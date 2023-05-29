@@ -10,23 +10,25 @@
 
 	const dispatch = createEventDispatcher();
 
-	const formatEvent = (e) => ({
-		...e,
+	const formatMouseEvent = (e) => ({
+		// ...e,
+		buttons: e.buttons,
 		point: convertToViewBox(findInParents(e.target, "svg"), e.x, e.y),
 	});
 
-	const onMouseDown = (e) => dispatch("press", formatEvent(e));
-	const onMouseMove = (e) => dispatch("move", formatEvent(e));
-	const onMouseUp = (e) => dispatch("release", formatEvent(e));
+	const mousedown = (e) => dispatch("press", formatMouseEvent(e));
+	const mousemove = (e) => dispatch("move", formatMouseEvent(e));
+	const mouseup = (e) => dispatch("release", formatMouseEvent(e));
 </script>
 
 <div>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		viewBox={$viewBox.join(" ")}
-		on:mousedown={onMouseDown}
-		on:mousemove={onMouseMove}
-		on:mouseup={onMouseUp}>
+		on:mousedown={mousedown}
+		on:mousemove={mousemove}
+		on:mouseup={mouseup}
+	>
 		<GridLayer />
 		<GraphLayer />
 	</svg>

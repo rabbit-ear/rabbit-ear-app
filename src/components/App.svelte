@@ -1,20 +1,31 @@
 <script>
 	import Header from "./Header.svelte";
+	import Footer from "./Footer.svelte";
 	import Toolbar from "./Toolbar.svelte";
 	import SVGCanvas from "./Canvas/SVGCanvas.svelte";
-	import GraphManager from "./GraphManager.svelte";
+	import Kernel from "./Kernel.svelte";
 
-	let didPressAt;
+	let press;
+	let move;
+	let release;
+	let keydown;
 </script>
 
 <main>
 	<Header />
 	<div class="body">
 		<Toolbar />
-		<SVGCanvas on:press={didPressAt}/>
+		<SVGCanvas on:press={press} on:move={move} on:release={release} />
 	</div>
-	<GraphManager bind:didPressAt={didPressAt} />
+	<Footer bind:keydown={keydown} />
+	<Kernel
+		bind:press={press}
+		bind:move={move}
+		bind:release={release}
+	/>
 </main>
+
+<!-- <svelte:window on:keydown={keydown} /> -->
 
 <style>
 	main {
@@ -24,6 +35,6 @@
 	.body {
 		display: flex;
 		flex-direction: row;
-		height: calc(100vh - 2rem);
+		height: calc(100vh - 4rem);
 	}
 </style>

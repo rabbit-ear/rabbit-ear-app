@@ -2,9 +2,16 @@
 	import {
 		darkMode,
 	} from "../stores/app.js";
+	import { current } from "../stores/ui.js";
+
 	const saveFile = () => {};
 	const newFile = () => {};
 	const clickDarkMode = () => { $darkMode = !$darkMode; };
+	const formatPoint = (p) => p
+		.map(n => {
+			const integer = parseInt(n);
+			return integer === n ? n : n.toFixed(4)
+		}).join(", ");
 </script>
 
 	<nav>
@@ -23,6 +30,9 @@
 						<button on:click={clickDarkMode}>dark mode</button>
 					</li>
 				</ul>
+			</li>
+			<li>
+				<input type="text" readonly value={$current ? formatPoint($current) : ""} >
 			</li>
 		</ul>
 	</nav>
