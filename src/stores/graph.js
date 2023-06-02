@@ -15,16 +15,7 @@ export const metadata = writable({
 });
 
 // operations that should modify the graph
-
-export const planarize = () => {
-
-};
-
-export const addVertex = (point) => {
-
-};
-
-export const addEdgeBetweenVertices = (vertices) => {
-
-};
+// export const planarize = () => {};
+// export const addVertex = (point) => {};
+// export const addEdgeBetweenVertices = (vertices) => {};
 

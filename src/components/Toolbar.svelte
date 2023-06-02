@@ -1,5 +1,12 @@
 <script>
 import {
+	TOOL_SELECT,
+	TOOL_VERTEX,
+	SELECT_VERTEX,
+	SELECT_EDGE,
+	SELECT_FACE,
+} from "../js/enums.js";
+import {
 	tool,
 	selectElement,
 } from "../stores/app.js";
@@ -8,22 +15,22 @@ import {
 
 <div class="toolbar">
 	<div class="column">
-		<input type="radio" name="tool" bind:group={$tool} value={"select"} />
+		<input type="radio" name="tool" bind:group={$tool} value={TOOL_SELECT} />
 		<label for="select">select</label>
-		<input type="radio" name="tool" bind:group={$tool} value={"newVertex"} />
-		<label for="modify">new vertex</label>
+		<input type="radio" name="tool" bind:group={$tool} value={TOOL_VERTEX} />
+		<label for="modify">vertex</label>
 	</div>
 
 	<hr />
 
 	<div class="column">
-		<input type="radio" name="VEF" bind:group={$selectElement} value="vertex" />
+		<input type="radio" name="VEF" bind:group={$selectElement} value={SELECT_VERTEX} />
 		<label for="vertices">vertices</label>
 
-		<input type="radio" name="VEF" bind:group={$selectElement} value="edge" />
+		<input type="radio" name="VEF" bind:group={$selectElement} value={SELECT_EDGE} />
 		<label for="edges">edges</label>
 
-		<input type="radio" name="VEF" bind:group={$selectElement} value="face" />
+		<input type="radio" name="VEF" bind:group={$selectElement} value={SELECT_FACE} />
 		<label for="faces">faces</label>
 	</div>
 </div>

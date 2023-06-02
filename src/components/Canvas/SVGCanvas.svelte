@@ -1,6 +1,7 @@
 <script>
 	import { createEventDispatcher } from "svelte";
 	import GridLayer from "./GridLayer.svelte";
+	import UILayer from "./UILayer.svelte";
 	import GraphLayer from "./GraphLayer.svelte";
 	import {
 		convertToViewBox,
@@ -11,7 +12,6 @@
 	const dispatch = createEventDispatcher();
 
 	const formatMouseEvent = (e) => ({
-		// ...e,
 		buttons: e.buttons,
 		point: convertToViewBox(findInParents(e.target, "svg"), e.x, e.y),
 	});
@@ -25,11 +25,13 @@
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		viewBox={$viewBox.join(" ")}
+		stroke-width={$viewBox[2] * 0.005}
 		on:mousedown={mousedown}
 		on:mousemove={mousemove}
 		on:mouseup={mouseup}
 	>
 		<GridLayer />
+		<UILayer />
 		<GraphLayer />
 	</svg>
 </div>
