@@ -4,6 +4,7 @@ import { includeS } from "rabbit-ear/math/general/function.js";
 import { pointInBoundingBox } from "rabbit-ear/math/intersect/encloses.js";
 import { get } from "svelte/store";
 import {
+	selectElement,
 	selectionRect,
 	selected,
 	viewBox,
@@ -14,6 +15,11 @@ import {
 	releases,
 	moves,
 } from "../stores/ui.js";
+import {
+	SELECT_VERTEX,
+	SELECT_EDGE,
+	SELECT_FACE,
+} from "../js/enums.js";
 
 const pointInRect = (p, rect) => (
 	p[0] > rect.min[0] && p[0] < rect.max[0] &&
@@ -88,6 +94,17 @@ const getSelectedGraph = (graph, rect) => {
 /**
  *
  */
+const filterNearest = (nears) => {
+	switch (get(selectElement)) {
+	case SELECT_VERTEX: return { vertices: nears.vertices, edges: [], faces: [] };
+	case SELECT_EDGE: return { vertices: [], edges: nears.edges, faces: [] };
+	case SELECT_FACE: return { vertices: [], edges: [], faces: nears.faces };
+	default: return nears;
+	}
+};
+/**
+ *
+ */
 export const handleToolSelect = (eventType) => {
 	const graphValue = get(graph);
 	const viewBoxValue = get(viewBox);
@@ -97,7 +114,8 @@ export const handleToolSelect = (eventType) => {
 		moves.set([]);
 		releases.set([]);
 		selectionRect.set(undefined);
-		selected.set(getNearestToPoint(graphValue, get(presses)[get(presses).length - 1]));
+		const nears = getNearestToPoint(graphValue, get(presses)[get(presses).length - 1]);
+		selected.set(filterNearest(nears));
 	}
 		break;
 	case "move": {
@@ -112,17 +130,19 @@ export const handleToolSelect = (eventType) => {
 		// selected.set(getSelectedGraph(graphValue, get(selectionRect)));
 		const degenerateSelection = get(selectionRect) === undefined
 			|| Math.max(...get(selectionRect).span) < vmax * 0.01;
-		selected.set(degenerateSelection
+		const nears = degenerateSelection
 			? getNearestToPoint(graphValue, get(presses)[get(presses).length - 1])
-			: getSelectedGraph(graphValue, get(selectionRect)));
+			: getSelectedGraph(graphValue, get(selectionRect));
+		selected.set(filterNearest(nears));
 	}
 		break;
 	case "release": {
 		const degenerateSelection = get(selectionRect) === undefined
 			|| Math.max(...get(selectionRect).span) < vmax * 0.01;
-		selected.set(degenerateSelection
+		const nears = degenerateSelection
 			? getNearestToPoint(graphValue, get(releases)[get(releases).length - 1])
-			: getSelectedGraph(graphValue, get(selectionRect)));
+			: getSelectedGraph(graphValue, get(selectionRect));
+		selected.set(filterNearest(nears));
 		selectionRect.set(undefined);
 		presses.set([]);
 		moves.set([]);

@@ -5,7 +5,10 @@
 		TOOL_SELECT,
 		TOOL_VERTEX,
 	} from "../js/enums.js";
-	import { tool } from "../stores/app.js";
+	import {
+		tool,
+		selectElement,
+	} from "../stores/app.js";
 	import {
 		keyboard,
 		presses,
