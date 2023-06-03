@@ -14,8 +14,8 @@
 <g class="ui-layer">
 	{#if $selectionRect !== undefined}
 		<rect
-			x={$selectionRect.origin[0]}
-			y={$selectionRect.origin[1]}
+			x={$selectionRect.min[0]}
+			y={$selectionRect.min[1]}
 			width={$selectionRect.span[0]}
 			height={$selectionRect.span[1]}
 			fill="none"

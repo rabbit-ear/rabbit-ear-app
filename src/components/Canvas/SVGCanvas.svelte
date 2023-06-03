@@ -19,31 +19,36 @@
 	const mousedown = (e) => dispatch("press", formatMouseEvent(e));
 	const mousemove = (e) => dispatch("move", formatMouseEvent(e));
 	const mouseup = (e) => dispatch("release", formatMouseEvent(e));
+
+	let vmax
+	$: vmax = Math.max($viewBox[2], $viewBox[3]);
+
+	const padViewBox = (view, pad) => [
+		view[0] - pad,
+		view[1] - pad,
+		view[2] + pad * 2,
+		view[3] + pad * 2,
+	];
+
 </script>
 
-<div>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
-		viewBox={$viewBox.join(" ")}
+		viewBox={padViewBox($viewBox, vmax * 0.1).join(" ")}
 		stroke-width={$viewBox[2] * 0.005}
 		on:mousedown={mousedown}
 		on:mousemove={mousemove}
 		on:mouseup={mouseup}
 	>
 		<GridLayer />
-		<UILayer />
 		<GraphLayer />
+		<UILayer />
 	</svg>
-</div>
 
 <style>
-	div {
-		flex: 1 0 auto;
-		padding: 1rem;
-	}
 	svg {
+		flex: 1 0 calc(100vw - 8rem);
 		width: 100%;
 		height: 100%;
-		overflow: visible;
 	}
 </style>

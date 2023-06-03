@@ -2,6 +2,7 @@
 import {
 	TOOL_SELECT,
 	TOOL_VERTEX,
+	TOOL_EDGE,
 	SELECT_VERTEX,
 	SELECT_EDGE,
 	SELECT_FACE,
@@ -15,23 +16,23 @@ import {
 
 <div class="toolbar">
 	<div class="column">
-		<input type="radio" name="tool" bind:group={$tool} value={TOOL_SELECT} />
+		<input type="radio" name="tool" id="select" bind:group={$tool} value={TOOL_SELECT} />
 		<label for="select">select</label>
-		<input type="radio" name="tool" bind:group={$tool} value={TOOL_VERTEX} />
-		<label for="modify">vertex</label>
+		<input type="radio" name="tool" id="vertex" bind:group={$tool} value={TOOL_VERTEX} />
+		<label for="vertex">vertex</label>
+		<input type="radio" name="tool" id="edge" bind:group={$tool} value={TOOL_EDGE} />
+		<label for="edge">edge</label>
 	</div>
 
 	<hr />
 
 	<div class="column">
-		<input type="radio" name="VEF" bind:group={$selectElement} value={SELECT_VERTEX} />
-		<label for="vertices">vertices</label>
-
-		<input type="radio" name="VEF" bind:group={$selectElement} value={SELECT_EDGE} />
-		<label for="edges">edges</label>
-
-		<input type="radio" name="VEF" bind:group={$selectElement} value={SELECT_FACE} />
-		<label for="faces">faces</label>
+		<input type="radio" name="VEF" id="selectVertices" bind:group={$selectElement} value={SELECT_VERTEX} />
+		<label for="selectVertices">vertices</label>
+		<input type="radio" name="VEF" id="selectEdges" bind:group={$selectElement} value={SELECT_EDGE} />
+		<label for="selectEdges">edges</label>
+		<input type="radio" name="VEF" id="selectFaces" bind:group={$selectElement} value={SELECT_FACE} />
+		<label for="selectFaces">faces</label>
 	</div>
 </div>
 

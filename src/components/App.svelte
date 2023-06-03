@@ -4,6 +4,7 @@
 	import Toolbar from "./Toolbar.svelte";
 	import SVGCanvas from "./Canvas/SVGCanvas.svelte";
 	import Kernel from "./Kernel.svelte";
+	import FileManager from "./FileManager.svelte";
 
 	let press;
 	let move;
@@ -23,6 +24,7 @@
 		bind:move={move}
 		bind:release={release}
 	/>
+	<FileManager />
 </main>
 
 <!-- <svelte:window on:keydown={keydown} /> -->

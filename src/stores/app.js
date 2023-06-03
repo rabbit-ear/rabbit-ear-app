@@ -7,16 +7,18 @@ import {
 	SELECT_FACE,
 } from "../js/enums.js";
 
-export const tool = writable(TOOL_VERTEX);
+export const tool = writable(TOOL_SELECT);
 
 export const selectElement = writable(SELECT_VERTEX);
 
 export const darkMode = writable(true);
 
-// stroke width of the crease edges
-export const strokeWidth = writable(0.0025);
-
-// export const viewBox = writable([0, 0, 16, 16]);
-export const viewBox = writable([0, 0, 12, 12]);
+export const viewBox = writable([0, 0, 3, 3]);
 
 export const selectionRect = writable(undefined);
+
+export const selected = writable({
+	vertices: [],
+	edges: [],
+	faces: [],
+});
