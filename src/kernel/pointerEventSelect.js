@@ -105,7 +105,7 @@ const filterNearest = (nears) => {
 /**
  *
  */
-export const handleToolSelect = (eventType) => {
+export const pointerEventSelect = (eventType) => {
 	const graphValue = get(graph);
 	const viewBoxValue = get(viewBox);
 	const vmax = Math.max(viewBoxValue[2], viewBoxValue[3]);

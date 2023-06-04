@@ -12,7 +12,7 @@ const distance2 = (a, b) => {
 	return Math.sqrt(x ** 2 + y ** 2);
 };
 
-export const handleToolVertex = (eventType) => {
+export const pointerEventVertex = (eventType) => {
 	const vb = get(viewBox);
 	const vmax = Math.max(vb[2], vb[3]);
 	switch (eventType) {

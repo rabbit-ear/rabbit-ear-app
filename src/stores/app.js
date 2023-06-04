@@ -7,23 +7,47 @@ import {
 	SELECT_FACE,
 } from "../js/enums.js";
 
-const makeEmptySelected = () => ({ vertices: [], edges: [], faces: [] });
+export const emptySelectObject = () => ({ vertices: [], edges: [], faces: [] });
 
-export const tool = writable(TOOL_SELECT);
+const {
+	subscribe: subscribeTool,
+	set: setTool,
+} = writable(TOOL_SELECT);
+// export const tool = writable(TOOL_SELECT);
+export const tool = {
+	subscribe: subscribeTool,
+	set: (g) => {
+		selected.set(emptySelectObject());
+		return setTool(g);
+	},
+	reset: () => setTool(TOOL_SELECT),
+};
 
-export const selected = writable(makeEmptySelected());
+const {
+	subscribe: subscribeSelected,
+	set: setSelected,
+} = writable(emptySelectObject());
+// export const selected = writable(emptySelectObject());
+export const selected = {
+	subscribe: subscribeSelected,
+	set: (g) => setSelected(g),
+	reset: () => setSelected(emptySelectObject()),
+};
 
 export const selectionRect = writable(undefined);
 
-const { subscribe, set, update } = writable(SELECT_VERTEX);
+const {
+	subscribe: subscribeSelectElement,
+	set: setSelectElement,
+} = writable(SELECT_VERTEX);
 // export const selectElement = writable(SELECT_VERTEX);
 export const selectElement = {
-	subscribe,
+	subscribe: subscribeSelectElement,
 	set: (g) => {
-		selected.set(makeEmptySelected());
-		return set(g);
+		selected.set(emptySelectObject());
+		return setSelectElement(g);
 	},
-	reset: () => set(makeEmptySelected()),
+	reset: () => setSelectElement(SELECT_VERTEX),
 };
 
 export const darkMode = writable(true);

@@ -9,8 +9,11 @@
 	let press;
 	let move;
 	let release;
-	let keydown;
+	let keydownKernel;
+	let keydownFooter;
 </script>
+
+<svelte:window on:keydown={keydownKernel}/>
 
 <main>
 	<Header />
@@ -18,16 +21,15 @@
 		<Toolbar />
 		<SVGCanvas on:press={press} on:move={move} on:release={release} />
 	</div>
-	<Footer bind:keydown={keydown} />
+	<Footer bind:keydown={keydownFooter} />
 	<Kernel
 		bind:press={press}
 		bind:move={move}
 		bind:release={release}
+		bind:keydown={keydownKernel}
 	/>
 	<FileManager />
 </main>
-
-<!-- <svelte:window on:keydown={keydown} /> -->
 
 <style>
 	main {

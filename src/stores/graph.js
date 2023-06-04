@@ -1,6 +1,7 @@
 import { get } from "svelte/store";
 import { boundingBox as makeBoundingBox } from "rabbit-ear/math/geometry/polygon.js";
 import { writable } from "svelte/store";
+import { selected } from "./app.js";
 
 const makeEmptyGraph = () => ({
 	vertices_coords: [],
@@ -20,6 +21,7 @@ export const graph = {
 	subscribe,
 	set: (g) => {
 		// boundingBox.set(makeBoundingBox(get(graph).vertices_coords || []));
+		selected.reset();
 		return set(g);
 	},
 	planarize: () => update(g => ear.graph.planarize(g)),
