@@ -1,9 +1,7 @@
 <script>
 	import { graph } from "../../stores/graph.js";
-	import {
-		selected,
-		viewBox,
-	} from "../../stores/app.js";
+	import { viewBox } from "../../stores/app.js";
+	import { selected } from "../../stores/select.js";
 
 	let vmax;
 	$: vmax = Math.max($viewBox[2], $viewBox[3]);

@@ -4,11 +4,13 @@ import { includeS } from "rabbit-ear/math/general/function.js";
 import { pointInBoundingBox } from "rabbit-ear/math/intersect/encloses.js";
 import { get } from "svelte/store";
 import {
-	selectElement,
+	viewBox,
+	elementSelect,
+} from "../stores/app.js";
+import {
 	selectionRect,
 	selected,
-	viewBox,
-} from "../stores/app.js";
+} from "../stores/select.js";
 import { graph } from "../stores/graph.js";
 import {
 	presses,
@@ -95,7 +97,7 @@ const getSelectedGraph = (graph, rect) => {
  *
  */
 const filterNearest = (nears) => {
-	switch (get(selectElement)) {
+	switch (get(elementSelect)) {
 	case SELECT_VERTEX: return { vertices: nears.vertices, edges: [], faces: [] };
 	case SELECT_EDGE: return { vertices: [], edges: nears.edges, faces: [] };
 	case SELECT_FACE: return { vertices: [], edges: [], faces: nears.faces };

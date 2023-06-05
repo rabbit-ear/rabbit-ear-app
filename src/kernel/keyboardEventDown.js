@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { graph } from "../stores/graph.js";
-import { selected } from "../stores/app.js";
+import { selected } from "../stores/select.js";
 import { deleteComponents } from "../js/graph.js";
 
 export const keyboardEventDown = (e) => {

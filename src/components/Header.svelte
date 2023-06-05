@@ -2,10 +2,9 @@
 	import {
 		darkMode,
 	} from "../stores/app.js";
+	import { graph } from "../stores/graph.js";
 	import { current } from "../stores/ui.js";
 
-	const saveFile = () => {};
-	const newFile = () => {};
 	const clickDarkMode = () => { $darkMode = !$darkMode; };
 	const formatPoint = (p) => p
 		.map(n => {
@@ -18,10 +17,15 @@
 		<ul>
 			<li>file
 				<ul>
-					<li><button on:click={newFile}>new</button></li>
+					<li><button on:click={graph.reset}>new</button></li>
 					<hr />
 					<li><button on:click={() => {}}>open</button></li>
-					<li><button on:click={saveFile}>save</button></li>
+					<li><button on:click={graph.download}>save</button></li>
+				</ul>
+			</li>
+			<li>graph
+				<ul>
+					<li><button on:click={graph.planarize}>planarize</button></li>
 				</ul>
 			</li>
 			<li>preferences

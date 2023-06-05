@@ -29,7 +29,6 @@
 		view[2] + pad * 2,
 		view[3] + pad * 2,
 	];
-
 </script>
 
 	<svg

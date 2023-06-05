@@ -1,8 +1,6 @@
 <script>
-	import {
-		viewBox,
-		selectionRect,
-	} from "../../stores/app.js";
+	import { viewBox } from "../../stores/app.js";
+	import { selectionRect } from "../../stores/select.js";
 
 	let vmax;
 	$: vmax = Math.max($viewBox[2], $viewBox[3]);

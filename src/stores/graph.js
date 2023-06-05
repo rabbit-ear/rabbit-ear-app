@@ -1,15 +1,18 @@
 import { get } from "svelte/store";
 import { boundingBox as makeBoundingBox } from "rabbit-ear/math/geometry/polygon.js";
+import planarize from "rabbit-ear/graph/planarize.js";
+import populate from "rabbit-ear/graph/populate.js";
 import { writable } from "svelte/store";
-import { selected } from "./app.js";
+import { selected } from "./select.js";
+import { downloadFile } from "../js/file.js";
 
-const makeEmptyGraph = () => ({
+const makeEmptyGraph = () => populate({
 	vertices_coords: [],
 	edges_vertices: [],
 	edges_assignment: [],
 	edges_foldAngle: [],
 	faces_vertices: [],
-})
+});
 
 // export const graph = writable(makeEmptyGraph());
 
@@ -24,7 +27,13 @@ export const graph = {
 		selected.reset();
 		return set(g);
 	},
-	planarize: () => update(g => ear.graph.planarize(g)),
+	// no change to topology
+	simpleSet: (g) => set(g),
+	planarize: () => update(g => populate(planarize(g), true)),
+	download: () => {
+		downloadFile(JSON.stringify(get(graph)));
+		return update(g => g);
+	},
 	reset: () => set(makeEmptyGraph()),
 };
 
