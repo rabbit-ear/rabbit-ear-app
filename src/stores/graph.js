@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 import { boundingBox as makeBoundingBox } from "rabbit-ear/math/geometry/polygon.js";
 import planarize from "rabbit-ear/graph/planarize.js";
 import populate from "rabbit-ear/graph/populate.js";
+import splitEdge from "rabbit-ear/graph/splitEdge/index.js";
 import { writable } from "svelte/store";
 import { selected } from "./select.js";
 import { downloadFile } from "../js/file.js";
@@ -29,20 +30,25 @@ export const graph = {
 	},
 	// no change to topology
 	simpleSet: (g) => set(g),
+	// methods which modify the graph
 	planarize: () => update(g => populate(planarize(g), true)),
+	splitSelectedEdges: () => update(g => {
+		selected.edges()
+			.sort((a, b) => b - a)
+			.forEach(edge => splitEdge(g, edge));
+		selected.reset();
+		return g;
+	}),
+	// trigger a file-download in the browser
 	download: () => {
 		downloadFile(JSON.stringify(get(graph)));
 		return update(g => g);
 	},
+	// empty the graph
 	reset: () => set(makeEmptyGraph()),
 };
-
-export const metadata = writable({
-	newestVertex: undefined, // {number} index in vertices_coords.
-});
 
 // operations that should modify the graph
 // export const planarize = () => {};
 // export const addVertex = (point) => {};
 // export const addEdgeBetweenVertices = (vertices) => {};
-

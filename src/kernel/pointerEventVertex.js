@@ -50,15 +50,16 @@ export const pointerEventVertex = (eventType) => {
 		break;
 	case "move": {
 		// get a flat list of all the selected vertices
-		const selectedValue = get(selected);
-		const vertices = Object.keys(selectedValue)
-			.map((sel, i) => sel ? i : undefined)
+		const selectedVertices = get(selected).vertices;
+		const vertices = Object.keys(selectedVertices)
+			.map(key => selectedVertices[key] ? key : undefined)
 			.filter(a => a !== undefined);
 		// move currently selected vertices
 		translateVertices(vertices);
 	}
 		break;
 	case "release":
+		// selected.reset();
 		break;
 	}
 };

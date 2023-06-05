@@ -26,6 +26,7 @@
 			<li>graph
 				<ul>
 					<li><button on:click={graph.planarize}>planarize</button></li>
+					<li><button on:click={graph.splitSelectedEdges}>split edge</button></li>
 				</ul>
 			</li>
 			<li>preferences
@@ -46,7 +47,6 @@
 	/*nav input {
 		display: none;
 	}*/
-	
 	/* navbar */
 	button {
 		all: unset;
@@ -59,6 +59,8 @@
 		flex-direction: row;
 		height: 2rem;
 		/* font-weight: 700;*/
+		box-shadow: 0 0rem 0.5rem 0 #111;
+		position: relative;
 	}
 	nav li {
 		padding: 0 1rem;
@@ -100,7 +102,7 @@
 	/* colors*/
 	nav,
 	nav ul ul {
-		background-color: #333;
+		background-color: #3a3a3a;
 		color: #eee;
 	}
 	nav li[highlighted=true] {

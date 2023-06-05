@@ -22,10 +22,10 @@ export const tool = {
 	subscribe: toolSubscribe,
 	set: (t) => {
 		selected.reset();
-		switch (t) {
-		case TOOL_VERTEX: elementSelectSet(SELECT_VERTEX); break;
-		case TOOL_EDGE: elementSelectSet(SELECT_EDGE); break;
-		}
+		// switch (t) {
+		// case TOOL_VERTEX: elementSelectSet(SELECT_VERTEX); break;
+		// case TOOL_EDGE: elementSelectSet(SELECT_EDGE); break;
+		// }
 		return toolSet(t);
 	},
 	reset: () => toolSet(TOOL_SELECT),
