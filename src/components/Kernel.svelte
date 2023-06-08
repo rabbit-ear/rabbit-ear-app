@@ -53,4 +53,8 @@
 
 	export const keydown = (e) => keyboardEventDown(e);
 
+	export const executeCommand = (fn, ...params) => {
+		
+	}
+
 </script>

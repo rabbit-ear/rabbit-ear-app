@@ -15,8 +15,22 @@ const {
 export const selected = {
 	subscribe: subscribeSelected,
 	set: (g) => setSelected(g),
+	vertices: () => {
+		const value = get(selected).vertices || [];
+		return Object.keys(value)
+			.map(key => value[key] ? key : undefined)
+			.filter(a => a !== undefined)
+			.map(n => parseInt(n, 10));
+	},
 	edges: () => {
 		const value = get(selected).edges || [];
+		return Object.keys(value)
+			.map(key => value[key] ? key : undefined)
+			.filter(a => a !== undefined)
+			.map(n => parseInt(n, 10));
+	},
+	faces: () => {
+		const value = get(selected).faces || [];
 		return Object.keys(value)
 			.map(key => value[key] ? key : undefined)
 			.filter(a => a !== undefined)

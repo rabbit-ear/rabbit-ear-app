@@ -27,6 +27,8 @@
 				<ul>
 					<li><button on:click={graph.planarize}>planarize</button></li>
 					<li><button on:click={graph.splitSelectedEdges}>split edge</button></li>
+					<hr />
+					<li><input type="checkbox" id="auto-planarize"><label for="auto-planarize">auto-planarize</label></li>
 				</ul>
 			</li>
 			<li>preferences
@@ -64,7 +66,8 @@
 	}
 	nav li {
 		padding: 0 1rem;
-		cursor: pointer;
+/*		cursor: pointer;*/
+		user-select: none;
 		height: 100%;
 	}
 	nav hr {

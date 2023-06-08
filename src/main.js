@@ -1,9 +1,9 @@
 import "./css/reset.css"
 import "./css/app.css"
 import "./css/svg.css"
-import App from "./components/App.svelte"
+import Main from "./components/Main.svelte"
 
-const app = new App({
+const app = new Main({
   target: document.getElementById("app"),
 });
 
