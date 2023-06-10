@@ -1,14 +1,13 @@
 import { get } from "svelte/store";
-import { graph } from "../stores/graph.js";
-import { tool } from "../stores/app.js";
-import { selected } from "../stores/select.js";
-import { deleteComponents } from "../js/graph.js";
 import {
 	TOOL_SELECT,
 	TOOL_VERTEX,
 	TOOL_EDGE,
 	TOOL_SPLIT_EDGE,
 } from "../js/enums.js";
+import { tool } from "../stores/app.js";
+import { selected } from "../stores/select.js";
+import { execute } from "./app.js";
 
 export const keyboardEventDown = (e) => {
 	const { altKey, ctrlKey, metaKey, shiftKey } = e;
@@ -16,7 +15,11 @@ export const keyboardEventDown = (e) => {
 	switch (e.keyCode) {
 	case 8: // backspace
 		e.preventDefault();
-		graph.set({ ...deleteComponents(get(graph), get(selected)) });
+		execute("deleteComponents", {
+			vertices: selected.vertices(),
+			edges: selected.edges(),
+			faces: selected.faces(),
+		});
 		break;
 	case 65: // "a"
 		// select all

@@ -26,7 +26,7 @@ import { graph } from "../stores/graph.js";
 			value={TOOL_SELECT} />
 		<label for="select">select</label>
 	</div>
-	<p>create</p>
+	<p>tool</p>
 	<div class="vertical-radio">
 		<input
 			type="radio"
@@ -43,7 +43,7 @@ import { graph } from "../stores/graph.js";
 			value={TOOL_EDGE} />
 		<label for="edge">edge</label>
 	</div>
-	<p>modify</p>
+	<p>modifiers</p>
 	<div class="vertical-radio">
 		<input
 			type="radio"

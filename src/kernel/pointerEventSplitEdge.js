@@ -8,6 +8,7 @@ import { graph } from "../stores/graph.js";
 import { viewBox } from "../stores/app.js";
 import { selected } from "../stores/select.js";
 import { current } from "../stores/ui.js";
+import { execute } from "./app.js";
 
 const getNearestToPoint = (graph, point) => {
 	const result = { vertices: [], edges: [], faces: [] };
@@ -26,7 +27,7 @@ export const pointerEventSplitEdge = (eventType) => {
 		const edges = [];
 		edges[edge] = true;
 		selected.set({ ...get(selected), edges });
-		graph.splitSelectedEdges();
+		execute("splitEdges", [edge]);
 	}
 		break;
 	case "hover": {

@@ -32,13 +32,13 @@ export const graph = {
 	simpleSet: (g) => set(g),
 	// methods which modify the graph
 	planarize: () => update(g => populate(planarize(g), true)),
-	splitSelectedEdges: () => update(g => {
-		selected.edges()
-			.sort((a, b) => b - a)
-			.forEach(edge => splitEdge(g, edge));
-		selected.reset();
-		return g;
-	}),
+	// splitSelectedEdges: () => update(g => {
+	// 	selected.edges()
+	// 		.sort((a, b) => b - a)
+	// 		.forEach(edge => splitEdge(g, edge));
+	// 	selected.reset();
+	// 	return g;
+	// }),
 	// trigger a file-download in the browser
 	download: () => {
 		downloadFile(JSON.stringify(get(graph)));

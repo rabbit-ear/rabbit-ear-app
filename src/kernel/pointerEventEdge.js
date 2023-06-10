@@ -13,11 +13,7 @@ import {
 	releases,
 } from "../stores/ui.js";
 import { didTouchVertex } from "../js/nearest.js";
-import {
-	addVertex,
-	addEdge,
-	translateVertices,
-} from "./functions.js";
+import { execute } from "./app.js";
 
 export const pointerEventEdge = (eventType) => {
 	switch (eventType) {
@@ -28,10 +24,10 @@ export const pointerEventEdge = (eventType) => {
 			vertices[near] = true;
 			selected.set({ ...get(selected), vertices });
 		} else {
-			addVertex(get(current));
+			execute("addVertex", get(current));
 		}
-		const vertex = addVertex(get(current));
-		addEdge(near !== undefined ? near : vertex - 1, vertex);
+		const vertex = execute("addVertex", get(current));
+		execute("addEdge", near !== undefined ? near : vertex - 1, vertex);
 		break;
 	case "move":
 		const origin = get(moves).length > 2
@@ -42,7 +38,7 @@ export const pointerEventEdge = (eventType) => {
 		const vector = subtract2(end, origin);
 		// move currently selected vertices
 		const newVertex = get(graph).vertices_coords.length - 1;
-		translateVertices([newVertex], vector);
+		execute("translateVertices", [newVertex], vector);
 		break;
 	case "release":
 		presses.set([]);

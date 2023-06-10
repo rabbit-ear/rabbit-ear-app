@@ -120,3 +120,12 @@ unsorted notes:
 
 for example the "delete currently selected" should perform the delete call, which, hopefully is a single function call to the Rabbit Ear library which makes a change to the data model, but then contains additional methods for the UI, such as to clear the currently selected set of components. so, an operation on the graph is in most cases actually an encapsulated function that contains the graph modify call, along with other application-specific and UI related calls. as far as what appears inside the "terminal", it should appear as one function call. "delete edge 4"
 
+# diary
+
+### june 8
+
+Everything is going well, I couldn't anticipate the entire pipeline but it's being uncovered easily enough. I've decided to name the "kernel" as the layer that sits between the UI and the application. it processes inputs into functions and sends them to the application to execute. these functions either manipulate the graph, or manipulate the screen to visualize an in-progress operation.
+
+One issue that has arisen is the need for a pipeline for visualization that includes a copy of the data model, able to be modified, but does not affect the actual data model. For example, during a UI drag event where a vertex is being moved across the screen, previously the graph was updated at every step. Which is possible for something as simple as moving a vertex. But for example simply implementing the ability to hold SHIFT to add a new selection box to the previous selection revealed the need for a cached state of not the graph itself, but the data storing the currently selected components. Because for example, if the user has some components selected, then SHIFT draws a new rectangle but changes their mind, we have to be able to highlight the in-progress selections, and then when they change their mind, return the selected set to the set from before this current SHIFT+select operation.
+
+Additionally, it reminded me that I had already run into this issue building a folding visualizer. When folding a paper using the press and drag operation, the new crease line has to be made from the cached state from before the press occurred.

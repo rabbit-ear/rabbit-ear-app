@@ -2,7 +2,7 @@
 	import Header from "./Header.svelte";
 	import Footer from "./Footer.svelte";
 	import Toolbar from "./Toolbar.svelte";
-	import SVGCanvas from "./Canvas/SVGCanvas.svelte";
+	import SVGCanvas from "./SVGCanvas/SVGCanvas.svelte";
 	import Kernel from "./Kernel.svelte";
 	import FileManager from "./FileManager.svelte";
 
@@ -39,6 +39,6 @@
 	.body {
 		display: flex;
 		flex-direction: row;
-		height: calc(100vh - 4rem);
+		height: calc(100vh - 8rem);
 	}
 </style>

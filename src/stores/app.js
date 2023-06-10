@@ -9,6 +9,8 @@ import {
 } from "../js/enums.js";
 import { selected } from "./select.js";
 
+export const history = writable([]);
+
 export const darkMode = writable(true);
 
 export const viewBox = writable([0, 0, 3, 3]);
