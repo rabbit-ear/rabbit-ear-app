@@ -1,7 +1,8 @@
 <script>
 	import { graph } from "../../stores/graph.js";
-	import { viewBox } from "../../stores/app.js";
+	import { viewBox, elementSelect } from "../../stores/app.js";
 	import { selected } from "../../stores/select.js";
+	import { SELECT_VERTEX } from "../../js/enums.js";
 
 	let vmax;
 	$: vmax = Math.max($viewBox[2], $viewBox[3]);
@@ -32,11 +33,13 @@
 		{/if}
 	{/each}
 
-	{#each $graph.vertices_coords as vertex, v}
-		{#if $selected.vertices[v]}
-			<circle r={vmax * 0.01} cx={vertex[0]} cy={vertex[1]} stroke="none" fill="#fb4" />
-		{:else}
-			<circle r={vmax * 0.01} cx={vertex[0]} cy={vertex[1]} stroke="none" fill="#aaa" />
-		{/if}
-	{/each}
+	{#if $elementSelect === SELECT_VERTEX}
+		{#each $graph.vertices_coords as vertex, v}
+			{#if $selected.vertices[v]}
+				<circle r={vmax * 0.01} cx={vertex[0]} cy={vertex[1]} stroke="none" fill="#fb4" />
+			{:else}
+				<circle r={vmax * 0.01} cx={vertex[0]} cy={vertex[1]} stroke="none" fill="#aaa" />
+			{/if}
+		{/each}
+	{/if}
 </g>

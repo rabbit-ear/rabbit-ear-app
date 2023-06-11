@@ -7,16 +7,42 @@ import { add2 } from "rabbit-ear/math/algebra/vector.js";
 import { graph } from "../stores/graph.js";
 import { selected } from "../stores/select.js";
 import { downloadFile } from "../js/file.js";
+/**
+ *
+ */
+export const clearSelection = () => selected.reset();
+/**
+ *
+ */
+export const addToSelection = (component = "vertices", components = []) => {
+	const sel = get(selected);
+	switch (component) {
+	case "vertices":
+		components.forEach(v => { sel.vertices[v] = true; });
+		break;
+	case "edges":
+		components.forEach(e => { sel.edges[e] = true; });
+		break;
+	case "faces":
+		components.forEach(f => { sel.faces[f] = true; });
+		break;
+	}
+	selected.set(sel);
+};
 
 const deleteComponentsFromGraph = (graph, remove) => {
 	// add each vertex's adjacent edges to the delete list
-	remove.vertices
-		.flatMap((del, v) => del ? graph.vertices_edges[v] : [])
-		.forEach(e => { remove.edges[e] = true; });
+	if (graph.vertices_edges) {
+		remove.vertices
+			.flatMap((del, v) => del ? graph.vertices_edges[v] : [])
+			.forEach(e => { remove.edges[e] = true; });
+	}
 	// add each vertex's adjacent faces to the delete list
-	remove.vertices
-		.flatMap((del, v) => del ? graph.vertices_faces[v] : [])
-		.forEach(f => { remove.faces[f] = true; });
+	if (graph.vertices_faces) {
+		remove.vertices
+			.flatMap((del, v) => del ? graph.vertices_faces[v] : [])
+			.forEach(f => { remove.faces[f] = true; });
+	}
 	// convert object into array of indices. these will be sorted.
 	const truthy = (arr) => arr
 		.map((del, i) => del ? i : undefined)
@@ -36,10 +62,6 @@ export const deleteComponents = (components) => {
 	components.faces.forEach(v => { remove.faces[v] = true; });
 	const g = deleteComponentsFromGraph(get(graph), remove);
 	graph.set({ ...g });
-};
-
-export const addToSelection = (selectionObject) => {
-
 };
 
 export const addVertex = (point) => {
@@ -82,6 +104,8 @@ export const translateVertices = (vertices, vector) => {
 export const planarize = () => graph.set(populate(Planarize(get(graph)), true));
 
 export const load = (FOLD) => graph.set(populate(FOLD));
+
+export const clear = () => graph.reset();
 
 export const download = (filename) => (
 	downloadFile(JSON.stringify(get(graph)), filename)

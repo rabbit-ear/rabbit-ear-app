@@ -3,7 +3,10 @@
 	import { pointerEventVertex } from "../kernel/pointerEventVertex.js";
 	import { pointerEventEdge } from "../kernel/pointerEventEdge.js";
 	import { pointerEventSplitEdge } from "../kernel/pointerEventSplitEdge.js";
-	import { keyboardEventDown } from "../kernel/keyboardEventDown.js";
+	import {
+		keyboardEventDown,
+		keyboardEventUp,
+	} from "../kernel/keyboardEventDown.js";
 	import {
 		TOOL_SELECT,
 		TOOL_VERTEX,
@@ -53,8 +56,8 @@
 
 	export const keydown = (e) => keyboardEventDown(e);
 
-	export const executeCommand = (fn, ...params) => {
-		
-	}
+	export const keyup = (e) => keyboardEventUp(e);
+
+	export const executeCommand = (fn, ...params) => {};
 
 </script>

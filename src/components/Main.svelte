@@ -11,10 +11,14 @@
 	let move;
 	let release;
 	let keydownKernel;
+	let keyupKernel;
 	let keydownFooter;
 </script>
 
-<svelte:window on:keydown={keydownKernel}/>
+<svelte:window
+	on:keydown={keydownKernel}
+	on:keyup={keyupKernel}
+/>
 
 <main>
 	<Header />
@@ -28,6 +32,7 @@
 		bind:move={move}
 		bind:release={release}
 		bind:keydown={keydownKernel}
+		bind:keyup={keyupKernel}
 	/>
 	<FileManager />
 	<DragAndDrop />
