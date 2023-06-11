@@ -4,7 +4,10 @@
 	} from "../stores/app.js";
 	import { graph } from "../stores/graph.js";
 	import { current } from "../stores/ui.js";
+	import { execute } from "../kernel/app.js";
+	import { loadFileDialog } from "../js/file.js";
 
+	let inputFile;
 	const clickDarkMode = () => { $darkMode = !$darkMode; };
 	const formatPoint = (p) => p
 		.map(n => {
@@ -19,14 +22,13 @@
 				<ul>
 					<li><button on:click={graph.reset}>new</button></li>
 					<hr />
-					<li><button on:click={() => {}}>open</button></li>
-					<li><button on:click={graph.download}>save</button></li>
+					<li><button on:click={() => inputFile.click()}>load</button></li>
+					<li><button on:click={() => execute("download", "origami.fold")}>download</button></li>
 				</ul>
 			</li>
 			<li>graph
 				<ul>
-					<li><button on:click={graph.planarize}>planarize</button></li>
-					<li><button on:click={graph.splitSelectedEdges}>split edge</button></li>
+					<li><button on:click={() => execute("planarize")}>planarize</button></li>
 					<hr />
 					<li><input type="checkbox" id="auto-planarize"><label for="auto-planarize">auto-planarize</label></li>
 				</ul>
@@ -42,13 +44,19 @@
 				<input type="text" readonly value={$current ? formatPoint($current) : ""} >
 			</li>
 		</ul>
+		<input
+			type="file"
+			id="file"
+			bind:this={inputFile}
+			on:change={loadFileDialog} />
 	</nav>
 
 <style>
 	/*file open hidden input dialog trigger*/
-	/*nav input {
-		display: none;
-	}*/
+	nav > input {
+		visibility: hidden;
+/*		display: none;*/
+	}
 	/* navbar */
 	button {
 		all: unset;

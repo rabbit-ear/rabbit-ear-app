@@ -5,6 +5,7 @@
 	import SVGCanvas from "./SVGCanvas/SVGCanvas.svelte";
 	import Kernel from "./Kernel.svelte";
 	import FileManager from "./FileManager.svelte";
+	import DragAndDrop from "./DragAndDrop.svelte";
 
 	let press;
 	let move;
@@ -29,6 +30,7 @@
 		bind:keydown={keydownKernel}
 	/>
 	<FileManager />
+	<DragAndDrop />
 </main>
 
 <style>

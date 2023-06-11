@@ -36,7 +36,7 @@ export const tool = {
 const {
 	subscribe: elementSelectSubscribe,
 	set: elementSelectSet,
-} = writable(SELECT_VERTEX);
+} = writable(SELECT_EDGE);
 
 export const elementSelect = {
 	subscribe: elementSelectSubscribe,
@@ -44,5 +44,5 @@ export const elementSelect = {
 		selected.reset();
 		return elementSelectSet(e);
 	},
-	reset: () => elementSelectSet(SELECT_VERTEX),
+	// reset: () => elementSelectSet(SELECT_VERTEX),
 };

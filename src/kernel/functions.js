@@ -1,9 +1,12 @@
 import { get } from "svelte/store";
+import removeGeometry from "rabbit-ear/graph/remove.js";
+import Planarize from "rabbit-ear/graph/planarize.js";
+import populate from "rabbit-ear/graph/populate.js";
 import splitEdge from "rabbit-ear/graph/splitEdge/index.js";
 import { add2 } from "rabbit-ear/math/algebra/vector.js";
 import { graph } from "../stores/graph.js";
 import { selected } from "../stores/select.js";
-import removeGeometry from "rabbit-ear/graph/remove.js";
+import { downloadFile } from "../js/file.js";
 
 const deleteComponentsFromGraph = (graph, remove) => {
 	// add each vertex's adjacent edges to the delete list
@@ -22,7 +25,7 @@ const deleteComponentsFromGraph = (graph, remove) => {
 	["vertices", "edges", "faces"]
 		.forEach(key => removeGeometry(graph, key, truthy(remove[key])));
 	return graph;
-}
+};
 /**
  *
  */
@@ -73,5 +76,13 @@ export const translateVertices = (vertices, vector) => {
 	vertices.forEach(v => {
 		vertices_coords[v] = add2(vertices_coords[v], vector);
 	});
-	graph.simpleSet({ ...get(graph), ...vertices_coords });
-}
+	graph.simpleSet({ ...get(graph), vertices_coords });
+};
+
+export const planarize = () => graph.set(populate(Planarize(get(graph)), true));
+
+export const load = (FOLD) => graph.set(populate(FOLD));
+
+export const download = (filename) => (
+	downloadFile(JSON.stringify(get(graph)), filename)
+);
