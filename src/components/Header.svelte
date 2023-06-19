@@ -1,7 +1,5 @@
 <script>
-	import {
-		darkMode,
-	} from "../stores/app.js";
+	import { darkMode, asapPlanarize, snapping } from "../stores/app.js";
 	import { graph } from "../stores/graph.js";
 	import { current } from "../stores/ui.js";
 	import { execute } from "../kernel/app.js";
@@ -23,14 +21,39 @@
 					<li><button on:click={graph.reset}>new</button></li>
 					<hr />
 					<li><button on:click={() => inputFile.click()}>load</button></li>
-					<li><button on:click={() => execute("download", "origami.fold")}>download</button></li>
+					<li><button on:click={() => execute("download", "origami.fold")}>save</button></li>
 				</ul>
 			</li>
 			<li>graph
 				<ul>
-					<li><button on:click={() => execute("planarize")}>planarize</button></li>
+					<li><span class="popover">convert to planar graph</span><button on:click={() => execute("planarize")}>planarize</button></li>
+					<li class="no-select"><span class="popover">automatically planarize after (most) operations</span><input type="checkbox" id="checkbox-asap-planarize" bind:checked={$asapPlanarize}><label for="checkbox-asap-planarize">asap planarize</label></li>
 					<hr />
-					<li><input type="checkbox" id="auto-planarize"><label for="auto-planarize">auto-planarize</label></li>
+					<li class="no-select"><input type="checkbox" id="checkbox-snapping" bind:checked={$snapping}><label for="checkbox-snapping">snap vertices</label></li>
+					<li><button on:click={() => execute("snapAllVertices")}>snap once</button></li>
+				</ul>
+			</li>
+			<li>select
+				<ul>
+					<li><button on:click={() => {}}>select all</button></li>
+					<li>select by assignment
+						<ul>
+							<li><button on:click={() => {}}>boundary</button></li>
+							<li><button on:click={() => {}}>mountain</button></li>
+							<li><button on:click={() => {}}>valley</button></li>
+							<li><button on:click={() => {}}>flat</button></li>
+							<li><button on:click={() => {}}>cut</button></li>
+							<li><button on:click={() => {}}>join</button></li>
+							<li><button on:click={() => {}}>unassigned</button></li>
+						</ul>
+					</li>
+					<hr />
+					<li class="no-select description">select type:</li>
+					<li class="no-select">
+						<input type="radio" id="radio-select-vertex"><label for="radio-select-vertex">vertex</label>
+						<input type="radio" id="radio-select-edge"><label for="radio-select-edge">edge</label>
+						<input type="radio" id="radio-select-face"><label for="radio-select-face">face</label>
+					</li>
 				</ul>
 			</li>
 			<li>preferences
@@ -52,6 +75,7 @@
 	</nav>
 
 <style>
+	.popover { display: none; }
 	/*file open hidden input dialog trigger*/
 	nav > input {
 		visibility: hidden;
@@ -126,5 +150,16 @@
 	}
 	nav li[highlighted=true]:hover {
 		background-color: #f75;
+	}
+	nav li.no-select {
+		background-color: unset;
+		color: unset;
+	}
+	nav li.no-select:hover {
+		background-color: unset;
+	}
+	nav li.description {
+		font-style: italic;
+		opacity: 80%;
 	}
 </style>

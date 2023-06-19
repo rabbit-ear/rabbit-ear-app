@@ -6,7 +6,7 @@
 	import {
 		keyboardEventDown,
 		keyboardEventUp,
-	} from "../kernel/keyboardEventDown.js";
+	} from "../kernel/keyboardEvent.js";
 	import {
 		TOOL_SELECT,
 		TOOL_VERTEX,

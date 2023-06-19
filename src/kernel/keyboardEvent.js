@@ -8,13 +8,15 @@ import {
 import { tool } from "../stores/app.js";
 import { selected } from "../stores/select.js";
 import { keyboard } from "../stores/ui.js";
+import {
+	textarea,
+	textareaValue,
+} from "../stores/terminal.js";
 import { execute } from "./app.js";
 
-export const keyboardEventDown = (e) => {
+const keyboardWindowEventDown = (e) => {
 	const { altKey, ctrlKey, metaKey, shiftKey } = e;
 	console.log(e.key, e.keyCode, "altKey", altKey, "ctrlKey", ctrlKey, "metaKey", metaKey, "shiftKey", shiftKey);
-	// update store state for every key
-	keyboard.set({ ...get(keyboard), [e.keyCode]: true });
 	// execute functions
 	switch (e.keyCode) {
 	case 8: // backspace
@@ -33,7 +35,7 @@ export const keyboardEventDown = (e) => {
 		// change tool to "edge"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
 			e.preventDefault();
-			tool.set(TOOL_EDGE);
+			// tool.set(TOOL_EDGE);
 		}
 		break;
 	case 78: // "n"
@@ -68,6 +70,30 @@ export const keyboardEventDown = (e) => {
 		break;
 	default: break;
 	}
+};
+
+const keyboardTerminalEventDown = (e) => {
+	switch (e.keyCode) {
+	case 13: // return
+		if (e.shiftKey) { break; }
+		console.log("textareaValue", get(textareaValue));
+		e.preventDefault();
+		textareaValue.set("");
+		break;
+	default:
+		break;
+	}
+};
+
+export const keyboardEventDown = (e) => {
+	// update store state for every key
+	keyboard.set({ ...get(keyboard), [e.keyCode]: true });
+	// execute different commands based on whether or not
+	// the textarea (Terminal) is active.
+	if (document.activeElement === get(textarea)) {
+		return keyboardTerminalEventDown(e);
+	}
+	return keyboardWindowEventDown(e);
 };
 
 export const keyboardEventUp = (e) => {

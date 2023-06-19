@@ -9,13 +9,12 @@
 	} from "../../js/dom.js";
 	import { viewBox } from "../../stores/app.js";
 
-	const dispatch = createEventDispatcher();
-
 	const formatMouseEvent = (e) => ({
 		buttons: e.buttons,
 		point: convertToViewBox(findInParents(e.target, "svg"), e.x, e.y),
 	});
 
+	const dispatch = createEventDispatcher();
 	const mousedown = (e) => dispatch("press", formatMouseEvent(e));
 	const mousemove = (e) => dispatch("move", formatMouseEvent(e));
 	const mouseup = (e) => dispatch("release", formatMouseEvent(e));
@@ -34,7 +33,7 @@
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		viewBox={padViewBox($viewBox, vmax * 0.1).join(" ")}
-		stroke-width={$viewBox[2] * 0.005}
+		stroke-width={$viewBox[2] * 0.0033}
 		on:mousedown={mousedown}
 		on:mousemove={mousemove}
 		on:mouseup={mouseup}

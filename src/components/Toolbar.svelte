@@ -98,11 +98,6 @@ import { graph } from "../stores/graph.js";
 		background-color: #333;
 	}
 	.toolbar { padding-top: 0.5rem; }
-	.column {
-		display: flex;
-		flex-direction: column;
-		align-items: start;
-	}
 	.vertical-radio {
 		display: grid;
 		grid-template-columns: min-content 1fr;

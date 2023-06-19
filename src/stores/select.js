@@ -15,6 +15,14 @@ const {
 export const selected = {
 	subscribe: subscribeSelected,
 	set: (g) => setSelected(g),
+	add: (obj) => {
+		const result = { vertices: [], edges: [], faces: [] };
+		const near = nearest(graph, point);
+		result.vertices[near.vertex] = true;
+		result.edges[near.edge] = true;
+		result.faces[near.face] = true;
+		return result;
+	},
 	vertices: () => {
 		const value = get(selected).vertices || [];
 		return Object.keys(value)

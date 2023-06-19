@@ -1,5 +1,4 @@
 import { get } from "svelte/store";
-import { execute } from "./app.js";
 import { elementSelect } from "../stores/app.js";
 import { selectionRect } from "../stores/select.js";
 import {
@@ -8,13 +7,22 @@ import {
 	moves,
 	keyboard,
 } from "../stores/ui.js";
-import { getSelected } from "../js/select.js";
 import {
 	SELECT_VERTEX,
 	SELECT_EDGE,
 	SELECT_FACE,
 } from "../js/enums.js";
+import { getSelected } from "../js/select.js";
+import { execute } from "./app.js";
 
+const vefName = {
+	[SELECT_VERTEX]: "vertices",
+	[SELECT_EDGE]: "edges",
+	[SELECT_FACE]: "faces",
+};
+/**
+ *
+ */
 const rectFromTwoPoints = (p, q) => {
 	const xs = [p[0], q[0]].sort((a, b) => a - b);
 	const ys = [p[1], q[1]].sort((a, b) => a - b);
@@ -24,13 +32,6 @@ const rectFromTwoPoints = (p, q) => {
 		span: [xs[1] - xs[0], ys[1] - ys[0]],
 	};
 };
-
-const vefName = {
-	[SELECT_VERTEX]: "vertices",
-	[SELECT_EDGE]: "edges",
-	[SELECT_FACE]: "faces",
-};
-
 /**
  *
  */

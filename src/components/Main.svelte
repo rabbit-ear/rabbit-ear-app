@@ -7,32 +7,31 @@
 	import FileManager from "./FileManager.svelte";
 	import DragAndDrop from "./DragAndDrop.svelte";
 
+	// these events originate from the SVG canvas
 	let press;
 	let move;
 	let release;
-	let keydownKernel;
-	let keyupKernel;
-	let keydownFooter;
+
+	// these events originate from the window
+	let keydown;
+	let keyup;
 </script>
 
-<svelte:window
-	on:keydown={keydownKernel}
-	on:keyup={keyupKernel}
-/>
+<svelte:window on:keydown={keydown} on:keyup={keyup} />
 
 <main>
 	<Header />
-	<div class="body">
+	<div class="content">
 		<Toolbar />
 		<SVGCanvas on:press={press} on:move={move} on:release={release} />
 	</div>
-	<Footer bind:keydown={keydownFooter} />
+	<Footer />
 	<Kernel
 		bind:press={press}
 		bind:move={move}
 		bind:release={release}
-		bind:keydown={keydownKernel}
-		bind:keyup={keyupKernel}
+		bind:keydown={keydown}
+		bind:keyup={keyup}
 	/>
 	<FileManager />
 	<DragAndDrop />
@@ -43,7 +42,7 @@
 		width: 100%;
 		height: 100vh;
 	}
-	.body {
+	.content {
 		display: flex;
 		flex-direction: row;
 		height: calc(100vh - 8rem);

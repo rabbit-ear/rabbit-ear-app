@@ -10,6 +10,13 @@ import { downloadFile } from "../js/file.js";
 /**
  *
  */
+export const test = (...args) => console.log(["test():"]
+	.concat(args.map((arg, i) => `${i}:${typeof arg}:${JSON.stringify(arg)}`))
+	.map(s => `${s}\n`)
+	.join(""));
+/**
+ *
+ */
 export const clearSelection = () => selected.reset();
 /**
  *
@@ -62,6 +69,14 @@ export const deleteComponents = (components) => {
 	components.faces.forEach(v => { remove.faces[v] = true; });
 	const g = deleteComponentsFromGraph(get(graph), remove);
 	graph.set({ ...g });
+};
+
+export const snapAllVertices = () => {
+	const vertices_coords = get(graph).vertices_coords || [];
+	vertices_coords.forEach((coord, i) => coord.forEach((n, j) => {
+		vertices_coords[i][j] = Math.round(n);
+	}));
+	graph.set({ ...get(graph), vertices_coords });
 };
 
 export const addVertex = (point) => {

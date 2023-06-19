@@ -1,21 +1,15 @@
 <script>
 	import { afterUpdate } from "svelte";
 	import { onKeyDown } from "../stores/ui.js";
-	import { history } from "../stores/app.js";
+	import {
+		textarea,
+		textareaValue,
+		history,
+	} from "../stores/terminal.js";
 
-	let preRef;
-	let textareaValue = "";
+	let pre;
 
-	export const keydown = (e) => {
-		e.preventDefault();
-		onKeyDown(e);
-		switch (e.keyCode) {
-		case 13: textareaValue = ""; break;
-		default: break;
-		}
-	};
-
-	afterUpdate(() => { preRef.scrollTop = preRef.scrollHeight; });
+	afterUpdate(() => { pre.scrollTop = pre.scrollHeight; });
 
 	const fade = 2;
 	let opacities;
@@ -26,9 +20,10 @@
 </script>
 
 <div>
-	<pre bind:this={preRef}>{#each $history as line, i}<span style={`opacity: ${opacities[i]}`}>{line.func.name}({line.args ? line.args.map(arg => JSON.stringify(arg)).join(", ") : ""})</span><br/>{/each}</pre>
+	<pre bind:this={pre}>{#each $history as line, i}<span style={`opacity: ${opacities[i]}`}>{line.func.name}({line.args ? line.args.map(arg => JSON.stringify(arg)).join(", ") : ""})</span><br/>{/each}</pre>
 	<textarea
-		bind:value={textareaValue}
+		bind:this={$textarea}
+		bind:value={$textareaValue}
 		autocomplete="off"
 		autocorrect="off"
 		rows="1"
