@@ -1,6 +1,10 @@
 <script>
+	import GraphVerticesLayer from "./GraphVerticesLayer.svelte";
+	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
+	import GraphFacesLayer from "./GraphFacesLayer.svelte";
 	import { viewBox } from "../../stores/app.js";
 	import { selectionRect } from "../../stores/select.js";
+	import { uiGraph } from "../../stores/graph.js";
 
 	let vmax;
 	$: vmax = Math.max($viewBox[2], $viewBox[3]);
@@ -9,7 +13,10 @@
 	setInterval(() => { tick += (vmax * 0.002); }, 30);
 </script>
 
-<g class="ui-layer">
+<g>
+	<GraphFacesLayer graph={$uiGraph} />
+	<GraphEdgesLayer graph={$uiGraph} />
+	<GraphVerticesLayer graph={$uiGraph} />
 	{#if $selectionRect !== undefined}
 		<rect
 			x={$selectionRect.min[0]}

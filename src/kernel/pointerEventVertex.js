@@ -1,6 +1,8 @@
-import { subtract2 } from "rabbit-ear/math/algebra/vector.js";
+import { add2, subtract2 } from "rabbit-ear/math/algebra/vector.js";
+// import { normalize } from "rabbit-ear/graph/subgraph.js";
 import { get } from "svelte/store";
 import { selected } from "../stores/select.js";
+import { graph, uiGraph } from "../stores/graph.js";
 import {
 	presses,
 	moves,
@@ -8,7 +10,15 @@ import {
 	current
 } from "../stores/ui.js";
 import { didTouchVertex } from "../js/nearest.js";
+import { subgraphWithVertices, normalize } from "../js/subgraph.js";
 import { execute } from "./app.js";
+
+const getDragVector = () => {
+	const origin = get(presses)[0];
+	const end = get(current);
+	if (!origin || !end) { return [0, 0]; }
+	return subtract2(end, origin);
+};
 
 export const pointerEventVertex = (eventType) => {
 	switch (eventType) {
@@ -23,22 +33,20 @@ export const pointerEventVertex = (eventType) => {
 		execute("addVertex", get(current));
 		break;
 	case "move": {
-		// const origin = get(moves).length > 2
-		// 	? get(moves)[get(moves).length - 2]
-		// 	: get(presses)[get(presses).length - 1];
-		// // const origin = get(presses)[get(presses).length - 1];
-		// const end = get(current);
-		// const vector = subtract2(end, origin);
-		// // move currently selected vertices
-		// translateVertices(selected.vertices(), vector);
+		const dragVector = getDragVector();
+		const selVerts = selected.vertices();
+		const subgraph = subgraphWithVertices(get(graph), selVerts);
+		selVerts.forEach(v => {
+			subgraph.vertices_coords[v] = add2(subgraph.vertices_coords[v], dragVector);
+		});
+		normalize(subgraph);
+		uiGraph.set({ ...subgraph });
 	}
 		break;
 	case "release":
-		const origin = get(presses)[0];
-		const end = get(current);
-		if (!origin || !end) { break; }
+		uiGraph.set({});
 		// move currently selected vertices
-		execute("translateVertices", selected.vertices(), subtract2(end, origin));
+		execute("translateVertices", selected.vertices(), getDragVector());
 		presses.set([]);
 		moves.set([]);
 		releases.set([]);

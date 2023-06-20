@@ -72,12 +72,33 @@ const keyboardWindowEventDown = (e) => {
 	}
 };
 
+const executeString = (str) => {
+	const preParen = str.match(/^[^(]*/);
+	const insideParen = str.match(/\(([^\)]+)\)/);
+	const fnName = preParen[0];
+	const argsStr = (!insideParen || insideParen.length < 2
+		? ""
+		: insideParen[1]);
+	let args;
+	try {
+		args = JSON.parse(`[${argsStr}]`);
+	} catch (error) {
+		console.error(error);
+		return;
+	}
+	console.log("insideParen", insideParen);
+	console.log("fnName", fnName);
+	console.log("argsStr", argsStr);
+	console.log("args", args);
+	execute(fnName, ...args);
+};
+
 const keyboardTerminalEventDown = (e) => {
 	switch (e.keyCode) {
 	case 13: // return
 		if (e.shiftKey) { break; }
-		console.log("textareaValue", get(textareaValue));
 		e.preventDefault();
+		executeString(get(textareaValue));
 		textareaValue.set("");
 		break;
 	default:

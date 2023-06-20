@@ -27,16 +27,16 @@ export const execute = (funcName, ...args) => {
 	return res;
 };
 
-export const executeString = (str) => {
-	const funcName = str.match(/^[^(]*/);
-	const func = Functions[funcName];
-	if (!func) {
-		console.error(new Error("no known function with that name"));
-		return;
-	}
-	console.log("executeString", funcName, funcName.length);
-	const parenthesis = str.slice(funcName.length);
-	console.log("executeString", funcName, funcName.length, parenthesis);
-	const argsString = parenthesis.match(/^\([^"]+\)/);
-	console.log("argsString", argsString);
-};
+// export const executeString = (str) => {
+// 	const funcName = str.match(/^[^(]*/);
+// 	const func = Functions[funcName];
+// 	if (!func) {
+// 		console.error(new Error("no known function with that name"));
+// 		return;
+// 	}
+// 	console.log("executeString", funcName, funcName.length);
+// 	const parenthesis = str.slice(funcName.length);
+// 	console.log("executeString", funcName, funcName.length, parenthesis);
+// 	const argsString = parenthesis.match(/^\([^"]+\)/);
+// 	console.log("argsString", argsString);
+// };

@@ -17,8 +17,9 @@ const makeEmptyGraph = () => populate({
 
 export const boundingBox = writable({ min: [0, 0], max: [1, 1], span: [1, 1] });
 
-const { subscribe, set, update } = writable(makeEmptyGraph());
+export const uiGraph = writable({});
 
+const { subscribe, set, update } = writable(makeEmptyGraph());
 export const graph = {
 	subscribe,
 	set: (g) => {
