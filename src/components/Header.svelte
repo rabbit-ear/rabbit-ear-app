@@ -1,5 +1,10 @@
 <script>
-	import { darkMode, asapPlanarize, snapping } from "../stores/app.js";
+	import {
+		darkMode,
+		autoPlanarize,
+		snapping,
+		viewBox,
+	} from "../stores/app.js";
 	import { graph } from "../stores/graph.js";
 	import { current } from "../stores/ui.js";
 	import { execute } from "../kernel/app.js";
@@ -8,6 +13,11 @@
 	// temp
 	let showSimulator = false;
 	let showTerminal = true;
+
+	let viewBoxWidth = $viewBox[2];
+	let viewBoxHeight = $viewBox[3];
+	$: viewBox.setWidth(parseFloat(viewBoxWidth));
+	$: viewBox.setHeight(parseFloat(viewBoxHeight));
 
 	let inputFile;
 	const clickDarkMode = () => { $darkMode = !$darkMode; };
@@ -25,16 +35,30 @@
 					<li><button on:click={graph.reset}>new</button></li>
 					<hr />
 					<li><button on:click={() => inputFile.click()}>load</button></li>
-					<li><button on:click={() => execute("download", "origami.fold")}>save</button></li>
+					<li>
+						<button on:click={() => execute("download", "origami.fold")}>save</button>
+					</li>
 				</ul>
 			</li>
 			<li>graph
 				<ul>
-					<li><span class="popover">convert to planar graph</span><button on:click={() => execute("planarize")}>planarize</button></li>
-					<li class="no-select"><span class="popover">automatically planarize after (most) operations</span><input type="checkbox" id="checkbox-asap-planarize" bind:checked={$asapPlanarize}><label for="checkbox-asap-planarize">asap planarize</label></li>
+					<li>
+						<span class="popover">convert to planar graph</span>
+						<button on:click={() => execute("planarize")}>planarize</button>
+					</li>
+					<li class="no-select">
+						<span class="popover">automatically planarize after (most) operations</span>
+						<input type="checkbox" id="checkbox-auto-planarize" bind:checked={$autoPlanarize}>
+						<label for="checkbox-auto-planarize">auto-planarize</label>
+					</li>
 					<hr />
-					<li class="no-select"><input type="checkbox" id="checkbox-snapping" bind:checked={$snapping}><label for="checkbox-snapping">snap vertices</label></li>
-					<li><button on:click={() => execute("snapAllVertices")}>snap once</button></li>
+					<li class="no-select">
+						<input type="checkbox" id="checkbox-snapping" bind:checked={$snapping}>
+						<label for="checkbox-snapping">snap vertices</label>
+					</li>
+					<li>
+						<button on:click={() => execute("snapAllVertices")}>snap once</button>
+					</li>
 				</ul>
 			</li>
 			<li>assignment
@@ -90,6 +114,10 @@
 			<li>
 				<input type="text" readonly value={$current ? formatPoint($current) : ""} >
 			</li>
+			<li>
+				<input class="short" type="text" bind:value={viewBoxWidth} >
+				<input class="short" type="text" bind:value={viewBoxHeight} >
+			</li>
 		</ul>
 	</nav>
 	<input
@@ -104,6 +132,7 @@
 /*		visibility: hidden;*/
 		display: none;
 	}
+	input[type=text].short { width: 3rem; }
 	/* navbar */
 	button {
 		all: unset;

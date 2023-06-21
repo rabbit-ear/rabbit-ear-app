@@ -1,10 +1,19 @@
 import { get, writable } from "svelte/store";
 import { history } from "../stores/terminal.js";
 import * as Functions from "./functions.js";
-
+/**
+ * @description pre and post execute event function parameters should
+ * be in the form of (funcName: string, ...args: any[])
+ * the funcName being the name of the function which was just executed.
+ */
 export const preExecuteEvents = writable([]);
 export const postExecuteEvents = writable([]);
-
+/**
+ * @description the main execution method. all methods, from UI to
+ * graph-modifying should pass through this method. pre and post-
+ * execute event methods can be called, and the effect of calling
+ * a method here will print it to the history log in the terminal.
+ */
 export const execute = (funcName, ...args) => {
 	const func = Functions[funcName];
 	if (!func) {
@@ -13,12 +22,9 @@ export const execute = (funcName, ...args) => {
 	}
 	let res;
 	try {
-		// pass in the func (or name of the func) so that we can customize
-		// each pre-execute event depending on which event is to follow.
-		get(preExecuteEvents).forEach(fn => fn(func));
+		get(preExecuteEvents).forEach(fn => fn(funcName, ...args));
 		res = func(...args);
-		// same with post-execute events.
-		get(postExecuteEvents).forEach(fn => fn(func));
+		get(postExecuteEvents).forEach(fn => fn(funcName, ...args));
 	} catch (error) {
 		console.error(error);
 		return res;
@@ -26,17 +32,3 @@ export const execute = (funcName, ...args) => {
 	history.set([...get(history), { func, args }]);
 	return res;
 };
-
-// export const executeString = (str) => {
-// 	const funcName = str.match(/^[^(]*/);
-// 	const func = Functions[funcName];
-// 	if (!func) {
-// 		console.error(new Error("no known function with that name"));
-// 		return;
-// 	}
-// 	console.log("executeString", funcName, funcName.length);
-// 	const parenthesis = str.slice(funcName.length);
-// 	console.log("executeString", funcName, funcName.length, parenthesis);
-// 	const argsString = parenthesis.match(/^\([^"]+\)/);
-// 	console.log("argsString", argsString);
-// };
