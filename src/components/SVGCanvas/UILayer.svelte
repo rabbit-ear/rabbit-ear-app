@@ -14,9 +14,11 @@
 </script>
 
 <g>
-	<GraphFacesLayer graph={$uiGraph} />
-	<GraphEdgesLayer graph={$uiGraph} />
-	<GraphVerticesLayer graph={$uiGraph} />
+	<g opacity="0.666">
+		<GraphFacesLayer graph={$uiGraph} />
+		<GraphEdgesLayer graph={$uiGraph} />
+		<GraphVerticesLayer graph={$uiGraph} />
+	</g>
 	{#if $selectionRect !== undefined}
 		<rect
 			x={$selectionRect.min[0]}

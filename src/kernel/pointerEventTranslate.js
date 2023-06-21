@@ -1,5 +1,5 @@
 import {
-	distance2,
+	add2,
 	subtract2,
 } from "rabbit-ear/math/algebra/vector.js";
 import { get } from "svelte/store";
@@ -18,47 +18,33 @@ import {
 import { didTouchVertex } from "../js/nearest.js";
 import { execute } from "./app.js";
 
-let pressVertex = undefined;
-let releaseVertex = undefined;
 let pressCoords = undefined;
 let releaseCoords = undefined;
 
-export const pointerEventEdge = (eventType) => {
+export const pointerEventTranslate = (eventType) => {
 	switch (eventType) {
 	case "press": {
 		const coords = get(current);
-		pressVertex = didTouchVertex(coords);
-		releaseVertex = pressVertex;
+		const pressVertex = didTouchVertex(coords);
 		pressCoords = pressVertex === undefined
 			? [...coords]
 			: get(graph).vertices_coords[pressVertex];
-		releaseCoords = [...pressCoords];
-		uiGraph.set({
-			vertices_coords: [pressCoords, releaseCoords],
-			edges_vertices: [[0, 1]],
-		});
 	}
 		break;
 	case "move": {
+		const g = get(graph);
 		const coords = get(current);
-		releaseVertex = didTouchVertex(coords);
+		const releaseVertex = didTouchVertex(coords);
 		releaseCoords = releaseVertex === undefined
 			? [...coords]
-			: get(graph).vertices_coords[releaseVertex];
-		uiGraph.set({
-			vertices_coords: [pressCoords, releaseCoords],
-			edges_vertices: [[0, 1]],
-		});
+			: g.vertices_coords[releaseVertex];
+		const vector = subtract2(releaseCoords, pressCoords);
+		const vertices_coords = [...g.vertices_coords]
+			.map(coord => add2(coord, vector));
+		uiGraph.set({ ...g, vertices_coords });
 	}
 		break;
 	case "release":
-		if (pressVertex === undefined) {
-			pressVertex = execute("addVertex", pressCoords);
-		}
-		if (releaseVertex === undefined) {
-			releaseVertex = execute("addVertex", releaseCoords);
-		}
-		execute("addEdge", pressVertex, releaseVertex);
 		presses.set([]);
 		moves.set([]);
 		releases.set([]);

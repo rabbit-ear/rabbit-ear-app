@@ -4,6 +4,8 @@ import {
 	TOOL_VERTEX,
 	TOOL_EDGE,
 	TOOL_SPLIT_EDGE,
+	TOOL_TRANSLATE,
+	TOOL_SCALE,
 	SELECT_VERTEX,
 	SELECT_EDGE,
 	SELECT_FACE,
@@ -42,6 +44,23 @@ import { graph } from "../stores/graph.js";
 			bind:group={$tool}
 			value={TOOL_EDGE} />
 		<label for="edge">edge</label>
+	</div>
+	<p>transform</p>
+	<div class="vertical-radio">
+		<input
+			type="radio"
+			name="tool"
+			id="translate"
+			bind:group={$tool}
+			value={TOOL_TRANSLATE} />
+		<label for="translate">translate</label>
+		<input
+			type="radio"
+			name="tool"
+			id="scale"
+			bind:group={$tool}
+			value={TOOL_SCALE} />
+		<label for="scale">scale</label>
 	</div>
 	<p>modifiers</p>
 	<div class="vertical-radio">

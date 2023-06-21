@@ -3,6 +3,8 @@
 	import { pointerEventVertex } from "../kernel/pointerEventVertex.js";
 	import { pointerEventEdge } from "../kernel/pointerEventEdge.js";
 	import { pointerEventSplitEdge } from "../kernel/pointerEventSplitEdge.js";
+	import { pointerEventTranslate } from "../kernel/pointerEventTranslate.js";
+	import { pointerEventScale } from "../kernel/pointerEventScale.js";
 	import {
 		keyboardEventDown,
 		keyboardEventUp,
@@ -12,6 +14,8 @@
 		TOOL_VERTEX,
 		TOOL_EDGE,
 		TOOL_SPLIT_EDGE,
+		TOOL_TRANSLATE,
+		TOOL_SCALE,
 	} from "../js/enums.js";
 	import { tool } from "../stores/app.js";
 	import {
@@ -28,6 +32,8 @@
 		case TOOL_VERTEX: return pointerEventVertex(eventType);
 		case TOOL_EDGE: return pointerEventEdge(eventType);
 		case TOOL_SPLIT_EDGE: return pointerEventSplitEdge(eventType);
+		case TOOL_TRANSLATE: return pointerEventTranslate(eventType);
+		case TOOL_SCALE: return pointerEventScale(eventType);
 		default: break;
 		}
 	};

@@ -19,7 +19,6 @@ export const darkMode = writable(true);
 
 export const snapping = writable(false);
 
-// export const viewBox = writable([0, 0, 3, 3]);
 const {
 	subscribe: viewBoxSubscribe,
 	set: viewBoxSet,
@@ -44,6 +43,7 @@ const {
 	subscribe: autoPlanarizeSubscribe,
 	set: autoPlanarizeSet,
 } = writable(false);
+
 export const autoPlanarize = {
 	subscribe: autoPlanarizeSubscribe,
 	set: (e) => {
@@ -63,11 +63,8 @@ const {
 export const tool = {
 	subscribe: toolSubscribe,
 	set: (t) => {
-		selected.reset();
-		// switch (t) {
-		// case TOOL_VERTEX: elementSelectSet(SELECT_VERTEX); break;
-		// case TOOL_EDGE: elementSelectSet(SELECT_EDGE); break;
-		// }
+		// selected.reset();
+		// switch (t) { case TOOL_VERTEX: break; }
 		return toolSet(t);
 	},
 	reset: () => toolSet(TOOL_SELECT),
