@@ -3,7 +3,10 @@ import {
 	subtract2,
 } from "rabbit-ear/math/algebra/vector.js";
 import { get } from "svelte/store";
-import { graph } from "../stores/graph.js";
+import {
+	graph,
+	uiGraph,
+} from "../stores/graph.js";
 import { viewBox } from "../stores/app.js";
 import { selected } from "../stores/select.js";
 import {
@@ -15,35 +18,51 @@ import {
 import { didTouchVertex } from "../js/nearest.js";
 import { execute } from "./app.js";
 
+let pressVertex = undefined;
+let releaseVertex = undefined;
+let pressCoords = undefined;
+let releaseCoords = undefined;
+
 export const pointerEventEdge = (eventType) => {
 	switch (eventType) {
-	case "press":
-		const near = didTouchVertex(get(current));
-		if (near !== undefined) {
-			const vertices = [];
-			vertices[near] = true;
-			selected.set({ ...get(selected), vertices });
-		} else {
-			execute("addVertex", get(current));
-		}
-		const vertex = execute("addVertex", get(current));
-		execute("addEdge", near !== undefined ? near : vertex - 1, vertex);
+	case "press": {
+		const coords = get(current);
+		pressVertex = didTouchVertex(coords);
+		releaseVertex = pressVertex;
+		pressCoords = pressVertex === undefined
+			? [...coords]
+			: get(graph).vertices_coords[pressVertex]
+		releaseCoords = [...pressCoords];
+		uiGraph.set({
+			vertices_coords: [pressCoords, releaseCoords],
+			edges_vertices: [[0, 1]],
+		});
+	}
 		break;
-	case "move":
-		const origin = get(moves).length > 2
-			? get(moves)[get(moves).length - 2]
-			: get(presses)[get(presses).length - 1];
-		// const origin = get(presses)[get(presses).length - 1];
-		const end = get(current);
-		const vector = subtract2(end, origin);
-		// move currently selected vertices
-		const newVertex = get(graph).vertices_coords.length - 1;
-		execute("translateVertices", [newVertex], vector);
+	case "move": {
+		const coords = get(current);
+		releaseVertex = didTouchVertex(coords);
+		releaseCoords = releaseVertex === undefined
+			? [...coords]
+			: get(graph).vertices_coords[releaseVertex];
+		uiGraph.set({
+			vertices_coords: [pressCoords, releaseCoords],
+			edges_vertices: [[0, 1]],
+		});
+	}
 		break;
 	case "release":
+		if (pressVertex === undefined) {
+			pressVertex = execute("addVertex", pressCoords);
+		}
+		if (releaseVertex === undefined) {
+			releaseVertex = execute("addVertex", releaseCoords);
+		}
+		execute("addEdge", pressVertex, releaseVertex);
 		presses.set([]);
 		moves.set([]);
 		releases.set([]);
+		uiGraph.set({});
 		break;
 	}
 };

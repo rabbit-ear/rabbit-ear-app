@@ -92,11 +92,14 @@ export const addVertex = (point) => {
 };
 
 export const addEdge = (vertexA, vertexB) => {
-	const edges_vertices = get(graph).edges_vertices || [];
+	const g = get(graph);
+	const edges_vertices = g.edges_vertices || [];
 	const newestEdge = edges_vertices.length;
 	edges_vertices.push([vertexA, vertexB]);
+	graph.set({ ...g, edges_vertices });
 	// edges_assignment.push("U");
 	// edges_foldAngle.push(0);
+	return newestEdge;
 };
 
 export const splitEdges = (edges) => {

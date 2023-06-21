@@ -1,5 +1,5 @@
 import { add2, subtract2 } from "rabbit-ear/math/algebra/vector.js";
-// import { normalize } from "rabbit-ear/graph/subgraph.js";
+// import normalize from "rabbit-ear/graph/normalize.js";
 import { get } from "svelte/store";
 import { selected } from "../stores/select.js";
 import { graph, uiGraph } from "../stores/graph.js";

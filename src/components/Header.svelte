@@ -5,6 +5,10 @@
 	import { execute } from "../kernel/app.js";
 	import { loadFileDialog } from "../js/file.js";
 
+	// temp
+	let showSimulator = false;
+	let showTerminal = true;
+
 	let inputFile;
 	const clickDarkMode = () => { $darkMode = !$darkMode; };
 	const formatPoint = (p) => p
@@ -33,6 +37,22 @@
 					<li><button on:click={() => execute("snapAllVertices")}>snap once</button></li>
 				</ul>
 			</li>
+			<li>assignment
+				<ul>
+					<li>reassign to
+						<ul>
+							<li><button on:click={() => {}}>boundary</button></li>
+							<li><button on:click={() => {}}>mountain</button></li>
+							<li><button on:click={() => {}}>valley</button></li>
+							<li><button on:click={() => {}}>flat</button></li>
+							<li><button on:click={() => {}}>cut</button></li>
+							<li><button on:click={() => {}}>join</button></li>
+							<li><button on:click={() => {}}>unassigned</button></li>
+						</ul>
+					</li>
+					<li><button on:click={() => {}}>flatten 3D angles</button></li>
+				</ul>
+			</li>
 			<li>select
 				<ul>
 					<li><button on:click={() => {}}>select all</button></li>
@@ -47,6 +67,7 @@
 							<li><button on:click={() => {}}>unassigned</button></li>
 						</ul>
 					</li>
+					<li><button on:click={() => {}}>select 3D angles</button></li>
 					<hr />
 					<li class="no-select description">select type:</li>
 					<li class="no-select">
@@ -56,8 +77,11 @@
 					</li>
 				</ul>
 			</li>
-			<li>preferences
+			<li>window
 				<ul>
+					<li class="no-select"><input type="checkbox" id="checkbox-show-simulator" bind:checked={showSimulator}><label for="checkbox-show-simulator">show simulator</label></li>
+					<li class="no-select"><input type="checkbox" id="checkbox-show-terminal" bind:checked={showTerminal}><label for="checkbox-show-terminal">show terminal</label></li>
+					<hr />
 					<li highlighted={$darkMode}>
 						<button on:click={clickDarkMode}>dark mode</button>
 					</li>
@@ -67,19 +91,18 @@
 				<input type="text" readonly value={$current ? formatPoint($current) : ""} >
 			</li>
 		</ul>
-		<input
-			type="file"
-			id="file"
-			bind:this={inputFile}
-			on:change={loadFileDialog} />
 	</nav>
+	<input
+		type="file"
+		id="file"
+		bind:this={inputFile}
+		on:change={loadFileDialog} />
 
 <style>
 	.popover { display: none; }
-	/*file open hidden input dialog trigger*/
-	nav > input {
-		visibility: hidden;
-/*		display: none;*/
+	input[type=file] {
+/*		visibility: hidden;*/
+		display: none;
 	}
 	/* navbar */
 	button {
