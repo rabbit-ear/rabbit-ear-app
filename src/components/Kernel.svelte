@@ -9,6 +9,7 @@
 		keyboardEventDown,
 		keyboardEventUp,
 	} from "../kernel/keyboardEvent.js";
+	import { scrollEvent } from "../kernel/scrollEvent.js";
 	import {
 		TOOL_SELECT,
 		TOOL_VERTEX,
@@ -59,6 +60,8 @@
 		$releases.push(point);
 		return pointerEvent("release");
 	};
+
+	export const scroll = (e) => scrollEvent(e.detail);
 
 	export const keydown = (e) => keyboardEventDown(e);
 

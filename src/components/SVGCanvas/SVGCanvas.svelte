@@ -14,10 +14,16 @@
 		point: convertToViewBox(findInParents(e.target, "svg"), e.x, e.y),
 	});
 
+	const formatWheelEvent = (e) => ({
+		wheelDelta: e.wheelDelta, // wheelDeltaX, wheelDeltaY
+		point: convertToViewBox(findInParents(e.target, "svg"), e.x, e.y),
+	});
+
 	const dispatch = createEventDispatcher();
 	const mousedown = (e) => dispatch("press", formatMouseEvent(e));
 	const mousemove = (e) => dispatch("move", formatMouseEvent(e));
 	const mouseup = (e) => dispatch("release", formatMouseEvent(e));
+	const wheel = (e) => dispatch("scroll", formatWheelEvent(e));
 
 	let vmax
 	$: vmax = Math.max($viewBox[2], $viewBox[3]);
@@ -37,6 +43,7 @@
 		on:mousedown={mousedown}
 		on:mousemove={mousemove}
 		on:mouseup={mouseup}
+		on:wheel={wheel}
 	>
 		<GridLayer />
 		<GraphLayer />

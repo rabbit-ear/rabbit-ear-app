@@ -3,7 +3,7 @@
 
 	let factors = [{}, {}];
 	$: {
-		const size = [$viewBox[2], $viewBox[3]];
+		const size = [$viewBox[2], $viewBox[3]].map(n => Math.ceil(n));
 		factors = Array.from(Array(2)).map((_, dim) => {
 			const result = Array(size[dim] + 1).fill(0);
 			Array.from(Array(size[dim]))
@@ -24,7 +24,7 @@
 </script>
 
 <g class="grid" stroke-width={Math.max($viewBox[2], $viewBox[3]) / 400}>
-	{#each Array.from(Array($viewBox[2] + 1)).map((_, i) => i + $viewBox[0]) as x}
+	{#each Array.from(Array(Math.ceil($viewBox[2]) + 1)).map((_, i) => i + $viewBox[0]) as x}
 		<line
 			x1={x}
 			y1={$viewBox[1]}
@@ -33,7 +33,7 @@
 			stroke-width={$viewBox[2] * 0.001 + factors[0][x] * 0.02}
 		/>
 	{/each}
-	{#each Array.from(Array($viewBox[3] + 1)).map((_, i) => i + $viewBox[1]) as y}
+	{#each Array.from(Array(Math.ceil($viewBox[3]) + 1)).map((_, i) => i + $viewBox[1]) as y}
 		<line
 			x1={$viewBox[0]}
 			y1={y}

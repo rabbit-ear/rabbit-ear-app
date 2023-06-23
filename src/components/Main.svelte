@@ -12,19 +12,28 @@
 	let press;
 	let move;
 	let release;
+	let scroll;
 
 	// these events originate from the window
 	let keydown;
 	let keyup;
 </script>
 
-<svelte:window on:keydown={keydown} on:keyup={keyup} />
+<svelte:window
+	on:keydown={keydown}
+	on:keyup={keyup}
+/>
 
 <main>
 	<Header />
 	<div class="content">
 		<Toolbar />
-		<SVGCanvas on:press={press} on:move={move} on:release={release} />
+		<SVGCanvas
+			on:press={press}
+			on:move={move}
+			on:release={release}
+			on:scroll={scroll}
+		/>
 		<Panels />
 	</div>
 	<Footer />
@@ -32,6 +41,7 @@
 		bind:press={press}
 		bind:move={move}
 		bind:release={release}
+		bind:scroll={scroll}
 		bind:keydown={keydown}
 		bind:keyup={keyup}
 	/>
