@@ -14,7 +14,7 @@ import {
 	SELECT_VERTEX,
 	SELECT_EDGE,
 	SELECT_FACE,
-} from "../js/enums.js";
+} from "../app/keys.js";
 
 const pointInRect = (p, rect) => (
 	p[0] > rect.min[0] && p[0] < rect.max[0] &&

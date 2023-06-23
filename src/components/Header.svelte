@@ -6,7 +6,6 @@
 		viewBox,
 	} from "../stores/app.js";
 	import { graph } from "../stores/graph.js";
-	import { current } from "../stores/ui.js";
 	import { execute } from "../kernel/app.js";
 	import { loadFileDialog } from "../js/file.js";
 
@@ -14,18 +13,8 @@
 	let showSimulator = false;
 	let showTerminal = true;
 
-	let viewBoxWidth = $viewBox[2];
-	let viewBoxHeight = $viewBox[3];
-	$: viewBox.setWidth(parseFloat(viewBoxWidth));
-	$: viewBox.setHeight(parseFloat(viewBoxHeight));
-
 	let inputFile;
 	const clickDarkMode = () => { $darkMode = !$darkMode; };
-	const formatPoint = (p) => p
-		.map(n => {
-			const integer = parseInt(n);
-			return integer === n ? n : n.toFixed(4)
-		}).join(", ");
 </script>
 
 	<nav>
@@ -110,13 +99,6 @@
 						<button on:click={clickDarkMode}>dark mode</button>
 					</li>
 				</ul>
-			</li>
-			<li>
-				<input type="text" readonly value={$current ? formatPoint($current) : ""} >
-			</li>
-			<li>
-				<input class="short" type="text" bind:value={viewBoxWidth} >
-				<input class="short" type="text" bind:value={viewBoxHeight} >
 			</li>
 		</ul>
 	</nav>

@@ -7,7 +7,7 @@ import {
 	SELECT_VERTEX,
 	SELECT_EDGE,
 	SELECT_FACE,
-} from "../js/enums.js";
+} from "../app/keys.js";
 import { selected } from "./select.js";
 import { autoPlanarize as autoPlanarizeFunc } from "../kernel/prePostEvents.js";
 import {

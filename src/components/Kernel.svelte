@@ -16,7 +16,7 @@
 		TOOL_SPLIT_EDGE,
 		TOOL_TRANSLATE,
 		TOOL_SCALE,
-	} from "../js/enums.js";
+	} from "../app/keys.js";
 	import { tool } from "../stores/app.js";
 	import {
 		keyboard,

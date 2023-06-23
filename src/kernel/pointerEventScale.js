@@ -42,6 +42,7 @@ export const pointerEventScale = (eventType) => {
 			releaseCoords[0] / pressCoords[0],
 			releaseCoords[1] / pressCoords[1],
 		];
+		console.log("ra", ratio);
 		const vector = (Number.isFinite(ratio[0]) && Number.isFinite(ratio[1])
 			? ratio
 			: [1, 1]);

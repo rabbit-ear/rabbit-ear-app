@@ -29,6 +29,12 @@ export const execute = (funcName, ...args) => {
 		console.error(error);
 		return res;
 	}
-	history.set([...get(history), { func, args }]);
+	let argsClone = args;
+	try {
+		argsClone = structuredClone(args);
+	} catch (error) {
+		console.error(error);
+	}
+	history.set([...get(history), { func, args: argsClone }]);
 	return res;
 };

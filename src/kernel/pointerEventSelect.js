@@ -11,7 +11,7 @@ import {
 	SELECT_VERTEX,
 	SELECT_EDGE,
 	SELECT_FACE,
-} from "../js/enums.js";
+} from "../app/keys.js";
 import { getSelected } from "../js/select.js";
 import { execute } from "./app.js";
 

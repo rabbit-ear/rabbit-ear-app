@@ -3,6 +3,7 @@
 	import Footer from "./Footer.svelte";
 	import Toolbar from "./Toolbar.svelte";
 	import SVGCanvas from "./SVGCanvas/SVGCanvas.svelte";
+	import Panels from "./Panels.svelte";
 	import Kernel from "./Kernel.svelte";
 	import FileManager from "./FileManager.svelte";
 	import DragAndDrop from "./DragAndDrop.svelte";
@@ -24,6 +25,7 @@
 	<div class="content">
 		<Toolbar />
 		<SVGCanvas on:press={press} on:move={move} on:release={release} />
+		<Panels />
 	</div>
 	<Footer />
 	<Kernel

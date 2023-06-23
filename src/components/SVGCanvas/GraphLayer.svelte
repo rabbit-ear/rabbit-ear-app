@@ -12,7 +12,7 @@
 		SELECT_VERTEX,
 		TOOL_VERTEX,
 		TOOL_SPLIT_EDGE,
-	} from "../../js/enums.js";
+	} from "../../app/keys.js";
 
 	let showVertices;
 	$: showVertices = ($elementSelect === SELECT_VERTEX

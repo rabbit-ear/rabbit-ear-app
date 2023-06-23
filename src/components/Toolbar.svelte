@@ -9,16 +9,50 @@ import {
 	SELECT_VERTEX,
 	SELECT_EDGE,
 	SELECT_FACE,
-} from "../js/enums.js";
+} from "../app/keys.js";
 import {
 	tool,
 	elementSelect,
 } from "../stores/app.js";
 import { graph } from "../stores/graph.js";
 
+let tempCreateLineType;
+
+const CREATE_LINE_SELECTED_FACES = "createOneFace";
+const CREATE_LINE_ALL_FACES = "createAllFaces";
+const CREATE_LINE_RULER = "createRuler";
+
 </script>
 
 <div class="toolbar">
+
+	<div class="horizontal-radio">
+		<input
+			type="radio"
+			name="VEF"
+			id="selectVertices"
+			bind:group={$elementSelect}
+			value={SELECT_VERTEX}
+			disabled={$tool !== TOOL_SELECT} />
+		<label for="selectVertices">V</label>
+		<input
+			type="radio"
+			name="VEF"
+			id="selectEdges"
+			bind:group={$elementSelect}
+			value={SELECT_EDGE}
+			disabled={$tool !== TOOL_SELECT} />
+		<label for="selectEdges">E</label>
+		<input
+			type="radio"
+			name="VEF"
+			id="selectFaces"
+			bind:group={$elementSelect}
+			value={SELECT_FACE}
+			disabled={$tool !== TOOL_SELECT} />
+		<label for="selectFaces">F</label>
+	</div>
+
 	<div class="vertical-radio">
 		<input
 			type="radio"
@@ -28,7 +62,10 @@ import { graph } from "../stores/graph.js";
 			value={TOOL_SELECT} />
 		<label for="select">select</label>
 	</div>
-	<p>tool</p>
+
+	<hr />
+ 
+	<p>create</p>
 	<div class="vertical-radio">
 		<input
 			type="radio"
@@ -75,31 +112,30 @@ import { graph } from "../stores/graph.js";
 
 	<hr />
 
-	<div class="horizontal-radio">
+	<p>create line</p>
+
+	<div class="vertical-radio">
 		<input
 			type="radio"
-			name="VEF"
-			id="selectVertices"
-			bind:group={$elementSelect}
-			value={SELECT_VERTEX}
-			disabled={$tool !== TOOL_SELECT} />
-		<label for="selectVertices">V</label>
+			name="create-type"
+			id="create-line-all-faces"
+			bind:group={tempCreateLineType}
+			value={CREATE_LINE_ALL_FACES} />
+		<label for="create-line-all-faces">all faces</label>
 		<input
 			type="radio"
-			name="VEF"
-			id="selectEdges"
-			bind:group={$elementSelect}
-			value={SELECT_EDGE}
-			disabled={$tool !== TOOL_SELECT} />
-		<label for="selectEdges">E</label>
+			name="create-type"
+			id="create-line-selected-faces"
+			bind:group={tempCreateLineType}
+			value={CREATE_LINE_SELECTED_FACES} />
+		<label for="create-line-selected-faces">selected</label>
 		<input
 			type="radio"
-			name="VEF"
-			id="selectFaces"
-			bind:group={$elementSelect}
-			value={SELECT_FACE}
-			disabled={$tool !== TOOL_SELECT} />
-		<label for="selectFaces">F</label>
+			name="create-type"
+			id="create-line-ruler"
+			bind:group={tempCreateLineType}
+			value={CREATE_LINE_RULER} />
+		<label for="create-line-ruler">ruler only</label>
 	</div>
 
 	<hr />

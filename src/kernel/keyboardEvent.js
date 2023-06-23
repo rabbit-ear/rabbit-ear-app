@@ -4,7 +4,7 @@ import {
 	TOOL_VERTEX,
 	TOOL_EDGE,
 	TOOL_SPLIT_EDGE,
-} from "../js/enums.js";
+} from "../app/keys.js";
 import { tool } from "../stores/app.js";
 import { selected } from "../stores/select.js";
 import { keyboard } from "../stores/ui.js";
