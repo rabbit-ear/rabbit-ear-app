@@ -52,7 +52,6 @@
 
 <style>
 	svg {
-		flex: 1 0 calc(100vw - 8rem - 12rem);
 		width: 100%;
 		height: 100%;
 	}

@@ -14,6 +14,8 @@
     "vite": "^4.3.2"
   },
   "dependencies": {
-    "rabbit-ear": "file:../../Origami/"
+    "earcut": "^2.2.4",
+    "rabbit-ear": "file:../../Origami/",
+    "three": "^0.153.0"
   }
 }

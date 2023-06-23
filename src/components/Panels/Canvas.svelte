@@ -22,20 +22,19 @@
 
 <Panel>
 	<span slot="title">Canvas</span>
-
 	<span slot="body">
 		<div>
 			<p>cursor</p>
-			<input type="text" readonly value={$current ? formatPoint($current) : ""} >
+			<input type="text" readonly value={$current ? formatPoint($current) : ""}>
 		</div>
 		<div>
 			<p>canvas</p>
-			<input class="half" type="text" bind:value={viewBoxWidth} >
-			<input class="half" type="text" bind:value={viewBoxHeight} >
+			<input class="half" type="text" bind:value={viewBoxWidth}><input class="half" type="text" bind:value={viewBoxHeight}>
 		</div>
 	</span>
 </Panel>
 
 <style>
-	.half { width: 40% }
+	input[type=text] { width: 100%; }
+	input[type=text].half { width: 50%; }
 </style>

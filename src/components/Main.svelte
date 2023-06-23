@@ -3,6 +3,7 @@
 	import Footer from "./Footer.svelte";
 	import Toolbar from "./Toolbar.svelte";
 	import SVGCanvas from "./SVGCanvas/SVGCanvas.svelte";
+	import Simulator from "./OrigamiSimulator/Simulator.svelte";
 	import Panels from "./Panels.svelte";
 	import Kernel from "./Kernel.svelte";
 	import FileManager from "./FileManager.svelte";
@@ -28,12 +29,19 @@
 	<Header />
 	<div class="content">
 		<Toolbar />
-		<SVGCanvas
-			on:press={press}
-			on:move={move}
-			on:release={release}
-			on:scroll={scroll}
-		/>
+		<div class="pair">
+			<div>
+				<SVGCanvas
+					on:press={press}
+					on:move={move}
+					on:release={release}
+					on:scroll={scroll}
+				/>
+			</div>
+			<div>
+				<Simulator />
+			</div>
+		</div>
 		<Panels />
 	</div>
 	<Footer />
@@ -58,5 +66,16 @@
 		display: flex;
 		flex-direction: row;
 		height: calc(100vh - 8rem);
+	}
+	.pair {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		height: 100%;
+		flex: 1 0 calc(100vw - 8rem - 12rem);
+	}
+	.pair > * {
+		width: 50%;
+		height: 100%;
 	}
 </style>
