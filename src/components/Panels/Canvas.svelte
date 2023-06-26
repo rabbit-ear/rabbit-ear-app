@@ -21,7 +21,7 @@
 </script>
 
 <Panel>
-	<span slot="title">Canvas</span>
+	<span slot="title">canvas</span>
 	<span slot="body">
 		<div>
 			<p>cursor</p>

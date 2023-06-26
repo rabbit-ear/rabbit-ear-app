@@ -55,7 +55,7 @@
 </script>
 
 <Panel>
-	<span slot="title">Origami Simulator</span>
+	<span slot="title">origami simulator</span>
 	<span slot="body">
 		<h3>
 			active

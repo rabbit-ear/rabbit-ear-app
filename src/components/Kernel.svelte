@@ -5,6 +5,7 @@
 	import { pointerEventSplitEdge } from "../kernel/pointerEventSplitEdge.js";
 	import { pointerEventTranslate } from "../kernel/pointerEventTranslate.js";
 	import { pointerEventScale } from "../kernel/pointerEventScale.js";
+	import { pointerEventAssign } from "../kernel/pointerEventAssign.js";
 	import {
 		keyboardEventDown,
 		keyboardEventUp,
@@ -17,6 +18,7 @@
 		TOOL_SPLIT_EDGE,
 		TOOL_TRANSLATE,
 		TOOL_SCALE,
+		TOOL_ASSIGN,
 	} from "../app/keys.js";
 	import { tool } from "../stores/app.js";
 	import {
@@ -35,6 +37,7 @@
 		case TOOL_SPLIT_EDGE: return pointerEventSplitEdge(eventType);
 		case TOOL_TRANSLATE: return pointerEventTranslate(eventType);
 		case TOOL_SCALE: return pointerEventScale(eventType);
+		case TOOL_ASSIGN: return pointerEventAssign(eventType);
 		default: break;
 		}
 	};
@@ -68,5 +71,4 @@
 	export const keyup = (e) => keyboardEventUp(e);
 
 	export const executeCommand = (fn, ...params) => {};
-
 </script>

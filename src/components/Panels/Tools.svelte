@@ -8,18 +8,19 @@
 		TOOL_SPLIT_EDGE,
 		TOOL_TRANSLATE,
 		TOOL_SCALE,
+		TOOL_ASSIGN,
+		TOOL_FOLD_ANGLE,
 		nameForTool,
 	} from "../../app/keys.js";
+	import ToolSelect from "./ToolSelect.svelte";
+	import ToolAssign from "./ToolAssign.svelte";
 </script>
 
 <Panel>
 	<span slot="title">{nameForTool[$tool]}</span>
-
 	<span slot="body">
 		{#if $tool === TOOL_SELECT}
-			<p>vertices</p>
-			<p>edges</p>
-			<p>faces</p>
+			<ToolSelect />
 		{:else if $tool === TOOL_VERTEX}
 			<p>new position</p>
 		{:else if $tool === TOOL_EDGE}
@@ -30,6 +31,10 @@
 			<p>all axes</p>
 		{:else if $tool === TOOL_SCALE}
 			<p>uniform</p>
+		{:else if $tool === TOOL_ASSIGN}
+			<ToolAssign />
+		{:else if $tool === TOOL_FOLD_ANGLE}
+			<input type="text">
 		{/if}
 	</span>
 </Panel>

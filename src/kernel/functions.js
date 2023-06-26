@@ -1,9 +1,12 @@
 import { get } from "svelte/store";
 import removeGeometry from "rabbit-ear/graph/remove.js";
 import Planarize from "rabbit-ear/graph/planarize.js";
-import populate from "rabbit-ear/graph/populate.js";
+import AddVertex from "rabbit-ear/graph/add/addVertex.js";
+import addNonPlanarEdge from "rabbit-ear/graph/add/addNonPlanarEdge.js";
 import splitEdge from "rabbit-ear/graph/splitEdge/index.js";
+import populate from "rabbit-ear/graph/populate.js";
 import { add2 } from "rabbit-ear/math/algebra/vector.js";
+import { assignmentFlatFoldAngle } from "rabbit-ear/fold/spec.js";
 import { graph } from "../stores/graph.js";
 import { selected } from "../stores/select.js";
 import { downloadFile } from "../js/file.js";
@@ -79,12 +82,10 @@ export const snapAllVertices = () => {
 	graph.set({ ...get(graph), vertices_coords });
 };
 
-export const addVertex = (point) => {
-	const vertices_coords = get(graph).vertices_coords || [];
-	const newestVertex = vertices_coords.length;
-	vertices_coords.push(point);
-	graph.set({ ...get(graph), vertices_coords });
-	// todo: should this automatically add the new vertex to the selection?
+export const addVertex = (coords) => {
+	const g = get(graph);
+	const newestVertex = AddVertex(g, coords);
+	graph.set({ ...g });
 	const vertices = [];
 	vertices[newestVertex] = true;
 	selected.set({ ...get(selected), vertices });
@@ -93,12 +94,11 @@ export const addVertex = (point) => {
 
 export const addEdge = (vertexA, vertexB) => {
 	const g = get(graph);
-	const edges_vertices = g.edges_vertices || [];
-	const newestEdge = edges_vertices.length;
-	edges_vertices.push([vertexA, vertexB]);
-	graph.set({ ...g, edges_vertices });
-	// edges_assignment.push("U");
-	// edges_foldAngle.push(0);
+	const newestEdge = addNonPlanarEdge(g, [vertexA, vertexB]);
+	graph.set({ ...g });
+	const edges = [];
+	edges[newestEdge] = true;
+	selected.set({ ...get(selected), edges });
 	return newestEdge;
 };
 
@@ -117,6 +117,53 @@ export const translateVertices = (vertices, vector) => {
 		vertices_coords[v] = add2(vertices_coords[v], vector);
 	});
 	graph.simpleSet({ ...get(graph), vertices_coords });
+};
+
+export const setEdgesAssignment = (edges, assignment, foldAngle) => {
+	const g = get(graph);
+	// ensure edges_assignment and edges_foldAngle exist
+	if (!g.edges_vertices) { return; }
+	if (!g.edges_assignment) {
+		g.edges_assignment = g.edges_vertices.map(() => "U");
+	}
+	if (!g.edges_foldAngle) {
+		g.edges_foldAngle = g.edges_vertices.map(() => 0);
+	}
+	// set data
+	edges.forEach(e => { g.edges_assignment[e] = assignment; });
+	if (foldAngle === undefined) {
+		foldAngle = assignmentFlatFoldAngle[assignment] || 0;
+	}
+	edges.forEach(e => { g.edges_foldAngle[e] = foldAngle; });
+	graph.simpleSet({ ...g });
+};
+
+const signedAssignments = { M: -1, m: -1, V: 1, v: 1 };
+
+export const setEdgesFoldAngle = (edges, foldAngle) => {
+	const g = get(graph);
+	// ensure edges_foldAngle exist
+	if (!g.edges_vertices) { return; }
+	if (!g.edges_foldAngle) {
+		g.edges_foldAngle = g.edges_vertices.map(() => 0);
+	}
+	// if edges_assignment exists, use it to ensure sign is correct
+	// (M is - and V is +, anything else don't touch).
+	if (g.edges_assignment) {
+		edges.forEach(e => {
+			// if the assignment is M or V, and
+			// the foldAngle sign doesn't match, flip it
+			if (g.edges_assignment[e] in signedAssignments
+				&& Math.sign(foldAngle) !== signedAssignments[g.edges_assignment[e]]) {
+				g.edges_foldAngle[e] = -foldAngle;
+			} else {
+				g.edges_foldAngle[e] = foldAngle;
+			}
+		});
+	} else {
+		edges.forEach(e => { g.edges_foldAngle[e] = foldAngle; });
+	}
+	graph.simpleSet({ ...g });
 };
 
 export const planarize = () => graph.set(populate(Planarize(get(graph)), true));

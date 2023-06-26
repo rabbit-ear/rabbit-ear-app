@@ -44,11 +44,16 @@
 		on:mousemove={mousemove}
 		on:mouseup={mouseup}
 		on:wheel={wheel}
+		on:focus={() => {}}
+		on:blur={() => {}}
+		role="presentation"
 	>
 		<GridLayer />
 		<GraphLayer />
 		<UILayer />
 	</svg>
+
+	<!-- i'm not sure what role=presentation means i just guessed -->
 
 <style>
 	svg {

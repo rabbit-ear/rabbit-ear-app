@@ -21,10 +21,12 @@ export const execute = (funcName, ...args) => {
 		return;
 	}
 	let res;
+	const preEvents = get(preExecuteEvents);
+	const postEvents = get(postExecuteEvents);
 	try {
-		get(preExecuteEvents).forEach(fn => fn(funcName, ...args));
+		preEvents.forEach(fn => fn(funcName, ...args));
 		res = func(...args);
-		get(postExecuteEvents).forEach(fn => fn(funcName, ...args));
+		postEvents.forEach(fn => fn(funcName, ...args));
 	} catch (error) {
 		console.error(error);
 		return res;
@@ -35,6 +37,10 @@ export const execute = (funcName, ...args) => {
 	} catch (error) {
 		console.error(error);
 	}
-	history.set([...get(history), { func, args: argsClone }]);
+	const newHistory = [];
+	newHistory.push(...preEvents.map(fn => ({ func: fn, args: [] })));
+	newHistory.push({ func, args: argsClone });
+	newHistory.push(...postEvents.map(fn => ({ func: fn, args: [] })));
+	history.set([...get(history), ...newHistory]);
 	return res;
 };

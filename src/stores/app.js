@@ -7,6 +7,7 @@ import {
 	SELECT_VERTEX,
 	SELECT_EDGE,
 	SELECT_FACE,
+	ASSIGN_SWAP,
 } from "../app/keys.js";
 import { selected } from "./select.js";
 import { autoPlanarize as autoPlanarizeFunc } from "../kernel/prePostEvents.js";
@@ -55,6 +56,10 @@ export const autoPlanarize = {
 	},
 };
 
+autoPlanarize.set(true);
+
+// this is the "main tool" selection
+
 const {
 	subscribe: toolSubscribe,
 	set: toolSet,
@@ -70,6 +75,9 @@ export const tool = {
 	reset: () => toolSet(TOOL_SELECT),
 };
 
+// any modifier or attribute or detail necessary
+// for the main tool.
+
 const {
 	subscribe: elementSelectSubscribe,
 	set: elementSelectSet,
@@ -81,5 +89,6 @@ export const elementSelect = {
 		selected.reset();
 		return elementSelectSet(e);
 	},
-	// reset: () => elementSelectSet(SELECT_VERTEX),
 };
+
+export const assignType = writable(ASSIGN_SWAP);

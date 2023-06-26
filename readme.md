@@ -21,6 +21,8 @@ UI events
 [ ] ctrl-z undo (redo). build an entire undo history thingy
 [ ] translate with number typing (like blender. check axis first.)
 [ ] select: need to be able to shift-deselect (remove from selection)
+[x] scroll to zoom in and out (half done)
+[ ] scroll to zoom in and out at the location of the cursor
 
 general
 
@@ -28,7 +30,7 @@ general
 [ ] show edge colors (edges_assignment, edges_foldAngle).
 [ ] introduce layers. first layer is the ruler layer.
 [ ] re-think snapping. snapping must contain a pre-built, easily searchable (binary tree), dataset which is separate from the graph because it has to include ruler layer ruler line intersections.
-[ ] bring back origami simulator.
+[x] bring back origami simulator.
 
 ## 2023-06-08: idea for new separate UI visualization layer
 

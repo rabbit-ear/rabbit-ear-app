@@ -6,6 +6,8 @@ import {
 	TOOL_SPLIT_EDGE,
 	TOOL_TRANSLATE,
 	TOOL_SCALE,
+	TOOL_ASSIGN,
+	TOOL_FOLD_ANGLE,
 	SELECT_VERTEX,
 	SELECT_EDGE,
 	SELECT_FACE,
@@ -25,33 +27,6 @@ const CREATE_LINE_RULER = "createRuler";
 </script>
 
 <div class="toolbar">
-
-	<div class="horizontal-radio">
-		<input
-			type="radio"
-			name="VEF"
-			id="selectVertices"
-			bind:group={$elementSelect}
-			value={SELECT_VERTEX}
-			disabled={$tool !== TOOL_SELECT} />
-		<label for="selectVertices">V</label>
-		<input
-			type="radio"
-			name="VEF"
-			id="selectEdges"
-			bind:group={$elementSelect}
-			value={SELECT_EDGE}
-			disabled={$tool !== TOOL_SELECT} />
-		<label for="selectEdges">E</label>
-		<input
-			type="radio"
-			name="VEF"
-			id="selectFaces"
-			bind:group={$elementSelect}
-			value={SELECT_FACE}
-			disabled={$tool !== TOOL_SELECT} />
-		<label for="selectFaces">F</label>
-	</div>
 
 	<div class="vertical-radio">
 		<input
@@ -109,6 +84,24 @@ const CREATE_LINE_RULER = "createRuler";
 			value={TOOL_SPLIT_EDGE} />
 		<label for="split-edge">split edge</label>
 	</div>
+	<div class="vertical-radio">
+		<input
+			type="radio"
+			name="tool"
+			id="assign"
+			bind:group={$tool}
+			value={TOOL_ASSIGN} />
+		<label for="assign">assignment</label>
+	</div>
+	<div class="vertical-radio">
+		<input
+			type="radio"
+			name="tool"
+			id="assign"
+			bind:group={$tool}
+			value={TOOL_FOLD_ANGLE} />
+		<label for="assign">fold angle</label>
+	</div>
 
 	<hr />
 
@@ -158,11 +151,4 @@ const CREATE_LINE_RULER = "createRuler";
 		grid-template-columns: min-content 1fr;
 	}
 	.vertical-radio input { grid-column: 1; }
-	.horizontal-radio {
-		display: grid;
-		grid-template-rows: 1fr 1fr;
-		grid-template-columns: repeat(3, 1fr);
-	}
-	.horizontal-radio input { grid-row: 1; }
-	.horizontal-radio label { margin: auto; }
 </style>

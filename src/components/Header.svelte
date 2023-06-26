@@ -84,16 +84,25 @@
 					<hr />
 					<li class="no-select description">select type:</li>
 					<li class="no-select">
-						<input type="radio" id="radio-select-vertex"><label for="radio-select-vertex">vertex</label>
-						<input type="radio" id="radio-select-edge"><label for="radio-select-edge">edge</label>
-						<input type="radio" id="radio-select-face"><label for="radio-select-face">face</label>
+						<input type="radio" id="radio-select-vertex">
+						<label for="radio-select-vertex">vertex</label>
+						<input type="radio" id="radio-select-edge">
+						<label for="radio-select-edge">edge</label>
+						<input type="radio" id="radio-select-face">
+						<label for="radio-select-face">face</label>
 					</li>
 				</ul>
 			</li>
 			<li>window
 				<ul>
-					<li class="no-select"><input type="checkbox" id="checkbox-show-simulator" bind:checked={showSimulator}><label for="checkbox-show-simulator">show simulator</label></li>
-					<li class="no-select"><input type="checkbox" id="checkbox-show-terminal" bind:checked={showTerminal}><label for="checkbox-show-terminal">show terminal</label></li>
+					<li class="no-select">
+						<input type="checkbox" id="checkbox-show-simulator" bind:checked={showSimulator}>
+						<label for="checkbox-show-simulator">show simulator</label>
+					</li>
+					<li class="no-select">
+						<input type="checkbox" id="checkbox-show-terminal" bind:checked={showTerminal}>
+						<label for="checkbox-show-terminal">show terminal</label>
+					</li>
 					<hr />
 					<li highlighted={$darkMode}>
 						<button on:click={clickDarkMode}>dark mode</button>
@@ -114,7 +123,6 @@
 /*		visibility: hidden;*/
 		display: none;
 	}
-	input[type=text].short { width: 3rem; }
 	/* navbar */
 	button {
 		all: unset;
