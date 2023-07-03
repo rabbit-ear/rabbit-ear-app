@@ -5,6 +5,11 @@
 		snapping,
 		viewBox,
 	} from "../stores/app.js";
+	import {
+		SNAP_NONE,
+		SNAP_GRID,
+		SNAP_SMART,
+	} from "../app/keys.js";
 	import { graph } from "../stores/graph.js";
 	import { execute } from "../kernel/app.js";
 	import { loadFileDialog } from "../js/file.js";
@@ -41,17 +46,33 @@
 						<label for="checkbox-auto-planarize">auto-planarize</label>
 					</li>
 					<hr />
+					<li class="no-select description">snapping</li>
 					<li class="no-select">
 						<div>
-							<input type="radio" id="radio-snapping-no-snapping">
-							<label for="radio-snapping-no-snapping">no snapping</label>
+							<input
+								type="radio"
+								id="radio-snapping-no-snapping"
+								bind:group={$snapping}
+								value={SNAP_NONE} 
+							>
+							<label for="radio-snapping-no-snapping">off</label>
 						</div>
 						<div>
-							<input type="radio" id="radio-snapping-grid">
+							<input
+								type="radio"
+								id="radio-snapping-grid"
+								bind:group={$snapping}
+								value={SNAP_GRID} 
+							>
 							<label for="radio-snapping-grid">grid</label>
 						</div>
 						<div>
-							<input type="radio" id="radio-snapping-smart">
+							<input
+								type="radio"
+								id="radio-snapping-smart"
+								bind:group={$snapping}
+								value={SNAP_SMART} 
+							>
 							<label for="radio-snapping-smart">smart</label>
 						</div>
 					</li>
@@ -62,7 +83,7 @@
 			</li>
 			<li>assignment
 				<ul>
-					<li>reassign to
+					<li>reassign selected
 						<ul>
 							<li><button on:click={() => {}}>boundary</button></li>
 							<li><button on:click={() => {}}>mountain</button></li>

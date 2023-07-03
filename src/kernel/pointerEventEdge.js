@@ -15,7 +15,7 @@ import {
 	moves,
 	releases,
 } from "../stores/ui.js";
-import { didTouchVertex } from "../js/nearest.js";
+import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
 
 let pressVertex = undefined;
@@ -26,13 +26,12 @@ let releaseCoords = undefined;
 export const pointerEventEdge = (eventType) => {
 	switch (eventType) {
 	case "press": {
-		const coords = get(current);
-		pressVertex = didTouchVertex(coords);
-		releaseVertex = pressVertex;
-		pressCoords = pressVertex === undefined
-			? [...coords]
-			: get(graph).vertices_coords[pressVertex];
-		releaseCoords = [...pressCoords];
+		// const coords = get(current);
+		const { coords, vertex } = getSnapPoint(get(current));
+		pressVertex = vertex
+		releaseVertex = vertex
+		pressCoords = coords;
+		releaseCoords = [...coords];
 		uiGraph.set({
 			vertices_coords: [pressCoords, releaseCoords],
 			edges_vertices: [[0, 1]],
@@ -40,11 +39,9 @@ export const pointerEventEdge = (eventType) => {
 	}
 		break;
 	case "move": {
-		const coords = get(current);
-		releaseVertex = didTouchVertex(coords);
-		releaseCoords = releaseVertex === undefined
-			? [...coords]
-			: get(graph).vertices_coords[releaseVertex];
+		const { coords, vertex } = getSnapPoint(get(current));
+		releaseVertex = vertex
+		releaseCoords = coords;
 		uiGraph.set({
 			vertices_coords: [pressCoords, releaseCoords],
 			edges_vertices: [[0, 1]],

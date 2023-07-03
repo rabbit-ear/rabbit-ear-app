@@ -21,6 +21,10 @@ export const ASSIGN_UNASSIGNED = "assignUnassigned";
 export const ASSIGN_CUT = "assignCut";
 export const ASSIGN_BOUNDARY = "assignBoundary";
 
+export const SNAP_NONE = "snapNone";
+export const SNAP_GRID = "snapGrid";
+export const SNAP_SMART = "snapSmart";
+
 export const nameForTool = {
 	[TOOL_SELECT]: "select",
 	[TOOL_VERTEX]: "vertex",

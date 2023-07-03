@@ -5,10 +5,6 @@ import {
 } from "rabbit-ear/math/algebra/matrix2.js";
 import { get } from "svelte/store";
 import { viewBox } from "../stores/app.js";
-import { selected } from "../stores/select.js";
-import { graph, uiGraph } from "../stores/graph.js";
-import { didTouchVertex } from "../js/nearest.js";
-import { subgraphWithVertices, normalize } from "../js/subgraph.js";
 import { execute } from "./app.js";
 
 export const scrollEvent = ({ point, wheelDelta }) => {

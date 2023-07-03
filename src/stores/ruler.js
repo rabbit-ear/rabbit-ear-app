@@ -8,7 +8,7 @@ export const rulerLines = {
 	update,
 	set: (newLines) => {
 		const res = set(newLines);
-		snapPoints.updatePoints();
+		snapPoints.recalculate();
 		return res;
 	},
 };

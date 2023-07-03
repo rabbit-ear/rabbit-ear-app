@@ -3,8 +3,14 @@ import { intersectLineLine } from "rabbit-ear/math/intersect/intersect.js";
 import { makeEdgesVector } from "rabbit-ear/graph/make.js";
 import { get } from "svelte/store";
 import { writable } from "svelte/store";
+import {
+	SNAP_NONE,
+	SNAP_GRID,
+	SNAP_SMART,
+} from "../app/keys.js";
 import { graph } from "./graph.js";
 import { rulerLines } from "./ruler.js";
+import { snapping } from "./app.js";
 
 const intersectGraphLine = (graph, line) => {
 	const edgesOrigin = graph.edges_vertices
@@ -24,14 +30,27 @@ export const snapPoints = {
 	subscribe,
 	set,
 	update,
-	updatePoints: () => {
-		const g = get(graph);
-		const lines = get(rulerLines);
-		const intersected = lines
-			.flatMap(line => intersectGraphLine(g, line));
-		// todo. filter. remove duplicates. build voronoi
-		const newPoints = [...g.vertices_coords, ...intersected];
-		// console.log("setting snapPoints", newPoints);
-		set(newPoints);
+	recalculate: () => {
+		switch (get(snapping)) {
+		case SNAP_NONE: {
+			set([]);
+		}
+			break;
+		case SNAP_GRID: {
+			break;
+		}
+			break;
+		case SNAP_SMART: {
+			const g = get(graph);
+			const lines = get(rulerLines);
+			const intersected = lines
+				.flatMap(line => intersectGraphLine(g, line));
+			// todo. filter. remove duplicates. build voronoi
+			const newPoints = [...g.vertices_coords, ...intersected];
+			// console.log("setting snapPoints", newPoints);
+			set(newPoints);
+		}
+			break;
+		}
 	},
 };

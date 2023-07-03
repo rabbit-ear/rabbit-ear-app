@@ -8,8 +8,12 @@ import {
 	SELECT_EDGE,
 	SELECT_FACE,
 	ASSIGN_SWAP,
+	SNAP_NONE,
+	SNAP_GRID,
+	SNAP_SMART,
 } from "../app/keys.js";
 import { selected } from "./select.js";
+import { snapPoints } from "./snap.js";
 import { autoPlanarize as autoPlanarizeFunc } from "../kernel/prePostEvents.js";
 import {
 	preExecuteEvents,
@@ -18,7 +22,19 @@ import {
 
 export const darkMode = writable(true);
 
-export const snapping = writable(false);
+const {
+	subscribe: snapSubscribe,
+	set: snapSet,
+} = writable(SNAP_SMART);
+
+export const snapping = {
+	subscribe: snapSubscribe,
+	set: (value) => {
+		const res = snapSet(value);
+		snapPoints.recalculate();
+		return res;
+	},
+};
 
 const {
 	subscribe: viewBoxSubscribe,

@@ -113,6 +113,7 @@ const CREATE_LINE_RULER = "createRuler";
 
 	<div class="vertical-radio">
 		<input
+			disabled=true
 			type="radio"
 			name="create-type"
 			id="create-line-selected-faces"
@@ -120,6 +121,7 @@ const CREATE_LINE_RULER = "createRuler";
 			value={CREATE_LINE_SELECTED_FACES} />
 		<label for="create-line-selected-faces">graph segments</label>
 		<input
+			disabled=true
 			type="radio"
 			name="create-type"
 			id="create-line-ruler"

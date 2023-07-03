@@ -21,14 +21,18 @@ export const boundingBox = writable({ min: [0, 0], max: [1, 1], span: [1, 1] });
 export const uiGraph = writable({});
 
 const { subscribe, set, update } = writable(makeEmptyGraph());
+
+const graphSet = (g) => {
+	// boundingBox.set(makeBoundingBox(get(graph).vertices_coords || []));
+	selected.reset();
+	const res = set(g);
+	snapPoints.recalculate();
+	return res;
+};
+
 export const graph = {
 	subscribe,
-	set: (g) => {
-		// boundingBox.set(makeBoundingBox(get(graph).vertices_coords || []));
-		selected.reset();
-		snapPoints.updatePoints();
-		return set(g);
-	},
+	set: graphSet,
 	// no change to topology
 	simpleSet: (g) => set(g),
 	// methods which modify the graph
@@ -39,7 +43,7 @@ export const graph = {
 		return update(g => g);
 	},
 	// empty the graph
-	reset: () => set(makeEmptyGraph()),
+	reset: () => graphSet(makeEmptyGraph()),
 };
 
 // operations that should modify the graph
