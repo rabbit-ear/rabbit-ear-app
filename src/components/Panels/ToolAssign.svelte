@@ -1,19 +1,11 @@
 <script>
 	import { assignType } from "../../stores/app.js";
 	import {
-		TOOL_SELECT,
-		TOOL_VERTEX,
-		TOOL_EDGE,
-		TOOL_SPLIT_EDGE,
-		TOOL_TRANSLATE,
-		TOOL_SCALE,
-		TOOL_ASSIGN,
 		ASSIGN_SWAP,
 		ASSIGN_FLAT,
 		ASSIGN_UNASSIGNED,
 		ASSIGN_CUT,
 		ASSIGN_BOUNDARY,
-		nameForTool,
 	} from "../../app/keys.js";
 </script>
 

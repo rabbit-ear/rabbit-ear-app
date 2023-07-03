@@ -92,3 +92,5 @@ export const elementSelect = {
 };
 
 export const assignType = writable(ASSIGN_SWAP);
+
+export const foldAngleValue = writable(90);

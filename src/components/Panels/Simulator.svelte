@@ -71,21 +71,21 @@
 			disabled={!$active}
 			bind:value={$foldAmount} />
 
-		<h3>pointer tool</h3>
+		<h3>touch</h3>
 		<input
 			type="radio"
 			id="radio-webgl-tool-trackball"
 			name="radio-webgl-tool"
 			bind:group={$tool}
 			value="trackball" />
-		<label for="radio-webgl-tool-trackball">trackball</label>
+		<label for="radio-webgl-tool-trackball">rotate</label>
 		<input
 			type="radio"
 			id="radio-webgl-tool-pull"
 			name="radio-webgl-tool"
 			bind:group={$tool}
 			value="pull" />
-		<label for="radio-webgl-tool-pull">pull</label>
+		<label for="radio-webgl-tool-pull">grab</label>
 
 		<h3>
 			show strain

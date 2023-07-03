@@ -42,11 +42,21 @@
 					</li>
 					<hr />
 					<li class="no-select">
-						<input type="checkbox" id="checkbox-snapping" bind:checked={$snapping}>
-						<label for="checkbox-snapping">snap vertices</label>
+						<div>
+							<input type="radio" id="radio-snapping-no-snapping">
+							<label for="radio-snapping-no-snapping">no snapping</label>
+						</div>
+						<div>
+							<input type="radio" id="radio-snapping-grid">
+							<label for="radio-snapping-grid">grid</label>
+						</div>
+						<div>
+							<input type="radio" id="radio-snapping-smart">
+							<label for="radio-snapping-smart">smart</label>
+						</div>
 					</li>
 					<li>
-						<button on:click={() => execute("snapAllVertices")}>snap once</button>
+						<button on:click={() => execute("snapAllVertices")}>snap once to grid</button>
 					</li>
 				</ul>
 			</li>
@@ -91,6 +101,11 @@
 						<input type="radio" id="radio-select-face">
 						<label for="radio-select-face">face</label>
 					</li>
+				</ul>
+			</li>
+			<li>analysis
+				<ul>
+					<li>flat-foldable vertex
 				</ul>
 			</li>
 			<li>window

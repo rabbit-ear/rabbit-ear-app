@@ -3,6 +3,7 @@
 	import GridLayer from "./GridLayer.svelte";
 	import UILayer from "./UILayer.svelte";
 	import GraphLayer from "./GraphLayer.svelte";
+	import RulerLayer from "./RulerLayer.svelte";
 	import {
 		convertToViewBox,
 		findInParents,
@@ -48,16 +49,18 @@
 		on:blur={() => {}}
 		role="presentation"
 	>
-		<GridLayer />
-		<GraphLayer />
-		<UILayer />
+			<GridLayer />
+			<GraphLayer />
+			<UILayer />
+			<RulerLayer />
 	</svg>
 
-	<!-- i'm not sure what role=presentation means i just guessed -->
+	<!-- i'm not sure what role=presentation means, i just guessed -->
 
 <style>
 	svg {
 		width: 100%;
 		height: 100%;
+		transform: matrix(1, 0, 0, -1, 0, 1);
 	}
 </style>

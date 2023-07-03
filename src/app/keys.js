@@ -1,3 +1,7 @@
+// "tool" is mentioned in:
+// - Kernel.svelte
+// - Toolbar.svelte
+// - Panels/Tools.svelte
 export const TOOL_SELECT = "toolSelect";
 export const TOOL_VERTEX = "toolVertex";
 export const TOOL_EDGE = "toolEdge";

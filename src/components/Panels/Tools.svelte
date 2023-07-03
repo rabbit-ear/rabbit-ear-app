@@ -14,6 +14,7 @@
 	} from "../../app/keys.js";
 	import ToolSelect from "./ToolSelect.svelte";
 	import ToolAssign from "./ToolAssign.svelte";
+	import ToolFoldAngle from "./ToolFoldAngle.svelte";
 </script>
 
 <Panel>
@@ -34,7 +35,7 @@
 		{:else if $tool === TOOL_ASSIGN}
 			<ToolAssign />
 		{:else if $tool === TOOL_FOLD_ANGLE}
-			<input type="text">
+			<ToolFoldAngle />
 		{/if}
 	</span>
 </Panel>

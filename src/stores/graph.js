@@ -3,6 +3,7 @@ import { boundingBox as makeBoundingBox } from "rabbit-ear/math/geometry/polygon
 import populate from "rabbit-ear/graph/populate.js";
 import { writable } from "svelte/store";
 import { selected } from "./select.js";
+import { snapPoints } from "./snap.js";
 import { downloadFile } from "../js/file.js";
 
 const makeEmptyGraph = () => populate({
@@ -25,6 +26,7 @@ export const graph = {
 	set: (g) => {
 		// boundingBox.set(makeBoundingBox(get(graph).vertices_coords || []));
 		selected.reset();
+		snapPoints.updatePoints();
 		return set(g);
 	},
 	// no change to topology

@@ -26,6 +26,8 @@ const CREATE_LINE_RULER = "createRuler";
 
 </script>
 
+<!-- todo make text non selectable -->
+
 <div class="toolbar">
 
 	<div class="vertical-radio">
@@ -37,8 +39,6 @@ const CREATE_LINE_RULER = "createRuler";
 			value={TOOL_SELECT} />
 		<label for="select">select</label>
 	</div>
-
-	<hr />
  
 	<p>create</p>
 	<div class="vertical-radio">
@@ -57,6 +57,38 @@ const CREATE_LINE_RULER = "createRuler";
 			value={TOOL_EDGE} />
 		<label for="edge">edge</label>
 	</div>
+
+	<p>modifiers</p>
+	<div class="vertical-radio">
+		<input
+			type="radio"
+			name="tool"
+			id="split-edge"
+			bind:group={$tool}
+			value={TOOL_SPLIT_EDGE} />
+		<label for="split-edge">split edge</label>
+	</div>
+
+	<p>attributes</p>
+	<div class="vertical-radio">
+		<input
+			type="radio"
+			name="tool"
+			id="assign"
+			bind:group={$tool}
+			value={TOOL_ASSIGN} />
+		<label for="assign">assignment</label>
+	</div>
+	<div class="vertical-radio">
+		<input
+			type="radio"
+			name="tool"
+			id="fold-angle"
+			bind:group={$tool}
+			value={TOOL_FOLD_ANGLE} />
+		<label for="fold-angle">fold angle</label>
+	</div>
+
 	<p>transform</p>
 	<div class="vertical-radio">
 		<input
@@ -74,61 +106,26 @@ const CREATE_LINE_RULER = "createRuler";
 			value={TOOL_SCALE} />
 		<label for="scale">scale</label>
 	</div>
-	<p>modifiers</p>
-	<div class="vertical-radio">
-		<input
-			type="radio"
-			name="tool"
-			id="split-edge"
-			bind:group={$tool}
-			value={TOOL_SPLIT_EDGE} />
-		<label for="split-edge">split edge</label>
-	</div>
-	<div class="vertical-radio">
-		<input
-			type="radio"
-			name="tool"
-			id="assign"
-			bind:group={$tool}
-			value={TOOL_ASSIGN} />
-		<label for="assign">assignment</label>
-	</div>
-	<div class="vertical-radio">
-		<input
-			type="radio"
-			name="tool"
-			id="assign"
-			bind:group={$tool}
-			value={TOOL_FOLD_ANGLE} />
-		<label for="assign">fold angle</label>
-	</div>
 
 	<hr />
 
-	<p>create line</p>
+	<p>lines into:</p>
 
 	<div class="vertical-radio">
-		<input
-			type="radio"
-			name="create-type"
-			id="create-line-all-faces"
-			bind:group={tempCreateLineType}
-			value={CREATE_LINE_ALL_FACES} />
-		<label for="create-line-all-faces">all faces</label>
 		<input
 			type="radio"
 			name="create-type"
 			id="create-line-selected-faces"
 			bind:group={tempCreateLineType}
 			value={CREATE_LINE_SELECTED_FACES} />
-		<label for="create-line-selected-faces">selected</label>
+		<label for="create-line-selected-faces">graph segments</label>
 		<input
 			type="radio"
 			name="create-type"
 			id="create-line-ruler"
 			bind:group={tempCreateLineType}
 			value={CREATE_LINE_RULER} />
-		<label for="create-line-ruler">ruler only</label>
+		<label for="create-line-ruler">ruler lines</label>
 	</div>
 
 	<hr />
@@ -145,10 +142,14 @@ const CREATE_LINE_RULER = "createRuler";
 		flex: 0 1 8rem;
 		background-color: #333;
 	}
-	.toolbar { padding-top: 0.5rem; }
+	.toolbar {
+		padding-top: 0.5rem;
+	}
 	.vertical-radio {
 		display: grid;
 		grid-template-columns: min-content 1fr;
 	}
-	.vertical-radio input { grid-column: 1; }
+	.vertical-radio input {
+		grid-column: 1;
+	}
 </style>

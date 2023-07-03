@@ -1,5 +1,27 @@
 # Blender-style graph maker
 
+## 2023-07-01: new features
+
+continue to refer to 2023-06-22 list which is not done.
+
+copy and paste:
+
+- copy graph. depending on what is selected, we need to copy a different set of components, for example, if an edge is selected it copies its adjacent vertices, but if vertices are selected, it only copies those edges which are fully selected (between two selected vertices) not leaf-adjacent edges.
+
+- pazte: multiple layers would be nice, someday, until then, we can paste the components as new components creating a disjoint section of the one graph, which is fully selected, allowing the user to switch tools to an affine transform and put the selected area into a new place.
+
+axioms:
+
+- performing an axiom will create one (or many) ruler line(s). this ruler line can disappear after the operation is fully completed. the ruler line should be colored differently than everything else, and should be stored as an infinite line and should render as a `<line>` segment that is always clipped to the viewBox. for example axiom 5 the sequence should go like this:
+
+1. click on a point, drag and release on a line
+2. click on a second point (which the line is to pass through)
+3. two ruler lines are now generated much like the walking-ant line selection line. all of their intersections with the graph are now snappable vertices, and the lines themselves are snappable (away from a vertex but still along the line at an arbitrary location). the user can now click and draw a segment using the rule line and once the user releases, the rulers disappear.
+
+22.5 degree lock:
+
+- no longer selecting between segment, ray, or line. by default "ray" is the only option. you can click on a vertex and if you are holding shift, it will draw the rule line thing from before (axioms section), and you draw along the line until one of the stopping points.
+
 ## 2023-06-22: new feature list
 
 menu:

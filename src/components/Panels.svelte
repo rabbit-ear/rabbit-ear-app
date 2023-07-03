@@ -5,8 +5,8 @@
 </script>
 
 <div class="container">
-	<Tools />
 	<Canvas />
+	<Tools />
 	<Simulator />
 </div>
 

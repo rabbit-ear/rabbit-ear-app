@@ -6,6 +6,7 @@
 	import { pointerEventTranslate } from "../kernel/pointerEventTranslate.js";
 	import { pointerEventScale } from "../kernel/pointerEventScale.js";
 	import { pointerEventAssign } from "../kernel/pointerEventAssign.js";
+	import { pointerEventFoldAngle } from "../kernel/pointerEventFoldAngle.js";
 	import {
 		keyboardEventDown,
 		keyboardEventUp,
@@ -19,6 +20,7 @@
 		TOOL_TRANSLATE,
 		TOOL_SCALE,
 		TOOL_ASSIGN,
+		TOOL_FOLD_ANGLE,
 	} from "../app/keys.js";
 	import { tool } from "../stores/app.js";
 	import {
@@ -38,6 +40,7 @@
 		case TOOL_TRANSLATE: return pointerEventTranslate(eventType);
 		case TOOL_SCALE: return pointerEventScale(eventType);
 		case TOOL_ASSIGN: return pointerEventAssign(eventType);
+		case TOOL_FOLD_ANGLE: return pointerEventFoldAngle(eventType);
 		default: break;
 		}
 	};

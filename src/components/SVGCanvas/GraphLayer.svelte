@@ -11,12 +11,14 @@
 	import {
 		SELECT_VERTEX,
 		TOOL_VERTEX,
+		TOOL_EDGE,
 		TOOL_SPLIT_EDGE,
 	} from "../../app/keys.js";
 
 	let showVertices;
 	$: showVertices = ($elementSelect === SELECT_VERTEX
 		|| $tool === TOOL_SPLIT_EDGE
+		|| $tool === TOOL_EDGE
 		|| $tool === TOOL_VERTEX);
 </script>
 
