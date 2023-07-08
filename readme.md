@@ -48,10 +48,11 @@ UI events
 
 general
 
-[ ] bring back the right panel which can fine tune the arguments for each tool/operation.
+[x] bring back the right panel which can fine tune the arguments for each tool/operation.
 [ ] show edge colors (edges_assignment, edges_foldAngle).
 [ ] introduce layers. first layer is the ruler layer.
-[ ] re-think snapping. snapping must contain a pre-built, easily searchable (binary tree), dataset which is separate from the graph because it has to include ruler layer ruler line intersections.
+[x] re-think snapping pt 1. dataset should be separate from the vertices of the graph, and include ruler intersections with the graph.
+[ ] re-think snapping pt 2. snap points should be inside an easily searchable binary tree data structure.
 [x] bring back origami simulator.
 
 ## 2023-06-08: idea for new separate UI visualization layer

@@ -1,5 +1,5 @@
 <script>
-	import { elementSelect } from "../../stores/app.js";
+	import { elementSelect } from "../../stores/tool.js";
 	import {
 		SELECT_VERTEX,
 		SELECT_EDGE,

@@ -1,9 +1,10 @@
 <script>
-	import { viewBox } from "../../stores/app.js";
+	import { viewBox } from "../../stores/viewBox.js";
 
 	let factors = [{}, {}];
 	$: {
 		const size = [$viewBox[2], $viewBox[3]].map(n => Math.ceil(n));
+		console.log("VIEWBOX", $viewBox);
 		factors = Array.from(Array(2)).map((_, dim) => {
 			const result = Array(size[dim] + 1).fill(0);
 			Array.from(Array(size[dim]))

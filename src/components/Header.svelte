@@ -3,7 +3,6 @@
 		darkMode,
 		autoPlanarize,
 		snapping,
-		viewBox,
 	} from "../stores/app.js";
 	import {
 		SNAP_NONE,
@@ -126,7 +125,22 @@
 			</li>
 			<li>analysis
 				<ul>
-					<li>flat-foldable vertex
+					<li>flat-foldable vertex</li>
+					<li>show face-winding</li>
+					<li>isolated vertices</li>
+					<li class="no-select description">show indices</li>
+					<li class="no-select">
+						<input type="checkbox" id="checkbox-vertices-indices">
+						<label for="checkbox-vertices-indices">vertices</label>
+					</li>
+					<li class="no-select">
+						<input type="checkbox" id="checkbox-edges-indices">
+						<label for="checkbox-edges-indices">edges</label>
+					</li>
+					<li class="no-select">
+						<input type="checkbox" id="checkbox-faces-indices">
+						<label for="checkbox-faces-indices">faces</label>
+					</li>
 				</ul>
 			</li>
 			<li>window

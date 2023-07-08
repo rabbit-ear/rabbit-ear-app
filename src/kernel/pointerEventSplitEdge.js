@@ -5,7 +5,7 @@ import {
 } from "rabbit-ear/math/algebra/vector.js";
 import { get } from "svelte/store";
 import { graph } from "../stores/graph.js";
-import { viewBox } from "../stores/app.js";
+import { viewBox } from "../stores/viewBox.js";
 import { selected } from "../stores/select.js";
 import { current } from "../stores/ui.js";
 import { execute } from "./app.js";

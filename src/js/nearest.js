@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import { distance2 } from "rabbit-ear/math/algebra/vector.js";
 import { graph } from "../stores/graph.js";
-import { viewBox } from "../stores/app.js";
+import { viewBox } from "../stores/viewBox.js";
 import { snapPoints } from "../stores/snap.js";
 /**
  * @returns {object} object with "coords" and "vertex". coords will
@@ -23,10 +23,11 @@ export const getSnapPoint = (point) => {
 		.sort((a, b) => distances[a] - distances[b])
 		.shift();
 	// no matching snap point
-	if (!snapPointIndex) {
+	if (snapPointIndex === undefined) {
 		return { coords: [...point], vertex: undefined };
 	}
 	const coords = [...points[snapPointIndex]];
+	// todo:
 	// redundant work. is the coord in the graph's vertices_coords?
 	const g = get(graph);
 	for (let i = 0; i < g.vertices_coords.length; i += 1) {

@@ -1,5 +1,5 @@
 <script>
-	import { viewBox } from "../../stores/app.js";
+	import { viewBox } from "../../stores/viewBox.js";
 
 	export let graph = {};
 	export let highlighted = [];

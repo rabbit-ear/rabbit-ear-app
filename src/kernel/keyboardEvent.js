@@ -5,7 +5,7 @@ import {
 	TOOL_EDGE,
 	TOOL_SPLIT_EDGE,
 } from "../app/keys.js";
-import { tool } from "../stores/app.js";
+import { tool } from "../stores/tool.js";
 import { selected } from "../stores/select.js";
 import { keyboard } from "../stores/ui.js";
 import {

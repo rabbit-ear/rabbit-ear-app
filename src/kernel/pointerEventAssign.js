@@ -15,7 +15,7 @@ import {
 import {
 	graph,
 } from "../stores/graph.js";
-import { assignType } from "../stores/app.js";
+import { assignType } from "../stores/tool.js";
 import {
 	current,
 	presses,

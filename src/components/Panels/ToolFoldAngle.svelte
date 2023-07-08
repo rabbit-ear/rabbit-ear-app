@@ -1,5 +1,5 @@
 <script>
-	import { foldAngleValue } from "../../stores/app.js";
+	import { foldAngleValue } from "../../stores/tool.js";
 </script>
 
 <div class="container">

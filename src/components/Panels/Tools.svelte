@@ -1,6 +1,6 @@
 <script>
 	import Panel from "./Panel.svelte";
-	import { tool } from "../../stores/app.js";
+	import { tool } from "../../stores/tool.js";
 	import {
 		TOOL_SELECT,
 		TOOL_VERTEX,
@@ -15,6 +15,7 @@
 	import ToolSelect from "./ToolSelect.svelte";
 	import ToolAssign from "./ToolAssign.svelte";
 	import ToolFoldAngle from "./ToolFoldAngle.svelte";
+	import ToolAxiom from "./ToolAxiom.svelte";
 </script>
 
 <Panel>
@@ -36,6 +37,8 @@
 			<ToolAssign />
 		{:else if $tool === TOOL_FOLD_ANGLE}
 			<ToolFoldAngle />
+		{:else if $tool.substring(0, 9) === "toolAxiom"}
+			<ToolAxiom />
 		{/if}
 	</span>
 </Panel>

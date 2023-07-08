@@ -2,6 +2,8 @@
 	import { pointerEventSelect } from "../kernel/pointerEventSelect.js";
 	import { pointerEventVertex } from "../kernel/pointerEventVertex.js";
 	import { pointerEventEdge } from "../kernel/pointerEventEdge.js";
+	import { pointerEventAxiom2 } from "../kernel/pointerEventAxiom2.js";
+	import { pointerEventAxiom7 } from "../kernel/pointerEventAxiom7.js";
 	import { pointerEventSplitEdge } from "../kernel/pointerEventSplitEdge.js";
 	import { pointerEventTranslate } from "../kernel/pointerEventTranslate.js";
 	import { pointerEventScale } from "../kernel/pointerEventScale.js";
@@ -16,13 +18,20 @@
 		TOOL_SELECT,
 		TOOL_VERTEX,
 		TOOL_EDGE,
+		TOOL_AXIOM_1,
+		TOOL_AXIOM_2,
+		TOOL_AXIOM_3,
+		TOOL_AXIOM_4,
+		TOOL_AXIOM_5,
+		TOOL_AXIOM_6,
+		TOOL_AXIOM_7,
 		TOOL_SPLIT_EDGE,
 		TOOL_TRANSLATE,
 		TOOL_SCALE,
 		TOOL_ASSIGN,
 		TOOL_FOLD_ANGLE,
 	} from "../app/keys.js";
-	import { tool } from "../stores/app.js";
+	import { tool } from "../stores/tool.js";
 	import {
 		keyboard,
 		presses,
@@ -36,6 +45,13 @@
 		case TOOL_SELECT: return pointerEventSelect(eventType);
 		case TOOL_VERTEX: return pointerEventVertex(eventType);
 		case TOOL_EDGE: return pointerEventEdge(eventType);
+		// case TOOL_AXIOM_1: return pointerEventAxiom1(eventType);
+		case TOOL_AXIOM_2: return pointerEventAxiom2(eventType);
+		// case TOOL_AXIOM_3: return pointerEventAxiom3(eventType);
+		// case TOOL_AXIOM_4: return pointerEventAxiom4(eventType);
+		// case TOOL_AXIOM_5: return pointerEventAxiom5(eventType);
+		// case TOOL_AXIOM_6: return pointerEventAxiom6(eventType);
+		case TOOL_AXIOM_7: return pointerEventAxiom7(eventType);
 		case TOOL_SPLIT_EDGE: return pointerEventSplitEdge(eventType);
 		case TOOL_TRANSLATE: return pointerEventTranslate(eventType);
 		case TOOL_SCALE: return pointerEventScale(eventType);

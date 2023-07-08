@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { elementSelect } from "../stores/app.js";
+import { elementSelect } from "../stores/tool.js";
 import { selectionRect } from "../stores/select.js";
 import {
 	presses,

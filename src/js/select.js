@@ -3,10 +3,8 @@ import { intersectLineLine } from "rabbit-ear/math/intersect/intersect.js";
 import { nearest } from "rabbit-ear/graph/nearest.js";
 import { includeS } from "rabbit-ear/math/general/function.js";
 // import { pointInBoundingBox } from "rabbit-ear/math/intersect/encloses.js";
-import {
-	viewBox,
-	elementSelect,
-} from "../stores/app.js";
+import { viewBox } from "../stores/viewBox.js";
+import { elementSelect } from "../stores/tool.js";
 import { selectionRect } from "../stores/select.js";
 import { graph } from "../stores/graph.js";
 import { releases } from "../stores/ui.js";
@@ -97,8 +95,8 @@ const vefName = {
  */
 export const getSelected = () => {
 	const graphValue = get(graph);
-	const viewBoxValue = get(viewBox);
-	const vmax = Math.max(viewBoxValue[2], viewBoxValue[3]);
+	const vb = get(viewBox);
+	const vmax = Math.max(vb[2], vb[3]);
 	const degenerateSelection = get(selectionRect) === undefined
 		|| Math.max(...get(selectionRect).span) < vmax * 0.01;
 	const nears = degenerateSelection

@@ -1,5 +1,4 @@
 import { get } from "svelte/store";
-import { boundingBox as makeBoundingBox } from "rabbit-ear/math/geometry/polygon.js";
 import populate from "rabbit-ear/graph/populate.js";
 import { writable } from "svelte/store";
 import { selected } from "./select.js";
@@ -14,25 +13,18 @@ const makeEmptyGraph = () => populate({
 	faces_vertices: [],
 });
 
-// export const graph = writable(makeEmptyGraph());
-
-export const boundingBox = writable({ min: [0, 0], max: [1, 1], span: [1, 1] });
-
-export const uiGraph = writable({});
-
-const { subscribe, set, update } = writable(makeEmptyGraph());
-
-const graphSet = (g) => {
-	// boundingBox.set(makeBoundingBox(get(graph).vertices_coords || []));
+const setGraph = (g) => {
 	selected.reset();
 	const res = set(g);
 	snapPoints.recalculate();
 	return res;
 };
 
+const { subscribe, set, update } = writable(makeEmptyGraph());
+
 export const graph = {
 	subscribe,
-	set: graphSet,
+	set: setGraph,
 	// no change to topology
 	simpleSet: (g) => set(g),
 	// methods which modify the graph
@@ -43,10 +35,10 @@ export const graph = {
 		return update(g => g);
 	},
 	// empty the graph
-	reset: () => graphSet(makeEmptyGraph()),
+	reset: () => setGraph(makeEmptyGraph()),
+
+	// not on every graph update, only on new file load or something
+	// of that magnitude, reset the modelMatrix to perfectly enclose the graph
 };
 
-// operations that should modify the graph
-// export const planarize = () => {};
-// export const addVertex = (point) => {};
-// export const addEdgeBetweenVertices = (vertices) => {};
+export const uiGraph = writable({});

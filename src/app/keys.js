@@ -11,16 +11,31 @@ export const TOOL_SCALE = "toolScale";
 export const TOOL_ASSIGN = "toolAssign";
 export const TOOL_FOLD_ANGLE = "toolFoldAngle";
 
+export const TOOL_AXIOM_1 = "toolAxiom1";
+export const TOOL_AXIOM_2 = "toolAxiom2";
+export const TOOL_AXIOM_3 = "toolAxiom3";
+export const TOOL_AXIOM_4 = "toolAxiom4";
+export const TOOL_AXIOM_5 = "toolAxiom5";
+export const TOOL_AXIOM_6 = "toolAxiom6";
+export const TOOL_AXIOM_7 = "toolAxiom7";
+
+export const TOOL_KAWASAKI = "toolKawasaki";
+export const TOOL_PLEAT = "toolPleat";
+export const TOOL_SCRIBBLE = "toolScribble";
+
+// settings for TOOL_SELECT
 export const SELECT_VERTEX = "selectVertex";
 export const SELECT_EDGE = "selectEdge";
 export const SELECT_FACE = "selectFace";
 
+// settings for TOOL_ASSIGN
 export const ASSIGN_SWAP = "assignSwap";
 export const ASSIGN_FLAT = "assignFlat";
 export const ASSIGN_UNASSIGNED = "assignUnassigned";
 export const ASSIGN_CUT = "assignCut";
 export const ASSIGN_BOUNDARY = "assignBoundary";
 
+// general settings
 export const SNAP_NONE = "snapNone";
 export const SNAP_GRID = "snapGrid";
 export const SNAP_SMART = "snapSmart";
@@ -34,4 +49,12 @@ export const nameForTool = {
 	[TOOL_SCALE]: "scale",
 	[TOOL_ASSIGN]: "assignment",
 	[TOOL_FOLD_ANGLE]: "fold angle",
+	[TOOL_AXIOM_1]: "axiom 1",
+	[TOOL_AXIOM_2]: "axiom 2",
+	[TOOL_AXIOM_3]: "axiom 3",
+	[TOOL_AXIOM_4]: "axiom 4",
+	[TOOL_AXIOM_5]: "axiom 5",
+	[TOOL_AXIOM_6]: "axiom 6",
+	[TOOL_AXIOM_7]: "axiom 7",
+	[TOOL_KAWASAKI]: "kawasaki",
 };

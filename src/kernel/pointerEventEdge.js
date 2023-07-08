@@ -7,7 +7,7 @@ import {
 	graph,
 	uiGraph,
 } from "../stores/graph.js";
-import { viewBox } from "../stores/app.js";
+import { viewBox } from "../stores/viewBox.js";
 import { selected } from "../stores/select.js";
 import {
 	current,

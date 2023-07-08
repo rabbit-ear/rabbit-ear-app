@@ -12,5 +12,3 @@ export const rulerLines = {
 		return res;
 	},
 };
-
-setTimeout(() => rulerLines.set([{ vector: [0, 1], origin: [0.5, 0] }]), 1000);

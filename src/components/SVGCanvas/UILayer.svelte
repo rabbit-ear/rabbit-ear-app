@@ -2,7 +2,7 @@
 	import GraphVerticesLayer from "./GraphVerticesLayer.svelte";
 	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
 	import GraphFacesLayer from "./GraphFacesLayer.svelte";
-	import { viewBox } from "../../stores/app.js";
+	import { viewBox } from "../../stores/viewBox.js";
 	import { selectionRect } from "../../stores/select.js";
 	import { uiGraph } from "../../stores/graph.js";
 

@@ -2,7 +2,7 @@
 	import { clipLineConvexPolygon } from "rabbit-ear/math/intersect/clip.js";
 	import { rulerLines } from "../../stores/ruler.js";
 	import { snapPoints } from "../../stores/snap.js";
-	import { viewBox } from "../../stores/app.js";
+	import { viewBox } from "../../stores/viewBox.js";
 
 	const clipLineInLargerViewBox = (line, box) => {
 		const [x, y, w, h] = box;
@@ -50,7 +50,7 @@
 			stroke-dashoffset={tick}
 		/>
 	{/each}
-	{#each $snapPoints as p}
+	<!-- {#each $snapPoints as p}
 		<circle cx={p[0]} cy={p[1]} r={0.01} fill="red" />
-	{/each}
+	{/each} -->
 </g>

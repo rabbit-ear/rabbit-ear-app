@@ -8,7 +8,7 @@
 		convertToViewBox,
 		findInParents,
 	} from "../../js/dom.js";
-	import { viewBox } from "../../stores/app.js";
+	import { viewBox } from "../../stores/viewBox.js";
 
 	const formatMouseEvent = (e) => ({
 		buttons: e.buttons,

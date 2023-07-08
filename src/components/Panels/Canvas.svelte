@@ -4,14 +4,14 @@
 		darkMode,
 		autoPlanarize,
 		snapping,
-		viewBox,
 	} from "../../stores/app.js";
+	import { viewBox } from "../../stores/viewBox.js";
 	import { current } from "../../stores/ui.js";
 
 	let viewBoxWidth = $viewBox[2];
 	let viewBoxHeight = $viewBox[3];
-	$: viewBox.setWidth(parseFloat(viewBoxWidth));
-	$: viewBox.setHeight(parseFloat(viewBoxHeight));
+	// $: viewBox.setWidth(parseFloat(viewBoxWidth));
+	// $: viewBox.setHeight(parseFloat(viewBoxHeight));
 	
 	const formatPoint = (p) => p
 		.map(n => {
