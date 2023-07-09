@@ -1,7 +1,7 @@
 import { add2, subtract2 } from "rabbit-ear/math/algebra/vector.js";
 // import normalize from "rabbit-ear/graph/normalize.js";
 import { get } from "svelte/store";
-import { selected } from "../stores/select.js";
+// import { selected } from "../stores/select.js";
 import { graph, uiGraph } from "../stores/graph.js";
 import {
 	presses,
@@ -27,7 +27,7 @@ export const pointerEventVertex = (eventType) => {
 		if (vertex !== undefined) {
 			const vertices = [];
 			vertices[vertex] = true;
-			selected.set({ ...get(selected), vertices });
+			// selected.set({ ...get(selected), vertices });
 			break;
 		}
 		execute("addVertex", coords);

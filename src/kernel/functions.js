@@ -8,7 +8,7 @@ import populate from "rabbit-ear/graph/populate.js";
 import { add2 } from "rabbit-ear/math/algebra/vector.js";
 import { assignmentFlatFoldAngle } from "rabbit-ear/fold/spec.js";
 import { graph } from "../stores/graph.js";
-import { selected } from "../stores/select.js";
+import { selection } from "../stores/select.js";
 import { downloadFile } from "../js/file.js";
 /**
  *
@@ -20,24 +20,29 @@ export const test = (...args) => console.log(["test():"]
 /**
  *
  */
-export const clearSelection = () => selected.reset();
+export const clearSelection = () => {}; selection.reset();
 /**
  *
  */
 export const addToSelection = (component = "vertices", components = []) => {
-	const sel = get(selected);
 	switch (component) {
-	case "vertices":
-		components.forEach(v => { sel.vertices[v] = true; });
-		break;
-	case "edges":
-		components.forEach(e => { sel.edges[e] = true; });
-		break;
-	case "faces":
-		components.forEach(f => { sel.faces[f] = true; });
-		break;
+	case "vertices": return selection.addVertices(components);
+	case "edges": return selection.addEdges(components);
+	case "faces": return selection.addFaces(components);
 	}
-	selected.set(sel);
+	// const sel = get(selected);
+	// switch (component) {
+	// case "vertices":
+	// 	components.forEach(v => { sel.vertices[v] = true; });
+	// 	break;
+	// case "edges":
+	// 	components.forEach(e => { sel.edges[e] = true; });
+	// 	break;
+	// case "faces":
+	// 	components.forEach(f => { sel.faces[f] = true; });
+	// 	break;
+	// }
+	// selected.set(sel);
 };
 
 const deleteComponentsFromGraph = (graph, remove) => {
@@ -86,9 +91,11 @@ export const addVertex = (coords) => {
 	const g = get(graph);
 	const newestVertex = AddVertex(g, coords);
 	graph.set({ ...g });
-	const vertices = [];
-	vertices[newestVertex] = true;
-	selected.set({ ...get(selected), vertices });
+	selection.reset();
+	selection.addVertices([newestVertex]);
+	// const vertices = [];
+	// vertices[newestVertex] = true;
+	// selected.set({ ...get(selected), vertices });
 	return newestVertex;
 };
 
@@ -96,9 +103,11 @@ export const addEdge = (vertexA, vertexB) => {
 	const g = get(graph);
 	const newestEdge = addNonPlanarEdge(g, [vertexA, vertexB]);
 	graph.set({ ...g });
-	const edges = [];
-	edges[newestEdge] = true;
-	selected.set({ ...get(selected), edges });
+	selection.reset();
+	selection.addEdges([newestEdge]);
+	// const edges = [];
+	// edges[newestEdge] = true;
+	// selected.set({ ...get(selected), edges });
 	return newestEdge;
 };
 

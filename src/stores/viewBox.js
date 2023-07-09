@@ -26,14 +26,23 @@ export const modelViewMatrix = derived(
 
 export const viewBox = derived(
 	modelViewMatrix,
-	($modelViewMatrix) => [
-		$modelViewMatrix[4],
-		$modelViewMatrix[5],
-		// todo: this is weird
-		multiplyMatrix2Vector2($modelViewMatrix, [1, 0])[0],
-		multiplyMatrix2Vector2($modelViewMatrix, [0, 1])[1],
-	],
+	($modelViewMatrix) => {
+		// const res = ;
+		return [
+			$modelViewMatrix[4],
+			$modelViewMatrix[5],
+			// todo: this is weird
+			multiplyMatrix2Vector2($modelViewMatrix, [1, 0])[0],
+			multiplyMatrix2Vector2($modelViewMatrix, [0, 1])[1],
+		];
+	},
 	[0, 0, 1, 1]);
+
+// export const multiplyMatrix2Vector2 = (matrix, vector) => [
+// 	matrix[0] * vector[0] + matrix[2] * vector[1] + matrix[4],
+// 	matrix[1] * vector[0] + matrix[3] * vector[1] + matrix[5],
+// ];
+
 
 // const {
 // 	subscribe: viewBoxSubscribe,

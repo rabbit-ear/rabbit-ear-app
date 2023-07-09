@@ -6,7 +6,7 @@ import {
 	TOOL_SPLIT_EDGE,
 } from "../app/keys.js";
 import { tool } from "../stores/tool.js";
-import { selected } from "../stores/select.js";
+// import { selected } from "../stores/select.js";
 import { keyboard } from "../stores/ui.js";
 import {
 	textarea,
@@ -21,11 +21,11 @@ const keyboardWindowEventDown = (e) => {
 	switch (e.keyCode) {
 	case 8: // backspace
 		e.preventDefault();
-		execute("deleteComponents", {
-			vertices: selected.vertices(),
-			edges: selected.edges(),
-			faces: selected.faces(),
-		});
+		// execute("deleteComponents", {
+		// 	vertices: selected.vertices(),
+		// 	edges: selected.edges(),
+		// 	faces: selected.faces(),
+		// });
 		break;
 	case 65: // "a"
 		// select all

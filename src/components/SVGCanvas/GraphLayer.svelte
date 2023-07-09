@@ -3,7 +3,7 @@
 	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
 	import GraphFacesLayer from "./GraphFacesLayer.svelte";
 	import { graph } from "../../stores/graph.js";
-	import { selected } from "../../stores/select.js";
+	import { selection } from "../../stores/select.js";
 	import {
 		tool,
 		elementSelect,
@@ -37,12 +37,32 @@
 		[TOOL_AXIOM_7]: true,
 		[TOOL_KAWASAKI]: true,
 	};
+
+	let facesFill = [];
+	let edgesStroke = [];
+	let verticesFill = [];
+
+	$: {
+		facesFill = [];
+		$selection.faces.forEach(i => { facesFill[i] = "#fb44"; });
+	};
+
+	$: {
+		edgesStroke = [];
+		$selection.edges.forEach(i => { edgesStroke[i] = "#fb4"; });
+	};
+
+	$: {
+		verticesFill = [];
+		$selection.vertices.forEach(i => { verticesFill[i] = "#fb4"; });
+	};
+
 </script>
 
 <g>
-	<GraphFacesLayer graph={$graph} highlighted={$selected.faces} />
-	<GraphEdgesLayer graph={$graph} highlighted={$selected.edges} />
+	<GraphFacesLayer graph={$graph} fills={facesFill} />
+	<GraphEdgesLayer graph={$graph} strokes={edgesStroke} />
 	{#if showVertices[$tool]}
-		<GraphVerticesLayer graph={$graph} highlighted={$selected.vertices} />
+		<GraphVerticesLayer graph={$graph} fills={verticesFill} />
 	{/if}
 </g>

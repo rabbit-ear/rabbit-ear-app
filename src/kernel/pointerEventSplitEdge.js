@@ -6,7 +6,7 @@ import {
 import { get } from "svelte/store";
 import { graph } from "../stores/graph.js";
 import { viewBox } from "../stores/viewBox.js";
-import { selected } from "../stores/select.js";
+// import { selected } from "../stores/select.js";
 import { current } from "../stores/ui.js";
 import { execute } from "./app.js";
 
@@ -26,7 +26,7 @@ export const pointerEventSplitEdge = (eventType) => {
 		if (edge === undefined) { break; }
 		const edges = [];
 		edges[edge] = true;
-		selected.set({ ...get(selected), edges });
+		// selected.set({ ...get(selected), edges });
 		execute("splitEdges", [edge]);
 	}
 		break;
@@ -35,7 +35,7 @@ export const pointerEventSplitEdge = (eventType) => {
 		if (edge === undefined) { break; }
 		const edges = [];
 		edges[edge] = true;
-		selected.set({ ...get(selected), edges });
+		// selected.set({ ...get(selected), edges });
 	}
 		break;
 	case "move":

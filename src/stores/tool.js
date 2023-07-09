@@ -6,7 +6,7 @@ import {
 	ASSIGN_SWAP,
 	SELECT_EDGE,
 } from "../app/keys.js";
-import { selected } from "./select.js";
+// import { selected } from "./select.js";
 
 const { subscribe, set, update } = writable(TOOL_SELECT);
 
@@ -32,7 +32,7 @@ export const elementSelect = {
 	subscribe: subElementSelect,
 	update: updateElementSelect,
 	set: (e) => {
-		selected.reset();
+		// selected.reset();
 		return setElementSelect(e);
 	},
 };

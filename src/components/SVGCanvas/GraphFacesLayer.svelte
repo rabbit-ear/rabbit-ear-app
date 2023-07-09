@@ -1,6 +1,6 @@
 <script>
 	export let graph = {};
-	export let highlighted = [];
+	export let fills = [];
 
 	let faces_polygon;
 	$: faces_polygon = !graph.faces_vertices
@@ -12,5 +12,5 @@
 {#each faces_polygon as poly, i}
 	<polygon
 		points={poly.map(point => point.join(",")).join(" ")}
-		fill={highlighted[i] ? "#fb44" : "#333" } />
+		fill={fills[i] || "#333" } />
 {/each}

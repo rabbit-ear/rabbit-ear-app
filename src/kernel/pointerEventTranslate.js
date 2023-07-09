@@ -8,7 +8,6 @@ import {
 	uiGraph,
 } from "../stores/graph.js";
 import { viewBox } from "../stores/viewBox.js";
-import { selected } from "../stores/select.js";
 import {
 	current,
 	presses,

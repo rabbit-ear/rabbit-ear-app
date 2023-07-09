@@ -1,7 +1,7 @@
 import { axiom2 } from "rabbit-ear/axioms/axiomsVecLine.js";
 import { get } from "svelte/store";
 // import { uiGraph } from "../stores/graph.js";
-import { selected } from "../stores/select.js";
+// import { selected } from "../stores/select.js";
 import {
 	current,
 	presses,
@@ -24,7 +24,7 @@ export const pointerEventAxiom7 = (eventType) => {
 		const { coords, vertex } = getSnapPoint(get(current));
 		const vertices = [];
 		if (vertex !== undefined) { vertices[vertex] = true; }
-		selected.set({ ...get(selected), vertices });
+		// selected.set({ ...get(selected), vertices });
 		// uiGraph.set({ vertices_coords: [coords] });
 	}
 		break;
@@ -39,7 +39,7 @@ export const pointerEventAxiom7 = (eventType) => {
 		}
 		const vertices = [];
 		if (vertex !== undefined) { vertices[vertex] = true; }
-		selected.set({ ...get(selected), vertices });
+		// selected.set({ ...get(selected), vertices });
 	}
 		break;
 	case "move": {
@@ -53,7 +53,7 @@ export const pointerEventAxiom7 = (eventType) => {
 		const vertices = [];
 		if (pressVertex !== undefined) { vertices[pressVertex] = true; }
 		if (releaseVertex !== undefined) { vertices[releaseVertex] = true; }
-		selected.set({ ...get(selected), vertices });
+		// selected.set({ ...get(selected), vertices });
 	}
 		break;
 	case "release":

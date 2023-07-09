@@ -1,8 +1,7 @@
 import { includeL, excludeS } from "rabbit-ear/math/general/function.js";
 import { intersectLineLine } from "rabbit-ear/math/intersect/intersect.js";
 import { makeEdgesVector } from "rabbit-ear/graph/make.js";
-import { get } from "svelte/store";
-import { writable } from "svelte/store";
+import { derived } from "svelte/store";
 import {
 	SNAP_NONE,
 	SNAP_GRID,
@@ -23,34 +22,19 @@ const intersectGraphLine = (graph, line) => {
 		.filter(a => a !== undefined);
 };
 
-// export const snapPoints = writable([]);
-
-const { subscribe, set, update } = writable([]);
-export const snapPoints = {
-	subscribe,
-	set,
-	update,
-	recalculate: () => {
-		switch (get(snapping)) {
-		case SNAP_NONE: {
-			set([]);
-		}
-			break;
-		case SNAP_GRID: {
-			break;
-		}
-			break;
-		case SNAP_SMART: {
-			const g = get(graph);
-			const lines = get(rulerLines);
-			const intersected = lines
-				.flatMap(line => intersectGraphLine(g, line));
+export const snapPoints = derived(
+	[snapping, graph, rulerLines],
+	([$snapping, $graph, $rulerLines]) => {
+		switch ($snapping) {
+		case SNAP_NONE: return [];
+		case SNAP_GRID: return [];
+		case SNAP_SMART:
 			// todo. filter. remove duplicates. build voronoi
-			const newPoints = [...g.vertices_coords, ...intersected];
-			// console.log("setting snapPoints", newPoints);
-			set(newPoints);
-		}
-			break;
+			const g = $graph;
+			const intersected = $rulerLines
+				.flatMap(line => intersectGraphLine(g, line));
+			return [...g.vertices_coords, ...intersected];
 		}
 	},
-};
+	[],
+);

@@ -121,6 +121,10 @@
 						<input type="radio" id="radio-select-face">
 						<label for="radio-select-face">face</label>
 					</li>
+					<hr />
+					<li class="no-select description">modify selection</li>
+					<li>set fold angle</li>
+					<li>set assignment</li>
 				</ul>
 			</li>
 			<li>analysis

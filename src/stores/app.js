@@ -5,7 +5,6 @@ import {
 	SNAP_GRID,
 	SNAP_SMART,
 } from "../app/keys.js";
-import { snapPoints } from "./snap.js";
 import { autoPlanarize as autoPlanarizeFunc } from "../kernel/prePostEvents.js";
 import {
 	preExecuteEvents,
@@ -14,19 +13,7 @@ import {
 
 export const darkMode = writable(true);
 
-const {
-	subscribe: snapSubscribe,
-	set: snapSet,
-} = writable(SNAP_SMART);
-
-export const snapping = {
-	subscribe: snapSubscribe,
-	set: (value) => {
-		const res = snapSet(value);
-		snapPoints.recalculate();
-		return res;
-	},
-};
+export const snapping = writable(SNAP_SMART);
 
 const {
 	subscribe: autoPlanarizeSubscribe,

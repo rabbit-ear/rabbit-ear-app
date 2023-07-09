@@ -21,6 +21,8 @@ export const showValley = writable(true);
 export const showFlat = writable(true);
 export const showJoin = writable(false);
 export const showUnassigned = writable(true);
+// cut is not used by origami simulator
+export const showCut = writable(true);
 
 //
 // colors
@@ -41,3 +43,5 @@ export const valleyColor = writable("#08f");
 export const flatColor = writable("#888");
 export const joinColor = writable("#f80");
 export const unassignedColor = writable("#80f");
+// cut is not used by origami simulator, used elsewhere.
+export const cutColor = writable("#8f0");
