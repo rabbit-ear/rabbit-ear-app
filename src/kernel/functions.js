@@ -20,7 +20,7 @@ export const test = (...args) => console.log(["test():"]
 /**
  *
  */
-export const clearSelection = () => {}; selection.reset();
+export const clearSelection = () => selection.reset();
 /**
  *
  */
@@ -30,19 +30,6 @@ export const addToSelection = (component = "vertices", components = []) => {
 	case "edges": return selection.addEdges(components);
 	case "faces": return selection.addFaces(components);
 	}
-	// const sel = get(selected);
-	// switch (component) {
-	// case "vertices":
-	// 	components.forEach(v => { sel.vertices[v] = true; });
-	// 	break;
-	// case "edges":
-	// 	components.forEach(e => { sel.edges[e] = true; });
-	// 	break;
-	// case "faces":
-	// 	components.forEach(f => { sel.faces[f] = true; });
-	// 	break;
-	// }
-	// selected.set(sel);
 };
 
 const deleteComponentsFromGraph = (graph, remove) => {
@@ -75,6 +62,7 @@ export const deleteComponents = (components) => {
 	components.vertices.forEach(v => { remove.vertices[v] = true; });
 	components.edges.forEach(v => { remove.edges[v] = true; });
 	components.faces.forEach(v => { remove.faces[v] = true; });
+	console.log("DEL", remove);
 	const g = deleteComponentsFromGraph(get(graph), remove);
 	graph.set({ ...g });
 };
@@ -93,9 +81,6 @@ export const addVertex = (coords) => {
 	graph.set({ ...g });
 	selection.reset();
 	selection.addVertices([newestVertex]);
-	// const vertices = [];
-	// vertices[newestVertex] = true;
-	// selected.set({ ...get(selected), vertices });
 	return newestVertex;
 };
 
@@ -105,9 +90,6 @@ export const addEdge = (vertexA, vertexB) => {
 	graph.set({ ...g });
 	selection.reset();
 	selection.addEdges([newestEdge]);
-	// const edges = [];
-	// edges[newestEdge] = true;
-	// selected.set({ ...get(selected), edges });
 	return newestEdge;
 };
 

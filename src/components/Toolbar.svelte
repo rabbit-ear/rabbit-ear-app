@@ -1,6 +1,7 @@
 <script>
 import {
 	TOOL_SELECT,
+	TOOL_CAMERA,
 	TOOL_VERTEX,
 	TOOL_EDGE,
 	TOOL_AXIOM_1,
@@ -39,6 +40,13 @@ const CREATE_LINE_RULER = "createRuler";
 <div class="toolbar">
 
 	<div class="vertical-radio">
+		<input
+			type="radio"
+			name="tool"
+			id="select"
+			bind:group={$tool}
+			value={TOOL_CAMERA} />
+		<label for="select">camera</label>
 		<input
 			type="radio"
 			name="tool"

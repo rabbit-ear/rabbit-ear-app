@@ -1,5 +1,6 @@
 <script>
 	import { pointerEventSelect } from "../kernel/pointerEventSelect.js";
+	import { pointerEventCamera } from "../kernel/pointerEventCamera.js";
 	import { pointerEventVertex } from "../kernel/pointerEventVertex.js";
 	import { pointerEventEdge } from "../kernel/pointerEventEdge.js";
 	import { pointerEventAxiom2 } from "../kernel/pointerEventAxiom2.js";
@@ -16,6 +17,7 @@
 	import { scrollEvent } from "../kernel/scrollEvent.js";
 	import {
 		TOOL_SELECT,
+		TOOL_CAMERA,
 		TOOL_VERTEX,
 		TOOL_EDGE,
 		TOOL_AXIOM_1,
@@ -43,6 +45,7 @@
 	const pointerEvent = (eventType) => {
 		switch ($tool) {
 		case TOOL_SELECT: return pointerEventSelect(eventType);
+		case TOOL_CAMERA: return pointerEventCamera(eventType);
 		case TOOL_VERTEX: return pointerEventVertex(eventType);
 		case TOOL_EDGE: return pointerEventEdge(eventType);
 		// case TOOL_AXIOM_1: return pointerEventAxiom1(eventType);

@@ -1,5 +1,9 @@
 import { get } from "svelte/store";
 import { writable } from "svelte/store";
+import {
+	invertMap,
+	mergeArrays,
+} from "../js/arrays.js";
 
 export const emptySelectObject = () => (
 	{ vertices: [], edges: [], faces: [] }
@@ -8,23 +12,6 @@ export const emptySelectObject = () => (
 export const selectionRect = writable(undefined);
 
 const { subscribe, set, update } = writable(emptySelectObject());
-
-/**
- * @description merge two arrays of integers,
- * maintaining their uniqueness.
- */
-const mergeArrays = (a, b) => {
-	const inverted = [];
-	a.forEach(i => { inverted[i] = true; });
-	b.forEach(i => { inverted[i] = true; });
-	return inverted.map((_, i) => i).filter(() => true);
-};
-
-const invertMap = (a) => {
-	const inverted = [];
-	a.forEach(i => { inverted[i] = true; });
-	return inverted;
-};
 
 export const selection = {
 	subscribe,
@@ -51,7 +38,7 @@ export const selection = {
 			faces: invertMap(obj.faces),
 		};
 	}
-}
+};
 
 // const {
 // 	subscribe: subscribeSelected,

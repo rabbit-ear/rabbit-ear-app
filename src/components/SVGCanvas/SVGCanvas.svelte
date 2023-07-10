@@ -39,7 +39,7 @@
 
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
-		viewBox={padViewBox($viewBox, vmax * 0.1).join(" ")}
+		viewBox={padViewBox($viewBox, vmax * 0.05).join(" ")}
 		stroke-width={$viewBox[2] * 0.0033}
 		on:mousedown={mousedown}
 		on:mousemove={mousemove}

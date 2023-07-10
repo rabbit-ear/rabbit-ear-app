@@ -3,6 +3,7 @@
 // - Toolbar.svelte
 // - Panels/Tools.svelte
 export const TOOL_SELECT = "toolSelect";
+export const TOOL_CAMERA = "toolCamera";
 export const TOOL_VERTEX = "toolVertex";
 export const TOOL_EDGE = "toolEdge";
 export const TOOL_SPLIT_EDGE = "toolSplitEdge";

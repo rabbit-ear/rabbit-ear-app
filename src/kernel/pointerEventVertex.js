@@ -1,7 +1,7 @@
 import { add2, subtract2 } from "rabbit-ear/math/algebra/vector.js";
 // import normalize from "rabbit-ear/graph/normalize.js";
 import { get } from "svelte/store";
-// import { selected } from "../stores/select.js";
+import { selection } from "../stores/select.js";
 import { graph, uiGraph } from "../stores/graph.js";
 import {
 	presses,
@@ -25,16 +25,15 @@ export const pointerEventVertex = (eventType) => {
 	case "press":
 		const { coords, vertex } = getSnapPoint(get(current));
 		if (vertex !== undefined) {
-			const vertices = [];
-			vertices[vertex] = true;
-			// selected.set({ ...get(selected), vertices });
+			selection.reset();
+			selection.addVertices([vertex]);
 			break;
 		}
 		execute("addVertex", coords);
 		break;
 	case "move": {
 		const dragVector = getDragVector();
-		const selVerts = selected.vertices();
+		const selVerts = get(selection).vertices;
 		const subgraph = subgraphWithVertices(get(graph), selVerts);
 		selVerts.forEach(v => {
 			subgraph.vertices_coords[v] = add2(subgraph.vertices_coords[v], dragVector);
@@ -46,11 +45,11 @@ export const pointerEventVertex = (eventType) => {
 	case "release":
 		uiGraph.set({});
 		// move currently selected vertices
-		execute("translateVertices", selected.vertices(), getDragVector());
+		execute("translateVertices", get(selection).vertices, getDragVector());
 		presses.set([]);
 		moves.set([]);
 		releases.set([]);
-		// selected.reset();
+		selection.reset();
 		break;
 	default:
 		console.warn("no switch definition for", eventType);

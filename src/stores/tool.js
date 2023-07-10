@@ -6,7 +6,12 @@ import {
 	ASSIGN_SWAP,
 	SELECT_EDGE,
 } from "../app/keys.js";
-// import { selected } from "./select.js";
+import { selection } from "./select.js";
+import {
+	presses,
+	moves,
+	releases,
+} from "./ui.js";
 
 const { subscribe, set, update } = writable(TOOL_SELECT);
 
@@ -14,9 +19,13 @@ export const tool = {
 	subscribe,
 	update,
 	set: (t) => {
+		presses.set([]);
+		moves.set([]);
+		releases.set([]);
 		switch (t) {
 		case TOOL_VERTEX: break;
-		// selected.reset();
+		default:
+			selection.reset();
 		}
 		return set(t);
 	},
@@ -32,7 +41,7 @@ export const elementSelect = {
 	subscribe: subElementSelect,
 	update: updateElementSelect,
 	set: (e) => {
-		// selected.reset();
+		selection.reset();
 		return setElementSelect(e);
 	},
 };

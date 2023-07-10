@@ -2,19 +2,20 @@ import { get } from "svelte/store";
 import { writable, derived } from "svelte/store";
 import {
 	identity2x3,
+	invertMatrix2,
 	multiplyMatrices2,
 	multiplyMatrix2Vector2,
 } from "rabbit-ear/math/algebra/matrix2.js";
 
-// new plan
-// viewbox is a derived state
-// derived from 2 things:
-// - the matrix which centers and aspect fits the graph in the screen
-// - the user matrix for zooming and translating the view around
-
 export const modelMatrix = writable([...identity2x3]);
 
-export const viewMatrix = writable([...identity2x3]);
+export const cameraMatrix = writable([...identity2x3]);
+
+export const viewMatrix = derived(
+	cameraMatrix,
+	($cameraMatrix) => invertMatrix2($cameraMatrix),
+	[...identity2x3],
+);
 
 export const modelViewMatrix = derived(
 	[modelMatrix, viewMatrix],
@@ -22,45 +23,17 @@ export const modelViewMatrix = derived(
 	[...identity2x3],
 );
 
-// const doubled = derived(modelViewMatrix, ($modelViewMatrix) => $modelViewMatrix * 2);
-
 export const viewBox = derived(
 	modelViewMatrix,
 	($modelViewMatrix) => {
-		// const res = ;
-		return [
-			$modelViewMatrix[4],
-			$modelViewMatrix[5],
-			// todo: this is weird
-			multiplyMatrix2Vector2($modelViewMatrix, [1, 0])[0],
-			multiplyMatrix2Vector2($modelViewMatrix, [0, 1])[1],
-		];
+		const m = [...$modelViewMatrix];
+		// get the translation component
+		const [, , , , x, y] = m;
+		// remove the translation component
+		m[4] = m[5] = 0;
+		// multiply by unit basis vectors
+		const [w, h] = multiplyMatrix2Vector2(m, [1, 1]);
+		return [x, y, w, h];
 	},
-	[0, 0, 1, 1]);
-
-// export const multiplyMatrix2Vector2 = (matrix, vector) => [
-// 	matrix[0] * vector[0] + matrix[2] * vector[1] + matrix[4],
-// 	matrix[1] * vector[0] + matrix[3] * vector[1] + matrix[5],
-// ];
-
-
-// const {
-// 	subscribe: viewBoxSubscribe,
-// 	set: viewBoxSet,
-// } = writable([0, 0, 1, 1]);
-
-// export const viewBox = {
-// 	subscribe: viewBoxSubscribe,
-// 	set: viewBoxSet,
-// 	setWidth: (n) => {
-// 		let box = get(viewBox);
-// 		box[2] = n;
-// 		return viewBoxSet([...box]);
-// 	},
-// 	setHeight: (n) => {
-// 		let box = get(viewBox);
-// 		box[3] = n;
-// 		return viewBoxSet([...box]);
-// 	},
-// };
-
+	[0, 0, 1, 1],
+);

@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import populate from "rabbit-ear/graph/populate.js";
 import { writable } from "svelte/store";
-// import { selected } from "./select.js";
+import { selection } from "./select.js";
 import { downloadFile } from "../js/file.js";
 
 const makeEmptyGraph = () => populate({
@@ -13,7 +13,7 @@ const makeEmptyGraph = () => populate({
 });
 
 const setGraph = (g) => {
-	// selected.reset();
+	selection.reset();
 	const res = set(g);
 	return res;
 };
