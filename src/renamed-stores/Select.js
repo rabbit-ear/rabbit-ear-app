@@ -9,11 +9,11 @@ export const emptySelectObject = () => (
 	{ vertices: [], edges: [], faces: [] }
 );
 
-export const selectionRect = writable(undefined);
+export const SelectionRect = writable(undefined);
 
 const { subscribe, set, update } = writable(emptySelectObject());
 
-export const selection = {
+export const Selection = {
 	subscribe,
 	set,
 	update,

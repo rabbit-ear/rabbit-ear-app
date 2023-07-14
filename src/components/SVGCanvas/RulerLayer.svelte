@@ -1,8 +1,11 @@
 <script>
 	import { clipLineConvexPolygon } from "rabbit-ear/math/intersect/clip.js";
-	import { rulerLines } from "../../stores/ruler.js";
-	import { snapPoints } from "../../stores/snap.js";
-	import { viewBox } from "../../stores/viewBox.js";
+	import {
+		Rulers,
+		RulerPreviews,
+	} from "../../stores/Ruler.js";
+	import { SnapPoints } from "../../stores/Snap.js";
+	import { ViewBox } from "../../stores/ViewBox.js";
 
 	const clipLineInLargerViewBox = (line, box) => {
 		const [x, y, w, h] = box;
@@ -26,13 +29,13 @@
 	};
 
 	let segments;
-	$: segments = $rulerLines
-		.map(line => clipLineInLargerViewBox(line, $viewBox))
+	$: segments = $Rulers.concat($RulerPreviews)
+		.map(line => clipLineInLargerViewBox(line, $ViewBox))
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 
 	let vmax;
-	$: vmax = Math.max($viewBox[2], $viewBox[3]);
+	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);
 
 	let tick = 0
 	setInterval(() => { tick += (vmax * 0.002); }, 30);
@@ -50,7 +53,7 @@
 			stroke-dashoffset={tick}
 		/>
 	{/each}
-	<!-- {#each $snapPoints as p}
+	<!-- {#each $SnapPoints as p}
 		<circle cx={p[0]} cy={p[1]} r={0.01} fill="red" />
 	{/each} -->
 </g>

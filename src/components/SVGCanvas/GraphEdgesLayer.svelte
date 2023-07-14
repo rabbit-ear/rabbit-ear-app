@@ -1,14 +1,14 @@
 <script>
 	import {
 		// lineOpacity,
-		boundaryColor,
-		mountainColor,
-		valleyColor,
-		flatColor,
-		joinColor,
-		cutColor,
-		unassignedColor,
-	} from "../../stores/style.js";
+		BoundaryColor,
+		MountainColor,
+		ValleyColor,
+		FlatColor,
+		JoinColor,
+		CutColor,
+		UnassignedColor,
+	} from "../../stores/Style.js";
 
 	export let graph = {};
 	export let strokes = [];
@@ -21,20 +21,20 @@
 
 	let colorMap = {};
 	$: colorMap = {
-		B: $boundaryColor,
-		b: $boundaryColor,
-		M: $mountainColor,
-		m: $mountainColor,
-		V: $valleyColor,
-		v: $valleyColor,
-		F: $flatColor,
-		f: $flatColor,
-		J: $joinColor,
-		j: $joinColor,
-		C: $cutColor,
-		c: $cutColor,
-		U: $unassignedColor,
-		u: $unassignedColor,
+		B: $BoundaryColor,
+		b: $BoundaryColor,
+		M: $MountainColor,
+		m: $MountainColor,
+		V: $ValleyColor,
+		v: $ValleyColor,
+		F: $FlatColor,
+		f: $FlatColor,
+		J: $JoinColor,
+		j: $JoinColor,
+		C: $CutColor,
+		c: $CutColor,
+		U: $UnassignedColor,
+		u: $UnassignedColor,
 	};
 
 	let edgesColor = [];

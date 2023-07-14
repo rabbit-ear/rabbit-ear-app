@@ -1,5 +1,5 @@
 <script>
-	import { assignType } from "../../stores/tool.js";
+	import { AssignType } from "../../stores/Tool.js";
 	import {
 		ASSIGN_SWAP,
 		ASSIGN_FLAT,
@@ -15,7 +15,7 @@
 			type="radio"
 			id="swap"
 			name="assignType"
-			bind:group={$assignType}
+			bind:group={$AssignType}
 			value={ASSIGN_SWAP} >
 		<label for="swap">mountain/valley</label>
 	</div>
@@ -24,7 +24,7 @@
 			type="radio"
 			id="flat"
 			name="assignType"
-			bind:group={$assignType}
+			bind:group={$AssignType}
 			value={ASSIGN_FLAT} >
 		<label for="flat">flat</label>
 	</div>
@@ -33,7 +33,7 @@
 			type="radio"
 			id="unassigned"
 			name="assignType"
-			bind:group={$assignType}
+			bind:group={$AssignType}
 			value={ASSIGN_UNASSIGNED} >
 		<label for="unassigned">unassigned</label>
 	</div>
@@ -42,7 +42,7 @@
 			type="radio"
 			id="cut"
 			name="assignType"
-			bind:group={$assignType}
+			bind:group={$AssignType}
 			value={ASSIGN_CUT} >
 		<label for="cut">cut</label>
 	</div>
@@ -51,7 +51,7 @@
 			type="radio"
 			id="boundary"
 			name="assignType"
-			bind:group={$assignType}
+			bind:group={$AssignType}
 			value={ASSIGN_BOUNDARY} >
 		<label for="boundary">boundary</label>
 	</div>

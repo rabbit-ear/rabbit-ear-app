@@ -1,11 +1,11 @@
 <script>
-	import { foldAngleValue } from "../../stores/tool.js";
+	import { FoldAngleValue } from "../../stores/Tool.js";
 </script>
 
 <div class="container">
 	<input
 		type="text"
-		bind:value={$foldAngleValue} >
+		bind:value={$FoldAngleValue} >
 </div>
 
 <style>

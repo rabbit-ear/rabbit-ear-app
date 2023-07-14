@@ -1,5 +1,5 @@
 <script>
-	import { elementSelect } from "../../stores/tool.js";
+	import { ElementSelect } from "../../stores/Tool.js";
 	import {
 		SELECT_VERTEX,
 		SELECT_EDGE,
@@ -14,7 +14,7 @@
 			type="radio"
 			name="VEF"
 			id="selectVertices"
-			bind:group={$elementSelect}
+			bind:group={$ElementSelect}
 			value={SELECT_VERTEX} />
 		<label for="selectVertices">vertices</label>
 	</div>
@@ -23,7 +23,7 @@
 			type="radio"
 			name="VEF"
 			id="selectEdges"
-			bind:group={$elementSelect}
+			bind:group={$ElementSelect}
 			value={SELECT_EDGE} />
 		<label for="selectEdges">edges</label>
 	</div>
@@ -32,7 +32,7 @@
 			type="radio"
 			name="VEF"
 			id="selectFaces"
-			bind:group={$elementSelect}
+			bind:group={$ElementSelect}
 			value={SELECT_FACE} />
 		<label for="selectFaces">faces</label>
 	</div>

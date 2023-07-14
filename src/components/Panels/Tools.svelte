@@ -1,6 +1,6 @@
 <script>
 	import Panel from "./Panel.svelte";
-	import { tool } from "../../stores/tool.js";
+	import { Tool, ToolStep } from "../../stores/Tool.js";
 	import {
 		TOOL_SELECT,
 		TOOL_VERTEX,
@@ -16,29 +16,33 @@
 	import ToolAssign from "./ToolAssign.svelte";
 	import ToolFoldAngle from "./ToolFoldAngle.svelte";
 	import ToolAxiom from "./ToolAxiom.svelte";
+	import ToolNewEdgeAssignment from "./ToolNewEdgeAssignment.svelte";
 </script>
 
 <Panel>
-	<span slot="title">{nameForTool[$tool]}</span>
+	<span slot="title">{nameForTool[$Tool]}</span>
 	<span slot="body">
-		{#if $tool === TOOL_SELECT}
+		{#if $Tool === TOOL_SELECT}
 			<ToolSelect />
-		{:else if $tool === TOOL_VERTEX}
+		{:else if $Tool === TOOL_VERTEX}
 			<p>new position</p>
-		{:else if $tool === TOOL_EDGE}
+		{:else if $Tool === TOOL_EDGE}
+			<ToolNewEdgeAssignment />
 			<p>between these</p>
-		{:else if $tool === TOOL_SPLIT_EDGE}
+		{:else if $Tool === TOOL_SPLIT_EDGE}
 			<p>split count: 2 (1 new vertex)</p>
-		{:else if $tool === TOOL_TRANSLATE}
+		{:else if $Tool === TOOL_TRANSLATE}
 			<p>all axes</p>
-		{:else if $tool === TOOL_SCALE}
+		{:else if $Tool === TOOL_SCALE}
 			<p>uniform</p>
-		{:else if $tool === TOOL_ASSIGN}
+		{:else if $Tool === TOOL_ASSIGN}
 			<ToolAssign />
-		{:else if $tool === TOOL_FOLD_ANGLE}
+		{:else if $Tool === TOOL_FOLD_ANGLE}
 			<ToolFoldAngle />
-		{:else if $tool.substring(0, 9) === "toolAxiom"}
+		{:else if $Tool.substring(0, 9) === "toolAxiom"}
 			<ToolAxiom />
 		{/if}
+		<hr />
+		<p>tool step {$ToolStep}</p>
 	</span>
 </Panel>

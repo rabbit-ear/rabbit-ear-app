@@ -1,12 +1,12 @@
 import { get } from "svelte/store";
-import { elementSelect } from "../stores/tool.js";
-import { selectionRect } from "../stores/select.js";
+import { ElementSelect } from "../stores/Tool.js";
+import { SelectionRect } from "../stores/Select.js";
 import {
-	presses,
-	releases,
-	moves,
-	keyboard,
-} from "../stores/ui.js";
+	Presses,
+	Releases,
+	Moves,
+	Keyboard,
+} from "../stores/UI.js";
 import {
 	SELECT_VERTEX,
 	SELECT_EDGE,
@@ -38,30 +38,30 @@ const rectFromTwoPoints = (p, q) => {
 export const pointerEventSelect = (eventType) => {
 	switch (eventType) {
 	case "press":
-		selectionRect.set(undefined);
+		SelectionRect.set(undefined);
 		break;
 	case "move":
-		if (!get(presses).length || !get(moves).length) {
-			selectionRect.set(undefined);
+		if (!get(Presses).length || !get(Moves).length) {
+			SelectionRect.set(undefined);
 			break;
 		}
-		selectionRect.set(rectFromTwoPoints(
-			get(presses)[get(presses).length - 1],
-			get(moves)[get(moves).length - 1],
+		SelectionRect.set(rectFromTwoPoints(
+			get(Presses)[get(Presses).length - 1],
+			get(Moves)[get(Moves).length - 1],
 		));
 		break;
 	case "release": {
 		const selected = getSelected();
-		if (get(keyboard)[16]) { // shift
-			execute("addToSelection", vefName[get(elementSelect)], selected);
+		if (get(Keyboard)[16]) { // shift
+			execute("addToSelection", vefName[get(ElementSelect)], selected);
 		} else {
 			execute("clearSelection");
-			execute("addToSelection", vefName[get(elementSelect)], selected);
+			execute("addToSelection", vefName[get(ElementSelect)], selected);
 		}
-		selectionRect.set(undefined);
-		presses.set([]);
-		moves.set([]);
-		releases.set([]);
+		SelectionRect.set(undefined);
+		Presses.set([]);
+		Moves.set([]);
+		Releases.set([]);
 	}
 		break;
 	}

@@ -4,7 +4,7 @@ import {
 	subtract2,
 } from "rabbit-ear/math/algebra/vector.js";
 import { get } from "svelte/store";
-import { selection } from "../stores/select.js";
+import { Selection } from "../stores/Select.js";
 import {
 	ASSIGN_SWAP,
 	ASSIGN_FLAT,
@@ -12,23 +12,16 @@ import {
 	ASSIGN_CUT,
 	ASSIGN_BOUNDARY,
 } from "../app/keys.js";
-import {
-	graph,
-} from "../stores/graph.js";
-import { assignType } from "../stores/tool.js";
-import {
-	current,
-	presses,
-	moves,
-	releases,
-} from "../stores/ui.js";
+import { Graph } from "../stores/Graph.js";
+import { AssignType } from "../stores/Tool.js";
+import { Current } from "../stores/UI.js";
 import { execute } from "./app.js";
 
 const swap = { M: "V", m: "V", V: "M", v: "M" };
 
 const performAssignment = (edge) => {
-	const g = get(graph);
-	switch (get(assignType)) {
+	const g = get(Graph);
+	switch (get(AssignType)) {
 	case ASSIGN_SWAP:
 		if (g.edges_assignment[edge] === "B"
 			|| g.edges_assignment[edge] === "b") {
@@ -63,21 +56,21 @@ const performAssignment = (edge) => {
 		break;
 	default: break;
 	}
-	graph.simpleSet({ ...g });
+	Graph.simpleSet({ ...g });
 }
 
 export const pointerEventAssign = (eventType) => {
 	switch (eventType) {
 	case "press":
-		const edge = nearest(get(graph), get(current)).edge;
+		const edge = nearest(get(Graph), get(Current)).edge;
 		if (edge === undefined) { break; }
 		performAssignment(edge);
 		break;
 	case "hover": {
-		const edge = nearest(get(graph), get(current)).edge;
+		const edge = nearest(get(Graph), get(Current)).edge;
 		if (edge === undefined) { break; }
-		selection.reset();
-		selection.addEdges([edge]);
+		Selection.reset();
+		Selection.addEdges([edge]);
 	}
 		break;
 	case "move":

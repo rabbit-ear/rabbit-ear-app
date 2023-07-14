@@ -1,12 +1,14 @@
 <script>
 	import Tools from "./Panels/Tools.svelte";
 	import Canvas from "./Panels/Canvas.svelte";
+	import RulerLines from "./Panels/RulerLines.svelte";
 	import Simulator from "./Panels/Simulator.svelte";
 </script>
 
 <div class="container">
 	<Canvas />
 	<Tools />
+	<RulerLines />
 	<Simulator />
 </div>
 

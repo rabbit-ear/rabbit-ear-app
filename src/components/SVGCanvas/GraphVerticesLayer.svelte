@@ -1,11 +1,11 @@
 <script>
-	import { viewBox } from "../../stores/viewBox.js";
+	import { ViewBox } from "../../stores/ViewBox.js";
 
 	export let graph = {};
 	export let fills = [];
 
 	let r;
-	$: r = Math.max($viewBox[2], $viewBox[3]) * 0.01;
+	$: r = Math.max($ViewBox[2], $ViewBox[3]) * 0.01;
 
 	let coords;
 	$: coords = !graph.vertices_coords ? [] : graph.vertices_coords;

@@ -3,17 +3,13 @@ import {
 	subtract2,
 } from "rabbit-ear/math/algebra/vector.js";
 import { get } from "svelte/store";
+import { UIGraph } from "../stores/Graph.js";
 import {
-	graph,
-	uiGraph,
-} from "../stores/graph.js";
-import { viewBox } from "../stores/viewBox.js";
-import {
-	current,
-	presses,
-	moves,
-	releases,
-} from "../stores/ui.js";
+	Current,
+	Presses,
+	Moves,
+	Releases,
+} from "../stores/UI.js";
 import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
 
@@ -25,23 +21,23 @@ let releaseCoords = undefined;
 export const pointerEventEdge = (eventType) => {
 	switch (eventType) {
 	case "press": {
-		// const coords = get(current);
-		const { coords, vertex } = getSnapPoint(get(current));
+		// const coords = get(Current);
+		const { coords, vertex } = getSnapPoint(get(Current));
 		pressVertex = vertex
 		releaseVertex = vertex
 		pressCoords = coords;
 		releaseCoords = [...coords];
-		uiGraph.set({
+		UIGraph.set({
 			vertices_coords: [pressCoords, releaseCoords],
 			edges_vertices: [[0, 1]],
 		});
 	}
 		break;
 	case "move": {
-		const { coords, vertex } = getSnapPoint(get(current));
+		const { coords, vertex } = getSnapPoint(get(Current));
 		releaseVertex = vertex
 		releaseCoords = coords;
-		uiGraph.set({
+		UIGraph.set({
 			vertices_coords: [pressCoords, releaseCoords],
 			edges_vertices: [[0, 1]],
 		});
@@ -55,10 +51,10 @@ export const pointerEventEdge = (eventType) => {
 			releaseVertex = execute("addVertex", releaseCoords);
 		}
 		execute("addEdge", pressVertex, releaseVertex);
-		presses.set([]);
-		moves.set([]);
-		releases.set([]);
-		uiGraph.set({});
+		Presses.set([]);
+		Moves.set([]);
+		Releases.set([]);
+		UIGraph.set({});
 		break;
 	}
 };

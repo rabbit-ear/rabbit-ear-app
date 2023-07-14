@@ -4,16 +4,15 @@ import {
 } from "rabbit-ear/math/algebra/vector.js";
 import { get } from "svelte/store";
 import {
-	graph,
-	uiGraph,
-} from "../stores/graph.js";
-import { viewBox } from "../stores/viewBox.js";
+	Graph,
+	UIGraph,
+} from "../stores/Graph.js";
 import {
-	current,
-	presses,
-	moves,
-	releases,
-} from "../stores/ui.js";
+	Current,
+	Presses,
+	Moves,
+	Releases,
+} from "../stores/UI.js";
 import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
 
@@ -23,13 +22,13 @@ let releaseCoords = undefined;
 export const pointerEventScale = (eventType) => {
 	switch (eventType) {
 	case "press": {
-		const { coords, vertex } = getSnapPoint(get(current));
+		const { coords, vertex } = getSnapPoint(get(Current));
 		pressCoords = coords;
 	}
 		break;
 	case "move": {
-		const g = get(graph);
-		const { coords, vertex } = getSnapPoint(get(current));
+		const g = get(Graph);
+		const { coords, vertex } = getSnapPoint(get(Current));
 		releaseCoords = coords;
 		const ratio = [
 			releaseCoords[0] / pressCoords[0],
@@ -41,14 +40,14 @@ export const pointerEventScale = (eventType) => {
 			: [1, 1]);
 		const vertices_coords = [...g.vertices_coords]
 			.map(coords => coords.map((n, i) => n * vector[i]));
-		uiGraph.set({ ...g, vertices_coords });
+		UIGraph.set({ ...g, vertices_coords });
 	}
 		break;
 	case "release":
-		presses.set([]);
-		moves.set([]);
-		releases.set([]);
-		uiGraph.set({});
+		Presses.set([]);
+		Moves.set([]);
+		Releases.set([]);
+		UIGraph.set({});
 		break;
 	}
 };

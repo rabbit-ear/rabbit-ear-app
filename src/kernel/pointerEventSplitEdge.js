@@ -4,10 +4,9 @@ import {
 	subtract2,
 } from "rabbit-ear/math/algebra/vector.js";
 import { get } from "svelte/store";
-import { graph } from "../stores/graph.js";
-import { viewBox } from "../stores/viewBox.js";
-// import { selected } from "../stores/select.js";
-import { current } from "../stores/ui.js";
+import { Graph } from "../stores/Graph.js";
+// import { selected } from "../stores/Select.js";
+import { Current } from "../stores/UI.js";
 import { execute } from "./app.js";
 
 const getNearestToPoint = (graph, point) => {
@@ -22,7 +21,7 @@ const getNearestToPoint = (graph, point) => {
 export const pointerEventSplitEdge = (eventType) => {
 	switch (eventType) {
 	case "press": {
-		const edge = nearest(get(graph), get(current)).edge;
+		const edge = nearest(get(Graph), get(Current)).edge;
 		if (edge === undefined) { break; }
 		const edges = [];
 		edges[edge] = true;
@@ -31,7 +30,7 @@ export const pointerEventSplitEdge = (eventType) => {
 	}
 		break;
 	case "hover": {
-		const edge = nearest(get(graph), get(current)).edge;
+		const edge = nearest(get(Graph), get(Current)).edge;
 		if (edge === undefined) { break; }
 		const edges = [];
 		edges[edge] = true;

@@ -2,12 +2,12 @@
 	import GraphVerticesLayer from "./GraphVerticesLayer.svelte";
 	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
 	import GraphFacesLayer from "./GraphFacesLayer.svelte";
-	import { viewBox } from "../../stores/viewBox.js";
-	import { selectionRect } from "../../stores/select.js";
-	import { uiGraph } from "../../stores/graph.js";
+	import { ViewBox } from "../../stores/ViewBox.js";
+	import { SelectionRect } from "../../stores/Select.js";
+	import { UIGraph } from "../../stores/Graph.js";
 
 	let vmax;
-	$: vmax = Math.max($viewBox[2], $viewBox[3]);
+	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);
 
 	let tick = 0
 	setInterval(() => { tick += (vmax * 0.002); }, 30);
@@ -15,16 +15,16 @@
 
 <g>
 	<g opacity="0.666">
-		<GraphFacesLayer graph={$uiGraph} />
-		<GraphEdgesLayer graph={$uiGraph} />
-		<GraphVerticesLayer graph={$uiGraph} />
+		<GraphFacesLayer graph={$UIGraph} />
+		<GraphEdgesLayer graph={$UIGraph} />
+		<GraphVerticesLayer graph={$UIGraph} />
 	</g>
-	{#if $selectionRect !== undefined}
+	{#if $SelectionRect !== undefined}
 		<rect
-			x={$selectionRect.min[0]}
-			y={$selectionRect.min[1]}
-			width={$selectionRect.span[0]}
-			height={$selectionRect.span[1]}
+			x={$SelectionRect.min[0]}
+			y={$SelectionRect.min[1]}
+			width={$SelectionRect.span[0]}
+			height={$SelectionRect.span[1]}
 			fill="none"
 			stroke="#fff8"
 			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}

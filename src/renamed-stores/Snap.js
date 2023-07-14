@@ -7,9 +7,9 @@ import {
 	SNAP_GRID,
 	SNAP_SMART,
 } from "../app/keys.js";
-import { graph } from "./graph.js";
-import { rulerLines } from "./ruler.js";
-import { snapping } from "./app.js";
+import { Graph } from "./Graph.js";
+import { Rulers } from "./Ruler.js";
+import { Snapping } from "./App.js";
 
 const intersectGraphLine = (graph, line) => {
 	const edgesOrigin = graph.edges_vertices
@@ -22,18 +22,18 @@ const intersectGraphLine = (graph, line) => {
 		.filter(a => a !== undefined);
 };
 
-export const snapPoints = derived(
-	[snapping, graph, rulerLines],
-	([$snapping, $graph, $rulerLines]) => {
-		switch ($snapping) {
+export const SnapPoints = derived(
+	[Snapping, Graph, Rulers],
+	([$Snapping, $Graph, $Rulers]) => {
+		switch ($Snapping) {
 		case SNAP_NONE: return [];
 		case SNAP_GRID: return [];
 		case SNAP_SMART:
 			// todo. filter. remove duplicates. build voronoi
-			const g = $graph;
-			const intersected = $rulerLines
-				.flatMap(line => intersectGraphLine(g, line));
-			return [...g.vertices_coords, ...intersected];
+			const graph = $Graph;
+			const intersected = $Rulers
+				.flatMap(line => intersectGraphLine(graph, line));
+			return [...graph.vertices_coords, ...intersected];
 		}
 	},
 	[],

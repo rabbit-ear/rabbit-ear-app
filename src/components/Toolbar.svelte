@@ -21,11 +21,7 @@ import {
 	SELECT_EDGE,
 	SELECT_FACE,
 } from "../app/keys.js";
-import {
-	tool,
-	elementSelect,
-} from "../stores/tool.js";
-import { graph } from "../stores/graph.js";
+import { Tool } from "../stores/Tool.js";
 
 let tempCreateLineType;
 
@@ -43,15 +39,15 @@ const CREATE_LINE_RULER = "createRuler";
 		<input
 			type="radio"
 			name="tool"
-			id="select"
-			bind:group={$tool}
+			id="camera"
+			bind:group={$Tool}
 			value={TOOL_CAMERA} />
-		<label for="select">camera</label>
+		<label for="camera">camera</label>
 		<input
 			type="radio"
 			name="tool"
 			id="select"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_SELECT} />
 		<label for="select">select</label>
 	</div>
@@ -62,14 +58,14 @@ const CREATE_LINE_RULER = "createRuler";
 			type="radio"
 			name="tool"
 			id="vertex"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_VERTEX} />
 		<label for="vertex">vertex</label>
 		<input
 			type="radio"
 			name="tool"
 			id="edge"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_EDGE} />
 		<label for="edge">edge</label>
 	</div>
@@ -80,49 +76,49 @@ const CREATE_LINE_RULER = "createRuler";
 			type="radio"
 			name="tool"
 			id="axiom-1"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_AXIOM_1} />
 		<label for="axiom-1">axiom 1</label>
 		<input
 			type="radio"
 			name="tool"
 			id="axiom-2"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_AXIOM_2} />
 		<label for="axiom-2">axiom 2</label>
 		<input
 			type="radio"
 			name="tool"
 			id="axiom-3"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_AXIOM_3} />
 		<label for="axiom-3">axiom 3</label>
 		<input
 			type="radio"
 			name="tool"
 			id="axiom-4"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_AXIOM_4} />
 		<label for="axiom-4">axiom 4</label>
 		<input
 			type="radio"
 			name="tool"
 			id="axiom-5"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_AXIOM_5} />
 		<label for="axiom-5">axiom 5</label>
 		<input
 			type="radio"
 			name="tool"
 			id="axiom-6"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_AXIOM_6} />
 		<label for="axiom-6">axiom 6</label>
 		<input
 			type="radio"
 			name="tool"
 			id="axiom-7"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_AXIOM_7} />
 		<label for="axiom-7">axiom 7</label>
 	</div>
@@ -132,10 +128,17 @@ const CREATE_LINE_RULER = "createRuler";
 		<input
 			type="radio"
 			name="tool"
-			id="kawasaki"
-			bind:group={$tool}
+			id="kawasaki-add"
+			bind:group={$Tool}
 			value={TOOL_KAWASAKI} />
-		<label for="kawasaki">kawasaki</label>
+		<label for="kawasaki-add">kawasaki add</label>
+		<input
+			type="radio"
+			name="tool"
+			id="kawasaki-shift"
+			bind:group={$Tool}
+			value={TOOL_KAWASAKI} />
+		<label for="kawasaki-shift">kawasaki shift</label>
 	</div>
 
 	<p>modifiers</p>
@@ -144,7 +147,7 @@ const CREATE_LINE_RULER = "createRuler";
 			type="radio"
 			name="tool"
 			id="split-edge"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_SPLIT_EDGE} />
 		<label for="split-edge">split edge</label>
 	</div>
@@ -155,7 +158,7 @@ const CREATE_LINE_RULER = "createRuler";
 			type="radio"
 			name="tool"
 			id="assign"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_ASSIGN} />
 		<label for="assign">assignment</label>
 	</div>
@@ -164,7 +167,7 @@ const CREATE_LINE_RULER = "createRuler";
 			type="radio"
 			name="tool"
 			id="fold-angle"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_FOLD_ANGLE} />
 		<label for="fold-angle">fold angle</label>
 	</div>
@@ -175,14 +178,14 @@ const CREATE_LINE_RULER = "createRuler";
 			type="radio"
 			name="tool"
 			id="translate"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_TRANSLATE} />
 		<label for="translate">translate</label>
 		<input
 			type="radio"
 			name="tool"
 			id="scale"
-			bind:group={$tool}
+			bind:group={$Tool}
 			value={TOOL_SCALE} />
 		<label for="scale">scale</label>
 	</div>

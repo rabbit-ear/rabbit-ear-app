@@ -5,13 +5,13 @@ import {
 	TOOL_EDGE,
 	TOOL_SPLIT_EDGE,
 } from "../app/keys.js";
-import { tool } from "../stores/tool.js";
-import { selection } from "../stores/select.js";
-import { keyboard } from "../stores/ui.js";
+import { Tool } from "../stores/Tool.js";
+import { Selection } from "../stores/Select.js";
+import { Keyboard } from "../stores/UI.js";
 import {
-	textarea,
-	textareaValue,
-} from "../stores/terminal.js";
+	Textarea,
+	TextareaValue,
+} from "../stores/Terminal.js";
 import { execute } from "./app.js";
 
 const keyboardWindowEventDown = (e) => {
@@ -21,7 +21,7 @@ const keyboardWindowEventDown = (e) => {
 	switch (e.keyCode) {
 	case 8: // backspace
 		e.preventDefault();
-		execute("deleteComponents", get(selection));
+		execute("deleteComponents", get(Selection));
 		// execute("deleteComponents", {
 		// 	vertices: selected.vertices(),
 		// 	edges: selected.edges(),
@@ -36,7 +36,7 @@ const keyboardWindowEventDown = (e) => {
 		// change tool to "edge"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
 			e.preventDefault();
-			// tool.set(TOOL_EDGE);
+			// Tool.set(TOOL_EDGE);
 		}
 		break;
 	case 78: // "n"
@@ -49,14 +49,14 @@ const keyboardWindowEventDown = (e) => {
 		// change tool to "select"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
 			e.preventDefault();
-			tool.set(TOOL_SELECT);
+			Tool.set(TOOL_SELECT);
 		}
 		break;
 	case 86: // "v"
 		// change tool to "vertex"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
 			e.preventDefault();
-			tool.set(TOOL_VERTEX);
+			Tool.set(TOOL_VERTEX);
 		}
 		break;
 	case 90: // "z"
@@ -99,8 +99,8 @@ const keyboardTerminalEventDown = (e) => {
 	case 13: // return
 		if (e.shiftKey) { break; }
 		e.preventDefault();
-		executeString(get(textareaValue));
-		textareaValue.set("");
+		executeString(get(TextareaValue));
+		TextareaValue.set("");
 		break;
 	default:
 		break;
@@ -109,17 +109,21 @@ const keyboardTerminalEventDown = (e) => {
 
 export const keyboardEventDown = (e) => {
 	// update store state for every key
-	keyboard.set({ ...get(keyboard), [e.keyCode]: true });
+	Keyboard.update(keys => ({ ...keys, [e.keyCode]: true }));
 	// execute different commands based on whether or not
 	// the textarea (Terminal) is active.
-	if (document.activeElement === get(textarea)) {
+	if (document.activeElement === get(Textarea)) {
 		return keyboardTerminalEventDown(e);
 	}
 	return keyboardWindowEventDown(e);
 };
 
 export const keyboardEventUp = (e) => {
-	const keys = get(keyboard);
-	delete keys[e.keyCode];
-	keyboard.set({ ...keys });
+	Keyboard.update(keys => {
+		delete keys[e.keyCode];
+		return keys;
+	});
+	// const keys = get(Keyboard);
+	// delete keys[e.keyCode];
+	// Keyboard.set({ ...keys });
 };

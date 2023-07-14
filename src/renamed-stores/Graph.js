@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import populate from "rabbit-ear/graph/populate.js";
 import { writable } from "svelte/store";
-import { selection } from "./select.js";
+import { Selection } from "./Select.js";
 import { downloadFile } from "../js/file.js";
 
 const makeEmptyGraph = () => populate({
@@ -13,14 +13,14 @@ const makeEmptyGraph = () => populate({
 });
 
 const setGraph = (g) => {
-	selection.reset();
+	Selection.reset();
 	const res = set(g);
 	return res;
 };
 
 const { subscribe, set, update } = writable(makeEmptyGraph());
 
-export const graph = {
+export const Graph = {
 	subscribe,
 	set: setGraph,
 	// no change to topology
@@ -39,4 +39,4 @@ export const graph = {
 	// of that magnitude, reset the modelMatrix to perfectly enclose the graph
 };
 
-export const uiGraph = writable({});
+export const UIGraph = writable({});

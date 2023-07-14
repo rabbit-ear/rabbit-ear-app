@@ -1,15 +1,15 @@
 <script>
 	import {
-		darkMode,
-		autoPlanarize,
-		snapping,
-	} from "../stores/app.js";
+		DarkMode,
+		AutoPlanarize,
+		Snapping,
+	} from "../stores/App.js";
 	import {
 		SNAP_NONE,
 		SNAP_GRID,
 		SNAP_SMART,
 	} from "../app/keys.js";
-	import { graph } from "../stores/graph.js";
+	import { Graph } from "../stores/Graph.js";
 	import { execute } from "../kernel/app.js";
 	import { loadFileDialog } from "../js/file.js";
 
@@ -18,14 +18,23 @@
 	let showTerminal = true;
 
 	let inputFile;
-	const clickDarkMode = () => { $darkMode = !$darkMode; };
+	const clickDarkMode = () => { $DarkMode = !$DarkMode; };
 </script>
 
 	<nav>
 		<ul>
 			<li>file
 				<ul>
-					<li><button on:click={graph.reset}>new</button></li>
+					<li><button on:click={Graph.reset}>new</button></li>
+					<hr />
+					<li>example bases
+						<ul>
+							<li>fish</li>
+							<li>bird</li>
+							<li>frog</li>
+							<li>windmill</li>
+						</ul>
+					</li>
 					<hr />
 					<li><button on:click={() => inputFile.click()}>load</button></li>
 					<li>
@@ -41,7 +50,7 @@
 					</li>
 					<li class="no-select">
 						<span class="popover">automatically planarize after (most) operations</span>
-						<input type="checkbox" id="checkbox-auto-planarize" bind:checked={$autoPlanarize}>
+						<input type="checkbox" id="checkbox-auto-planarize" bind:checked={$AutoPlanarize}>
 						<label for="checkbox-auto-planarize">auto-planarize</label>
 					</li>
 					<hr />
@@ -51,7 +60,7 @@
 							<input
 								type="radio"
 								id="radio-snapping-no-snapping"
-								bind:group={$snapping}
+								bind:group={$Snapping}
 								value={SNAP_NONE} 
 							>
 							<label for="radio-snapping-no-snapping">off</label>
@@ -60,7 +69,7 @@
 							<input
 								type="radio"
 								id="radio-snapping-grid"
-								bind:group={$snapping}
+								bind:group={$Snapping}
 								value={SNAP_GRID} 
 							>
 							<label for="radio-snapping-grid">grid</label>
@@ -69,7 +78,7 @@
 							<input
 								type="radio"
 								id="radio-snapping-smart"
-								bind:group={$snapping}
+								bind:group={$Snapping}
 								value={SNAP_SMART} 
 							>
 							<label for="radio-snapping-smart">smart</label>
@@ -158,7 +167,7 @@
 						<label for="checkbox-show-terminal">show terminal</label>
 					</li>
 					<hr />
-					<li highlighted={$darkMode}>
+					<li highlighted={$DarkMode}>
 						<button on:click={clickDarkMode}>dark mode</button>
 					</li>
 				</ul>

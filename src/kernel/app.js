@@ -1,5 +1,5 @@
 import { get, writable } from "svelte/store";
-import { history } from "../stores/terminal.js";
+import { AppHistory } from "../stores/Terminal.js";
 import * as Functions from "./functions.js";
 /**
  * @description pre and post execute event function parameters should
@@ -8,6 +8,18 @@ import * as Functions from "./functions.js";
  */
 export const preExecuteEvents = writable([]);
 export const postExecuteEvents = writable([]);
+/**
+ *
+ */
+const previewFunctions = {
+	"axiom1Preview": true,
+	"axiom2Preview": true,
+	"axiom3Preview": true,
+	"axiom4Preview": true,
+	"axiom5Preview": true,
+	"axiom6Preview": true,
+	"axiom7Preview": true,
+};
 /**
  * @description the main execution method. all methods, from UI to
  * graph-modifying should pass through this method. pre and post-
@@ -19,6 +31,9 @@ export const execute = (funcName, ...args) => {
 	if (!func) {
 		console.error(new Error("no known function with that name"));
 		return;
+	}
+	if (previewFunctions[funcName]) {
+		return func(...args);
 	}
 	let res;
 	const preEvents = get(preExecuteEvents);
@@ -41,6 +56,7 @@ export const execute = (funcName, ...args) => {
 	newHistory.push(...preEvents.map(fn => ({ func: fn, args: [] })));
 	newHistory.push({ func, args: argsClone });
 	newHistory.push(...postEvents.map(fn => ({ func: fn, args: [] })));
-	history.set([...get(history), ...newHistory]);
+	AppHistory.update(h => [...h, ...newHistory]);
+	// AppHistory.set([...get(AppHistory), ...newHistory]);
 	return res;
 };

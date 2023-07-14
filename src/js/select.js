@@ -3,11 +3,11 @@ import { intersectLineLine } from "rabbit-ear/math/intersect/intersect.js";
 import { nearest } from "rabbit-ear/graph/nearest.js";
 import { includeS } from "rabbit-ear/math/general/function.js";
 // import { pointInBoundingBox } from "rabbit-ear/math/intersect/encloses.js";
-import { viewBox } from "../stores/viewBox.js";
-import { elementSelect } from "../stores/tool.js";
-import { selectionRect } from "../stores/select.js";
-import { graph } from "../stores/graph.js";
-import { releases } from "../stores/ui.js";
+import { ViewBox } from "../stores/ViewBox.js";
+import { ElementSelect } from "../stores/Tool.js";
+import { SelectionRect } from "../stores/Select.js";
+import { Graph } from "../stores/Graph.js";
+import { Releases } from "../stores/UI.js";
 import {
 	SELECT_VERTEX,
 	SELECT_EDGE,
@@ -91,16 +91,16 @@ const vefName = {
 };
 
 /**
- * @description get the selected components inside the selectionRect
+ * @description get the selected components inside the SelectionRect
  */
 export const getSelected = () => {
-	const graphValue = get(graph);
-	const vb = get(viewBox);
+	const graphValue = get(Graph);
+	const vb = get(ViewBox);
 	const vmax = Math.max(vb[2], vb[3]);
-	const degenerateSelection = get(selectionRect) === undefined
-		|| Math.max(...get(selectionRect).span) < vmax * 0.01;
+	const degenerateSelection = get(SelectionRect) === undefined
+		|| Math.max(...get(SelectionRect).span) < vmax * 0.01;
 	const nears = degenerateSelection
-		? getSelectedFromPoint(graphValue, get(releases)[get(releases).length - 1])
-		: getSelectedFromRect(graphValue, get(selectionRect));
-	return nears[vefName[get(elementSelect)]];
+		? getSelectedFromPoint(graphValue, get(Releases)[get(Releases).length - 1])
+		: getSelectedFromRect(graphValue, get(SelectionRect));
+	return nears[vefName[get(ElementSelect)]];
 };

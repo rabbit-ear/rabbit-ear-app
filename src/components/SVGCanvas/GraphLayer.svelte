@@ -2,14 +2,11 @@
 	import GraphVerticesLayer from "./GraphVerticesLayer.svelte";
 	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
 	import GraphFacesLayer from "./GraphFacesLayer.svelte";
-	import { graph } from "../../stores/graph.js";
-	import { selection } from "../../stores/select.js";
+	import { Graph } from "../../stores/Graph.js";
+	import { Selection } from "../../stores/Select.js";
+	import { Tool } from "../../stores/Tool.js";
 	import {
-		tool,
-		elementSelect,
-	} from "../../stores/tool.js";
-	import {
-		SELECT_VERTEX,
+		TOOL_SELECT,
 		TOOL_VERTEX,
 		TOOL_EDGE,
 		TOOL_SPLIT_EDGE,
@@ -24,7 +21,7 @@
 	} from "../../app/keys.js";
 
 	let showVertices = {
-		[SELECT_VERTEX]: true,
+		[TOOL_SELECT]: true,
 		[TOOL_SPLIT_EDGE]: true,
 		[TOOL_EDGE]: true,
 		[TOOL_VERTEX]: true,
@@ -44,25 +41,25 @@
 
 	$: {
 		facesFill = [];
-		$selection.faces.forEach(i => { facesFill[i] = "#fb44"; });
+		$Selection.faces.forEach(i => { facesFill[i] = "#fb44"; });
 	};
 
 	$: {
 		edgesStroke = [];
-		$selection.edges.forEach(i => { edgesStroke[i] = "#fb4"; });
+		$Selection.edges.forEach(i => { edgesStroke[i] = "#fb4"; });
 	};
 
 	$: {
 		verticesFill = [];
-		$selection.vertices.forEach(i => { verticesFill[i] = "#fb4"; });
+		$Selection.vertices.forEach(i => { verticesFill[i] = "#fb4"; });
 	};
 
 </script>
 
 <g>
-	<GraphFacesLayer graph={$graph} fills={facesFill} />
-	<GraphEdgesLayer graph={$graph} strokes={edgesStroke} />
-	{#if showVertices[$tool]}
-		<GraphVerticesLayer graph={$graph} fills={verticesFill} />
+	<GraphFacesLayer graph={$Graph} fills={facesFill} />
+	<GraphEdgesLayer graph={$Graph} strokes={edgesStroke} />
+	{#if showVertices[$Tool]}
+		<GraphVerticesLayer graph={$Graph} fills={verticesFill} />
 	{/if}
 </g>

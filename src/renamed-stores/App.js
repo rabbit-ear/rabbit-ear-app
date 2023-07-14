@@ -11,16 +11,20 @@ import {
 	postExecuteEvents,
 } from "../kernel/app.js";
 
-export const darkMode = writable(true);
+export const NewEdgeAssignment = writable("U");
 
-export const snapping = writable(SNAP_SMART);
+export const DarkMode = writable(true);
+
+export const Snapping = writable(SNAP_SMART);
+
+export const RulersAutoClear = writable(true);
 
 const {
 	subscribe: autoPlanarizeSubscribe,
 	set: autoPlanarizeSet,
 } = writable(false);
 
-export const autoPlanarize = {
+export const AutoPlanarize = {
 	subscribe: autoPlanarizeSubscribe,
 	set: (e) => {
 		const events = get(postExecuteEvents)
@@ -31,4 +35,4 @@ export const autoPlanarize = {
 	},
 };
 
-autoPlanarize.set(true);
+AutoPlanarize.set(true);

@@ -4,30 +4,30 @@ import {
 	multiplyMatrices2,
 } from "rabbit-ear/math/algebra/matrix2.js";
 import { get } from "svelte/store";
-import { cameraMatrix } from "../stores/viewBox.js";
+import { CameraMatrix } from "../stores/ViewBox.js";
 import {
-	current,
-	presses,
-	moves,
-	releases,
-} from "../stores/ui.js";
+	Current,
+	Presses,
+	Moves,
+	Releases,
+} from "../stores/UI.js";
 
 export const pointerEventCamera = (eventType) => {
-	const point = get(current);
+	const point = get(Current);
 	switch (eventType) {
 	case "press": break;
 	case "move":
-		if (!get(presses).length) { break; }
+		if (!get(Presses).length) { break; }
 		const m = multiplyMatrices2(
-			get(cameraMatrix),
-			makeMatrix2Translate(...subtract2(point, get(presses)[0]))
+			get(CameraMatrix),
+			makeMatrix2Translate(...subtract2(point, get(Presses)[0]))
 		);
-		cameraMatrix.set(m);
+		CameraMatrix.set(m);
 		break;
 	case "release":
-		presses.set([]);
-		moves.set([]);
-		releases.set([]);
+		Presses.set([]);
+		Moves.set([]);
+		Releases.set([]);
 		break;
 	}
 };

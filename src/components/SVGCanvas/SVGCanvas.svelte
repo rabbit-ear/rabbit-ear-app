@@ -8,7 +8,7 @@
 		convertToViewBox,
 		findInParents,
 	} from "../../js/dom.js";
-	import { viewBox } from "../../stores/viewBox.js";
+	import { ViewBox } from "../../stores/ViewBox.js";
 
 	const formatMouseEvent = (e) => ({
 		buttons: e.buttons,
@@ -27,7 +27,7 @@
 	const wheel = (e) => dispatch("scroll", formatWheelEvent(e));
 
 	let vmax
-	$: vmax = Math.max($viewBox[2], $viewBox[3]);
+	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);
 
 	const padViewBox = (view, pad) => [
 		view[0] - pad,
@@ -39,8 +39,8 @@
 
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
-		viewBox={padViewBox($viewBox, vmax * 0.05).join(" ")}
-		stroke-width={$viewBox[2] * 0.0033}
+		viewBox={padViewBox($ViewBox, vmax * 0.05).join(" ")}
+		stroke-width={$ViewBox[2] * 0.0033}
 		on:mousedown={mousedown}
 		on:mousemove={mousemove}
 		on:mouseup={mouseup}

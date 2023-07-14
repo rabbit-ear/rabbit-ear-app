@@ -27,45 +27,45 @@
 	import Raycasters from "../../simulator/touches/raycasters";
 	import boundingBox from "../../simulator/fold/boundingBox";
 	import {
-		active,
-		foldAmount,
-		strain,
-		tool,
-		error,
-		reset,
-		exportModel,
+		Active,
+		FoldAmount,
+		Strain,
+		Tool,
+		VertexError,
+		Reset,
+		ExportModel,
 	} from "../../stores/simulator.js";
 	import {
-		integration,
-		axialStiffness,
-		faceStiffness,
-		joinStiffness,
-		creaseStiffness,
-		dampingRatio,
+		Integration,
+		AxialStiffness,
+		FaceStiffness,
+		JoinStiffness,
+		CreaseStiffness,
+		DampingRatio,
 	} from "../../stores/solver.js";
 	import {
-		showTouches,
-		showShadows,
-		showFront,
-		showBack,
-		showBoundary,
-		showMountain,
-		showValley,
-		showFlat,
-		showJoin,
-		showUnassigned,
-		backgroundColor,
-		frontColor,
-		backColor,
-		lineOpacity,
-		boundaryColor,
-		mountainColor,
-		valleyColor,
-		flatColor,
-		joinColor,
-		unassignedColor,
+		ShowTouches,
+		ShowShadows,
+		ShowFront,
+		ShowBack,
+		ShowBoundary,
+		ShowMountain,
+		ShowValley,
+		ShowFlat,
+		ShowJoin,
+		ShowUnassigned,
+		BackgroundColor,
+		FrontColor,
+		BackColor,
+		LineOpacity,
+		BoundaryColor,
+		MountainColor,
+		ValleyColor,
+		FlatColor,
+		JoinColor,
+		UnassignedColor,
 	} from "../../stores/style.js";
-	import { graph } from "../../stores/graph.js";
+	import { Graph } from "../../stores/graph.js";
 
 	const lightVertices = [
 		[+1, +1, +1],
@@ -109,11 +109,11 @@
 	 * to the window.requestAnimationFrame and will fire at the end of every loop
 	 */
 	const onCompute = (props) => {
-		error.set(props.error);
+		VertexError.set(props.error);
 		// The raycaster will update on a mousemove event, but if the origami is
 		// in a folding animation, the raycaster will not update and the visuals
 		// will mismatch, hence, the raycaster can fire on a frame update if needed
-		raycasters.animate($tool === "pull");
+		raycasters.animate($Tool === "pull");
 	};
 	/**
 	 * @description This is the callback from ThreeView after three.js has
@@ -133,14 +133,14 @@
 			setTouches: t => { touches = t; },
 		});
 		lights.forEach(light => scene.add(light));
-		exportModel.set(simulator.export);
+		ExportModel.set(simulator.export);
 	};
 
 	// load a new origami model. thrown errors are because of a bad file format
 	$: {
 		try {
-			simulator.load($graph);
-			const box = boundingBox($graph);
+			simulator.load($Graph);
+			const box = boundingBox($Graph);
 			modelSize = box ? Math.max(...box.span) : 1;
 		} catch (error) {
 			window.alert(error);
@@ -174,51 +174,51 @@
 			lights[i].shadow.camera.far = radius * 10; // 500 default
 		});
 	}
-	$: reset.set(simulator.reset);
+	$: Reset.set(simulator.reset);
 
 	/**
 	 * settings from the Simulator store
 	 */
-	$: simulator.setActive($active);
-	$: simulator.setFoldAmount($foldAmount);
-	$: simulator.setStrain($strain);
-	$: simulator.setIntegration($integration);
-	$: simulator.setAxialStiffness($axialStiffness);
-	$: simulator.setFaceStiffness($faceStiffness);
-	$: simulator.setJoinStiffness($joinStiffness);
-	$: simulator.setCreaseStiffness($creaseStiffness);
-	$: simulator.setDampingRatio($dampingRatio);
+	$: simulator.setActive($Active);
+	$: simulator.setFoldAmount($FoldAmount);
+	$: simulator.setStrain($Strain);
+	$: simulator.setIntegration($Integration);
+	$: simulator.setAxialStiffness($AxialStiffness);
+	$: simulator.setFaceStiffness($FaceStiffness);
+	$: simulator.setJoinStiffness($JoinStiffness);
+	$: simulator.setCreaseStiffness($CreaseStiffness);
+	$: simulator.setDampingRatio($DampingRatio);
 	// show/hide things
-	$: simulator.setShadows($showShadows);
+	$: simulator.setShadows($ShowShadows);
 	$: [0, 3, 4, 7].forEach(i => {
-		lights[i % lights.length].castShadow = $showShadows;
+		lights[i % lights.length].castShadow = $ShowShadows;
 	});
-	$: $showTouches
+	$: $ShowTouches
 		? highlights.highlightTouch(touches[0])
 		: highlights.clear();
-	$: simulator.getModel().frontMesh.visible = $showFront;
-	$: simulator.getModel().backMesh.visible = $showBack;
-	$: simulator.getLines().B.visible = $showBoundary;
-	$: simulator.getLines().M.visible = $showMountain;
-	$: simulator.getLines().V.visible = $showValley;
-	$: simulator.getLines().F.visible = $showFlat;
-	$: simulator.getLines().J.visible = $showJoin;
-	$: simulator.getLines().U.visible = $showUnassigned;
+	$: simulator.getModel().frontMesh.visible = $ShowFront;
+	$: simulator.getModel().backMesh.visible = $ShowBack;
+	$: simulator.getLines().B.visible = $ShowBoundary;
+	$: simulator.getLines().M.visible = $ShowMountain;
+	$: simulator.getLines().V.visible = $ShowValley;
+	$: simulator.getLines().F.visible = $ShowFlat;
+	$: simulator.getLines().J.visible = $ShowJoin;
+	$: simulator.getLines().U.visible = $ShowUnassigned;
 	// colors
-	$: simulator.setFrontColor($frontColor);
-	$: simulator.setBackColor($backColor);
+	$: simulator.setFrontColor($FrontColor);
+	$: simulator.setBackColor($BackColor);
 	$: Object.values(simulator.getMaterials().line)
-		.forEach(m => { m.opacity = $lineOpacity; });
-	$: simulator.setBoundaryColor($boundaryColor);
-	$: simulator.setMountainColor($mountainColor);
-	$: simulator.setValleyColor($valleyColor);
-	$: simulator.setFlatColor($flatColor);
-	$: simulator.setJoinColor($joinColor);
-	$: simulator.setUnassignedColor($unassignedColor);
-	$: if (scene) { scene.background = new THREE.Color($backgroundColor); }
+		.forEach(m => { m.opacity = $LineOpacity; });
+	$: simulator.setBoundaryColor($BoundaryColor);
+	$: simulator.setMountainColor($MountainColor);
+	$: simulator.setValleyColor($ValleyColor);
+	$: simulator.setFlatColor($FlatColor);
+	$: simulator.setJoinColor($JoinColor);
+	$: simulator.setUnassignedColor($UnassignedColor);
+	$: if (scene) { scene.background = new THREE.Color($BackgroundColor); }
 
 	// nitpicky. upon tool change we need raycasterPullVertex to be undefined
-	$: if (raycasters) { raycasters.raycasterReleaseHandler($tool); }
+	$: if (raycasters) { raycasters.raycasterReleaseHandler($Tool); }
 
 	/**
 	 * @description cleanup all memory associated with origami simulator
@@ -231,7 +231,7 @@
 </script>
 
 <TrackballView
-	enabled={$tool !== "pull"}
+	enabled={$Tool !== "pull"}
 	maxDistance={modelSize * 30}
 	minDistance={modelSize * 0.1}
 	panSpeed={1}
