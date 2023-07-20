@@ -4,11 +4,16 @@
 	import UILayer from "./UILayer.svelte";
 	import GraphLayer from "./GraphLayer.svelte";
 	import RulerLayer from "./RulerLayer.svelte";
+	import AxesLayer from "./AxesLayer.svelte";
 	import {
 		convertToViewBox,
 		findInParents,
 	} from "../../js/dom.js";
 	import { ViewBox } from "../../stores/ViewBox.js";
+	import {
+		ShowGrid,
+		ShowAxes,
+	} from "../../stores/App.js";
 
 	const formatMouseEvent = (e) => ({
 		buttons: e.buttons,
@@ -49,10 +54,15 @@
 		on:blur={() => {}}
 		role="presentation"
 	>
+		{#if $ShowGrid}
 			<GridLayer />
-			<GraphLayer />
-			<UILayer />
-			<RulerLayer />
+		{/if}
+		<GraphLayer />
+		{#if $ShowAxes}
+			<AxesLayer />
+		{/if}
+		<UILayer />
+		<RulerLayer />
 	</svg>
 
 	<!-- i'm not sure what role=presentation means, i just guessed -->

@@ -55,7 +55,6 @@ export const pointerEventAxiom7 = (eventType, { point }) => {
 		edge1 = undefined;
 		RulerPreviews.set([]);
 		Presses.set([]);
-		Moves.set([]);
 		Releases.set([]);
 		break;
 	}

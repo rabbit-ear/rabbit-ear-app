@@ -54,6 +54,15 @@
 						<label for="checkbox-auto-planarize">auto-planarize</label>
 					</li>
 					<hr />
+					<li>insert
+						<ul>
+							<li><button on:click={() => {}}>fish</button></li>
+							<li><button on:click={() => {}}>windmill</button></li>
+							<li><button on:click={() => {}}>bird</button></li>
+							<li><button on:click={() => {}}>frog</button></li>
+						</ul>
+					</li>
+					<hr />
 					<li class="no-select description">snapping</li>
 					<li class="no-select">
 						<div>
@@ -132,8 +141,9 @@
 					</li>
 					<hr />
 					<li class="no-select description">modify selection</li>
-					<li>set fold angle</li>
-					<li>set assignment</li>
+					<li><button on:click={() => {}}>merge selected vertices</button></li>
+					<li>set edges fold angle</li>
+					<li>set edges assignment</li>
 				</ul>
 			</li>
 			<li>analysis
@@ -241,17 +251,17 @@
 		background-color: #3a3a3a;
 		color: #eee;
 	}
-	nav li[highlighted=true] {
+	/*nav li[highlighted=true] {
 		background-color: #e53;
 		color: white;
-	}
+	}*/
 	nav li:hover {
 		background-color: #444;
 		color: white;
 	}
-	nav li[highlighted=true]:hover {
+	/*nav li[highlighted=true]:hover {
 		background-color: #f75;
-	}
+	}*/
 	nav li.no-select {
 		background-color: unset;
 		color: unset;

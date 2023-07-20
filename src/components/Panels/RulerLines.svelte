@@ -18,8 +18,3 @@
 		</div>
 	</span>
 </Panel>
-
-<style>
-	input[type=text] { width: 100%; }
-	input[type=text].half { width: 50%; }
-</style>

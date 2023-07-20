@@ -66,6 +66,10 @@ export const ElementSelect = {
 // for the main tool.
 export const AssignType = writable(ASSIGN_SWAP);
 export const FoldAngleValue = writable(90);
+export const ScribbleSmooth = writable(true);
+export const ScribbleSmoothAmount = writable(0.5);
+export const ScribbleDensity = writable(0.5);
+export const ScribbleWaitForConfirmation = writable(false);
 
 /**
  * @description for the UI. which tool step is currently in progress

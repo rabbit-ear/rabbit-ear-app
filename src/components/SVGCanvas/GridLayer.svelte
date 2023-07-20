@@ -1,48 +1,61 @@
 <script>
 	import { ViewBox } from "../../stores/ViewBox.js";
 
-	let origin = [0, 0];
-	$: origin = [-$ViewBox[0], -$ViewBox[1]];
+	// let strokeWidth;
+	// $: strokeWidth = 
 
-	let factors = [{}, {}];
+	let xs = [];
+	let ys = [];
 	$: {
-		const size = [$ViewBox[2], $ViewBox[3]].map(n => Math.ceil(n));
-		factors = Array.from(Array(2)).map((_, dim) => {
-			const result = Array(size[dim] + 1).fill(0);
-			Array.from(Array(size[dim]))
-				.map((_, i) => i)
-				.map(i => ({ i, n: size[dim] / i }))
-				.filter(el => el.n == parseInt(el.n, 10))
-				.map(el => el.i)
-				.forEach(i => {
-					let n = i;
-					while (n < size[dim]) {
-						result[n] += 1;
-						n += i;
-					}
-				});
-				return result;
-		});
+		let xSpacing = 1;
+		while (($ViewBox[2] / xSpacing) > 32) { xSpacing *= 2; }
+		const xCount = parseInt($ViewBox[2] / xSpacing);
+		const xOffset = Math.ceil($ViewBox[0] / xSpacing) * xSpacing;
+		// const xOffset = Math.ceil($ViewBox[0]);
+		// console.log("xOffset", xOffset, "xCount", xCount);
+		xs = Array.from(Array(xCount + 1))
+			.map((_, i) => xOffset + xSpacing * i);
+	}
+	$: {
+		let ySpacing = 1;
+		while (($ViewBox[3] / ySpacing) > 32) { ySpacing *= 2; }
+		const yCount = parseInt($ViewBox[3] / ySpacing);
+		const yOffset = Math.ceil($ViewBox[1] / ySpacing) * ySpacing;
+		ys = Array.from(Array(yCount + 1))
+			.map((_, i) => yOffset + ySpacing * i);
 	}
 </script>
 
 <g class="grid" stroke-width={Math.max($ViewBox[2], $ViewBox[3]) / 400}>
-	<!-- {#each Array.from(Array(Math.ceil($ViewBox[2]) + 1)).map((_, i) => i + $ViewBox[0]) as x}
+<!-- 	<rect
+		x={$ViewBox[0] + $ViewBox[2] * 0.05}
+		y={$ViewBox[1] + $ViewBox[3] * 0.05}
+		width={$ViewBox[2] - $ViewBox[2] * 0.1}
+		height={$ViewBox[3] - $ViewBox[3] * 0.1}
+		fill="none"
+		stroke="red"
+	/> -->
+
+	{#each xs as x}
 		<line
-			x1={origin[0] + x}
-			y1={origin[1] + $ViewBox[1]}
-			x2={origin[0] + x}
-			y2={origin[1] + $ViewBox[1] + $ViewBox[3]}
-			stroke-width={$ViewBox[2] * 0.001 + factors[0][x] * 0.02}
+			x1={x}
+			y1={$ViewBox[1]}
+			x2={x}
+			y2={$ViewBox[1] + $ViewBox[3]}
 		/>
 	{/each}
-	{#each Array.from(Array(Math.ceil($ViewBox[3]) + 1)).map((_, i) => i + $ViewBox[1]) as y}
+	{#each ys as y}
 		<line
-			x1={origin[0] + $ViewBox[0]}
-			y1={origin[1] + y}
-			x2={origin[0] + $ViewBox[0] + $ViewBox[2]}
-			y2={origin[1] + y}
-			stroke-width={$ViewBox[2] * 0.001 + factors[1][y] * 0.02}
+			x1={$ViewBox[0]}
+			y1={y}
+			x2={$ViewBox[0] + $ViewBox[2]}
+			y2={y}
 		/>
-	{/each} -->
+	{/each}
+
+	<!--
+	stroke-width={$ViewBox[2] * 0.001 + factors[0][x] * 0.02}
+	stroke-width={$ViewBox[2] * 0.001 + factors[0][y] * 0.02}
+	-->
+
 </g>

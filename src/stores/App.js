@@ -12,13 +12,11 @@ import {
 } from "../kernel/app.js";
 
 export const NewEdgeAssignment = writable("U");
-
 export const Snapping = writable(SNAP_SMART);
-
 export const ShowSimulator = writable(false);
-
 export const ShowTerminal = writable(false);
-
+export const ShowGrid = writable(true);
+export const ShowAxes = writable(true);
 export const RulersAutoClear = writable(true);
 
 const {

@@ -47,6 +47,7 @@ export const pointerEventAxiom3 = (eventType, { point }) => {
 			execute("axiom3", pressEdge, edge);
 			pressEdge = undefined;
 		}
+		// nearest point on line
 		if (vertex !== undefined) { Selection.addVertices([vertex]); }
 		break;
 	case 3:
@@ -66,7 +67,6 @@ export const pointerEventAxiom3 = (eventType, { point }) => {
 		if (get(RulersAutoClear)) { Rulers.set([]); }
 		execute("addEdge", pressVertex, vertex);
 		Presses.set([]);
-		Moves.set([]);
 		Releases.set([]);
 		break;
 	}
@@ -94,7 +94,6 @@ export const pointerEventAxiom3 = (eventType, { point }) => {
 // 		pressEdge = undefined;
 // 		RulerPreviews.set([]);
 // 		Presses.set([]);
-// 		Moves.set([]);
 // 		Releases.set([]);
 // 		break;
 // 	}

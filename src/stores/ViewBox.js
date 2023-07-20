@@ -8,11 +8,22 @@ import {
 
 export const ModelMatrix = writable([...identity2x3]);
 
+// const { subscribe, set, update } = writable([...identity2x3]);
+// export const CameraMatrix = {
+// 	subscribe,
+// 	set: m => set(m),
+// 	update: m => update,
+// }
 export const CameraMatrix = writable([...identity2x3]);
+CameraMatrix.reset = () => CameraMatrix.set([...identity2x3]);
 
 export const ViewMatrix = derived(
 	CameraMatrix,
 	($CameraMatrix) => invertMatrix2($CameraMatrix),
+	// ($CameraMatrix) => {
+	// 	console.log("$CameraMatrix", $CameraMatrix);
+	// 	return invertMatrix2($CameraMatrix);
+	// },
 	[...identity2x3],
 );
 

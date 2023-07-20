@@ -9,3 +9,7 @@ line {
 .grid line {
 	stroke: #444;
 }
+
+line.axis-marker-x { stroke: red; }
+line.axis-marker-y { stroke: green; }
+

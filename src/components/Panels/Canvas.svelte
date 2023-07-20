@@ -1,12 +1,14 @@
 <script>
 	import Panel from "./Panel.svelte";
-	import { ViewBox } from "../../stores/ViewBox.js";
-	import { Current } from "../../stores/UI.js";
+	import { ModelMatrix, CameraMatrix } from "../../stores/ViewBox.js";
+	// import { Current } from "../../stores/UI.js";
 
-	let viewBoxWidth = $ViewBox[2];
-	let viewBoxHeight = $ViewBox[3];
-	// $: ViewBox.setWidth(parseFloat(viewBoxWidth));
-	// $: ViewBox.setHeight(parseFloat(viewBoxHeight));
+	// todo check this is correct. we are inferring zoom level of a matrix
+	let zoom;
+	$: {
+		const value = $ModelMatrix[0] * $CameraMatrix[0];
+		zoom = !isNaN(value) ? value.toFixed(3) : 0;
+	};
 	
 	const formatPoint = (p) => p
 		.map(n => {
@@ -18,20 +20,22 @@
 <Panel>
 	<span slot="title">canvas</span>
 	<span slot="body">
-		<div>
+		<p>zoom: <span class="number">{zoom}</span></p>
+		<!-- <input type="text" class="half" bind:value={zoom}> -->
+		<!-- <div>
 			<p>cursor</p>
 			<input type="text" readonly value={$Current ? formatPoint($Current) : ""}>
-		</div>
+		</div> -->
 		<div>
-			<p>canvas</p>
-			<input class="half" type="text" bind:value={viewBoxWidth}><input class="half" type="text" bind:value={viewBoxHeight}>
+			<button on:click={CameraMatrix.reset}>reset zoom</button>
 		</div>
-		<hr />
-		<button>re-center</button>
 	</span>
 </Panel>
 
 <style>
-	input[type=text] { width: 100%; }
-	input[type=text].half { width: 50%; }
+	.number {
+		font-weight: bold;
+	}
+/*	input[type=text] { width: 100%; }*/
+/*	input[type=text].half { width: 50%; }*/
 </style>

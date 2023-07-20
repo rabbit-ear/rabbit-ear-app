@@ -26,13 +26,7 @@ import {
 import { Tool } from "../stores/Tool.js";
 
 // temp
-let tempCreateLineType;
 let TOOL_KAWASAKI_SHIFT = "toolKawasakiShift";
-
-
-const CREATE_LINE_SELECTED_FACES = "createOneFace";
-const CREATE_LINE_ALL_FACES = "createAllFaces";
-const CREATE_LINE_RULER = "createRuler";
 
 </script>
 
@@ -213,31 +207,6 @@ const CREATE_LINE_RULER = "createRuler";
 			value={TOOL_SCALE} />
 		<label for="scale">scale</label>
 	</div>
-
-	<hr />
-
-	<p>lines into:</p>
-
-	<div class="vertical-radio">
-		<input
-			disabled=true
-			type="radio"
-			name="create-type"
-			id="create-line-selected-faces"
-			bind:group={tempCreateLineType}
-			value={CREATE_LINE_SELECTED_FACES} />
-		<label for="create-line-selected-faces">graph segments</label>
-		<input
-			disabled=true
-			type="radio"
-			name="create-type"
-			id="create-line-ruler"
-			bind:group={tempCreateLineType}
-			value={CREATE_LINE_RULER} />
-		<label for="create-line-ruler">ruler lines</label>
-	</div>
-
-	<hr />
 
 </div>
 
