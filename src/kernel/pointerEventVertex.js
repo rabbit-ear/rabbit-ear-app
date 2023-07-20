@@ -3,27 +3,23 @@ import { add2, subtract2 } from "rabbit-ear/math/algebra/vector.js";
 import { get } from "svelte/store";
 import { Selection } from "../stores/Select.js";
 import { Graph, UIGraph } from "../stores/Graph.js";
-import {
-	Presses,
-	Moves,
-	Releases,
-	Current
-} from "../stores/UI.js";
 import { getSnapPoint } from "../js/nearest.js";
 import { subgraphWithVertices, normalize } from "../js/subgraph.js";
 import { execute } from "./app.js";
 
-const getDragVector = () => {
-	const origin = get(Presses)[0];
-	const end = get(Current);
-	if (!origin || !end) { return [0, 0]; }
-	return subtract2(end, origin);
+let press;
+
+const getDragVector = (point) => {
+	// const origin = get(Presses)[0];
+	// const end = get(Current);
+	if (!press || !point) { return [0, 0]; }
+	return subtract2(point, press);
 };
 
-export const pointerEventVertex = (eventType) => {
+export const pointerEventVertex = (eventType, { point }) => {
 	switch (eventType) {
 	case "press":
-		const { coords, vertex } = getSnapPoint(get(Current));
+		const { coords, vertex } = getSnapPoint(point);
 		if (vertex !== undefined) {
 			Selection.reset();
 			Selection.addVertices([vertex]);
@@ -32,7 +28,7 @@ export const pointerEventVertex = (eventType) => {
 		execute("addVertex", coords);
 		break;
 	case "move": {
-		const dragVector = getDragVector();
+		const dragVector = getDragVector(point);
 		const selVerts = get(Selection).vertices;
 		const subgraph = subgraphWithVertices(get(Graph), selVerts);
 		selVerts.forEach(v => {
@@ -45,10 +41,7 @@ export const pointerEventVertex = (eventType) => {
 	case "release":
 		UIGraph.set({});
 		// move currently selected vertices
-		execute("translateVertices", get(Selection).vertices, getDragVector());
-		Presses.set([]);
-		Moves.set([]);
-		Releases.set([]);
+		execute("translateVertices", get(Selection).vertices, getDragVector(point));
 		Selection.reset();
 		break;
 	default:

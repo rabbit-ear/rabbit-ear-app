@@ -27,7 +27,7 @@
 </script>
 
 <g class="grid" stroke-width={Math.max($ViewBox[2], $ViewBox[3]) / 400}>
-	{#each Array.from(Array(Math.ceil($ViewBox[2]) + 1)).map((_, i) => i + $ViewBox[0]) as x}
+	<!-- {#each Array.from(Array(Math.ceil($ViewBox[2]) + 1)).map((_, i) => i + $ViewBox[0]) as x}
 		<line
 			x1={origin[0] + x}
 			y1={origin[1] + $ViewBox[1]}
@@ -44,5 +44,5 @@
 			y2={origin[1] + y}
 			stroke-width={$ViewBox[2] * 0.001 + factors[1][y] * 0.02}
 		/>
-	{/each}
+	{/each} -->
 </g>

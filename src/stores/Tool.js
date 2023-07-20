@@ -1,11 +1,4 @@
 import { writable, derived } from "svelte/store";
-// import {
-// 	TOOL_SELECT,
-// 	TOOL_VERTEX,
-// 	TOOL_EDGE,
-// 	ASSIGN_SWAP,
-// 	SELECT_EDGE,
-// } from "../app/keys.js";
 import {
 	ASSIGN_SWAP,
 	SELECT_EDGE,
@@ -105,9 +98,14 @@ export const ToolStep = derived(
 			if (pressesCount === 1 && releasesCount === 0) { return 1; }
 			if (pressesCount === 1 && releasesCount === 1) { return 2; }
 			if (pressesCount === 2 && releasesCount === 1) { return 3; }
+			if (pressesCount === 2 && releasesCount === 2) { return 4; }
+			if (pressesCount === 3 && releasesCount === 2) { return 5; }
+			if (pressesCount === 3 && releasesCount === 3) { return 6; }
+			return 7;
 		case TOOL_KAWASAKI: return 0;
 		case TOOL_PLEAT: return 0;
 		case TOOL_SCRIBBLE: return 0;
+		default: return Infinity;
 		}
 	},
 	0,

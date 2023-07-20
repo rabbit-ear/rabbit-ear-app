@@ -3,9 +3,18 @@ import {
 	TOOL_SELECT,
 	TOOL_VERTEX,
 	TOOL_EDGE,
+	TOOL_ASSIGN,
 	TOOL_SPLIT_EDGE,
+	ASSIGN_SWAP,
+	ASSIGN_FLAT,
+	ASSIGN_UNASSIGNED,
+	ASSIGN_CUT,
+	ASSIGN_BOUNDARY,
 } from "../app/keys.js";
-import { Tool } from "../stores/Tool.js";
+import {
+	Tool,
+	AssignType,
+} from "../stores/Tool.js";
 import { Selection } from "../stores/Select.js";
 import { Keyboard } from "../stores/UI.js";
 import {
@@ -13,6 +22,7 @@ import {
 	TextareaValue,
 } from "../stores/Terminal.js";
 import { execute } from "./app.js";
+import { Presses, Releases, Moves } from "../stores/UI.js";
 
 const keyboardWindowEventDown = (e) => {
 	const { altKey, ctrlKey, metaKey, shiftKey } = e;
@@ -28,15 +38,52 @@ const keyboardWindowEventDown = (e) => {
 		// 	faces: selected.faces(),
 		// });
 		break;
+	case 27: // ESC
+		Presses.set([]);
+		Moves.set([]);
+		Releases.set([]);
+		break;
 	case 65: // "a"
 		// select all
 		// assignment
+		break;
+	case 66: // "b"
+		// assignment mountain/valley
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_ASSIGN);
+			AssignType.set(ASSIGN_BOUNDARY);
+		}
+		break;
+	case 67: // "c"
+		// assignment cut
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_ASSIGN);
+			AssignType.set(ASSIGN_CUT);
+		}
 		break;
 	case 69: // "e"
 		// change tool to "edge"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
 			e.preventDefault();
 			// Tool.set(TOOL_EDGE);
+		}
+		break;
+	case 70: // "f"
+		// assignment flat
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_ASSIGN);
+			AssignType.set(ASSIGN_FLAT);
+		}
+		break;
+	case 77: // "m"
+		// assignment mountain/valley
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_ASSIGN);
+			AssignType.set(ASSIGN_SWAP);
 		}
 		break;
 	case 78: // "n"
@@ -52,11 +99,20 @@ const keyboardWindowEventDown = (e) => {
 			Tool.set(TOOL_SELECT);
 		}
 		break;
-	case 86: // "v"
-		// change tool to "vertex"
+	case 85: // "u"
+		// assignment unassigned
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
 			e.preventDefault();
-			Tool.set(TOOL_VERTEX);
+			Tool.set(TOOL_ASSIGN);
+			AssignType.set(ASSIGN_UNASSIGNED);
+		}
+		break;
+	case 86: // "v"
+		// assignment mountain/valley
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_ASSIGN);
+			AssignType.set(ASSIGN_SWAP);
 		}
 		break;
 	case 90: // "z"

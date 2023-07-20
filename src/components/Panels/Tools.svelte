@@ -16,18 +16,19 @@
 	import ToolAssign from "./ToolAssign.svelte";
 	import ToolFoldAngle from "./ToolFoldAngle.svelte";
 	import ToolAxiom from "./ToolAxiom.svelte";
-	import ToolNewEdgeAssignment from "./ToolNewEdgeAssignment.svelte";
+	import NewEdgeAssignment from "./NewEdgeAssignment.svelte";
 </script>
 
 <Panel>
 	<span slot="title">{nameForTool[$Tool]}</span>
 	<span slot="body">
+		<NewEdgeAssignment />
+		<hr />
 		{#if $Tool === TOOL_SELECT}
 			<ToolSelect />
 		{:else if $Tool === TOOL_VERTEX}
 			<p>new position</p>
 		{:else if $Tool === TOOL_EDGE}
-			<ToolNewEdgeAssignment />
 			<p>between these</p>
 		{:else if $Tool === TOOL_SPLIT_EDGE}
 			<p>split count: 2 (1 new vertex)</p>

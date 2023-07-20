@@ -55,6 +55,7 @@
 		<ol>
 			<li class={classes[0]}>press on a line</li>
 			<li class={classes[1]}>release on a line</li>
+			<li class={classes[2]}>draw segment</li>
 		</ol>
 	{:else if $Tool === TOOL_AXIOM_4}
 		<ol>

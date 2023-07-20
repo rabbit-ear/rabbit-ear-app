@@ -1,12 +1,7 @@
 import { get } from "svelte/store";
 import { ElementSelect } from "../stores/Tool.js";
 import { SelectionRect } from "../stores/Select.js";
-import {
-	Presses,
-	Releases,
-	Moves,
-	Keyboard,
-} from "../stores/UI.js";
+import { Keyboard } from "../stores/UI.js";
 import {
 	SELECT_VERTEX,
 	SELECT_EDGE,
@@ -32,25 +27,25 @@ const rectFromTwoPoints = (p, q) => {
 		span: [xs[1] - xs[0], ys[1] - ys[0]],
 	};
 };
+
+let press;
 /**
  *
  */
-export const pointerEventSelect = (eventType) => {
+export const pointerEventSelect = (eventType, { point }) => {
 	switch (eventType) {
 	case "press":
+		press = point;
 		SelectionRect.set(undefined);
 		break;
 	case "move":
-		if (!get(Presses).length || !get(Moves).length) {
+		if (press === undefined) {
 			SelectionRect.set(undefined);
 			break;
 		}
-		SelectionRect.set(rectFromTwoPoints(
-			get(Presses)[get(Presses).length - 1],
-			get(Moves)[get(Moves).length - 1],
-		));
+		SelectionRect.set(rectFromTwoPoints(press, point));
 		break;
-	case "release": {
+	case "release":
 		const selected = getSelected();
 		if (get(Keyboard)[16]) { // shift
 			execute("addToSelection", vefName[get(ElementSelect)], selected);
@@ -59,10 +54,6 @@ export const pointerEventSelect = (eventType) => {
 			execute("addToSelection", vefName[get(ElementSelect)], selected);
 		}
 		SelectionRect.set(undefined);
-		Presses.set([]);
-		Moves.set([]);
-		Releases.set([]);
-	}
 		break;
 	}
 };

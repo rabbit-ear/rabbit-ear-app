@@ -3,6 +3,7 @@ import { nearest } from "rabbit-ear/graph/nearest.js";
 import { Selection } from "../stores/Select.js";
 import {
 	Presses,
+	Moves,
 	Releases,
 } from "../stores/UI.js";
 import { getSnapPoint } from "../js/nearest.js";
@@ -15,17 +16,16 @@ import { ToolStep } from "../stores/Tool.js";
 let pressEdge = undefined;
 let pressVertex = undefined;
 
-export const pointerEventAxiom3 = (eventType, { point }) => {
+export const pointerEventScribble = (eventType, { point }) => {
 	switch (eventType) {
 	case "press": Presses.update(p => [...p, point]); break;
 	case "hover": break;
-	case "move": break;
+	case "move": Moves.update(p => [...p, point]); break;
 	case "release": Releases.update(p => [...p, point]); break;
 	}
 	const toolStep = get(ToolStep);
 	const { vertex, edge } = nearest(get(Graph), point);
 	Selection.reset();
-	// console.log(toolStep, eventType, pressEdge, edge, vertex);
 	switch (toolStep) {
 	case 0:
 		if (edge !== undefined) { Selection.addEdges([edge]); }
@@ -71,31 +71,3 @@ export const pointerEventAxiom3 = (eventType, { point }) => {
 		break;
 	}
 };
-
-// export const pointerEventAxiom3 = (eventType) => {
-// 	const { edge } = nearest(get(Graph), get(Current));
-// 	switch (eventType) {
-// 	case "hover":
-// 		Selection.reset();
-// 		if (edge !== undefined) { Selection.addEdges([edge]); }
-// 		break;
-// 	case "press":
-// 		pressEdge = edge;
-// 		if (get(RulersAutoClear)) { Rulers.set([]); }
-// 		// no break
-// 	case "move":
-// 		Selection.reset();
-// 		Selection.addEdges([pressEdge, edge]
-// 			.filter(a => a !== undefined));
-// 		execute("axiom3Preview", pressEdge, edge);
-// 		break;
-// 	case "release":
-// 		execute("axiom3", pressEdge, edge);
-// 		pressEdge = undefined;
-// 		RulerPreviews.set([]);
-// 		Presses.set([]);
-// 		Moves.set([]);
-// 		Releases.set([]);
-// 		break;
-// 	}
-// };

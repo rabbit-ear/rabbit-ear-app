@@ -7,39 +7,28 @@ import {
 	Graph,
 	UIGraph,
 } from "../stores/Graph.js";
-import {
-	Current,
-	Presses,
-	Moves,
-	Releases,
-} from "../stores/UI.js";
 import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
 
-let pressCoords = undefined;
-let releaseCoords = undefined;
+let pressCoords;
 
-export const pointerEventTranslate = (eventType) => {
+export const pointerEventTranslate = (eventType, { point }) => {
 	switch (eventType) {
 	case "press": {
-		const { coords, vertex } = getSnapPoint(get(Current));
+		const { coords, vertex } = getSnapPoint(point);
 		pressCoords = coords;
 	}
 		break;
 	case "move": {
-		const g = get(Graph);
-		const { coords, vertex } = getSnapPoint(get(Current));
-		releaseCoords = coords;
-		const vector = subtract2(releaseCoords, pressCoords);
-		const vertices_coords = [...g.vertices_coords]
+		const graph = get(Graph);
+		const { coords, vertex } = getSnapPoint(point);
+		const vector = subtract2(coords, pressCoords);
+		const vertices_coords = [...graph.vertices_coords]
 			.map(coord => add2(coord, vector));
-		UIGraph.set({ ...g, vertices_coords });
+		UIGraph.set({ ...graph, vertices_coords });
 	}
 		break;
 	case "release":
-		Presses.set([]);
-		Moves.set([]);
-		Releases.set([]);
 		UIGraph.set({});
 		break;
 	}

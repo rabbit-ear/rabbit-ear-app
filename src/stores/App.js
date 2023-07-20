@@ -13,19 +13,23 @@ import {
 
 export const NewEdgeAssignment = writable("U");
 
-export const DarkMode = writable(true);
-
 export const Snapping = writable(SNAP_SMART);
+
+export const ShowSimulator = writable(false);
+
+export const ShowTerminal = writable(false);
 
 export const RulersAutoClear = writable(true);
 
 const {
 	subscribe: autoPlanarizeSubscribe,
+	update: autoPlanarizeUpdate,
 	set: autoPlanarizeSet,
 } = writable(false);
 
 export const AutoPlanarize = {
 	subscribe: autoPlanarizeSubscribe,
+	update: autoPlanarizeUpdate,
 	set: (e) => {
 		const events = get(postExecuteEvents)
 			.filter(fn => fn !== autoPlanarizeFunc);

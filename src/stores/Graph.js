@@ -12,16 +12,17 @@ const makeEmptyGraph = () => populate({
 	faces_vertices: [],
 });
 
+const { subscribe, set, update } = writable(makeEmptyGraph());
+
 const setGraph = (g) => {
 	Selection.reset();
 	const res = set(g);
 	return res;
 };
 
-const { subscribe, set, update } = writable(makeEmptyGraph());
-
 export const Graph = {
 	subscribe,
+	update,
 	set: setGraph,
 	// no change to topology
 	simpleSet: (g) => set(g),

@@ -5,7 +5,7 @@
 	export let fills = [];
 
 	let r;
-	$: r = Math.max($ViewBox[2], $ViewBox[3]) * 0.01;
+	$: r = Math.max($ViewBox[2], $ViewBox[3]) * 0.00666;
 
 	let coords;
 	$: coords = !graph.vertices_coords ? [] : graph.vertices_coords;

@@ -7,28 +7,22 @@ import {
 	Graph,
 	UIGraph,
 } from "../stores/Graph.js";
-import {
-	Current,
-	Presses,
-	Moves,
-	Releases,
-} from "../stores/UI.js";
 import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
 
 let pressCoords = undefined;
 let releaseCoords = undefined;
 
-export const pointerEventScale = (eventType) => {
+export const pointerEventScale = (eventType, { point }) => {
 	switch (eventType) {
 	case "press": {
-		const { coords, vertex } = getSnapPoint(get(Current));
+		const { coords, vertex } = getSnapPoint(point);
 		pressCoords = coords;
 	}
 		break;
 	case "move": {
-		const g = get(Graph);
-		const { coords, vertex } = getSnapPoint(get(Current));
+		const graph = get(Graph);
+		const { coords, vertex } = getSnapPoint(point);
 		releaseCoords = coords;
 		const ratio = [
 			releaseCoords[0] / pressCoords[0],
@@ -38,15 +32,12 @@ export const pointerEventScale = (eventType) => {
 		const vector = (Number.isFinite(ratio[0]) && Number.isFinite(ratio[1])
 			? ratio
 			: [1, 1]);
-		const vertices_coords = [...g.vertices_coords]
+		const vertices_coords = [...graph.vertices_coords]
 			.map(coords => coords.map((n, i) => n * vector[i]));
-		UIGraph.set({ ...g, vertices_coords });
+		UIGraph.set({ ...graph, vertices_coords });
 	}
 		break;
 	case "release":
-		Presses.set([]);
-		Moves.set([]);
-		Releases.set([]);
 		UIGraph.set({});
 		break;
 	}

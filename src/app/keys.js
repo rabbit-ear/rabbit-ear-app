@@ -58,4 +58,6 @@ export const nameForTool = {
 	[TOOL_AXIOM_6]: "axiom 6",
 	[TOOL_AXIOM_7]: "axiom 7",
 	[TOOL_KAWASAKI]: "kawasaki",
+	[TOOL_PLEAT]: "pleat",
+	[TOOL_SCRIBBLE]: "scribble",
 };

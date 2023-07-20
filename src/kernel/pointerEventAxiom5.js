@@ -1,64 +1,59 @@
-import { axiom2 } from "rabbit-ear/axioms/axiomsVecLine.js";
 import { get } from "svelte/store";
+import { nearest } from "rabbit-ear/graph/nearest.js";
 import { Selection } from "../stores/Select.js";
 import {
-	Current,
 	Presses,
-	Moves,
 	Releases,
 } from "../stores/UI.js";
-import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
-import { Rulers } from "../stores/Ruler.js";
+import { Rulers, RulerPreviews } from "../stores/Ruler.js";
 import { ToolStep } from "../stores/Tool.js";
+import { Graph } from "../stores/Graph.js";
+import { RulersAutoClear } from "../stores/App.js";
 
-let pressCoords = undefined;
-let pressVertex = undefined;
+let vertex1 = undefined;
+let edge1 = undefined;
 
-let releaseCoords = undefined;
-let releaseVertex = undefined;
-
-export const pointerEventAxiom5 = (eventType) => {
-	const { coords, vertex } = getSnapPoint(get(Current));
+export const pointerEventAxiom5 = (eventType, { point }) => {
 	switch (eventType) {
-	case "hover":
-		Selection.reset();
-		if (vertex !== undefined) {
-			Selection.addVertices([vertex]);
-		}
-		break;
-	case "press": {
-		pressVertex = vertex;
-		pressCoords = coords;
-		releaseCoords = [...coords];
-		const result = axiom2(pressCoords, releaseCoords);
-		if (result) {
-			Rulers.set(result);
-		}
-		Selection.reset();
-		if (vertex !== undefined) {
-			Selection.addVertices([vertex]);
-		}
+	case "press": Presses.update(p => [...p, point]); break;
+	case "hover": break;
+	case "move": break;
+	case "release": Releases.update(p => [...p, point]); break;
 	}
+	const toolStep = get(ToolStep);
+	const { vertex, edge } = nearest(get(Graph), point);
+	Selection.reset();
+	// console.log(toolStep, eventType, edge1, vertex1, vertex);
+	switch (toolStep) {
+	case 0:
+		if (vertex !== undefined) { Selection.addVertices([vertex]); }
 		break;
-	case "move": {
-		releaseVertex = vertex;
-		releaseCoords = coords;
-		const result = axiom2(pressCoords, releaseCoords);
-		if (result) {
-			Rulers.set(result);
-		}
-		Selection.reset();
-		Selection.addVertices([pressVertex, releaseVertex]
-			.filter(a => a !== undefined));
-	}
+	case 1:
+		if (eventType === "press") { vertex1 = vertex; }
+		if (get(RulersAutoClear)) { Rulers.set([]); }
+		// RulerPreviews.set([]);
+		if (vertex1 !== undefined) { Selection.addVertices([vertex1]); }
+		if (edge !== undefined) { Selection.addEdges([edge]); }
 		break;
-	case "release":
-		releaseCoords = coords;
-		const result = axiom2(pressCoords, releaseCoords);
-		if (result) {
-			Rulers.set(result);
-		}
+	case 2:
+		if (eventType === "release") { edge1 = edge; }
+		if (vertex1 !== undefined) { Selection.addVertices([vertex1]); }
+		if (edge1 !== undefined) { Selection.addEdges([edge1]); }
+		if (vertex !== undefined) { Selection.addVertices([vertex]); }
+		execute("axiom5Preview", edge1, vertex1, vertex);
+		break;
+	case 3:
+		if (vertex1 !== undefined) { Selection.addVertices([vertex1]); }
+		if (edge1 !== undefined) { Selection.addEdges([edge1]); }
+		if (vertex !== undefined) { Selection.addVertices([vertex]); }
+		execute("axiom5Preview", edge1, vertex1, vertex);
+		break;
+	default:
+		execute("axiom5", edge1, vertex1, vertex);
+		vertex1 = undefined;
+		edge1 = undefined;
+		RulerPreviews.set([]);
 		Presses.set([]);
 		Moves.set([]);
 		Releases.set([]);

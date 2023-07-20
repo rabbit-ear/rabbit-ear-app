@@ -40,7 +40,7 @@ export const LineOpacity = writable(1);
 export const BoundaryColor = writable("#888");
 export const MountainColor = writable("#e53");
 export const ValleyColor = writable("#08f");
-export const FlatColor = writable("#888");
+export const FlatColor = writable("#555");
 export const JoinColor = writable("#f80");
 export const UnassignedColor = writable("#80f");
 // cut is not used by origami simulator, used elsewhere.

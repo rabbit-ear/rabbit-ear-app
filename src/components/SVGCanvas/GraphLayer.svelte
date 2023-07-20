@@ -4,7 +4,7 @@
 	import GraphFacesLayer from "./GraphFacesLayer.svelte";
 	import { Graph } from "../../stores/Graph.js";
 	import { Selection } from "../../stores/Select.js";
-	import { Tool } from "../../stores/Tool.js";
+	import { Tool, ToolStep } from "../../stores/Tool.js";
 	import {
 		TOOL_SELECT,
 		TOOL_VERTEX,
@@ -20,20 +20,43 @@
 		TOOL_KAWASAKI,
 	} from "../../app/keys.js";
 
-	let showVertices = {
-		[TOOL_SELECT]: true,
-		[TOOL_SPLIT_EDGE]: true,
-		[TOOL_EDGE]: true,
-		[TOOL_VERTEX]: true,
-		[TOOL_AXIOM_1]: true,
-		[TOOL_AXIOM_2]: true,
-		[TOOL_AXIOM_3]: true,
-		[TOOL_AXIOM_4]: true,
-		[TOOL_AXIOM_5]: true,
-		[TOOL_AXIOM_6]: true,
-		[TOOL_AXIOM_7]: true,
-		[TOOL_KAWASAKI]: true,
-	};
+	const showVertices = (tool, toolStep) => {
+		switch (tool) {
+			case TOOL_SELECT:
+			case TOOL_SPLIT_EDGE:
+			case TOOL_EDGE:
+			case TOOL_VERTEX:
+			case TOOL_AXIOM_1:
+			case TOOL_AXIOM_2:
+			case TOOL_KAWASAKI:
+				return true;
+			case TOOL_AXIOM_3:
+				return toolStep > 1;
+			case TOOL_AXIOM_4:
+				switch (toolStep) {
+				case 0: return false;
+				default: return true;
+				}
+			case TOOL_AXIOM_5:
+				switch (toolStep) {
+				case 0: return true;
+				case 1: return false;
+				default: return true;
+				}
+			case TOOL_AXIOM_6:
+				switch (toolStep) {
+				case 0: return true;
+				case 1: return false;
+				case 2: return true;
+				default: return false;
+				}
+			case TOOL_AXIOM_7:
+				switch (toolStep) {
+				case 0: return true;
+				default: return false;
+				}
+		}
+	}
 
 	let facesFill = [];
 	let edgesStroke = [];
@@ -59,7 +82,7 @@
 <g>
 	<GraphFacesLayer graph={$Graph} fills={facesFill} />
 	<GraphEdgesLayer graph={$Graph} strokes={edgesStroke} />
-	{#if showVertices[$Tool]}
+	{#if showVertices($Tool, $ToolStep)}
 		<GraphVerticesLayer graph={$Graph} fills={verticesFill} />
 	{/if}
 </g>

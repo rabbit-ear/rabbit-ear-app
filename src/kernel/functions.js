@@ -187,25 +187,43 @@ export const download = (filename) => (
 	downloadFile(JSON.stringify(get(Graph)), filename)
 );
 
-export const axiom1 = (a, b) => Rulers.set(fnAxiom1(get(Graph), a, b));
-export const axiom2 = (a, b) => Rulers.set(fnAxiom2(get(Graph), a, b));
-export const axiom3 = (a, b) => {
-	const g = get(Graph);
-	const lines = [a, b]
-		.map(e => g.edges_vertices[e].map(v => g.vertices_coords[v]))
-		.map(seg => pointsToLine(...seg));
-	const res = fnAxiom3(...lines);
-	Rulers.set(res);
-};
+const doAxiom1 = (a, b) => a !== undefined && b !== undefined
+	? fnAxiom1(get(Graph), a, b)
+	: [];
+const doAxiom2 = (a, b) => a !== undefined && b !== undefined
+	? fnAxiom2(get(Graph), a, b)
+	: [];
+const doAxiom3 = (a, b) => a !== undefined && b !== undefined
+	? fnAxiom3(get(Graph), a, b)
+	: [];
+const doAxiom4 = (a, b) => a !== undefined && b !== undefined
+	? fnAxiom4(get(Graph), a, b)
+	: [];
+const doAxiom5 = (a, b, c) => (
+	a !== undefined && b !== undefined && c !== undefined
+		? fnAxiom5(get(Graph), a, b, c)
+		: []);
+const doAxiom6 = (a, b, c, d) => (
+	a !== undefined && b !== undefined && c !== undefined && d !== undefined
+		? fnAxiom6(get(Graph), a, b, c, d)
+		: []);
+const doAxiom7 = (a, b, c) => (
+	a !== undefined && b !== undefined && c !== undefined
+		? fnAxiom7(get(Graph), a, b, c)
+		: []);
 
-export const axiom1Preview = (a, b) => RulerPreviews.set(fnAxiom1(get(Graph), a, b));
-export const axiom2Preview = (a, b) => RulerPreviews.set(fnAxiom2(get(Graph), a, b));
-export const axiom3Preview = (a, b) => {
-	const g = get(Graph);
-	const lines = [a, b]
-		.map(e => g.edges_vertices[e].map(v => g.vertices_coords[v]))
-		.map(seg => pointsToLine(...seg));
-	const res = fnAxiom3(...lines);
-	RulerPreviews.set(res);
-};
+export const axiom1 = (...args) => Rulers.add(doAxiom1(...args));
+export const axiom2 = (...args) => Rulers.add(doAxiom2(...args));
+export const axiom3 = (...args) => Rulers.add(doAxiom3(...args));
+export const axiom4 = (...args) => Rulers.add(doAxiom4(...args));
+export const axiom5 = (...args) => Rulers.add(doAxiom5(...args));
+export const axiom6 = (...args) => Rulers.add(doAxiom6(...args));
+export const axiom7 = (...args) => Rulers.add(doAxiom7(...args));
 
+export const axiom1Preview = (...args) => RulerPreviews.set(doAxiom1(...args));
+export const axiom2Preview = (...args) => RulerPreviews.set(doAxiom2(...args));
+export const axiom3Preview = (...args) => RulerPreviews.set(doAxiom3(...args));
+export const axiom4Preview = (...args) => RulerPreviews.set(doAxiom4(...args));
+export const axiom5Preview = (...args) => RulerPreviews.set(doAxiom5(...args));
+export const axiom6Preview = (...args) => RulerPreviews.set(doAxiom6(...args));
+export const axiom7Preview = (...args) => RulerPreviews.set(doAxiom7(...args));

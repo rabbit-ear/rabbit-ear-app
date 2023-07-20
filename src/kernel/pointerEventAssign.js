@@ -23,11 +23,11 @@ const performAssignment = (edge) => {
 	const g = get(Graph);
 	switch (get(AssignType)) {
 	case ASSIGN_SWAP:
-		if (g.edges_assignment[edge] === "B"
-			|| g.edges_assignment[edge] === "b") {
-			break;
-		}
-		g.edges_assignment[edge] = swap[g.edges_assignment[edge]] || "M";
+		// if (g.edges_assignment[edge] === "B"
+		// 	|| g.edges_assignment[edge] === "b") {
+		// 	break;
+		// }
+		g.edges_assignment[edge] = swap[g.edges_assignment[edge]] || "V";
 		if (g.edges_foldAngle[edge] == null || g.edges_foldAngle[edge] === 0) {
 			g.edges_foldAngle[edge] = g.edges_assignment[edge] === "M"
 				? -180
@@ -59,15 +59,15 @@ const performAssignment = (edge) => {
 	Graph.simpleSet({ ...g });
 }
 
-export const pointerEventAssign = (eventType) => {
+export const pointerEventAssign = (eventType, { point }) => {
 	switch (eventType) {
 	case "press":
-		const edge = nearest(get(Graph), get(Current)).edge;
+		const edge = nearest(get(Graph), point).edge;
 		if (edge === undefined) { break; }
 		performAssignment(edge);
 		break;
 	case "hover": {
-		const edge = nearest(get(Graph), get(Current)).edge;
+		const edge = nearest(get(Graph), point).edge;
 		if (edge === undefined) { break; }
 		Selection.reset();
 		Selection.addEdges([edge]);

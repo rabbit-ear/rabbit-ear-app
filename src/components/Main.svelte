@@ -8,6 +8,10 @@
 	import Kernel from "./Kernel.svelte";
 	import FileManager from "./FileManager.svelte";
 	import DragAndDrop from "./DragAndDrop.svelte";
+	import {
+		ShowTerminal,
+		ShowSimulator,
+	} from "../stores/App.js";
 
 	// these events originate from the SVG canvas
 	let press;
@@ -18,6 +22,17 @@
 	// these events originate from the window
 	let keydown;
 	let keyup;
+
+	let pairClass;
+	$: pairClass = $ShowSimulator
+		? "pair with-simulator"
+		: "pair without-simulator";
+
+	let contentClass;
+	$: contentClass = $ShowTerminal
+		? "content with-terminal"
+		: "content without-terminal";
+
 </script>
 
 <svelte:window
@@ -27,10 +42,10 @@
 
 <main>
 	<Header />
-	<div class="content">
+	<div class={contentClass}>
 		<Toolbar />
-		<div class="pair">
-			<div>
+		<div class={pairClass}>
+			<div class="svg-container">
 				<SVGCanvas
 					on:press={press}
 					on:move={move}
@@ -38,13 +53,17 @@
 					on:scroll={scroll}
 				/>
 			</div>
+			{#if $ShowSimulator}
 			<div>
 				<Simulator />
 			</div>
+			{/if}
 		</div>
 		<Panels />
 	</div>
-	<Footer />
+	{#if $ShowTerminal}
+		<Footer />
+	{/if}
 	<Kernel
 		bind:press={press}
 		bind:move={move}
@@ -62,20 +81,33 @@
 		width: 100%;
 		height: 100vh;
 	}
-	.content {
+	.svg-container {
+		overflow: hidden;
+	}
+	:global(.content) {
 		display: flex;
 		flex-direction: row;
+	}
+	:global(.content.with-terminal) {
 		height: calc(100vh - 8rem);
 	}
-	.pair {
+	:global(.content.without-terminal) {
+		height: calc(100vh - 2rem);
+	}
+	:global(.pair) {
 		display: flex;
 		flex-direction: row;
 		width: 100%;
 		height: 100%;
 		flex: 1 0 calc(100vw - 8rem - 12rem);
 	}
-	.pair > * {
-		width: 50%;
+	:global(.pair) > * {
 		height: 100%;
+	}
+	:global(.pair.with-simulator) > * {
+		width: 50%;
+	}
+	:global(.pair.without-simulator) > * {
+		width: 100%;
 	}
 </style>

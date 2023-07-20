@@ -1,72 +1,62 @@
-import { axiom2 } from "rabbit-ear/axioms/axiomsVecLine.js";
 import { get } from "svelte/store";
-// import { UIGraph } from "../stores/Graph.js";
-// import { Selected } from "../stores/Select.js";
+import { nearest } from "rabbit-ear/graph/nearest.js";
+import { Selection } from "../stores/Select.js";
 import {
-	Current,
 	Presses,
-	Moves,
 	Releases,
 } from "../stores/UI.js";
-import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
-import { Rulers } from "../stores/Ruler.js";
+import { Rulers, RulerPreviews } from "../stores/Ruler.js";
+import { ToolStep } from "../stores/Tool.js";
+import { Graph } from "../stores/Graph.js";
+import { RulersAutoClear } from "../stores/App.js";
 
-let pressCoords = undefined;
-let pressVertex = undefined;
+let vertex1 = undefined;
+let edge1 = undefined;
 
-let releaseCoords = undefined;
-let releaseVertex = undefined;
-
-export const pointerEventAxiom7 = (eventType) => {
+export const pointerEventAxiom7 = (eventType, { point }) => {
 	switch (eventType) {
-	case "hover": {
-		const { coords, vertex } = getSnapPoint(get(Current));
-		const vertices = [];
-		if (vertex !== undefined) { vertices[vertex] = true; }
-		// Selected.set({ ...get(Selected), vertices });
-		// UIGraph.set({ vertices_coords: [coords] });
+	case "press": Presses.update(p => [...p, point]); break;
+	case "hover": break;
+	case "move": break;
+	case "release": Releases.update(p => [...p, point]); break;
 	}
+	const toolStep = get(ToolStep);
+	const { vertex, edge } = nearest(get(Graph), point);
+	Selection.reset();
+	// console.log(toolStep, eventType, edge1, vertex1, vertex);
+	switch (toolStep) {
+	case 0:
+		if (vertex !== undefined) { Selection.addVertices([vertex]); }
 		break;
-	case "press": {
-		const { coords, vertex } = getSnapPoint(get(Current));
-		pressVertex = vertex;
-		pressCoords = coords;
-		releaseCoords = [...coords];
-		const result = axiom2(pressCoords, releaseCoords);
-		if (result) {
-			Rulers.set(result);
-		}
-		const vertices = [];
-		if (vertex !== undefined) { vertices[vertex] = true; }
-		// Selected.set({ ...get(Selected), vertices });
-	}
+	case 1:
+		if (eventType === "press") { vertex1 = vertex; }
+		if (get(RulersAutoClear)) { Rulers.set([]); }
+		// RulerPreviews.set([]);
+		if (vertex1 !== undefined) { Selection.addVertices([vertex1]); }
+		if (edge !== undefined) { Selection.addEdges([edge]); }
 		break;
-	case "move": {
-		const { coords, vertex } = getSnapPoint(get(Current));
-		releaseVertex = vertex;
-		releaseCoords = coords;
-		const result = axiom2(pressCoords, releaseCoords);
-		if (result) {
-			Rulers.set(result);
-		}
-		const vertices = [];
-		if (pressVertex !== undefined) { vertices[pressVertex] = true; }
-		if (releaseVertex !== undefined) { vertices[releaseVertex] = true; }
-		// Selected.set({ ...get(Selected), vertices });
-	}
+	case 2:
+		if (eventType === "release") { edge1 = edge; }
+		if (vertex1 !== undefined) { Selection.addVertices([vertex1]); }
+		if (edge1 !== undefined) { Selection.addEdges([edge1]); }
+		if (edge !== undefined) { Selection.addEdges([edge]); }
+		execute("axiom7Preview", edge1, edge, vertex1);
 		break;
-	case "release":
-		const { coords } = getSnapPoint(get(Current));
-		releaseCoords = coords;
-		const result = axiom2(pressCoords, releaseCoords);
-		if (result) {
-			Rulers.set(result);
-		}
+	case 3:
+		if (vertex1 !== undefined) { Selection.addVertices([vertex1]); }
+		if (edge1 !== undefined) { Selection.addEdges([edge1]); }
+		if (edge !== undefined) { Selection.addEdges([edge]); }
+		execute("axiom7Preview", edge1, edge, vertex1);
+		break;
+	default:
+		execute("axiom7", edge1, edge, vertex1);
+		vertex1 = undefined;
+		edge1 = undefined;
+		RulerPreviews.set([]);
 		Presses.set([]);
 		Moves.set([]);
 		Releases.set([]);
-		// UIGraph.set({});
 		break;
 	}
 };

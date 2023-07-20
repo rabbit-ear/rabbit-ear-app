@@ -12,6 +12,8 @@ import {
 	TOOL_AXIOM_6,
 	TOOL_AXIOM_7,
 	TOOL_KAWASAKI,
+	TOOL_PLEAT,
+	TOOL_SCRIBBLE,
 	TOOL_SPLIT_EDGE,
 	TOOL_TRANSLATE,
 	TOOL_SCALE,
@@ -23,7 +25,10 @@ import {
 } from "../app/keys.js";
 import { Tool } from "../stores/Tool.js";
 
+// temp
 let tempCreateLineType;
+let TOOL_KAWASAKI_SHIFT = "toolKawasakiShift";
+
 
 const CREATE_LINE_SELECTED_FACES = "createOneFace";
 const CREATE_LINE_ALL_FACES = "createAllFaces";
@@ -52,7 +57,7 @@ const CREATE_LINE_RULER = "createRuler";
 		<label for="select">select</label>
 	</div>
  
-	<p>create</p>
+	<p>simple</p>
 	<div class="vertical-radio">
 		<input
 			type="radio"
@@ -70,7 +75,7 @@ const CREATE_LINE_RULER = "createRuler";
 		<label for="edge">edge</label>
 	</div>
 
-	<p>line</p>
+	<p>lines</p>
 	<div class="vertical-radio">
 		<input
 			type="radio"
@@ -123,7 +128,7 @@ const CREATE_LINE_RULER = "createRuler";
 		<label for="axiom-7">axiom 7</label>
 	</div>
 
-	<p>ray</p>
+	<p>single vertex</p>
 	<div class="vertical-radio">
 		<input
 			type="radio"
@@ -133,12 +138,31 @@ const CREATE_LINE_RULER = "createRuler";
 			value={TOOL_KAWASAKI} />
 		<label for="kawasaki-add">kawasaki add</label>
 		<input
+			disabled=true
 			type="radio"
 			name="tool"
 			id="kawasaki-shift"
 			bind:group={$Tool}
-			value={TOOL_KAWASAKI} />
+			value={TOOL_KAWASAKI_SHIFT} />
 		<label for="kawasaki-shift">kawasaki shift</label>
+	</div>
+
+	<p>many</p>
+	<div class="vertical-radio">
+		<input
+			type="radio"
+			name="tool"
+			id="pleat"
+			bind:group={$Tool}
+			value={TOOL_PLEAT} />
+		<label for="pleat">pleat</label>
+		<input
+			type="radio"
+			name="tool"
+			id="scribble"
+			bind:group={$Tool}
+			value={TOOL_SCRIBBLE} />
+		<label for="scribble">scribble</label>
 	</div>
 
 	<p>modifiers</p>

@@ -1,6 +1,6 @@
 <script>
 	import {
-		DarkMode,
+		// DarkMode,
 		AutoPlanarize,
 		Snapping,
 	} from "../stores/App.js";
@@ -12,13 +12,13 @@
 	import { Graph } from "../stores/Graph.js";
 	import { execute } from "../kernel/app.js";
 	import { loadFileDialog } from "../js/file.js";
-
-	// temp
-	let showSimulator = false;
-	let showTerminal = true;
+	import {
+		ShowSimulator,
+		ShowTerminal,
+	} from "../stores/App.js";
 
 	let inputFile;
-	const clickDarkMode = () => { $DarkMode = !$DarkMode; };
+	// const clickDarkMode = () => { $DarkMode = !$DarkMode; };
 </script>
 
 	<nav>
@@ -159,16 +159,12 @@
 			<li>window
 				<ul>
 					<li class="no-select">
-						<input type="checkbox" id="checkbox-show-simulator" bind:checked={showSimulator}>
+						<input type="checkbox" id="checkbox-show-simulator" bind:checked={$ShowSimulator}>
 						<label for="checkbox-show-simulator">show simulator</label>
 					</li>
 					<li class="no-select">
-						<input type="checkbox" id="checkbox-show-terminal" bind:checked={showTerminal}>
+						<input type="checkbox" id="checkbox-show-terminal" bind:checked={$ShowTerminal}>
 						<label for="checkbox-show-terminal">show terminal</label>
-					</li>
-					<hr />
-					<li highlighted={$DarkMode}>
-						<button on:click={clickDarkMode}>dark mode</button>
 					</li>
 				</ul>
 			</li>

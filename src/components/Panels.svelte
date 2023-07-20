@@ -3,13 +3,16 @@
 	import Canvas from "./Panels/Canvas.svelte";
 	import RulerLines from "./Panels/RulerLines.svelte";
 	import Simulator from "./Panels/Simulator.svelte";
+	import { ShowSimulator } from "../stores/App.js";
 </script>
 
 <div class="container">
 	<Canvas />
 	<Tools />
 	<RulerLines />
-	<Simulator />
+	{#if $ShowSimulator}
+		<Simulator />
+	{/if}
 </div>
 
 <style>
