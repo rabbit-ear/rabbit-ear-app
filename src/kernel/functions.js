@@ -188,28 +188,28 @@ export const download = (filename) => (
 );
 
 const doAxiom1 = (a, b) => a !== undefined && b !== undefined
-	? fnAxiom1(get(Graph), a, b)
+	? fnAxiom1(get(Graph), a, b).filter(a => a !== undefined)
 	: [];
 const doAxiom2 = (a, b) => a !== undefined && b !== undefined
-	? fnAxiom2(get(Graph), a, b)
+	? fnAxiom2(get(Graph), a, b).filter(a => a !== undefined)
 	: [];
 const doAxiom3 = (a, b) => a !== undefined && b !== undefined
-	? fnAxiom3(get(Graph), a, b)
+	? fnAxiom3(get(Graph), a, b).filter(a => a !== undefined)
 	: [];
 const doAxiom4 = (a, b) => a !== undefined && b !== undefined
-	? fnAxiom4(get(Graph), a, b)
+	? fnAxiom4(get(Graph), a, b).filter(a => a !== undefined)
 	: [];
 const doAxiom5 = (a, b, c) => (
 	a !== undefined && b !== undefined && c !== undefined
-		? fnAxiom5(get(Graph), a, b, c)
+		? fnAxiom5(get(Graph), a, b, c).filter(a => a !== undefined)
 		: []);
 const doAxiom6 = (a, b, c, d) => (
 	a !== undefined && b !== undefined && c !== undefined && d !== undefined
-		? fnAxiom6(get(Graph), a, b, c, d)
+		? fnAxiom6(get(Graph), a, b, c, d).filter(a => a !== undefined)
 		: []);
 const doAxiom7 = (a, b, c) => (
 	a !== undefined && b !== undefined && c !== undefined
-		? fnAxiom7(get(Graph), a, b, c)
+		? fnAxiom7(get(Graph), a, b, c).filter(a => a !== undefined)
 		: []);
 
 export const axiom1 = (...args) => Rulers.add(doAxiom1(...args));

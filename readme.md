@@ -1,5 +1,88 @@
 # Blender-style graph maker
 
+## 2023-07-23
+
+### new feature ideas
+
+- select along line: draw a line segment and all of the graph's edges which lie collinear along your segment will be added to the selection. tool parameter to adjust collinearity similarity.
+
+### concepts
+
+drawing an edge along:
+
+- ruler lines
+- radial snapping
+
+should be able to snap along a line. thankfully this should be limited to ruler lines. not all lines in the graph.
+
+snapping
+
+- find nearest grid snap point, this way hexagon grid can be implemented
+- new snap algorithm when adding a new point should go like this:
+
+a list of snap points includes:
+   - intersections between ruler lines and graph edges
+   - intersections between ruler lines
+   - graph vertices
+
+1. check against all snap points. remember shortest distance.
+2. check against all rulers - nearest point on line/ray.
+3. whichever is the closest, check if it is within the snap range, if so we have a snap point, if not there is none. snapping should also let you specify force-snapping or not. like, no matter how far, you need to snap. which is used in the radial-edge snap method.
+
+snap points are different from finding the nearest vertex.
+
+should axiom methods be based on vertex only? or also include snap points?
+
+summary, things that use snapping:
+
+- edge draw 1: weak snap points, allowed to not snap
+- edge draw 2: strong snap to ruler lines
+
+
+ruler lines
+
+- needs to include rays
+
+### tools
+
+camera
+
+- re-center needs to include the size of the graph. when there are no vertices or degenerate, size is 1x1. 
+
+select
+
+- so much difficult work to do
+
+vertex
+
+- broken. fix it. shouldn't be too hard
+
+edge
+
+- implement radial snapping. radial snapping degree selector (22.5 vs 30), snapping along radial line.
+
+axioms
+
+- implement the last step. drawing a yellow edge between snap points, and non snap points tbh
+
+kawasaki
+
+- need rays in rulers
+- same drawing step as in edge (radially snapped) and drawing along axiom rulers.
+
+pleat
+
+- ability to apply all lines to the entire graph. or choose to just make ruler lines
+
+translate, scale
+
+- make these work
+
+### menu things
+
+insert base
+
+
 ## 2023-07-01: new features
 
 continue to refer to 2023-06-22 list which is not done.

@@ -9,6 +9,11 @@
 		const value = $ModelMatrix[0] * $CameraMatrix[0];
 		zoom = !isNaN(value) ? value.toFixed(3) : 0;
 	};
+
+	// const reset = () => {
+	// 	CameraMatrix.reset();
+	// 	ModelMatrix.reset();
+	// };
 	
 	const formatPoint = (p) => p
 		.map(n => {

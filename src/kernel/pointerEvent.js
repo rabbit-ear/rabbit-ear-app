@@ -1,6 +1,7 @@
 import { get } from "svelte/store";
 import {
 	TOOL_SELECT,
+	TOOL_DELETE,
 	TOOL_CAMERA,
 	TOOL_VERTEX,
 	TOOL_EDGE,
@@ -22,6 +23,7 @@ import {
 } from "../app/keys.js";
 import { Tool } from "../stores/Tool.js";
 import { pointerEventSelect } from "./pointerEventSelect.js";
+import { pointerEventDelete } from "./pointerEventDelete.js";
 import { pointerEventCamera } from "./pointerEventCamera.js";
 import { pointerEventVertex } from "./pointerEventVertex.js";
 import { pointerEventEdge } from "./pointerEventEdge.js";
@@ -44,6 +46,7 @@ import { pointerEventFoldAngle } from "./pointerEventFoldAngle.js";
 const customPointerEvent = (eventType, event) => {
 	switch (get(Tool)) {
 	case TOOL_SELECT: return pointerEventSelect(eventType, event);
+	case TOOL_DELETE: return pointerEventDelete(eventType, event);
 	case TOOL_CAMERA: return pointerEventCamera(eventType, event);
 	case TOOL_VERTEX: return pointerEventVertex(eventType, event);
 	case TOOL_EDGE: return pointerEventEdge(eventType, event);

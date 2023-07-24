@@ -25,14 +25,12 @@
 		<ul>
 			<li>file
 				<ul>
-					<li><button on:click={Graph.reset}>new</button></li>
-					<hr />
-					<li>example bases
+					<li>new
 						<ul>
-							<li>fish</li>
-							<li>bird</li>
-							<li>frog</li>
-							<li>windmill</li>
+							<li><button on:click={Graph.reset}>empty</button></li>
+							<li>unit square</li>
+							<li>NxN square</li>
+							<li>regular polygon</li>
 						</ul>
 					</li>
 					<hr />
@@ -100,6 +98,7 @@
 			</li>
 			<li>assignment
 				<ul>
+					<li><button on:click={() => {}}>invert assignments</button></li>
 					<li>reassign selected
 						<ul>
 							<li><button on:click={() => {}}>boundary</button></li>
@@ -239,7 +238,7 @@
 	}
 	nav ul ul ul {
 		top: 0;
-		left: calc(6rem);
+		left: calc(3rem);
 	}
 	nav li:hover > ul {
 		display: block;

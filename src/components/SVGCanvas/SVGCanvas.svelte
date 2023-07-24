@@ -5,6 +5,7 @@
 	import GraphLayer from "./GraphLayer.svelte";
 	import RulerLayer from "./RulerLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
+	import ToolLayer from "./ToolLayer.svelte";
 	import {
 		convertToViewBox,
 		findInParents,
@@ -63,6 +64,7 @@
 		{/if}
 		<UILayer />
 		<RulerLayer />
+		<ToolLayer />
 	</svg>
 
 	<!-- i'm not sure what role=presentation means, i just guessed -->

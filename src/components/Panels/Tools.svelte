@@ -3,6 +3,7 @@
 	import { Tool, ToolStep } from "../../stores/Tool.js";
 	import {
 		TOOL_SELECT,
+		TOOL_DELETE,
 		TOOL_VERTEX,
 		TOOL_EDGE,
 		TOOL_SPLIT_EDGE,
@@ -27,6 +28,8 @@
 		<NewEdgeAssignment />
 		<hr />
 		{#if $Tool === TOOL_SELECT}
+			<ToolSelect />
+		{:else if $Tool === TOOL_DELETE}
 			<ToolSelect />
 		{:else if $Tool === TOOL_VERTEX}
 			<p>new position</p>

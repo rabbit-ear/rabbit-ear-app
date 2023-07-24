@@ -1,29 +1,24 @@
 <script>
 	import { ViewBox } from "../../stores/ViewBox.js";
-
-	// let strokeWidth;
-	// $: strokeWidth = 
+	/**
+	 * @description create a set of evenly spaced intervals that fit
+	 * inside the viewbox, one dimension at a time.
+	 * @param {number} the viewbox corner (origin, x or y)
+	 * @param {number} the viewbox size (width or height)
+	 */
+	const makeIntervals = (start, size) => {
+		let spacing = 1;
+		while ((size / spacing) > 32) { spacing *= 2; }
+		const count = parseInt(size / spacing);
+		const offset = Math.ceil(start / spacing) * spacing;
+		return Array.from(Array(count + 1))
+			.map((_, i) => offset + spacing * i);
+	};
 
 	let xs = [];
 	let ys = [];
-	$: {
-		let xSpacing = 1;
-		while (($ViewBox[2] / xSpacing) > 32) { xSpacing *= 2; }
-		const xCount = parseInt($ViewBox[2] / xSpacing);
-		const xOffset = Math.ceil($ViewBox[0] / xSpacing) * xSpacing;
-		// const xOffset = Math.ceil($ViewBox[0]);
-		// console.log("xOffset", xOffset, "xCount", xCount);
-		xs = Array.from(Array(xCount + 1))
-			.map((_, i) => xOffset + xSpacing * i);
-	}
-	$: {
-		let ySpacing = 1;
-		while (($ViewBox[3] / ySpacing) > 32) { ySpacing *= 2; }
-		const yCount = parseInt($ViewBox[3] / ySpacing);
-		const yOffset = Math.ceil($ViewBox[1] / ySpacing) * ySpacing;
-		ys = Array.from(Array(yCount + 1))
-			.map((_, i) => yOffset + ySpacing * i);
-	}
+	$: xs = makeIntervals($ViewBox[0], $ViewBox[2]);
+	$: ys = makeIntervals($ViewBox[1], $ViewBox[3]);
 </script>
 
 <g class="grid" stroke-width={Math.max($ViewBox[2], $ViewBox[3]) / 400}>
@@ -52,10 +47,4 @@
 			y2={y}
 		/>
 	{/each}
-
-	<!--
-	stroke-width={$ViewBox[2] * 0.001 + factors[0][x] * 0.02}
-	stroke-width={$ViewBox[2] * 0.001 + factors[0][y] * 0.02}
-	-->
-
 </g>

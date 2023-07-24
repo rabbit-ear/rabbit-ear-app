@@ -1,8 +1,9 @@
-import { writable, derived } from "svelte/store";
+import { get, writable, derived } from "svelte/store";
 import {
 	ASSIGN_SWAP,
 	SELECT_EDGE,
 	TOOL_SELECT,
+	TOOL_DELETE,
 	TOOL_CAMERA,
 	TOOL_VERTEX,
 	TOOL_EDGE,
@@ -41,7 +42,7 @@ export const Tool = {
 		switch (t) {
 		case TOOL_VERTEX: break;
 		default:
-			Selection.reset();
+			// Selection.reset();
 		}
 		return set(t);
 	},
@@ -83,6 +84,7 @@ export const ToolStep = derived(
 		const releasesCount = $Releases.length;
 		switch ($Tool) {
 		case TOOL_SELECT: return pressesCount ? 1 : 0;
+		case TOOL_DELETE: return 0;
 		case TOOL_CAMERA: return 0;
 		case TOOL_VERTEX: return 0;
 		case TOOL_EDGE: return 0;

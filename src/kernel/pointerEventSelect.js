@@ -2,19 +2,8 @@ import { get } from "svelte/store";
 import { ElementSelect } from "../stores/Tool.js";
 import { SelectionRect } from "../stores/Select.js";
 import { Keyboard } from "../stores/UI.js";
-import {
-	SELECT_VERTEX,
-	SELECT_EDGE,
-	SELECT_FACE,
-} from "../app/keys.js";
 import { getSelected } from "../js/select.js";
 import { execute } from "./app.js";
-
-const vefName = {
-	[SELECT_VERTEX]: "vertices",
-	[SELECT_EDGE]: "edges",
-	[SELECT_FACE]: "faces",
-};
 /**
  *
  */
@@ -48,10 +37,10 @@ export const pointerEventSelect = (eventType, { point }) => {
 	case "release":
 		const selected = getSelected();
 		if (get(Keyboard)[16]) { // shift
-			execute("addToSelection", vefName[get(ElementSelect)], selected);
+			execute("addToSelection", get(ElementSelect), selected);
 		} else {
 			execute("clearSelection");
-			execute("addToSelection", vefName[get(ElementSelect)], selected);
+			execute("addToSelection", get(ElementSelect), selected);
 		}
 		SelectionRect.set(undefined);
 		break;

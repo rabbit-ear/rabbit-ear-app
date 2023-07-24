@@ -3,6 +3,7 @@
 // - Toolbar.svelte
 // - Panels/Tools.svelte
 export const TOOL_SELECT = "toolSelect";
+export const TOOL_DELETE = "toolDelete";
 export const TOOL_CAMERA = "toolCamera";
 export const TOOL_VERTEX = "toolVertex";
 export const TOOL_EDGE = "toolEdge";
@@ -25,9 +26,9 @@ export const TOOL_PLEAT = "toolPleat";
 export const TOOL_SCRIBBLE = "toolScribble";
 
 // settings for TOOL_SELECT
-export const SELECT_VERTEX = "selectVertex";
-export const SELECT_EDGE = "selectEdge";
-export const SELECT_FACE = "selectFace";
+export const SELECT_VERTEX = "vertices";
+export const SELECT_EDGE = "edges";
+export const SELECT_FACE = "faces";
 
 // settings for TOOL_ASSIGN
 export const ASSIGN_SWAP = "assignSwap";

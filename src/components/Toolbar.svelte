@@ -1,6 +1,7 @@
 <script>
 import {
 	TOOL_SELECT,
+	TOOL_DELETE,
 	TOOL_CAMERA,
 	TOOL_VERTEX,
 	TOOL_EDGE,
@@ -49,6 +50,13 @@ let TOOL_KAWASAKI_SHIFT = "toolKawasakiShift";
 			bind:group={$Tool}
 			value={TOOL_SELECT} />
 		<label for="select">select</label>
+		<input
+			type="radio"
+			name="tool"
+			id="delete"
+			bind:group={$Tool}
+			value={TOOL_DELETE} />
+		<label for="delete">delete</label>
 	</div>
  
 	<p>simple</p>
