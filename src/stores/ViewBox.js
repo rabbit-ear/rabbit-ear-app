@@ -5,27 +5,17 @@ import {
 	multiplyMatrices2,
 	multiplyMatrix2Vector2,
 } from "rabbit-ear/math/algebra/matrix2.js";
-import { boundingBox } from "rabbit-ear/graph/boundary.js";
+import { graphToMatrix2 } from "../js/matrix.js";
 import { Graph } from "./Graph.js";
 
+// export const ModelMatrix = derived(
+// 	Graph,
+// 	($Graph) => graphToMatrix2($Graph),
+// 	[...identity2x3],
+// );
 
-export const ModelMatrix = derived(
-	Graph,
-	($Graph) => {
-		const box = boundingBox($Graph);
-		if (!box || !box.span || !box.min) {
-			return [...identity2x3];
-		}
-		if (!isFinite(box.min[0]) || !isFinite(box.min[1])
-			|| !isFinite(box.span[0]) || !isFinite(box.span[1])) {
-			return [...identity2x3];
-		}
-		const vmax = Math.max(box.span[0], box.span[1]);
-		console.log("model matrix", [vmax, 0, 0, vmax, box.min[0], box.min[1]]);
-		return [vmax, 0, 0, vmax, box.min[0], box.min[1]];
-	},
-	[...identity2x3],
-);
+export const ModelMatrix = writable([...identity2x3]);
+ModelMatrix.reset = () => ModelMatrix.set([...identity2x3]);
 
 // export const ModelMatrix = writable([...identity2x3]);
 // ModelMatrix.reset = () => {

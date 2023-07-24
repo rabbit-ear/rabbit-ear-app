@@ -4,11 +4,6 @@
 		AutoPlanarize,
 		Snapping,
 	} from "../stores/App.js";
-	import {
-		SNAP_NONE,
-		SNAP_GRID,
-		SNAP_SMART,
-	} from "../app/keys.js";
 	import { Graph } from "../stores/Graph.js";
 	import { execute } from "../kernel/app.js";
 	import { loadFileDialog } from "../js/file.js";
@@ -61,34 +56,25 @@
 						</ul>
 					</li>
 					<hr />
-					<li class="no-select description">snapping</li>
+					<li class="no-select description">grid snapping</li>
 					<li class="no-select">
-						<div>
-							<input
-								type="radio"
-								id="radio-snapping-no-snapping"
-								bind:group={$Snapping}
-								value={SNAP_NONE} 
-							>
-							<label for="radio-snapping-no-snapping">off</label>
-						</div>
 						<div>
 							<input
 								type="radio"
 								id="radio-snapping-grid"
 								bind:group={$Snapping}
-								value={SNAP_GRID} 
+								value={true}
 							>
-							<label for="radio-snapping-grid">grid</label>
+							<label for="radio-snapping-grid">on</label>
 						</div>
 						<div>
 							<input
 								type="radio"
-								id="radio-snapping-smart"
+								id="radio-snapping-no-snapping"
 								bind:group={$Snapping}
-								value={SNAP_SMART} 
+								value={false}
 							>
-							<label for="radio-snapping-smart">smart</label>
+							<label for="radio-snapping-no-snapping">off</label>
 						</div>
 					</li>
 					<li>

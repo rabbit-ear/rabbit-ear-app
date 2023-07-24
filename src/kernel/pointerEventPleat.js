@@ -17,10 +17,9 @@ export const pointerEventPleat = (eventType, { point }) => {
 	case "move": break;
 	case "release": Releases.update(p => [...p, point]); break;
 	}
-	const toolStep = get(ToolStep);
 	const { vertex, edge } = nearest(get(Graph), point);
 	Selection.reset();
-	switch (toolStep) {
+	switch (get(ToolStep)) {
 	case 0:
 		if (edge !== undefined) { Selection.addEdges([edge]); }
 		break;

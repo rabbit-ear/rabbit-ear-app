@@ -27,7 +27,7 @@ export const pointerEventAxiom1 = (eventType, { point }) => {
 		break;
 	case "press":
 		pressVertex = vertex;
-		if (get(RulersAutoClear)) { Rulers.set([]); }
+		// if (get(RulersAutoClear)) { Rulers.set([]); }
 		// no break
 	case "move":
 		Selection.reset();
@@ -39,6 +39,7 @@ export const pointerEventAxiom1 = (eventType, { point }) => {
 		execute("axiom1", pressVertex, vertex);
 		pressVertex = undefined;
 		RulerPreviews.set([]);
+		Rulers.set([]);
 		Presses.set([]);
 		Releases.set([]);
 		break;

@@ -38,9 +38,8 @@ export const ASSIGN_CUT = "assignCut";
 export const ASSIGN_BOUNDARY = "assignBoundary";
 
 // general settings
-export const SNAP_NONE = "snapNone";
-export const SNAP_GRID = "snapGrid";
-export const SNAP_SMART = "snapSmart";
+// export const SNAP_NONE = "snapNone";
+// export const SNAP_GRID = "snapGrid";
 
 export const nameForTool = {
 	[TOOL_SELECT]: "select",

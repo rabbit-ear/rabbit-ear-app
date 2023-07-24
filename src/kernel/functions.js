@@ -179,7 +179,7 @@ export const setEdgesFoldAngle = (edges, foldAngle) => {
 
 export const planarize = () => Graph.set(populate(Planarize(get(Graph)), true));
 
-export const load = (FOLD) => Graph.set(populate(FOLD));
+export const load = (FOLD) => Graph.load(populate(FOLD));
 
 export const clear = () => Graph.reset();
 

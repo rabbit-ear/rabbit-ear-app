@@ -5,15 +5,15 @@ import {
 	Presses,
 	Releases,
 } from "../stores/UI.js";
-import { getSnapPoint } from "../js/nearest.js";
+import { snapToPoint } from "../js/snap.js";
 import { execute } from "./app.js";
 import { Rulers, RulerPreviews } from "../stores/Ruler.js";
-import { Graph } from "../stores/Graph.js";
-import { RulersAutoClear } from "../stores/App.js";
+import { Graph, UIGraph } from "../stores/Graph.js";
+// import { RulersAutoClear } from "../stores/App.js";
 import { ToolStep } from "../stores/Tool.js";
 
 let pressEdge = undefined;
-let pressVertex = undefined;
+let pressCoords = undefined;
 
 export const pointerEventAxiom3 = (eventType, { point }) => {
 	switch (eventType) {
@@ -22,11 +22,9 @@ export const pointerEventAxiom3 = (eventType, { point }) => {
 	case "move": break;
 	case "release": Releases.update(p => [...p, point]); break;
 	}
-	const toolStep = get(ToolStep);
 	const { vertex, edge } = nearest(get(Graph), point);
 	Selection.reset();
-	// console.log(toolStep, eventType, pressEdge, edge, vertex);
-	switch (toolStep) {
+	switch (get(ToolStep)) {
 	case 0:
 		if (edge !== undefined) { Selection.addEdges([edge]); }
 		break;
@@ -34,13 +32,12 @@ export const pointerEventAxiom3 = (eventType, { point }) => {
 		// "press" selecting the first edge
 		// "move" preview the second edge
 		if (eventType === "press") { pressEdge = edge; }
-		if (get(RulersAutoClear)) { Rulers.set([]); }
 		if (edge !== undefined) { Selection.addEdges([edge]); }
 		if (pressEdge !== undefined) { Selection.addEdges([pressEdge]); }
 		execute("axiom3Preview", pressEdge, edge);
 		break;
 	case 2:
-		// "release" axiom operation done
+		// "release" axiom operation done. ruler lines now drawn.
 		// "hover" preview first edge point
 		RulerPreviews.set([]);
 		if (eventType === "release") {
@@ -48,53 +45,31 @@ export const pointerEventAxiom3 = (eventType, { point }) => {
 			pressEdge = undefined;
 		}
 		// nearest point on line
-		if (vertex !== undefined) { Selection.addVertices([vertex]); }
+		UIGraph.set({ vertices_coords: [snapToPoint(point, false)] });
 		break;
 	case 3:
 		// "press" selecting first edge point
 		// "move" preview second edge point
-		if (eventType === "press") { pressVertex = vertex; }
-		if (vertex !== undefined) { Selection.addVertices([vertex]); }
+		const coords = snapToPoint(point, false);
+		if (eventType === "press") {
+			pressCoords = coords;
+		}
+		UIGraph.set({
+			vertices_coords: [pressCoords, coords],
+			edges_vertices: [[0, 1]],
+		});
 		break;
 	default:
 		// "release" drawing edge, reset all
-		// if (pressVertex === undefined) {
-		// 	pressVertex = execute("addVertex", pressCoords);
-		// }
-		// if (vertex === undefined) {
-		// 	releaseVertex = execute("addVertex", releaseCoords);
-		// }
-		if (get(RulersAutoClear)) { Rulers.set([]); }
-		execute("addEdge", pressVertex, vertex);
+		execute("addEdge",
+			execute("addVertex", pressCoords),
+			execute("addVertex", snapToPoint(point, false)),
+		);
+		// if (get(RulersAutoClear)) { Rulers.set([]); }
+		UIGraph.set({});
+		Rulers.set([]);
 		Presses.set([]);
 		Releases.set([]);
 		break;
 	}
 };
-
-// export const pointerEventAxiom3 = (eventType) => {
-// 	const { edge } = nearest(get(Graph), get(Current));
-// 	switch (eventType) {
-// 	case "hover":
-// 		Selection.reset();
-// 		if (edge !== undefined) { Selection.addEdges([edge]); }
-// 		break;
-// 	case "press":
-// 		pressEdge = edge;
-// 		if (get(RulersAutoClear)) { Rulers.set([]); }
-// 		// no break
-// 	case "move":
-// 		Selection.reset();
-// 		Selection.addEdges([pressEdge, edge]
-// 			.filter(a => a !== undefined));
-// 		execute("axiom3Preview", pressEdge, edge);
-// 		break;
-// 	case "release":
-// 		execute("axiom3", pressEdge, edge);
-// 		pressEdge = undefined;
-// 		RulerPreviews.set([]);
-// 		Presses.set([]);
-// 		Releases.set([]);
-// 		break;
-// 	}
-// };

@@ -1,19 +1,13 @@
 <script>
 	import Panel from "./Panel.svelte";
 	import { ModelMatrix, CameraMatrix } from "../../stores/ViewBox.js";
-	// import { Current } from "../../stores/UI.js";
+	import { Current } from "../../stores/UI.js";
 
-	// todo check this is correct. we are inferring zoom level of a matrix
 	let zoom;
 	$: {
-		const value = $ModelMatrix[0] * $CameraMatrix[0];
-		zoom = !isNaN(value) ? value.toFixed(3) : 0;
+		const value = $CameraMatrix[0] / $ModelMatrix[0];
+		zoom = !isNaN(value) ? (1 / value).toFixed(3) : 0;
 	};
-
-	// const reset = () => {
-	// 	CameraMatrix.reset();
-	// 	ModelMatrix.reset();
-	// };
 	
 	const formatPoint = (p) => p
 		.map(n => {
@@ -26,11 +20,10 @@
 	<span slot="title">canvas</span>
 	<span slot="body">
 		<p>zoom: <span class="number">{zoom}</span></p>
-		<!-- <input type="text" class="half" bind:value={zoom}> -->
-		<!-- <div>
+		<div>
 			<p>cursor</p>
 			<input type="text" readonly value={$Current ? formatPoint($Current) : ""}>
-		</div> -->
+		</div>
 		<div>
 			<button on:click={CameraMatrix.reset}>reset zoom</button>
 		</div>

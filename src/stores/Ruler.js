@@ -1,10 +1,13 @@
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
+import { RulersAutoClear } from "./App.js";
 
 const { subscribe, set, update } = writable([]);
 
 export const Rulers = writable([]);
 
-Rulers.add = (newRulers) => Rulers.update((r) => [...r, ...newRulers]);
+Rulers.add = (newRulers) => Rulers.update((r) => get(RulersAutoClear)
+	? [...newRulers]
+	: [...r, ...newRulers]);
 
 export const RulerPreviews = writable([]);
 

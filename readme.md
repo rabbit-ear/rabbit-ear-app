@@ -38,10 +38,21 @@ summary, things that use snapping:
 - edge draw 1: weak snap points, allowed to not snap
 - edge draw 2: strong snap to ruler lines
 
-
 ruler lines
 
 - needs to include rays
+
+need a better list of visualization things:
+
+ruler lines (line type), and rays (ray type)
+
+---
+
+decoration lines
+
+ruler lines (and rays), and previews of ruler lines (and rays)
+previews of new segments
+the selected parts of the graph (vertices, edges, faces)
 
 ### tools
 

@@ -12,5 +12,5 @@
 {#each faces_polygon as poly, i}
 	<polygon
 		points={poly.map(point => point.join(",")).join(" ")}
-		fill={fills[i] || "#333" } />
+		fill={fills[i] || "#333c" } />
 {/each}

@@ -49,7 +49,7 @@
 		border: 1px solid transparent;
 		color: #ddd;
 		outline-color: transparent;
-		background-color: transparent;
+		background-color: #2a2a2a;
 	}
 	textarea:focus {
 		outline: none !important;
