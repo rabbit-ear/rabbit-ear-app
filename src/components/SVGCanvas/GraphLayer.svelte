@@ -3,7 +3,11 @@
 	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
 	import GraphFacesLayer from "./GraphFacesLayer.svelte";
 	import { Graph } from "../../stores/Graph.js";
-	import { Selection } from "../../stores/Select.js";
+	import {
+		Selection,
+		Highlight,
+	} from "../../stores/Select.js";
+	import { StrokeWidth } from "../../stores/Style.js";
 	import { Tool, ToolStep } from "../../stores/Tool.js";
 	import {
 		TOOL_SELECT,
@@ -60,6 +64,7 @@
 
 	let facesFill = [];
 	let edgesStroke = [];
+	let edgesStrokeWidth = [];
 	let verticesFill = [];
 
 	$: {
@@ -73,6 +78,11 @@
 	};
 
 	$: {
+		edgesStrokeWidth = [];
+		$Highlight.edges.forEach(i => { edgesStrokeWidth[i] = $StrokeWidth * 3; });
+	};
+
+	$: {
 		verticesFill = [];
 		$Selection.vertices.forEach(i => { verticesFill[i] = "#fb4"; });
 	};
@@ -81,7 +91,11 @@
 
 <g>
 	<GraphFacesLayer graph={$Graph} fills={facesFill} />
-	<GraphEdgesLayer graph={$Graph} strokes={edgesStroke} />
+	<GraphEdgesLayer
+		graph={$Graph}
+		strokes={edgesStroke}
+		strokeWidths={edgesStrokeWidth}
+	/>
 	{#if showVertices($Tool, $ToolStep)}
 		<GraphVerticesLayer graph={$Graph} fills={verticesFill} />
 	{/if}

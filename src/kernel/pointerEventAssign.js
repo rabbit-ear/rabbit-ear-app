@@ -4,7 +4,7 @@ import {
 	subtract2,
 } from "rabbit-ear/math/algebra/vector.js";
 import { get } from "svelte/store";
-import { Selection } from "../stores/Select.js";
+import { Highlight } from "../stores/Select.js";
 import {
 	ASSIGN_SWAP,
 	ASSIGN_FLAT,
@@ -69,8 +69,8 @@ export const pointerEventAssign = (eventType, { point }) => {
 	case "hover": {
 		const edge = nearest(get(Graph), point).edge;
 		if (edge === undefined) { break; }
-		Selection.reset();
-		Selection.addEdges([edge]);
+		Highlight.reset();
+		Highlight.addEdges([edge]);
 	}
 		break;
 	case "move":

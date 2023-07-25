@@ -1,4 +1,5 @@
 import { boundingBox } from "rabbit-ear/graph/boundary.js";
+import { identity2x3 } from "rabbit-ear/math/algebra/matrix2.js";
 
 export const graphToMatrix2 = (graph) => {
 	const box = boundingBox(graph);

@@ -1,4 +1,13 @@
-import { writable } from "svelte/store";
+import { writable, derived } from "svelte/store";
+import { ViewBox } from "./ViewBox.js";
+
+// size
+
+export const StrokeWidth = derived(
+	ViewBox,
+	($ViewBox) => Math.max($ViewBox[2], $ViewBox[3]) * 0.00333,
+	0.00333,
+);
 
 //
 // show/hide things

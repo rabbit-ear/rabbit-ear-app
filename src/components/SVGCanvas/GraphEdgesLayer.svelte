@@ -1,5 +1,6 @@
 <script>
 	import {
+		StrokeWidth,
 		// lineOpacity,
 		BoundaryColor,
 		MountainColor,
@@ -12,6 +13,7 @@
 
 	export let graph = {};
 	export let strokes = [];
+	export let strokeWidths = [];
 
 	let edges_segment;
 	$: edges_segment = !graph.edges_vertices
@@ -51,5 +53,6 @@
 		y1={seg[0][1]}
 		x2={seg[1][0]}
 		y2={seg[1][1]}
+		stroke-width={strokeWidths[i] || $StrokeWidth}
 		stroke={strokes[i] || edgesColor[i]} />
 {/each}

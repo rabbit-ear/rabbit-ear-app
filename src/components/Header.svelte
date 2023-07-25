@@ -1,5 +1,10 @@
 <script>
 	import {
+		square,
+		rectangle,
+		polygon,
+	} from "rabbit-ear/fold/bases.js";
+	import {
 		// DarkMode,
 		AutoPlanarize,
 		Snapping,
@@ -14,6 +19,9 @@
 
 	let inputFile;
 	// const clickDarkMode = () => { $DarkMode = !$DarkMode; };
+	const newEmpty = () => execute("load", {});
+	const newSquare = () => execute("load", square());
+	const newPolygon = () => execute("load", polygon(6));
 </script>
 
 	<nav>
@@ -22,10 +30,11 @@
 				<ul>
 					<li>new
 						<ul>
-							<li><button on:click={Graph.reset}>empty</button></li>
-							<li>unit square</li>
+							<li><button on:click={newEmpty}>empty</button></li>
+							<li><button on:click={newSquare}>unit square</button></li>
+							<li></li>
 							<li>NxN square</li>
-							<li>regular polygon</li>
+							<li><button on:click={newPolygon}>regular polygon</button></li>
 						</ul>
 					</li>
 					<hr />

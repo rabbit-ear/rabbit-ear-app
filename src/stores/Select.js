@@ -5,19 +5,19 @@ import {
 	mergeArrays,
 } from "../js/arrays.js";
 
-export const emptySelectObject = () => (
+export const emptyComponentObject = () => (
 	{ vertices: [], edges: [], faces: [] }
 );
 
 export const SelectionRect = writable(undefined);
 
-const { subscribe, set, update } = writable(emptySelectObject());
+const { subscribe, set, update } = writable(emptyComponentObject());
 
 export const Selection = {
 	subscribe,
 	set,
 	update,
-	reset: () => set(emptySelectObject()),
+	reset: () => set(emptyComponentObject()),
 	addVertices: (verts) => update(obj => {
 		obj.vertices = mergeArrays(obj.vertices, verts);
 		return obj;
@@ -30,52 +30,37 @@ export const Selection = {
 		obj.faces = mergeArrays(obj.faces, verts);
 		return obj;
 	}),
-	lookup: () => {
-		const obj = get(selection);
-		return {
-			vertices: invertMap(obj.vertices),
-			edges: invertMap(obj.edges),
-			faces: invertMap(obj.faces),
-		};
-	}
+	// lookup: () => {
+	// 	const obj = get(Selection);
+	// 	return {
+	// 		vertices: invertMap(obj.vertices),
+	// 		edges: invertMap(obj.edges),
+	// 		faces: invertMap(obj.faces),
+	// 	};
+	// }
 };
 
-// const {
-// 	subscribe: subscribeSelected,
-// 	set: setSelected,
-// } = writable(emptySelectObject());
+const {
+	subscribe: subscribeHigh,
+	set: setHigh,
+	update: updateHigh,
+} = writable(emptyComponentObject());
 
-// export const selected = {
-// 	subscribe: subscribeSelected,
-// 	set: (g) => setSelected(g),
-// 	add: (obj) => {
-// 		const result = { vertices: [], edges: [], faces: [] };
-// 		const near = nearest(graph, point);
-// 		result.vertices[near.vertex] = true;
-// 		result.edges[near.edge] = true;
-// 		result.faces[near.face] = true;
-// 		return result;
-// 	},
-// 	vertices: () => {
-// 		const value = get(selected).vertices || [];
-// 		return Object.keys(value)
-// 			.map(key => value[key] ? key : undefined)
-// 			.filter(a => a !== undefined)
-// 			.map(n => parseInt(n, 10));
-// 	},
-// 	edges: () => {
-// 		const value = get(selected).edges || [];
-// 		return Object.keys(value)
-// 			.map(key => value[key] ? key : undefined)
-// 			.filter(a => a !== undefined)
-// 			.map(n => parseInt(n, 10));
-// 	},
-// 	faces: () => {
-// 		const value = get(selected).faces || [];
-// 		return Object.keys(value)
-// 			.map(key => value[key] ? key : undefined)
-// 			.filter(a => a !== undefined)
-// 			.map(n => parseInt(n, 10));
-// 	},
-// 	reset: () => setSelected(emptySelectObject()),
-// };
+export const Highlight = {
+	subscribe: subscribeHigh,
+	set: setHigh,
+	update: updateHigh,
+	reset: () => setHigh(emptyComponentObject()),
+	addVertices: (verts) => updateHigh(obj => {
+		obj.vertices = mergeArrays(obj.vertices, verts);
+		return obj;
+	}),
+	addEdges: (verts) => updateHigh(obj => {
+		obj.edges = mergeArrays(obj.edges, verts);
+		return obj;
+	}),
+	addFaces: (verts) => updateHigh(obj => {
+		obj.faces = mergeArrays(obj.faces, verts);
+		return obj;
+	}),
+};
