@@ -66,6 +66,7 @@
 	let edgesStroke = [];
 	let edgesStrokeWidth = [];
 	let verticesFill = [];
+	let verticesScale = [];
 
 	$: {
 		facesFill = [];
@@ -85,6 +86,13 @@
 	$: {
 		verticesFill = [];
 		$Selection.vertices.forEach(i => { verticesFill[i] = "#fb4"; });
+		$Highlight.vertices.forEach(i => { verticesFill[i] = "#fb4"; });
+	};
+
+	$: {
+		verticesScale = [];
+		$Selection.vertices.forEach(i => { verticesScale[i] = 1.666; });
+		$Highlight.vertices.forEach(i => { verticesScale[i] = 1.666; });
 	};
 
 </script>
@@ -97,6 +105,10 @@
 		strokeWidths={edgesStrokeWidth}
 	/>
 	{#if showVertices($Tool, $ToolStep)}
-		<GraphVerticesLayer graph={$Graph} fills={verticesFill} />
+		<GraphVerticesLayer
+			graph={$Graph}
+			fills={verticesFill}
+			scales={verticesScale}
+		/>
 	{/if}
 </g>

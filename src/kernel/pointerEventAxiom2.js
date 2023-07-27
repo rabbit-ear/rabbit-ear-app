@@ -1,13 +1,13 @@
 import { axiom2 } from "rabbit-ear/axioms/axiomsVecLine.js";
 import { get } from "svelte/store";
-import { Selection } from "../stores/Select.js";
+import { Highlight } from "../stores/Select.js";
 import {
 	Presses,
 	Releases,
 } from "../stores/UI.js";
 import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
-import { Rulers, RulerPreviews } from "../stores/Ruler.js";
+import { RulerLines, RulerLinePreviews } from "../stores/Ruler.js";
 import { ToolStep } from "../stores/Tool.js";
 import { RulersAutoClear } from "../stores/App.js";
 
@@ -23,23 +23,23 @@ export const pointerEventAxiom2 = (eventType, { point }) => {
 	const { vertex } = getSnapPoint(point);
 	switch (eventType) {
 	case "hover":
-		Selection.reset();
-		if (vertex !== undefined) { Selection.addVertices([vertex]); }
+		Highlight.reset();
+		if (vertex !== undefined) { Highlight.addVertices([vertex]); }
 		break;
 	case "press":
 		pressVertex = vertex;
-		if (get(RulersAutoClear)) { Rulers.set([]); }
+		if (get(RulersAutoClear)) { RulerLines.set([]); }
 		// no break
 	case "move":
-		Selection.reset();
-		Selection.addVertices([pressVertex, vertex]
+		Highlight.reset();
+		Highlight.addVertices([pressVertex, vertex]
 			.filter(a => a !== undefined));
 		execute("axiom2Preview", pressVertex, vertex);
 		break;
 	case "release":
 		execute("axiom2", pressVertex, vertex);
 		pressVertex = undefined;
-		RulerPreviews.set([]);
+		RulerLinePreviews.set([]);
 		Presses.set([]);
 		Releases.set([]);
 		break;

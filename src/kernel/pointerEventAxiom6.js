@@ -6,7 +6,7 @@ import {
 	Releases,
 } from "../stores/UI.js";
 import { execute } from "./app.js";
-import { Rulers, RulerPreviews } from "../stores/Ruler.js";
+import { RulerLines, RulerLinePreviews } from "../stores/Ruler.js";
 import { ToolStep } from "../stores/Tool.js";
 import { Graph } from "../stores/Graph.js";
 import { RulersAutoClear } from "../stores/App.js";
@@ -32,8 +32,8 @@ export const pointerEventAxiom6 = (eventType, { point }) => {
 		break;
 	case 1:
 		if (eventType === "press") { vertex1 = vertex; }
-		if (get(RulersAutoClear)) { Rulers.set([]); }
-		// RulerPreviews.set([]);
+		if (get(RulersAutoClear)) { RulerLines.set([]); }
+		// RulerLinePreviews.set([]);
 		if (vertex1 !== undefined) { Selection.addVertices([vertex1]); }
 		if (edge !== undefined) { Selection.addEdges([edge]); }
 		break;
@@ -56,7 +56,7 @@ export const pointerEventAxiom6 = (eventType, { point }) => {
 		execute("axiom6", edge1, edge, vertex1, vertex2);
 		vertex1 = undefined;
 		edge1 = undefined;
-		RulerPreviews.set([]);
+		RulerLinePreviews.set([]);
 		Presses.set([]);
 		Releases.set([]);
 		break;

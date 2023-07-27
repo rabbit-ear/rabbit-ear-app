@@ -1,14 +1,48 @@
-import { writable, get } from "svelte/store";
+import { writable, derived, get } from "svelte/store";
+import {
+	intersectGraphLine,
+	intersectGraphRay,
+} from "../js/intersect.js";
 import { RulersAutoClear } from "./App.js";
-
-const { subscribe, set, update } = writable([]);
-
-export const Rulers = writable([]);
-
-Rulers.add = (newRulers) => Rulers.update((r) => get(RulersAutoClear)
+import { Graph } from "./Graph.js";
+import { Snapping } from "./App.js";
+/**
+ *
+ */
+export const RulerLines = writable([]);
+RulerLines.add = (newRulers) => RulerLines.update((r) => get(RulersAutoClear)
 	? [...newRulers]
 	: [...r, ...newRulers]);
-
-export const RulerPreviews = writable([]);
-
-RulerPreviews.add = (newRulers) => RulerPreviews.update((r) => [...r, ...newRulers]);
+/**
+ *
+ */
+export const RulerRays = writable([]);
+RulerRays.add = (newRulers) => RulerRays.update((r) => get(RulersAutoClear)
+	? [...newRulers]
+	: [...r, ...newRulers]);
+/**
+ *
+ */
+export const RulerPoints = derived(
+	[Graph, RulerLines, RulerRays],
+	([$Graph, $RulerLines, $RulerRays]) => {
+		// todo, filter, remove duplicates
+		const intersectedLines = $RulerLines
+			.flatMap(line => intersectGraphLine($Graph, line));
+		const intersectedRays = $RulerRays
+			.flatMap(ray => intersectGraphRay($Graph, ray));
+		// todo: intersect lines and rays against themselves
+		return [...intersectedLines, ...intersectedRays];
+	},
+	[],
+);
+/**
+ *
+ */
+export const RulerLinePreviews = writable([]);
+RulerLinePreviews.add = (newRulers) => RulerLinePreviews.update((r) => [...r, ...newRulers]);
+/**
+ *
+ */
+export const RulerRayPreviews = writable([]);
+RulerRayPreviews.add = (newRulers) => RulerRayPreviews.update((r) => [...r, ...newRulers]);

@@ -10,6 +10,9 @@ line {
 	stroke: #444;
 }
 
+.graph-preview line { stroke: #fb4; }
+.graph-preview circle { fill: #fb4; }
+.graph-preview polygon { opacity: 0.5; }
+
 line.axis-marker-x { stroke: red; }
 line.axis-marker-y { stroke: green; }
-

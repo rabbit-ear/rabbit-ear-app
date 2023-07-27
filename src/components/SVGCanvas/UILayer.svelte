@@ -11,13 +11,32 @@
 
 	let tick = 0
 	setInterval(() => { tick += (vmax * 0.002); }, 30);
+
+	let strokeWidths;
+	$: strokeWidths = $UIGraph.edges_vertices
+		? $UIGraph.edges_vertices.map(() => vmax * 0.005)
+		: [];
+
+	let scales;
+	$: scales = $UIGraph.vertices_coords
+		? $UIGraph.vertices_coords.map(() => 1.5)
+		: [];
+
 </script>
 
 <g>
-	<g opacity="0.666">
-		<GraphFacesLayer graph={$UIGraph} />
-		<GraphEdgesLayer graph={$UIGraph} />
-		<GraphVerticesLayer graph={$UIGraph} />
+	<g class="graph-preview">
+		<GraphFacesLayer
+			graph={$UIGraph}
+		/>
+		<GraphEdgesLayer
+			graph={$UIGraph}
+			strokeWidths={strokeWidths}
+		/>
+		<GraphVerticesLayer
+			graph={$UIGraph}
+			scales={scales}
+		/>
 	</g>
 	{#if $SelectionRect !== undefined}
 		<rect

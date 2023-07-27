@@ -7,7 +7,7 @@ import {
 } from "../stores/UI.js";
 import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
-import { Rulers, RulerPreviews } from "../stores/Ruler.js";
+import { RulerLines, RulerLinePreviews } from "../stores/Ruler.js";
 import { Graph } from "../stores/Graph.js";
 import { RulersAutoClear } from "../stores/App.js";
 
@@ -28,7 +28,7 @@ export const pointerEventAxiom4 = (eventType, { point }) => {
 		break;
 	case "press":
 		pressEdge = edge;
-		if (get(RulersAutoClear)) { Rulers.set([]); }
+		if (get(RulersAutoClear)) { RulerLines.set([]); }
 		// no break
 	case "move":
 		Selection.reset();
@@ -39,7 +39,7 @@ export const pointerEventAxiom4 = (eventType, { point }) => {
 	case "release":
 		execute("axiom4", pressEdge, vertex);
 		pressEdge = undefined;
-		RulerPreviews.set([]);
+		RulerLinePreviews.set([]);
 		Presses.set([]);
 		Releases.set([]);
 		break;

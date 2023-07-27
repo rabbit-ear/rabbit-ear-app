@@ -23,13 +23,20 @@ import AddVertex from "rabbit-ear/graph/add/addVertex.js";
 import addNonPlanarEdge from "rabbit-ear/graph/add/addNonPlanarEdge.js";
 import splitEdge from "rabbit-ear/graph/splitEdge/index.js";
 import populate from "rabbit-ear/graph/populate.js";
+import { kawasakiSolutions } from "rabbit-ear/singleVertex/kawasakiGraph.js";
 import { add2 } from "rabbit-ear/math/algebra/vector.js";
+import { pleat as fnPleat } from "rabbit-ear/graph/pleat.js";
 import { pointsToLine } from "rabbit-ear/math/general/convert.js";
 import { assignmentFlatFoldAngle } from "rabbit-ear/fold/spec.js";
 import { downloadFile } from "../js/file.js";
 import { Graph } from "../stores/Graph.js";
 import { Selection } from "../stores/Select.js";
-import { Rulers, RulerPreviews } from "../stores/Ruler.js";
+import {
+	RulerLines,
+	RulerRays,
+	RulerLinePreviews,
+	RulerRayPreviews,
+} from "../stores/Ruler.js";
 /**
  *
  */
@@ -212,18 +219,62 @@ const doAxiom7 = (a, b, c) => (
 		? fnAxiom7(get(Graph), a, b, c).filter(a => a !== undefined)
 		: []);
 
-export const axiom1 = (...args) => Rulers.add(doAxiom1(...args));
-export const axiom2 = (...args) => Rulers.add(doAxiom2(...args));
-export const axiom3 = (...args) => Rulers.add(doAxiom3(...args));
-export const axiom4 = (...args) => Rulers.add(doAxiom4(...args));
-export const axiom5 = (...args) => Rulers.add(doAxiom5(...args));
-export const axiom6 = (...args) => Rulers.add(doAxiom6(...args));
-export const axiom7 = (...args) => Rulers.add(doAxiom7(...args));
+export const axiom1 = (...args) => RulerLines.add(doAxiom1(...args));
+export const axiom2 = (...args) => RulerLines.add(doAxiom2(...args));
+export const axiom3 = (...args) => RulerLines.add(doAxiom3(...args));
+export const axiom4 = (...args) => RulerLines.add(doAxiom4(...args));
+export const axiom5 = (...args) => RulerLines.add(doAxiom5(...args));
+export const axiom6 = (...args) => RulerLines.add(doAxiom6(...args));
+export const axiom7 = (...args) => RulerLines.add(doAxiom7(...args));
 
-export const axiom1Preview = (...args) => RulerPreviews.set(doAxiom1(...args));
-export const axiom2Preview = (...args) => RulerPreviews.set(doAxiom2(...args));
-export const axiom3Preview = (...args) => RulerPreviews.set(doAxiom3(...args));
-export const axiom4Preview = (...args) => RulerPreviews.set(doAxiom4(...args));
-export const axiom5Preview = (...args) => RulerPreviews.set(doAxiom5(...args));
-export const axiom6Preview = (...args) => RulerPreviews.set(doAxiom6(...args));
-export const axiom7Preview = (...args) => RulerPreviews.set(doAxiom7(...args));
+export const axiom1Preview = (...args) => (
+	RulerLinePreviews.set(doAxiom1(...args))
+);
+export const axiom2Preview = (...args) => (
+	RulerLinePreviews.set(doAxiom2(...args))
+);
+export const axiom3Preview = (...args) => (
+	RulerLinePreviews.set(doAxiom3(...args))
+);
+export const axiom4Preview = (...args) => (
+	RulerLinePreviews.set(doAxiom4(...args))
+);
+export const axiom5Preview = (...args) => (
+	RulerLinePreviews.set(doAxiom5(...args))
+);
+export const axiom6Preview = (...args) => (
+	RulerLinePreviews.set(doAxiom6(...args))
+);
+export const axiom7Preview = (...args) => (
+	RulerLinePreviews.set(doAxiom7(...args))
+);
+
+const doPleat = (edgeA, edgeB, count) => {
+	if (edgeA === undefined || edgeB === undefined) { return []; }
+	// console.log("Pleat", get(Graph), ...args);
+	// console.log("result", edgeA, edgeB, count, fnPleat(get(Graph), edgeA, edgeB, count));
+	const result = fnPleat(get(Graph), edgeA, edgeB, count);
+	return result.flat();
+};
+
+export const pleat = (...args) => RulerLines.add(doPleat(...args));
+export const pleatPreview = (...args) => (
+	RulerLinePreviews.add(doPleat(...args))
+);
+export const kawasakiRulerPreviews = (vertex) => {
+	const graph = get(Graph);
+	const origin = graph.vertices_coords[vertex];
+	const rays = kawasakiSolutions(graph, vertex)
+		.filter(a => a !== undefined)
+		.map(vector => ({ origin, vector }));
+	RulerRayPreviews.set(rays);
+};
+
+export const kawasakiRulers = (vertex) => {
+	const graph = get(Graph);
+	const origin = graph.vertices_coords[vertex];
+	const rays = kawasakiSolutions(graph, vertex)
+		.filter(a => a !== undefined)
+		.map(vector => ({ origin, vector }));
+	RulerRays.set(rays);
+};

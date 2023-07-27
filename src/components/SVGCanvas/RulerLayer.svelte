@@ -1,45 +1,42 @@
 <script>
-	import { clipLineConvexPolygon } from "rabbit-ear/math/intersect/clip.js";
 	import {
-		Rulers,
-		RulerPreviews,
+		clipLineInLargerViewBox,
+		clipRayInLargerViewBox,
+	} from "../../js/intersect.js";
+	import {
+		RulerLines,
+		RulerRays,
+		RulerLinePreviews,
+		RulerRayPreviews,
 	} from "../../stores/Ruler.js";
 	import { SnapPoints } from "../../stores/Snap.js";
 	import { ViewBox } from "../../stores/ViewBox.js";
 
-	const clipLineInLargerViewBox = (line, box) => {
-		const [x, y, w, h] = box;
-		const polygon = [
-			[x - (w * 10), y - (h * 10)],
-			[x + (w * 11), y - (h * 10)],
-			[x + (w * 11), y + (h * 11)],
-			[x - (w * 10), y + (h * 11)],
-		];
-		return clipLineConvexPolygon(polygon, line);
-	};
-
-	const clipLineInViewBox = (line, box) => {
-		const polygon = [
-			[box[0], box[1]],
-			[box[0] + box[2], box[1]],
-			[box[0] + box[2], box[1] + box[3]],
-			[box[0], box[1] + box[3]],
-		];
-		return clipLineConvexPolygon(polygon, line);
-	};
-
 	let segments;
-	$: segments = $Rulers
-		.map(line => clipLineInLargerViewBox(line, $ViewBox))
-		.filter(res => res !== undefined)
-		.filter(res => res.length > 1);
+	$: {
+		const lineSegments = $RulerLines
+			.map(line => clipLineInLargerViewBox(line, $ViewBox))
+			.filter(res => res !== undefined)
+			.filter(res => res.length > 1);
+		const raySegments = $RulerRays
+			.map(ray => clipRayInLargerViewBox(ray, $ViewBox))
+			.filter(res => res !== undefined)
+			.filter(res => res.length > 1);
+		segments = lineSegments.concat(raySegments);
+	};
 
 	let segmentsPrev;
-	$: segmentsPrev = $RulerPreviews
-		.map(line => clipLineInLargerViewBox(line, $ViewBox))
-		.filter(res => res !== undefined)
-		.filter(res => res.length > 1);
-
+	$: {
+		const lineSegments = $RulerLinePreviews
+			.map(line => clipLineInLargerViewBox(line, $ViewBox))
+			.filter(res => res !== undefined)
+			.filter(res => res.length > 1);
+		const raySegments = $RulerRayPreviews
+			.map(line => clipRayInLargerViewBox(line, $ViewBox))
+			.filter(res => res !== undefined)
+			.filter(res => res.length > 1);
+		segmentsPrev = lineSegments.concat(raySegments);
+	};
 	let vmax;
 	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);
 
@@ -55,7 +52,7 @@
 			x2={s[1][0]}
 			y2={s[1][1]}
 			stroke="#fff8"
-			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
+ 			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
 			stroke-dashoffset={tick}
 		/>
 	{/each}
@@ -66,7 +63,7 @@
 			x2={s[1][0]}
 			y2={s[1][1]}
 			stroke="#fb4"
-			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
+ 			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
 			stroke-dashoffset={tick}
 		/>
 	{/each}
@@ -74,3 +71,8 @@
 		<circle cx={p[0]} cy={p[1]} r={0.01} fill="red" />
 	{/each} -->
 </g>
+
+<!--
+ 			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
+			stroke-dashoffset={tick}
+ -->

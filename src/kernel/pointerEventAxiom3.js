@@ -1,14 +1,13 @@
 import { get } from "svelte/store";
-import { nearest } from "rabbit-ear/graph/nearest.js";
-import { Selection } from "../stores/Select.js";
+import { Highlight } from "../stores/Select.js";
+import { Presses, Releases } from "../stores/UI.js";
 import {
-	Presses,
-	Releases,
-} from "../stores/UI.js";
-import { snapToPoint } from "../js/snap.js";
+	snapToPoint,
+	snapToEdge,
+} from "../js/snap.js";
 import { execute } from "./app.js";
-import { Rulers, RulerPreviews } from "../stores/Ruler.js";
-import { Graph, UIGraph } from "../stores/Graph.js";
+import { RulerLines, RulerLinePreviews } from "../stores/Ruler.js";
+import { UIGraph } from "../stores/Graph.js";
 // import { RulersAutoClear } from "../stores/App.js";
 import { ToolStep } from "../stores/Tool.js";
 
@@ -22,24 +21,24 @@ export const pointerEventAxiom3 = (eventType, { point }) => {
 	case "move": break;
 	case "release": Releases.update(p => [...p, point]); break;
 	}
-	const { vertex, edge } = nearest(get(Graph), point);
-	Selection.reset();
+	const { edge, coords } = snapToEdge(point);
+	Highlight.reset();
 	switch (get(ToolStep)) {
 	case 0:
-		if (edge !== undefined) { Selection.addEdges([edge]); }
+		if (edge !== undefined) { Highlight.addEdges([edge]); }
 		break;
 	case 1:
 		// "press" selecting the first edge
 		// "move" preview the second edge
 		if (eventType === "press") { pressEdge = edge; }
-		if (edge !== undefined) { Selection.addEdges([edge]); }
-		if (pressEdge !== undefined) { Selection.addEdges([pressEdge]); }
+		if (edge !== undefined) { Highlight.addEdges([edge]); }
+		if (pressEdge !== undefined) { Highlight.addEdges([pressEdge]); }
 		execute("axiom3Preview", pressEdge, edge);
 		break;
 	case 2:
 		// "release" axiom operation done. ruler lines now drawn.
 		// "hover" preview first edge point
-		RulerPreviews.set([]);
+		RulerLinePreviews.set([]);
 		if (eventType === "release") {
 			execute("axiom3", pressEdge, edge);
 			pressEdge = undefined;
@@ -65,9 +64,9 @@ export const pointerEventAxiom3 = (eventType, { point }) => {
 			execute("addVertex", pressCoords),
 			execute("addVertex", snapToPoint(point, false)),
 		);
-		// if (get(RulersAutoClear)) { Rulers.set([]); }
+		// if (get(RulersAutoClear)) { RulerLines.set([]); }
 		UIGraph.set({});
-		Rulers.set([]);
+		RulerLines.set([]);
 		Presses.set([]);
 		Releases.set([]);
 		break;

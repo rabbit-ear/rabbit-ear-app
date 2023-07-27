@@ -23,7 +23,10 @@ import {
 	TOOL_PLEAT,
 	TOOL_SCRIBBLE,
 } from "../app/keys.js";
-import { Selection } from "./Select.js";
+import {
+	Selection,
+	Highlight,
+} from "./Select.js";
 import {
 	Presses,
 	Moves,
@@ -39,6 +42,7 @@ export const Tool = {
 		Presses.set([]);
 		Moves.set([]);
 		Releases.set([]);
+		Highlight.reset();
 		switch (t) {
 		case TOOL_VERTEX: break;
 		default:
@@ -71,6 +75,7 @@ export const ScribbleSmooth = writable(true);
 export const ScribbleSmoothAmount = writable(0.5);
 export const ScribbleDensity = writable(0.5);
 export const ScribbleWaitForConfirmation = writable(false);
+export const PleatCount = writable(8);
 
 /**
  * @description for the UI. which tool step is currently in progress
@@ -108,8 +113,16 @@ export const ToolStep = derived(
 			if (pressesCount === 3 && releasesCount === 2) { return 5; }
 			if (pressesCount === 3 && releasesCount === 3) { return 6; }
 			return 7;
-		case TOOL_KAWASAKI: return 0;
-		case TOOL_PLEAT: return 0;
+		case TOOL_KAWASAKI:
+			if (pressesCount === 0) { return 0; }
+			if (pressesCount === 1 && releasesCount === 0) { return 1; }
+			if (pressesCount === 1 && releasesCount === 1) { return 2; }
+			if (pressesCount === 2 && releasesCount === 1) { return 3; }
+			if (pressesCount === 2 && releasesCount === 2) { return 4; }
+		case TOOL_PLEAT:
+			if (pressesCount === 0) { return 0; }
+			if (pressesCount === 1 && releasesCount === 0) { return 1; }
+			if (pressesCount === 1 && releasesCount === 1) { return 2; }
 		case TOOL_SCRIBBLE: return 0;
 		default: return Infinity;
 		}
