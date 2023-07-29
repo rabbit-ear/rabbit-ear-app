@@ -17,9 +17,8 @@ let pressCoords = undefined;
 export const pointerEventAxiom3 = (eventType, { point }) => {
 	switch (eventType) {
 	case "press": Presses.update(p => [...p, point]); break;
-	case "hover": break;
-	case "move": break;
 	case "release": Releases.update(p => [...p, point]); break;
+	default: break;
 	}
 	const { edge, coords } = snapToEdge(point);
 	Highlight.reset();
@@ -40,6 +39,12 @@ export const pointerEventAxiom3 = (eventType, { point }) => {
 		// "hover" preview first edge point
 		RulerLinePreviews.set([]);
 		if (eventType === "release") {
+			// inputs are bad. reset to step 0
+			if (pressEdge === undefined || edge === undefined) {
+				Presses.set([]);
+				Releases.set([]);
+				break;
+			}
 			execute("axiom3", pressEdge, edge);
 			pressEdge = undefined;
 		}

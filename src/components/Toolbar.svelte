@@ -74,7 +74,7 @@ let TOOL_KAWASAKI_SHIFT = "toolKawasakiShift";
 			id="edge"
 			bind:group={$Tool}
 			value={TOOL_EDGE} />
-		<label for="edge">segment</label>
+		<label for="edge">edge</label>
 	</div>
 
 	<p>lines</p>

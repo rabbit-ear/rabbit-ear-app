@@ -70,8 +70,14 @@ export const snapToPoint = (point, force = false) => {
 	const gridCoord = get(Snapping)
 		? nearestGridPoint(point, snapRadius)
 		: undefined;
-	if (gridCoord !== undefined) { return gridCoord; }
-	const points = get(SnapPoints);
+	// const gridCoordDist = gridCoord === undefined
+	// 	? Infinity
+	// 	: distance2(point, gridCoord);
+	// if (gridCoord !== undefined) { return gridCoord; }
+	const points = gridCoord === undefined
+		? get(SnapPoints)
+		: [...get(SnapPoints), gridCoord];
+	// if (gridCoord !== undefined) { points.push(gridCoord); }
 	const distances = points.map(p => distance2(p, point));
 	const index = distances
 		.map((d, i) => d < snapRadius ? i : undefined)

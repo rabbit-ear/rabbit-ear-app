@@ -42,7 +42,7 @@ export const BackgroundColor = writable("#2a2a2a");
 
 // front and back are the mesh faces
 export const FrontColor = writable("#333");
-export const BackColor = writable("#414ff1");
+export const BackColor = writable("#1133a1");
 
 // line color by assignment
 export const LineOpacity = writable(1);

@@ -3,8 +3,8 @@
 	import {
 		Textarea,
 		TextareaValue,
-		AppHistory,
 	} from "../stores/Terminal.js";
+	import { TerminalHistory } from "../stores/History.js";
 
 	let pre;
 
@@ -12,14 +12,14 @@
 
 	const fade = 2;
 	let opacities;
-	$: opacities = ($AppHistory)
+	$: opacities = ($TerminalHistory)
 		.map((_, i, arr) => arr.length - 1 - i)
 		.map(count => Math.min(fade, count))
 		.map(count => 1 - ((count / fade) * 0.5));
 </script>
 
 <div>
-	<pre bind:this={pre}>{#each $AppHistory as line, i}<span style={`opacity: ${opacities[i]}`}>{line.func.name}({line.args ? line.args.map(arg => JSON.stringify(arg)).join(", ") : ""})</span><br/>{/each}</pre>
+	<pre bind:this={pre}>{#each $TerminalHistory as line, i}<span style={`opacity: ${opacities[i]}`}>{line.func.name}({line.args ? line.args.map(arg => JSON.stringify(arg)).join(", ") : ""})</span><br/>{/each}</pre>
 	<textarea
 		bind:this={$Textarea}
 		bind:value={$TextareaValue}

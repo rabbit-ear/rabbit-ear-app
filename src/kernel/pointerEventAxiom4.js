@@ -1,45 +1,68 @@
 import { get } from "svelte/store";
 import { nearest } from "rabbit-ear/graph/nearest.js";
-import { Selection } from "../stores/Select.js";
-import {
-	Presses,
-	Releases,
-} from "../stores/UI.js";
-import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
+import { snapToPoint, snapToEdge } from "../js/snap.js";
+import { Highlight } from "../stores/Select.js";
+import { Presses, Releases } from "../stores/UI.js";
 import { RulerLines, RulerLinePreviews } from "../stores/Ruler.js";
-import { Graph } from "../stores/Graph.js";
-import { RulersAutoClear } from "../stores/App.js";
+import { ToolStep } from "../stores/Tool.js";
+import { UIGraph } from "../stores/Graph.js";
 
-let pressEdge = undefined;
+let pressEdge;
+let pressCoords;
 
 export const pointerEventAxiom4 = (eventType, { point }) => {
 	switch (eventType) {
 	case "press": Presses.update(p => [...p, point]); break;
-	case "hover": break;
-	case "move": break;
 	case "release": Releases.update(p => [...p, point]); break;
+	default: break;
 	}
-	const { vertex, edge } = nearest(get(Graph), point);
-	switch (eventType) {
-	case "hover":
-		Selection.reset();
-		if (edge !== undefined) { Selection.addEdges([edge]); }
+	Highlight.reset();
+	switch (get(ToolStep)) {
+	case 0: {
+		const { edge } = snapToEdge(point, false);
+		if (edge !== undefined) { Highlight.addEdges([edge]); }
+	}
 		break;
-	case "press":
-		pressEdge = edge;
-		if (get(RulersAutoClear)) { RulerLines.set([]); }
-		// no break
-	case "move":
-		Selection.reset();
-		if (vertex !== undefined) { Selection.addVertices([vertex]); }
-		if (edge !== undefined) { Selection.addEdges([pressEdge]); }
-		execute("axiom4Preview", pressEdge, vertex);
+	case 1: {
+		const { edge } = snapToEdge(point, false);
+		const coords = snapToPoint(point, false);
+		if (eventType === "press") { pressEdge = edge; }
+		if (coords !== undefined) { UIGraph.set({ vertices_coords: [coords] }); }
+		if (pressEdge !== undefined) {
+			Highlight.addEdges([pressEdge]);
+			execute("axiom4Preview", pressEdge, coords);
+		}
+	}
 		break;
-	case "release":
-		execute("axiom4", pressEdge, vertex);
-		pressEdge = undefined;
+	case 2: {
+		const coords = snapToPoint(point, false);
 		RulerLinePreviews.set([]);
+		if (eventType === "release") {
+			execute("axiom4", pressEdge, coords);
+			pressEdge = undefined;
+		}
+		// nearest point on line
+		UIGraph.set({ vertices_coords: [snapToPoint(point, false)] });
+	}
+		break;
+	case 3: {
+		const coords = snapToPoint(point, false);
+		if (eventType === "press") { pressCoords = coords; }
+		UIGraph.set({
+			vertices_coords: [pressCoords, coords],
+			edges_vertices: [[0, 1]],
+		});
+	}
+		break;
+	default:
+		execute("addEdge",
+			execute("addVertex", pressCoords),
+			execute("addVertex", snapToPoint(point, false)),
+		);
+		// if (get(RulersAutoClear)) { RulerLines.set([]); }
+		UIGraph.set({});
+		RulerLines.set([]);
 		Presses.set([]);
 		Releases.set([]);
 		break;

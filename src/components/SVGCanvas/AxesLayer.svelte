@@ -1,6 +1,5 @@
 <script>
 	import { ViewBox } from "../../stores/ViewBox.js";
-
 	let length = 1;
 	$: length = Math.min($ViewBox[2], $ViewBox[3]) * 0.1;
 </script>

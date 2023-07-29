@@ -18,15 +18,13 @@ let vertex2 = undefined;
 export const pointerEventAxiom6 = (eventType, { point }) => {
 	switch (eventType) {
 	case "press": Presses.update(p => [...p, point]); break;
-	case "hover": break;
-	case "move": break;
 	case "release": Releases.update(p => [...p, point]); break;
+	default: break;
 	}
-	const toolStep = get(ToolStep);
 	const { vertex, edge } = nearest(get(Graph), point);
 	Selection.reset();
-	console.log(toolStep, eventType, edge1, vertex1, vertex);
-	switch (toolStep) {
+	// console.log(toolStep, eventType, edge1, vertex1, vertex);
+	switch (get(ToolStep)) {
 	case 0:
 		if (vertex !== undefined) { Selection.addVertices([vertex]); }
 		break;

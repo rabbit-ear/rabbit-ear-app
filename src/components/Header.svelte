@@ -31,8 +31,7 @@
 					<li>new
 						<ul>
 							<li><button on:click={newEmpty}>empty</button></li>
-							<li><button on:click={newSquare}>unit square</button></li>
-							<li></li>
+							<li><button on:click={newSquare}>square</button></li>
 							<li>NxN square</li>
 							<li><button on:click={newPolygon}>regular polygon</button></li>
 						</ul>

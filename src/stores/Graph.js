@@ -8,6 +8,7 @@ import {
 	CameraMatrix,
 	ModelMatrix,
 } from "./ViewBox.js";
+import { GraphHistory } from "./History.js";
 
 const makeEmptyGraph = () => populate({
 	vertices_coords: [],
@@ -19,10 +20,11 @@ const makeEmptyGraph = () => populate({
 
 const { subscribe, set, update } = writable(makeEmptyGraph());
 
-const setGraph = (g) => {
+const setGraph = (graph) => {
+	console.log("setGraph");
 	Selection.reset();
-	const res = set(g);
-	return res;
+	GraphHistory.update(history => [...history, graph]);
+	return set(graph);
 };
 
 export const Graph = {
@@ -30,7 +32,18 @@ export const Graph = {
 	update,
 	set: setGraph,
 	// no change to topology
-	simpleSet: (graph) => set(graph),
+	simpleSet: (graph) => {
+		console.log("simpleSet");
+		GraphHistory.update(history => [...history, graph]);
+		set(graph);
+	},
+	revert: () => {
+		const history = get(GraphHistory);
+		const previous = history.pop();
+		GraphHistory.set(history);
+		Selection.reset();
+		return set(previous);
+	},
 	// methods which modify the graph
 	// planarize: () => update(g => populate(planarize(g), true)),
 	// trigger a file-download in the browser

@@ -8,7 +8,7 @@
 		const value = $CameraMatrix[0] / $ModelMatrix[0];
 		zoom = !isNaN(value) ? (1 / value).toFixed(3) : 0;
 	};
-	
+
 	const formatPoint = (p) => p
 		.map(n => {
 			const integer = parseInt(n);
@@ -34,6 +34,6 @@
 	.number {
 		font-weight: bold;
 	}
-/*	input[type=text] { width: 100%; }*/
+	input[type=text] { width: 100%; }
 /*	input[type=text].half { width: 50%; }*/
 </style>

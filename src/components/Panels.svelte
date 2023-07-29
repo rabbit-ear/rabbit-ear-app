@@ -1,6 +1,7 @@
 <script>
 	import Tools from "./Panels/Tools.svelte";
 	import Canvas from "./Panels/Canvas.svelte";
+	import History from "./Panels/History.svelte";
 	import RulerLines from "./Panels/RulerLines.svelte";
 	import Simulator from "./Panels/Simulator.svelte";
 	import { ShowSimulator } from "../stores/App.js";
@@ -10,6 +11,7 @@
 	<Canvas />
 	<Tools />
 	<RulerLines />
+	<History />
 	{#if $ShowSimulator}
 		<Simulator />
 	{/if}

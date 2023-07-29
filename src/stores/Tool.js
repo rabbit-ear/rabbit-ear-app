@@ -27,13 +27,14 @@ import {
 	Selection,
 	Highlight,
 } from "./Select.js";
+import { UIGraph } from "./Graph.js";
 import {
 	Presses,
 	Moves,
 	Releases,
 } from "./UI.js";
 
-const { subscribe, set, update } = writable(TOOL_SELECT);
+const { subscribe, set, update } = writable(TOOL_EDGE);
 
 export const Tool = {
 	subscribe,
@@ -43,6 +44,7 @@ export const Tool = {
 		Moves.set([]);
 		Releases.set([]);
 		Highlight.reset();
+		UIGraph.set({});
 		switch (t) {
 		case TOOL_VERTEX: break;
 		default:

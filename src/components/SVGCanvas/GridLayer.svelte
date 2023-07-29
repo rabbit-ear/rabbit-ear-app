@@ -17,8 +17,8 @@
 
 	let xs = [];
 	let ys = [];
-	$: xs = makeIntervals($ViewBox[0], $ViewBox[2]);
-	$: ys = makeIntervals($ViewBox[1], $ViewBox[3]);
+	$: xs = makeIntervals($ViewBox[0] - $ViewBox[2], $ViewBox[2] * 3);
+	$: ys = makeIntervals($ViewBox[1] - $ViewBox[3], $ViewBox[3] * 3);
 </script>
 
 <g class="grid" stroke-width={Math.max($ViewBox[2], $ViewBox[3]) / 400}>
@@ -34,16 +34,16 @@
 	{#each xs as x}
 		<line
 			x1={x}
-			y1={$ViewBox[1]}
+			y1={$ViewBox[1] - $ViewBox[3]}
 			x2={x}
-			y2={$ViewBox[1] + $ViewBox[3]}
+			y2={$ViewBox[1] + $ViewBox[3] * 2}
 		/>
 	{/each}
 	{#each ys as y}
 		<line
-			x1={$ViewBox[0]}
+			x1={$ViewBox[0] - $ViewBox[2]}
 			y1={y}
-			x2={$ViewBox[0] + $ViewBox[2]}
+			x2={$ViewBox[0] + $ViewBox[2] * 2}
 			y2={y}
 		/>
 	{/each}

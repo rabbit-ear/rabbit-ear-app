@@ -1,22 +1,13 @@
 import { get } from "svelte/store";
-// import {
-// 	axiom1 as fnAxiom1,
-// 	axiom2 as fnAxiom2,
-// 	axiom3 as fnAxiom3,
-// 	axiom4 as fnAxiom4,
-// 	axiom5 as fnAxiom5,
-// 	axiom6 as fnAxiom6,
-// 	axiom7 as fnAxiom7,
-// } from "rabbit-ear/axioms/axiomsVecLine.js";
 import {
-	axiom1 as fnAxiom1,
-	axiom2 as fnAxiom2,
-	axiom3 as fnAxiom3,
-	axiom4 as fnAxiom4,
-	axiom5 as fnAxiom5,
-	axiom6 as fnAxiom6,
-	axiom7 as fnAxiom7,
-} from "rabbit-ear/graph/axioms.js";
+	doAxiom1,
+	doAxiom2,
+	doAxiom3,
+	doAxiom4,
+	doAxiom5,
+	doAxiom6,
+	doAxiom7,
+} from "../js/axioms.js";
 import removeGeometry from "rabbit-ear/graph/remove.js";
 import Planarize from "rabbit-ear/graph/planarize.js";
 import AddVertex from "rabbit-ear/graph/add/addVertex.js";
@@ -27,7 +18,6 @@ import { kawasakiSolutions } from "rabbit-ear/singleVertex/kawasakiGraph.js";
 import { add2 } from "rabbit-ear/math/algebra/vector.js";
 import { pleat as fnPleat } from "rabbit-ear/graph/pleat.js";
 import { pointsToLine } from "rabbit-ear/math/general/convert.js";
-import { assignmentFlatFoldAngle } from "rabbit-ear/fold/spec.js";
 import { downloadFile } from "../js/file.js";
 import { Graph } from "../stores/Graph.js";
 import { Selection } from "../stores/Select.js";
@@ -37,6 +27,8 @@ import {
 	RulerLinePreviews,
 	RulerRayPreviews,
 } from "../stores/Ruler.js";
+import { NewEdgeAssignment } from "../stores/App.js";
+import { doSetEdgesAssignment } from "../js/assignments.js";
 /**
  *
  */
@@ -89,7 +81,6 @@ export const deleteComponents = (components) => {
 	components.vertices.forEach(v => { remove.vertices[v] = true; });
 	components.edges.forEach(v => { remove.edges[v] = true; });
 	components.faces.forEach(v => { remove.faces[v] = true; });
-	console.log("DEL", remove);
 	const g = deleteComponentsFromGraph(get(Graph), remove);
 	Graph.set({ ...g });
 };
@@ -114,6 +105,7 @@ export const addVertex = (coords) => {
 export const addEdge = (vertexA, vertexB) => {
 	const g = get(Graph);
 	const newestEdge = addNonPlanarEdge(g, [vertexA, vertexB]);
+	doSetEdgesAssignment(g, [newestEdge], get(NewEdgeAssignment));
 	Graph.set({ ...g });
 	Selection.reset();
 	Selection.addEdges([newestEdge]);
@@ -138,53 +130,20 @@ export const translateVertices = (vertices, vector) => {
 };
 
 export const setEdgesAssignment = (edges, assignment, foldAngle) => {
-	const g = get(Graph);
-	// ensure edges_assignment and edges_foldAngle exist
-	if (!g.edges_vertices) { return; }
-	if (!g.edges_assignment) {
-		g.edges_assignment = g.edges_vertices.map(() => "U");
-	}
-	if (!g.edges_foldAngle) {
-		g.edges_foldAngle = g.edges_vertices.map(() => 0);
-	}
-	// set data
-	edges.forEach(e => { g.edges_assignment[e] = assignment; });
-	if (foldAngle === undefined) {
-		foldAngle = assignmentFlatFoldAngle[assignment] || 0;
-	}
-	edges.forEach(e => { g.edges_foldAngle[e] = foldAngle; });
-	Graph.simpleSet({ ...g });
+	const graph = get(Graph);
+	doSetEdgesAssignment(graph, edges, assignment, foldAngle);
+	Graph.simpleSet({ ...graph });
 };
-
-const signedAssignments = { M: -1, m: -1, V: 1, v: 1 };
 
 export const setEdgesFoldAngle = (edges, foldAngle) => {
-	const g = get(Graph);
-	// ensure edges_foldAngle exist
-	if (!g.edges_vertices) { return; }
-	if (!g.edges_foldAngle) {
-		g.edges_foldAngle = g.edges_vertices.map(() => 0);
-	}
-	// if edges_assignment exists, use it to ensure sign is correct
-	// (M is - and V is +, anything else don't touch).
-	if (g.edges_assignment) {
-		edges.forEach(e => {
-			// if the assignment is M or V, and
-			// the foldAngle sign doesn't match, flip it
-			if (g.edges_assignment[e] in signedAssignments
-				&& Math.sign(foldAngle) !== signedAssignments[g.edges_assignment[e]]) {
-				g.edges_foldAngle[e] = -foldAngle;
-			} else {
-				g.edges_foldAngle[e] = foldAngle;
-			}
-		});
-	} else {
-		edges.forEach(e => { g.edges_foldAngle[e] = foldAngle; });
-	}
-	Graph.simpleSet({ ...g });
+	const graph = get(Graph);
+	doSetEdgesFoldAngle(graph, edges, foldAngle);
+	Graph.simpleSet({ ...graph });
 };
 
-export const planarize = () => Graph.set(populate(Planarize(get(Graph)), true));
+export const planarize = () => (
+	Graph.set(populate(Planarize(get(Graph)), true))
+);
 
 export const load = (FOLD) => Graph.load(populate(FOLD));
 
@@ -194,65 +153,52 @@ export const download = (filename) => (
 	downloadFile(JSON.stringify(get(Graph)), filename)
 );
 
-const doAxiom1 = (a, b) => a !== undefined && b !== undefined
-	? fnAxiom1(get(Graph), a, b).filter(a => a !== undefined)
-	: [];
-const doAxiom2 = (a, b) => a !== undefined && b !== undefined
-	? fnAxiom2(get(Graph), a, b).filter(a => a !== undefined)
-	: [];
-const doAxiom3 = (a, b) => a !== undefined && b !== undefined
-	? fnAxiom3(get(Graph), a, b).filter(a => a !== undefined)
-	: [];
-const doAxiom4 = (a, b) => a !== undefined && b !== undefined
-	? fnAxiom4(get(Graph), a, b).filter(a => a !== undefined)
-	: [];
-const doAxiom5 = (a, b, c) => (
-	a !== undefined && b !== undefined && c !== undefined
-		? fnAxiom5(get(Graph), a, b, c).filter(a => a !== undefined)
-		: []);
-const doAxiom6 = (a, b, c, d) => (
-	a !== undefined && b !== undefined && c !== undefined && d !== undefined
-		? fnAxiom6(get(Graph), a, b, c, d).filter(a => a !== undefined)
-		: []);
-const doAxiom7 = (a, b, c) => (
-	a !== undefined && b !== undefined && c !== undefined
-		? fnAxiom7(get(Graph), a, b, c).filter(a => a !== undefined)
-		: []);
-
-export const axiom1 = (...args) => RulerLines.add(doAxiom1(...args));
-export const axiom2 = (...args) => RulerLines.add(doAxiom2(...args));
-export const axiom3 = (...args) => RulerLines.add(doAxiom3(...args));
-export const axiom4 = (...args) => RulerLines.add(doAxiom4(...args));
-export const axiom5 = (...args) => RulerLines.add(doAxiom5(...args));
-export const axiom6 = (...args) => RulerLines.add(doAxiom6(...args));
-export const axiom7 = (...args) => RulerLines.add(doAxiom7(...args));
+export const axiom1 = (...args) => (
+	RulerLines.add(doAxiom1(get(Graph), ...args))
+);
+export const axiom2 = (...args) => (
+	RulerLines.add(doAxiom2(get(Graph), ...args))
+);
+export const axiom3 = (...args) => (
+	RulerLines.add(doAxiom3(get(Graph), ...args))
+);
+export const axiom4 = (...args) => (
+	RulerLines.add(doAxiom4(get(Graph), ...args))
+);
+export const axiom5 = (...args) => (
+	RulerLines.add(doAxiom5(get(Graph), ...args))
+);
+export const axiom6 = (...args) => (
+	RulerLines.add(doAxiom6(get(Graph), ...args))
+);
+export const axiom7 = (...args) => (
+	RulerLines.add(doAxiom7(get(Graph), ...args))
+);
 
 export const axiom1Preview = (...args) => (
-	RulerLinePreviews.set(doAxiom1(...args))
+	RulerLinePreviews.set(doAxiom1(get(Graph), ...args))
 );
 export const axiom2Preview = (...args) => (
-	RulerLinePreviews.set(doAxiom2(...args))
+	RulerLinePreviews.set(doAxiom2(get(Graph), ...args))
 );
 export const axiom3Preview = (...args) => (
-	RulerLinePreviews.set(doAxiom3(...args))
+	RulerLinePreviews.set(doAxiom3(get(Graph), ...args))
 );
 export const axiom4Preview = (...args) => (
-	RulerLinePreviews.set(doAxiom4(...args))
+	RulerLinePreviews.set(doAxiom4(get(Graph), ...args))
 );
 export const axiom5Preview = (...args) => (
-	RulerLinePreviews.set(doAxiom5(...args))
+	RulerLinePreviews.set(doAxiom5(get(Graph), ...args))
 );
 export const axiom6Preview = (...args) => (
-	RulerLinePreviews.set(doAxiom6(...args))
+	RulerLinePreviews.set(doAxiom6(get(Graph), ...args))
 );
 export const axiom7Preview = (...args) => (
-	RulerLinePreviews.set(doAxiom7(...args))
+	RulerLinePreviews.set(doAxiom7(get(Graph), ...args))
 );
 
 const doPleat = (edgeA, edgeB, count) => {
 	if (edgeA === undefined || edgeB === undefined) { return []; }
-	// console.log("Pleat", get(Graph), ...args);
-	// console.log("result", edgeA, edgeB, count, fnPleat(get(Graph), edgeA, edgeB, count));
 	const result = fnPleat(get(Graph), edgeA, edgeB, count);
 	return result.flat();
 };

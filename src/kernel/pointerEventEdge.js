@@ -3,35 +3,29 @@ import { snapToPoint } from "../js/snap.js";
 import { execute } from "./app.js";
 
 let pressCoords = undefined;
-let releaseCoords = undefined;
 
 export const pointerEventEdge = (eventType, { point }) => {
 	const coords = snapToPoint(point, false);
 	switch (eventType) {
-	case "press": {
+	case "hover":
+		UIGraph.set({ vertices_coords: [coords] });
+	break;
+	case "press":
 		pressCoords = coords;
-		releaseCoords = [...coords];
+		UIGraph.set({ vertices_coords: [coords] });
+	break;
+	case "move":
 		UIGraph.set({
-			vertices_coords: [pressCoords, releaseCoords],
+			vertices_coords: [pressCoords, coords],
 			edges_vertices: [[0, 1]],
 		});
-	}
-		break;
-	case "move": {
-		releaseCoords = coords;
-		UIGraph.set({
-			vertices_coords: [pressCoords, releaseCoords],
-			edges_vertices: [[0, 1]],
-		});
-	}
-		break;
+	break;
 	case "release":
-		releaseCoords = coords;
 		execute("addEdge",
 			execute("addVertex", pressCoords),
-			execute("addVertex", releaseCoords),
+			execute("addVertex", coords),
 		);
-		UIGraph.set({});
-		break;
+		UIGraph.set({ vertices_coords: [coords] });
+	break;
 	}
 };

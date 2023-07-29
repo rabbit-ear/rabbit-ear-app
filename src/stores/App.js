@@ -6,7 +6,7 @@ import {
 	postExecuteEvents,
 } from "../kernel/app.js";
 
-export const NewEdgeAssignment = writable("U");
+export const NewEdgeAssignment = writable("F");
 export const Snapping = writable(true);
 export const ShowSimulator = writable(false);
 export const ShowTerminal = writable(false);

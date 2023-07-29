@@ -5,6 +5,14 @@ import {
 	TOOL_EDGE,
 	TOOL_ASSIGN,
 	TOOL_SPLIT_EDGE,
+	TOOL_AXIOM_1,
+	TOOL_AXIOM_2,
+	TOOL_AXIOM_3,
+	TOOL_AXIOM_4,
+	TOOL_AXIOM_5,
+	TOOL_AXIOM_6,
+	TOOL_AXIOM_7,
+	TOOL_KAWASAKI,
 	ASSIGN_SWAP,
 	ASSIGN_FLAT,
 	ASSIGN_UNASSIGNED,
@@ -15,6 +23,7 @@ import {
 	Tool,
 	AssignType,
 } from "../stores/Tool.js";
+import { Graph } from "../stores/Graph.js";
 import { Selection } from "../stores/Select.js";
 import { Keyboard } from "../stores/UI.js";
 import {
@@ -43,6 +52,48 @@ const keyboardWindowEventDown = (e) => {
 		Moves.set([]);
 		Releases.set([]);
 		break;
+	case 49: // "1"
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_AXIOM_1);
+		}
+		break;
+	case 50: // "2"
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_AXIOM_2);
+		}
+		break;
+	case 51: // "3"
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_AXIOM_3);
+		}
+		break;
+	case 52: // "4"
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_AXIOM_4);
+		}
+		break;
+	case 53: // "5"
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_AXIOM_5);
+		}
+		break;
+	case 54: // "6"
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_AXIOM_6);
+		}
+		break;
+	case 55: // "7"
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_AXIOM_7);
+		}
+		break;
 	case 65: // "a"
 		// select all
 		// assignment
@@ -64,10 +115,9 @@ const keyboardWindowEventDown = (e) => {
 		}
 		break;
 	case 69: // "e"
-		// change tool to "edge"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
 			e.preventDefault();
-			// Tool.set(TOOL_EDGE);
+			Tool.set(TOOL_EDGE);
 		}
 		break;
 	case 70: // "f"
@@ -76,6 +126,12 @@ const keyboardWindowEventDown = (e) => {
 			e.preventDefault();
 			Tool.set(TOOL_ASSIGN);
 			AssignType.set(ASSIGN_FLAT);
+		}
+		break;
+	case 75: // "k"
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			e.preventDefault();
+			Tool.set(TOOL_KAWASAKI);
 		}
 		break;
 	case 77: // "m"
@@ -93,11 +149,6 @@ const keyboardWindowEventDown = (e) => {
 		}
 		break;
 	case 83: // "s"
-		// change tool to "select"
-		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
-			Tool.set(TOOL_SELECT);
-		}
 		break;
 	case 85: // "u"
 		// assignment unassigned
@@ -119,13 +170,15 @@ const keyboardWindowEventDown = (e) => {
 		if (!altKey && (ctrlKey || metaKey) && !shiftKey) {
 			e.preventDefault();
 			console.log("undo");
+			Graph.revert();
 		}
 		if (!altKey && (ctrlKey || metaKey) && shiftKey) {
 			e.preventDefault();
 			console.log("redo");
 		}
 		break;
-	default: break;
+	default:
+		break;
 	}
 };
 

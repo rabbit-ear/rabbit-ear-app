@@ -1,5 +1,5 @@
 import { get, writable } from "svelte/store";
-import { AppHistory } from "../stores/Terminal.js";
+import { TerminalHistory } from "../stores/History.js";
 import * as Functions from "./functions.js";
 /**
  * @description pre and post execute event function parameters should
@@ -56,7 +56,6 @@ export const execute = (funcName, ...args) => {
 	newHistory.push(...preEvents.map(fn => ({ func: fn, args: [] })));
 	newHistory.push({ func, args: argsClone });
 	newHistory.push(...postEvents.map(fn => ({ func: fn, args: [] })));
-	AppHistory.update(h => [...h, ...newHistory]);
-	// AppHistory.set([...get(AppHistory), ...newHistory]);
+	TerminalHistory.update(history => [...history, ...newHistory]);
 	return res;
 };
