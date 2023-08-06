@@ -1,12 +1,9 @@
 <script>
-	import { ViewBox } from "../../stores/ViewBox.js";
+	import { VertexRadius } from "../../stores/App.js";
 
 	export let graph = {};
 	export let fills = [];
 	export let scales = [];
-
-	let r;
-	$: r = Math.max($ViewBox[2], $ViewBox[3]) * 0.00666;
 
 	let coords;
 	$: coords = !graph.vertices_coords ? [] : graph.vertices_coords;
@@ -14,11 +11,9 @@
 
 {#each coords as vertex, i}
 	<circle
-		r={scales[i] ? r * scales[i] : r}
+		r={scales[i] ? $VertexRadius * scales[i] : $VertexRadius}
 		cx={vertex[0]}
 		cy={vertex[1]}
 		stroke="none"
 		fill={fills[i] || "#aaa" } />
 {/each}
-
-

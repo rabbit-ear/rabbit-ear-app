@@ -8,7 +8,7 @@ import {
 } from "../stores/UI.js";
 import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
-import { Graph } from "../stores/Graph.js";
+import { Graph } from "../stores/Model.js";
 import { ToolStep } from "../stores/Tool.js";
 
 let pressEdge = undefined;

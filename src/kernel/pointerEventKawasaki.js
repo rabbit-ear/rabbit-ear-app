@@ -1,15 +1,15 @@
-import { nearest } from "rabbit-ear/graph/nearest.js";
 import { get } from "svelte/store";
-import {
-	snapToVertex,
-	snapToPoint,
-} from "../js/snap.js";
+import { snapToPoint, snapToVertex } from "../js/snap.js";
 import { Highlight } from "../stores/Select.js";
-import { Graph, UIGraph } from "../stores/Graph.js";
 import { ToolStep } from "../stores/Tool.js";
-import { Presses, Releases } from "../stores/UI.js";
-import { RulerRays, RulerRayPreviews } from "../stores/Ruler.js";
+import { RulerRays } from "../stores/Ruler.js";
 import { execute } from "./app.js";
+import {
+	Presses,
+	Releases,
+	UIGraph,
+	UIRays,
+} from "../stores/UI.js";
 
 let pressVertex;
 let pressCoords;
@@ -36,7 +36,7 @@ export const pointerEventKawasaki = (eventType, { point }) => {
 			const { vertex, coords } = snapToVertex(point, true);
 			pressVertex = vertex;
 			pressCoords = coords;
-			RulerRayPreviews.set([]);
+			UIRays.set([]);
 			execute("kawasakiRulers", vertex);
 		} else {
 			const coords = snapToPoint(point, false);

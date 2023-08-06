@@ -1,6 +1,6 @@
 import { nearest } from "rabbit-ear/graph/nearest.js";
 import { get } from "svelte/store";
-import { Graph } from "../stores/Graph.js";
+import { Graph } from "../stores/Model.js";
 // import { selected } from "../stores/Select.js";
 import { execute } from "./app.js";
 

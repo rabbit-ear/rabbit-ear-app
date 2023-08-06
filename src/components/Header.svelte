@@ -9,7 +9,7 @@
 		AutoPlanarize,
 		Snapping,
 	} from "../stores/App.js";
-	import { Graph } from "../stores/Graph.js";
+	import { Graph } from "../stores/Model.js";
 	import { execute } from "../kernel/app.js";
 	import { loadFileDialog } from "../js/file.js";
 	import {
@@ -22,6 +22,8 @@
 	const newEmpty = () => execute("load", {});
 	const newSquare = () => execute("load", square());
 	const newPolygon = () => execute("load", polygon(6));
+	const selectAll = () => execute("selectAll");
+	const deselectAll = () => execute("clearSelection");
 </script>
 
 	<nav>
@@ -109,7 +111,8 @@
 			</li>
 			<li>select
 				<ul>
-					<li><button on:click={() => {}}>select all</button></li>
+					<li><button on:click={selectAll}>select all</button></li>
+					<li><button on:click={deselectAll}>deselect all</button></li>
 					<li>select by assignment
 						<ul>
 							<li><button on:click={() => {}}>boundary</button></li>

@@ -6,7 +6,7 @@ import { includeS } from "rabbit-ear/math/general/function.js";
 import { ViewBox } from "../stores/ViewBox.js";
 import { ElementSelect } from "../stores/Tool.js";
 import { SelectionRect } from "../stores/Select.js";
-import { Graph } from "../stores/Graph.js";
+import { Graph } from "../stores/Model.js";
 import { Releases } from "../stores/UI.js";
 import {
 	SELECT_VERTEX,

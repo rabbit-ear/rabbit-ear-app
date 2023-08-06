@@ -65,7 +65,7 @@
 		JoinColor,
 		UnassignedColor,
 	} from "../../stores/style.js";
-	import { Graph } from "../../stores/graph.js";
+	import { Graph } from "../../stores/Model.js";
 
 	const lightVertices = [
 		[+1, +1, +1],

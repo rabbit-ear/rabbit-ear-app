@@ -1,12 +1,15 @@
 import { get } from "svelte/store";
-import { nearest } from "rabbit-ear/graph/nearest.js";
 import { execute } from "./app.js";
 import { snapToPoint, snapToEdge } from "../js/snap.js";
 import { Highlight } from "../stores/Select.js";
-import { Presses, Releases } from "../stores/UI.js";
-import { RulerLines, RulerLinePreviews } from "../stores/Ruler.js";
+import { RulerLines } from "../stores/Ruler.js";
 import { ToolStep } from "../stores/Tool.js";
-import { UIGraph } from "../stores/Graph.js";
+import {
+	Presses,
+	Releases,
+	UIGraph,
+	UILines,
+} from "../stores/UI.js";
 
 let releaseEdge;
 let pressCoords;
@@ -47,7 +50,7 @@ export const pointerEventAxiom7 = (eventType, { point }) => {
 		if (releaseEdge !== undefined) { Highlight.addEdges([releaseEdge]); }
 		if (edge !== undefined) { Highlight.addEdges([edge]); }
 		UIGraph.set({});
-		RulerLinePreviews.set([]);
+		UILines.set([]);
 		execute("axiom7", releaseEdge, edge, pressCoords);
 	}
 		break;

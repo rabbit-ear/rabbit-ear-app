@@ -1,15 +1,19 @@
 import { get } from "svelte/store";
-import { nearest } from "rabbit-ear/graph/nearest.js";
 import { execute } from "./app.js";
 import { snapToPoint, snapToEdge } from "../js/snap.js";
 import { Highlight } from "../stores/Select.js";
-import { Presses, Releases } from "../stores/UI.js";
-import { RulerLines, RulerLinePreviews } from "../stores/Ruler.js";
+import { RulerLines } from "../stores/Ruler.js";
 import { ToolStep } from "../stores/Tool.js";
-import { UIGraph } from "../stores/Graph.js";
+import {
+	Presses,
+	Releases,
+	UIGraph,
+	UILines,
+} from "../stores/UI.js";
 
-let releaseEdge;
-let pressCoords;
+let axiom5Edge;
+let axiom5Point1;
+let segmentPoint1;
 
 export const pointerEventAxiom5 = (eventType, { point }) => {
 	switch (eventType) {
@@ -26,49 +30,44 @@ export const pointerEventAxiom5 = (eventType, { point }) => {
 		break;
 	case 1: {
 		const { edge } = snapToEdge(point, false);
-		if (eventType === "press") { pressCoords = snapToPoint(point, false); }
-		UIGraph.set({ vertices_coords: [pressCoords] });
+		if (eventType === "press") { axiom5Point1 = snapToPoint(point, false); }
+		UIGraph.set({ vertices_coords: [axiom5Point1] });
 		if (edge !== undefined) { Highlight.addEdges([edge]); }
 	}
 		break;
 	case 2: {
-		const coords = snapToPoint(point, false);
+		const axiom5Point2 = snapToPoint(point, false);
 		const { edge } = snapToEdge(point, false);
-		// if (edge !== undefined) { Highlight.addEdges([edge]); }
-		if (eventType === "release") { releaseEdge = edge; }
-		if (releaseEdge !== undefined) { Highlight.addEdges([releaseEdge]); }
-		UIGraph.set({ vertices_coords: [pressCoords, coords] });
-		execute("axiom5Preview", releaseEdge, pressCoords, coords);
-		// nearest point on line
+		if (eventType === "release") { axiom5Edge = edge; }
+		if (axiom5Edge !== undefined) { Highlight.addEdges([axiom5Edge]); }
+		UIGraph.set({ vertices_coords: [axiom5Point1, axiom5Point2] });
+		execute("axiom5Preview", axiom5Edge, axiom5Point1, axiom5Point2);
 	}
 		break;
 	case 3: {
-		const coords = snapToPoint(point, false);
-		if (releaseEdge !== undefined) { Highlight.addEdges([releaseEdge]); }
+		const axiom5Point2 = snapToPoint(point, false);
+		if (axiom5Edge !== undefined) { Highlight.addEdges([axiom5Edge]); }
 		UIGraph.set({});
-		RulerLinePreviews.set([]);
-		execute("axiom5", releaseEdge, pressCoords, coords);
+		UILines.set([]);
+		execute("axiom5", axiom5Edge, axiom5Point1, axiom5Point2);
 	}
 		break;
 	case 4:
 		UIGraph.set({ vertices_coords: [snapToPoint(point, false)] });
 		break;
-	case 5: {
-		const coords = snapToPoint(point, false);
-		if (eventType === "press") { pressCoords = coords; }
+	case 5:
+		const segmentPoint2 = snapToPoint(point, false);
+		if (eventType === "press") { segmentPoint1 = segmentPoint2; }
 		UIGraph.set({
-			vertices_coords: [pressCoords, coords],
+			vertices_coords: [segmentPoint1, segmentPoint2],
 			edges_vertices: [[0, 1]],
 		});
-	}
 		break;
 	default:
-		// "release" drawing edge, reset all
 		execute("addEdge",
-			execute("addVertex", pressCoords),
+			execute("addVertex", segmentPoint1),
 			execute("addVertex", snapToPoint(point, false)),
 		);
-		// if (get(RulersAutoClear)) { RulerLines.set([]); }
 		UIGraph.set({});
 		RulerLines.set([]);
 		Presses.set([]);

@@ -4,11 +4,12 @@ import { Selection } from "../stores/Select.js";
 import {
 	Presses,
 	Releases,
+	UILines,
 } from "../stores/UI.js";
 import { execute } from "./app.js";
-import { RulerLines, RulerLinePreviews } from "../stores/Ruler.js";
+import { RulerLines } from "../stores/Ruler.js";
 import { ToolStep } from "../stores/Tool.js";
-import { Graph } from "../stores/Graph.js";
+import { Graph } from "../stores/Model.js";
 import { RulersAutoClear } from "../stores/App.js";
 
 let vertex1 = undefined;
@@ -31,7 +32,7 @@ export const pointerEventAxiom6 = (eventType, { point }) => {
 	case 1:
 		if (eventType === "press") { vertex1 = vertex; }
 		if (get(RulersAutoClear)) { RulerLines.set([]); }
-		// RulerLinePreviews.set([]);
+		// UILines.set([]);
 		if (vertex1 !== undefined) { Selection.addVertices([vertex1]); }
 		if (edge !== undefined) { Selection.addEdges([edge]); }
 		break;
@@ -54,7 +55,7 @@ export const pointerEventAxiom6 = (eventType, { point }) => {
 		execute("axiom6", edge1, edge, vertex1, vertex2);
 		vertex1 = undefined;
 		edge1 = undefined;
-		RulerLinePreviews.set([]);
+		UILines.set([]);
 		Presses.set([]);
 		Releases.set([]);
 		break;

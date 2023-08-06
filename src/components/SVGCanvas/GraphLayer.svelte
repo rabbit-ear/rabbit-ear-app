@@ -2,7 +2,7 @@
 	import GraphVerticesLayer from "./GraphVerticesLayer.svelte";
 	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
 	import GraphFacesLayer from "./GraphFacesLayer.svelte";
-	import { Graph } from "../../stores/Graph.js";
+	import { Graph } from "../../stores/Model.js";
 	import {
 		Selection,
 		Highlight,

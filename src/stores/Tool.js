@@ -27,12 +27,28 @@ import {
 	Selection,
 	Highlight,
 } from "./Select.js";
-import { UIGraph } from "./Graph.js";
+import {
+	RulerLines,
+	RulerRays,
+} from "./Ruler.js"
 import {
 	Presses,
 	Moves,
 	Releases,
+	UIGraph,
+	UILines,
+	UIRays,
 } from "./UI.js";
+
+// any modifier or attribute or detail necessary
+// for the main tool.
+export const AssignType = writable(ASSIGN_SWAP);
+export const FoldAngleValue = writable(90);
+export const ScribbleSmooth = writable(true);
+export const ScribbleSmoothAmount = writable(0.5);
+export const ScribbleDensity = writable(0.5);
+export const ScribbleWaitForConfirmation = writable(false);
+export const PleatCount = writable(4);
 
 const { subscribe, set, update } = writable(TOOL_EDGE);
 
@@ -45,6 +61,10 @@ export const Tool = {
 		Releases.set([]);
 		Highlight.reset();
 		UIGraph.set({});
+		RulerLines.set([]);
+		RulerRays.set([]);
+		UILines.set([]);
+		UIRays.set([]);
 		switch (t) {
 		case TOOL_VERTEX: break;
 		default:
@@ -69,15 +89,6 @@ export const ElementSelect = {
 	},
 };
 
-// any modifier or attribute or detail necessary
-// for the main tool.
-export const AssignType = writable(ASSIGN_SWAP);
-export const FoldAngleValue = writable(90);
-export const ScribbleSmooth = writable(true);
-export const ScribbleSmoothAmount = writable(0.5);
-export const ScribbleDensity = writable(0.5);
-export const ScribbleWaitForConfirmation = writable(false);
-export const PleatCount = writable(8);
 
 /**
  * @description for the UI. which tool step is currently in progress
@@ -125,6 +136,8 @@ export const ToolStep = derived(
 			if (pressesCount === 0) { return 0; }
 			if (pressesCount === 1 && releasesCount === 0) { return 1; }
 			if (pressesCount === 1 && releasesCount === 1) { return 2; }
+			if (pressesCount === 2 && releasesCount === 1) { return 3; }
+			if (pressesCount === 2 && releasesCount === 2) { return 4; }
 		case TOOL_SCRIBBLE: return 0;
 		default: return Infinity;
 		}

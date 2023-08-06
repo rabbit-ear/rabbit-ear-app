@@ -5,6 +5,7 @@
 	import SVGCanvas from "./SVGCanvas/SVGCanvas.svelte";
 	import Simulator from "./OrigamiSimulator/Simulator.svelte";
 	import Panels from "./Panels.svelte";
+	import Dialogs from "./Dialogs.svelte";
 	import Kernel from "./Kernel.svelte";
 	import FileManager from "./FileManager.svelte";
 	import DragAndDrop from "./DragAndDrop.svelte";
@@ -41,6 +42,7 @@
 />
 
 <main>
+	<Dialogs />
 	<Header />
 	<div class={contentClass}>
 		<Toolbar />

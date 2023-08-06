@@ -2,7 +2,7 @@ import { nearest } from "rabbit-ear/graph/nearest.js";
 import remove from "rabbit-ear/graph/remove.js";
 import { get } from "svelte/store";
 import { Selection } from "../stores/Select.js";
-import { Graph } from "../stores/Graph.js";
+import { Graph } from "../stores/Model.js";
 import { ViewBox } from "../stores/ViewBox.js";
 import { ElementSelect } from "../stores/Tool.js";
 

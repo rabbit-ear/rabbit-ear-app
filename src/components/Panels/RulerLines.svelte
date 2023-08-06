@@ -3,9 +3,11 @@
 	import {
 		RulerLines,
 		RulerRays,
-		RulerLinePreviews,
-		RulerRayPreviews,
 	} from "../../stores/Ruler.js";
+	import {
+		UILines,
+		UIRays,
+	} from "../../stores/UI.js";
 	// import { RulersAutoClear } from "../../stores/App.js";
 
 	const clearRulers = () => {
@@ -24,6 +26,6 @@
 		<div>
 			<button on:click={clearRulers}>clear rulers</button>
 		</div>
-		<p>{$RulerLinePreviews.length + $RulerRayPreviews.length} preview lines</p>
+		<p>{$UILines.length + $UIRays.length} preview lines</p>
 	</span>
 </Panel>

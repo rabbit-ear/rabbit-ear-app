@@ -4,7 +4,7 @@ import {
 	intersectGraphRay,
 } from "../js/intersect.js";
 import { RulersAutoClear } from "./App.js";
-import { Graph } from "./Graph.js";
+import { Graph } from "./Model.js";
 import { Snapping } from "./App.js";
 /**
  *
@@ -36,13 +36,3 @@ export const RulerPoints = derived(
 	},
 	[],
 );
-/**
- *
- */
-export const RulerLinePreviews = writable([]);
-RulerLinePreviews.add = (newRulers) => RulerLinePreviews.update((r) => [...r, ...newRulers]);
-/**
- *
- */
-export const RulerRayPreviews = writable([]);
-RulerRayPreviews.add = (newRulers) => RulerRayPreviews.update((r) => [...r, ...newRulers]);

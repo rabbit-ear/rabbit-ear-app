@@ -16,8 +16,11 @@ import {
 	SnapPoints,
 	SnapRadius,
 } from "../stores/Snap.js";
-import { Graph } from "../stores/Graph.js";
-import { RulerPoints } from "../stores/Ruler.js";
+import { Graph } from "../stores/Model.js";
+import {
+	RulerPoints,
+	RulerLines,
+} from "../stores/Ruler.js";
 import { Snapping } from "../stores/App.js";
 
 const nearestGridPoint = (point, snapRadius) => {
@@ -89,6 +92,26 @@ export const snapToPoint = (point, force = false) => {
 		: [...points[index]];
 };
 
+export const snapToRulerLine = (point, force = false) => {
+	const rulerLines = get(RulerLines);
+	const rulerLinesNearPoints = rulerLines
+		.map(line => nearestPointOnLine(line, point));
+	const distances = rulerLinesNearPoints
+		.map(p => distance2(point, p));
+	let index = 0;
+	for (let i = 1; i < distances.length; i += 1) {
+		if (distances[i] < distances[index]) { index = i; }
+	}
+	return force || distances[index] < get(SnapRadius)
+		? { index, line: rulerLines[index], coords: rulerLinesNearPoints[index] }
+		: { index: undefined, line: undefined, coords: point };
+
+};
+
+export const snapToPointOrRulerLine = (point, force = false) => {
+
+};
+
 // export const snapToPoint = (point, force = false) => {
 // 	const snapRadius = get(SnapRadius);
 // 	// all the snap points
@@ -114,11 +137,3 @@ export const snapToPoint = (point, force = false) => {
 // 		? [...point]
 // 		: [...points[index]];
 // };
-
-export const snapToPointOrRulerLine = (point, force = false) => {
-
-};
-
-export const snapToRulerLine = (point, force = false) => {
-
-};

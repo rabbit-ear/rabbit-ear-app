@@ -17,6 +17,28 @@ export const doSetEdgesAssignment = (graph, edges, assignment, foldAngle) => {
 	edges.forEach(e => { graph.edges_foldAngle[e] = foldAngle; });
 };
 
+const swap = { M: "V", m: "V", V: "M", v: "M" };
+
+export const doToggleEdgesAssignment = (graph, edges) => {
+	edges.forEach(edge => {
+		// if (g.edges_assignment[edge] === "B"
+		// 	|| g.edges_assignment[edge] === "b") {
+		// 	return;
+		// }
+		graph.edges_assignment[edge] = swap[graph.edges_assignment[edge]] || "V";
+		if (graph.edges_foldAngle[edge] == null
+			|| graph.edges_foldAngle[edge] === 0) {
+			graph.edges_foldAngle[edge] = graph.edges_assignment[edge] === "M"
+				? -180
+				: 180;
+		} else {
+			graph.edges_foldAngle[edge] = graph.edges_assignment[edge] === "M"
+				? -Math.abs(graph.edges_foldAngle[edge])
+				: Math.abs(graph.edges_foldAngle[edge]);
+		}
+	});
+}
+
 const signedAssignments = { M: -1, m: -1, V: 1, v: 1 };
 
 export const doSetEdgesFoldAngle = (g, edges, foldAngle) => {

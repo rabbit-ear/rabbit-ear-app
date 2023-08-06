@@ -22,6 +22,7 @@ export const TOOL_AXIOM_6 = "toolAxiom6";
 export const TOOL_AXIOM_7 = "toolAxiom7";
 
 export const TOOL_KAWASAKI = "toolKawasaki";
+// export const TOOL_KAWASAKI_SHIFT = "toolKawasakiShift";
 export const TOOL_PLEAT = "toolPleat";
 export const TOOL_SCRIBBLE = "toolScribble";
 

@@ -6,7 +6,7 @@ import {
 	multiplyMatrix2Vector2,
 } from "rabbit-ear/math/algebra/matrix2.js";
 import { graphToMatrix2 } from "../js/matrix.js";
-import { Graph } from "./Graph.js";
+// import { Graph } from "./Graph.js";
 
 // export const ModelMatrix = derived(
 // 	Graph,

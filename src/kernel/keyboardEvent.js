@@ -19,19 +19,25 @@ import {
 	ASSIGN_CUT,
 	ASSIGN_BOUNDARY,
 } from "../app/keys.js";
+import { keyboardEventEdge } from "./keyboardEventEdge.js";
+import { keyboardEventTerminal } from "./keyboardEventTerminal.js";
 import {
 	Tool,
 	AssignType,
 } from "../stores/Tool.js";
-import { Graph } from "../stores/Graph.js";
+// import { Graph } from "../stores/Model.js";
 import { Selection } from "../stores/Select.js";
 import { Keyboard } from "../stores/UI.js";
-import {
-	Textarea,
-	TextareaValue,
-} from "../stores/Terminal.js";
+import { Textarea } from "../stores/Terminal.js";
 import { execute } from "./app.js";
 import { Presses, Releases, Moves } from "../stores/UI.js";
+
+const customWindowKeyEvent = (eventType, event) => {
+	switch (get(Tool)) {
+	case TOOL_EDGE: return keyboardEventEdge(eventType, event);
+	default: break;
+	}
+};
 
 const keyboardWindowEventDown = (e) => {
 	const { altKey, ctrlKey, metaKey, shiftKey } = e;
@@ -46,6 +52,8 @@ const keyboardWindowEventDown = (e) => {
 		// 	edges: selected.edges(),
 		// 	faces: selected.faces(),
 		// });
+		break;
+	case 16: // Shift
 		break;
 	case 27: // ESC
 		Presses.set([]);
@@ -170,7 +178,7 @@ const keyboardWindowEventDown = (e) => {
 		if (!altKey && (ctrlKey || metaKey) && !shiftKey) {
 			e.preventDefault();
 			console.log("undo");
-			Graph.revert();
+			// Graph.revert();
 		}
 		if (!altKey && (ctrlKey || metaKey) && shiftKey) {
 			e.preventDefault();
@@ -180,59 +188,69 @@ const keyboardWindowEventDown = (e) => {
 	default:
 		break;
 	}
+	return customWindowKeyEvent("down", e);
 };
 
-const executeString = (str) => {
-	const preParen = str.match(/^[^(]*/);
-	const insideParen = str.match(/\(([^\)]+)\)/);
-	const fnName = preParen[0];
-	const argsStr = (!insideParen || insideParen.length < 2
-		? ""
-		: insideParen[1]);
-	let args;
-	try {
-		args = JSON.parse(`[${argsStr}]`);
-	} catch (error) {
-		console.error(error);
-		return;
-	}
-	console.log("insideParen", insideParen);
-	console.log("fnName", fnName);
-	console.log("argsStr", argsStr);
-	console.log("args", args);
-	execute(fnName, ...args);
-};
+const keyboardWindowEventUp = (event) => (
+	customWindowKeyEvent("up", event)
+);
 
-const keyboardTerminalEventDown = (e) => {
-	switch (e.keyCode) {
-	case 13: // return
-		if (e.shiftKey) { break; }
-		e.preventDefault();
-		executeString(get(TextareaValue));
-		TextareaValue.set("");
-		break;
-	default:
-		break;
+const customFormKeyEvent = (eventType, event) => {
+	// replace with switch, and an alternative way of
+	// getting the current document active element.
+	if (document.activeElement === get(Textarea)) {
+		return keyboardEventTerminal(eventType, event);
 	}
 };
 
-export const keyboardEventDown = (e) => {
+const keyboardFormEventDown = (event) => {
+	switch (event.keyCode) {
+	case 27: // ESC
+		console.log("todo: document.body.focus()");
+		event.preventDefault();
+		document.body.focus();
+		console.log("document.activeElement", document.activeElement);
+		// return;
+		break;
+	default: break;
+	}
+	customFormKeyEvent("down", event)
+};
+
+const keyboardFormEventUp = (event) => (
+	customFormKeyEvent("up", event)
+);
+
+const isFormElementActive = () => {
+	const { nodeName } = document.activeElement;
+	const name = (nodeName || "").toLowerCase();
+	// if these node types are currently active,
+	// touches will not be intercepted.
+	return name === "textarea"
+		|| name === "input";
+	// an alternative approach would be to store a reference
+	// to every known form element (which requires generating
+	// this list), and the compare directly to these references, like:
+	// if (document.activeElement === get(Textarea))
+}
+
+export const keyboardEventDown = (event) => {
 	// update store state for every key
-	Keyboard.update(keys => ({ ...keys, [e.keyCode]: true }));
+	Keyboard.update(keys => ({ ...keys, [event.keyCode]: true }));
 	// execute different commands based on whether or not
 	// the textarea (Terminal) is active.
-	if (document.activeElement === get(Textarea)) {
-		return keyboardTerminalEventDown(e);
-	}
-	return keyboardWindowEventDown(e);
+	return isFormElementActive()
+		? keyboardFormEventDown(event)
+		: keyboardWindowEventDown(event);
 };
 
-export const keyboardEventUp = (e) => {
+export const keyboardEventUp = (event) => {
 	Keyboard.update(keys => {
-		delete keys[e.keyCode];
-		return keys;
+		delete keys[event.keyCode];
+		return { ...keys };
+		// return keys;
 	});
-	// const keys = get(Keyboard);
-	// delete keys[e.keyCode];
-	// Keyboard.set({ ...keys });
+	return isFormElementActive()
+		? keyboardFormEventUp(event)
+		: keyboardWindowEventUp(event);
 };

@@ -9,6 +9,7 @@
 		TOOL_SPLIT_EDGE,
 		TOOL_TRANSLATE,
 		TOOL_SCALE,
+		TOOL_PLEAT,
 		TOOL_ASSIGN,
 		TOOL_FOLD_ANGLE,
 		TOOL_SCRIBBLE,
@@ -18,6 +19,7 @@
 	import ToolAssign from "./ToolAssign.svelte";
 	import ToolFoldAngle from "./ToolFoldAngle.svelte";
 	import ToolAxiom from "./ToolAxiom.svelte";
+	import ToolPleat from "./ToolPleat.svelte";
 	import ToolScribble from "./ToolScribble.svelte";
 	import NewEdgeAssignment from "./NewEdgeAssignment.svelte";
 </script>
@@ -45,6 +47,8 @@
 			<ToolAssign />
 		{:else if $Tool === TOOL_FOLD_ANGLE}
 			<ToolFoldAngle />
+		{:else if $Tool === TOOL_PLEAT}
+			<ToolPleat />
 		{:else if $Tool === TOOL_SCRIBBLE}
 			<ToolScribble />
 		{:else if $Tool.substring(0, 9) === "toolAxiom"}

@@ -1,13 +1,16 @@
 import { get } from "svelte/store";
-import { nearest } from "rabbit-ear/graph/nearest.js";
 import { execute } from "./app.js";
-import { snapToPoint, snapToVertex } from "../js/snap.js";
+import { snapToPoint } from "../js/snap.js";
 import { Highlight } from "../stores/Select.js";
-import { Presses, Releases } from "../stores/UI.js";
-import { RulerLines, RulerLinePreviews } from "../stores/Ruler.js";
-// import { RulersAutoClear } from "../stores/App.js";
+import { RulerLines } from "../stores/Ruler.js";
 import { ToolStep } from "../stores/Tool.js";
-import { UIGraph } from "../stores/Graph.js";
+import {
+	Presses,
+	Releases,
+	UIGraph,
+	UILines,
+} from "../stores/UI.js";
+// import { RulersAutoClear } from "../stores/App.js";
 
 let pressCoords;
 
@@ -36,7 +39,7 @@ export const pointerEventAxiom1 = (eventType, { point }) => {
 	case 2:
 		// "release" axiom operation done. ruler lines now drawn.
 		// "hover" preview first edge point
-		RulerLinePreviews.set([]);
+		UILines.set([]);
 		if (eventType === "release") {
 			execute("axiom1", pressCoords, coords);
 			pressCoords = undefined;

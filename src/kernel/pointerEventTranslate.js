@@ -3,10 +3,8 @@ import {
 	subtract2,
 } from "rabbit-ear/math/algebra/vector.js";
 import { get } from "svelte/store";
-import {
-	Graph,
-	UIGraph,
-} from "../stores/Graph.js";
+import { Graph } from "../stores/Model.js";
+import { UIGraph } from "../stores/UI.js";
 import { getSnapPoint } from "../js/nearest.js";
 import { Selection } from "../stores/Select.js";
 import { execute } from "./app.js";

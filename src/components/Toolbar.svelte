@@ -26,9 +26,6 @@ import {
 } from "../app/keys.js";
 import { Tool } from "../stores/Tool.js";
 
-// temp
-let TOOL_KAWASAKI_SHIFT = "toolKawasakiShift";
-
 </script>
 
 <!-- todo make text non selectable -->
@@ -138,15 +135,7 @@ let TOOL_KAWASAKI_SHIFT = "toolKawasakiShift";
 			id="kawasaki-add"
 			bind:group={$Tool}
 			value={TOOL_KAWASAKI} />
-		<label for="kawasaki-add">kawasaki add</label>
-		<input
-			disabled=true
-			type="radio"
-			name="tool"
-			id="kawasaki-shift"
-			bind:group={$Tool}
-			value={TOOL_KAWASAKI_SHIFT} />
-		<label for="kawasaki-shift">kawasaki shift</label>
+		<label for="kawasaki-add">kawasaki</label>
 	</div>
 
 	<p>many</p>

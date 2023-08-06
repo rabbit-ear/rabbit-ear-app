@@ -1,4 +1,10 @@
-import { UIGraph } from "../stores/Graph.js";
+import { get } from "svelte/store";
+import {
+	Keyboard,
+	Presses,
+	UIGraph,
+} from "../stores/UI.js";
+import { RulerLines } from "../stores/Ruler.js";
 import { snapToPoint } from "../js/snap.js";
 import { execute } from "./app.js";
 
@@ -12,6 +18,10 @@ export const pointerEventEdge = (eventType, { point }) => {
 	break;
 	case "press":
 		pressCoords = coords;
+		Presses.set([pressCoords]);
+		if (get(Keyboard)[16]) { // Shift
+			execute("radialRulers", pressCoords);
+		}
 		UIGraph.set({ vertices_coords: [coords] });
 	break;
 	case "move":
@@ -25,6 +35,8 @@ export const pointerEventEdge = (eventType, { point }) => {
 			execute("addVertex", pressCoords),
 			execute("addVertex", coords),
 		);
+		Presses.set([]);
+		RulerLines.set([]);
 		UIGraph.set({ vertices_coords: [coords] });
 	break;
 	}

@@ -4,7 +4,7 @@
 	import GraphFacesLayer from "./GraphFacesLayer.svelte";
 	import { ViewBox } from "../../stores/ViewBox.js";
 	import { SelectionRect } from "../../stores/Select.js";
-	import { UIGraph } from "../../stores/Graph.js";
+	import { UIGraph } from "../../stores/UI.js";
 
 	let vmax;
 	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);

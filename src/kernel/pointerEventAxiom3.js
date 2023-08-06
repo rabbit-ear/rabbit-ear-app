@@ -1,15 +1,15 @@
 import { get } from "svelte/store";
-import { Highlight } from "../stores/Select.js";
-import { Presses, Releases } from "../stores/UI.js";
-import {
-	snapToPoint,
-	snapToEdge,
-} from "../js/snap.js";
 import { execute } from "./app.js";
-import { RulerLines, RulerLinePreviews } from "../stores/Ruler.js";
-import { UIGraph } from "../stores/Graph.js";
-// import { RulersAutoClear } from "../stores/App.js";
+import { snapToPoint, snapToEdge } from "../js/snap.js";
+import { Highlight } from "../stores/Select.js";
+import { RulerLines } from "../stores/Ruler.js";
 import { ToolStep } from "../stores/Tool.js";
+import {
+	Presses,
+	Releases,
+	UIGraph,
+	UILines,
+} from "../stores/UI.js";
 
 let pressEdge = undefined;
 let pressCoords = undefined;
@@ -37,7 +37,7 @@ export const pointerEventAxiom3 = (eventType, { point }) => {
 	case 2:
 		// "release" axiom operation done. ruler lines now drawn.
 		// "hover" preview first edge point
-		RulerLinePreviews.set([]);
+		UILines.set([]);
 		if (eventType === "release") {
 			// inputs are bad. reset to step 0
 			if (pressEdge === undefined || edge === undefined) {

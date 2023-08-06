@@ -1,5 +1,5 @@
 import { derived } from "svelte/store";
-import { Graph } from "./Graph.js";
+import { Graph } from "./Model.js";
 import { Snapping } from "./App.js";
 import { ViewBox } from "./ViewBox.js";
 import { RulerPoints } from "./Ruler.js";

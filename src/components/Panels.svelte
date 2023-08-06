@@ -1,5 +1,6 @@
 <script>
 	import Tools from "./Panels/Tools.svelte";
+	import File from "./Panels/File.svelte";
 	import Canvas from "./Panels/Canvas.svelte";
 	import History from "./Panels/History.svelte";
 	import RulerLines from "./Panels/RulerLines.svelte";
@@ -8,6 +9,7 @@
 </script>
 
 <div class="container">
+	<File />
 	<Canvas />
 	<Tools />
 	<RulerLines />

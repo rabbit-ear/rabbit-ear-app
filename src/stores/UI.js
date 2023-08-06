@@ -11,6 +11,12 @@ export const Moves = writable([]); // {number[][]} array of points
 export const Releases = writable([]); // {number[][]} array of points
 export const Current = writable(undefined); // {number[]} point
 
+export const UIGraph = writable({});
+export const UILines = writable([]);
+export const UIRays = writable([]);
+UILines.add = (newRulers) => UILines.update((r) => [...r, ...newRulers]);
+UIRays.add = (newRulers) => UIRays.update((r) => [...r, ...newRulers]);
+
 // export const testStore = derived(
 // 	[presses, moves, releases, tool],
 // 	([$presses, $moves, $releases, $tool]) => {

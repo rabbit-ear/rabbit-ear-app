@@ -1,33 +1,20 @@
-import { nearest } from "rabbit-ear/graph/nearest.js";
 import { get } from "svelte/store";
+import { snapToEdge } from "../js/snap.js";
 import { Selection } from "../stores/Select.js";
-import {
-	ASSIGN_SWAP,
-	ASSIGN_FLAT,
-	ASSIGN_UNASSIGNED,
-	ASSIGN_CUT,
-	ASSIGN_BOUNDARY,
-} from "../app/keys.js";
-import { Graph } from "../stores/Graph.js";
+import { FoldAngleValue } from "../stores/Tool.js";
 import { execute } from "./app.js";
 
-const setFoldAngle = (edge) => {
-
-};
-
 export const pointerEventFoldAngle = (eventType, { point }) => {
+	const { edge } = snapToEdge(point);
 	switch (eventType) {
 	case "press":
-		const edge = nearest(get(Graph), point).edge;
 		if (edge === undefined) { break; }
-		setFoldAngle(edge);
+		execute("setFoldAngle", [edge], get(FoldAngleValue));
 		break;
-	case "hover": {
-		const edge = nearest(get(Graph), point).edge;
+	case "hover":
 		if (edge === undefined) { break; }
 		Selection.reset();
 		Selection.addEdges([edge]);
-	}
 		break;
 	case "move": break;
 	case "release": break;

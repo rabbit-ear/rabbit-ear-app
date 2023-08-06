@@ -6,9 +6,11 @@
 	import {
 		RulerLines,
 		RulerRays,
-		RulerLinePreviews,
-		RulerRayPreviews,
 	} from "../../stores/Ruler.js";
+	import {
+		UILines,
+		UIRays,
+	} from "../../stores/UI.js";
 	import { SnapPoints } from "../../stores/Snap.js";
 	import { ViewBox } from "../../stores/ViewBox.js";
 
@@ -27,11 +29,11 @@
 
 	let segmentsPrev;
 	$: {
-		const lineSegments = $RulerLinePreviews
+		const lineSegments = $UILines
 			.map(line => clipLineInLargerViewBox(line, $ViewBox))
 			.filter(res => res !== undefined)
 			.filter(res => res.length > 1);
-		const raySegments = $RulerRayPreviews
+		const raySegments = $UIRays
 			.map(line => clipRayInLargerViewBox(line, $ViewBox))
 			.filter(res => res !== undefined)
 			.filter(res => res.length > 1);

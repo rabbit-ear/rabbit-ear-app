@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { distance2 } from "rabbit-ear/math/algebra/vector.js";
-import { Graph } from "../stores/Graph.js";
+import { Graph } from "../stores/Model.js";
 import { ViewBox } from "../stores/ViewBox.js";
 import { SnapPoints } from "../stores/Snap.js";
 

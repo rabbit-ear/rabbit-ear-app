@@ -1,12 +1,15 @@
 import { get } from "svelte/store";
-import { nearest } from "rabbit-ear/graph/nearest.js";
 import { execute } from "./app.js";
 import { snapToPoint, snapToEdge } from "../js/snap.js";
 import { Highlight } from "../stores/Select.js";
-import { Presses, Releases } from "../stores/UI.js";
-import { RulerLines, RulerLinePreviews } from "../stores/Ruler.js";
+import { RulerLines } from "../stores/Ruler.js";
 import { ToolStep } from "../stores/Tool.js";
-import { UIGraph } from "../stores/Graph.js";
+import {
+	Presses,
+	Releases,
+	UIGraph,
+	UILines,
+} from "../stores/UI.js";
 
 let pressEdge;
 let pressCoords;
@@ -37,7 +40,7 @@ export const pointerEventAxiom4 = (eventType, { point }) => {
 		break;
 	case 2: {
 		const coords = snapToPoint(point, false);
-		RulerLinePreviews.set([]);
+		UILines.set([]);
 		if (eventType === "release") {
 			execute("axiom4", pressEdge, coords);
 			pressEdge = undefined;

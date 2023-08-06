@@ -1,34 +1,43 @@
 import { add2, subtract2 } from "rabbit-ear/math/algebra/vector.js";
 // import normalize from "rabbit-ear/graph/normalize.js";
 import { get } from "svelte/store";
-import { Selection } from "../stores/Select.js";
-import { Graph, UIGraph } from "../stores/Graph.js";
-import { getSnapPoint } from "../js/nearest.js";
+import { Selection, Highlight } from "../stores/Select.js";
+import { Graph } from "../stores/Model.js";
+import { UIGraph } from "../stores/UI.js";
+import { snapToVertex, snapToPoint } from "../js/snap.js";
 import { subgraphWithVertices, normalize } from "../js/subgraph.js";
 import { execute } from "./app.js";
 
-let press;
+let pressVertex;
+let pressCoords;
 
-const getDragVector = (point) => {
-	// const origin = get(Presses)[0];
-	// const end = get(Current);
-	if (!press || !point) { return [0, 0]; }
-	return subtract2(point, press);
-};
+const getDragVector = (point) => (!pressCoords || !point)
+	? [0, 0]
+	:subtract2(point, pressCoords);
 
 export const pointerEventVertex = (eventType, { point }) => {
+	Highlight.reset();
 	switch (eventType) {
-	case "press":
-		const { coords, vertex } = getSnapPoint(point);
+	case "hover": {
+		const { coords, vertex } = snapToVertex(point, false);
+		if (vertex !== undefined) { Highlight.addVertices([vertex]); }
+	}
+		break;
+	case "press": {
+		const { coords, vertex } = snapToVertex(point, false);
 		if (vertex !== undefined) {
+			pressCoords = coords;
+			pressVertex = vertex;
 			Selection.reset();
 			Selection.addVertices([vertex]);
 			break;
 		}
 		execute("addVertex", coords);
+	}
 		break;
 	case "move": {
-		const dragVector = getDragVector(point);
+		const coords = snapToPoint(point, false);
+		const dragVector = getDragVector(coords);
 		const selVerts = get(Selection).vertices;
 		const subgraph = subgraphWithVertices(get(Graph), selVerts);
 		selVerts.forEach(v => {
@@ -38,13 +47,14 @@ export const pointerEventVertex = (eventType, { point }) => {
 		UIGraph.set({ ...subgraph });
 	}
 		break;
-	case "release":
+	case "release": {
+		const coords = snapToPoint(point, false);
+		const dragVector = getDragVector(coords);
 		UIGraph.set({});
 		// move currently selected vertices
-		execute("translateVertices", get(Selection).vertices, getDragVector(point));
+		execute("translateVertices", get(Selection).vertices, dragVector);
 		Selection.reset();
+	}
 		break;
-	default:
-		console.warn("no switch definition for", eventType);
 	}
 };

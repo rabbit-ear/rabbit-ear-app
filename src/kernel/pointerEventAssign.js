@@ -1,8 +1,4 @@
-import { nearest } from "rabbit-ear/graph/nearest.js";
-import {
-	distance2,
-	subtract2,
-} from "rabbit-ear/math/algebra/vector.js";
+import { snapToEdge } from "../js/snap.js";
 import { get } from "svelte/store";
 import { Highlight } from "../stores/Select.js";
 import {
@@ -12,70 +8,29 @@ import {
 	ASSIGN_CUT,
 	ASSIGN_BOUNDARY,
 } from "../app/keys.js";
-import { Graph } from "../stores/Graph.js";
 import { AssignType } from "../stores/Tool.js";
-import { Current } from "../stores/UI.js";
 import { execute } from "./app.js";
 
-const swap = { M: "V", m: "V", V: "M", v: "M" };
-
 const performAssignment = (edge) => {
-	const g = get(Graph);
 	switch (get(AssignType)) {
-	case ASSIGN_SWAP:
-		// if (g.edges_assignment[edge] === "B"
-		// 	|| g.edges_assignment[edge] === "b") {
-		// 	break;
-		// }
-		g.edges_assignment[edge] = swap[g.edges_assignment[edge]] || "V";
-		if (g.edges_foldAngle[edge] == null || g.edges_foldAngle[edge] === 0) {
-			g.edges_foldAngle[edge] = g.edges_assignment[edge] === "M"
-				? -180
-				: 180;
-		} else {
-			g.edges_foldAngle[edge] = g.edges_assignment[edge] === "M"
-				? -Math.abs(g.edges_foldAngle[edge])
-				: Math.abs(g.edges_foldAngle[edge]);
-		}
-		break;
-	case ASSIGN_FLAT:
-		g.edges_assignment[edge] = "F";
-		g.edges_foldAngle[edge] = 0;
-		break;
-	case ASSIGN_UNASSIGNED:
-		g.edges_assignment[edge] = "U";
-		g.edges_foldAngle[edge] = 0;
-		break;
-	case ASSIGN_CUT:
-		g.edges_assignment[edge] = "C";
-		g.edges_foldAngle[edge] = 0;
-		break;
-	case ASSIGN_BOUNDARY:
-		g.edges_assignment[edge] = "B";
-		g.edges_foldAngle[edge] = 0;
-		break;
+	case ASSIGN_SWAP: return execute("toggleAssignment", [edge]);
+	case ASSIGN_FLAT: return execute("setAssignment", [edge], "F", 0);
+	case ASSIGN_UNASSIGNED: return execute("setAssignment", [edge], "U", 0);
+	case ASSIGN_CUT: return execute("setAssignment", [edge], "C", 0);
+	case ASSIGN_BOUNDARY: return execute("setAssignment", [edge], "B", 0);
 	default: break;
 	}
-	Graph.simpleSet({ ...g });
-}
+};
 
 export const pointerEventAssign = (eventType, { point }) => {
+	Highlight.reset();
+	const { edge } = snapToEdge(point);
+	if (edge === undefined) { return; }
+	Highlight.addEdges([edge]);
 	switch (eventType) {
-	case "press":
-		const edge = nearest(get(Graph), point).edge;
-		if (edge === undefined) { break; }
-		performAssignment(edge);
-		break;
-	case "hover": {
-		const edge = nearest(get(Graph), point).edge;
-		if (edge === undefined) { break; }
-		Highlight.reset();
-		Highlight.addEdges([edge]);
-	}
-		break;
-	case "move":
-		break;
-	case "release":
-		break;
+	case "press": return performAssignment(edge);
+	case "hover": break;
+	case "move": break;
+	case "release": break;
 	}
 };
