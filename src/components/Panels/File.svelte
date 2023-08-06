@@ -5,12 +5,9 @@
 <Panel>
 	<span slot="title">file</span>
 	<span slot="body">
-		<h3>title</h3>
-		<input type="text">
-		<h3>author</h3>
-		<input type="text">
-		<h3>description</h3>
-		<textarea></textarea>
+		<input type="text" placeholder="title">
+		<input type="text" placeholder="author">
+		<textarea placeholder="description"></textarea>
 	</span>
 </Panel>
 

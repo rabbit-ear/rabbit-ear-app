@@ -1,9 +1,6 @@
 <script>
-	import {
-		square,
-		rectangle,
-		polygon,
-	} from "rabbit-ear/fold/bases.js";
+	import { assignmentCanBeFolded } from "rabbit-ear/fold/spec.js";
+	import { get } from "svelte/store";
 	import {
 		// DarkMode,
 		AutoPlanarize,
@@ -15,29 +12,28 @@
 	import {
 		ShowSimulator,
 		ShowTerminal,
+		DialogNewFile,
 	} from "../stores/App.js";
 
 	let inputFile;
 	// const clickDarkMode = () => { $DarkMode = !$DarkMode; };
-	const newEmpty = () => execute("load", {});
-	const newSquare = () => execute("load", square());
-	const newPolygon = () => execute("load", polygon(6));
 	const selectAll = () => execute("selectAll");
 	const deselectAll = () => execute("clearSelection");
+	const invertAssignments = () => {
+		const graph = get(Graph);
+		const edges_assignment = graph.edges_assignment || [];
+		const edges = (graph.edges_vertices || [])
+			.map((_, i) => i)
+			.filter(e => assignmentCanBeFolded[graph.edges_assignment[e]])
+		execute("toggleAssignment", edges);
+	};
 </script>
 
 	<nav>
 		<ul>
 			<li>file
 				<ul>
-					<li>new
-						<ul>
-							<li><button on:click={newEmpty}>empty</button></li>
-							<li><button on:click={newSquare}>square</button></li>
-							<li>NxN square</li>
-							<li><button on:click={newPolygon}>regular polygon</button></li>
-						</ul>
-					</li>
+					<li on:click={() => $DialogNewFile.showModal()}>new</li>
 					<hr />
 					<li><button on:click={() => inputFile.click()}>load</button></li>
 					<li>
@@ -57,13 +53,13 @@
 						<label for="checkbox-auto-planarize">auto-planarize</label>
 					</li>
 					<hr />
-					<li>insert
-						<ul>
+					<li disabled>insert
+						<!-- <ul>
 							<li><button on:click={() => {}}>fish</button></li>
 							<li><button on:click={() => {}}>windmill</button></li>
 							<li><button on:click={() => {}}>bird</button></li>
 							<li><button on:click={() => {}}>frog</button></li>
-						</ul>
+						</ul> -->
 					</li>
 					<hr />
 					<li class="no-select description">grid snapping</li>
@@ -94,9 +90,9 @@
 			</li>
 			<li>assignment
 				<ul>
-					<li><button on:click={() => {}}>invert assignments</button></li>
-					<li>reassign selected
-						<ul>
+					<li><button on:click={invertAssignments}>invert assignments</button></li>
+					<li disabled>reassign selected
+						<!-- <ul>
 							<li><button on:click={() => {}}>boundary</button></li>
 							<li><button on:click={() => {}}>mountain</button></li>
 							<li><button on:click={() => {}}>valley</button></li>
@@ -104,7 +100,7 @@
 							<li><button on:click={() => {}}>cut</button></li>
 							<li><button on:click={() => {}}>join</button></li>
 							<li><button on:click={() => {}}>unassigned</button></li>
-						</ul>
+						</ul> -->
 					</li>
 					<li><button on:click={() => {}}>flatten 3D angles</button></li>
 				</ul>
@@ -160,6 +156,9 @@
 						<input type="checkbox" id="checkbox-faces-indices">
 						<label for="checkbox-faces-indices">faces</label>
 					</li>
+					<hr />
+					<li class="no-select description">simulator</li>
+					<li>find equilibrium</li>
 				</ul>
 			</li>
 			<li>window
@@ -203,6 +202,7 @@
 		box-shadow: 0 0rem 0.5rem 0 #111;
 		position: relative;
 	}
+	li[disabled] { opacity: 0.5; }
 	nav li {
 		padding: 0 1rem;
 /*		cursor: pointer;*/

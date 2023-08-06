@@ -30,7 +30,8 @@ import { Selection } from "../stores/Select.js";
 import { Keyboard } from "../stores/UI.js";
 import { Textarea } from "../stores/Terminal.js";
 import { execute } from "./app.js";
-import { Presses, Releases, Moves } from "../stores/UI.js";
+import { ResetUI } from "../stores/UI.js";
+import { RulerLines, RulerRays } from "../stores/Ruler.js";
 
 const customWindowKeyEvent = (eventType, event) => {
 	switch (get(Tool)) {
@@ -41,7 +42,7 @@ const customWindowKeyEvent = (eventType, event) => {
 
 const keyboardWindowEventDown = (e) => {
 	const { altKey, ctrlKey, metaKey, shiftKey } = e;
-	console.log(e.key, e.keyCode, "altKey", altKey, "ctrlKey", ctrlKey, "metaKey", metaKey, "shiftKey", shiftKey);
+	// console.log(e.key, e.keyCode, "altKey", altKey, "ctrlKey", ctrlKey, "metaKey", metaKey, "shiftKey", shiftKey);
 	// execute functions
 	switch (e.keyCode) {
 	case 8: // backspace
@@ -56,9 +57,9 @@ const keyboardWindowEventDown = (e) => {
 	case 16: // Shift
 		break;
 	case 27: // ESC
-		Presses.set([]);
-		Moves.set([]);
-		Releases.set([]);
+		ResetUI();
+		RulerLines.set([]);
+		RulerRays.set([]);
 		break;
 	case 49: // "1"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {

@@ -30,6 +30,7 @@ import {
 	Graph,
 	UpdateFrame,
 	IsoUpdateFrame,
+	SetFrame,
 } from "../stores/Model.js";
 import { Selection } from "../stores/Select.js";
 import {
@@ -46,6 +47,7 @@ import {
 	doSetEdgesFoldAngle,
 	doToggleEdgesAssignment,
 } from "../js/assignments.js";
+import { makeEmptyGraph } from "../js/graph.js";
 /**
  *
  */
@@ -113,9 +115,15 @@ const deleteComponentsFromGraph = (graph, remove) => {
  */
 export const deleteComponents = (components) => {
 	const remove = { vertices: [], edges: [], faces: [] };
-	components.vertices.forEach(v => { remove.vertices[v] = true; });
-	components.edges.forEach(v => { remove.edges[v] = true; });
-	components.faces.forEach(v => { remove.faces[v] = true; });
+	if (components.vertices) {
+		components.vertices.forEach(v => { remove.vertices[v] = true; });
+	}
+	if (components.edges) {
+		components.edges.forEach(v => { remove.edges[v] = true; });
+	}
+	if (components.faces) {
+		components.faces.forEach(v => { remove.faces[v] = true; });
+	}
 	const g = deleteComponentsFromGraph(get(Graph), remove);
 	UpdateFrame({ ...g });
 };
@@ -173,7 +181,7 @@ export const translateVertices = (vertices, vector) => {
 	IsoUpdateFrame({ ...get(Graph), vertices_coords });
 };
 
-export const toggleAssignment = (edges, assignment, foldAngle) => {
+export const toggleAssignment = (edges) => {
 	const graph = get(Graph);
 	doToggleEdgesAssignment(graph, edges);
 	IsoUpdateFrame({ ...graph });
@@ -196,9 +204,9 @@ export const planarize = () => (
 	UpdateFrame(populate(Planarize(get(Graph)), true))
 );
 
-export const load = (FOLD) => Graph.load(populate(FOLD));
+export const load = (FOLD) => SetFrame(populate(FOLD));
 
-export const clear = () => Graph.reset();
+export const clear = () => SetFrame(makeEmptyGraph());
 
 export const download = (filename) => (
 	downloadFile(JSON.stringify(get(Graph)), filename)

@@ -15,6 +15,9 @@ export const ShowGrid = writable(true);
 export const ShowAxes = writable(true);
 export const RulersAutoClear = writable(true);
 
+// DOM references
+export const DialogNewFile = writable(undefined);
+
 export const VertexRadiusFactor = writable(0.00666);
 
 export const VertexRadius = derived(

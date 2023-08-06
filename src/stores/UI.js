@@ -17,6 +17,16 @@ export const UIRays = writable([]);
 UILines.add = (newRulers) => UILines.update((r) => [...r, ...newRulers]);
 UIRays.add = (newRulers) => UIRays.update((r) => [...r, ...newRulers]);
 
+export const ResetUI = () => {
+	Presses.set([]);
+	Moves.set([]);
+	Releases.set([]);
+	Current.set(undefined);
+	UIGraph.set({});
+	UILines.set([]);
+	UIRays.set([]);
+};
+
 // export const testStore = derived(
 // 	[presses, moves, releases, tool],
 // 	([$presses, $moves, $releases, $tool]) => {

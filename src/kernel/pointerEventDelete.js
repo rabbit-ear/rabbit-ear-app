@@ -1,10 +1,11 @@
 import { nearest } from "rabbit-ear/graph/nearest.js";
-import remove from "rabbit-ear/graph/remove.js";
+// import remove from "rabbit-ear/graph/remove.js";
 import { get } from "svelte/store";
 import { Selection } from "../stores/Select.js";
 import { Graph } from "../stores/Model.js";
 import { ViewBox } from "../stores/ViewBox.js";
 import { ElementSelect } from "../stores/Tool.js";
+import { execute } from "./app.js";
 
 let pressEdge;
 
@@ -34,10 +35,11 @@ export const pointerEventDelete = (eventType, { point }) => {
 	case "move": break;
 	case "release":
 		if (pressEdge !== undefined && pressEdge === selected.edges[0]) {
-			Graph.update(graph => {
-				remove(graph, "edges", [pressEdge]);
-				return graph;
-			});
+			execute("deleteComponents", { edges: [pressEdge] });
+			// Graph.update(graph => {
+			// 	remove(graph, "edges", [pressEdge]);
+			// 	return graph;
+			// });
 		}
 		break;
 	}
