@@ -1,4 +1,5 @@
 <script>
+	import { TOOL_EDGE } from "../../app/keys.js";
 	import {
 		clipLineInLargerViewBox,
 		clipRayInLargerViewBox,
@@ -12,7 +13,14 @@
 		UIRays,
 	} from "../../stores/UI.js";
 	import { SnapPoints } from "../../stores/Snap.js";
+	import { Tool } from "../../stores/Tool.js";
 	import { ViewBox } from "../../stores/ViewBox.js";
+
+	let showRulers = true;
+	$: showRulers = $Tool !== TOOL_EDGE;
+
+	let vmax;
+	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);
 
 	let segments;
 	$: {
@@ -39,39 +47,39 @@
 			.filter(res => res.length > 1);
 		segmentsPrev = lineSegments.concat(raySegments);
 	};
-	let vmax;
-	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);
 
 	let tick = 0
 	setInterval(() => { tick += (vmax * 0.002); }, 30);
 </script>
 
 <g>
-	{#each segments as s}
-		<line
-			x1={s[0][0]}
-			y1={s[0][1]}
-			x2={s[1][0]}
-			y2={s[1][1]}
-			stroke="#fff8"
- 			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
-			stroke-dashoffset={tick}
-		/>
-	{/each}
-	{#each segmentsPrev as s}
-		<line
-			x1={s[0][0]}
-			y1={s[0][1]}
-			x2={s[1][0]}
-			y2={s[1][1]}
-			stroke="#fb4"
- 			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
-			stroke-dashoffset={tick}
-		/>
-	{/each}
-	<!-- {#each $SnapPoints as p}
-		<circle cx={p[0]} cy={p[1]} r={0.01} fill="red" />
-	{/each} -->
+	{#if showRulers}
+		{#each segments as s}
+			<line
+				x1={s[0][0]}
+				y1={s[0][1]}
+				x2={s[1][0]}
+				y2={s[1][1]}
+				stroke="#fff8"
+	 			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
+				stroke-dashoffset={tick}
+			/>
+		{/each}
+		{#each segmentsPrev as s}
+			<line
+				x1={s[0][0]}
+				y1={s[0][1]}
+				x2={s[1][0]}
+				y2={s[1][1]}
+				stroke="#fb4"
+	 			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
+				stroke-dashoffset={tick}
+			/>
+		{/each}
+		<!-- {#each $SnapPoints as p}
+			<circle cx={p[0]} cy={p[1]} r={0.01} fill="red" />
+		{/each} -->
+	{/if}
 </g>
 
 <!--

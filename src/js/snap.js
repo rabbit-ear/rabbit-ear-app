@@ -3,8 +3,12 @@ import {
 	distance2,
 	subtract2,
 } from "rabbit-ear/math/algebra/vector.js";
-import { clampSegment } from "rabbit-ear/math/general/function.js";
+import {
+	clampLine,
+	clampSegment,
+} from "rabbit-ear/math/general/function.js";
 import { nearestPointOnLine } from "rabbit-ear/math/geometry/nearest.js";
+import { overlapLinePoint } from "rabbit-ear/math/intersect/overlap.js";
 import {
 	nearest,
 	nearestVertex as reNearestVertex,
@@ -92,8 +96,30 @@ export const snapToPoint = (point, force = false) => {
 		: [...points[index]];
 };
 
-export const snapToRulerLine = (point, force = false) => {
+// const isPointOnLine = (point, lines) => {
+// 	for (let i = 0; i < lines.length; i += 1) {
+// 		const line = lines[i];
+// 		const near = nearestPointOnLine(line, point);
+// 		if (distance2(near, point) < 1e-3) { return true; }
+// 	}
+// 	return false;
+// };
+
+
+// const isPointOnALine = (point, lines) => {
+// 	for (let i = 0; i < lines.length; i += 1) {
+// 		const line = lines[i];
+// 		const near = nearestPointOnLine(line, point);
+// 		if (distance2(near, point) < 1e-3) { return true; }
+// 	}
+// 	return false;
+// };
+
+export const snapToRulerLine = (point) => {
 	const rulerLines = get(RulerLines);
+	if (!rulerLines.length) {
+		return { index: undefined, line: undefined, coords: snapToPoint(point, false) };
+	}
 	const rulerLinesNearPoints = rulerLines
 		.map(line => nearestPointOnLine(line, point));
 	const distances = rulerLinesNearPoints
@@ -102,14 +128,11 @@ export const snapToRulerLine = (point, force = false) => {
 	for (let i = 1; i < distances.length; i += 1) {
 		if (distances[i] < distances[index]) { index = i; }
 	}
-	return force || distances[index] < get(SnapRadius)
-		? { index, line: rulerLines[index], coords: rulerLinesNearPoints[index] }
-		: { index: undefined, line: undefined, coords: point };
-
-};
-
-export const snapToPointOrRulerLine = (point, force = false) => {
-
+	const rulerPoint = rulerLinesNearPoints[index];
+	const snapPoint = snapToPoint(rulerPoint, false);
+	return overlapLinePoint(rulerLines[index], snapPoint)
+		? { index, line: rulerLines[index], coords: snapPoint }
+		: { index, line: rulerLines[index], coords: rulerPoint };
 };
 
 // export const snapToPoint = (point, force = false) => {

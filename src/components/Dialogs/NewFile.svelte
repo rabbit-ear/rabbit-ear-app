@@ -41,7 +41,7 @@
 </script>
 
 <dialog bind:this={$DialogNewFile}>
-	<h1>new</h1>
+	<h1>new file</h1>
 	<hr />
 	<button on:click={newEmpty}>empty</button>
 	<button on:click={newSquare}>square</button>
@@ -90,10 +90,15 @@
 </dialog>
 
 <style>
-h1 {
-	font-size: 2rem;
-}
-dialog::backdrop {
-	background: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.2));
-}
+	dialog {
+		border: 0;
+		background-color: #333;
+	}
+	dialog::backdrop {
+		background-color: #0004;
+/*		background: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.2));*/
+	}
+	h1 {
+		font-size: 2rem;
+	}
 </style>

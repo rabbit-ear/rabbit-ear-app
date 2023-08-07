@@ -3,6 +3,7 @@ import {
 	TOOL_SELECT,
 	TOOL_VERTEX,
 	TOOL_EDGE,
+	TOOL_DELETE,
 	TOOL_ASSIGN,
 	TOOL_SPLIT_EDGE,
 	TOOL_AXIOM_1,
@@ -20,13 +21,17 @@ import {
 	ASSIGN_BOUNDARY,
 } from "../app/keys.js";
 import { keyboardEventEdge } from "./keyboardEventEdge.js";
+import { keyboardEventDelete } from "./keyboardEventDelete.js";
 import { keyboardEventTerminal } from "./keyboardEventTerminal.js";
 import {
 	Tool,
 	AssignType,
 } from "../stores/Tool.js";
 // import { Graph } from "../stores/Model.js";
-import { Selection } from "../stores/Select.js";
+import {
+	DialogNewFile,
+	ShowTerminal,
+} from "../stores/App.js";
 import { Keyboard } from "../stores/UI.js";
 import { Textarea } from "../stores/Terminal.js";
 import { execute } from "./app.js";
@@ -34,25 +39,23 @@ import { ResetUI } from "../stores/UI.js";
 import { RulerLines, RulerRays } from "../stores/Ruler.js";
 
 const customWindowKeyEvent = (eventType, event) => {
+	// custom keyboard events can be determined by
+	// the selected tool or the key pressed.
 	switch (get(Tool)) {
 	case TOOL_EDGE: return keyboardEventEdge(eventType, event);
 	default: break;
 	}
+	switch (event.keyCode) {
+	case 8: return keyboardEventDelete(eventType, event);
+	}
 };
 
-const keyboardWindowEventDown = (e) => {
-	const { altKey, ctrlKey, metaKey, shiftKey } = e;
-	// console.log(e.key, e.keyCode, "altKey", altKey, "ctrlKey", ctrlKey, "metaKey", metaKey, "shiftKey", shiftKey);
+const keyboardWindowEventDown = (event) => {
+	const { altKey, ctrlKey, metaKey, shiftKey } = event;
+	// console.log(event.key, event.keyCode, "altKey", altKey, "ctrlKey", ctrlKey, "metaKey", metaKey, "shiftKey", shiftKey);
 	// execute functions
-	switch (e.keyCode) {
-	case 8: // backspace
-		e.preventDefault();
-		execute("deleteComponents", get(Selection));
-		// execute("deleteComponents", {
-		// 	vertices: selected.vertices(),
-		// 	edges: selected.edges(),
-		// 	faces: selected.faces(),
-		// });
+	switch (event.keyCode) {
+	case 8: // delete
 		break;
 	case 16: // Shift
 		break;
@@ -60,57 +63,62 @@ const keyboardWindowEventDown = (e) => {
 		ResetUI();
 		RulerLines.set([]);
 		RulerRays.set([]);
+		// todo: a bit overkill here. can this action be bound
+		// to the dialog, so it only fires when it's active?
+		get(DialogNewFile).close();
 		break;
 	case 49: // "1"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_AXIOM_1);
 		}
 		break;
 	case 50: // "2"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_AXIOM_2);
 		}
 		break;
 	case 51: // "3"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_AXIOM_3);
 		}
 		break;
 	case 52: // "4"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_AXIOM_4);
 		}
 		break;
 	case 53: // "5"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_AXIOM_5);
 		}
 		break;
 	case 54: // "6"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_AXIOM_6);
 		}
 		break;
 	case 55: // "7"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_AXIOM_7);
 		}
 		break;
 	case 65: // "a"
-		// select all
-		// assignment
+		if (!altKey && !ctrlKey && !metaKey && shiftKey) {
+			event.preventDefault();
+			execute("selectAll");
+		}
 		break;
 	case 66: // "b"
 		// assignment mountain/valley
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_ASSIGN);
 			AssignType.set(ASSIGN_BOUNDARY);
 		}
@@ -118,78 +126,88 @@ const keyboardWindowEventDown = (e) => {
 	case 67: // "c"
 		// assignment cut
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_ASSIGN);
 			AssignType.set(ASSIGN_CUT);
 		}
 		break;
+	case 68: // "d"
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			event.preventDefault();
+			Tool.set(TOOL_DELETE);
+		}
+		break;
 	case 69: // "e"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_EDGE);
 		}
 		break;
 	case 70: // "f"
-		// assignment flat
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_ASSIGN);
 			AssignType.set(ASSIGN_FLAT);
 		}
 		break;
 	case 75: // "k"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_KAWASAKI);
 		}
 		break;
 	case 77: // "m"
-		// assignment mountain/valley
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_ASSIGN);
 			AssignType.set(ASSIGN_SWAP);
 		}
 		break;
 	case 78: // "n"
 		if (!altKey && (ctrlKey || metaKey) && !shiftKey) {
-			e.preventDefault();
-			execute("clear");
+			event.preventDefault();
+			get(DialogNewFile).showModal();
 		}
 		break;
 	case 83: // "s"
 		break;
 	case 85: // "u"
-		// assignment unassigned
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_ASSIGN);
 			AssignType.set(ASSIGN_UNASSIGNED);
 		}
 		break;
 	case 86: // "v"
-		// assignment mountain/valley
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			Tool.set(TOOL_ASSIGN);
 			AssignType.set(ASSIGN_SWAP);
 		}
 		break;
 	case 90: // "z"
 		if (!altKey && (ctrlKey || metaKey) && !shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			console.log("undo");
 			// Graph.revert();
 		}
 		if (!altKey && (ctrlKey || metaKey) && shiftKey) {
-			e.preventDefault();
+			event.preventDefault();
 			console.log("redo");
 		}
+		break;
+	case 191: // / (forward slash)
+		if (!get(ShowTerminal)) {
+			ShowTerminal.set(true);
+		} else {
+			get(Textarea).focus();
+		}
+		event.preventDefault();
 		break;
 	default:
 		break;
 	}
-	return customWindowKeyEvent("down", e);
+	return customWindowKeyEvent("down", event);
 };
 
 const keyboardWindowEventUp = (event) => (
@@ -209,7 +227,8 @@ const keyboardFormEventDown = (event) => {
 	case 27: // ESC
 		console.log("todo: document.body.focus()");
 		event.preventDefault();
-		document.body.focus();
+		get(Textarea).focus();
+		// document.body.focus();
 		console.log("document.activeElement", document.activeElement);
 		// return;
 		break;
@@ -222,13 +241,46 @@ const keyboardFormEventUp = (event) => (
 	customFormKeyEvent("up", event)
 );
 
+// form element that take in text input (type=text, number, etc..)
+// form elements like radio do not count,
+// keyboard event should bubble through.
 const isFormElementActive = () => {
-	const { nodeName } = document.activeElement;
-	const name = (nodeName || "").toLowerCase();
+	const node = document.activeElement;
+	if (!node) { return false; }
+	const name = (node.nodeName || "").toLowerCase();
+	const type = (node.type || "").toLowerCase();
 	// if these node types are currently active,
 	// touches will not be intercepted.
-	return name === "textarea"
-		|| name === "input";
+	switch (name) {
+	case "textarea": return true;
+	case "input":
+		switch (type) {
+		case "date": 
+		case "datetime-local": 
+		case "month": 
+		case "number": 
+		case "password": 
+		case "tel": 
+		case "time": 
+		case "email": 
+		case "text": return true;
+		case "button": 
+		case "checkbox": 
+		case "color": 
+		case "file": 
+		case "hidden": 
+		case "image": 
+		case "radio": 
+		case "range": 
+		case "reset": 
+		case "search": 
+		case "submit": 
+		case "url": 
+		case "week":
+		default:
+		return false;
+		}
+	}
 	// an alternative approach would be to store a reference
 	// to every known form element (which requires generating
 	// this list), and the compare directly to these references, like:

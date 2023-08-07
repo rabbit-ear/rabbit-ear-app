@@ -1,6 +1,5 @@
 import { get } from "svelte/store";
 import { execute } from "./app.js";
-import { snapToPoint, snapToEdge } from "../js/snap.js";
 import { Highlight } from "../stores/Select.js";
 import { RulerLines } from "../stores/Ruler.js";
 import { ToolStep } from "../stores/Tool.js";
@@ -10,6 +9,11 @@ import {
 	UIGraph,
 	UILines,
 } from "../stores/UI.js";
+import {
+	snapToPoint,
+	snapToEdge,
+	snapToRulerLine,
+} from "../js/snap.js";
 
 let pressEdge;
 let pressCoords;
@@ -46,11 +50,11 @@ export const pointerEventAxiom4 = (eventType, { point }) => {
 			pressEdge = undefined;
 		}
 		// nearest point on line
-		UIGraph.set({ vertices_coords: [snapToPoint(point, false)] });
+		UIGraph.set({ vertices_coords: [snapToRulerLine(point).coords] });
 	}
 		break;
 	case 3: {
-		const coords = snapToPoint(point, false);
+		const { coords } = snapToRulerLine(point);
 		if (eventType === "press") { pressCoords = coords; }
 		UIGraph.set({
 			vertices_coords: [pressCoords, coords],
@@ -61,7 +65,7 @@ export const pointerEventAxiom4 = (eventType, { point }) => {
 	default:
 		execute("addEdge",
 			execute("addVertex", pressCoords),
-			execute("addVertex", snapToPoint(point, false)),
+			execute("addVertex", snapToRulerLine(point).coords),
 		);
 		// if (get(RulersAutoClear)) { RulerLines.set([]); }
 		UIGraph.set({});

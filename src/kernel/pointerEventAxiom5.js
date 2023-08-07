@@ -1,6 +1,5 @@
 import { get } from "svelte/store";
 import { execute } from "./app.js";
-import { snapToPoint, snapToEdge } from "../js/snap.js";
 import { Highlight } from "../stores/Select.js";
 import { RulerLines } from "../stores/Ruler.js";
 import { ToolStep } from "../stores/Tool.js";
@@ -10,6 +9,11 @@ import {
 	UIGraph,
 	UILines,
 } from "../stores/UI.js";
+import {
+	snapToPoint,
+	snapToEdge,
+	snapToRulerLine,
+} from "../js/snap.js";
 
 let axiom5Edge;
 let axiom5Point1;
@@ -53,10 +57,10 @@ export const pointerEventAxiom5 = (eventType, { point }) => {
 	}
 		break;
 	case 4:
-		UIGraph.set({ vertices_coords: [snapToPoint(point, false)] });
+		UIGraph.set({ vertices_coords: [snapToRulerLine(point).coords] });
 		break;
 	case 5:
-		const segmentPoint2 = snapToPoint(point, false);
+		const segmentPoint2 = snapToRulerLine(point).coords;
 		if (eventType === "press") { segmentPoint1 = segmentPoint2; }
 		UIGraph.set({
 			vertices_coords: [segmentPoint1, segmentPoint2],
@@ -66,7 +70,7 @@ export const pointerEventAxiom5 = (eventType, { point }) => {
 	default:
 		execute("addEdge",
 			execute("addVertex", segmentPoint1),
-			execute("addVertex", snapToPoint(point, false)),
+			execute("addVertex", snapToRulerLine(point).coords),
 		);
 		UIGraph.set({});
 		RulerLines.set([]);

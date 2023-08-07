@@ -1,5 +1,8 @@
 <script>
-	import { afterUpdate } from "svelte";
+	import {
+		afterUpdate,
+		onMount,
+	} from "svelte";
 	import {
 		Textarea,
 		TextareaValue,
@@ -9,6 +12,7 @@
 	let pre;
 
 	afterUpdate(() => { pre.scrollTop = pre.scrollHeight; });
+	onMount(() => $Textarea.focus());
 
 	const fade = 2;
 	let opacities;

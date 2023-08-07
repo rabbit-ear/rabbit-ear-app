@@ -1,6 +1,6 @@
 <script>
 	import Header from "./Header.svelte";
-	import Footer from "./Footer.svelte";
+	import Terminal from "./Terminal.svelte";
 	import Toolbar from "./Toolbar.svelte";
 	import SVGCanvas from "./SVGCanvas/SVGCanvas.svelte";
 	import Simulator from "./OrigamiSimulator/Simulator.svelte";
@@ -64,7 +64,7 @@
 		<Panels />
 	</div>
 	{#if $ShowTerminal}
-		<Footer />
+		<Terminal />
 	{/if}
 	<Kernel
 		bind:press={press}

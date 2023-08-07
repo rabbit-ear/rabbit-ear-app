@@ -33,7 +33,7 @@
 		<ul>
 			<li>file
 				<ul>
-					<li on:click={() => $DialogNewFile.showModal()}>new</li>
+					<li><button on:click={() => $DialogNewFile.showModal()}>new</button></li>
 					<hr />
 					<li><button on:click={() => inputFile.click()}>load</button></li>
 					<li>
