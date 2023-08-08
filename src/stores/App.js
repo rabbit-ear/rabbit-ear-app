@@ -17,6 +17,7 @@ export const RulersAutoClear = writable(true);
 
 // DOM references
 export const DialogNewFile = writable(undefined);
+export const DialogNewFrame = writable(undefined);
 
 export const VertexRadiusFactor = writable(0.00666);
 

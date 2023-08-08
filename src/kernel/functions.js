@@ -27,6 +27,8 @@ import {
 } from "rabbit-ear/graph/nearest.js";
 import { downloadFile } from "../js/file.js";
 import {
+	Frames,
+	FrameIndex,
 	Graph,
 	UpdateFrame,
 	IsoUpdateFrame,
@@ -212,6 +214,11 @@ export const clear = () => LoadFile(makeEmptyGraph());
 export const download = (filename) => (
 	downloadFile(JSON.stringify(get(Graph)), filename)
 );
+
+export const appendFrame = (frame) => {
+	Frames.update(frames => [...frames, frame]);
+	FrameIndex.set(get(Frames).length - 1);
+};
 
 export const axiom1 = (...args) => (
 	RulerLines.add(doAxiom1(get(Graph), ...args))

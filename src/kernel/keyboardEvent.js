@@ -65,7 +65,8 @@ const keyboardWindowEventDown = (event) => {
 		RulerRays.set([]);
 		// todo: a bit overkill here. can this action be bound
 		// to the dialog, so it only fires when it's active?
-		get(DialogNewFile).close();
+		// update: turns out this is a default behavior built in.
+		// get(DialogNewFile).close();
 		break;
 	case 49: // "1"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
