@@ -1,5 +1,10 @@
 import { get } from "svelte/store";
 import { writable, derived } from "svelte/store";
+import { getFileMetadata } from "rabbit-ear/fold/spec.js";
+import {
+	flattenFrame,
+	getFramesAsFlatArray,
+} from "rabbit-ear/fold/frames.js";
 import { downloadFile } from "../js/file.js";
 import { graphToMatrix2 } from "../js/matrix.js";
 import { makeEmptyGraph } from "../js/graph.js";
@@ -18,7 +23,6 @@ import {
 // 	case "json": break;
 // 	}
 // };
-
 /**
  * @description contains the metadata "file_" entries, like "file_title"
  */
@@ -29,9 +33,25 @@ export const File = writable({});
  */
 export const Frames = writable([makeEmptyGraph()]);
 /**
+ * @description Contains an array of graphs, each being one frame
+ * in the FOLD file, where the first item is the top level graph.
+ */
+export const FramesRendered = derived(
+	[Frames],
+	([$Frames]) => {
+		// temporarily reassemble frames into a FOLD object for "flattenFrame"
+		const FOLD = { ...$Frames[0] };
+		const file_frames = $Frames.slice(1);
+		if (file_frames.length) { FOLD.file_frames = file_frames; }
+		return Array.from(Array($Frames.length))
+			.map((_, i) => flattenFrame(FOLD, i));
+	},
+	[makeEmptyGraph()],
+);
+/**
  * @description which frame is currently visible in the main viewport
  */
-const FrameIndex = writable(0);
+export const FrameIndex = writable(0);
 /**
  * @description The currently selected (and currently being edited) frame.
  */
@@ -76,8 +96,15 @@ export const SetFrame = (graph) => {
 	return UpdateFrame(graph);
 };
 /**
- *
+ * @description Load a FOLD file and fill all relevant data models,
+ * including the file metadata and frames, and reset the current frame
+ * to frame 0.
  */
+export const LoadFile = (FOLD) => {
+	File.set(getFileMetadata(FOLD));
+	Frames.set(getFramesAsFlatArray(FOLD));
+	FrameIndex.set(0);
+};
 
 // const { subscribe, set, update } = writable(makeEmptyGraph());
 

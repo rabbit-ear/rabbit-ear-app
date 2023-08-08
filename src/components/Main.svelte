@@ -5,6 +5,7 @@
 	import SVGCanvas from "./SVGCanvas/SVGCanvas.svelte";
 	import Simulator from "./OrigamiSimulator/Simulator.svelte";
 	import Panels from "./Panels.svelte";
+	import FramesView from "./Frames/FramesView.svelte";
 	import Dialogs from "./Dialogs.svelte";
 	import Kernel from "./Kernel.svelte";
 	import FileManager from "./FileManager.svelte";
@@ -64,7 +65,8 @@
 		<Panels />
 	</div>
 	{#if $ShowTerminal}
-		<Terminal />
+		<FramesView />
+		<!-- <Terminal /> -->
 	{/if}
 	<Kernel
 		bind:press={press}

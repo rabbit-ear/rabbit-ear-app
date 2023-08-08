@@ -31,6 +31,7 @@ import {
 	UpdateFrame,
 	IsoUpdateFrame,
 	SetFrame,
+	LoadFile,
 } from "../stores/Model.js";
 import { Selection } from "../stores/Select.js";
 import {
@@ -204,9 +205,9 @@ export const planarize = () => (
 	UpdateFrame(populate(Planarize(get(Graph)), true))
 );
 
-export const load = (FOLD) => SetFrame(populate(FOLD));
+export const load = (FOLD) => LoadFile(FOLD);
 
-export const clear = () => SetFrame(makeEmptyGraph());
+export const clear = () => LoadFile(makeEmptyGraph());
 
 export const download = (filename) => (
 	downloadFile(JSON.stringify(get(Graph)), filename)
