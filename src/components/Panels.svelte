@@ -8,21 +8,11 @@
 	import { ShowSimulator } from "../stores/App.js";
 </script>
 
-<div class="container">
-	<File />
-	<Canvas />
-	<Tools />
-	<RulerLines />
-	<History />
-	{#if $ShowSimulator}
-		<Simulator />
-	{/if}
-</div>
-
-<style>
-	.container {
-		flex: 0 1 12rem;
-		background-color: #333;
-		overflow-y: auto;
-	}
-</style>
+<File />
+<Canvas />
+<Tools />
+<RulerLines />
+<History />
+{#if $ShowSimulator}
+	<Simulator />
+{/if}

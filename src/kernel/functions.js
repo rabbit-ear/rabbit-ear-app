@@ -34,6 +34,7 @@ import {
 	IsoUpdateFrame,
 	SetFrame,
 	LoadFile,
+	SaveFile,
 } from "../stores/Model.js";
 import { Selection } from "../stores/Select.js";
 import {
@@ -212,7 +213,7 @@ export const load = (FOLD) => LoadFile(FOLD);
 export const clear = () => LoadFile(makeEmptyGraph());
 
 export const download = (filename) => (
-	downloadFile(JSON.stringify(get(Graph)), filename)
+	downloadFile(JSON.stringify(SaveFile()), filename)
 );
 
 export const appendFrame = (frame) => {

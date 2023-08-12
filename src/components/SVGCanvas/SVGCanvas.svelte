@@ -43,29 +43,29 @@
 	];
 </script>
 
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		viewBox={padViewBox($ViewBox, vmax * 0.05).join(" ")}
-		stroke-width={$ViewBox[2] * 0.0033}
-		on:mousedown={mousedown}
-		on:mousemove={mousemove}
-		on:mouseup={mouseup}
-		on:wheel={wheel}
-		on:focus={() => {}}
-		on:blur={() => {}}
-		role="presentation"
-	>
-		{#if $ShowGrid}
-			<GridLayer />
-		{/if}
-		<GraphLayer />
-		{#if $ShowAxes}
-			<AxesLayer />
-		{/if}
-		<UILayer />
-		<RulerLayer />
-		<ToolLayer />
-	</svg>
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox={padViewBox($ViewBox, vmax * 0.05).join(" ")}
+	stroke-width={$ViewBox[2] * 0.0033}
+	on:mousedown={mousedown}
+	on:mousemove={mousemove}
+	on:mouseup={mouseup}
+	on:wheel={wheel}
+	on:focus={() => {}}
+	on:blur={() => {}}
+	role="presentation"
+>
+	{#if $ShowGrid}
+		<GridLayer />
+	{/if}
+	<GraphLayer />
+	{#if $ShowAxes}
+		<AxesLayer />
+	{/if}
+	<UILayer />
+	<RulerLayer />
+	<ToolLayer />
+</svg>
 
 	<!-- i'm not sure what role=presentation means, i just guessed -->
 

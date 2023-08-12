@@ -35,20 +35,19 @@
 
 <style>
 	div {
-		height: 6rem;
+		width: 100%;
+		height: 100%;
 		display: flex;
 		flex-direction: column;
-		background-color: #333;
 	}
 	pre {
-		height: 4rem;
+		flex: 1 1 auto;
 		overflow-y: scroll;
 		font-family: monospace;
 	}
 	pre > * { margin: 0.1rem 0 }
 	textarea {
-		height: 2rem;
-		/* height: 100%; */
+		flex: 0 0 1.5rem;
 		resize: none;
 		border: 1px solid transparent;
 		color: #ddd;

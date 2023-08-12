@@ -182,22 +182,11 @@
 		on:change={loadFileDialog} />
 
 <style>
-	.popover { display: none; }
-	input[type=file] {
-/*		visibility: hidden;*/
-		display: none;
-	}
-	/* navbar */
-	button {
-		all: unset;
-		margin: 0;
-		padding: 0;
-		border: 0;
-	}
 	nav {
 		display: flex;
 		flex-direction: row;
-		height: 2rem;
+		width: 100%;
+		height: 100%;
 		/* font-weight: 700;*/
 		box-shadow: 0 0rem 0.5rem 0 #111;
 		position: relative;
@@ -268,5 +257,19 @@
 	nav li.description {
 		font-style: italic;
 		opacity: 80%;
+	}
+
+	.popover {
+		display: none;
+	}
+	input[type=file] {
+		display: none;
+		/* visibility: hidden; */
+	}
+	button {
+		all: unset;
+		margin: 0;
+		padding: 0;
+		border: 0;
 	}
 </style>

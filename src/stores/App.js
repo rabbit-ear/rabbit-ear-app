@@ -7,6 +7,10 @@ import {
 } from "../kernel/app.js";
 import { ViewBox } from "./ViewBox.js";
 
+// a bit like compiler directives.
+// these will only change to target different builds.
+export const ShowHeader = true;
+
 export const NewEdgeAssignment = writable("F");
 export const Snapping = writable(true);
 export const ShowSimulator = writable(false);

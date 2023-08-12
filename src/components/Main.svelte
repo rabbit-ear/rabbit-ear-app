@@ -2,17 +2,16 @@
 	import Header from "./Header.svelte";
 	import Terminal from "./Terminal.svelte";
 	import Toolbar from "./Toolbar.svelte";
-	import SVGCanvas from "./SVGCanvas/SVGCanvas.svelte";
-	import Simulator from "./OrigamiSimulator/Simulator.svelte";
+	import Canvases from "./Canvases.svelte";
 	import Panels from "./Panels.svelte";
-	import FramesView from "./Frames/FramesView.svelte";
+	import Frames from "./Frames.svelte";
 	import Dialogs from "./Dialogs.svelte";
 	import Kernel from "./Kernel.svelte";
 	import FileManager from "./FileManager.svelte";
 	import DragAndDrop from "./DragAndDrop.svelte";
 	import {
+		ShowHeader,
 		ShowTerminal,
-		ShowSimulator,
 	} from "../stores/App.js";
 
 	// these events originate from the SVG canvas
@@ -24,17 +23,6 @@
 	// these events originate from the window
 	let keydown;
 	let keyup;
-
-	let pairClass;
-	$: pairClass = $ShowSimulator
-		? "pair with-simulator"
-		: "pair without-simulator";
-
-	let contentClass;
-	$: contentClass = $ShowTerminal
-		? "content with-terminal"
-		: "content without-terminal";
-
 </script>
 
 <svelte:window
@@ -42,76 +30,118 @@
 	on:keyup={keyup}
 />
 
-<main>
-	<Dialogs />
-	<Header />
-	<div class={contentClass}>
-		<Toolbar />
-		<div class={pairClass}>
-			<div class="svg-container">
-				<SVGCanvas
-					on:press={press}
-					on:move={move}
-					on:release={release}
-					on:scroll={scroll}
-				/>
-			</div>
-			{#if $ShowSimulator}
-			<div>
-				<Simulator />
-			</div>
-			{/if}
+<Dialogs />
+<Kernel
+	bind:press={press}
+	bind:move={move}
+	bind:release={release}
+	bind:scroll={scroll}
+	bind:keydown={keydown}
+	bind:keyup={keyup}
+/>
+<FileManager />
+<DragAndDrop />
+
+<main class="vertical">
+	{#if ShowHeader}
+		<div class="header">
+			<Header />
 		</div>
-		<Panels />
+	{/if}
+	<div class="gui horizontal">
+		<div class="toolbar">
+			<Toolbar />
+		</div>
+		<div class="renderings vertical">
+			<div class="canvases">
+				<Canvases {press} {move} {release} {scroll} />
+			</div>
+			<div class="frames">
+				<Frames />
+			</div>
+		</div>
+		<div class="panels">
+			<Panels />
+		</div>
 	</div>
 	{#if $ShowTerminal}
-		<FramesView />
-		<!-- <Terminal /> -->
+		<div class="terminal">
+			<Terminal />
+		</div>
 	{/if}
-	<Kernel
-		bind:press={press}
-		bind:move={move}
-		bind:release={release}
-		bind:scroll={scroll}
-		bind:keydown={keydown}
-		bind:keyup={keyup}
-	/>
-	<FileManager />
-	<DragAndDrop />
 </main>
 
 <style>
 	main {
-		width: 100%;
+		width: 100vw;
 		height: 100vh;
+		max-width: 100vw;
+		max-height: 100vh;
 	}
-	.svg-container {
-		overflow: hidden;
+	.vertical {
+		display: flex;
+		flex-direction: column;
 	}
-	:global(.content) {
+	.horizontal {
 		display: flex;
 		flex-direction: row;
 	}
-	:global(.content.with-terminal) {
-		height: calc(100vh - 8rem);
+
+	/* main children: the top-most level */
+	.header {
+		width: 100%;
+		height: 2rem;
+		flex: 0 0 auto;
 	}
-	:global(.content.without-terminal) {
-		height: calc(100vh - 2rem);
+	.gui {
+		width: 100%;
+		flex: 1 1 auto;
+		min-height: 0;
 	}
-	:global(.pair) {
-		display: flex;
-		flex-direction: row;
+	.terminal {
+		width: 100%;
+		height: 6rem;
+		flex: 0 1 auto;
+	}
+
+	/* .gui children */
+	.toolbar {
+		width: 8rem;
+		height: 100%;
+		flex: 0 0 auto;  /* shrink to 1 */
+		overflow-y: auto;
+		padding-top: 0.5rem;
+	}
+	.renderings {
 		width: 100%;
 		height: 100%;
-		flex: 1 0 calc(100vw - 8rem - 12rem);
+		min-width: 0;
+		flex: 1 1 auto;
 	}
-	:global(.pair) > * {
+	.panels {
+		width: 12rem;
 		height: 100%;
+		flex: 0 0 auto;  /* shrink to 1 */
+		overflow-y: auto;
 	}
-	:global(.pair.with-simulator) > * {
-		width: 50%;
+
+	/* .renderings children */
+	.canvases {
+		flex: 1 1 auto;
 	}
-	:global(.pair.without-simulator) > * {
-		width: 100%;
+	.frames {
+		flex: 0 1 auto;
+		min-width: 0;
+	}
+
+	/* colors */
+	.toolbar {
+		background-color: #333;
+	}
+	.panels {
+		background-color: #333;
+	}
+	.terminal {
+		background-color: #333;
 	}
 </style>

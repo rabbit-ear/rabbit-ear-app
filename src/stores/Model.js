@@ -33,12 +33,15 @@ export const File = writable({});
  */
 export const Frames = writable([makeEmptyGraph()]);
 /**
- * @description Contains an array of graphs, each being one frame
- * in the FOLD file, where the first item is the top level graph.
+ * @description which frame is currently visible in the main viewport
+ */
+export const FrameIndex = writable(0);
+/**
+ * @description
  */
 export const FramesRendered = derived(
-	[Frames],
-	([$Frames]) => {
+	Frames,
+	($Frames) => {
 		// temporarily reassemble frames into a FOLD object for "flattenFrame"
 		const FOLD = { ...$Frames[0] };
 		const file_frames = $Frames.slice(1);
@@ -49,16 +52,33 @@ export const FramesRendered = derived(
 	[makeEmptyGraph()],
 );
 /**
- * @description which frame is currently visible in the main viewport
- */
-export const FrameIndex = writable(0);
-/**
  * @description The currently selected (and currently being edited) frame.
  */
 export const Graph = derived(
-	[Frames, FrameIndex],
-	([$Frames, $FrameIndex]) => $Frames[$FrameIndex],
+	[FramesRendered, FrameIndex],
+	([$FramesRendered, $FrameIndex]) => {
+		const newGraph = $FramesRendered[$FrameIndex];
+		ModelMatrix.set(graphToMatrix2(newGraph));
+		return newGraph;
+	},
 	makeEmptyGraph(),
+);
+/**
+ *
+ */
+export const FramesInherit = derived(
+	Frames,
+	($Frames) => $Frames
+		.map(frame => frame.frame_inherit === true),
+	[false],
+);
+/**
+ *
+ */
+export const FrameIsLocked = derived(
+	[FramesInherit, FrameIndex],
+	([$FramesInherit, $FrameIndex]) => $FramesInherit[$FrameIndex],
+	false,
 );
 /**
  * @description When the graph requires an update but the change
@@ -91,7 +111,7 @@ export const UpdateFrame = (graph) => {
  * viewport is also reset. This is used when loading a new frame.
  */
 export const SetFrame = (graph) => {
-	ModelMatrix.set(graphToMatrix2(graph));
+	// ModelMatrix.set(graphToMatrix2(graph));
 	CameraMatrix.reset();
 	return UpdateFrame(graph);
 };
@@ -101,9 +121,20 @@ export const SetFrame = (graph) => {
  * to frame 0.
  */
 export const LoadFile = (FOLD) => {
+	FrameIndex.set(0);
 	File.set(getFileMetadata(FOLD));
 	Frames.set(getFramesAsFlatArray(FOLD));
-	FrameIndex.set(0);
+};
+/**
+ *
+ */
+export const SaveFile = () => {
+	const frames = get(Frames);
+	const FOLD = { ...get(File), ...frames[0] };
+	if (frames.length > 1) {
+		FOLD.file_frames = frames.slice(1);
+	}
+	return FOLD;
 };
 
 // const { subscribe, set, update } = writable(makeEmptyGraph());
@@ -158,12 +189,3 @@ export const LoadFile = (FOLD) => {
 // 		return res;
 // 	},
 // };
-
-export const UIGraph = writable({});
-
-// export const GraphSelected = derived(
-// 	[Graph, Selection], 
-// 	([$Graph, $Selection]) => {
-
-// 	},
-// 	({}));
