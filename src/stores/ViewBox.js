@@ -6,8 +6,14 @@ import {
 	multiplyMatrix2Vector2,
 } from "rabbit-ear/math/algebra/matrix2.js";
 import { graphToMatrix2 } from "../js/matrix.js";
-// import { Graph } from "./Graph.js";
 
+// This approach does not work under the current arrangement,
+// the ModelViewMatrix will update every single time the graph changes,
+// in most cases this doesn't matter, except when the graph changes size.
+// When a line is added outside the current bounds the effect is that
+// the canvas jumps into a new position and is disorienting.
+// Otherwise, this would be ideal, so, in case a more elegant work-around
+// is found, I'm leaving this here for now.
 // export const ModelMatrix = derived(
 // 	Graph,
 // 	($Graph) => graphToMatrix2($Graph),
@@ -16,18 +22,6 @@ import { graphToMatrix2 } from "../js/matrix.js";
 
 export const ModelMatrix = writable([...identity2x3]);
 ModelMatrix.reset = () => ModelMatrix.set([...identity2x3]);
-
-// export const ModelMatrix = writable([...identity2x3]);
-// ModelMatrix.reset = () => {
-// 	const box = boundingBox(get(Graph));
-// 	if (!box || !box.span || !isFinite(box.span[0]) || !isFinite(box.span[1])) {
-// 		ModelMatrix.set([...identity2x3]);
-// 	}
-// 	const vmax = Math.max(box.span[0], box.span[1]);
-// 	console.log("model matrix", [vmax, 0, 0, vmax, box.min[0], box.min[1]]);
-// 	ModelMatrix.set([vmax, 0, 0, vmax, box.min[0], box.min[1]]);
-// };
-
 
 export const CameraMatrix = writable([...identity2x3]);
 CameraMatrix.reset = () => CameraMatrix.set([...identity2x3]);

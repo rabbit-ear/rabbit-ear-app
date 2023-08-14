@@ -7,21 +7,24 @@ import { RulersAutoClear } from "./App.js";
 import { Graph } from "./Model.js";
 import { Snapping } from "./App.js";
 /**
- *
+ * @description Lines which are intended to be a step towards
+ * adding new geometry to the graph; affects the list of UI snap points.
  */
 export const RulerLines = writable([]);
 RulerLines.add = (newRulers) => RulerLines.update((r) => get(RulersAutoClear)
 	? [...newRulers]
 	: [...r, ...newRulers]);
 /**
- *
+ * @description Rays which are intended to be a step towards
+ * adding new geometry to the graph; affects the list of UI snap points.
  */
 export const RulerRays = writable([]);
 RulerRays.add = (newRulers) => RulerRays.update((r) => get(RulersAutoClear)
 	? [...newRulers]
 	: [...r, ...newRulers]);
 /**
- *
+ * @description A list of points that are the intersection of all
+ * Ruler Lines and Rays with all graph edges.
  */
 export const RulerPoints = derived(
 	[Graph, RulerLines, RulerRays],

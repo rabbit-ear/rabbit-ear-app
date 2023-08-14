@@ -9,48 +9,47 @@ import { downloadFile } from "../js/file.js";
 import { graphToMatrix2 } from "../js/matrix.js";
 import { makeEmptyGraph } from "../js/graph.js";
 import { Selection } from "./Select.js";
-import { GraphHistory } from "./History.js";
+import { FileHistory } from "./History.js";
 import {
 	CameraMatrix,
 	ModelMatrix,
 } from "./ViewBox.js";
-
-// export const LoadFromFile = (data, type="string") => {
-// 	switch (type) {
-// 	case "string": break;
-// 	case "fold": break;
-// 	case "json": break;
-// 	case "json": break;
-// 	}
-// };
 /**
- * @description contains the metadata "file_" entries, like "file_title"
+ * @description an object which contains only FOLD file metadata,
+ * any key that starts with "file_", for example "file_title".
  */
 export const File = writable({});
 /**
  * @description Contains an array of graphs, each being one frame
- * in the FOLD file, where the first item is the top level graph.
+ * in the FOLD file, where the first item is the top level frame.
  */
 export const Frames = writable([makeEmptyGraph()]);
 /**
- * @description which frame is currently visible in the main viewport
- */
-export const FrameIndex = writable(0);
-/**
- * @description
+ * @description Because FOLD frames can have parent-child inheritance,
+ * To properly render a FOLD frame requires "flattening" all of the
+ * frame's parents (recursively) into one single FOLD object frame.
+ * This is a copy of the list of "Frames", but each is fully flattened.
+ * @todo This is going to be expensive to run when a single frame is modified,
+ * currently this is the safe way, but some kind of caching would be ideal.
  */
 export const FramesRendered = derived(
 	Frames,
 	($Frames) => {
-		// temporarily reassemble frames into a FOLD object for "flattenFrame"
+		// because of the "flattenFrame" method, we need to reassemble the
+		// FOLD object back into its original form.
 		const FOLD = { ...$Frames[0] };
 		const file_frames = $Frames.slice(1);
 		if (file_frames.length) { FOLD.file_frames = file_frames; }
+		// run flattenFrame on every frame.
 		return Array.from(Array($Frames.length))
 			.map((_, i) => flattenFrame(FOLD, i));
 	},
 	[makeEmptyGraph()],
 );
+/**
+ * @description Which frame is currently visible in the main viewport?
+ */
+export const FrameIndex = writable(0);
 /**
  * @description The currently selected (and currently being edited) frame.
  */
@@ -64,7 +63,7 @@ export const Graph = derived(
 	makeEmptyGraph(),
 );
 /**
- *
+ * @description For each frame, does the frame inherit from a parent frame?
  */
 export const FramesInherit = derived(
 	Frames,
@@ -73,7 +72,8 @@ export const FramesInherit = derived(
 	[false],
 );
 /**
- *
+ * @description A frame is locked (unable to edit) if it contains
+ * inheritance, or, if it is a child with another frame as its parent.
  */
 export const FrameIsLocked = derived(
 	[FramesInherit, FrameIndex],
@@ -82,13 +82,12 @@ export const FrameIsLocked = derived(
 );
 /**
  * @description When the graph requires an update but the change
- * results in an isomorphic graph as it relates to VEF, so, likely
+ * results in an isomorphic graph as it relates to VEF, so, for example,
  * an edge attribute has been changed like edges_assignment.
  * This still requires a drawing update, but all index pointers, like
  * the indices of selected components don't need to be reset.
  */
 export const IsoUpdateFrame = (graph) => {
-	// GraphHistory.update(history => [...history, graph]);
 	return Frames.update(frames => {
 		frames[get(FrameIndex)] = graph;
 		return [...frames];
@@ -102,7 +101,6 @@ export const IsoUpdateFrame = (graph) => {
  */
 export const UpdateFrame = (graph) => {
 	Selection.reset();
-	// GraphHistory.update(history => [...history, graph]);
 	return IsoUpdateFrame(graph);
 };
 /**
@@ -119,8 +117,12 @@ export const SetFrame = (graph) => {
  * @description Load a FOLD file and fill all relevant data models,
  * including the file metadata and frames, and reset the current frame
  * to frame 0.
+ * This should include everything that happens in all the other
+ * update/set Frame methods.
  */
 export const LoadFile = (FOLD) => {
+	Selection.reset();
+	FileHistory.set([]);
 	FrameIndex.set(0);
 	File.set(getFileMetadata(FOLD));
 	Frames.set(getFramesAsFlatArray(FOLD));
@@ -136,56 +138,3 @@ export const SaveFile = () => {
 	}
 	return FOLD;
 };
-
-// const { subscribe, set, update } = writable(makeEmptyGraph());
-
-// const setGraph = (graph) => {
-// 	// console.log("setGraph");
-// 	Selection.reset();
-// 	// GraphHistory.update(history => [...history, graph]);
-// 	return set(graph);
-// };
-
-// export const Graph = {
-// 	subscribe,
-// 	update,
-// 	set: setGraph,
-// 	saveHistory: () => update(graph => {
-// 		GraphHistory.update(history => [...history, graph]);
-// 		return graph;
-// 	}),
-// 	// no change to topology
-// 	simpleSet: (graph) => {
-// 		console.log("simpleSet");
-// 		// GraphHistory.update(history => [...history, graph]);
-// 		set(graph);
-// 	},
-// 	revert: () => {
-// 		const history = get(GraphHistory);
-// 		const previous = history.pop();
-// 		GraphHistory.set(history);
-// 		Selection.reset();
-// 		return set(previous);
-// 	},
-// 	// methods which modify the graph
-// 	// planarize: () => update(g => populate(planarize(g), true)),
-// 	// trigger a file-download in the browser
-// 	download: () => {
-// 		downloadFile(JSON.stringify(get(graph)));
-// 		return update(graph => graph);
-// 	},
-// 	// empty the graph
-// 	reset: () => {
-// 		ModelMatrix.reset();
-// 		CameraMatrix.reset();
-// 		return setGraph(makeEmptyGraph())
-// 	},
-// 	// not on every graph update, only on new file load or something
-// 	// of that magnitude, reset the modelMatrix to perfectly enclose the graph
-// 	load: (graph) => {
-// 		const res = setGraph(graph);
-// 		ModelMatrix.set(graphToMatrix2(graph));
-// 		CameraMatrix.reset();
-// 		return res;
-// 	},
-// };

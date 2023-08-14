@@ -13,7 +13,3 @@
 	>
 		<WebGLCanvas {graph} />
 	</FrameItem>
-
-<style>
-	
-</style>

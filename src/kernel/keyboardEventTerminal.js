@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { TextareaValue } from "../stores/Terminal.js";
+import { TerminalValue } from "../stores/App.js";
 import { executeString } from "./app.js";
 
 export const keyboardEventTerminal = (eventType, event) => {
@@ -10,8 +10,9 @@ export const keyboardEventTerminal = (eventType, event) => {
 		case "down":
 			if (event.shiftKey) { break; }
 			event.preventDefault();
-			executeString(get(TextareaValue));
-			TextareaValue.set("");
+			// if command is a valid operation, cache the FileHistory
+			executeString(get(TerminalValue));
+			TerminalValue.set("");
 			break;
 		}
 	}

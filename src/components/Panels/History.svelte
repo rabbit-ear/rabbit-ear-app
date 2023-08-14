@@ -1,12 +1,12 @@
 <script>
 	import Panel from "./Panel.svelte";
-	import { GraphHistory } from "../../stores/History.js";
+	import { FileHistory } from "../../stores/History.js";
 </script>
 
 <Panel>
 	<span slot="title">history</span>
 	<span slot="body">
-		<p>history: <span class="number">{$GraphHistory.length}</span></p>
+		<p>history: <span class="number">{$FileHistory.length}</span></p>
 	</span>
 </Panel>
 

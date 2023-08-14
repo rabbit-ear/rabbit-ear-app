@@ -1,5 +1,4 @@
 import { writable, derived } from "svelte/store";
-// import { tool } from "./tool.js";
 
 // a hash lookup of every keyboard key currently being pressed
 // where the dictionary keys are the ______ (key characters?)
@@ -11,6 +10,11 @@ export const Moves = writable([]); // {number[][]} array of points
 export const Releases = writable([]); // {number[][]} array of points
 export const Current = writable(undefined); // {number[]} point
 
+// there are a few different ways of offering the user UI feedback
+// Lines and Rays are infinite objects which get clipped in the viewbox,
+// UIGraph is a custom graph (often used as a subgraph of the one on screen)
+// which will appear highlighted and on top of the current viewing graph.
+// UIGraph is a FOLD object.
 export const UIGraph = writable({});
 export const UILines = writable([]);
 export const UIRays = writable([]);
@@ -26,20 +30,3 @@ export const ResetUI = () => {
 	UILines.set([]);
 	UIRays.set([]);
 };
-
-// export const testStore = derived(
-// 	[presses, moves, releases, tool],
-// 	([$presses, $moves, $releases, $tool]) => {
-// 		switch ($tool) {
-// 		case SNAP_NONE: return [];
-// 		case SNAP_GRID: return [];
-// 		case SNAP_SMART:
-// 			// todo. filter. remove duplicates. build voronoi
-// 			const g = $graph;
-// 			const intersected = $rulerLines
-// 				.flatMap(line => intersectGraphLine(g, line));
-// 			return [...g.vertices_coords, ...intersected];
-// 		}
-// 	},
-// 	[],
-// );

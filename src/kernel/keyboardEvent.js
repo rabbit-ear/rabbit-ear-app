@@ -27,13 +27,13 @@ import {
 	Tool,
 	AssignType,
 } from "../stores/Tool.js";
-// import { Graph } from "../stores/Model.js";
+import { FileHistory } from "../stores/History.js";
 import {
 	DialogNewFile,
+	TerminalTextarea,
 	ShowTerminal,
 } from "../stores/App.js";
 import { Keyboard } from "../stores/UI.js";
-import { Textarea } from "../stores/Terminal.js";
 import { execute } from "./app.js";
 import { ResetUI } from "../stores/UI.js";
 import { RulerLines, RulerRays } from "../stores/Ruler.js";
@@ -189,8 +189,7 @@ const keyboardWindowEventDown = (event) => {
 	case 90: // "z"
 		if (!altKey && (ctrlKey || metaKey) && !shiftKey) {
 			event.preventDefault();
-			console.log("undo");
-			// Graph.revert();
+			FileHistory.revert();
 		}
 		if (!altKey && (ctrlKey || metaKey) && shiftKey) {
 			event.preventDefault();
@@ -201,7 +200,7 @@ const keyboardWindowEventDown = (event) => {
 		if (!get(ShowTerminal)) {
 			ShowTerminal.set(true);
 		} else {
-			get(Textarea).focus();
+			get(TerminalTextarea).focus();
 		}
 		event.preventDefault();
 		break;
@@ -218,7 +217,7 @@ const keyboardWindowEventUp = (event) => (
 const customFormKeyEvent = (eventType, event) => {
 	// replace with switch, and an alternative way of
 	// getting the current document active element.
-	if (document.activeElement === get(Textarea)) {
+	if (document.activeElement === get(TerminalTextarea)) {
 		return keyboardEventTerminal(eventType, event);
 	}
 };
@@ -228,7 +227,7 @@ const keyboardFormEventDown = (event) => {
 	case 27: // ESC
 		console.log("todo: document.body.focus()");
 		event.preventDefault();
-		get(Textarea).focus();
+		get(TerminalTextarea).focus();
 		// document.body.focus();
 		console.log("document.activeElement", document.activeElement);
 		// return;
@@ -285,7 +284,7 @@ const isFormElementActive = () => {
 	// an alternative approach would be to store a reference
 	// to every known form element (which requires generating
 	// this list), and the compare directly to these references, like:
-	// if (document.activeElement === get(Textarea))
+	// if (document.activeElement === get(TerminalTextarea))
 }
 
 export const keyboardEventDown = (event) => {

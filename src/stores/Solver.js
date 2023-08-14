@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-// settings to fine-tune the simulator's solver
+// Origami Simulator, settings to fine-tune the solver
 export const Integration = writable("euler");
 export const AxialStiffness = writable(20);
 export const FaceStiffness = writable(0.2);

@@ -4,15 +4,15 @@
 		onMount,
 	} from "svelte";
 	import {
-		Textarea,
-		TextareaValue,
-	} from "../stores/Terminal.js";
+		TerminalTextarea,
+		TerminalValue,
+	} from "../stores/App.js";
 	import { TerminalHistory } from "../stores/History.js";
 
 	let pre;
 
 	afterUpdate(() => { pre.scrollTop = pre.scrollHeight; });
-	onMount(() => $Textarea.focus());
+	onMount(() => $TerminalTextarea.focus());
 
 	const fade = 2;
 	let opacities;
@@ -25,8 +25,8 @@
 <div>
 	<pre bind:this={pre}>{#each $TerminalHistory as line, i}<span style={`opacity: ${opacities[i]}`}>{line.func.name}({line.args ? line.args.map(arg => JSON.stringify(arg)).join(", ") : ""})</span><br/>{/each}</pre>
 	<textarea
-		bind:this={$Textarea}
-		bind:value={$TextareaValue}
+		bind:this={$TerminalTextarea}
+		bind:value={$TerminalValue}
 		autocomplete="off"
 		autocorrect="off"
 		rows="1"

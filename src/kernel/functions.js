@@ -37,6 +37,7 @@ import {
 	SaveFile,
 } from "../stores/Model.js";
 import { Selection } from "../stores/Select.js";
+import { FileHistory } from "../stores/History.js";
 import {
 	RulerLines,
 	RulerRays,
@@ -118,6 +119,7 @@ const deleteComponentsFromGraph = (graph, remove) => {
  *
  */
 export const deleteComponents = (components) => {
+	FileHistory.cache();
 	const remove = { vertices: [], edges: [], faces: [] };
 	if (components.vertices) {
 		components.vertices.forEach(v => { remove.vertices[v] = true; });
@@ -133,6 +135,7 @@ export const deleteComponents = (components) => {
 };
 
 export const snapAllVertices = () => {
+	FileHistory.cache();
 	const vertices_coords = get(Graph).vertices_coords || [];
 	vertices_coords.forEach((coord, i) => coord.forEach((n, j) => {
 		vertices_coords[i][j] = Math.round(n);
@@ -151,6 +154,7 @@ export const addVertex = (coords) => {
 };
 
 export const addEdge = (vertexA, vertexB) => {
+	FileHistory.cache();
 	const g = get(Graph);
 	const newestEdge = addNonPlanarEdge(g, [vertexA, vertexB]);
 	doSetEdgesAssignment(g, [newestEdge], get(NewEdgeAssignment));
@@ -162,6 +166,7 @@ export const addEdge = (vertexA, vertexB) => {
 };
 
 export const addLine = (line) => {
+	FileHistory.cache();
 	const graph = get(Graph);
 	const result = addPlanarLine(graph, line);
 	UpdateFrame({ ...graph });
@@ -169,6 +174,7 @@ export const addLine = (line) => {
 };
 
 export const splitEdges = (edges) => {
+	FileHistory.cache();
 	const g = get(Graph);
 	const result = edges
 		.slice()
@@ -178,6 +184,7 @@ export const splitEdges = (edges) => {
 };
 
 export const translateVertices = (vertices, vector) => {
+	FileHistory.cache();
 	const vertices_coords = get(Graph).vertices_coords || [];
 	vertices.forEach(v => {
 		vertices_coords[v] = add2(vertices_coords[v], vector);
@@ -186,27 +193,35 @@ export const translateVertices = (vertices, vector) => {
 };
 
 export const toggleAssignment = (edges) => {
+	FileHistory.cache();
 	const graph = get(Graph);
 	doToggleEdgesAssignment(graph, edges);
 	IsoUpdateFrame({ ...graph });
 };
 
 export const setAssignment = (edges, assignment, foldAngle) => {
+	FileHistory.cache();
 	const graph = get(Graph);
 	doSetEdgesAssignment(graph, edges, assignment, foldAngle);
 	IsoUpdateFrame({ ...graph });
 };
 
 export const setFoldAngle = (edges, foldAngle) => {
+	FileHistory.cache();
 	const graph = get(Graph);
 	doSetEdgesFoldAngle(graph, edges, foldAngle);
 	IsoUpdateFrame({ ...graph });
 };
 
-export const planarize = () => (
+export const autoPlanarize = () => {
+	UpdateFrame(populate(Planarize(get(Graph)), true));
+};
+
+export const planarize = () => {
+	FileHistory.cache();
 	// Graph.set(populate(Planarize(get(Graph)), true))
-	UpdateFrame(populate(Planarize(get(Graph)), true))
-);
+	UpdateFrame(populate(Planarize(get(Graph)), true));
+};
 
 export const load = (FOLD) => LoadFile(FOLD);
 
@@ -217,6 +232,7 @@ export const download = (filename) => (
 );
 
 export const appendFrame = (frame) => {
+	FileHistory.cache();
 	Frames.update(frames => [...frames, frame]);
 	FrameIndex.set(get(Frames).length - 1);
 };

@@ -10,6 +10,7 @@ import { ViewBox } from "./ViewBox.js";
 // these are immutable. a bit like compiler directives.
 // these will only change to target different builds.
 export const ShowHeader = true;
+export const UndoHistoryLength = 15;
 
 // app preferences and settings
 export const NewEdgeAssignment = writable("F");
@@ -24,6 +25,8 @@ export const RulersAutoClear = writable(true);
 // DOM element references
 export const DialogNewFile = writable(undefined);
 export const DialogNewFrame = writable(undefined);
+export const TerminalTextarea = writable(undefined);
+export const TerminalValue = writable(undefined);
 
 // vertex radius is is dynamic according to the zoom level
 // this number is a scale of the size of the viewbox.

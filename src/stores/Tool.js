@@ -73,23 +73,6 @@ export const Tool = {
 		return set(t);
 	},
 };
-
-const {
-	subscribe: subElementSelect,
-	set: setElementSelect,
-	update: updateElementSelect,
-} = writable(SELECT_EDGE);
-
-export const ElementSelect = {
-	subscribe: subElementSelect,
-	update: updateElementSelect,
-	set: (e) => {
-		Selection.reset();
-		return setElementSelect(e);
-	},
-};
-
-
 /**
  * @description for the UI. which tool step is currently in progress
  * based on the collected touch data.
@@ -144,3 +127,19 @@ export const ToolStep = derived(
 	},
 	0,
 );
+
+const {
+	subscribe: subElementSelect,
+	set: setElementSelect,
+	update: updateElementSelect,
+} = writable(SELECT_EDGE);
+
+export const ElementSelect = {
+	subscribe: subElementSelect,
+	update: updateElementSelect,
+	set: (e) => {
+		Selection.reset();
+		return setElementSelect(e);
+	},
+};
+
