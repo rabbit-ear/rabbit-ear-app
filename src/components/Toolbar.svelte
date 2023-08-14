@@ -79,7 +79,7 @@ $: editable = !($FrameIsLocked);
 		value={TOOL_EDGE} />
 	<label for="edge">edge</label>
 </div>
-<!-- 
+ 
 <p>lines</p>
 <div class="vertical-radio">
 	<input
@@ -139,7 +139,7 @@ $: editable = !($FrameIsLocked);
 		value={TOOL_AXIOM_7} />
 	<label for="axiom-7">axiom 7</label>
 </div>
--->
+
 <p>single vertex</p>
 <div class="vertical-radio">
 	<input

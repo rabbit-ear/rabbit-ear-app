@@ -7,24 +7,29 @@ import {
 } from "../kernel/app.js";
 import { ViewBox } from "./ViewBox.js";
 
-// a bit like compiler directives.
+// these are immutable. a bit like compiler directives.
 // these will only change to target different builds.
 export const ShowHeader = true;
 
+// app preferences and settings
 export const NewEdgeAssignment = writable("F");
 export const Snapping = writable(true);
 export const ShowSimulator = writable(false);
-export const ShowTerminal = writable(true);
+export const ShowTerminal = writable(false);
+export const ShowFrames = writable(true);
 export const ShowGrid = writable(true);
 export const ShowAxes = writable(true);
 export const RulersAutoClear = writable(true);
 
-// DOM references
+// DOM element references
 export const DialogNewFile = writable(undefined);
 export const DialogNewFrame = writable(undefined);
 
+// vertex radius is is dynamic according to the zoom level
+// this number is a scale of the size of the viewbox.
 export const VertexRadiusFactor = writable(0.00666);
 
+// svg circle elements query this for their radius value.
 export const VertexRadius = derived(
 	[ViewBox, VertexRadiusFactor],
 	([$ViewBox, $VertexRadiusFactor]) => (
@@ -33,6 +38,10 @@ export const VertexRadius = derived(
 	0.00666,
 );
 
+// pre- and post- execute() events are managed by the kernel.
+// when an operation is finished, it's customary to re-planarize
+// the graph to resolve any edge crossings/duplicate vertices.
+// an advanced user can disable this feature.
 const {
 	subscribe: autoPlanarizeSubscribe,
 	update: autoPlanarizeUpdate,

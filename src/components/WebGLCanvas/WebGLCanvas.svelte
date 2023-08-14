@@ -16,7 +16,8 @@
 		drawProgram,
 		deallocProgram,
 	} from "rabbit-ear/webgl/program.js";
-	import { Graph } from "../../stores/Model.js";
+
+	export let graph = {};
 
 	let canvas;
 
@@ -31,10 +32,10 @@
 	let projectionMatrix = identity4x4;
 	let modelViewMatrix = identity4x4;
 
-	$: rebuildAndDraw($Graph);
+	$: rebuildAndDraw(graph);
 
 	const rebuildAndDraw = () => {
-		modelViewMatrix = makeModelMatrix($Graph);
+		modelViewMatrix = makeModelMatrix(graph);
 		rebuildPrograms();
 		draw();
 	};
@@ -42,6 +43,7 @@
 	const draw = () => {
 		if (!gl) { return; }
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		const inferredScale = 1 / modelViewMatrix[0];
 		const uniforms = programs.map(prog => prog.makeUniforms(gl, {
 			projectionMatrix,
 			modelViewMatrix,
@@ -49,7 +51,7 @@
 			frontColor: "#369",
 			backColor: "white",
 			cpColor: "#333",
-			strokeWidth: 0.02,
+			strokeWidth: inferredScale * 0.02,
 			opacity: 1,
 		}));
 		programs.forEach((program, i) => drawProgram(gl, version, program, uniforms[i]));
@@ -72,13 +74,13 @@
 			// faces: $showFoldedFaces,
 			// dark: $colorMode === "dark",
 		};
-		const isFoldedForm = $Graph
-			&& $Graph.frame_classes
-			&& $Graph.frame_classes.length
-			&& $Graph.frame_classes.includes("foldedForm");
+		const isFoldedForm = graph
+			&& graph.frame_classes
+			&& graph.frame_classes.length
+			&& graph.frame_classes.includes("foldedForm");
 		programs = isFoldedForm
-			? foldedForm(gl, version, $Graph)
-			: creasePattern(gl, version, $Graph, options);
+			? foldedForm(gl, version, graph)
+			: creasePattern(gl, version, graph, options);
 	};
 
 	onMount(() => {

@@ -1,6 +1,11 @@
 <script>
 	import { Graph } from "../stores/Model.js";
-	import { ShowSimulator } from "../stores/App.js";
+	import {
+		ShowHeader,
+		ShowFrames,
+		ShowTerminal,
+		ShowSimulator,
+	} from "../stores/App.js";
 	import SVGCanvas from "./SVGCanvas/SVGCanvas.svelte";
 	import WebGLCanvas from "./WebGLCanvas/WebGLCanvas.svelte";
 	import Simulator from "./OrigamiSimulator/Simulator.svelte";
@@ -14,15 +19,23 @@
 	$: isFoldedForm = $Graph.frame_classes
 		&& $Graph.frame_classes.length
 		&& $Graph.frame_classes.includes("foldedForm");
+
+	let height = "100vh";
+	$: height = [
+		"100vh - 5px",
+		ShowHeader ? "2rem" : "",
+		$ShowFrames ? "6.5rem" : "",
+		$ShowTerminal ? "6rem" : "",
+	].filter(a => a !== "").join(" - ");
 </script>
 
 <div class="canvases horizontal">
 	{#if isFoldedForm}
 		<div class="webgl-canvas">
-			<WebGLCanvas />
+			<WebGLCanvas graph={$Graph}/>
 		</div>
 	{:else}
-		<div class="svg-canvas">
+		<div class="svg-canvas" style={`max-height: calc(${height})`}>
 			<SVGCanvas
 				on:press={press}
 				on:move={move}
@@ -57,7 +70,7 @@
 		height: 100%;
 		/* svgs are especially unrully */
 		/* this part might need more attention */
-		max-height: calc(100vh - 2rem - 6rem - 6rem);
+/*		max-height: calc(100vh - 2rem - 6rem - 6rem);*/
 		flex: 1 1 auto;
 	}
 	.simulator-canvas {

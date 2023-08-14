@@ -1,68 +1,41 @@
 <script>
-	import {
-		File,
-		FramesRendered,
-		FrameIndex,
-	} from "../stores/Model.js"
-	import { DialogNewFrame } from "../stores/App.js";
-	import GLPreview from "./Frames/GLPreview.svelte";
-
-	const newFrame = () => $DialogNewFrame.showModal();
+	import FrameRender from "./Frames/FrameRender.svelte";
+	import NewFrameButton from "./Frames/NewFrameButton.svelte";
+	import ExpandButton from "./Frames/ExpandButton.svelte";
+	import { FramesRendered } from "../stores/Model.js"
+	import { ShowFrames } from "../stores/App.js";
 </script>
 
-<div class="frames horizontal">
-	{#each $FramesRendered as frame, i}
-		<button
-			on:click={() => FrameIndex.set(i)}
-			highlight={i === $FrameIndex}>
-			<GLPreview graph={frame} />
-		</button>
-	{/each}
-	<button on:click={newFrame} class="plus-button">
-		<svg
-			class="plus-sign"
-			version="1.1"
-			xmlns="http://www.w3.org/2000/svg"
-			viewBox="0 0 80 80">
-			<rect x="35" y="20" width="10" height="40"/>
-			<rect x="20" y="35" width="40" height="10"/>
-		</svg>
-	</button>
+<div class="container">
+	<ExpandButton />
+	{#if $ShowFrames}
+		<div class="frames horizontal">
+			{#each $FramesRendered as graph, index}
+				<FrameRender {graph} {index} />
+			{/each}
+			<NewFrameButton />
+		</div>
+	{/if}
 </div>
 
 <style>
-	.horizontal {
-		display: flex;
-		flex-direction: row;
-		gap: 4px;
+	.container {
+		width: 100%;
+		height: 100%;
+		min-width: 0;
+		overflow: visible;
+		position: relative;
 	}
 	.frames {
 		width: 100%;
 		height: 100%;
-		padding: 0.5rem;
 		overflow-x: auto;
+		border-top: 2px solid #333;
+		padding: 0.5rem;
 	}
-	button {
-		all: unset;
-		flex: 0 0 auto;
-		width: 5rem;
-		height: 5rem;
-		border: 2px solid transparent;
-		border-radius: 4px;
-/*		margin: 4px;*/
-/*		padding: 2px;*/
-		background-color: #2f2f2f;
-	}
-	button.plus-button {
-		background-color: transparent;
-	}
-	button[highlight=true] {
-		border-color: #fb4;
-	}
-	svg.plus-sign {
-		fill: #ccc;
-	}
-	svg.plus-sign:hover {
-		fill: #fb4;
+	.horizontal {
+		display: flex;
+		flex-direction: row;
+		gap: 4px;
 	}
 </style>

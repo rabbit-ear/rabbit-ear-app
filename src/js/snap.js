@@ -27,6 +27,9 @@ import {
 } from "../stores/Ruler.js";
 import { Snapping } from "../stores/App.js";
 
+// todo: for large crease patterns, this is overwriting the
+// intended behavior. grid resolution needs to be dependent
+// on the viewbox zoom, fractions of a unit need to be ignored.
 const nearestGridPoint = (point, snapRadius) => {
 	// if hex grid, check nearest hex grid point
 	// square grid:
