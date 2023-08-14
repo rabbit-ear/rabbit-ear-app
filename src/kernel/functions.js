@@ -16,7 +16,10 @@ import addNonPlanarEdge from "rabbit-ear/graph/add/addNonPlanarEdge.js";
 import splitEdge from "rabbit-ear/graph/splitEdge/index.js";
 import populate from "rabbit-ear/graph/populate.js";
 import { kawasakiSolutions } from "rabbit-ear/singleVertex/kawasakiGraph.js";
-import { add2 } from "rabbit-ear/math/algebra/vector.js";
+import {
+	add2,
+	scale2,
+} from "rabbit-ear/math/algebra/vector.js";
 import { pleat as fnPleat } from "rabbit-ear/graph/pleat.js";
 import { pointsToLine } from "rabbit-ear/math/general/convert.js";
 import {
@@ -175,12 +178,12 @@ export const addLine = (line) => {
 
 export const splitEdges = (edges) => {
 	FileHistory.cache();
-	const g = get(Graph);
+	const graph = get(Graph);
 	const result = edges
 		.slice()
 		.sort((a, b) => b - a)
-		.map(edge => splitEdge(g, edge));
-	UpdateFrame({ ...g });
+		.map(edge => splitEdge(graph, edge));
+	UpdateFrame({ ...graph });
 };
 
 export const translateVertices = (vertices, vector) => {
@@ -190,6 +193,14 @@ export const translateVertices = (vertices, vector) => {
 		vertices_coords[v] = add2(vertices_coords[v], vector);
 	});
 	IsoUpdateFrame({ ...get(Graph), vertices_coords });
+};
+
+export const scale = (scaleFactor = 1) => {
+	FileHistory.cache();
+	const graph = get(Graph);
+	const vertices_coords = (graph.vertices_coords || [])
+		.map(coords => scale2(coords, scaleFactor));
+	IsoUpdateFrame({ ...graph, vertices_coords });
 };
 
 export const toggleAssignment = (edges) => {

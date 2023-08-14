@@ -21,28 +21,26 @@
 	import ToolAxiom from "./ToolAxiom.svelte";
 	import ToolPleat from "./ToolPleat.svelte";
 	import ToolScribble from "./ToolScribble.svelte";
+	import ToolScale from "./ToolScale.svelte";
 	import NewEdgeAssignment from "./NewEdgeAssignment.svelte";
 </script>
 
 <Panel>
 	<span slot="title">{nameForTool[$Tool]}</span>
 	<span slot="body">
-		<NewEdgeAssignment />
-		<hr />
 		{#if $Tool === TOOL_SELECT}
 			<ToolSelect />
 		{:else if $Tool === TOOL_DELETE}
 			<ToolSelect />
 		{:else if $Tool === TOOL_VERTEX}
-			<p>new position</p>
 		{:else if $Tool === TOOL_EDGE}
-			<p>between these</p>
+			<NewEdgeAssignment />
 		{:else if $Tool === TOOL_SPLIT_EDGE}
 			<p>split count: 2 (1 new vertex)</p>
 		{:else if $Tool === TOOL_TRANSLATE}
 			<p>all axes</p>
 		{:else if $Tool === TOOL_SCALE}
-			<p>uniform</p>
+			<ToolScale />
 		{:else if $Tool === TOOL_ASSIGN}
 			<ToolAssign />
 		{:else if $Tool === TOOL_FOLD_ANGLE}
@@ -53,8 +51,9 @@
 			<ToolScribble />
 		{:else if $Tool.substring(0, 9) === "toolAxiom"}
 			<ToolAxiom />
+			<hr />
+			<NewEdgeAssignment />
 		{/if}
-		<hr />
-		<p>tool step {$ToolStep}</p>
+		<!-- <p>tool step {$ToolStep}</p> -->
 	</span>
 </Panel>

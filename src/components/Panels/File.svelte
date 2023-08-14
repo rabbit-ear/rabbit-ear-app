@@ -1,7 +1,7 @@
 <script>
 	import { File } from "../../stores/Model.js";
 	import Panel from "./Panel.svelte";
-	let cpOrFolded = "crease-pattern";
+	// let cpOrFolded = "crease-pattern";
 
 	let file_title;
 	let file_author;
@@ -18,7 +18,7 @@
 		<input type="text" placeholder="title" bind:value={file_title} >
 		<input type="text" placeholder="author" bind:value={file_author} >
 		<textarea placeholder="description" bind:value={file_description}></textarea>
-		<hr />
+		<!-- <hr />
 		<h3>frame</h3>
 		<input
 			type="radio"
@@ -33,7 +33,7 @@
 			id="folded-form"
 			bind:group={cpOrFolded}
 			value="folded-form" />
-		<label for="folded-form">folded</label>
+		<label for="folded-form">folded</label> -->
 	</span>
 </Panel>
 

@@ -10,7 +10,7 @@ import { ViewBox } from "./ViewBox.js";
 // these are immutable. a bit like compiler directives.
 // these will only change to target different builds.
 export const ShowHeader = true;
-export const UndoHistoryLength = 15;
+export const UndoHistoryLength = 30;
 
 // app preferences and settings
 export const NewEdgeAssignment = writable("F");
