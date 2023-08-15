@@ -12,6 +12,7 @@
 	import {
 		ShowSimulator,
 		ShowTerminal,
+		ShowFlatFoldableIssues,
 		DialogNewFile,
 	} from "../stores/App.js";
 
@@ -19,6 +20,7 @@
 	// const clickDarkMode = () => { $DarkMode = !$DarkMode; };
 	const selectAll = () => execute("selectAll");
 	const deselectAll = () => execute("clearSelection");
+	const findBoundary = () => execute("findBoundary");
 	const invertAssignments = () => {
 		const graph = get(Graph);
 		const edges_assignment = graph.edges_assignment || [];
@@ -90,6 +92,7 @@
 			</li>
 			<li>assignment
 				<ul>
+					<li><button on:click={findBoundary}>rebuild boundary</button></li>
 					<li><button on:click={invertAssignments}>invert assignments</button></li>
 					<li disabled>reassign selected
 						<!-- <ul>
@@ -140,9 +143,12 @@
 			</li>
 			<li>analysis
 				<ul>
-					<li>flat-foldable vertex</li>
-					<li>show face-winding</li>
-					<li>isolated vertices</li>
+					<li>
+						<input type="checkbox" id="checkbox-flat-foldable" bind:checked={$ShowFlatFoldableIssues}>
+						<label for="checkbox-flat-foldable">flat-foldable issues</label>
+					</li>
+					<!-- <li>show face-winding</li> -->
+					<!-- <li>isolated vertices</li> -->
 					<li class="no-select description">show indices</li>
 					<li class="no-select">
 						<input type="checkbox" id="checkbox-vertices-indices">
@@ -156,9 +162,14 @@
 						<input type="checkbox" id="checkbox-faces-indices">
 						<label for="checkbox-faces-indices">faces</label>
 					</li>
-					<hr />
+				</ul>
+			</li>
+			<li>solvers
+				<ul>
+					<li class="no-select description">crease pattern</li>
+					<li>flat-foldable vertex</li>
 					<li class="no-select description">simulator</li>
-					<li>find equilibrium</li>
+					<li>find fold angles</li>
 				</ul>
 			</li>
 			<li>window
@@ -258,7 +269,9 @@
 		font-style: italic;
 		opacity: 80%;
 	}
-
+	label {
+		user-select: none;
+	}
 	.popover {
 		display: none;
 	}

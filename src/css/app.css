@@ -29,3 +29,11 @@ html, body, #app {
 		background-color: #ffffff;
 	}
 }
+
+/* css variables for colors */
+:root {
+	--text: #ccc;
+	--bright: #fff;
+	--dim: #888;
+	--highlight: #fb4;
+}

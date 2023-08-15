@@ -8,7 +8,7 @@
 	 */
 	const makeIntervals = (start, size) => {
 		let spacing = 1;
-		while ((size / spacing) > 32) { spacing *= 2; }
+		while ((size / spacing) > 64) { spacing *= 2; }
 		const count = parseInt(size / spacing);
 		const offset = Math.ceil(start / spacing) * spacing;
 		return Array.from(Array(count + 1))

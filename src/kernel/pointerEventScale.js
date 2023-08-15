@@ -10,41 +10,42 @@ import { getSnapPoint } from "../js/nearest.js";
 import { execute } from "./app.js";
 
 let pressLength = 1;
+let ratio = 1;
 
-const nonUniform = () => {
-	const ratio = [
-		releaseCoords[0] / pressCoords[0],
-		releaseCoords[1] / pressCoords[1],
-	];
-	const vector = (Number.isFinite(ratio[0]) && Number.isFinite(ratio[1])
-		? ratio
-		: [1, 1]);
-	const vertices_coords = [...graph.vertices_coords]
-		.map(coords => coords.map((n, i) => n * vector[i]));
-};
+const getSnapPointLength = (point) => (
+	magnitude2(getSnapPoint(point).coords)
+);
 
 export const pointerEventScale = (eventType, { point }) => {
 	switch (eventType) {
 	case "press":
-		pressLength = magnitude2(getSnapPoint(point).coords);
+		pressLength = getSnapPointLength(point);
 		break;
-	case "move": {
-		const length = magnitude2(getSnapPoint(point).coords);
-		const ratio = length / pressLength;
+	case "move":
+		ratio = getSnapPointLength(point) / pressLength;
 		if (isNaN(ratio) || !isFinite(ratio)) { break; }
 		const graph = get(Graph);
 		const vertices_coords = [...graph.vertices_coords]
 			.map(coords => coords.map(n => n * ratio));
 		UIGraph.set({ ...graph, vertices_coords });
-	}
 		break;
-	case "release": {
-		const length = magnitude2(getSnapPoint(point).coords);
-		const ratio = length / pressLength;
+	case "release":
+		ratio = getSnapPointLength(point) / pressLength;
 		if (isNaN(ratio) || !isFinite(ratio)) { break; }
 		execute("scale", ratio);
 		UIGraph.set({});
-	}
 		break;
 	}
 };
+
+// const nonUniform = () => {
+// 	const ratio = [
+// 		releaseCoords[0] / pressCoords[0],
+// 		releaseCoords[1] / pressCoords[1],
+// 	];
+// 	const vector = (Number.isFinite(ratio[0]) && Number.isFinite(ratio[1])
+// 		? ratio
+// 		: [1, 1]);
+// 	const vertices_coords = [...graph.vertices_coords]
+// 		.map(coords => coords.map((n, i) => n * vector[i]));
+// };

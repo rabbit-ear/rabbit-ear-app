@@ -6,6 +6,8 @@
 	import RulerLayer from "./RulerLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
 	import ToolLayer from "./ToolLayer.svelte";
+	import FlatFoldable from "./FlatFoldable.svelte";
+	import { Graph } from "../../stores/Model.js";
 	import {
 		convertToViewBox,
 		findInParents,
@@ -14,6 +16,7 @@
 	import {
 		ShowGrid,
 		ShowAxes,
+		ShowFlatFoldableIssues,
 	} from "../../stores/App.js";
 
 	const formatMouseEvent = (e) => ({
@@ -61,6 +64,9 @@
 	<GraphLayer />
 	{#if $ShowAxes}
 		<AxesLayer />
+	{/if}
+	{#if $ShowFlatFoldableIssues}
+		<FlatFoldable graph={$Graph} />
 	{/if}
 	<UILayer />
 	<RulerLayer />

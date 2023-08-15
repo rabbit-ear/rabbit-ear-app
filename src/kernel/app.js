@@ -9,7 +9,9 @@ import * as Functions from "./functions.js";
 export const preExecuteEvents = writable([]);
 export const postExecuteEvents = writable([]);
 /**
- *
+ * @description "preview" functions do not run the pre and post events
+ * because they simply generate UI Previews. in fact, I kind of feel
+ * like they shouldn't even be running through the kernel to begin with.
  */
 const previewFunctions = {
 	"axiom1Preview": true,
@@ -19,6 +21,8 @@ const previewFunctions = {
 	"axiom5Preview": true,
 	"axiom6Preview": true,
 	"axiom7Preview": true,
+	"kawasakiRulerPreviews": true,
+	// "autoPlanarize": true,
 };
 /**
  * @description the main execution method. all methods, from UI to

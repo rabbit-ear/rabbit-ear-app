@@ -18,6 +18,7 @@ export const Snapping = writable(true);
 export const ShowSimulator = writable(false);
 export const ShowTerminal = writable(false);
 export const ShowFrames = writable(true);
+export const ShowFlatFoldableIssues = writable(true);
 export const ShowGrid = writable(true);
 export const ShowAxes = writable(true);
 export const RulersAutoClear = writable(true);

@@ -1,5 +1,26 @@
 # Blender-style graph maker
 
+## 2023-08-15
+
+Amazingly, I can see the finish line. There are still quite a few remaining issues, and then a wealth of small quality of life improvements which would be confusing to a new user.
+
+Here is a list of the remaining features and bugfixes:
+
+- "select" still needs some more features. need to be able to CTRL+C, V, copy and paste selected subgraph and move it around.
+- "translate" needs to be implemented.
+- "scale" was just completed, and could use some improvements to the UI.
+- Menu items under "select": select by assignment, select 3D angles.
+- "merge selected vertices"
+- Panels, ToolPanel specficially. needs a big re-work. "select" tool needs to say how many components are selected.
+- Flat foldable vertices: Maekawa.
+- New Frame popover. Better link between frames. (see below)
+- scribble: need to implement. need a way of "simplifying" a polyline.
+- pleat: need a better solution, I think.
+
+Link between frames: I discussed this in a note elsewhere, a frame can be a child of another frame, for example, but modify the vertices into the folded state. However, if the first frame changes the number of vertices, the child frame needs to dynamically update. So, I think we need a concept of "modifier", which is a dynamic binding between a child and a parent, and the child is constantly refreshing the data by running this modifier function anytime the first frame changes.
+
+Need to fully explore what it would take to keep track of vertices, edges, and faces in between operations, to try to maintain isometry between components which do not move. calling "planarize()" really disrupts this.
+
 ## 2023-07-23
 
 ### new feature ideas

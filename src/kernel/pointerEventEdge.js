@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
 import {
+	CurrentSnap,
 	Keyboard,
 	Presses,
 	UIGraph,
@@ -18,6 +19,7 @@ export const pointerEventEdge = (eventType, { point }) => {
 	const coords = shift
 		? snapToRulerLine(point).coords
 		: snapToPoint(point, false);
+	CurrentSnap.set(coords);
 	switch (eventType) {
 	case "hover":
 		UIGraph.set({ vertices_coords: [coords] });

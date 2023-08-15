@@ -21,7 +21,10 @@ import {
 	TOOL_ASSIGN,
 	TOOL_FOLD_ANGLE,
 } from "../app/keys.js";
-import { Current } from "../stores/UI.js";
+import {
+	Current,
+	CurrentSnap,
+} from "../stores/UI.js";
 import { Tool } from "../stores/Tool.js";
 import { pointerEventSelect } from "./pointerEventSelect.js";
 import { pointerEventDelete } from "./pointerEventDelete.js";
@@ -46,6 +49,7 @@ import { pointerEventFoldAngle } from "./pointerEventFoldAngle.js";
 
 const customPointerEvent = (eventType, event) => {
 	Current.set(event.point);
+	CurrentSnap.set(undefined);
 	switch (get(Tool)) {
 	case TOOL_SELECT: return pointerEventSelect(eventType, event);
 	case TOOL_DELETE: return pointerEventDelete(eventType, event);

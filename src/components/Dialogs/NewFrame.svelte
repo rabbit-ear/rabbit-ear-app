@@ -1,11 +1,21 @@
 <script>
 	import { execute } from "../../kernel/app.js";
 	import { DialogNewFrame } from "../../stores/App.js";
+	import {
+		Frames,
+		FrameIndex,
+	} from "../../stores/Model.js";
 
 	const newEmpty = () => {
 		execute("appendFrame", {});
 		$DialogNewFrame.close();
 	};
+
+	const duplicate = () => {
+		execute("appendFrame", structuredClone($Frames[$FrameIndex]));
+		$DialogNewFrame.close();
+	};
+
 </script>
 
 <dialog bind:this={$DialogNewFrame}>
@@ -13,9 +23,14 @@
 	<hr />
 	<h3>stand-alone</h3>
 	<button on:click={newEmpty}>empty</button>
+	<button on:click={duplicate}>duplicate current selection</button>
 	<hr />
 	<h3>child frame</h3>
-	<button on:click={newEmpty}>foldedForm</button>
+	<button on:click={() => {}}>no modifier</button>
+	<button on:click={() => {}}>modifier: folded form</button>
+	<hr />
+	<h3>parent frame</h3>
+	<button on:click={newEmpty}>tessellation</button>
 </dialog>
 
 <style>

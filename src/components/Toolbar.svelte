@@ -227,10 +227,14 @@ $: editable = !($FrameIsLocked);
 </div>
 
 <style>
+	label {
+		user-select: none;
+	}
 	p {
 		color: #999;
 		margin: 1rem 0 0.25rem 0;
 		font-style: italic;
+		user-select: none;
 	}
 	.vertical-radio {
 		display: grid;
