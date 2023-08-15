@@ -44,7 +44,7 @@
 		flex-direction: column;
 	}
 	p {
-		color: #999;
+		color: var(--dim);
 /*		margin: 1rem 0 0.25rem 0;*/
 		font-style: italic;
 	}

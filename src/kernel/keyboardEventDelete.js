@@ -8,11 +8,6 @@ export const keyboardEventDelete = (eventType, event) => {
 	case "down":
 		event.preventDefault();
 		execute("deleteComponents", get(Selection));
-		// execute("deleteComponents", {
-		// 	vertices: selected.vertices(),
-		// 	edges: selected.edges(),
-		// 	faces: selected.faces(),
-		// });
 		break;
 	case "up":
 		break;

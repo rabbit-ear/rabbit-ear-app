@@ -1,18 +1,23 @@
-/*circle {
+/*
+circle {
 	fill: white;
 }
 
 line {
 	stroke: white;
-}*/
-
-.grid line {
-	stroke: #444;
 }
+*/
 
-.graph-preview line { stroke: #fb4; }
-.graph-preview circle { fill: #fb4; }
+.grid line { stroke: var(--background-3); }
+
+.graph-preview line { stroke: var(--highlight); }
+.graph-preview circle { fill: var(--highlight); }
 .graph-preview polygon { opacity: 0.5; }
 
-line.axis-marker-x { stroke: red; }
-line.axis-marker-y { stroke: green; }
+line.axis-marker-x { stroke: var(--red); }
+line.axis-marker-y { stroke: var(--green); }
+
+polygon {
+	fill: var(--background-1);
+	opacity: 0.75;
+}

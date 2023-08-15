@@ -5,6 +5,7 @@
 	import GraphLayer from "./GraphLayer.svelte";
 	import RulerLayer from "./RulerLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
+	import GraphIndices from "./GraphIndices.svelte";
 	import ToolLayer from "./ToolLayer.svelte";
 	import FlatFoldable from "./FlatFoldable.svelte";
 	import { Graph } from "../../stores/Model.js";
@@ -17,6 +18,7 @@
 		ShowGrid,
 		ShowAxes,
 		ShowFlatFoldableIssues,
+		ShowIndices,
 	} from "../../stores/App.js";
 
 	const formatMouseEvent = (e) => ({
@@ -71,6 +73,9 @@
 	<UILayer />
 	<RulerLayer />
 	<ToolLayer />
+	{#if $ShowIndices}
+		<GraphIndices />
+	{/if}
 </svg>
 
 	<!-- i'm not sure what role=presentation means, i just guessed -->

@@ -1,25 +1,36 @@
 <script>
-	import { validateKawasaki } from "rabbit-ear/singleVertex/validate.js";
+	import {
+		validateKawasaki,
+		validateMaekawa,
+	} from "rabbit-ear/singleVertex/validate.js";
 	import { VertexRadius } from "../../stores/App.js";
 
 	export let graph = {};
 
-	let invalid = [];
-	$: invalid = graph.edges_vertices ? validateKawasaki(graph) : [];
+	// todo get rid of the graph.edges_vertices check
 
-	$: console.log("invalid", invalid);
+	let invalidKawasaki = [];
+	$: invalidKawasaki = graph.edges_vertices ? validateKawasaki(graph, 1e-3) : [];
+
+	let invalidMaekawa = [];
+	$: invalidMaekawa = graph.edges_vertices ? validateMaekawa(graph) : [];
 </script>
 
-{#each invalid as v}
+{#each invalidMaekawa as v}
 	<circle
-		r={$VertexRadius * 4}
+		r={$VertexRadius * 3}
+		cx={graph.vertices_coords[v][0]}
+		cy={graph.vertices_coords[v][1]}
+		stroke="#fb4a"
+		stroke-width={$VertexRadius * 1}
+		fill="none" />
+{/each}
+
+{#each invalidKawasaki as v}
+	<circle
+		r={$VertexRadius * 2}
 		cx={graph.vertices_coords[v][0]}
 		cy={graph.vertices_coords[v][1]}
 		stroke="none"
-		fill="#e53a" />
+		fill="#e53" />
 {/each}
-
-
-<style>
-	
-</style>

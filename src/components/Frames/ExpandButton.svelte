@@ -33,12 +33,12 @@
 		width: 4rem;
 		height: 1.3rem;
 		cursor: pointer;
-		background-color: #333;
-		stroke: #777;
+		background-color: var(--background-1);
+		stroke: var(--dim);
 		font-size: 0.9rem;
 		font-weight: bold;
 	}
 	button:hover {
-		stroke: #ccc;
+		stroke: var(--text);
 	}
 </style>

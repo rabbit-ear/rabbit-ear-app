@@ -136,12 +136,12 @@
 
 	/* colors */
 	.toolbar {
-		background-color: #333;
+		background-color: var(--background-1);
 	}
 	.panels {
-		background-color: #333;
+		background-color: var(--background-1);
 	}
 	.terminal {
-		background-color: #333;
+		background-color: var(--background-1);
 	}
 </style>

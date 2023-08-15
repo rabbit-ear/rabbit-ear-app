@@ -14,6 +14,6 @@
 	</FrameItem>
 
 <style>
-	svg { fill: #ccc; }
-	svg:hover { fill: #fb4; }
+	svg { fill: var(--dim); }
+	svg:hover { fill: var(--highlight); }
 </style>

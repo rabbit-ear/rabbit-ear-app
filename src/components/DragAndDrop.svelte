@@ -81,6 +81,6 @@
     border-radius: 0.25rem;
 	}
 	div.dragging {
-		border-color: #fb4;
+		border-color: var(--highlight);
 	}
 </style>

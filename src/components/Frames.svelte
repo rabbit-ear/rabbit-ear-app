@@ -30,7 +30,7 @@
 		width: 100%;
 		height: 100%;
 		overflow-x: auto;
-		border-top: 2px solid #333;
+		border-top: 2px solid var(--background-1);
 		padding: 0.5rem;
 	}
 	.horizontal {

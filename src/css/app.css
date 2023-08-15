@@ -1,17 +1,51 @@
+/* css variables for colors */
+:root {
+	color-scheme: light dark;
+	--text: #ddd;
+	--bright: #fff;
+	--dim: #888;
+	--background-0: #2a2a2a;
+	--background-1: #333;
+	--background-2: #3a3a3a;
+	--background-3: #444;
+	--yellow: #fb4;
+	--blue: #158;
+	--lightblue: #39e;
+	--red: #e53;
+	--green: #5e3;
+	--highlight: var(--yellow);
+}
+
+/*
+:root {
+	color-scheme: light;
+	--text: #555;
+	--bright: #000;
+	--dim: #888;
+	--background-0: #f8f8f8;
+	--background-1: #eee;
+	--background-2: #fff;
+	--background-3: #d9ddee;
+	--yellow: #fb4;
+	--blue: #158;
+	--lightblue: #39e;
+	--red: #e53;
+	--green: #5e3;
+	--highlight: var(--lightblue);
+}
+*/
+
 :root {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
-
-	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #2a2a2a;
-
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
+	color: var(--text);
+	background-color: var(--background-0);
 }
 
 * {
@@ -23,17 +57,9 @@ html, body, #app {
 	height: 100%;
 }
 
-@media (prefers-color-scheme: light) {
+/*@media (prefers-color-scheme: light) {
 	:root {
 		color: #213547;
 		background-color: #ffffff;
 	}
-}
-
-/* css variables for colors */
-:root {
-	--text: #ccc;
-	--bright: #fff;
-	--dim: #888;
-	--highlight: #fb4;
-}
+}*/

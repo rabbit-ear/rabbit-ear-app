@@ -43,7 +43,7 @@
 	}
 	.info {
 		font-style: italic;
-		color: #999;
+		color: var(--dim);
 	}
 	hr { width: 100%; }
 </style>

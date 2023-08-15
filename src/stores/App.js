@@ -21,6 +21,7 @@ export const ShowFrames = writable(true);
 export const ShowFlatFoldableIssues = writable(true);
 export const ShowGrid = writable(true);
 export const ShowAxes = writable(true);
+export const ShowIndices = writable(false);
 export const RulersAutoClear = writable(true);
 
 // DOM element references

@@ -1,6 +1,9 @@
 <script>
 	import Panel from "./Panel.svelte";
-	import { ModelMatrix, CameraMatrix } from "../../stores/ViewBox.js";
+	import {
+		ModelMatrix,
+		CameraMatrix,
+	} from "../../stores/ViewBox.js";
 	import {
 		Current,
 		CurrentSnap,
@@ -52,6 +55,7 @@
 	.dim {
 		color: var(--dim);
 	}
-	input[type=text] { width: 100%; }
-/*	input[type=text].half { width: 50%; }*/
+	input[type=text] {
+		width: 100%;
+	}
 </style>

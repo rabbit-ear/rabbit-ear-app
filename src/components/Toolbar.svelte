@@ -172,6 +172,7 @@ $: editable = !($FrameIsLocked);
 	<label for="scribble">scribble</label>
 </div>
 
+<!-- 
 <p>modifiers</p>
 <div class="vertical-radio">
 	<input
@@ -183,6 +184,7 @@ $: editable = !($FrameIsLocked);
 		value={TOOL_SPLIT_EDGE} />
 	<label for="split-edge">split edge</label>
 </div>
+ -->
 
 <p>attributes</p>
 <div class="vertical-radio">
@@ -231,7 +233,7 @@ $: editable = !($FrameIsLocked);
 		user-select: none;
 	}
 	p {
-		color: #999;
+		color: var(--text);
 		margin: 1rem 0 0.25rem 0;
 		font-style: italic;
 		user-select: none;

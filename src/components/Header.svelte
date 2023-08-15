@@ -198,16 +198,21 @@
 		flex-direction: row;
 		width: 100%;
 		height: 100%;
-		/* font-weight: 700;*/
-		box-shadow: 0 0rem 0.5rem 0 #111;
+		box-shadow: 0 0rem 0.5rem 0 black;
 		position: relative;
+	}
+	nav > ul > li {
+		font-weight: bold;
+	}
+	nav > ul > li > ul {
+		font-weight: normal;
 	}
 	li[disabled] { opacity: 0.5; }
 	nav li {
 		padding: 0 1rem;
-/*		cursor: pointer;*/
 		user-select: none;
 		height: 100%;
+		/* cursor: pointer;*/
 	}
 	nav hr {
 		margin: 0.25rem auto;
@@ -244,16 +249,16 @@
 	/* colors*/
 	nav,
 	nav ul ul {
-		background-color: #3a3a3a;
-		color: #eee;
+		background-color: var(--background-2);
+		color: var(--text);
 	}
 	/*nav li[highlighted=true] {
 		background-color: #e53;
-		color: white;
+		color: var(--highlight);
 	}*/
 	nav li:hover {
-		background-color: #444;
-		color: white;
+		background-color: var(--background-3);
+		color: var(--bright);
 	}
 	/*nav li[highlighted=true]:hover {
 		background-color: #f75;

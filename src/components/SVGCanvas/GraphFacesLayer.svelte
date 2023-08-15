@@ -10,7 +10,11 @@
 </script>
 
 {#each faces_polygon as poly, i}
-	<polygon
-		points={poly.map(point => point.join(",")).join(" ")}
-		fill={fills[i] || "#333c" } />
+	{#if fills[i]}
+		<polygon
+			points={poly.map(point => point.join(",")).join(" ")}
+			fill={fills[i]} />
+	{:else}
+		<polygon points={poly.map(point => point.join(",")).join(" ")} />
+	{/if}
 {/each}

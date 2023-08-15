@@ -56,6 +56,13 @@ const keyboardWindowEventDown = (event) => {
 	// execute functions
 	switch (event.keyCode) {
 	case 8: // delete
+		// currently selected a frame from the frame item panel.
+		// user would like to delete this frame.
+		if (document.activeElement
+			&& document.activeElement.classList
+			&& document.activeElement.classList.contains("button-frame-item")) {
+			execute("deleteActiveFrame");
+		}
 		break;
 	case 16: // Shift
 		break;

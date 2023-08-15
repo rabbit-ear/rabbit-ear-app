@@ -50,14 +50,14 @@
 		flex: 0 0 1.5rem;
 		resize: none;
 		border: 1px solid transparent;
-		color: #ddd;
+		color: var(--text);
 		outline-color: transparent;
-		background-color: #2a2a2a;
+		background-color: var(--background-0);
 	}
 	textarea:focus {
 		outline: none !important;
-		border: 1px solid #17c;
+		border: 1px solid var(--lightblue);
 		outline-color: transparent;
-		background-color: #222;
+		background-color: var(--background-0);
 	}
 </style>

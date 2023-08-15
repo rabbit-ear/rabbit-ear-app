@@ -60,7 +60,7 @@
 				y1={s[0][1]}
 				x2={s[1][0]}
 				y2={s[1][1]}
-				stroke="#fff8"
+				class="ruler-line"
 	 			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
 				stroke-dashoffset={tick}
 			/>
@@ -71,7 +71,7 @@
 				y1={s[0][1]}
 				x2={s[1][0]}
 				y2={s[1][1]}
-				stroke="#fb4"
+				class="preview-line"
 	 			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
 				stroke-dashoffset={tick}
 			/>
@@ -86,3 +86,12 @@
  			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
 			stroke-dashoffset={tick}
  -->
+<style>
+	.ruler-line {
+/*		stroke: var(--highlight);*/
+		stroke: var(--bright);
+	}
+	.preview-line {
+		stroke: var(--dim);
+	}
+</style>

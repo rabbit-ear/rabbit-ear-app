@@ -93,7 +93,14 @@
 		display: flex;
 		flex-direction: column;
 	}
-	.done { color: #444; }
-	.current { color: #39c; }
-	.todo { color: #bbb; }
+	.done {
+		color: var(--dim);
+	}
+	.current {
+		color: var(--highlight);
+		font-weight: bold;
+	}
+	.todo {
+		color: var(--text);
+	}
 </style>

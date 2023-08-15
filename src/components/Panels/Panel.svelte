@@ -17,11 +17,11 @@
 	}
 	.title {
 		padding: 0.25rem 0.5rem;
-		background-color: #444;
+		background-color: var(--background-3);
 		font-weight: bold;
 	}
 	.body {
 		padding: 0.25rem 0.5rem;
-		background-color: #393939;
+		background-color: var(--background-2);
 	}
 </style>
