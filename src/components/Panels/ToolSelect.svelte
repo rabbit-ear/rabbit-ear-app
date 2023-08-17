@@ -1,5 +1,6 @@
 <script>
 	import { ElementSelect } from "../../stores/Tool.js";
+	import { Selection } from "../../stores/Select.js";
 	import {
 		SELECT_VERTEX,
 		SELECT_EDGE,
@@ -36,12 +37,26 @@
 			value={SELECT_FACE} />
 		<label for="selectFaces">faces</label>
 	</div>
+	<div>
+		{#if $Selection.vertices.length}
+			<p><strong>{$Selection.vertices.length}</strong> vertices</p>
+		{/if}
+		{#if $Selection.edges.length}
+			<p><strong>{$Selection.edges.length}</strong> edges</p>
+		{/if}
+		{#if $Selection.faces.length}
+			<p><strong>{$Selection.faces.length}</strong> faces</p>
+		{/if}
+	</div>
 </div>
 
 <style>
 	.container {
 		display: flex;
 		flex-direction: column;
+	}
+	strong {
+		font-weight: bold;
 	}
 	p {
 		color: var(--dim);

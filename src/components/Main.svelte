@@ -11,7 +11,6 @@
 	import DragAndDrop from "./DragAndDrop.svelte";
 	import {
 		ShowHeader,
-		ShowTerminal,
 	} from "../stores/App.js";
 
 	// these events originate from the SVG canvas
@@ -48,6 +47,7 @@
 			<Header />
 		</div>
 	{/if}
+	<Terminal />
 	<div class="gui horizontal">
 		<div class="toolbar">
 			<Toolbar />
@@ -64,11 +64,6 @@
 			<Panels />
 		</div>
 	</div>
-	{#if $ShowTerminal}
-		<div class="terminal">
-			<Terminal />
-		</div>
-	{/if}
 </main>
 
 <style>
@@ -100,7 +95,7 @@
 	}
 	.terminal {
 		width: 100%;
-		height: 6rem;
+		height: 3.75rem;
 		flex: 0 1 auto;
 	}
 

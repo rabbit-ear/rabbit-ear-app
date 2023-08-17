@@ -70,8 +70,8 @@
 	{#if $ShowFlatFoldableIssues}
 		<FlatFoldable graph={$Graph} />
 	{/if}
-	<UILayer />
 	<RulerLayer />
+	<UILayer />
 	<ToolLayer />
 	{#if $ShowIndices}
 		<GraphIndices />

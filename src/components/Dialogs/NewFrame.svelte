@@ -57,7 +57,7 @@
 	{/if}
 	{#if panel==="tessellation"}
 		<hr />
-		<button on:click={newEmpty}>tessellation</button>
+		<button on:click={() => {}}>tessellation</button>
 	{/if}
 </dialog>
 

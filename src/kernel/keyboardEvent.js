@@ -118,7 +118,7 @@ const keyboardWindowEventDown = (event) => {
 		}
 		break;
 	case 65: // "a"
-		if (!altKey && !ctrlKey && !metaKey && shiftKey) {
+		if (!altKey && (ctrlKey || metaKey) && !shiftKey) {
 			event.preventDefault();
 			execute("selectAll");
 		}

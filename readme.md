@@ -21,6 +21,20 @@ Link between frames: I discussed this in a note elsewhere, a frame can be a chil
 
 Need to fully explore what it would take to keep track of vertices, edges, and faces in between operations, to try to maintain isometry between components which do not move. calling "planarize()" really disrupts this.
 
+### update: usage issues
+
+I'm encoutering usage issues while making a crease pattern for a new design. It is often the case that two vertices end up as near-epsilon neighbors; there is a duplicate-vertices issue, at least, there might be something else. I think I need better analysis tools, tools to uncover possible issues, like:
+
+- vertices: too close to each other
+- edges: circular, or duplicate should be already removed
+- edges: degenerate, due to close vertices, which should be handled by the first vertex solution
+- faces: degenerate, area is too small
+- faces: winding is in the wrong direction
+
+it would be nice to use the terminal output to report "no duplicate vertices found", for example.
+
+additionally: some fixes
+
 ## 2023-07-23
 
 ### new feature ideas

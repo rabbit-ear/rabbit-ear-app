@@ -14,6 +14,8 @@
 
 	let invalidMaekawa = [];
 	$: invalidMaekawa = graph.edges_vertices ? validateMaekawa(graph) : [];
+
+	$: console.log("invalid (k, m)", invalidKawasaki, invalidMaekawa);
 </script>
 
 {#each invalidMaekawa as v}
