@@ -21,7 +21,7 @@
 
 {#if $ShowTerminal}
 	<div class="expanded">
-		<pre bind:this={pre}><span>newEdge(20, 22)</span><br /><span>newVertex(0.4142, 0.5)</span><br /><span>newVertex(0, 0.9999999999999)</span><br /><span>newEdge(0, 1)</span><br /><span>no duplicate vertices found</span><br /><span>newEdge(7, 9)</span><br /><span>newVertex(0.5, 0.5)</span><br />{#each $TerminalHistory as line, i}<span>{line.func.name}({line.args ? line.args.map(arg => JSON.stringify(arg)).join(", ") : ""})</span><br/>{/each}</pre>
+		<pre bind:this={pre}>{#each $TerminalHistory as el}{@html el.html}<br/>{/each}</pre>
 		<textarea
 			bind:this={$TerminalTextarea}
 			bind:value={$TerminalValue}
@@ -32,7 +32,7 @@
 	</div>
 {:else}
 	<div class="collapsed">
-		<pre bind:this={pre}><span>newEdge(20, 22)</span><br /><span>newVertex(0.4142, 0.5)</span><br /><span>newVertex(0, 0.9999999999999)</span><br /><span>newEdge(0, 1)</span><br /><span>no duplicate vertices found</span><br /><span>newEdge(7, 9)</span><br /><span>newVertex(0.5, 0.5)</span><br />{#each $TerminalHistory as line, i}<span>{line.func.name}({line.args ? line.args.map(arg => JSON.stringify(arg)).join(", ") : ""})</span><br/>{/each}</pre>
+		<pre bind:this={pre}>{#each $TerminalHistory as el}<span>{@html el.html}</span><br/>{/each}</pre>
 	</div>
 {/if}
 
@@ -64,7 +64,7 @@
 		overflow-x: hidden;
 		overflow-y: scroll;
 		font-family: monospace;
-		color: var(--dim); 
+/*		color: var(--dim); */
 		background-color: var(--background-2);
 	}
 	pre > * {
@@ -77,12 +77,17 @@
 		border: 1px solid transparent;
 		color: var(--text);
 		outline-color: transparent;
-		background-color: var(--background-2);
+		background-color: var(--background-0);
 	}
 	textarea:focus {
 		outline: none !important;
-		border: 1px solid var(--background-3);
+		border: 1px solid var(--dim);
 		outline-color: transparent;
 		background-color: var(--background-0);
 	}
+	pre :global(.function) { color: var(--lightblue); }
+	pre :global(.param) { color: var(--yellow); }
+	pre :global(.error) { color: var(--red); }
+	pre :global(.return) { color: var(--dim); }
+	pre :global(.prompt-symbol) { color: var(--dim); }
 </style>

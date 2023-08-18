@@ -50,6 +50,11 @@ export const FramesRendered = derived(
  * @description Which frame is currently visible in the main viewport?
  */
 export const FrameIndex = writable(0);
+const FrameIndexSet = FrameIndex.set;
+FrameIndex.set = (n) => {
+	Selection.reset();
+	FrameIndexSet(n);
+};
 /**
  * @description The currently selected (and currently being edited) frame.
  */
@@ -79,6 +84,27 @@ export const FrameIsLocked = derived(
 	[FramesInherit, FrameIndex],
 	([$FramesInherit, $FrameIndex]) => $FramesInherit[$FrameIndex],
 	false,
+);
+/**
+ *
+ */
+export const TessellationBasisVectors = writable([
+	[1, 0],
+	[0, 1],
+]);
+/**
+ *
+ */
+export const TessellationRepeats = writable([3, 3]);
+/**
+ *
+ */
+export const FramesIsTessellation = derived(
+	Frames,
+	($Frames) => $Frames
+		.map(frame => frame.frame_classes
+			&& frame.frame_classes.includes("tessellation"))
+	[false],
 );
 /**
  * @description When the graph requires an update but the change

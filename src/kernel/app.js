@@ -25,6 +25,37 @@ const previewFunctions = {
 	// "autoPlanarize": true,
 };
 /**
+ *
+ */
+const formatFunctionResult = (result) => {
+	const prompt = `<span class="prompt-symbol">&gt;</span>`;
+	switch (typeof result) {
+	case "boolean": return `${prompt} <span class="return">${result}</span>`;
+	case "number": return `${prompt} <span class="return">${result}</span>`;
+	case "string": return `${prompt} <span class="return">${result}</span>`;
+	case "object": return `${prompt} <span class="return">${JSON.stringify(result)}</span>`;
+	case "function": break;
+	}
+};
+/**
+ *
+ */
+const formatFunctionCall = (functionName, args) => {
+	let params;
+	try {
+		params = structuredClone(args);
+	} catch (error) {
+		throw new Error(`<span class="error">${error}</span>`);
+	}
+	const paramsString = params
+		? params
+			.map(arg => JSON.stringify(arg))
+			.map(a => `<span class="param">${a}</span>`)
+			.join(", ")
+		: ""
+	return `<span class="function">${functionName}</span>(${paramsString})`
+};
+/**
  * @description the main execution method. all methods, from UI to
  * graph-modifying should pass through this method. pre and post-
  * execute event methods can be called, and the effect of calling
@@ -33,11 +64,16 @@ const previewFunctions = {
 export const execute = (funcName, ...args) => {
 	const func = Functions[funcName];
 	if (!func) {
-		console.error(new Error("no known function with that name"));
+		const error = new Error(`no known function with the name "${funcName}"`);
+		TerminalHistory.update(history => [
+			...history,
+			{ html: `<span class="error">${error}</span>` },
+		]);
 		return;
 	}
 	if (previewFunctions[funcName]) {
-		return func(...args);
+		func(...args);
+		return;
 	}
 	let res;
 	const preEvents = get(preExecuteEvents);
@@ -47,19 +83,23 @@ export const execute = (funcName, ...args) => {
 		res = func(...args);
 		postEvents.forEach(fn => fn(funcName, ...args));
 	} catch (error) {
-		console.error(error);
-		return res;
-	}
-	let argsClone = args;
-	try {
-		argsClone = structuredClone(args);
-	} catch (error) {
-		console.error(error);
+		// console.error(error);
+		TerminalHistory.update(history => [
+			...history,
+			{ html: `<span class="error">${error}</span>` },
+		]);
+		return;
 	}
 	const newHistory = [];
-	newHistory.push(...preEvents.map(fn => ({ func: fn, args: [] })));
-	newHistory.push({ func, args: argsClone });
-	newHistory.push(...postEvents.map(fn => ({ func: fn, args: [] })));
+	try {
+		newHistory.push({ html: formatFunctionCall(func.name, args) });
+	} catch (error) {
+		newHistory.push({ html: error });
+		return;
+	}
+	if (res !== undefined) {
+		newHistory.push({ html: formatFunctionResult(res) });
+	}
 	TerminalHistory.update(history => [...history, ...newHistory]);
 	return res;
 };
@@ -75,12 +115,16 @@ export const executeString = (str) => {
 	try {
 		args = JSON.parse(`[${argsStr}]`);
 	} catch (error) {
-		console.error(error);
+		// console.error(error);
+		TerminalHistory.update(history => [
+			...history,
+			{ html: `<span class="error">${error}</span>` },
+		]);
 		return;
 	}
-	console.log("insideParen", insideParen);
-	console.log("fnName", fnName);
-	console.log("argsStr", argsStr);
-	console.log("args", args);
+	// console.log("insideParen", insideParen);
+	// console.log("fnName", fnName);
+	// console.log("argsStr", argsStr);
+	// console.log("args", args);
 	execute(fnName, ...args);
 };

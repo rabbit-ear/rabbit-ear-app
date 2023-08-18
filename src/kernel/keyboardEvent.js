@@ -27,7 +27,6 @@ import {
 	Tool,
 	AssignType,
 } from "../stores/Tool.js";
-import { FileHistory } from "../stores/History.js";
 import {
 	DialogNewFile,
 	TerminalTextarea,
@@ -196,7 +195,7 @@ const keyboardWindowEventDown = (event) => {
 	case 90: // "z"
 		if (!altKey && (ctrlKey || metaKey) && !shiftKey) {
 			event.preventDefault();
-			FileHistory.revert();
+			execute("undo");
 		}
 		if (!altKey && (ctrlKey || metaKey) && shiftKey) {
 			event.preventDefault();

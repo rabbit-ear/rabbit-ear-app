@@ -16,7 +16,7 @@ export const UndoHistoryLength = 30;
 export const NewEdgeAssignment = writable("F");
 export const Snapping = writable(true);
 export const ShowSimulator = writable(false);
-export const ShowTerminal = writable(false);
+export const ShowTerminal = writable(true);
 export const ShowFrames = writable(true);
 export const ShowFlatFoldableIssues = writable(true);
 export const ShowGrid = writable(true);
@@ -47,22 +47,14 @@ export const VertexRadius = derived(
 // when an operation is finished, it's customary to re-planarize
 // the graph to resolve any edge crossings/duplicate vertices.
 // an advanced user can disable this feature.
-const {
-	subscribe: autoPlanarizeSubscribe,
-	update: autoPlanarizeUpdate,
-	set: autoPlanarizeSet,
-} = writable(false);
-
-export const AutoPlanarize = {
-	subscribe: autoPlanarizeSubscribe,
-	update: autoPlanarizeUpdate,
-	set: (e) => {
-		const events = get(postExecuteEvents)
-			.filter(fn => fn !== autoPlanarizeFunc);
-		if (e) { events.push(autoPlanarizeFunc); }
-		postExecuteEvents.set(events);
-		return autoPlanarizeSet(e);
-	},
+export const AutoPlanarize = writable(false);
+const AutoPlanarizeSet = AutoPlanarize.set;
+AutoPlanarize.set = (e) => {
+	const events = get(postExecuteEvents)
+		.filter(fn => fn !== autoPlanarizeFunc);
+	if (e) { events.push(autoPlanarizeFunc); }
+	postExecuteEvents.set(events);
+	return AutoPlanarizeSet(e);
 };
 
 AutoPlanarize.set(true);

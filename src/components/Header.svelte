@@ -7,8 +7,10 @@
 		Snapping,
 	} from "../stores/App.js";
 	import { Graph } from "../stores/Model.js";
+	import { Selection } from "../stores/Select.js";
 	import { execute } from "../kernel/app.js";
 	import { loadFileDialog } from "../js/file.js";
+	import { nearestTwoVertices } from "../js/errors.js";
 	import {
 		ShowSimulator,
 		ShowTerminal,
@@ -29,6 +31,13 @@
 			.filter(e => assignmentCanBeFolded[graph.edges_assignment[e]])
 		execute("toggleAssignment", edges);
 	};
+	const selectNearestVertices = () => {
+		const vertices = nearestTwoVertices(get(Graph));
+		if (vertices === undefined) { return; }
+		Selection.reset();
+		Selection.addVertices(vertices);
+	};
+	const mergeNearbyVertices = () => execute("mergeNearbyVertices");
 </script>
 
 	<nav>
@@ -45,6 +54,7 @@
 			</li>
 			<li>graph
 				<ul>
+					<li><button on:click={mergeNearbyVertices}>merge nearby vertices</button></li>
 					<li>
 						<span class="popover">convert to planar graph</span>
 						<button on:click={() => execute("planarize")}>planarize</button>
@@ -64,7 +74,7 @@
 						</ul> -->
 					</li>
 					<hr />
-					<li class="no-select description">grid snapping</li>
+					<!-- <li class="no-select description">grid snapping</li>
 					<li class="no-select">
 						<div>
 							<input
@@ -84,9 +94,9 @@
 							>
 							<label for="radio-snapping-no-snapping">off</label>
 						</div>
-					</li>
+					</li> -->
 					<li>
-						<button on:click={() => execute("snapAllVertices")}>snap once to grid</button>
+						<button on:click={() => execute("snapAllVertices")}>snap all to grid</button>
 					</li>
 				</ul>
 			</li>
@@ -147,6 +157,8 @@
 						<input type="checkbox" id="checkbox-flat-foldable" bind:checked={$ShowFlatFoldableIssues}>
 						<label for="checkbox-flat-foldable">flat-foldable issues</label>
 					</li>
+					<li><button on:click={selectNearestVertices}>select nearest vertices</button></li>
+					<hr />
 					<!-- <li>show face-winding</li> -->
 					<!-- <li>isolated vertices</li> -->
 					<li class="no-select description">show indices</li>

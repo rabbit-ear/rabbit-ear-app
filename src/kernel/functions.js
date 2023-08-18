@@ -16,6 +16,7 @@ import addNonPlanarEdge from "rabbit-ear/graph/add/addNonPlanarEdge.js";
 import splitEdge from "rabbit-ear/graph/splitEdge/index.js";
 import populate from "rabbit-ear/graph/populate.js";
 import { kawasakiSolutions } from "rabbit-ear/singleVertex/kawasakiGraph.js";
+import { removeDuplicateVertices } from "rabbit-ear/graph/vertices/duplicate.js";
 import { planarBoundary } from "rabbit-ear/graph/boundary.js";
 import {
 	add2,
@@ -30,6 +31,7 @@ import {
 	nearestFace,
 } from "rabbit-ear/graph/nearest.js";
 import { downloadFile } from "../js/file.js";
+import { findEpsilon } from "../js/epsilon.js";
 import {
 	Frames,
 	FrameIndex,
@@ -73,6 +75,10 @@ export const faceAtPoint = (point) => nearestFace(get(Graph), point);
 /**
  *
  */
+export const undo = () => FileHistory.revert();
+/**
+ *
+ */
 export const selectAll = () => {
 	const graph = get(Graph);
 	const vertices = (graph.vertices_coords || []).map((_, i) => i);
@@ -95,6 +101,15 @@ export const addToSelection = (component = "vertices", components = []) => {
 	case "edges": return Selection.addEdges(components);
 	case "faces": return Selection.addFaces(components);
 	}
+};
+
+export const mergeNearbyVertices = (epsilonFactor = 1e-4) => {
+	const graph = get(Graph);
+	const epsilon = findEpsilon(graph, epsilonFactor);
+	const result = removeDuplicateVertices(graph, epsilon);
+	return result.remove.length
+		? `removed ${result.remove.length} vertices: [${result.remove.join(" ")}]`
+		: `removed no vertices`;
 };
 
 export const findBoundary = () => {
