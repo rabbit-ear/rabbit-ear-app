@@ -14,7 +14,7 @@
 		<input type="text" placeholder="title" bind:value={$File.file_title} >
 		<input type="text" placeholder="author" bind:value={$File.file_author} >
 		<textarea placeholder="description" bind:value={$File.file_description}></textarea>
-		<h3>frame {$FrameIndex + 1}/{$Frames.length}</h3>
+		<p>frame {$FrameIndex + 1}/{$Frames.length}</p>
 		<!-- <input
 			type="radio"
 			name="frame-class"

@@ -5,7 +5,14 @@ import {
 	Presses,
 	UIGraph,
 } from "../stores/UI.js";
-import { RulerLines } from "../stores/Ruler.js";
+import {
+	RulerLines,
+	RulerRays,
+} from "../stores/Ruler.js";
+import {
+	RadialSnapDegrees,
+	RadialSnapOffset,
+} from "../stores/Tool.js";
 import {
 	snapToPoint,
 	snapToRulerLine,
@@ -28,7 +35,11 @@ export const pointerEventEdge = (eventType, { point }) => {
 		pressCoords = coords;
 		Presses.set([pressCoords]);
 		if (shift) { // Shift
-			execute("radialRulers", pressCoords);
+			execute("radialRulers",
+				pressCoords,
+				get(RadialSnapDegrees),
+				get(RadialSnapOffset),
+			);
 		}
 		UIGraph.set({ vertices_coords: [coords] });
 	break;
@@ -45,6 +56,7 @@ export const pointerEventEdge = (eventType, { point }) => {
 		);
 		Presses.set([]);
 		RulerLines.set([]);
+		RulerRays.set([]);
 		UIGraph.set({ vertices_coords: [coords] });
 	break;
 	}

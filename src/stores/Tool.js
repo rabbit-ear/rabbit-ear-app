@@ -49,6 +49,8 @@ export const ScribbleSmoothAmount = writable(0.5);
 export const ScribbleDensity = writable(0.5);
 export const ScribbleWaitForConfirmation = writable(false);
 export const PleatCount = writable(4);
+export const RadialSnapDegrees = writable(22.5);
+export const RadialSnapOffset = writable(0);
 
 const { subscribe, set, update } = writable(TOOL_EDGE);
 

@@ -1,5 +1,9 @@
 import { get } from "svelte/store";
 import { Presses } from "../stores/UI.js";
+import {
+	RadialSnapDegrees,
+	RadialSnapOffset,
+} from "../stores/Tool.js";
 import { RulerLines } from "../stores/Ruler.js";
 import { execute } from "./app.js";
 
@@ -9,7 +13,11 @@ export const keyboardEventEdge = (eventType, event) => {
 		case "down":
 			const presses = get(Presses);
 			if (presses.length) {
-				execute("radialRulers", presses[0]);
+				execute("radialRulers",
+					presses[0],
+					get(RadialSnapDegrees),
+					get(RadialSnapOffset),
+				);
 			}
 			break;
 		case "up":

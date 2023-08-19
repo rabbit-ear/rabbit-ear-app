@@ -29,20 +29,29 @@
 
 <dialog bind:this={$DialogNewFile}>
 	<h1>new file</h1>
+	<p>This will create a new file and erase all current progress.</p>
 	<hr />
-	<NewShape on:new={newDidPress} />
+	<div>
+		<NewShape on:new={newDidPress} />
+	</div>
 </dialog>
 
 <style>
 	dialog {
 		border: 0;
+		padding: 0;
 		background-color: var(--background-1);
+		border: 1px solid var(--text);
 	}
 	dialog::backdrop {
 		background-color: #0004;
 /*		background: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.2));*/
 	}
+	dialog > * {
+		margin: 1rem;
+	}
 	h1 {
 		font-size: 2rem;
+/*		margin: 0.5rem 0.5rem;*/
 	}
 </style>

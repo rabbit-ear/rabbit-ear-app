@@ -23,6 +23,8 @@ Need to fully explore what it would take to keep track of vertices, edges, and f
 
 ### update: usage issues
 
+> UPDATE: I found the issue. It is that `planarize()` was creating circular edges. This issues has been resolved.
+
 I'm encoutering usage issues while making a crease pattern for a new design. It is often the case that two vertices end up as near-epsilon neighbors; there is a duplicate-vertices issue, at least, there might be something else. I think I need better analysis tools, tools to uncover possible issues, like:
 
 - vertices: too close to each other

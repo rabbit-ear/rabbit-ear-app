@@ -23,6 +23,7 @@
 	import ToolScribble from "./ToolScribble.svelte";
 	import ToolScale from "./ToolScale.svelte";
 	import NewEdgeAssignment from "./NewEdgeAssignment.svelte";
+	import ShiftLockAngle from "./ShiftLockAngle.svelte";
 </script>
 
 <Panel>
@@ -35,6 +36,8 @@
 		{:else if $Tool === TOOL_VERTEX}
 		{:else if $Tool === TOOL_EDGE}
 			<NewEdgeAssignment />
+			<hr />
+			<ShiftLockAngle />
 		{:else if $Tool === TOOL_SPLIT_EDGE}
 			<p>split count: 2 (1 new vertex)</p>
 		{:else if $Tool === TOOL_TRANSLATE}

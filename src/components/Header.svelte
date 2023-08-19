@@ -210,7 +210,7 @@
 		flex-direction: row;
 		width: 100%;
 		height: 100%;
-/*		box-shadow: 0 0rem 0.5rem 0 black;*/
+		box-shadow: 0 0rem 0.25rem 0 black;
 		position: relative;
 	}
 	nav > ul > li {

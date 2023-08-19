@@ -5,6 +5,7 @@ import {
 } from "rabbit-ear/math/algebra/vector.js";
 import {
 	clampLine,
+	clampRay,
 	clampSegment,
 } from "rabbit-ear/math/general/function.js";
 import { nearestPointOnLine } from "rabbit-ear/math/geometry/nearest.js";
@@ -24,6 +25,7 @@ import { Graph } from "../stores/Model.js";
 import {
 	RulerPoints,
 	RulerLines,
+	RulerRays,
 } from "../stores/Ruler.js";
 import { Snapping } from "../stores/App.js";
 
@@ -120,11 +122,16 @@ export const snapToPoint = (point, force = false) => {
 
 export const snapToRulerLine = (point) => {
 	const rulerLines = get(RulerLines);
-	if (!rulerLines.length) {
+	const rulerRays = get(RulerRays);
+	// lines and rays in the same array, with a "type" key.
+	const lineTypes = rulerLines
+		.map(geo => ({ type: "line", geo }))
+		.concat(rulerRays.map(geo => ({ type: "ray", geo })))
+	if (!lineTypes.length) {
 		return { index: undefined, line: undefined, coords: snapToPoint(point, false) };
 	}
-	const rulerLinesNearPoints = rulerLines
-		.map(line => nearestPointOnLine(line, point));
+	const rulerLinesNearPoints = lineTypes
+		.map(el => nearestPointOnLine(el.geo, point, el.type === "ray" ? clampRay : clampLine));
 	const distances = rulerLinesNearPoints
 		.map(p => distance2(point, p));
 	let index = 0;
@@ -133,9 +140,9 @@ export const snapToRulerLine = (point) => {
 	}
 	const rulerPoint = rulerLinesNearPoints[index];
 	const snapPoint = snapToPoint(rulerPoint, false);
-	return overlapLinePoint(rulerLines[index], snapPoint)
-		? { index, line: rulerLines[index], coords: snapPoint }
-		: { index, line: rulerLines[index], coords: rulerPoint };
+	return overlapLinePoint(lineTypes[index].geo, snapPoint)
+		? { index, line: lineTypes[index].geo, coords: snapPoint }
+		: { index, line: lineTypes[index].geo, coords: rulerPoint };
 };
 
 // export const snapToPoint = (point, force = false) => {

@@ -48,7 +48,7 @@
 		height: 3.75rem;
 	}
 	.collapsed {
-		height: 1rem;
+		height: 1.1rem;
 	}
 	.expand-button {
 		all: unset;
@@ -65,7 +65,7 @@
 		overflow-y: scroll;
 		font-family: monospace;
 /*		color: var(--dim); */
-		background-color: var(--background-2);
+		background-color: var(--background-1);
 	}
 	pre > * {
 		margin: 0;
