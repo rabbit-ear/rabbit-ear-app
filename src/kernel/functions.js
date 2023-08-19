@@ -216,11 +216,13 @@ export const splitEdges = (edges) => {
 
 export const translateVertices = (vertices, vector) => {
 	FileHistory.cache();
-	const vertices_coords = get(Graph).vertices_coords || [];
+	if (!vertices.length) { return; }
+	const graph = get(Graph);
+	const vertices_coords = graph.vertices_coords || [];
 	vertices.forEach(v => {
 		vertices_coords[v] = add2(vertices_coords[v], vector);
 	});
-	IsoUpdateFrame({ ...get(Graph), vertices_coords });
+	IsoUpdateFrame({ ...graph, vertices_coords });
 };
 
 export const scale = (scaleFactor = 1) => {

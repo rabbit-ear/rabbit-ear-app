@@ -14,6 +14,7 @@ import {
 	TOOL_AXIOM_6,
 	TOOL_AXIOM_7,
 	TOOL_KAWASAKI,
+	TOOL_TRANSLATE,
 	ASSIGN_SWAP,
 	ASSIGN_FLAT,
 	ASSIGN_UNASSIGNED,
@@ -177,6 +178,16 @@ const keyboardWindowEventDown = (event) => {
 		}
 		break;
 	case 83: // "s"
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			event.preventDefault();
+			Tool.set(TOOL_SELECT);
+		}
+		break;
+	case 84: // "t"
+		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
+			event.preventDefault();
+			Tool.set(TOOL_TRANSLATE);
+		}
 		break;
 	case 85: // "u"
 		if (!altKey && !ctrlKey && !metaKey && !shiftKey) {
