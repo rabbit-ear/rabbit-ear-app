@@ -1,5 +1,11 @@
 # Blender-style graph maker
 
+## 2023-08-20
+
+new features:
+
+- ray-repeat. but in terms of the folded state. already in rabbit-ear as `flatFold()`, but with a "F" as the assignment.
+
 ## 2023-08-15
 
 Amazingly, I can see the finish line. There are still quite a few remaining issues, and then a wealth of small quality of life improvements which would be confusing to a new user.

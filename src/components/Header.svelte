@@ -212,6 +212,7 @@
 		height: 100%;
 		box-shadow: 0 0rem 0.25rem 0 black;
 		position: relative;
+		z-index: 1;
 	}
 	nav > ul > li {
 		font-weight: bold;

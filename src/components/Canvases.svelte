@@ -71,7 +71,7 @@
 		/* svgs are especially unrully */
 		/* this part might need more attention */
 		/* now it is calculated in the Javascript section */
-/*		max-height: calc(100vh - 2rem - 6rem - 6rem);*/
+		/* max-height: calc(100vh - 2rem - 6rem - 6rem);*/
 		flex: 1 1 auto;
 	}
 	.simulator-canvas {

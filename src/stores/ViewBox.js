@@ -34,7 +34,7 @@ export const ViewMatrix = derived(
 
 export const ModelViewMatrix = derived(
 	[ModelMatrix, ViewMatrix],
-	([$ModelMatrix, $ViewMatrix]) => multiplyMatrices2($ViewMatrix, $ModelMatrix),
+	([$ModelMatrix, $ViewMatrix]) => multiplyMatrices2($ModelMatrix, $ViewMatrix),
 	[...identity2x3],
 );
 

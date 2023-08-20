@@ -1,24 +1,38 @@
-<div class="container">
+<script>
+	let expanded = true;
+</script>
 
-	<div class="title">
+<div class="container">
+	<button class="title" on:click={() => expanded = !expanded}>
 		<slot name="title">
 			<span class="missing">Panel</span>
 		</slot>
-	</div>
+	</button>
 
-	<div class="body">
-		<slot name="body" />
-	</div>
+	{#if expanded}
+		<div class="body">
+			<slot name="body" />
+		</div>
+	{/if}
 </div>
 
 <style>
 	.container {
 		margin: 0.5rem;
 	}
+	button {
+		all: unset;
+		box-sizing: border-box;
+		width: 100%;
+		cursor: pointer;
+	}
 	.title {
 		padding: 0.25rem 0.5rem;
 		background-color: var(--background-3);
 		font-weight: bold;
+	}
+	.title:hover {
+		background-color: var(--background-1);
 	}
 	.body {
 		padding: 0.25rem 0.5rem;

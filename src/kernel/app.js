@@ -50,6 +50,7 @@ const formatFunctionCall = (functionName, args) => {
 	const paramsString = params
 		? params
 			.map(arg => JSON.stringify(arg))
+			.map(string => string.length > 1000 ? "[JSON]" : string)
 			.map(a => `<span class="param">${a}</span>`)
 			.join(", ")
 		: ""

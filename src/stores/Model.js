@@ -1,19 +1,23 @@
 import { get } from "svelte/store";
 import { writable, derived } from "svelte/store";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
-import {
-	flattenFrame,
-	getFramesAsFlatArray,
-} from "rabbit-ear/fold/frames.js";
+import { getFramesAsFlatArray } from "rabbit-ear/fold/frames.js";
 import { downloadFile } from "../js/file.js";
 import { graphToMatrix2 } from "../js/matrix.js";
-import { makeEmptyGraph } from "../js/graph.js";
+import {
+	makeEmptyGraph,
+	renderFrames,
+} from "../js/graph.js";
 import { Selection } from "./Select.js";
 import { FileHistory } from "./History.js";
 import {
 	CameraMatrix,
 	ModelMatrix,
 } from "./ViewBox.js";
+/**
+ *
+ */
+export const TessellationRepeats = writable(6);
 /**
  * @description an object which contains only FOLD file metadata,
  * any key that starts with "file_", for example "file_title".
@@ -33,17 +37,8 @@ export const Frames = writable([makeEmptyGraph()]);
  * currently this is the safe way, but some kind of caching would be ideal.
  */
 export const FramesRendered = derived(
-	Frames,
-	($Frames) => {
-		// because of the "flattenFrame" method, we need to reassemble the
-		// FOLD object back into its original form.
-		const FOLD = { ...$Frames[0] };
-		const file_frames = $Frames.slice(1);
-		if (file_frames.length) { FOLD.file_frames = file_frames; }
-		// run flattenFrame on every frame.
-		return Array.from(Array($Frames.length))
-			.map((_, i) => flattenFrame(FOLD, i));
-	},
+	[Frames, TessellationRepeats],
+	([$Frames, $TessellationRepeats]) => renderFrames($Frames, $TessellationRepeats),
 	[makeEmptyGraph()],
 );
 /**
@@ -88,24 +83,13 @@ export const FrameIsLocked = derived(
 /**
  *
  */
-export const TessellationBasisVectors = writable([
-	[1, 0],
-	[0, 1],
-]);
-/**
- *
- */
-export const TessellationRepeats = writable([3, 3]);
-/**
- *
- */
-export const FramesIsTessellation = derived(
-	Frames,
-	($Frames) => $Frames
-		.map(frame => frame.frame_classes
-			&& frame.frame_classes.includes("tessellation"))
-	[false],
-);
+// export const FramesIsTessellation = derived(
+// 	Frames,
+// 	($Frames) => $Frames
+// 		.map(frame => frame.frame_classes
+// 			&& frame.frame_classes.includes("tessellation"))
+// 	[false],
+// );
 /**
  * @description When the graph requires an update but the change
  * results in an isomorphic graph as it relates to VEF, so, for example,

@@ -1,13 +1,4 @@
 import { get } from "svelte/store";
-import {
-	doAxiom1,
-	doAxiom2,
-	doAxiom3,
-	doAxiom4,
-	doAxiom5,
-	doAxiom6,
-	doAxiom7,
-} from "../js/axioms.js";
 import removeGeometry from "rabbit-ear/graph/remove.js";
 import Planarize from "rabbit-ear/graph/planarize.js";
 import AddVertex from "rabbit-ear/graph/add/addVertex.js";
@@ -18,20 +9,41 @@ import populate from "rabbit-ear/graph/populate.js";
 import { kawasakiSolutions } from "rabbit-ear/singleVertex/kawasakiGraph.js";
 import { removeDuplicateVertices } from "rabbit-ear/graph/vertices/duplicate.js";
 import { planarBoundary } from "rabbit-ear/graph/boundary.js";
+import { pleat as fnPleat } from "rabbit-ear/graph/pleat.js";
+import { pointsToLine } from "rabbit-ear/math/general/convert.js";
 import {
 	add2,
 	scale2,
 } from "rabbit-ear/math/algebra/vector.js";
-import { pleat as fnPleat } from "rabbit-ear/graph/pleat.js";
-import { pointsToLine } from "rabbit-ear/math/general/convert.js";
 import {
 	nearest,
 	nearestVertex,
 	nearestEdge,
 	nearestFace,
 } from "rabbit-ear/graph/nearest.js";
-import { downloadFile } from "../js/file.js";
-import { findEpsilon } from "../js/epsilon.js";
+import {
+	doAxiom1,
+	doAxiom2,
+	doAxiom3,
+	doAxiom4,
+	doAxiom5,
+	doAxiom6,
+	doAxiom7,
+} from "../js/axioms.js";
+import {
+	downloadFile,
+} from "../js/file.js";
+import {
+	findEpsilon,
+} from "../js/epsilon.js";
+import {
+	doSetEdgesAssignment,
+	doSetEdgesFoldAngle,
+	doToggleEdgesAssignment,
+} from "../js/assignments.js";
+import {
+	makeEmptyGraph,
+} from "../js/graph.js";
 import {
 	Frames,
 	FrameIndex,
@@ -42,8 +54,12 @@ import {
 	LoadFile,
 	SaveFile,
 } from "../stores/Model.js";
-import { Selection } from "../stores/Select.js";
-import { FileHistory } from "../stores/History.js";
+import {
+	Selection,
+} from "../stores/Select.js";
+import {
+	FileHistory,
+} from "../stores/History.js";
 import {
 	RulerLines,
 	RulerRays,
@@ -52,14 +68,12 @@ import {
 	UILines,
 	UIRays,
 } from "../stores/UI.js";
-import { NewEdgeAssignment } from "../stores/App.js";
-import { RadialSnapDegrees } from "../stores/Tool.js";
 import {
-	doSetEdgesAssignment,
-	doSetEdgesFoldAngle,
-	doToggleEdgesAssignment,
-} from "../js/assignments.js";
-import { makeEmptyGraph } from "../js/graph.js";
+	NewEdgeAssignment,
+} from "../stores/App.js";
+import {
+	RadialSnapDegrees,
+} from "../stores/Tool.js";
 /**
  *
  */

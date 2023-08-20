@@ -42,7 +42,9 @@
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		border-bottom: 2px solid var(--background-2);
+/*		border-bottom: 2px solid var(--background-2);*/
+		box-shadow: 0 0.25rem 0.25rem -0.25rem black;
+		position: relative;
 	}
 	.expanded {
 		height: 3.75rem;

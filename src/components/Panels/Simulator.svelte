@@ -57,21 +57,20 @@
 <Panel>
 	<span slot="title">origami simulator</span>
 	<span slot="body">
-		<h3>
-			active
-			<input type="checkbox" bind:checked={$Active} />
-		</h3>
+		<input id="checkbox-active" type="checkbox" bind:checked={$Active} />
+		<label for="checkbox-active">active</label>
 
-		<h3>fold amount</h3>
 		<input
+			id="range-fold-amount"
 			type="range"
 			min="0"
 			max="1"
 			step="0.01"
 			disabled={!$Active}
 			bind:value={$FoldAmount} />
+		<label for="range-fold-amount">fold amount</label>
 
-		<h3>touch</h3>
+		<p>touch</p>
 		<input
 			type="radio"
 			id="radio-webgl-tool-trackball"
@@ -87,20 +86,14 @@
 			value="pull" />
 		<label for="radio-webgl-tool-pull">grab</label>
 
-		<h3>
-			show strain
-			<input type="checkbox" disabled={!$Active} bind:checked={$Strain} />
-		</h3>
+		<input id="checkbox-strain" type="checkbox" disabled={!$Active} bind:checked={$Strain} />
+		<label for="checkbox-strain">show strain</label>
 
-		<h3>
-			show touches
-			<input type="checkbox" bind:checked={$ShowTouches} />
-		</h3>
+		<input id="checkbox-show-touches" type="checkbox" bind:checked={$ShowTouches} />
+		<label for="checkbox-show-touches">show touches</label>
 
-		<h3>
-			show shadows
-			<input type="checkbox" disabled={$Strain} bind:checked={$ShowShadows} />
-		</h3>
+		<input id="checkbox-show-shadows" type="checkbox" disabled={$Strain} bind:checked={$ShowShadows} />
+		<label for="checkbox-show-shadows">show shadows</label>
 
 		<button>style</button>
 		<div class="collabsible">
