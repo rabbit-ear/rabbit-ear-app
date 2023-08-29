@@ -47,10 +47,10 @@
 		position: relative;
 	}
 	.expanded {
-		height: 3.75rem;
+		height: 6rem;
 	}
 	.collapsed {
-		height: 1.1rem;
+		height: 2rem;
 	}
 	.expand-button {
 		all: unset;

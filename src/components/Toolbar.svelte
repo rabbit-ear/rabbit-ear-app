@@ -15,6 +15,7 @@ import {
 	TOOL_KAWASAKI,
 	TOOL_PLEAT,
 	TOOL_SCRIBBLE,
+	TOOL_SYMMETRY,
 	TOOL_SPLIT_EDGE,
 	TOOL_TRANSLATE,
 	TOOL_SCALE,
@@ -226,6 +227,14 @@ $: editable = !($FrameIsLocked);
 		bind:group={$Tool}
 		value={TOOL_SCALE} />
 	<label for="scale">scale</label>
+	<input
+		type="radio"
+		name="tool"
+		id="symmetry"
+		disabled={!editable}
+		bind:group={$Tool}
+		value={TOOL_SYMMETRY} />
+	<label for="symmetry">symmetry</label>
 </div>
 
 <style>

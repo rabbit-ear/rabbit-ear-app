@@ -25,6 +25,7 @@ export const TOOL_KAWASAKI = "toolKawasaki";
 // export const TOOL_KAWASAKI_SHIFT = "toolKawasakiShift";
 export const TOOL_PLEAT = "toolPleat";
 export const TOOL_SCRIBBLE = "toolScribble";
+export const TOOL_SYMMETRY = "toolSymmetry";
 
 // settings for TOOL_SELECT
 export const SELECT_VERTEX = "vertices";
@@ -61,4 +62,5 @@ export const nameForTool = {
 	[TOOL_KAWASAKI]: "kawasaki",
 	[TOOL_PLEAT]: "pleat",
 	[TOOL_SCRIBBLE]: "scribble",
+	[TOOL_SYMMETRY]: "symmetry lines",
 };

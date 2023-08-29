@@ -15,6 +15,7 @@ import {
 	TOOL_KAWASAKI,
 	TOOL_PLEAT,
 	TOOL_SCRIBBLE,
+	TOOL_SYMMETRY,
 	TOOL_SPLIT_EDGE,
 	TOOL_TRANSLATE,
 	TOOL_SCALE,
@@ -41,6 +42,7 @@ import { pointerEventAxiom7 } from "./pointerEventAxiom7.js";
 import { pointerEventKawasaki } from "./pointerEventKawasaki.js";
 import { pointerEventPleat } from "./pointerEventPleat.js";
 import { pointerEventScribble } from "./pointerEventScribble.js";
+import { pointerEventSymmetry } from "./pointerEventSymmetry.js";
 import { pointerEventSplitEdge } from "./pointerEventSplitEdge.js";
 import { pointerEventTranslate } from "./pointerEventTranslate.js";
 import { pointerEventScale } from "./pointerEventScale.js";
@@ -66,6 +68,7 @@ const customPointerEvent = (eventType, event) => {
 	case TOOL_KAWASAKI: return pointerEventKawasaki(eventType, event);
 	case TOOL_PLEAT: return pointerEventPleat(eventType, event);
 	case TOOL_SCRIBBLE: return pointerEventScribble(eventType, event);
+	case TOOL_SYMMETRY: return pointerEventSymmetry(eventType, event);
 	case TOOL_SPLIT_EDGE: return pointerEventSplitEdge(eventType, event);
 	case TOOL_TRANSLATE: return pointerEventTranslate(eventType, event);
 	case TOOL_SCALE: return pointerEventScale(eventType, event);

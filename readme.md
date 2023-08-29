@@ -4,7 +4,9 @@
 
 new features:
 
-- ray-repeat. but in terms of the folded state. already in rabbit-ear as `flatFold()`, but with a "F" as the assignment.
+**ray-repeat**: be able to make a crease and have it propagate throughout the crease pattern by way of 
+
+but in terms of the folded state. already in rabbit-ear as `flatFold()`, but with a "F" as the assignment.
 
 ## 2023-08-15
 

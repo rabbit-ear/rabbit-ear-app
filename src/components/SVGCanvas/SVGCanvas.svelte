@@ -4,6 +4,7 @@
 	import UILayer from "./UILayer.svelte";
 	import GraphLayer from "./GraphLayer.svelte";
 	import RulerLayer from "./RulerLayer.svelte";
+	import SymmetryLayer from "./SymmetryLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
 	import ToolLayer from "./ToolLayer.svelte";
@@ -71,6 +72,7 @@
 		<FlatFoldable graph={$Graph} />
 	{/if}
 	<RulerLayer />
+	<SymmetryLayer />
 	<UILayer />
 	<ToolLayer />
 	{#if $ShowIndices}

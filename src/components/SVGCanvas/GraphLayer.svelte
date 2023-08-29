@@ -28,11 +28,11 @@
 		switch (tool) {
 			case TOOL_SELECT:
 			case TOOL_SPLIT_EDGE:
-			case TOOL_EDGE:
+			// case TOOL_EDGE:
 			case TOOL_VERTEX:
-			case TOOL_AXIOM_1:
-			case TOOL_AXIOM_2:
-			case TOOL_KAWASAKI:
+			// case TOOL_AXIOM_1:
+			// case TOOL_AXIOM_2:
+			// case TOOL_KAWASAKI:
 				return true;
 			case TOOL_AXIOM_3:
 				return toolStep > 1;
@@ -59,6 +59,7 @@
 				case 0: return true;
 				default: return false;
 				}
+			default: return false;
 		}
 	}
 

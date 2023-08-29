@@ -25,7 +25,7 @@
 		"100vh - 5px",
 		ShowHeader ? "2rem" : "",
 		$ShowFrames ? "6.5rem" : "",
-		$ShowTerminal ? "3.75rem" : "1.1rem",
+		$ShowTerminal ? "6rem" : "2rem",
 	].filter(a => a !== "").join(" - ");
 </script>
 

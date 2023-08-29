@@ -13,6 +13,7 @@
 		TOOL_ASSIGN,
 		TOOL_FOLD_ANGLE,
 		TOOL_SCRIBBLE,
+		TOOL_SYMMETRY,
 		nameForTool,
 	} from "../../app/keys.js";
 	import ToolSelect from "./ToolSelect.svelte";
@@ -24,6 +25,7 @@
 	import ToolScale from "./ToolScale.svelte";
 	import NewEdgeAssignment from "./NewEdgeAssignment.svelte";
 	import ShiftLockAngle from "./ShiftLockAngle.svelte";
+	import SymmetryLines from "./SymmetryLines.svelte";
 </script>
 
 <Panel>
@@ -52,6 +54,8 @@
 			<ToolPleat />
 		{:else if $Tool === TOOL_SCRIBBLE}
 			<ToolScribble />
+		{:else if $Tool === TOOL_SYMMETRY}
+			<SymmetryLines />
 		{:else if $Tool.substring(0, 9) === "toolAxiom"}
 			<ToolAxiom />
 			<hr />

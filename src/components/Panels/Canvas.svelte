@@ -3,6 +3,7 @@
 	import {
 		ModelMatrix,
 		CameraMatrix,
+		AutoSizeModelMatrix,
 	} from "../../stores/ViewBox.js";
 	import {
 		Current,
@@ -34,6 +35,8 @@
 	<span slot="body">
 		<p>zoom: <span class="number">{zoom}</span></p>
 		<button on:click={CameraMatrix.reset}>reset zoom</button>
+		<br />
+		<input type="checkbox" bind:checked={$AutoSizeModelMatrix} id="auto-model-matrix"><label for="auto-model-matrix">follow model changes</label>
 		<hr />
 		<p>cursor</p>
 		<input type="text" readonly value={formatPoint(NotUndefined($CurrentSnap, $Current))}>

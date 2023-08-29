@@ -51,6 +51,7 @@ export const ScribbleWaitForConfirmation = writable(false);
 export const PleatCount = writable(4);
 export const RadialSnapDegrees = writable(22.5);
 export const RadialSnapOffset = writable(0);
+export const FoldThroughLayers = writable(true);
 
 const { subscribe, set, update } = writable(TOOL_EDGE);
 

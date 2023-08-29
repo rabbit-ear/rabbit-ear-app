@@ -6,7 +6,7 @@ import addPlanarLine from "rabbit-ear/graph/add/addPlanarLine.js";
 import addNonPlanarEdge from "rabbit-ear/graph/add/addNonPlanarEdge.js";
 import splitEdge from "rabbit-ear/graph/splitEdge/index.js";
 import populate from "rabbit-ear/graph/populate.js";
-import { kawasakiSolutions } from "rabbit-ear/singleVertex/kawasakiGraph.js";
+import { kawasakiSolutions } from "rabbit-ear/singleVertex/kawasaki.js";
 import { removeDuplicateVertices } from "rabbit-ear/graph/vertices/duplicate.js";
 import { planarBoundary } from "rabbit-ear/graph/boundary.js";
 import { pleat as fnPleat } from "rabbit-ear/graph/pleat.js";

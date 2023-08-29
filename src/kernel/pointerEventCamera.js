@@ -4,20 +4,22 @@ import {
 	multiplyMatrices2,
 } from "rabbit-ear/math/algebra/matrix2.js";
 import { get } from "svelte/store";
+import { getScreenPoint } from "../js/matrix.js";
 import { CameraMatrix } from "../stores/ViewBox.js";
 
 let press;
 
 export const pointerEventCamera = (eventType, { point }) => {
+	const screenPoint = getScreenPoint(point);
 	switch (eventType) {
 	case "press":
-		press = point;
+		press = screenPoint;
 		break;
 	case "move":
 		if (press === undefined) { break; }
 		const m = multiplyMatrices2(
 			get(CameraMatrix),
-			makeMatrix2Translate(...subtract2(point, press)),
+			makeMatrix2Translate(...subtract2(screenPoint, press)),
 		);
 		CameraMatrix.set(m);
 		break;

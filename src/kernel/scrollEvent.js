@@ -1,16 +1,11 @@
 import { get } from "svelte/store";
 import {
-	invertMatrix2,
 	makeMatrix2UniformScale,
 	multiplyMatrices2,
-	multiplyMatrix2Vector2,
 	determinant2,
 } from "rabbit-ear/math/algebra/matrix2.js";
-import {
-	CameraMatrix,
-	ModelMatrix,
-	ModelViewMatrix,
-} from "../stores/ViewBox.js";
+import { CameraMatrix } from "../stores/ViewBox.js";
+import { getScreenPoint } from "../js/matrix.js";
 
 export const scrollEvent = ({ point, wheelDelta }) => {
 	const scaleOffset = (wheelDelta / 300);
@@ -20,11 +15,7 @@ export const scrollEvent = ({ point, wheelDelta }) => {
 	// applying a change to the CameraMatrix. So, before we modify the
 	// CameraMatrix with this point, we need to "remove" the ModelMatrix
 	// out of this point (multiply by the inverse of ModelMatrix).
-	const inverseModelMatrix = invertMatrix2(get(ModelMatrix));
-	const pointInCameraSpace = inverseModelMatrix === undefined
-		? point
-		: multiplyMatrix2Vector2(inverseModelMatrix, point);
-	const matrix = makeMatrix2UniformScale(scale, pointInCameraSpace);
+	const matrix = makeMatrix2UniformScale(scale, getScreenPoint(point));
 	CameraMatrix.update(cam => {
 		// safety check.
 		// if the determininat is too small, return unchanged matrix

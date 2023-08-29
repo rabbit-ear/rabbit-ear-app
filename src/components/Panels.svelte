@@ -8,11 +8,11 @@
 	import { ShowSimulator } from "../stores/App.js";
 </script>
 
-<File />
-<Canvas />
 <Tools />
+<Canvas />
 <!-- <RulerLines /> -->
 {#if $ShowSimulator}
 	<Simulator />
 {/if}
+<File />
 <History />

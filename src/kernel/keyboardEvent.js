@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
 import {
+	TOOL_CAMERA,
 	TOOL_SELECT,
 	TOOL_VERTEX,
 	TOOL_EDGE,
@@ -38,6 +39,8 @@ import { execute } from "./app.js";
 import { ResetUI } from "../stores/UI.js";
 import { RulerLines, RulerRays } from "../stores/Ruler.js";
 
+let altCameraToolSwap = undefined;
+
 const customWindowKeyEvent = (eventType, event) => {
 	// custom keyboard events can be determined by
 	// the selected tool or the key pressed.
@@ -65,6 +68,10 @@ const keyboardWindowEventDown = (event) => {
 		}
 		break;
 	case 16: // Shift
+		break;
+	case 18: // Alt
+		altCameraToolSwap = get(Tool);
+		Tool.set(TOOL_CAMERA);
 		break;
 	case 27: // ESC
 		ResetUI();
@@ -227,9 +234,20 @@ const keyboardWindowEventDown = (event) => {
 	return customWindowKeyEvent("down", event);
 };
 
-const keyboardWindowEventUp = (event) => (
+const keyboardWindowEventUp = (event) => {
+	// const { altKey, ctrlKey, metaKey, shiftKey } = event;
+	// console.log(event.key, event.keyCode, "altKey", altKey, "ctrlKey", ctrlKey, "metaKey", metaKey, "shiftKey", shiftKey);
+	// execute functions
+	switch (event.keyCode) {
+	case 18: // Alt
+		Tool.set(altCameraToolSwap || TOOL_EDGE);
+		altCameraToolSwap = undefined;
+		break;
+	default:
+		break;
+	}
 	customWindowKeyEvent("up", event)
-);
+};
 
 const customFormKeyEvent = (eventType, event) => {
 	// replace with switch, and an alternative way of

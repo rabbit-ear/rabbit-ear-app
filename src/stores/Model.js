@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 import { writable, derived } from "svelte/store";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFramesAsFlatArray } from "rabbit-ear/fold/frames.js";
+import populate from "rabbit-ear/graph/populate.js";
 import { downloadFile } from "../js/file.js";
 import { graphToMatrix2 } from "../js/matrix.js";
 import {
@@ -13,6 +14,7 @@ import { FileHistory } from "./History.js";
 import {
 	CameraMatrix,
 	ModelMatrix,
+	AutoSizeModelMatrix,
 } from "./ViewBox.js";
 /**
  *
@@ -54,10 +56,12 @@ FrameIndex.set = (n) => {
  * @description The currently selected (and currently being edited) frame.
  */
 export const Graph = derived(
-	[FramesRendered, FrameIndex],
-	([$FramesRendered, $FrameIndex]) => {
+	[FramesRendered, FrameIndex, AutoSizeModelMatrix],
+	([$FramesRendered, $FrameIndex, $AutoSizeModelMatrix]) => {
 		const newGraph = $FramesRendered[$FrameIndex];
-		ModelMatrix.set(graphToMatrix2(newGraph));
+		if ($AutoSizeModelMatrix) {
+			ModelMatrix.set(graphToMatrix2(newGraph));
+		}
 		return newGraph;
 	},
 	makeEmptyGraph(),
@@ -131,11 +135,19 @@ export const SetFrame = (graph) => {
  * update/set Frame methods.
  */
 export const LoadFile = (FOLD) => {
+	// ModelMatrix is a derived state. this is basically like
+	// calling "ModelMatrix.reset()" to resize it to the new Model.
+	const autoSize = get(AutoSizeModelMatrix);
+	AutoSizeModelMatrix.set(true);
+	// load file
 	Selection.reset();
 	FileHistory.set([]);
 	FrameIndex.set(0);
 	File.set(getFileMetadata(FOLD));
-	Frames.set(getFramesAsFlatArray(FOLD));
+	Frames.set(getFramesAsFlatArray(FOLD).map(populate));
+	CameraMatrix.reset();
+	// end load file. return ModelMatrix setting back to what it was.
+	AutoSizeModelMatrix.set(autoSize);
 };
 /**
  *
