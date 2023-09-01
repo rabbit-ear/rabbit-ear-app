@@ -3,7 +3,7 @@ import {
 	makeMatrix2UniformScale,
 	multiplyMatrices2,
 	determinant2,
-} from "rabbit-ear/math/algebra/matrix2.js";
+} from "rabbit-ear/math/matrix2.js";
 import { CameraMatrix } from "../stores/ViewBox.js";
 import { getScreenPoint } from "../js/matrix.js";
 

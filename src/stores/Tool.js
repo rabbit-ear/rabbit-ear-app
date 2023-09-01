@@ -146,3 +146,8 @@ export const ElementSelect = {
 	},
 };
 
+export const SelectHoverIndex = writable({
+	vertex: undefined,
+	edge: undefined,
+	face: undefined,
+});

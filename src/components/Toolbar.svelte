@@ -12,6 +12,7 @@ import {
 	TOOL_AXIOM_5,
 	TOOL_AXIOM_6,
 	TOOL_AXIOM_7,
+	TOOL_FOLD_LINE,
 	TOOL_KAWASAKI,
 	TOOL_PLEAT,
 	TOOL_SCRIBBLE,
@@ -155,6 +156,14 @@ $: editable = !($FrameIsLocked);
 
 <p>many</p>
 <div class="vertical-radio">
+	<input
+		type="radio"
+		name="tool"
+		id="fold-line"
+		disabled={!editable}
+		bind:group={$Tool}
+		value={TOOL_FOLD_LINE} />
+	<label for="fold-line">folded line</label>
 	<input
 		type="radio"
 		name="tool"

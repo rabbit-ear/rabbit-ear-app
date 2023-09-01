@@ -3,7 +3,7 @@
 		onMount,
 		onDestroy,
 	} from "svelte";
-	import { identity4x4 } from "rabbit-ear/math/algebra/matrix4.js";
+	import { identity4x4 } from "rabbit-ear/math/matrix4.js";
 	import initialize from "rabbit-ear/webgl/general/initialize.js";
 	import {
 		rebuildViewport,

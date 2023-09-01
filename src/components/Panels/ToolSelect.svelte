@@ -1,5 +1,8 @@
 <script>
-	import { ElementSelect } from "../../stores/Tool.js";
+	import {
+		ElementSelect,
+		SelectHoverIndex,
+	} from "../../stores/Tool.js";
 	import { Selection } from "../../stores/Select.js";
 	import {
 		SELECT_VERTEX,
@@ -46,6 +49,18 @@
 		{/if}
 		{#if $Selection.faces.length}
 			<p><strong>{$Selection.faces.length}</strong> faces</p>
+		{/if}
+	</div>
+	<div>
+		<p>nearest</p>
+		{#if $SelectHoverIndex.vertex}
+			<p>vertex: <strong>{$SelectHoverIndex.vertex}</strong></p>
+		{/if}
+		{#if $SelectHoverIndex.edge}
+			<p>edge: <strong>{$SelectHoverIndex.edge}</strong></p>
+		{/if}
+		{#if $SelectHoverIndex.face}
+			<p>face: <strong>{$SelectHoverIndex.face}</strong></p>
 		{/if}
 	</div>
 </div>

@@ -1,4 +1,4 @@
-import { add2, subtract2 } from "rabbit-ear/math/algebra/vector.js";
+import { add2, subtract2 } from "rabbit-ear/math/vector.js";
 // import normalize from "rabbit-ear/graph/normalize.js";
 import { get } from "svelte/store";
 import { Selection, Highlight } from "../stores/Select.js";

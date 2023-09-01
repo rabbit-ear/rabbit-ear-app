@@ -7,6 +7,7 @@ export const autoPlanarize = (funcName, ...args) => {
 	case "addEdge":
 	case "translateVertices":
 	case "deleteComponents":
+	case "repeatFoldLine":
 		aPlanarize();
 		break;
 	default: break;

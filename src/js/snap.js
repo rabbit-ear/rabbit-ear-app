@@ -1,15 +1,18 @@
+/**
+ * Rabbit Ear (c) Kraft
+ */
 import { get } from "svelte/store";
 import {
 	distance2,
 	subtract2,
-} from "rabbit-ear/math/algebra/vector.js";
+} from "rabbit-ear/math/vector.js";
 import {
 	clampLine,
 	clampRay,
 	clampSegment,
-} from "rabbit-ear/math/general/function.js";
-import { nearestPointOnLine } from "rabbit-ear/math/geometry/nearest.js";
-import { overlapLinePoint } from "rabbit-ear/math/intersect/overlap.js";
+} from "rabbit-ear/math/line.js";
+import { nearestPointOnLine } from "rabbit-ear/math/nearest.js";
+import { overlapLinePoint } from "rabbit-ear/math/overlap.js";
 import {
 	nearest,
 	nearestVertex as reNearestVertex,

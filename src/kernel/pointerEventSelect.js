@@ -1,9 +1,14 @@
 import { get } from "svelte/store";
-import { ElementSelect } from "../stores/Tool.js";
+import { nearest } from "rabbit-ear/graph/nearest.js";
 import { SelectionRect } from "../stores/Select.js";
+import { Graph } from "../stores/Model.js";
 import { Keyboard } from "../stores/UI.js";
 import { getSelected } from "../js/select.js";
 import { execute } from "./app.js";
+import {
+	ElementSelect,
+	SelectHoverIndex,
+} from "../stores/Tool.js";
 /**
  *
  */
@@ -23,6 +28,14 @@ let press;
  */
 export const pointerEventSelect = (eventType, { point }) => {
 	switch (eventType) {
+	case "hover":
+		const near = nearest(get(Graph), point);
+		SelectHoverIndex.set({
+			vertex: near.vertex,
+			edge: near.edge,
+			face: near.face,
+		})
+		break;
 	case "press":
 		press = point;
 		SelectionRect.set(undefined);

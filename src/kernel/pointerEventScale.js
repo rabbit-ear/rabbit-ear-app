@@ -2,7 +2,7 @@ import {
 	magnitude2,
 	distance2,
 	subtract2,
-} from "rabbit-ear/math/algebra/vector.js";
+} from "rabbit-ear/math/vector.js";
 import { get } from "svelte/store";
 import { Graph } from "../stores/Model.js";
 import { UIGraph } from "../stores/UI.js";

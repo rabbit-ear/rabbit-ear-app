@@ -12,6 +12,7 @@ import {
 	TOOL_AXIOM_5,
 	TOOL_AXIOM_6,
 	TOOL_AXIOM_7,
+	TOOL_FOLD_LINE,
 	TOOL_KAWASAKI,
 	TOOL_PLEAT,
 	TOOL_SCRIBBLE,
@@ -39,6 +40,7 @@ import { pointerEventAxiom4 } from "./pointerEventAxiom4.js";
 import { pointerEventAxiom5 } from "./pointerEventAxiom5.js";
 import { pointerEventAxiom6 } from "./pointerEventAxiom6.js";
 import { pointerEventAxiom7 } from "./pointerEventAxiom7.js";
+import { pointerEventFoldLine } from "./pointerEventFoldLine.js";
 import { pointerEventKawasaki } from "./pointerEventKawasaki.js";
 import { pointerEventPleat } from "./pointerEventPleat.js";
 import { pointerEventScribble } from "./pointerEventScribble.js";
@@ -65,6 +67,7 @@ const customPointerEvent = (eventType, event) => {
 	case TOOL_AXIOM_5: return pointerEventAxiom5(eventType, event);
 	case TOOL_AXIOM_6: return pointerEventAxiom6(eventType, event);
 	case TOOL_AXIOM_7: return pointerEventAxiom7(eventType, event);
+	case TOOL_FOLD_LINE: return pointerEventFoldLine(eventType, event);
 	case TOOL_KAWASAKI: return pointerEventKawasaki(eventType, event);
 	case TOOL_PLEAT: return pointerEventPleat(eventType, event);
 	case TOOL_SCRIBBLE: return pointerEventScribble(eventType, event);

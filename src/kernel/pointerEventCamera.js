@@ -1,8 +1,8 @@
-import { subtract2 } from "rabbit-ear/math/algebra/vector.js";
+import { subtract2 } from "rabbit-ear/math/vector.js";
 import {
 	makeMatrix2Translate,
 	multiplyMatrices2,
-} from "rabbit-ear/math/algebra/matrix2.js";
+} from "rabbit-ear/math/matrix2.js";
 import { get } from "svelte/store";
 import { getScreenPoint } from "../js/matrix.js";
 import { CameraMatrix } from "../stores/ViewBox.js";

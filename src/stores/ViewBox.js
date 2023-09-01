@@ -4,7 +4,7 @@ import {
 	invertMatrix2,
 	multiplyMatrices2,
 	multiplyMatrix2Vector2,
-} from "rabbit-ear/math/algebra/matrix2.js";
+} from "rabbit-ear/math/matrix2.js";
 import { graphToMatrix2 } from "../js/matrix.js";
 
 export const AutoSizeModelMatrix = writable(false);

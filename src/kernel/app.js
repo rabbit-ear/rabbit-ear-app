@@ -22,6 +22,7 @@ const previewFunctions = {
 	"axiom6Preview": true,
 	"axiom7Preview": true,
 	"kawasakiRulerPreviews": true,
+	"repeatFoldLinePreview": true,
 	// "autoPlanarize": true,
 };
 /**

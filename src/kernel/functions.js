@@ -10,11 +10,13 @@ import { kawasakiSolutions } from "rabbit-ear/singleVertex/kawasaki.js";
 import { removeDuplicateVertices } from "rabbit-ear/graph/vertices/duplicate.js";
 import { planarBoundary } from "rabbit-ear/graph/boundary.js";
 import { pleat as fnPleat } from "rabbit-ear/graph/pleat.js";
-import { pointsToLine } from "rabbit-ear/math/general/convert.js";
+import { pointsToLine } from "rabbit-ear/math/convert.js";
 import {
 	add2,
+	subtract2,
 	scale2,
-} from "rabbit-ear/math/algebra/vector.js";
+} from "rabbit-ear/math/vector.js";
+import { edgeAssignmentToFoldAngle } from "rabbit-ear/fold/spec.js";
 import {
 	nearest,
 	nearestVertex,
@@ -65,6 +67,7 @@ import {
 	RulerRays,
 } from "../stores/Ruler.js";
 import {
+	UIGraph,
 	UILines,
 	UIRays,
 } from "../stores/UI.js";
@@ -74,6 +77,7 @@ import {
 import {
 	RadialSnapDegrees,
 } from "../stores/Tool.js";
+import repeatFold from "rabbit-ear/graph/flatFold/repeatFold.js";
 /**
  *
  */
@@ -349,6 +353,47 @@ export const axiom6Preview = (...args) => (
 export const axiom7Preview = (...args) => (
 	UILines.set(doAxiom7(get(Graph), ...args))
 );
+
+export const repeatFoldLine = (a, b) => {
+	const line = { vector: subtract2(b, a), origin: a };
+	try {
+		const result = repeatFold(get(Graph), line, "V")
+			.filter(a => a !== undefined);
+		FileHistory.cache();
+		const graph = get(Graph);
+		const vertCount = graph.vertices_coords.length;
+		graph.vertices_coords.push(...result.flatMap(el => el.points));
+		graph.edges_vertices.push(...result
+			.map((_, i) => [vertCount + i * 2, vertCount + i * 2 + 1]));
+		graph.edges_assignment.push(...result.map(el => el.assignment));
+		graph.edges_foldAngle.push(...result
+			.map(el => el.assignment)
+			.map(a => edgeAssignmentToFoldAngle(a)));
+		UpdateFrame({ ...graph });
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export const repeatFoldLinePreview = (a, b) => {
+	const line = { vector: subtract2(b, a), origin: a };
+	// return repeatFold(get(Graph), line, "V");
+	try {
+		const result = repeatFold(get(Graph), line, "V")
+			.filter(a => a !== undefined);
+		// console.log("graph", {
+		// 	vertices_coords: result.flatMap(el => el.points),
+		// 	edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
+		// });
+		UIGraph.set({
+			vertices_coords: result.flatMap(el => el.points),
+			edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
+		});
+	} catch (error) {
+		console.error(error);
+	}
+};
+
 
 const doPleat = (edgeA, edgeB, count) => {
 	if (edgeA === undefined || edgeB === undefined) { return []; }

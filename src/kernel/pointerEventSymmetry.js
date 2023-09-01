@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { subtract2 } from "rabbit-ear/math/algebra/vector.js";
+import { subtract2 } from "rabbit-ear/math/vector.js";
 import {
 	CurrentSnap,
 	Keyboard,

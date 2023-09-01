@@ -3,10 +3,10 @@ import {
 	includeL,
 	includeR,
 	excludeS,
-} from "rabbit-ear/math/general/function.js";
-import { intersectLineLine } from "rabbit-ear/math/intersect/intersect.js";
+} from "rabbit-ear/math/compare.js";
+import { intersectLineLine } from "rabbit-ear/math/intersect.js";
 import { makeEdgesVector } from "rabbit-ear/graph/make.js";
-import { clipLineConvexPolygon } from "rabbit-ear/math/intersect/clip.js";
+import { clipLineConvexPolygon } from "rabbit-ear/math/clip.js";
 
 const intersectGraphLineFunc = (graph, line, lineFn = includeL) => {
 	const edgesOrigin = graph.edges_vertices

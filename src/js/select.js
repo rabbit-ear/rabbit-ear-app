@@ -1,8 +1,8 @@
 import { get } from "svelte/store";
-import { intersectLineLine } from "rabbit-ear/math/intersect/intersect.js";
+import { intersectLineLine } from "rabbit-ear/math/intersect.js";
 import { nearest } from "rabbit-ear/graph/nearest.js";
-import { includeS } from "rabbit-ear/math/general/function.js";
-// import { pointInBoundingBox } from "rabbit-ear/math/intersect/encloses.js";
+import { includeS } from "rabbit-ear/math/compare.js";
+// import { pointInBoundingBox } from "rabbit-ear/math/encloses.js";
 import { ViewBox } from "../stores/ViewBox.js";
 import { ElementSelect } from "../stores/Tool.js";
 import { SelectionRect } from "../stores/Select.js";

@@ -23,6 +23,7 @@ export const TOOL_AXIOM_7 = "toolAxiom7";
 
 export const TOOL_KAWASAKI = "toolKawasaki";
 // export const TOOL_KAWASAKI_SHIFT = "toolKawasakiShift";
+export const TOOL_FOLD_LINE = "toolRepeatLine";
 export const TOOL_PLEAT = "toolPleat";
 export const TOOL_SCRIBBLE = "toolScribble";
 export const TOOL_SYMMETRY = "toolSymmetry";
@@ -59,6 +60,7 @@ export const nameForTool = {
 	[TOOL_AXIOM_5]: "axiom 5",
 	[TOOL_AXIOM_6]: "axiom 6",
 	[TOOL_AXIOM_7]: "axiom 7",
+	[TOOL_FOLD_LINE]: "fold line",
 	[TOOL_KAWASAKI]: "kawasaki",
 	[TOOL_PLEAT]: "pleat",
 	[TOOL_SCRIBBLE]: "scribble",

@@ -4,7 +4,7 @@ import {
 	identity2x3,
 	invertMatrix2,
 	multiplyMatrix2Vector2,
-} from "rabbit-ear/math/algebra/matrix2.js";
+} from "rabbit-ear/math/matrix2.js";
 import { ModelMatrix } from "../stores/ViewBox.js";
 
 export const graphToMatrix2 = (graph) => {

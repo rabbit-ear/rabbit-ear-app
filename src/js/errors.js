@@ -1,4 +1,4 @@
-import { distance2 } from "rabbit-ear/math/algebra/vector.js";
+import { distance2 } from "rabbit-ear/math/vector.js";
 
 export const nearestTwoVertices = ({ vertices_coords }) => {
 	const nearest = [0, 1];
