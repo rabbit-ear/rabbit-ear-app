@@ -22,7 +22,10 @@ import { execute } from "./app.js";
 let pressCoords = undefined;
 
 export const pointerEventFoldLine = (eventType, { point }) => {
-	const coords = snapToPoint(point, false);
+	const shift = get(Keyboard)[16];
+	const coords = shift
+		? snapToRulerLine(point).coords
+		: snapToPoint(point, false);
 	CurrentSnap.set(coords);
 	switch (eventType) {
 	case "hover":
@@ -31,6 +34,13 @@ export const pointerEventFoldLine = (eventType, { point }) => {
 	case "press":
 		pressCoords = coords;
 		Presses.set([pressCoords]);
+		if (shift) { // Shift
+			execute("radialRulers",
+				pressCoords,
+				get(RadialSnapDegrees),
+				get(RadialSnapOffset),
+			);
+		}
 		UIGraph.set({ vertices_coords: [coords] });
 	break;
 	case "move": {

@@ -1,5 +1,8 @@
 <script>
-	import { TOOL_EDGE } from "../../app/keys.js";
+	import {
+		TOOL_EDGE,
+		TOOL_FOLD_LINE,
+	} from "../../app/keys.js";
 	import {
 		clipLineInLargerViewBox,
 		clipRayInLargerViewBox,
@@ -20,7 +23,8 @@
 	import { ViewBox } from "../../stores/ViewBox.js";
 
 	let showRulers = true;
-	$: showRulers = $Tool !== TOOL_EDGE;
+	$: showRulers = $Tool !== TOOL_EDGE
+		&& $Tool !== TOOL_FOLD_LINE;
 
 	let vmax;
 	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);

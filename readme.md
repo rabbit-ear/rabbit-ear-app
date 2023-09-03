@@ -1,5 +1,9 @@
 # Blender-style graph maker
 
+## bug list:
+
+- scale-up a crease pattern, reset zoom no longer works (fixed to old size).
+
 ## 2023-08-20
 
 new features:

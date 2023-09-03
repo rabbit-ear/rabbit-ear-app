@@ -7,6 +7,7 @@
 		TOOL_VERTEX,
 		TOOL_EDGE,
 		TOOL_SPLIT_EDGE,
+		TOOL_FOLD_LINE,
 		TOOL_TRANSLATE,
 		TOOL_SCALE,
 		TOOL_PLEAT,
@@ -37,6 +38,10 @@
 			<ToolSelect />
 		{:else if $Tool === TOOL_VERTEX}
 		{:else if $Tool === TOOL_EDGE}
+			<NewEdgeAssignment />
+			<hr />
+			<ShiftLockAngle />
+		{:else if $Tool === TOOL_FOLD_LINE}
 			<NewEdgeAssignment />
 			<hr />
 			<ShiftLockAngle />

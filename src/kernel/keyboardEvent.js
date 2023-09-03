@@ -14,6 +14,7 @@ import {
 	TOOL_AXIOM_5,
 	TOOL_AXIOM_6,
 	TOOL_AXIOM_7,
+	TOOL_FOLD_LINE,
 	TOOL_KAWASAKI,
 	TOOL_TRANSLATE,
 	ASSIGN_SWAP,
@@ -23,6 +24,7 @@ import {
 	ASSIGN_BOUNDARY,
 } from "../app/keys.js";
 import { keyboardEventEdge } from "./keyboardEventEdge.js";
+import { keyboardEventFoldLine } from "./keyboardEventFoldLine.js";
 import { keyboardEventDelete } from "./keyboardEventDelete.js";
 import { keyboardEventTerminal } from "./keyboardEventTerminal.js";
 import {
@@ -46,6 +48,7 @@ const customWindowKeyEvent = (eventType, event) => {
 	// the selected tool or the key pressed.
 	switch (get(Tool)) {
 	case TOOL_EDGE: return keyboardEventEdge(eventType, event);
+	case TOOL_FOLD_LINE: return keyboardEventFoldLine(eventType, event);
 	default: break;
 	}
 	switch (event.keyCode) {
