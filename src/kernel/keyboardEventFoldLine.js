@@ -4,7 +4,7 @@ import {
 	RadialSnapDegrees,
 	RadialSnapOffset,
 } from "../stores/Tool.js";
-import { RulerLines } from "../stores/Ruler.js";
+import { RulerLines, RulerRays } from "../stores/Ruler.js";
 import { execute } from "./app.js";
 
 export const keyboardEventFoldLine = (eventType, event) => {
@@ -22,6 +22,7 @@ export const keyboardEventFoldLine = (eventType, event) => {
 			break;
 		case "up":
 			RulerLines.set([]);
+			RulerRays.set([]);
 			break;
 		}
 	}

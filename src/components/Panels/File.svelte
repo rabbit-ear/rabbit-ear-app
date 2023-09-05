@@ -40,7 +40,4 @@
 		width: 100%;
 		resize: vertical;
 	}
-	strong {
-		font-weight: bold;
-	}
 </style>

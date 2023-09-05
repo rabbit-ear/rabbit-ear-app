@@ -93,11 +93,6 @@
 		flex: 1 1 auto;
 		min-height: 0;
 	}
-	.terminal {
-		width: 100%;
-		height: 3.75rem;
-		flex: 0 1 auto;
-	}
 
 	/* .gui children */
 	.toolbar {
@@ -134,9 +129,6 @@
 		background-color: var(--background-1);
 	}
 	.panels {
-		background-color: var(--background-1);
-	}
-	.terminal {
 		background-color: var(--background-1);
 	}
 </style>

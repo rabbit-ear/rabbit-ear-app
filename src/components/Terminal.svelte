@@ -52,11 +52,11 @@
 	.collapsed {
 		height: 2rem;
 	}
-	.expand-button {
+	/*.expand-button {
 		all: unset;
 		width: 1rem;
 		height: 1rem;
-	}
+	}*/
 	pre, textarea {
 		margin: 0;
 		padding: 0 0.25rem;

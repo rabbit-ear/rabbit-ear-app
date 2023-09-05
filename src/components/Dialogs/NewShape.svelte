@@ -99,9 +99,6 @@
 	input[type=number] {
 		width: 5rem;
 	}
-	.style-row {
-		margin: 0;
-	}
 	p {
 		margin: 1rem 0;
 	}

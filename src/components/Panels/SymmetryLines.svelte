@@ -21,9 +21,9 @@
 	<ul class="row">
 		<div>
 			<!-- <input type="checkbox" checked>
-			<label>{toDegree(line.vector)}&deg;</label> -->
+			<p>{toDegree(line.vector)}&deg;</p> -->
 			<li>
-				<label>{toDegree(line.vector)}&deg;</label>
+				<p>{toDegree(line.vector)}&deg;</p>
 			</li>
 
 		</div>

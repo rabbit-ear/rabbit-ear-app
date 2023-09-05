@@ -37,6 +37,7 @@
 		{:else if $Tool === TOOL_DELETE}
 			<ToolSelect />
 		{:else if $Tool === TOOL_VERTEX}
+			<div></div>
 		{:else if $Tool === TOOL_EDGE}
 			<NewEdgeAssignment />
 			<hr />

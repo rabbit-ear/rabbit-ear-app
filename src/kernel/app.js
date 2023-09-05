@@ -108,64 +108,64 @@ export const execute = (funcName, ...args) => {
 /**
  *
  */
-export const executeUI = (funcName, ...args) => {
-	const func = Functions[funcName];
-	if (!func) {
-		const error = new Error(`no known function with the name "${funcName}"`);
-		TerminalHistory.update(history => [
-			...history,
-			{ html: `<span class="error">${error}</span>` },
-		]);
-		return;
-	}
-	let res;
-	try {
-		res = func(...args);
-	} catch (error) {
-		// console.error(error);
-		TerminalHistory.update(history => [
-			...history,
-			{ html: `<span class="error">${error}</span>` },
-		]);
-		return;
-	}
-	const newHistory = [];
-	try {
-		newHistory.push({ html: formatFunctionCall(func.name, args) });
-	} catch (error) {
-		newHistory.push({ html: error });
-		return;
-	}
-	if (res !== undefined) {
-		newHistory.push({ html: formatFunctionResult(res) });
-	}
-	TerminalHistory.update(history => [...history, ...newHistory]);
-	return res;
-};
+// export const executeUI = (funcName, ...args) => {
+// 	const func = Functions[funcName];
+// 	if (!func) {
+// 		const error = new Error(`no known function with the name "${funcName}"`);
+// 		TerminalHistory.update(history => [
+// 			...history,
+// 			{ html: `<span class="error">${error}</span>` },
+// 		]);
+// 		return;
+// 	}
+// 	let res;
+// 	try {
+// 		res = func(...args);
+// 	} catch (error) {
+// 		// console.error(error);
+// 		TerminalHistory.update(history => [
+// 			...history,
+// 			{ html: `<span class="error">${error}</span>` },
+// 		]);
+// 		return;
+// 	}
+// 	const newHistory = [];
+// 	try {
+// 		newHistory.push({ html: formatFunctionCall(func.name, args) });
+// 	} catch (error) {
+// 		newHistory.push({ html: error });
+// 		return;
+// 	}
+// 	if (res !== undefined) {
+// 		newHistory.push({ html: formatFunctionResult(res) });
+// 	}
+// 	TerminalHistory.update(history => [...history, ...newHistory]);
+// 	return res;
+// };
 /**
  *
  */
-export const executeString = (str) => {
-	const preParen = str.match(/^[^(]*/);
-	const insideParen = str.match(/\(([^\)]+)\)/);
-	const fnName = preParen[0];
-	const argsStr = (!insideParen || insideParen.length < 2
-		? ""
-		: insideParen[1]);
-	let args;
-	try {
-		args = JSON.parse(`[${argsStr}]`);
-	} catch (error) {
-		// console.error(error);
-		TerminalHistory.update(history => [
-			...history,
-			{ html: `<span class="error">${error}</span>` },
-		]);
-		return;
-	}
-	// console.log("insideParen", insideParen);
-	// console.log("fnName", fnName);
-	// console.log("argsStr", argsStr);
-	// console.log("args", args);
-	execute(fnName, ...args);
-};
+// export const executeString = (str) => {
+// 	const preParen = str.match(/^[^(]*/);
+// 	const insideParen = str.match(/\(([^\)]+)\)/);
+// 	const fnName = preParen[0];
+// 	const argsStr = (!insideParen || insideParen.length < 2
+// 		? ""
+// 		: insideParen[1]);
+// 	let args;
+// 	try {
+// 		args = JSON.parse(`[${argsStr}]`);
+// 	} catch (error) {
+// 		// console.error(error);
+// 		TerminalHistory.update(history => [
+// 			...history,
+// 			{ html: `<span class="error">${error}</span>` },
+// 		]);
+// 		return;
+// 	}
+// 	// console.log("insideParen", insideParen);
+// 	// console.log("fnName", fnName);
+// 	// console.log("argsStr", argsStr);
+// 	// console.log("args", args);
+// 	execute(fnName, ...args);
+// };
