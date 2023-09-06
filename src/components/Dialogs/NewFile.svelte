@@ -5,7 +5,7 @@
 		rectangle,
 		polygon,
 	} from "rabbit-ear/fold/bases.js";
-	import { execute } from "../../kernel/app.js";
+	import execute from "../../kernel/execute.js";
 	import { DialogNewFile } from "../../stores/App.js";
 
 	const newDidPress = ({ detail }) => {

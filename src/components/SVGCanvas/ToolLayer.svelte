@@ -2,7 +2,7 @@
 // Anything that is specific to a certain tool?
 	import { TOOL_SCRIBBLE } from "../../app/keys.js";
 	import { ViewBox } from "../../stores/ViewBox.js";
-	import { Tool } from "../../stores/Tool.js";
+	import { ToolNew } from "../../stores/Tool.js";
 	import {
 		Presses,
 		Moves,
@@ -10,13 +10,13 @@
 	} from "../../stores/UI.js";
 
 	let scribblePointString = "";
-	$: scribblePointString = $Tool === TOOL_SCRIBBLE
-		? [].concat($Presses)
-			.concat($Moves)
-			.concat($Releases)
-			.map(p => p.join(","))
-			.join(" ")
-		: "";
+	// $: scribblePointString = $ToolNew.name === TOOL_SCRIBBLE
+	// 	? [].concat($Presses)
+	// 		.concat($Moves)
+	// 		.concat($Releases)
+	// 		.map(p => p.join(","))
+	// 		.join(" ")
+	// 	: "";
 
 	let vmax;
 	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);

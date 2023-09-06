@@ -1,5 +1,5 @@
 <script>
-	import Tools from "./Panels/Tools.svelte";
+	// import Tools from "./Panels/Tools.svelte";
 	import File from "./Panels/File.svelte";
 	import Canvas from "./Panels/Canvas.svelte";
 	import History from "./Panels/History.svelte";
@@ -8,7 +8,7 @@
 	import { ShowSimulator } from "../stores/App.js";
 </script>
 
-<Tools />
+<!-- <Tools /> -->
 <Canvas />
 <!-- <RulerLines /> -->
 {#if $ShowSimulator}

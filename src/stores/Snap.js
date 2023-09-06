@@ -1,6 +1,6 @@
 import { derived } from "svelte/store";
+// import { Snapping } from "./App.js";
 import { Graph } from "./Model.js";
-import { Snapping } from "./App.js";
 import { ViewBox } from "./ViewBox.js";
 import { RulerPoints } from "./Ruler.js";
 /**
@@ -16,11 +16,16 @@ import { RulerPoints } from "./Ruler.js";
  * - intersections between ruler lines and ruler lines
  * - intersections between ruler lines and the background grid
  */
+// export const SnapPoints = derived(
+// 	[Snapping, Graph, RulerPoints],
+// 	([$Snapping, $Graph, $RulerPoints]) => $Snapping
+// 		? [...($Graph.vertices_coords || []), ...$RulerPoints]
+// 		: [],
+// 	[],
+// );
 export const SnapPoints = derived(
-	[Snapping, Graph, RulerPoints],
-	([$Snapping, $Graph, $RulerPoints]) => $Snapping
-		? [...($Graph.vertices_coords || []), ...$RulerPoints]
-		: [],
+	[Graph, RulerPoints],
+	([$Graph, $RulerPoints]) => [...($Graph.vertices_coords || []), ...$RulerPoints],
 	[],
 );
 /**

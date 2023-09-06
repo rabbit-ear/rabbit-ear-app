@@ -4,7 +4,7 @@ import { autoPlanarize as autoPlanarizeFunc } from "../kernel/prePostEvents.js";
 import {
 	preExecuteEvents,
 	postExecuteEvents,
-} from "../kernel/app.js";
+} from "../kernel/execute.js";
 import { ViewBox } from "./ViewBox.js";
 
 // these are immutable. a bit like compiler directives.

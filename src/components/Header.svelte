@@ -8,7 +8,7 @@
 	} from "../stores/App.js";
 	import { Graph } from "../stores/Model.js";
 	import { Selection } from "../stores/Select.js";
-	import { execute } from "../kernel/app.js";
+	import execute from "../kernel/execute.js";
 	import { loadFileDialog } from "../js/file.js";
 	import { nearestTwoVertices } from "../js/errors.js";
 	import {
@@ -38,6 +38,7 @@
 		Selection.addVertices(vertices);
 	};
 	const mergeNearbyVertices = () => execute("mergeNearbyVertices");
+	const cleanVertices = () => execute("cleanVertices");
 </script>
 
 	<nav>
@@ -95,6 +96,9 @@
 							<label for="radio-snapping-no-snapping">off</label>
 						</div>
 					</li> -->
+					<li>
+						<button on:click={() => execute("cleanVertices")}>smart clean vertices</button>
+					</li>
 					<li>
 						<button on:click={() => execute("snapAllVertices")}>snap all to grid</button>
 					</li>

@@ -1,15 +1,11 @@
 import { get } from "svelte/store";
-import { keyboardEventEdge } from "./keyboardEventEdge.js";
-import { keyboardEventFoldLine } from "./keyboardEventFoldLine.js";
-import { keyboardEventDelete } from "./keyboardEventDelete.js";
-import { keyboardEventTerminal } from "./keyboardEventTerminal.js";
-import { keyboardEventApp } from "./keyboardEventApp.js";
 import {
 	TOOL_EDGE,
 	TOOL_FOLD_LINE,
 } from "../app/keys.js";
+import { isFormElementActive } from "../js/dom.js";
 import {
-	Tool,
+	ToolNew,
 	AssignType,
 } from "../stores/Tool.js";
 import {
@@ -18,18 +14,20 @@ import {
 	ShowTerminal,
 } from "../stores/App.js";
 import { Keyboard } from "../stores/UI.js";
-import { execute } from "./app.js";
 import { ResetUI } from "../stores/UI.js";
 import { RulerLines, RulerRays } from "../stores/Ruler.js";
-import { isFormElementActive } from "../js/dom.js";
+import { keyboardEventApp } from "./keyboardEventApp.js";
+// import { keyboardEventEdge } from "./keyboardEventEdge.js";
+// import { keyboardEventFoldLine } from "./keyboardEventFoldLine.js";
+// import { keyboardEventTerminal } from "./keyboardEventTerminal.js";
+import execute from "./execute.js";
 
 const customWindowKeyEvent = (eventType, event) => {
 	// custom keyboard events can be determined by
 	// the selected tool or the key pressed.
-	switch (get(Tool)) {
-	case TOOL_EDGE: return keyboardEventEdge(eventType, event);
-	case TOOL_FOLD_LINE: return keyboardEventFoldLine(eventType, event);
-	default: break;
+	const tool = get(ToolNew);
+	if (tool.keyboardEvent) {
+		return tool.keyboardEvent(eventType, event);
 	}
 };
 

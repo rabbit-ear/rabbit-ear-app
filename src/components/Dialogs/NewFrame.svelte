@@ -5,7 +5,7 @@
 		polygon,
 	} from "rabbit-ear/fold/bases.js";
 	import NewShape from "./NewShape.svelte";
-	import { execute } from "../../kernel/app.js";
+	import execute from "../../kernel/execute.js";
 	import { DialogNewFrame } from "../../stores/App.js";
 	import {
 		Frames,

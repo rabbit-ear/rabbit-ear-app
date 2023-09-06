@@ -1,4 +1,4 @@
-import { execute } from "../kernel/app.js";
+import execute from "../kernel/execute.js";
 /**
  * this can be expanded to include different file types.
  */

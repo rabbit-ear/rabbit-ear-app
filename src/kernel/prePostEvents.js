@@ -1,4 +1,4 @@
-import { autoPlanarize as aPlanarize } from "./functions.js";
+import { autoPlanarize as aPlanarize } from "./commands/index.js";
 
 export const autoPlanarize = (funcName, ...args) => {
 	switch (funcName) {

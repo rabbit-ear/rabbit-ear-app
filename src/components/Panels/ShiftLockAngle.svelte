@@ -1,7 +1,5 @@
 <script>
 	import {
-		Tool,
-		ToolStep,
 		RadialSnapDegrees,
 	} from "../../stores/Tool.js";
 	import { Keyboard } from "../../stores/UI.js";
