@@ -1,14 +1,14 @@
 import { get } from "svelte/store";
 import {
+	Tool,
 	Current,
 	CurrentSnap,
 } from "../stores/UI.js";
-import { ToolNew } from "../stores/Tool.js";
 
 const customPointerEvent = (eventType, event) => {
 	Current.set(event.point);
 	CurrentSnap.set(undefined);
-	const tool = get(ToolNew);
+	const tool = get(Tool);
 	const { pointerEvent } = tool;
 	if (pointerEvent) { return pointerEvent(eventType, event); }
 };

@@ -1,8 +1,6 @@
 <script>
-	import {
-		RadialSnapDegrees,
-	} from "../../stores/Tool.js";
 	import { Keyboard } from "../../stores/UI.js";
+	import { RadialSnapDegrees } from "../../stores/Snap.js";
 </script>
 
 <p>snap edge to angle</p>

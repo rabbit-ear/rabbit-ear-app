@@ -1,8 +1,6 @@
 <script>
-	import {
-		ElementSelect,
-		SelectHoverIndex,
-	} from "../../stores/Tool.js";
+	import { ElementSelect } from "../../stores/UI.js";
+	import { SelectHoverIndex } from "./stores.js";
 	import { Selection } from "../../stores/Select.js";
 	import {
 		SELECT_VERTEX,

@@ -6,7 +6,7 @@
 	import {
 		SymmetryLines,
 	} from "../../stores/Symmetry.js";
-	import { ToolNew } from "../../stores/Tool.js";
+	// import { Tool } from "../../stores/UI.js";
 	import { ViewBox } from "../../stores/ViewBox.js";
 
 	let showRulers = true;

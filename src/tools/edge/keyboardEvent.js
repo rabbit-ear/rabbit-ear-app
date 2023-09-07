@@ -3,7 +3,7 @@ import { Presses } from "../../stores/UI.js";
 import {
 	RadialSnapDegrees,
 	RadialSnapOffset,
-} from "../../stores/Tool.js";
+} from "../../stores/Snap.js";
 import { RulerLines } from "../../stores/Ruler.js";
 import execute from "../../kernel/execute.js";
 

@@ -1,7 +1,7 @@
 <script>
 // Anything that is specific to a certain tool?
 	import { ViewBox } from "../../stores/ViewBox.js";
-	import { ToolNew } from "../../stores/Tool.js";
+	import { Tool } from "../../stores/UI.js";
 	import {
 		Presses,
 		Moves,
@@ -9,7 +9,7 @@
 	} from "../../stores/UI.js";
 
 	let scribblePointString = "";
-	// $: scribblePointString = $ToolNew.name === TOOL_SCRIBBLE
+	// $: scribblePointString = $Tool.name === TOOL_SCRIBBLE
 	// 	? [].concat($Presses)
 	// 		.concat($Moves)
 	// 		.concat($Releases)

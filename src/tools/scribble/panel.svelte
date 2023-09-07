@@ -9,7 +9,7 @@
 		ScribbleSmoothAmount,
 		ScribbleDensity,
 		ScribbleWaitForConfirmation,
-	} from "../../stores/Tool.js";
+	} from "./stores.js";
 	let pointCount;
 	$: pointCount = $Presses.length + $Moves.length + $Releases.length;
 </script>

@@ -77,7 +77,7 @@ import {
 } from "../../stores/App.js";
 import {
 	RadialSnapDegrees,
-} from "../../stores/Tool.js";
+} from "../../stores/Snap.js";
 import repeatFold from "rabbit-ear/graph/flatFold/repeatFold.js";
 /**
  *

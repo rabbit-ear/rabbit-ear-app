@@ -8,7 +8,7 @@ import {
 	ASSIGN_CUT,
 	ASSIGN_BOUNDARY,
 } from "../../app/keys.js";
-import { AssignType } from "../../stores/Tool.js";
+import { AssignType } from "./stores.js";
 import execute from "../../kernel/execute.js";
 
 const performAssignment = (edge) => {

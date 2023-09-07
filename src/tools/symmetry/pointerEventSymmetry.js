@@ -10,7 +10,7 @@ import { SymmetryLines } from "../stores/Symmetry.js";
 import {
 	RadialSnapDegrees,
 	RadialSnapOffset,
-} from "../stores/Tool.js";
+} from "../stores/Snap.js";
 import {
 	snapToPoint,
 	snapToRulerLine,

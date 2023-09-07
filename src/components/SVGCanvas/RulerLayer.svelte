@@ -15,7 +15,7 @@
 		UIRays,
 	} from "../../stores/UI.js";
 	import { SnapPoints } from "../../stores/Snap.js";
-	import { ToolNew } from "../../stores/Tool.js";
+	// import { Tool } from "../../stores/UI.js";
 	import { ViewBox } from "../../stores/ViewBox.js";
 
 	let showRulers = true;

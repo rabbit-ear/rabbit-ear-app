@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import { snapToEdge } from "../../js/snap.js";
 import { Selection } from "../../stores/Select.js";
-import { FoldAngleValue } from "../../stores/Tool.js";
+import { FoldAngleValue } from "./stores.js";
 import execute from "../../kernel/execute.js";
 
 const pointerEventFoldAngle = (eventType, { point }) => {

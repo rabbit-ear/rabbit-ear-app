@@ -26,7 +26,7 @@ import {
 	SELECT_EDGE,
 	SELECT_FACE,
 } from "../app/keys.js";
-import { ToolNew } from "../stores/Tool.js";
+import { Tool } from "../stores/UI.js";
 
 // import {
 // 	TOOL_SELECT,
@@ -70,7 +70,7 @@ $: editable = !($FrameIsLocked);
 		type="radio"
 		name="tool"
 		id="camera"
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolCamera} />
 	<label for="camera">camera</label>
 	<input
@@ -78,7 +78,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="select"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolSelect} />
 	<label for="select">select</label>
 	<input
@@ -86,7 +86,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="delete"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolDelete} />
 	<label for="delete">delete</label>
 </div>
@@ -98,7 +98,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="vertex"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolVertex} />
 	<label for="vertex">vertex</label>
 	<input
@@ -106,7 +106,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="edge"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolEdge} />
 	<label for="edge">edge</label>
 </div>
@@ -118,7 +118,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="axiom-1"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolAxiom1} />
 	<label for="axiom-1">axiom 1</label>
 	<input
@@ -126,7 +126,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="axiom-2"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolAxiom2} />
 	<label for="axiom-2">axiom 2</label>
 	<input
@@ -134,7 +134,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="axiom-3"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolAxiom3} />
 	<label for="axiom-3">axiom 3</label>
 	<input
@@ -142,7 +142,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="axiom-4"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolAxiom4} />
 	<label for="axiom-4">axiom 4</label>
 	<input
@@ -150,7 +150,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="axiom-5"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolAxiom5} />
 	<label for="axiom-5">axiom 5</label>
 	<input
@@ -158,7 +158,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="axiom-6"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolAxiom6} />
 	<label for="axiom-6">axiom 6</label>
 	<input
@@ -166,7 +166,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="axiom-7"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolAxiom7} />
 	<label for="axiom-7">axiom 7</label>
 </div>
@@ -178,7 +178,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="kawasaki-add"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolKawasaki} />
 	<label for="kawasaki-add">kawasaki</label>
 </div>
@@ -190,7 +190,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="fold-line"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolFoldedLine} />
 	<label for="fold-line">folded line</label>
 	<input
@@ -198,7 +198,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="pleat"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolPleat} />
 	<label for="pleat">pleat</label>
 	<input
@@ -206,7 +206,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="scribble"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolScribble} />
 	<label for="scribble">scribble</label>
 </div>
@@ -219,7 +219,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="split-edge"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={TOOL_SPLIT_EDGE} />
 	<label for="split-edge">split edge</label>
 </div>
@@ -232,7 +232,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="assign"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolAssignment} />
 	<label for="assign">assignment</label>
 </div>
@@ -242,7 +242,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="fold-angle"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolFoldAngle} />
 	<label for="fold-angle">fold angle</label>
 </div>
@@ -254,7 +254,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="translate"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolTranslate} />
 	<label for="translate">translate</label>
 	<input
@@ -262,7 +262,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="scale"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolScale} />
 	<label for="scale">scale</label>
 	<input
@@ -270,7 +270,7 @@ $: editable = !($FrameIsLocked);
 		name="tool"
 		id="symmetry"
 		disabled={!editable}
-		bind:group={$ToolNew}
+		bind:group={$Tool}
 		value={ToolSymmetry} />
 	<label for="symmetry">symmetry</label>
 </div>

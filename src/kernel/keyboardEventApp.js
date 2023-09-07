@@ -28,10 +28,8 @@ import {
 	ASSIGN_CUT,
 	ASSIGN_BOUNDARY,
 } from "../app/keys.js";
-import {
-	ToolNew,
-	AssignType,
-} from "../stores/Tool.js";
+// import { Tool } from "../stores/UI.js";
+import { AssignType } from "../tools/assignment/stores.js";
 import {
 	DialogNewFile,
 	TerminalTextarea,

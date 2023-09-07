@@ -1,8 +1,10 @@
 import { get } from "svelte/store";
 import { isFormElementActive } from "../js/dom.js";
-import { ToolNew } from "../stores/Tool.js";
 import { TerminalTextarea } from "../stores/App.js";
-import { Keyboard } from "../stores/UI.js";
+import {
+	Keyboard,
+	Tool,
+} from "../stores/UI.js";
 import { keyboardEventApp } from "./keyboardEventApp.js";
 import { keyboardEventTerminal } from "./keyboardEventTerminal.js";
 
@@ -10,7 +12,7 @@ const keyboardWindowEvent = (eventType, event) => {
 	if (keyboardEventApp(eventType, event)) { return; }
 	// custom keyboard events can be determined by
 	// the selected tool or the key pressed.
-	const tool = get(ToolNew);
+	const tool = get(Tool);
 	if (tool.keyboardEvent) {
 		return tool.keyboardEvent(eventType, event);
 	}

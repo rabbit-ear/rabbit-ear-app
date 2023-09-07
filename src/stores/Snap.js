@@ -1,8 +1,12 @@
-import { derived } from "svelte/store";
+import { writable, derived } from "svelte/store";
 // import { Snapping } from "./App.js";
 import { Graph } from "./Model.js";
 import { ViewBox } from "./ViewBox.js";
 import { RulerPoints } from "./Ruler.js";
+
+// modifiers
+export const RadialSnapDegrees = writable(22.5);
+export const RadialSnapOffset = writable(0);
 /**
  * @description SnapPoints contains a list of 2D points
  * in the plane which the UI should be able to snap to.

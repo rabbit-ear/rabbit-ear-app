@@ -8,7 +8,7 @@
 		Highlight,
 	} from "../../stores/Select.js";
 	import { StrokeWidth } from "../../stores/Style.js";
-	import { ToolNew } from "../../stores/Tool.js";
+	// import { Tool } from "../../stores/UI.js";
 
 	const showVertices = (toolStep) => {
 		return false;

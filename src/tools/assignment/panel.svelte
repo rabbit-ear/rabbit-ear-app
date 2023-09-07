@@ -1,5 +1,5 @@
 <script>
-	import { AssignType } from "../../stores/Tool.js";
+	import { AssignType } from "./stores.js";
 	import {
 		ASSIGN_SWAP,
 		ASSIGN_FLAT,
