@@ -4,6 +4,7 @@ import pointerEvent from "./pointerEvent.js";
 const deleteTool = {
 	uuid: "deleteTool",
 	name: "delete",
+	group: "general",
 	pointerEvent,
 	// panel,
 };

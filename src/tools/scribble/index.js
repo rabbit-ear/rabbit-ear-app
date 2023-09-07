@@ -4,6 +4,7 @@ import panel from "./panel.svelte";
 const scribble = {
 	uuid: "scribble",
 	name: "scribble",
+	group: "many lines",
 	pointerEvent,
 	panel,
 };

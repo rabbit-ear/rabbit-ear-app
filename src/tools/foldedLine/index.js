@@ -4,6 +4,7 @@ import pointerEvent from "./pointerEvent.js";
 const foldedLine = {
 	uuid: "foldedLine",
 	name: "folded line",
+	group: "many lines",
 	pointerEvent,
 	// panel,
 };

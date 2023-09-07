@@ -4,6 +4,7 @@ import pointerEvent from "./pointerEvent.js";
 const camera = {
 	uuid: "camera",
 	name: "camera",
+	group: "general",
 	pointerEvent,
 	// panel,
 };

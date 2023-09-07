@@ -4,6 +4,7 @@ import pointerEvent from "./pointerEvent.js";
 const kawasaki = {
 	uuid: "kawasaki",
 	name: "kawasaki",
+	group: "single vertex",
 	pointerEvent,
 	// panel,
 };

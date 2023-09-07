@@ -4,6 +4,7 @@ import pointerEvent from "./pointerEvent.js";
 const translate = {
 	uuid: "translate",
 	name: "translate",
+	group: "transform",
 	pointerEvent,
 	// panel,
 };

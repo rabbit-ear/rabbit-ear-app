@@ -5,6 +5,7 @@ import * as stores from "./stores.js";
 const axiom4 = {
 	uuid: "axiom4",
 	name: "axiom 4",
+	group: "lines",
 	pointerEvent,
 	panel,
 	stores,

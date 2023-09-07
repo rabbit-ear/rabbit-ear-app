@@ -11,6 +11,7 @@ const options = {
 const edge = {
 	uuid: "edge",
 	name: "edge",
+	group: "simple",
 	pointerEvent,
 	keyboardEvent,
 	options,

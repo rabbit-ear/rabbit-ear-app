@@ -4,6 +4,7 @@ import pointerEvent from "./pointerEvent.js";
 const vertex = {
 	uuid: "vertex",
 	name: "vertex",
+	group: "simple",
 	pointerEvent,
 	// panel,
 };

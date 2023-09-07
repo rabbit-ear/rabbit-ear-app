@@ -4,6 +4,7 @@ import panel from "./panel.svelte";
 const selectTool = {
 	uuid: "select",
 	name: "select",
+	group: "general",
 	pointerEvent,
 	panel,
 };

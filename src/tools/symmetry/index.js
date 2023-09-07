@@ -4,6 +4,7 @@ import panel from "./panel.svelte";
 const symmetry = {
 	uuid: "symmetry",
 	name: "symmetry",
+	group: "transform",
 	// pointerEvent,
 	panel,
 };
