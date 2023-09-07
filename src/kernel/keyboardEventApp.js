@@ -37,10 +37,10 @@ import {
 	TerminalTextarea,
 	ShowTerminal,
 } from "../stores/App.js";
-import execute from "./execute.js";
 import { ResetUI } from "../stores/UI.js";
 import { RulerLines, RulerRays } from "../stores/Ruler.js";
 import { Selection } from "../stores/Select.js";
+import execute from "./execute.js";
 
 let altCameraToolSwap;
 

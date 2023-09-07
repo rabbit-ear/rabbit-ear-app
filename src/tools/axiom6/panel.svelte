@@ -1,5 +1,6 @@
 <script>
-	import { ToolStep } from "../../stores/Tool.js";
+	import Panel from "../../components/Panels/Panel.svelte";
+	import { ToolStep } from "./stores.js";
 
 	let classes = ["todo", "todo", "todo", "todo"];
 	$: switch ($ToolStep) {
@@ -30,14 +31,20 @@
 	}
 </script>
 
-<div class="container">
-	<ol>
-		<li class={classes[0]}>press on a point</li>
-		<li class={classes[1]}>release on a line</li>
-		<li class={classes[2]}>press on a point</li>
-		<li class={classes[3]}>release on a line</li>
-	</ol>
-</div>
+<Panel>
+	<span slot="title">axiom 6</span>
+	<span slot="body">
+		<div class="container">
+			<ol>
+				<li class={classes[0]}>press on a point</li>
+				<li class={classes[1]}>release on a line</li>
+				<li class={classes[2]}>press on a point</li>
+				<li class={classes[3]}>release on a line</li>
+				<li class={classes[4]}>draw segment</li>
+			</ol>
+		</div>
+	</span>
+</Panel>
 
 <style>
 	ol {

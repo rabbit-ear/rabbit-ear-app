@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
-import execute from "./execute.js";
 import { TerminalValue } from "../stores/App.js";
 import { TerminalHistory } from "../stores/History.js";
+import execute from "./execute.js";
 
 const executeString = (str) => {
 	const preParen = str.match(/^[^(]*/);

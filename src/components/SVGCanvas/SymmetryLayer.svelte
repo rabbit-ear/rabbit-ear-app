@@ -1,5 +1,4 @@
 <script>
-	import { TOOL_SYMMETRY } from "../../app/keys.js";
 	import {
 		clipLineInLargerViewBox,
 		clipRayInLargerViewBox,

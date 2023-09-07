@@ -16,7 +16,7 @@ import ToolKawasaki from "../tools/kawasaki/index.js";
 import ToolPleat from "../tools/pleat/index.js";
 import ToolScribble from "../tools/scribble/index.js";
 import ToolSymmetry from "../tools/symmetry/index.js";
-// import ToolSPLIT_EDGE from "../tools/index/.js";
+// import ToolSplitEdge from "../tools/splitEdge/index.js";
 import ToolTranslate from "../tools/translate/index.js";
 import ToolScale from "../tools/scale/index.js";
 import ToolAssignment from "../tools/assignment/index.js";

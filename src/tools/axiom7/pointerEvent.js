@@ -2,7 +2,7 @@ import { get } from "svelte/store";
 import execute from "../../kernel/execute.js";
 import { Highlight } from "../../stores/Select.js";
 import { RulerLines } from "../../stores/Ruler.js";
-import { ToolStep } from "../../stores/Tool.js";
+import { ToolStep } from "./stores.js";
 import {
 	Presses,
 	Releases,

@@ -1,6 +1,5 @@
 <script>
 // Anything that is specific to a certain tool?
-	import { TOOL_SCRIBBLE } from "../../app/keys.js";
 	import { ViewBox } from "../../stores/ViewBox.js";
 	import { ToolNew } from "../../stores/Tool.js";
 	import {

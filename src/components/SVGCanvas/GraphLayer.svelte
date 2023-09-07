@@ -8,21 +8,7 @@
 		Highlight,
 	} from "../../stores/Select.js";
 	import { StrokeWidth } from "../../stores/Style.js";
-	import { ToolNew, ToolStep } from "../../stores/Tool.js";
-	import {
-		TOOL_SELECT,
-		TOOL_VERTEX,
-		TOOL_EDGE,
-		TOOL_SPLIT_EDGE,
-		TOOL_AXIOM_1,
-		TOOL_AXIOM_2,
-		TOOL_AXIOM_3,
-		TOOL_AXIOM_4,
-		TOOL_AXIOM_5,
-		TOOL_AXIOM_6,
-		TOOL_AXIOM_7,
-		TOOL_KAWASAKI,
-	} from "../../app/keys.js";
+	import { ToolNew } from "../../stores/Tool.js";
 
 	const showVertices = (toolStep) => {
 		return false;
@@ -106,7 +92,8 @@
 		strokes={edgesStroke}
 		strokeWidths={edgesStrokeWidth}
 	/>
-	{#if showVertices($ToolStep)}
+	<!-- {#if showVertices($ToolStep)} -->
+	{#if showVertices()}
 		<GraphVerticesLayer
 			graph={$Graph}
 			fills={verticesFill}

@@ -1,12 +1,18 @@
 <script>
-import { PleatCount } from "../../stores/Tool.js";
+	import Panel from "../../components/Panels/Panel.svelte";
+	import { PleatCount } from "./stores.js";
 </script>
 
-<div class="container">
-	<input
-		type="text"
-		bind:value={$PleatCount} >
-</div>
+<Panel>
+	<span slot="title">pleat</span>
+	<span slot="body">
+		<div class="container">
+			<input
+				type="text"
+				bind:value={$PleatCount} >
+		</div>
+	</span>
+</Panel>
 
 <style>
 	input[type=text] {

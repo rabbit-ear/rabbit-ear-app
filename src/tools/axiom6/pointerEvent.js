@@ -8,7 +8,7 @@ import {
 } from "../../stores/UI.js";
 import execute from "../../kernel/execute.js";
 import { RulerLines } from "../../stores/Ruler.js";
-import { ToolStep } from "../../stores/Tool.js";
+import { ToolStep } from "./stores.js";
 import { Graph } from "../../stores/Model.js";
 import { RulersAutoClear } from "../../stores/App.js";
 

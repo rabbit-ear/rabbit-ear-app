@@ -11,7 +11,7 @@ import execute from "../../kernel/execute.js";
 import {
 	ToolStep,
 	PleatCount,
-} from "../../stores/Tool.js";
+} from "./stores.js";
 import {
 	Presses,
 	Releases,

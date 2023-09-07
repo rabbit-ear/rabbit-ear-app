@@ -1,0 +1,65 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-0.04 -0.04 1.08 1.08" stroke-width="0.1" stroke-linecap="round">
+	<defs>
+		<code>
+			<![CDATA[
+// var svg = ear.svg();
+svg.size(1, 1)
+  .padding(0.04)
+  .strokeWidth(0.1)
+  .strokeLinecap("round");
+
+const cp = ear.cp();
+
+cp.segment(0,1,1,0).valley();
+
+svg.origami(cp, {
+  edges: {valley: {
+    "stroke": "#26F",
+    "stroke-dasharray": "0.1 0.15",
+    "stroke-dashoffset": 0.095,
+  }}
+});
+
+svg.arrow(0.1,0.2,0.85,0.85)
+  .tail({ width: 0.3, height: 0.3 })
+  .bend(0.3)
+  .stroke("transparent");
+
+svg.arrow(0.4,0.25,0.85,0.85)
+  .strokeWidth(0.09)
+  .bend(0.5)
+  .stroke("black");
+
+]]>
+		</code>
+	</defs>
+	<g class="creasePattern">
+		<g stroke="black" fill="white" class="boundaries">
+			<polygon points="0,0 1,0 1,1 0,1" class="boundary"/>
+		</g>
+		<g fill="none" class="faces">
+			<polygon points="1,1 0,1 1,0" index="0" class="front"/>
+			<polygon points="0,1 0,0 1,0" index="1" class="front"/>
+		</g>
+		<g stroke="black" class="edges">
+			<path d="M0 1L1 0" class="valley" stroke="#26F" stroke-dasharray="0.1 0.15" stroke-dashoffset="0.095"/>
+			<path d="M0 0L1 0M1 0L1 1M1 1L0 1M0 1L0 0" class="boundary"/>
+		</g>
+		<g fill="none" class="vertices">
+			<circle cx="0" cy="0" r="0.02"/>
+			<circle cx="1" cy="0" r="0.02"/>
+			<circle cx="1" cy="1" r="0.02"/>
+			<circle cx="0" cy="1" r="0.02"/>
+		</g>
+	</g>
+	<g class="arrow" stroke="transparent">
+		<path class="arrow-line" style="fill:none;" d="M0.39548710739389414,0.25183984340243754C0.6468304842423689,0.3524046415019123,0.8204544092179014,0.5809018213221813,0.85,0.85"/>
+		<path class="arrow-tail" stroke="none" d="M0.09999999999999998,0.19999999999999998L0.3695671856926754,0.3995833970993846L0.4214070290951129,0.10409628970549045Z" visibility="visible"/>
+		<path class="arrow-head" stroke="none" d="M3.9603906041462547,10.353971290446887L4.651588516178755,-0.39415624165850194L-2.9515885161787554,2.094156241658502Z" visibility="hidden"/>
+	</g>
+	<g class="arrow" stroke-width="0.09" stroke="black">
+		<path class="arrow-line" style="fill:none;" d="M0.4,0.25C0.72445,0.29635000000000006,0.89635,0.52555,0.85,0.85"/>
+		<path class="arrow-tail" stroke="none" d="M-9.499494936611667,-1.1642135623730965L-0.16568542494923855,4.209797974644667L0.9656854249492386,-3.7097979746446668Z" visibility="hidden"/>
+		<path class="arrow-head" stroke="none" d="M-0.5642135623730967,10.749494936611667L4.809797974644667,1.4156854249492388L-3.1097979746446667,0.2843145750507613Z" visibility="hidden"/>
+	</g>
+</svg>

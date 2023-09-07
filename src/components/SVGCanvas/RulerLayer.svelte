@@ -1,9 +1,5 @@
 <script>
 	import {
-		TOOL_EDGE,
-		TOOL_FOLD_LINE,
-	} from "../../app/keys.js";
-	import {
 		clipLineInLargerViewBox,
 		clipRayInLargerViewBox,
 	} from "../../js/intersect.js";
