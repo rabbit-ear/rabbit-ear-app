@@ -241,9 +241,19 @@ export const splitEdges = (edges) => {
 	UpdateFrame({ ...graph });
 };
 
+export const translate = (vector) => {
+	FileHistory.cache();
+	const graph = get(Graph);
+	const vertices_coords = graph.vertices_coords || [];
+	vertices_coords.forEach((_, v) => {
+		vertices_coords[v] = add2(vertices_coords[v], vector);
+	});
+	IsoUpdateFrame({ ...graph, vertices_coords });
+};
+
 export const translateVertices = (vertices, vector) => {
 	FileHistory.cache();
-	if (!vertices.length) { return; }
+	if (!vertices.length) { return "no vertices selected"; }
 	const graph = get(Graph);
 	const vertices_coords = graph.vertices_coords || [];
 	vertices.forEach(v => {

@@ -39,26 +39,3 @@ export const ASSIGN_BOUNDARY = "assignBoundary";
 // general settings
 // export const SNAP_NONE = "snapNone";
 // export const SNAP_GRID = "snapGrid";
-
-// export const nameForTool = {
-// 	[TOOL_SELECT]: "select",
-// 	[TOOL_VERTEX]: "vertex",
-// 	[TOOL_EDGE]: "edge",
-// 	[TOOL_SPLIT_EDGE]: "split edge",
-// 	[TOOL_TRANSLATE]: "translate",
-// 	[TOOL_SCALE]: "scale",
-// 	[TOOL_ASSIGN]: "assignment",
-// 	[TOOL_FOLD_ANGLE]: "fold angle",
-// 	[TOOL_AXIOM_1]: "axiom 1",
-// 	[TOOL_AXIOM_2]: "axiom 2",
-// 	[TOOL_AXIOM_3]: "axiom 3",
-// 	[TOOL_AXIOM_4]: "axiom 4",
-// 	[TOOL_AXIOM_5]: "axiom 5",
-// 	[TOOL_AXIOM_6]: "axiom 6",
-// 	[TOOL_AXIOM_7]: "axiom 7",
-// 	[TOOL_FOLD_LINE]: "fold line",
-// 	[TOOL_KAWASAKI]: "kawasaki",
-// 	[TOOL_PLEAT]: "pleat",
-// 	[TOOL_SCRIBBLE]: "scribble",
-// 	[TOOL_SYMMETRY]: "symmetry lines",
-// };

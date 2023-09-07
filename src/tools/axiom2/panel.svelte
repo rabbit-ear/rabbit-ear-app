@@ -2,33 +2,11 @@
 	import Panel from "../../components/Panels/Panel.svelte";
 	import { ToolStep } from "./stores.js";
 
-	let classes = ["todo", "todo", "todo", "todo"];
-	$: switch ($ToolStep) {
-	case 0:
-		classes[0] = "current";
-		classes[1] = "todo";
-		classes[2] = "todo";
-		classes[3] = "todo";
-		break;
-	case 1:
-		classes[0] = "done";
-		classes[1] = "current";
-		classes[2] = "todo";
-		classes[3] = "todo";
-		break;
-	case 2:
-		classes[0] = "done";
-		classes[1] = "done";
-		classes[2] = "current";
-		classes[3] = "todo";
-		break;
-	case 3:
-		classes[0] = "done";
-		classes[1] = "done";
-		classes[2] = "done";
-		classes[3] = "current";
-		break;
-	}
+	let classes;
+	$: classes = Array.from(Array(5))
+		.map(() => "todo")
+		.map((str, i) => i === $ToolStep ? "current" : str)
+		.map((str, i) => i < $ToolStep ? "done" : str);
 </script>
 
 <Panel>
@@ -38,6 +16,7 @@
 			<ol>
 				<li class={classes[0]}>press on a point</li>
 				<li class={classes[1]}>release on a point</li>
+				<li class={classes[2]}>draw segment</li>
 			</ol>
 		</div>
 	</span>

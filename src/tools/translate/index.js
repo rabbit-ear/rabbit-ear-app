@@ -1,12 +1,12 @@
 import pointerEvent from "./pointerEvent.js";
-// import panel from "./panel.svelte";
+import panel from "./panel.svelte";
 
 const translate = {
 	uuid: "translate",
 	name: "translate",
 	group: "transform",
 	pointerEvent,
-	// panel,
+	panel,
 };
 
 export default translate;

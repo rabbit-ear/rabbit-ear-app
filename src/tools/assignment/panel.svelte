@@ -1,4 +1,5 @@
 <script>
+	import Panel from "../../components/Panels/Panel.svelte";
 	import { AssignType } from "./stores.js";
 	import {
 		ASSIGN_SWAP,
@@ -9,53 +10,58 @@
 	} from "../../app/keys.js";
 </script>
 
-<div class="container">
-	<div>
-		<input
-			type="radio"
-			id="swap"
-			name="assignType"
-			bind:group={$AssignType}
-			value={ASSIGN_SWAP} >
-		<label for="swap">mountain/valley</label>
-	</div>
-	<div>
-		<input
-			type="radio"
-			id="flat"
-			name="assignType"
-			bind:group={$AssignType}
-			value={ASSIGN_FLAT} >
-		<label for="flat">flat</label>
-	</div>
-	<div>
-		<input
-			type="radio"
-			id="unassigned"
-			name="assignType"
-			bind:group={$AssignType}
-			value={ASSIGN_UNASSIGNED} >
-		<label for="unassigned">unassigned</label>
-	</div>
-	<div>
-		<input
-			type="radio"
-			id="cut"
-			name="assignType"
-			bind:group={$AssignType}
-			value={ASSIGN_CUT} >
-		<label for="cut">cut</label>
-	</div>
-	<div>
-		<input
-			type="radio"
-			id="boundary"
-			name="assignType"
-			bind:group={$AssignType}
-			value={ASSIGN_BOUNDARY} >
-		<label for="boundary">boundary</label>
-	</div>
-</div>
+<Panel>
+	<span slot="title">assignment</span>
+	<span slot="body">
+		<div class="container">
+			<div>
+				<input
+					type="radio"
+					id="swap"
+					name="assignType"
+					bind:group={$AssignType}
+					value={ASSIGN_SWAP} >
+				<label for="swap">mountain/valley</label>
+			</div>
+			<div>
+				<input
+					type="radio"
+					id="flat"
+					name="assignType"
+					bind:group={$AssignType}
+					value={ASSIGN_FLAT} >
+				<label for="flat">flat</label>
+			</div>
+			<div>
+				<input
+					type="radio"
+					id="unassigned"
+					name="assignType"
+					bind:group={$AssignType}
+					value={ASSIGN_UNASSIGNED} >
+				<label for="unassigned">unassigned</label>
+			</div>
+			<div>
+				<input
+					type="radio"
+					id="cut"
+					name="assignType"
+					bind:group={$AssignType}
+					value={ASSIGN_CUT} >
+				<label for="cut">cut</label>
+			</div>
+			<div>
+				<input
+					type="radio"
+					id="boundary"
+					name="assignType"
+					bind:group={$AssignType}
+					value={ASSIGN_BOUNDARY} >
+				<label for="boundary">boundary</label>
+			</div>
+		</div>
+	</span>
+</Panel>
 
 <style>
 	.container {

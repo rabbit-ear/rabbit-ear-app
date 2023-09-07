@@ -1,15 +1,11 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
-	import { FoldAngleValue } from "./stores.js";
 </script>
 
 <Panel>
-	<span slot="title">fold angle</span>
+	<span slot="title">folded line</span>
 	<span slot="body">
 		<div class="container">
-			<input
-				type="text"
-				bind:value={$FoldAngleValue} >
 		</div>
 	</span>
 </Panel>

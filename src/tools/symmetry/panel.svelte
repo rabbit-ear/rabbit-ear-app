@@ -1,4 +1,5 @@
 <script>
+	import Panel from "../../components/Panels/Panel.svelte";
 	// import {
 	// 	RulerLines,
 	// 	RulerRays,
@@ -15,26 +16,33 @@
 	});
 </script>
 
-<p>{$SymmetryLines.length} currently</p>
+<Panel>
+	<span slot="title">symmetry</span>
+	<span slot="body">
+		<div class="container">
+			<p>{$SymmetryLines.length} currently</p>
 
-{#each $SymmetryLines as line, i}
-	<ul class="row">
-		<div>
-			<!-- <input type="checkbox" checked>
-			<p>{toDegree(line.vector)}&deg;</p> -->
-			<li>
-				<p>{toDegree(line.vector)}&deg;</p>
-			</li>
+			{#each $SymmetryLines as line, i}
+				<ul class="row">
+					<div>
+						<!-- <input type="checkbox" checked>
+						<p>{toDegree(line.vector)}&deg;</p> -->
+						<li>
+							<p>{toDegree(line.vector)}&deg;</p>
+						</li>
 
+					</div>
+					<div>
+						<button on:click={() => deleteLine(i)}>delete</button>
+					</div>
+				</ul>
+			{/each}
+			<div>
+				<button on:click={() => {}}>clear all lines</button>
+			</div>
 		</div>
-		<div>
-			<button on:click={() => deleteLine(i)}>delete</button>
-		</div>
-	</ul>
-{/each}
-<div>
-	<button on:click={() => {}}>clear all lines</button>
-</div>
+	</span>
+</Panel>
 
 <style>
 	li { margin-left: 1rem; }
@@ -44,6 +52,10 @@
 	}
 	button {
 /*		all: unset;*/
+	}
+	.container {
+		display: flex;
+		flex-direction: column;
 	}
 	.row {
 		display: flex;
