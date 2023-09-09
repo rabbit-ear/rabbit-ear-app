@@ -16,6 +16,7 @@
 			<ol>
 				<li class={classes[0]}>press on a point</li>
 				<li class={classes[1]}>release on a point</li>
+				<li class={classes[2]}>draw segment</li>
 			</ol>
 		</div>
 	</span>

@@ -15,6 +15,8 @@
 	let invalidMaekawa = [];
 	$: invalidMaekawa = graph.edges_vertices ? validateMaekawa(graph) : [];
 
+	// todo: show smallest-sector assignment violation
+
 	// $: console.log("invalid (k, m)", invalidKawasaki, invalidMaekawa);
 </script>
 

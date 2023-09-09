@@ -1,10 +1,5 @@
 <script>
 	import Tools from "../tools/index.js";
-	import {
-		SELECT_VERTEX,
-		SELECT_EDGE,
-		SELECT_FACE,
-	} from "../app/keys.js";
 	import { Tool } from "../stores/UI.js";
 	import { FrameIsLocked } from "../stores/Model.js";
 
@@ -22,6 +17,7 @@
 	];
 </script>
 
+<!-- 
 {#each categories as category}
 	<p>{category}</p>
 	<div class="vertical-radio">
@@ -37,6 +33,27 @@
 		{/each}
 	</div>
 {/each}
+ -->
+
+<div class="toolbar">
+	{#each categories as category}
+		<div class="grid-columns">
+			{#each Object.values(Tools).filter(el => el.group === category) as tool}
+				<button
+					title={tool.name}
+					class={tool.name}
+					disabled={$FrameIsLocked}
+					highlighted={$Tool.name === tool.name}
+					on:click={() => Tool.set(tool)}>
+					{#if tool.icon}
+						<svelte:component this={tool.icon} />
+					{/if}
+				</button>
+			{/each}
+		</div>
+		<hr />
+	{/each}
+</div>
 
 <style>
 	label {
@@ -55,5 +72,47 @@
 	}
 	.vertical-radio input {
 		grid-column: 1;
+	}
+
+	/* button grid layout */
+	.toolbar {
+		height: 100%;
+		overflow-y: auto;
+	}
+	.grid-columns {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		align-content: flex-start;
+	}
+	button {
+		width: 2rem;
+		height: 2rem;
+		display: inline-block;
+		margin: 0.15rem;
+		padding: 0;
+		border: 0px solid;
+		border-radius: 0.25rem;
+		outline-offset: 0.125rem;
+		cursor: pointer;
+/*		background-color: var(--toolbar-button-color);*/
+	}
+	/* :global(svg) */
+	button {
+		stroke: var(--text);
+		fill: var(--text);
+	}
+	button:hover {
+/*		background-color: var(--toolbar-button-hover);*/
+		stroke: var(--bright);
+		fill: var(--bright);
+	}
+	button[highlighted="true"] {
+		stroke: var(--highlight);
+		fill: var(--highlight);
+	}
+	hr {
+		margin: 1.5px;
+		border: 1.5px solid var(--dim);
+		opacity: 0.5;
 	}
 </style>

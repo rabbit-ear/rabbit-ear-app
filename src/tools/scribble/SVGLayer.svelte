@@ -1,7 +1,5 @@
 <script>
-// Anything that is specific to a certain tool?
 	import { ViewBox } from "../../stores/ViewBox.js";
-	import { Tool } from "../../stores/UI.js";
 	import {
 		Presses,
 		Moves,
@@ -9,13 +7,12 @@
 	} from "../../stores/UI.js";
 
 	let scribblePointString = "";
-	// $: scribblePointString = $Tool.name === TOOL_SCRIBBLE
-	// 	? [].concat($Presses)
-	// 		.concat($Moves)
-	// 		.concat($Releases)
-	// 		.map(p => p.join(","))
-	// 		.join(" ")
-	// 	: "";
+	$: scribblePointString = []
+		.concat($Presses)
+		.concat($Moves)
+		.concat($Releases)
+		.map(p => p.join(","))
+		.join(" ")
 
 	let vmax;
 	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);
@@ -26,7 +23,6 @@
 
 {#if scribblePointString !== ""}
 	<polyline
-		class="scribble-line"
 		points={scribblePointString}
 		stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
 		stroke-dashoffset={tick}
@@ -34,7 +30,7 @@
 {/if}
 
 <style>
-	.scribble-line {
+	polyline {
 		fill: none;
 		stroke: #fb4;
 	}

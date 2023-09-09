@@ -18,21 +18,21 @@
 
 /*:root {
 	color-scheme: light;
-	--text: #555;
-	--bright: #000;
+	--text: black;
+	--bright: black;
 	--dim: #888;
-	--background-0: #f8f8f8;
-	--background-1: #eee;
-	--background-2: #fff;
-	--background-3: #d9ddee;
+	--background-0: #eee;
+	--background-1: #fff;
+	--background-2: #eee;
+	--background-3: #ccc;
 	--yellow: #fb4;
 	--blue: #158;
 	--lightblue: #39e;
 	--red: #e53;
 	--green: #5e3;
 	--highlight: var(--lightblue);
-}
-*/
+}*/
+
 :root {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;

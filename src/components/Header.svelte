@@ -55,17 +55,13 @@
 			</li>
 			<li>graph
 				<ul>
+					<li class="no-select description">repair</li>
+					<li><button on:click={() => execute("planarize")}>planarize</button></li>
+					<li><button title="fix floating point rounding errors" on:click={() => execute("cleanVertices")}>smart clean vertices</button></li>
 					<li><button on:click={mergeNearbyVertices}>merge nearby vertices</button></li>
 					<li>
-						<span class="popover">convert to planar graph</span>
-						<button on:click={() => execute("planarize")}>planarize</button>
+						<button on:click={() => execute("snapAllVertices")}>snap all vertices to grid</button>
 					</li>
-					<li class="no-select">
-						<span class="popover">automatically planarize after (most) operations</span>
-						<input type="checkbox" id="checkbox-auto-planarize" bind:checked={$AutoPlanarize}>
-						<label for="checkbox-auto-planarize">auto-planarize</label>
-					</li>
-					<hr />
 					<li disabled>insert
 						<!-- <ul>
 							<li><button on:click={() => {}}>fish</button></li>
@@ -96,11 +92,16 @@
 							<label for="radio-snapping-no-snapping">off</label>
 						</div>
 					</li> -->
-					<li>
-						<button on:click={() => execute("cleanVertices")}>smart clean vertices</button>
-					</li>
-					<li>
-						<button on:click={() => execute("snapAllVertices")}>snap all to grid</button>
+					<li class="no-select description">modify selected</li>
+					<li><button on:click={() => {}}>merge selected vertices</button></li>
+					<li>set edges fold angle</li>
+					<li>set edges assignment</li>
+					<hr />
+					<li class="no-select description">application</li>
+					<li class="no-select">
+						<span class="popover">automatically planarize after (most) operations</span>
+						<input type="checkbox" id="checkbox-auto-planarize" bind:checked={$AutoPlanarize}>
+						<label for="checkbox-auto-planarize">auto-planarize</label>
 					</li>
 				</ul>
 			</li>
@@ -124,8 +125,9 @@
 			</li>
 			<li>select
 				<ul>
-					<li><button on:click={selectAll}>select all</button></li>
+					<li><button on:click={() => execute("selectAll")}>select all</button></li>
 					<li><button on:click={deselectAll}>deselect all</button></li>
+					<hr />
 					<li>select by assignment
 						<ul>
 							<li><button on:click={() => {}}>boundary</button></li>
@@ -137,9 +139,13 @@
 							<li><button on:click={() => {}}>unassigned</button></li>
 						</ul>
 					</li>
-					<li><button on:click={() => {}}>select 3D angles</button></li>
-					<hr />
-					<li class="no-select description">select type:</li>
+					<li>select by fold angle
+						<ul>
+							<li><button on:click={() => {}}>flat-folded</button></li>
+							<li><button on:click={() => {}}>3D angles</button></li>
+						</ul>
+					</li>
+					<!-- <li class="no-select description">select type:</li>
 					<li class="no-select">
 						<input type="radio" id="radio-select-vertex">
 						<label for="radio-select-vertex">vertex</label>
@@ -148,15 +154,12 @@
 						<input type="radio" id="radio-select-face">
 						<label for="radio-select-face">face</label>
 					</li>
-					<hr />
-					<li class="no-select description">modify selection</li>
-					<li><button on:click={() => {}}>merge selected vertices</button></li>
-					<li>set edges fold angle</li>
-					<li>set edges assignment</li>
+					<hr /> -->
 				</ul>
 			</li>
 			<li>analysis
 				<ul>
+					<li class="no-select description">single-vertex</li>
 					<li>
 						<input type="checkbox" id="checkbox-flat-foldable" bind:checked={$ShowFlatFoldableIssues}>
 						<label for="checkbox-flat-foldable">flat-foldable issues</label>

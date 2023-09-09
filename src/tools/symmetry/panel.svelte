@@ -4,7 +4,7 @@
 	// 	RulerLines,
 	// 	RulerRays,
 	// } from "../../stores/Ruler.js";
-	import { SymmetryLines } from "../../stores/Symmetry.js";
+	import { SymmetryLines } from "./stores.js";
 
 	const toDegree = (vector) => {
 		const radians = Math.atan2(vector[1], vector[0]);

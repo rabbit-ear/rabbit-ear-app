@@ -5,3 +5,5 @@ export const SelectHoverIndex = writable({
 	edge: undefined,
 	face: undefined,
 });
+
+export const SelectionRect = writable(undefined);

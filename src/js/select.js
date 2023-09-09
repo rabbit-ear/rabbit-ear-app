@@ -5,7 +5,7 @@ import { includeS } from "rabbit-ear/math/compare.js";
 // import { pointInBoundingBox } from "rabbit-ear/math/encloses.js";
 import { ViewBox } from "../stores/ViewBox.js";
 import { ElementSelect } from "../stores/UI.js";
-import { SelectionRect } from "../stores/Select.js";
+import { SelectionRect } from "../tools/Select/stores.js"; // todo get rid of
 import { Graph } from "../stores/Model.js";
 import { Releases } from "../stores/UI.js";
 import {

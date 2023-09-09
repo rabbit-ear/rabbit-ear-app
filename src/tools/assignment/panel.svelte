@@ -21,7 +21,7 @@
 					name="assignType"
 					bind:group={$AssignType}
 					value={ASSIGN_SWAP} >
-				<label for="swap">mountain/valley</label>
+				<label for="swap">valley/mountain</label>
 			</div>
 			<div>
 				<input

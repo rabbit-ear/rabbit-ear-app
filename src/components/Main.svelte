@@ -96,7 +96,7 @@
 
 	/* .gui children */
 	.toolbar {
-		width: 8rem;
+		/* width: 8rem;*/
 		height: 100%;
 		flex: 0 0 auto;  /* shrink to 1 */
 		overflow-y: auto;

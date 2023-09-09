@@ -6,6 +6,7 @@
 	<span slot="title">kawasaki</span>
 	<span slot="body">
 		<div class="container">
+			<p class="instruction">fix a vertex with an odd-number of edges.</p>
 		</div>
 	</span>
 </Panel>
@@ -14,5 +15,9 @@
 	.container {
 		display: flex;
 		flex-direction: column;
+	}
+	.instruction {
+		color: var(--dim);
+		font-style: italic;
 	}
 </style>

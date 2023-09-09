@@ -4,16 +4,14 @@
 	import UILayer from "./UILayer.svelte";
 	import GraphLayer from "./GraphLayer.svelte";
 	import RulerLayer from "./RulerLayer.svelte";
-	import SymmetryLayer from "./SymmetryLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
-	import ToolLayer from "./ToolLayer.svelte";
 	import FlatFoldable from "./FlatFoldable.svelte";
-	import { Graph } from "../../stores/Model.js";
 	import {
 		convertToViewBox,
 		findInParents,
 	} from "../../js/dom.js";
+	import { Graph } from "../../stores/Model.js";
 	import { ViewBox } from "../../stores/ViewBox.js";
 	import {
 		ShowGrid,
@@ -21,6 +19,7 @@
 		ShowFlatFoldableIssues,
 		ShowIndices,
 	} from "../../stores/App.js";
+	import { Tool } from "../../stores/UI.js";
 
 	const formatMouseEvent = (e) => ({
 		buttons: e.buttons,
@@ -49,6 +48,8 @@
 	];
 </script>
 
+<!-- i'm not sure what role=presentation means, i just guessed -->
+
 <svg
 	xmlns="http://www.w3.org/2000/svg"
 	viewBox={padViewBox($ViewBox, vmax * 0.05).join(" ")}
@@ -72,15 +73,14 @@
 		<FlatFoldable graph={$Graph} />
 	{/if}
 	<RulerLayer />
-	<SymmetryLayer />
 	<UILayer />
-	<ToolLayer />
+	{#if $Tool.SVGLayer}
+		<svelte:component this={$Tool.SVGLayer} />
+	{/if}
 	{#if $ShowIndices}
 		<GraphIndices />
 	{/if}
 </svg>
-
-	<!-- i'm not sure what role=presentation means, i just guessed -->
 
 <style>
 	svg {

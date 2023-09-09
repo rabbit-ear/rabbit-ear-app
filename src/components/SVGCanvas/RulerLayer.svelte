@@ -8,9 +8,6 @@
 		RulerRays,
 	} from "../../stores/Ruler.js";
 	import {
-		SymmetryLines,
-	} from "../../stores/Symmetry.js";
-	import {
 		UILines,
 		UIRays,
 	} from "../../stores/UI.js";

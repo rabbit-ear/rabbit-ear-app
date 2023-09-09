@@ -3,7 +3,6 @@
 	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
 	import GraphFacesLayer from "./GraphFacesLayer.svelte";
 	import { ViewBox } from "../../stores/ViewBox.js";
-	import { SelectionRect } from "../../stores/Select.js";
 	import { UIGraph } from "../../stores/UI.js";
 
 	let vmax;
@@ -21,7 +20,6 @@
 	$: scales = $UIGraph.vertices_coords
 		? $UIGraph.vertices_coords.map(() => 1.5)
 		: [];
-
 </script>
 
 <g>
@@ -38,16 +36,4 @@
 			scales={scales}
 		/>
 	</g>
-	{#if $SelectionRect !== undefined}
-		<rect
-			x={$SelectionRect.min[0]}
-			y={$SelectionRect.min[1]}
-			width={$SelectionRect.span[0]}
-			height={$SelectionRect.span[1]}
-			fill="none"
-			stroke="#fff8"
-			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
-			stroke-dashoffset={tick}
-		/>
-	{/if}
 </g>

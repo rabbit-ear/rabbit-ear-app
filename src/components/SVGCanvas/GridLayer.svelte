@@ -22,11 +22,11 @@
 </script>
 
 <g class="grid" stroke-width={Math.max($ViewBox[2], $ViewBox[3]) / 400}>
-<!-- 	<rect
-		x={$ViewBox[0] + $ViewBox[2] * 0.05}
-		y={$ViewBox[1] + $ViewBox[3] * 0.05}
-		width={$ViewBox[2] - $ViewBox[2] * 0.1}
-		height={$ViewBox[3] - $ViewBox[3] * 0.1}
+	<!-- <rect
+		x={$ViewBox[0]}
+		y={$ViewBox[1]}
+		width={$ViewBox[2]}
+		height={$ViewBox[3]}
 		fill="none"
 		stroke="red"
 	/> -->
@@ -48,3 +48,7 @@
 		/>
 	{/each}
 </g>
+
+<style>
+	line { stroke: var(--background-3); }
+</style>
