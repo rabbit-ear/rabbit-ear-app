@@ -16,8 +16,6 @@ import execute from "../../kernel/execute.js";
 import executeUI from "../../kernel/executeUI.js";
 import { Data } from "./stores.js";
 
-// let pressCoords = undefined;
-
 const pointerEventEdge = (eventType, { point }) => {
 	const shift = get(Keyboard)[16];
 	const coords = shift

@@ -80,6 +80,7 @@ export const snapToEdge = (point, force = false) => {
 };
 
 export const snapToPoint = (point, force = false) => {
+	if (!point) { return undefined; }
 	const snapRadius = get(SnapRadius);
 	// all the snap points
 	const gridCoord = get(Snapping)
@@ -124,6 +125,9 @@ export const snapToPoint = (point, force = false) => {
 // };
 
 export const snapToRulerLine = (point) => {
+	if (!point) {
+		return { index: undefined, line: undefined, coords: undefined };
+	}
 	const rulerLines = get(RulerLines);
 	const rulerRays = get(RulerRays);
 	// lines and rays in the same array, with a "type" key.

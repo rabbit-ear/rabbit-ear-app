@@ -2,24 +2,82 @@ import {
 	writable,
 	derived,
 } from "svelte/store";
+import {
+	snapToPoint,
+	snapToRulerLine,
+} from "../../js/snap.js";
+import { zipArrays } from "../../js/arrays.js";
+// import { UIGraph } from "../../stores/UI.js";
+import execute from "../../kernel/execute.js";
 
+export const reset = () => {
+	Hover.set(undefined);
+	Move.set(undefined);
+	Presses.set([]);
+	Releases.set([]);
+};
+
+export const Hover = writable(undefined);
+export const Move = writable(undefined);
 export const Presses = writable([]);
-
 export const Releases = writable([]);
 
-export const ToolStep = derived(
-	[Presses, Releases],
-	([$Presses, $Releases]) => {
-		const pressesCount = $Presses.length;
-		const releasesCount = $Releases.length;
-		if (pressesCount === 0) { return 0; }
-		if (pressesCount === 1 && releasesCount === 0) { return 1; }
-		if (pressesCount === 1 && releasesCount === 1) { return 2; }
-		if (pressesCount === 2 && releasesCount === 1) { return 3; }
-		if (pressesCount === 2 && releasesCount === 2) { return 4; }
-		if (pressesCount === 3 && releasesCount === 2) { return 5; }
-		if (pressesCount === 3 && releasesCount === 3) { return 6; }
-		return Infinity;
-	},
-	0,
+export const Touches = derived(
+	[Hover, Move, Presses, Releases],
+	([$Hover, $Move, $Presses, $Releases]) => zipArrays($Presses, $Releases)
+		.concat([$Hover])
+		.concat([$Move])
+		.filter(a => a !== undefined),
+	[],
 );
+
+export const Step = derived(Touches, ($Touches) => $Touches.length, 0);
+
+export const Coords0 = derived(
+	Touches,
+	($Touches) => snapToPoint($Touches[0], false),
+	undefined,
+);
+
+export const Coords1 = derived(
+	Touches,
+	($Touches) => snapToPoint($Touches[1], false),
+	undefined,
+);
+
+export const Coords2 = derived(
+	Touches,
+	($Touches) => snapToRulerLine($Touches[2], false).coords,
+	undefined,
+);
+
+export const Coords3 = derived(
+	Touches,
+	($Touches) => snapToRulerLine($Touches[3], false).coords,
+	undefined,
+);
+
+export const AxiomPreview = derived(
+	[Coords0, Coords1],
+	([$Coords0, $Coords1]) => (
+		($Coords0 !== undefined && $Coords1 !== undefined
+			? execute("axiom2Preview", $Coords0, $Coords1)
+			: undefined)),
+	undefined,
+);
+
+AxiomPreview.subscribe(() => {});
+
+// export const UIGraphDrawing = derived(
+// 	[Coords0, Coords1, Coords2, Coords3],
+// 	([$Coords0, $Coords1, $Coords2, $Coords3]) => {
+// 		const vertices_coords = [$Coords0, $Coords1, $Coords2, $Coords3]
+// 			.filter(a => a !== undefined);
+// 		const uiGraph = $Coords2 !== undefined && $Coords3 !== undefined
+// 			? { vertices_coords, edges_vertices: [[2, 3]] }
+// 			: { vertices_coords };
+// 		UIGraph.set(uiGraph);
+// 	},
+// 	undefined,
+// );
+// UIGraphDrawing.subscribe(() => {});
