@@ -1,5 +1,10 @@
 import { get, writable } from "svelte/store";
 import { TerminalHistory } from "../stores/History.js";
+import { ExecuteInput } from "../stores/Debug.js";
+import {
+	formatCommandResult,
+	formatCommandCall,
+} from "./format.js";
 import * as Commands from "./commands/index.js";
 /**
  * @description pre and post execute event function parameters should
@@ -26,44 +31,13 @@ const noHistoryCommands = {
 	// "autoPlanarize": true,
 };
 /**
- *
- */
-const formatCommandResult = (result) => {
-	const prompt = `<span class="prompt-symbol">&gt;</span>`;
-	switch (typeof result) {
-	case "boolean": return `${prompt} <span class="return">${result}</span>`;
-	case "number": return `${prompt} <span class="return">${result}</span>`;
-	case "string": return `${prompt} <span class="return">${result}</span>`;
-	case "object": return `${prompt} <span class="return">${JSON.stringify(result)}</span>`;
-	case "function": break;
-	}
-};
-/**
- *
- */
-const formatCommandCall = (functionName, args) => {
-	let params;
-	try {
-		params = structuredClone(args);
-	} catch (error) {
-		throw new Error(`<span class="error">${error}</span>`);
-	}
-	const paramsString = params
-		? params
-			.map(arg => JSON.stringify(arg))
-			.map(string => string.length > 1000 ? "[JSON]" : string)
-			.map(a => `<span class="param">${a}</span>`)
-			.join(", ")
-		: ""
-	return `<span class="function">${functionName}</span>(${paramsString})`
-};
-/**
  * @description the main execution method. all methods, from UI to
  * graph-modifying should pass through this method. pre and post-
  * execute event methods can be called, and the effect of calling
  * a method here will print it to the history log in the terminal.
  */
 const execute = (funcName, ...args) => {
+	ExecuteInput.set(funcName + "\n" + JSON.stringify(args));
 	const func = Commands[funcName];
 	if (!func) {
 		const error = new Error(`no known function with the name "${funcName}"`);
@@ -99,6 +73,7 @@ const execute = (funcName, ...args) => {
 		newHistory.push({ html: error });
 		return;
 	}
+	// if command returned anything, print output to terminal
 	if (res !== undefined) {
 		newHistory.push({ html: formatCommandResult(res) });
 	}
@@ -107,68 +82,3 @@ const execute = (funcName, ...args) => {
 };
 
 export default execute;
-
-/**
- *
- */
-// export const executeUI = (funcName, ...args) => {
-// 	const func = Commands[funcName];
-// 	if (!func) {
-// 		const error = new Error(`no known function with the name "${funcName}"`);
-// 		TerminalHistory.update(history => [
-// 			...history,
-// 			{ html: `<span class="error">${error}</span>` },
-// 		]);
-// 		return;
-// 	}
-// 	let res;
-// 	try {
-// 		res = func(...args);
-// 	} catch (error) {
-// 		// console.error(error);
-// 		TerminalHistory.update(history => [
-// 			...history,
-// 			{ html: `<span class="error">${error}</span>` },
-// 		]);
-// 		return;
-// 	}
-// 	const newHistory = [];
-// 	try {
-// 		newHistory.push({ html: formatCommandCall(func.name, args) });
-// 	} catch (error) {
-// 		newHistory.push({ html: error });
-// 		return;
-// 	}
-// 	if (res !== undefined) {
-// 		newHistory.push({ html: formatCommandResult(res) });
-// 	}
-// 	TerminalHistory.update(history => [...history, ...newHistory]);
-// 	return res;
-// };
-/**
- *
- */
-// export const executeString = (str) => {
-// 	const preParen = str.match(/^[^(]*/);
-// 	const insideParen = str.match(/\(([^\)]+)\)/);
-// 	const fnName = preParen[0];
-// 	const argsStr = (!insideParen || insideParen.length < 2
-// 		? ""
-// 		: insideParen[1]);
-// 	let args;
-// 	try {
-// 		args = JSON.parse(`[${argsStr}]`);
-// 	} catch (error) {
-// 		// console.error(error);
-// 		TerminalHistory.update(history => [
-// 			...history,
-// 			{ html: `<span class="error">${error}</span>` },
-// 		]);
-// 		return;
-// 	}
-// 	// console.log("insideParen", insideParen);
-// 	// console.log("fnName", fnName);
-// 	// console.log("argsStr", argsStr);
-// 	// console.log("args", args);
-// 	execute(fnName, ...args);
-// };

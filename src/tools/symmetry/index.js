@@ -4,7 +4,7 @@ import icon from "./icon.svelte";
 import SVGLayer from "./SVGLayer.svelte";
 
 const symmetry = {
-	uuid: "symmetry",
+	key: "symmetry",
 	name: "symmetry",
 	group: "transform",
 	icon,

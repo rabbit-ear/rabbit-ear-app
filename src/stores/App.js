@@ -42,7 +42,6 @@ export const VertexRadius = derived(
 	),
 	0.00666,
 );
-
 // pre- and post- execute() events are managed by the kernel.
 // when an operation is finished, it's customary to re-planarize
 // the graph to resolve any edge crossings/duplicate vertices.

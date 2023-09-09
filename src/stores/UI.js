@@ -1,28 +1,11 @@
 import { writable, derived } from "svelte/store";
 import { SELECT_EDGE } from "../app/keys.js";
-import ToolEdge from "../tools/edge/index.js";
+// import ToolEdge from "../tools/edge/index.js";
 import {
 	RulerLines,
 	RulerRays,
 } from "./Ruler.js"
 import { Highlight } from "./Select.js";
-/**
- * @description Tool
- */
-export const Tool = writable(ToolEdge);
-const ToolSet = Tool.set;
-Tool.set = (tool) => {
-	Presses.set([]);
-	Moves.set([]);
-	Releases.set([]);
-	Highlight.reset();
-	UIGraph.set({});
-	RulerLines.set([]);
-	RulerRays.set([]);
-	UILines.set([]);
-	UIRays.set([]);
-	return ToolSet(tool);
-};
 // a hash lookup of every keyboard key currently being pressed
 // where the dictionary keys are the ______ (key characters?)
 export const Keyboard = writable({});
@@ -44,16 +27,6 @@ export const UILines = writable([]);
 export const UIRays = writable([]);
 UILines.add = (newRulers) => UILines.update((r) => [...r, ...newRulers]);
 UIRays.add = (newRulers) => UIRays.update((r) => [...r, ...newRulers]);
-
-export const ResetUI = () => {
-	Presses.set([]);
-	Moves.set([]);
-	Releases.set([]);
-	Current.set(undefined);
-	UIGraph.set({});
-	UILines.set([]);
-	UIRays.set([]);
-};
 /**
  * @description for the UI. which tool step is currently in progress
  * based on the collected touch data.
@@ -63,4 +36,29 @@ const ElementSelectSet = ElementSelect.set;
 ElementSelect.set = (e) => {
 	Selection.reset();
 	return ElementSelectSet(e);
+};
+/**
+ *
+ */
+export const resetUI = () => {
+	Presses.set([]);
+	Moves.set([]);
+	Releases.set([]);
+	Current.set(undefined);
+	Highlight.reset();
+	UIGraph.set({});
+	UILines.set([]);
+	UIRays.set([]);
+	RulerLines.set([]);
+	RulerRays.set([]);
+};
+/**
+ * @description Tool
+ */
+// export const Tool = writable(ToolEdge);
+export const Tool = writable(undefined);
+const ToolSet = Tool.set;
+Tool.set = (tool) => {
+	resetUI();
+	return ToolSet(tool);
 };

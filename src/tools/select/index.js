@@ -4,7 +4,7 @@ import icon from "./icon.svelte";
 import SVGLayer from "./SVGLayer.svelte";
 
 const selectTool = {
-	uuid: "select",
+	key: "selectTool",
 	name: "select",
 	group: "general",
 	icon,

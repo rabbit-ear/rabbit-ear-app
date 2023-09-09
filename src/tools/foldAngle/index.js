@@ -3,7 +3,7 @@ import panel from "./panel.svelte";
 import icon from "./icon.svelte";
 
 const foldAngle = {
-	uuid: "foldAngle",
+	key: "foldAngle",
 	name: "fold angle",
 	group: "attributes",
 	icon,

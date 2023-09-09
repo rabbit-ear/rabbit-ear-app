@@ -7,10 +7,8 @@ const options = {
 	postExecute: [{ func: "planarize", args: [] }],
 };
 
-// export { default as Test } from './Test.svelte';
-
 const edge = {
-	uuid: "edge",
+	key: "edge",
 	name: "edge",
 	group: "simple",
 	icon,

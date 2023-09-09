@@ -3,7 +3,7 @@ import panel from "./panel.svelte";
 import icon from "./icon.svelte";
 
 const pleat = {
-	uuid: "pleat",
+	key: "pleat",
 	name: "pleat",
 	group: "many lines",
 	icon,

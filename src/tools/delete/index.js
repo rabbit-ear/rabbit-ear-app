@@ -3,7 +3,7 @@ import pointerEvent from "./pointerEvent.js";
 import icon from "./icon.svelte";
 
 const deleteTool = {
-	uuid: "deleteTool",
+	key: "deleteTool",
 	name: "delete",
 	group: "general",
 	icon,

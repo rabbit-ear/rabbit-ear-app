@@ -3,7 +3,7 @@ import panel from "./panel.svelte";
 import icon from "./icon.svelte";
 
 const camera = {
-	uuid: "camera",
+	key: "camera",
 	name: "camera",
 	group: "general",
 	icon,

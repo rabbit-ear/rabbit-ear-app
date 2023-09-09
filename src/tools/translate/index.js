@@ -3,7 +3,7 @@ import panel from "./panel.svelte";
 import icon from "./icon.svelte";
 
 const translate = {
-	uuid: "translate",
+	key: "translate",
 	name: "translate",
 	group: "transform",
 	icon,

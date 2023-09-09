@@ -4,7 +4,7 @@ import icon from "./icon.svelte";
 import SVGLayer from "./SVGLayer.svelte";
 
 const scribble = {
-	uuid: "scribble",
+	key: "scribble",
 	name: "scribble",
 	group: "many lines",
 	icon,

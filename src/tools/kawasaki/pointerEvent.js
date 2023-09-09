@@ -1,12 +1,14 @@
 import { get } from "svelte/store";
 import { snapToPoint, snapToVertex } from "../../js/snap.js";
 import { Highlight } from "../../stores/Select.js";
-import { ToolStep } from "./stores.js";
-import { RulerRays } from "../../stores/Ruler.js";
-import execute from "../../kernel/execute.js";
 import {
 	Presses,
 	Releases,
+	ToolStep,
+} from "./stores.js";
+import { RulerRays } from "../../stores/Ruler.js";
+import execute from "../../kernel/execute.js";
+import {
 	UIGraph,
 	UIRays,
 } from "../../stores/UI.js";

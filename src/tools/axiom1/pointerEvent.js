@@ -1,19 +1,19 @@
 import { get } from "svelte/store";
 import execute from "../../kernel/execute.js";
-import { Highlight } from "../../stores/Select.js";
-import { RulerLines } from "../../stores/Ruler.js";
-import { ToolStep } from "./stores.js";
+import executeUI from "../../kernel/executeUI.js";
 import {
-	Presses,
-	Releases,
 	UIGraph,
 	UILines,
 } from "../../stores/UI.js";
-// import { RulersAutoClear } from "../../stores/App.js";
 import {
 	snapToPoint,
 	snapToRulerLine,
 } from "../../js/snap.js";
+import {
+	Presses,
+	Releases,
+	ToolStep,
+} from "./stores.js";
 
 let pressCoords;
 
@@ -23,7 +23,6 @@ const pointerEventAxiom1 = (eventType, { point }) => {
 	case "release": Releases.update(p => [...p, point]); break;
 	default: break;
 	}
-	Highlight.reset();
 	switch (get(ToolStep)) {
 	case 0: {
 		const coords = snapToPoint(point, false);
@@ -72,11 +71,7 @@ const pointerEventAxiom1 = (eventType, { point }) => {
 			execute("addVertex", pressCoords),
 			execute("addVertex", snapToRulerLine(point).coords),
 		);
-		// if (get(RulersAutoClear)) { RulerLines.set([]); }
-		UIGraph.set({});
-		RulerLines.set([]);
-		Presses.set([]);
-		Releases.set([]);
+		executeUI("resetUI");
 		break;
 	}
 };

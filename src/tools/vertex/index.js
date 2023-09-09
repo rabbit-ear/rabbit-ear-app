@@ -3,7 +3,7 @@ import pointerEvent from "./pointerEvent.js";
 import icon from "./icon.svelte";
 
 const vertex = {
-	uuid: "vertex",
+	key: "vertex",
 	name: "vertex",
 	group: "simple",
 	icon,

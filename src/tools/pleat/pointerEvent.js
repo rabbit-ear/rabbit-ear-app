@@ -9,12 +9,12 @@ import { Highlight } from "../../stores/Select.js";
 import { RulerLines } from "../../stores/Ruler.js";
 import execute from "../../kernel/execute.js";
 import {
+	Presses,
+	Releases,
 	ToolStep,
 	PleatCount,
 } from "./stores.js";
 import {
-	Presses,
-	Releases,
 	UILines,
 } from "../../stores/UI.js";
 

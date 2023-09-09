@@ -13,8 +13,10 @@ const keyboardWindowEvent = (eventType, event) => {
 	// custom keyboard events can be determined by
 	// the selected tool or the key pressed.
 	const tool = get(Tool);
-	if (tool.keyboardEvent) {
-		return tool.keyboardEvent(eventType, event);
+	if (tool) {
+		if (tool.keyboardEvent) {
+			return tool.keyboardEvent(eventType, event);
+		}
 	}
 };
 

@@ -9,8 +9,12 @@ const customPointerEvent = (eventType, event) => {
 	Current.set(event.point);
 	CurrentSnap.set(undefined);
 	const tool = get(Tool);
-	const { pointerEvent } = tool;
-	if (pointerEvent) { return pointerEvent(eventType, event); }
+	if (tool) {
+		const { pointerEvent } = tool;
+		if (pointerEvent) {
+			return pointerEvent(eventType, event);
+		}
+	}
 };
 
 export const pressEvent = ({ point }) => (

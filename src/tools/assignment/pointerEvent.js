@@ -1,6 +1,5 @@
 import { snapToEdge } from "../../js/snap.js";
 import { get } from "svelte/store";
-import { Highlight } from "../../stores/Select.js";
 import {
 	ASSIGN_SWAP,
 	ASSIGN_FLAT,
@@ -10,6 +9,7 @@ import {
 } from "../../app/keys.js";
 import { AssignType } from "./stores.js";
 import execute from "../../kernel/execute.js";
+import executeUI from "../../kernel/executeUI.js";
 
 const performAssignment = (edge) => {
 	switch (get(AssignType)) {
@@ -23,10 +23,12 @@ const performAssignment = (edge) => {
 };
 
 const pointerEventAssign = (eventType, { point }) => {
-	Highlight.reset();
 	const { edge } = snapToEdge(point);
-	if (edge === undefined) { return; }
-	Highlight.addEdges([edge]);
+	if (edge === undefined) {
+		executeUI("highlight", {});
+		return;
+	}
+	executeUI("highlight", { edges: [edge] });
 	switch (eventType) {
 	case "press": return performAssignment(edge);
 	case "hover": break;

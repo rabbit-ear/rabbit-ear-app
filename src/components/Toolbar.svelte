@@ -43,7 +43,7 @@
 					title={tool.name}
 					class={tool.name}
 					disabled={$FrameIsLocked}
-					highlighted={$Tool.name === tool.name}
+					highlighted={$Tool && $Tool.name === tool.name}
 					on:click={() => Tool.set(tool)}>
 					{#if tool.icon}
 						<svelte:component this={tool.icon} />

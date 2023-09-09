@@ -2,10 +2,7 @@ import { get } from "svelte/store";
 import execute from "../../kernel/execute.js";
 import { Highlight } from "../../stores/Select.js";
 import { RulerLines } from "../../stores/Ruler.js";
-import { ToolStep } from "./stores.js";
 import {
-	Presses,
-	Releases,
 	UIGraph,
 	UILines,
 } from "../../stores/UI.js";
@@ -13,6 +10,11 @@ import {
 	snapToPoint,
 	snapToRulerLine,
 } from "../../js/snap.js";
+import {
+	Presses,
+	Releases,
+	ToolStep,
+} from "./stores.js";
 
 let pressCoords;
 

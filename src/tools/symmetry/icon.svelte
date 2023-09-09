@@ -1,3 +1,13 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-0.04 -0.04 1.08 1.08" stroke-width="0.1">
-	<polygon points="0,0 1,0 1,1 0,1" />
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-10 -15 20 20">
+	<text
+		font-family="Helvetica Neue, Helvetica, Arial"
+		font-size="16"
+		transform="matrix(1 0 0 1 1 -1)"
+		stroke="none">s</text>
+	<text
+		font-family="Helvetica Neue, Helvetica, Arial"
+		font-size="16"
+		transform="matrix(-1 0 0 1 -1 -1)"
+		stroke="none">s</text>
+	<line x1="0" y1="-15" x2="0" y2="5" stroke-width="1" />
 </svg>

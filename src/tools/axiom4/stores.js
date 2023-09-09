@@ -1,5 +1,11 @@
-import { derived } from "svelte/store";
-import { Presses, Releases } from "../../stores/UI.js";
+import {
+	writable,
+	derived,
+} from "svelte/store";
+
+export const Presses = writable([]);
+
+export const Releases = writable([]);
 
 export const ToolStep = derived(
 	[Presses, Releases],

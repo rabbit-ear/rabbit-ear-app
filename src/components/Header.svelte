@@ -20,9 +20,6 @@
 
 	let inputFile;
 	// const clickDarkMode = () => { $DarkMode = !$DarkMode; };
-	const selectAll = () => execute("selectAll");
-	const deselectAll = () => execute("clearSelection");
-	const findBoundary = () => execute("findBoundary");
 	const invertAssignments = () => {
 		const graph = get(Graph);
 		const edges_assignment = graph.edges_assignment || [];
@@ -37,8 +34,6 @@
 		Selection.reset();
 		Selection.addVertices(vertices);
 	};
-	const mergeNearbyVertices = () => execute("mergeNearbyVertices");
-	const cleanVertices = () => execute("cleanVertices");
 </script>
 
 	<nav>
@@ -58,7 +53,7 @@
 					<li class="no-select description">repair</li>
 					<li><button on:click={() => execute("planarize")}>planarize</button></li>
 					<li><button title="fix floating point rounding errors" on:click={() => execute("cleanVertices")}>smart clean vertices</button></li>
-					<li><button on:click={mergeNearbyVertices}>merge nearby vertices</button></li>
+					<li><button on:click={() => execute("mergeNearbyVertices")}>merge nearby vertices</button></li>
 					<li>
 						<button on:click={() => execute("snapAllVertices")}>snap all vertices to grid</button>
 					</li>
@@ -107,7 +102,7 @@
 			</li>
 			<li>assignment
 				<ul>
-					<li><button on:click={findBoundary}>rebuild boundary</button></li>
+					<li><button on:click={() => execute("findBoundary")}>rebuild boundary</button></li>
 					<li><button on:click={invertAssignments}>invert assignments</button></li>
 					<li disabled>reassign selected
 						<!-- <ul>
@@ -126,7 +121,7 @@
 			<li>select
 				<ul>
 					<li><button on:click={() => execute("selectAll")}>select all</button></li>
-					<li><button on:click={deselectAll}>deselect all</button></li>
+					<li><button on:click={() => execute("clearSelection")}>deselect all</button></li>
 					<hr />
 					<li>select by assignment
 						<ul>

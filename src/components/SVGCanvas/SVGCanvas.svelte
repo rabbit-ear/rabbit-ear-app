@@ -74,7 +74,7 @@
 	{/if}
 	<RulerLayer />
 	<UILayer />
-	{#if $Tool.SVGLayer}
+	{#if $Tool && $Tool.SVGLayer}
 		<svelte:component this={$Tool.SVGLayer} />
 	{/if}
 	{#if $ShowIndices}

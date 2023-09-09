@@ -3,7 +3,7 @@ import panel from "./panel.svelte";
 import icon from "./icon.svelte";
 
 const kawasaki = {
-	uuid: "kawasaki",
+	key: "kawasaki",
 	name: "kawasaki",
 	group: "single vertex",
 	icon,

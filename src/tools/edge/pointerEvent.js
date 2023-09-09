@@ -2,13 +2,8 @@ import { get } from "svelte/store";
 import {
 	CurrentSnap,
 	Keyboard,
-	Presses,
 	UIGraph,
 } from "../../stores/UI.js";
-import {
-	RulerLines,
-	RulerRays,
-} from "../../stores/Ruler.js";
 import {
 	RadialSnapDegrees,
 	RadialSnapOffset,
@@ -18,8 +13,10 @@ import {
 	snapToRulerLine,
 } from "../../js/snap.js";
 import execute from "../../kernel/execute.js";
+import executeUI from "../../kernel/executeUI.js";
+import { Data } from "./stores.js";
 
-let pressCoords = undefined;
+// let pressCoords = undefined;
 
 const pointerEventEdge = (eventType, { point }) => {
 	const shift = get(Keyboard)[16];
@@ -32,11 +29,10 @@ const pointerEventEdge = (eventType, { point }) => {
 		UIGraph.set({ vertices_coords: [coords] });
 	break;
 	case "press":
-		pressCoords = coords;
-		Presses.set([pressCoords]);
+		Data.pressCoords = coords;
 		if (shift) { // Shift
 			execute("radialRulers",
-				pressCoords,
+				Data.pressCoords,
 				get(RadialSnapDegrees),
 				get(RadialSnapOffset),
 			);
@@ -45,18 +41,16 @@ const pointerEventEdge = (eventType, { point }) => {
 	break;
 	case "move":
 		UIGraph.set({
-			vertices_coords: [pressCoords, coords],
+			vertices_coords: [Data.pressCoords, coords],
 			edges_vertices: [[0, 1]],
 		});
 	break;
 	case "release":
 		execute("addEdge",
-			execute("addVertex", pressCoords),
+			execute("addVertex", Data.pressCoords),
 			execute("addVertex", coords),
 		);
-		Presses.set([]);
-		RulerLines.set([]);
-		RulerRays.set([]);
+		executeUI("resetUI");
 		UIGraph.set({ vertices_coords: [coords] });
 	break;
 	}

@@ -4,7 +4,7 @@ import * as stores from "./stores.js";
 import icon from "./icon.svelte";
 
 const axiom2 = {
-	uuid: "axiom2",
+	key: "axiom2",
 	name: "axiom 2",
 	group: "lines",
 	icon,

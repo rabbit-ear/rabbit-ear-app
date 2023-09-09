@@ -2,15 +2,17 @@ import { get } from "svelte/store";
 import { nearest } from "rabbit-ear/graph/nearest.js";
 import { Selection } from "../../stores/Select.js";
 import {
-	Presses,
-	Releases,
 	UILines,
 } from "../../stores/UI.js";
 import execute from "../../kernel/execute.js";
 import { RulerLines } from "../../stores/Ruler.js";
-import { ToolStep } from "./stores.js";
 import { Graph } from "../../stores/Model.js";
 import { RulersAutoClear } from "../../stores/App.js";
+import {
+	Presses,
+	Releases,
+	ToolStep,
+} from "./stores.js";
 
 let vertex1 = undefined;
 let edge1 = undefined;
