@@ -10,11 +10,8 @@ import { Highlight } from "./Select.js";
 export const Keyboard = writable({});
 
 // every touch input
-export const Presses = writable([]); // {number[][]} array of points
-export const Moves = writable([]); // {number[][]} array of points
-export const Releases = writable([]); // {number[][]} array of points
-export const Current = writable(undefined); // {number[]} point
-export const CurrentSnap = writable(undefined); // {number[]} point
+export const Pointer = writable(undefined); // {number[]} point
+// export const PointerSnap = writable(undefined); // {number[]} point
 
 // there are a few different ways of offering the user UI feedback
 // Lines and Rays are infinite objects which get clipped in the viewbox,
@@ -40,10 +37,9 @@ ElementSelect.set = (e) => {
  *
  */
 export const resetUI = () => {
-	Presses.set([]);
-	Moves.set([]);
-	Releases.set([]);
-	Current.set(undefined);
+	const tool = get(Tool);
+	if (tool && tool.reset) { tool.reset(); }
+	Pointer.set(undefined);
 	Highlight.reset();
 	UIGraph.set({});
 	UILines.set([]);

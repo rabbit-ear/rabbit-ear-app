@@ -1,8 +1,7 @@
 import { get } from "svelte/store";
 import {
-	CurrentSnap,
+	// CurrentSnap,
 	Keyboard,
-	Presses,
 	UIGraph,
 } from "../../stores/UI.js";
 import {
@@ -18,6 +17,7 @@ import {
 	snapToRulerLine,
 } from "../../js/snap.js";
 import execute from "../../kernel/execute.js";
+import { Presses } from "./stores.js";
 
 let pressCoords = undefined;
 
@@ -26,7 +26,7 @@ const pointerEventFoldLine = (eventType, { point }) => {
 	const coords = shift
 		? snapToRulerLine(point).coords
 		: snapToPoint(point, false);
-	CurrentSnap.set(coords);
+	// CurrentSnap.set(coords);
 	switch (eventType) {
 	case "hover":
 		UIGraph.set({ vertices_coords: [coords] });

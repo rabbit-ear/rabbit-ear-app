@@ -6,7 +6,6 @@ import { zipArrays } from "../../js/arrays.js";
 
 export const Move = writable(undefined);
 export const Presses = writable([]);
-export const Moves = writable([]);
 export const Releases = writable([]);
 
 export const Touches = derived(
@@ -16,8 +15,3 @@ export const Touches = derived(
 		.filter(a => a !== undefined),
 	[],
 );
-
-export const ScribbleSmooth = writable(true);
-export const ScribbleSmoothAmount = writable(0.5);
-export const ScribbleDensity = writable(0.5);
-export const ScribbleWaitForConfirmation = writable(false);

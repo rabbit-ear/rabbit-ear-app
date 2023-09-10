@@ -7,7 +7,7 @@
 
 <p>new edges are:</p>
 <select bind:value={$NewEdgeAssignment}>
-  {#each options as option, i}
-    <option value={option}>{edgesAssignmentNames[option]}</option>
-  {/each}
+	{#each options as option, i}
+		<option value={option}>{edgesAssignmentNames[option]}</option>
+	{/each}
 </select>

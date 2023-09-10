@@ -5,7 +5,7 @@ import {
 	Presses,
 	Moves,
 	Releases,
-} from "../../stores/UI.js";
+} from "./stores.js";
 import { getSnapPoint } from "../../js/nearest.js";
 import { Graph } from "../../stores/Model.js";
 // import { ToolStep } from "./stores.js";

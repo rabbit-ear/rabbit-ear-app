@@ -4,7 +4,7 @@
 		Presses,
 		Moves,
 		Releases,
-	} from "../../stores/UI.js";
+	} from "./stores.js";
 
 	let scribblePointString = "";
 	$: scribblePointString = []

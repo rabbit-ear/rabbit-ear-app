@@ -6,8 +6,8 @@
 		AutoSizeModelMatrix,
 	} from "../../stores/ViewBox.js";
 	import {
-		Current,
-		CurrentSnap,
+		Pointer,
+		// PointerSnap,
 	} from "../../stores/UI.js";
 
 	let zoom;
@@ -17,7 +17,7 @@
 	};
 
 	let isSnapped = false;
-	$: isSnapped = $CurrentSnap !== undefined;
+	// $: isSnapped = $PointerSnap !== undefined;
 
 	const formatPoint = (p) => p === undefined ? "" : p
 		.map(n => {
@@ -39,7 +39,8 @@
 		<input type="checkbox" bind:checked={$AutoSizeModelMatrix} id="auto-model-matrix"><label for="auto-model-matrix">follow model changes</label>
 		<hr />
 		<p>cursor</p>
-		<input type="text" readonly value={formatPoint(NotUndefined($CurrentSnap, $Current))}>
+		<!-- <input type="text" readonly value={formatPoint(NotUndefined($PointerSnap, $Pointer))}> -->
+		<input type="text" readonly value={formatPoint($Pointer)}>
 		{#if isSnapped}
 			<p class="alert">snapped</p>
 		{:else}

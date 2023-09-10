@@ -2,10 +2,6 @@ import { get } from "svelte/store";
 import execute from "../../kernel/execute.js";
 import executeUI from "../../kernel/executeUI.js";
 import {
-	snapToPoint,
-	snapToRulerLine,
-} from "../../js/snap.js";
-import {
 	Move,
 	Presses,
 	Releases,

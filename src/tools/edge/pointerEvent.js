@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import {
-	CurrentSnap,
+	// CurrentSnap,
 	Keyboard,
 	UIGraph,
 } from "../../stores/UI.js";
@@ -21,7 +21,7 @@ const pointerEvent = (eventType, { point }) => {
 	const coords = shift
 		? snapToRulerLine(point).coords
 		: snapToPoint(point, false);
-	CurrentSnap.set(coords);
+	// CurrentSnap.set(coords);
 	switch (eventType) {
 	case "press":
 		Data.pressCoords = coords;

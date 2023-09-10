@@ -21,7 +21,7 @@
 </script>
 
 <Panel>
-	<span slot="title">frames ({$Frames.length})</span>
+	<span slot="title">frames ({$FrameIndex + 1}/{$Frames.length})</span>
 	<span slot="body">
 		<p>current frame: {$FrameIndex + 1}</p>
 		<input type="text" bind:value={frame.frame_classes} >

@@ -6,9 +6,11 @@ import { get } from "svelte/store";
 import { Graph } from "../../stores/Model.js";
 import {
 	Keyboard,
-	Presses,
 	UIGraph,
 } from "../../stores/UI.js";
+import {
+	Presses,
+} from "./stores.js";
 import {
 	snapToPoint,
 	snapToRulerLine,

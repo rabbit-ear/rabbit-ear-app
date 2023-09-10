@@ -51,6 +51,7 @@ const nearestGridPoint = (point, snapRadius) => {
 // export const nearestFace = (point) => reNearestFace(get(Graph), point);
 
 export const snapToVertex = (point, force = false) => {
+	if (!point) { return { vertex: undefined, coords: undefined }; }
 	const vertices = get(Graph).vertices_coords || [];
 	if (!vertices.length) { return { vertex: undefined, coords: point }; }
 	const distances = vertices.map(p => distance2(p, point));
@@ -64,6 +65,7 @@ export const snapToVertex = (point, force = false) => {
 };
 
 export const snapToEdge = (point, force = false) => {
+	if (!point) { return { edge: undefined, coords: undefined }; }
 	const graph = get(Graph);
 	const edge = reNearestEdge(graph, point);
 	if (edge === undefined) { return { edge: undefined, coords: point}; }

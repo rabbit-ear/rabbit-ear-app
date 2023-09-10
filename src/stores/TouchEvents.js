@@ -11,8 +11,8 @@ import { getScreenPoint } from "../js/matrix.js";
 import { CameraMatrix } from "./ViewBox.js";
 import {
 	Tool,
-	Current,
-	CurrentSnap,
+	Pointer,
+	// PointerSnap,
 } from "./UI.js";
 
 const ToolPointerEvent = derived(
@@ -24,8 +24,8 @@ const ToolPointerEvent = derived(
 );
 
 const AppPointerEvent = readable((eventType, event) => {
-	Current.set(event.point);
-	CurrentSnap.set(undefined);
+	Pointer.set(event.point);
+	// PointerSnap.set(undefined);
 });
 
 export const PointerEvent = derived(

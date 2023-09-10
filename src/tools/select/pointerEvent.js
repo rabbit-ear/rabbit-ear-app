@@ -1,9 +1,11 @@
 import { get } from "svelte/store";
 import { nearest } from "rabbit-ear/graph/nearest.js";
-import { SelectionRect } from "./stores.js";
+import {
+	SelectionRect,
+	getSelected,
+} from "./stores.js";
 import { Graph } from "../../stores/Model.js";
 import { Keyboard } from "../../stores/UI.js";
-import { getSelected } from "../../js/select.js";
 import execute from "../../kernel/execute.js";
 import { ElementSelect } from "../../stores/UI.js";
 import { SelectHoverIndex } from "./stores.js";
