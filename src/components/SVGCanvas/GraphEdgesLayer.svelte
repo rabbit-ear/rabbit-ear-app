@@ -1,4 +1,6 @@
 <script>
+	import { edgeFoldAngleIsFlat } from "rabbit-ear/fold/spec.js";
+	import { ViewBox } from "../../stores/ViewBox.js";
 	import {
 		StrokeWidth,
 		// lineOpacity,
@@ -15,11 +17,19 @@
 	export let strokes = [];
 	export let strokeWidths = [];
 
+	let vmax;
+	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);
+
 	let edges_segment;
 	$: edges_segment = !graph.edges_vertices
 		? []
 		: graph.edges_vertices
 		.map(ev => ev.map(v => graph.vertices_coords[v]));
+
+	let edges_flat;
+	$: edges_flat = !graph.edges_foldAngle
+		? []
+		: graph.edges_foldAngle.map(edgeFoldAngleIsFlat);
 
 	let colorMap = {};
 	$: colorMap = {
@@ -53,6 +63,7 @@
 		y1={seg[0][1]}
 		x2={seg[1][0]}
 		y2={seg[1][1]}
+		stroke-dasharray={edges_flat[i] ? "" : [vmax * 0.01, vmax * 0.01].join(" ")}
 		stroke-width={strokeWidths[i] || $StrokeWidth}
 		stroke={strokes[i] || edgesColor[i]} />
 {/each}

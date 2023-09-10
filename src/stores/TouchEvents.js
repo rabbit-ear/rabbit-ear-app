@@ -1,12 +1,43 @@
 import {
+	derived,
+	readable,
+} from "svelte/store";
+import {
 	makeMatrix2UniformScale,
 	multiplyMatrices2,
 	determinant2,
 } from "rabbit-ear/math/matrix2.js";
-import { CameraMatrix } from "../stores/ViewBox.js";
 import { getScreenPoint } from "../js/matrix.js";
+import { CameraMatrix } from "./ViewBox.js";
+import {
+	Tool,
+	Current,
+	CurrentSnap,
+} from "./UI.js";
 
-export const scrollEvent = ({ point, wheelDelta }) => {
+const ToolPointerEvent = derived(
+	Tool,
+	($Tool) => $Tool && $Tool.pointerEvent
+		? $Tool.pointerEvent
+		: () => {},
+	() => {},
+);
+
+const AppPointerEvent = readable((eventType, event) => {
+	Current.set(event.point);
+	CurrentSnap.set(undefined);
+});
+
+export const PointerEvent = derived(
+	[AppPointerEvent, ToolPointerEvent],
+	([$AppPointerEvent, $ToolPointerEvent]) => (eventType, event) => {
+		$AppPointerEvent(eventType, event);
+		$ToolPointerEvent(eventType, event);
+	},
+	() => {},
+);
+
+export const ScrollEvent = readable(({ point, wheelDelta }) => {
 	const scaleOffset = (wheelDelta / 300);
 	const scale = 1 + scaleOffset;
 	// the input point is in ModelViewMatrix space,
@@ -28,4 +59,4 @@ export const scrollEvent = ({ point, wheelDelta }) => {
 		if (tooLarge) { return [1e+5, 0, 0, 1e+5, 0, 0]; }
 		return newMatrix;
 	});
-};
+});

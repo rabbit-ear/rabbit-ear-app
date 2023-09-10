@@ -11,25 +11,15 @@ import {
 	DialogNewFile,
 	TerminalTextarea,
 	ShowTerminal,
-} from "../stores/App.js";
-import Tools from "../tools/index.js";
-import {
-	Tool,
-} from "../stores/UI.js";
-import { Selection } from "../stores/Select.js";
-import execute from "./execute.js";
-import executeUI from "./executeUI.js";
+} from "./App.js";
+import { Tool } from "./UI.js";
+import { Selection } from "./Select.js";
+import execute from "../kernel/execute.js";
+import executeUI from "../kernel/executeUI.js";
 
 let altCameraToolSwap;
 
-//
-// shift: 1
-// ctrl/meta: 2
-// alt: 4
-//
-// ctrl + shift: 3
-//
-const keybindingsDown = {
+export const KeybindingsDown = {
 	// delete
 	8: {
 		0: (event) => {
@@ -166,7 +156,7 @@ const keybindingsDown = {
 	},
 };
 
-const keybindingsUp = {
+export const KeybindingsUp = {
 	// alt
 	18: {
 		0: (event) => {
@@ -174,26 +164,4 @@ const keybindingsUp = {
 			altCameraToolSwap = undefined;
 		},
 	},
-};
-
-export const keyboardEventApp = (eventType, event) => {
-	const { altKey, ctrlKey, metaKey, shiftKey } = event;
-	const modifier = (shiftKey << 0) | ((ctrlKey || metaKey) << 1) | (altKey << 2);
-	let match;
-	switch (eventType) {
-	case "down":
-		match = keybindingsDown[event.keyCode]
-			? keybindingsDown[event.keyCode][modifier]
-			: undefined;
-		break;
-	case "up":
-		match = keybindingsUp[event.keyCode]
-			? keybindingsUp[event.keyCode][modifier]
-			: undefined;
-		break;
-	}
-	if (match === undefined) { return false; }
-	event.preventDefault();
-	match(event);
-	return true;
 };

@@ -1,11 +1,13 @@
 <script>
-	import {
-		File,
-		FrameIndex,
-		Frames,
-	} from "../../stores/Model.js";
+	import { File } from "../../stores/Model.js";
 	import Panel from "./Panel.svelte";
-	// let cpOrFolded = "crease-pattern";
+
+	const file_classes = [
+		"singleModel",
+		"multiModel",
+		"animation",
+		"diagrams",
+	];
 </script>
 
 <Panel>
@@ -14,21 +16,7 @@
 		<input type="text" placeholder="title" bind:value={$File.file_title} >
 		<input type="text" placeholder="author" bind:value={$File.file_author} >
 		<textarea placeholder="description" bind:value={$File.file_description}></textarea>
-		<p>frame {$FrameIndex + 1}/{$Frames.length}</p>
-		<!-- <input
-			type="radio"
-			name="frame-class"
-			id="crease-pattern"
-			bind:group={cpOrFolded}
-			value="crease-pattern" />
-		<label for="crease-pattern">cp</label>
-		<input
-			type="radio"
-			name="frame-class"
-			id="folded-form"
-			bind:group={cpOrFolded}
-			value="folded-form" />
-		<label for="folded-form">folded</label> -->
+		<p>file class</p>
 	</span>
 </Panel>
 

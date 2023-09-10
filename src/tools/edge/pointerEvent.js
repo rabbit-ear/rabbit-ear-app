@@ -16,16 +16,13 @@ import execute from "../../kernel/execute.js";
 import executeUI from "../../kernel/executeUI.js";
 import { Data } from "./stores.js";
 
-const pointerEventEdge = (eventType, { point }) => {
+const pointerEvent = (eventType, { point }) => {
 	const shift = get(Keyboard)[16];
 	const coords = shift
 		? snapToRulerLine(point).coords
 		: snapToPoint(point, false);
 	CurrentSnap.set(coords);
 	switch (eventType) {
-	case "hover":
-		UIGraph.set({ vertices_coords: [coords] });
-	break;
 	case "press":
 		Data.pressCoords = coords;
 		if (shift) { // Shift
@@ -38,10 +35,14 @@ const pointerEventEdge = (eventType, { point }) => {
 		UIGraph.set({ vertices_coords: [coords] });
 	break;
 	case "move":
-		UIGraph.set({
-			vertices_coords: [Data.pressCoords, coords],
-			edges_vertices: [[0, 1]],
-		});
+		if (Data.pressCoords) {
+			UIGraph.set({
+				vertices_coords: [Data.pressCoords, coords],
+				edges_vertices: [[0, 1]],
+			});
+		} else {
+			UIGraph.set({ vertices_coords: [coords] });
+		}
 	break;
 	case "release":
 		execute("addEdge",
@@ -49,9 +50,10 @@ const pointerEventEdge = (eventType, { point }) => {
 			execute("addVertex", coords),
 		);
 		executeUI("resetUI");
+		Data.pressCoords = undefined;
 		UIGraph.set({ vertices_coords: [coords] });
 	break;
 	}
 };
 
-export default pointerEventEdge;
+export default pointerEvent;

@@ -7,7 +7,6 @@ import {
 	snapToRulerLine,
 } from "../../js/snap.js";
 import { zipArrays } from "../../js/arrays.js";
-// import { UIGraph } from "../../stores/UI.js";
 import execute from "../../kernel/execute.js";
 
 export const reset = () => {
@@ -67,17 +66,3 @@ export const AxiomPreview = derived(
 );
 
 AxiomPreview.subscribe(() => {});
-
-// export const UIGraphDrawing = derived(
-// 	[Coords0, Coords1, Coords2, Coords3],
-// 	([$Coords0, $Coords1, $Coords2, $Coords3]) => {
-// 		const vertices_coords = [$Coords0, $Coords1, $Coords2, $Coords3]
-// 			.filter(a => a !== undefined);
-// 		const uiGraph = $Coords2 !== undefined && $Coords3 !== undefined
-// 			? { vertices_coords, edges_vertices: [[2, 3]] }
-// 			: { vertices_coords };
-// 		UIGraph.set(uiGraph);
-// 	},
-// 	undefined,
-// );
-// UIGraphDrawing.subscribe(() => {});

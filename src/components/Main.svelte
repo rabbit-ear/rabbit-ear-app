@@ -6,22 +6,21 @@
 	import Panels from "./Panels.svelte";
 	import Frames from "./Frames.svelte";
 	import Dialogs from "./Dialogs.svelte";
-	import Kernel from "./Kernel.svelte";
 	import FileManager from "./FileManager.svelte";
 	import DragAndDrop from "./DragAndDrop.svelte";
+	import { ShowHeader } from "../stores/App.js";
+	import { KeyboardEvent } from "../stores/KeyboardEvents.js";
 	import {
-		ShowHeader,
-	} from "../stores/App.js";
+		PointerEvent,
+		ScrollEvent,
+	} from "../stores/TouchEvents.js";
 
-	// these events originate from the SVG canvas
-	let press;
-	let move;
-	let release;
-	let scroll;
-
-	// these events originate from the window
-	let keydown;
-	let keyup;
+	const press = (e) => $PointerEvent("press", e.detail);
+	const move = (e) => $PointerEvent("move", e.detail);
+	const release = (e) => $PointerEvent("release", e.detail);
+	const scroll = (e) => $ScrollEvent(e.detail);
+	const keydown = (e) => $KeyboardEvent("down", e);
+	const keyup = (e) => $KeyboardEvent("up", e);
 </script>
 
 <svelte:window
@@ -30,14 +29,6 @@
 />
 
 <Dialogs />
-<Kernel
-	bind:press={press}
-	bind:move={move}
-	bind:release={release}
-	bind:scroll={scroll}
-	bind:keydown={keydown}
-	bind:keyup={keyup}
-/>
 <FileManager />
 <DragAndDrop />
 
