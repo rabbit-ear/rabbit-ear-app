@@ -10,7 +10,7 @@
 	import { Tool } from "../stores/UI.js";
 </script>
 
-<Debug />
+<!-- <Debug /> -->
 {#if $Tool && $Tool.panel}
 	<svelte:component this={$Tool.panel} />
 {/if}

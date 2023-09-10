@@ -1,6 +1,5 @@
-import { writable, derived } from "svelte/store";
+import { get, writable, derived } from "svelte/store";
 import { SELECT_EDGE } from "../app/keys.js";
-// import ToolEdge from "../tools/edge/index.js";
 import {
 	RulerLines,
 	RulerRays,
@@ -55,10 +54,12 @@ export const resetUI = () => {
 /**
  * @description Tool
  */
-// export const Tool = writable(ToolEdge);
 export const Tool = writable(undefined);
 const ToolSet = Tool.set;
-Tool.set = (tool) => {
+Tool.set = (newTool) => {
+	const oldTool = get(Tool);
+	if (oldTool && oldTool.unsubscribe) { oldTool.unsubscribe(); }
 	resetUI();
-	return ToolSet(tool);
+	if (newTool && newTool.subscribe) { newTool.subscribe(); }
+	return ToolSet(newTool);
 };

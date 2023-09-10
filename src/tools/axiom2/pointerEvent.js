@@ -6,7 +6,6 @@ import {
 	snapToRulerLine,
 } from "../../js/snap.js";
 import {
-	Hover,
 	Move,
 	Presses,
 	Releases,
@@ -19,10 +18,8 @@ import {
 } from "./stores.js";
 
 const pointerEvent = (eventType, { point }) => {
-	Hover.set(eventType === "hover" ? point : undefined);
 	Move.set(eventType === "move" ? point : undefined);
 	switch (eventType) {
-	case "hover": break;
 	case "move": break;
 	case "press":
 		Presses.update(p => [...p, point]);

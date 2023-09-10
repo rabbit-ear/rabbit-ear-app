@@ -2,78 +2,44 @@ import { get } from "svelte/store";
 import execute from "../../kernel/execute.js";
 import executeUI from "../../kernel/executeUI.js";
 import {
-	UIGraph,
-	UILines,
-} from "../../stores/UI.js";
-import {
 	snapToPoint,
 	snapToRulerLine,
 } from "../../js/snap.js";
 import {
+	Move,
 	Presses,
 	Releases,
-	ToolStep,
+	Coords0,
+	Coords1,
+	Coords2,
+	Coords3,
+	Step,
+	reset,
 } from "./stores.js";
 
-let pressCoords;
-
-const pointerEventAxiom1 = (eventType, { point }) => {
+const pointerEvent = (eventType, { point }) => {
+	Move.set(eventType === "move" ? point : undefined);
 	switch (eventType) {
-	case "press": Presses.update(p => [...p, point]); break;
-	case "release": Releases.update(p => [...p, point]); break;
-	default: break;
-	}
-	switch (get(ToolStep)) {
-	case 0: {
-		const coords = snapToPoint(point, false);
-		if (coords !== undefined) { UIGraph.set({ vertices_coords: [coords] }); }
-	}
+	case "move": break;
+	case "press":
+		Presses.update(p => [...p, point]);
 		break;
-	case 1: {
-		// "press" selecting the first vertex
-		// "move" preview the second vertex
-		const coords = snapToPoint(point, false);
-		if (eventType === "press") { pressCoords = coords; }
-		if (coords !== undefined) { UIGraph.set({ vertices_coords: [coords] }); }
-		if (pressCoords !== undefined) {
-			UIGraph.set({ vertices_coords: [coords, pressCoords] });
+	case "release":
+		Releases.update(p => [...p, point]);
+		switch (get(Step)) {
+		case 2:
+			execute("axiom1", get(Coords0), get(Coords1));
+			break;
+		case 4:
+			execute("addEdge",
+				execute("addVertex", get(Coords2)),
+				execute("addVertex", get(Coords3)),
+			);
+			reset();
+			executeUI("resetUI");
+			break;
 		}
-		execute("axiom1Preview", pressCoords, coords);
-	}
-		break;
-	case 2: {
-		// "release" axiom operation done. ruler lines now drawn.
-		// "hover" preview first edge point
-		const coords = snapToPoint(point, false);
-		UILines.set([]);
-		if (eventType === "release") {
-			execute("axiom1", pressCoords, coords);
-			pressCoords = undefined;
-		}
-		// nearest point on line
-		UIGraph.set({ vertices_coords: [snapToRulerLine(point).coords] });
-	}
-		break;
-	case 3: {
-		// "press" selecting first edge point
-		// "move" preview second edge point
-		const { coords } = snapToRulerLine(point);
-		if (eventType === "press") { pressCoords = coords; }
-		UIGraph.set({
-			vertices_coords: [pressCoords, coords],
-			edges_vertices: [[0, 1]],
-		});
-	}
-		break;
-	default:
-		// "release" drawing edge, reset all
-		execute("addEdge",
-			execute("addVertex", pressCoords),
-			execute("addVertex", snapToRulerLine(point).coords),
-		);
-		executeUI("resetUI");
-		break;
 	}
 };
 
-export default pointerEventAxiom1;
+export default pointerEvent;

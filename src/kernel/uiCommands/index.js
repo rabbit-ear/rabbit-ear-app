@@ -1,17 +1,6 @@
 import {
-	// Presses,
-	// Moves,
-	// Releases,
-	Current,
-	UIGraph,
-	UILines,
-	UIRays,
 	Tool,
 } from "../../stores/UI.js";
-import {
-	RulerLines,
-	RulerRays,
-} from "../../stores/Ruler.js";
 import Tools from "../../tools/index.js";
 import { Highlight } from "../../stores/Select.js";
 import { resetUI as ResetUI } from "../../stores/UI.js";

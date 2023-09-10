@@ -1,12 +1,12 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
-	import { ToolStep } from "./stores.js";
+	import { Step } from "./stores.js";
 
 	let classes;
 	$: classes = Array.from(Array(5))
 		.map(() => "todo")
-		.map((str, i) => i === $ToolStep ? "current" : str)
-		.map((str, i) => i < $ToolStep ? "done" : str);
+		.map((str, i) => i === ($Step - 1) ? "current" : str)
+		.map((str, i) => i < ($Step - 1) ? "done" : str);
 </script>
 
 <Panel>
@@ -21,7 +21,6 @@
 		</div>
 	</span>
 </Panel>
-
 
 <style>
 	ol {

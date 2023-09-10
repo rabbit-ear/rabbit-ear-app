@@ -9,22 +9,13 @@ import {
 import { zipArrays } from "../../js/arrays.js";
 import execute from "../../kernel/execute.js";
 
-export const reset = () => {
-	Hover.set(undefined);
-	Move.set(undefined);
-	Presses.set([]);
-	Releases.set([]);
-};
-
-export const Hover = writable(undefined);
 export const Move = writable(undefined);
 export const Presses = writable([]);
 export const Releases = writable([]);
 
 export const Touches = derived(
-	[Hover, Move, Presses, Releases],
-	([$Hover, $Move, $Presses, $Releases]) => zipArrays($Presses, $Releases)
-		.concat([$Hover])
+	[Move, Presses, Releases],
+	([$Move, $Presses, $Releases]) => zipArrays($Presses, $Releases)
 		.concat([$Move])
 		.filter(a => a !== undefined),
 	[],
@@ -65,4 +56,19 @@ export const AxiomPreview = derived(
 	undefined,
 );
 
-AxiomPreview.subscribe(() => {});
+export const reset = () => {
+	Move.set(undefined);
+	Presses.set([]);
+	Releases.set([]);
+};
+
+let unsub;
+
+export const subscribe = () => {
+	unsub = AxiomPreview.subscribe(() => {});
+};
+
+export const unsubscribe = () => {
+	reset();
+	if (unsub) { unsub(); }
+};
