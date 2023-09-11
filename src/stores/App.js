@@ -23,6 +23,7 @@ export const DialogNewFile = writable(undefined);
 export const DialogNewFrame = writable(undefined);
 export const TerminalTextarea = writable(undefined);
 export const TerminalValue = writable(undefined);
+export const InputFile = writable(undefined);
 
 // vertex radius is is dynamic according to the zoom level
 // this number is a scale of the size of the viewbox.
