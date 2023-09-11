@@ -1,40 +1,39 @@
-import { snapToEdge } from "../../js/snap.js";
 import { get } from "svelte/store";
 import {
 	ASSIGN_SWAP,
 	ASSIGN_FLAT,
 	ASSIGN_UNASSIGNED,
 	ASSIGN_CUT,
+	ASSIGN_JOIN,
 	ASSIGN_BOUNDARY,
 } from "../../app/keys.js";
-import { AssignType } from "./stores.js";
+import {
+	AssignType,
+	Move,
+	Edge,
+} from "./stores.js";
 import execute from "../../kernel/execute.js";
-import executeUI from "../../kernel/executeUI.js";
 
-const performAssignment = (edge) => {
-	switch (get(AssignType)) {
-	case ASSIGN_SWAP: return execute("toggleAssignment", [edge]);
-	case ASSIGN_FLAT: return execute("setAssignment", [edge], "F", 0);
-	case ASSIGN_UNASSIGNED: return execute("setAssignment", [edge], "U", 0);
-	case ASSIGN_CUT: return execute("setAssignment", [edge], "C", 0);
-	case ASSIGN_BOUNDARY: return execute("setAssignment", [edge], "B", 0);
-	default: break;
-	}
+const lookup = {
+	[ASSIGN_FLAT]: "F",
+	[ASSIGN_UNASSIGNED]: "U",
+	[ASSIGN_CUT]: "C",
+	[ASSIGN_JOIN]: "J",
+	[ASSIGN_BOUNDARY]: "B",
 };
 
-const pointerEventAssign = (eventType, { point }) => {
-	const { edge } = snapToEdge(point);
-	if (edge === undefined) {
-		executeUI("highlight", {});
-		return;
-	}
-	executeUI("highlight", { edges: [edge] });
-	switch (eventType) {
-	case "press": return performAssignment(edge);
-	case "hover": break;
-	case "move": break;
-	case "release": break;
-	}
+const setAssignment = (edge, assignType) => {
+	if (edge === undefined) { return; }
+	return lookup[assignType]
+		? execute("setAssignment", [edge], lookup[assignType], 0)
+		: execute("toggleAssignment", [edge]);
 };
 
-export default pointerEventAssign;
+const pointerEvent = (eventType, { point }) => {
+	if (eventType === "press") {
+		return setAssignment(get(Edge), get(AssignType));
+	}
+	Move.set(point);
+};
+
+export default pointerEvent;

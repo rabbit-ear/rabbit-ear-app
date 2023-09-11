@@ -87,11 +87,13 @@
 
 	/* .gui children */
 	.toolbar {
-		/* width: 8rem;*/
+/*		width: 6rem;*/
 		height: 100%;
 		flex: 0 0 auto;  /* shrink to 1 */
-		overflow-y: auto;
+/*		overflow-y: auto;*/
 		padding-top: 0.5rem;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 	.renderings {
 		width: 100%;

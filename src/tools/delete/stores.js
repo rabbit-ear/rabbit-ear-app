@@ -1,9 +1,6 @@
 import { writable, derived } from "svelte/store";
-import { ASSIGN_SWAP } from "../../app/keys.js";
 import { snapToEdge } from "../../js/snap.js";
 import executeUI from "../../kernel/executeUI.js";
-
-export const AssignType = writable(ASSIGN_SWAP);
 
 export const Move = writable(undefined);
 

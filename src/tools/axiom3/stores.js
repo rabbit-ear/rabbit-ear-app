@@ -10,6 +10,7 @@ import {
 import { zipArrays } from "../../js/arrays.js";
 import executeUI from "../../kernel/executeUI.js";
 import { Highlight } from "../../stores/Select.js";
+import { UILines } from "../../stores/UI.js";
 
 export const Move = writable(undefined);
 export const Presses = writable([]);
@@ -64,7 +65,7 @@ export const AxiomPreview = derived(
 	([$Edge0, $Edge1]) => (
 		($Edge0 !== undefined && $Edge1 !== undefined
 			? executeUI("axiom3Preview", $Edge0, $Edge1)
-			: undefined)),
+			: UILines.set([]))),
 	undefined,
 );
 

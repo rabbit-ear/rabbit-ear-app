@@ -25,6 +25,7 @@ import {
 	nearestEdge,
 	nearestFace,
 } from "rabbit-ear/graph/nearest.js";
+import repeatFold from "rabbit-ear/graph/flatFold/repeatFold.js";
 import {
 	doAxiom1,
 	doAxiom2,
@@ -48,6 +49,7 @@ import {
 } from "../../js/assignments.js";
 import {
 	makeEmptyGraph,
+	doPleat,
 } from "../../js/graph.js";
 import {
 	Frames,
@@ -80,7 +82,6 @@ import {
 import {
 	RadialSnapDegrees,
 } from "../../stores/Snap.js";
-import repeatFold from "rabbit-ear/graph/flatFold/repeatFold.js";
 /**
  *
  */
@@ -404,44 +405,9 @@ export const repeatFoldLine = (a, b) => {
 	}
 };
 
-export const repeatFoldLinePreview = (a, b) => {
-	const line = { vector: subtract2(b, a), origin: a };
-	// return repeatFold(get(Graph), line, "V");
-	try {
-		const result = repeatFold(get(Graph), line, "V")
-			.filter(a => a !== undefined);
-		// console.log("graph", {
-		// 	vertices_coords: result.flatMap(el => el.points),
-		// 	edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
-		// });
-		UIGraph.set({
-			vertices_coords: result.flatMap(el => el.points),
-			edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
-		});
-	} catch (error) {
-		console.error(error);
-	}
-};
-
-
-const doPleat = (edgeA, edgeB, count) => {
-	if (edgeA === undefined || edgeB === undefined) { return []; }
-	const result = fnPleat(get(Graph), edgeA, edgeB, count);
-	return result.flat();
-};
-
-export const pleat = (...args) => RulerLines.add(doPleat(...args));
-export const pleatPreview = (...args) => (
-	UILines.add(doPleat(...args))
+export const pleat = (...args) => (
+	RulerLines.add(doPleat(get(Graph), ...args))
 );
-export const kawasakiRulerPreviews = (vertex) => {
-	const graph = get(Graph);
-	const origin = graph.vertices_coords[vertex];
-	const rays = kawasakiSolutions(graph, vertex)
-		.filter(a => a !== undefined)
-		.map(vector => ({ origin, vector }));
-	UIRays.set(rays);
-};
 
 export const kawasakiRulers = (vertex) => {
 	const graph = get(Graph);

@@ -28,6 +28,7 @@ export const graphToMatrix2 = (graph) => {
  * out of this point (multiply by the inverse of ModelMatrix).
  */
 export const getScreenPoint = (point) => {
+	if (point === undefined) { return undefined; }
 	const inverseModelMatrix = invertMatrix2(get(ModelMatrix));
 	return inverseModelMatrix === undefined
 		? point

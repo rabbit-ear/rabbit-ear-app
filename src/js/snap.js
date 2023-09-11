@@ -53,7 +53,7 @@ const nearestGridPoint = (point, snapRadius) => {
 export const snapToVertex = (point, force = false) => {
 	if (!point) { return { vertex: undefined, coords: undefined }; }
 	const vertices = get(Graph).vertices_coords || [];
-	if (!vertices.length) { return { vertex: undefined, coords: point }; }
+	if (!vertices.length) { return { vertex: undefined, coords: undefined }; }
 	const distances = vertices.map(p => distance2(p, point));
 	let index = 0;
 	for (let i = 1; i < distances.length; i += 1) {
@@ -61,7 +61,7 @@ export const snapToVertex = (point, force = false) => {
 	}
 	return force || distances[index] < get(SnapRadius)
 		? { vertex: index, coords: vertices[index] }
-		: { vertex: undefined, coords: point };
+		: { vertex: undefined, coords: undefined };
 };
 
 export const snapToEdge = (point, force = false) => {

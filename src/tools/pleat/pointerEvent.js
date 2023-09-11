@@ -8,6 +8,7 @@ import {
 import { Highlight } from "../../stores/Select.js";
 import { RulerLines } from "../../stores/Ruler.js";
 import execute from "../../kernel/execute.js";
+import executeUI from "../../kernel/executeUI.js";
 import {
 	Presses,
 	Releases,
@@ -45,7 +46,7 @@ const pointerEventPleat = (eventType, { point }) => {
 		if (edge !== undefined) { Highlight.addEdges([edge]); }
 		if (pressEdge !== undefined) { Highlight.addEdges([pressEdge]); }
 		UILines.set([]);
-		execute("pleatPreview", pressEdge, edge, get(PleatCount));
+		executeUI("pleatPreview", pressEdge, edge, get(PleatCount));
 		break;
 	case 2: {
 		selectedRulerLines = {};

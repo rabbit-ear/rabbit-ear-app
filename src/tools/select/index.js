@@ -7,6 +7,7 @@ const selectTool = {
 	key: "selectTool",
 	name: "select",
 	group: "general",
+	order: 1,
 	icon,
 	pointerEvent,
 	panel,

@@ -13,6 +13,7 @@
 	<span slot="title">axiom 6</span>
 	<span slot="body">
 		<div class="container">
+			<p class="instruction">Bring a point to a line, and another point to another line.</p>
 			<ol>
 				<li class={classes[0]}>press on a point</li>
 				<li class={classes[1]}>release on a line</li>
@@ -42,5 +43,9 @@
 	}
 	.todo {
 		color: var(--text);
+	}
+	.instruction {
+		color: var(--dim);
+		font-style: italic;
 	}
 </style>

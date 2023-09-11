@@ -15,6 +15,17 @@
 		"single vertex",
 		"transform",
 	];
+	const filterAndSort = (tools, category) => {
+		const categoryTools = tools
+			.filter(el => el.group === category);
+		const unorderedTools = categoryTools
+			.filter(el => el.order === undefined);
+		const orderedTools = categoryTools
+			.filter(el => el.order !== undefined)
+			.sort((a, b) => a.order - b.order);
+		return orderedTools.concat(unorderedTools);
+	};
+
 </script>
 
 <!-- 
@@ -35,25 +46,23 @@
 {/each}
  -->
 
-<div class="toolbar">
-	{#each categories as category}
-		<div class="grid-columns">
-			{#each Object.values(Tools).filter(el => el.group === category) as tool}
-				<button
-					title={tool.name}
-					class={tool.name}
-					disabled={$FrameIsLocked}
-					highlighted={$Tool && $Tool.name === tool.name}
-					on:click={() => Tool.set(tool)}>
-					{#if tool.icon}
-						<svelte:component this={tool.icon} />
-					{/if}
-				</button>
-			{/each}
-		</div>
-		<hr />
-	{/each}
-</div>
+{#each categories as category}
+	<div class="grid-columns">
+		{#each filterAndSort(Object.values(Tools), category) as tool}
+			<button
+				title={tool.name}
+				class={tool.name}
+				disabled={$FrameIsLocked}
+				highlighted={$Tool && $Tool.name === tool.name}
+				on:click={() => Tool.set(tool)}>
+				{#if tool.icon}
+					<svelte:component this={tool.icon} />
+				{/if}
+			</button>
+		{/each}
+	</div>
+	<hr />
+{/each}
 
 <style>
 	/*label {
@@ -75,10 +84,6 @@
 	}*/
 
 	/* button grid layout */
-	.toolbar {
-		height: 100%;
-		overflow-y: auto;
-	}
 	.grid-columns {
 		display: grid;
 		grid-template-columns: 50% 50%;
@@ -107,8 +112,9 @@
 		fill: var(--bright);
 	}
 	button[highlighted="true"] {
-		stroke: var(--highlight);
-		fill: var(--highlight);
+		background-color: var(--highlight);
+		stroke: var(--background-1);
+		fill: var(--background-1);
 	}
 	hr {
 		margin: 1.5px;

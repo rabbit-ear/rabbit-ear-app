@@ -6,6 +6,7 @@ const scale = {
 	key: "scale",
 	name: "scale",
 	group: "transform",
+	order: 2,
 	icon,
 	pointerEvent,
 	panel,

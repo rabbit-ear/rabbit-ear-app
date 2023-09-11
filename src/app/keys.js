@@ -7,6 +7,7 @@ export const SELECT_FACE = "faces";
 export const ASSIGN_SWAP = "assignSwap";
 export const ASSIGN_FLAT = "assignFlat";
 export const ASSIGN_UNASSIGNED = "assignUnassigned";
+export const ASSIGN_JOIN = "assignJoin";
 export const ASSIGN_CUT = "assignCut";
 export const ASSIGN_BOUNDARY = "assignBoundary";
 

@@ -15,6 +15,9 @@ import {
 	// PointerSnap,
 } from "./UI.js";
 
+// todo: figure out how to scroll the view if there is
+// a mouse, and the user right-clicks.
+
 const ToolPointerEvent = derived(
 	Tool,
 	($Tool) => $Tool && $Tool.pointerEvent
@@ -38,7 +41,7 @@ export const PointerEvent = derived(
 );
 
 export const ScrollEvent = readable(({ point, wheelDelta }) => {
-	const scaleOffset = (wheelDelta / 300);
+	const scaleOffset = (wheelDelta / 1000);
 	const scale = 1 + scaleOffset;
 	// the input point is in ModelViewMatrix space,
 	// which includes ModelMatrix. But, in the upcoming line we are only

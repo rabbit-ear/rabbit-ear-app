@@ -8,6 +8,7 @@ import {
 } from "./stores.js";
 import { RulerRays } from "../../stores/Ruler.js";
 import execute from "../../kernel/execute.js";
+import executeUI from "../../kernel/executeUI.js";
 import {
 	UIGraph,
 	UIRays,
@@ -29,7 +30,7 @@ const pointerEventKawasaki = (eventType, { point }) => {
 		const { vertex, coords } = snapToVertex(point, true);
 		if (vertex !== undefined) {
 			Highlight.addVertices([vertex]);
-			execute("kawasakiRulerPreviews", vertex);
+			executeUI("kawasakiRulerPreviews", vertex);
 		}
 	}
 		break;

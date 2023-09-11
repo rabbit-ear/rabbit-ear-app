@@ -1,5 +1,12 @@
 import { get } from "svelte/store";
 import {
+	add2,
+	subtract2,
+	scale2,
+} from "rabbit-ear/math/vector.js";
+import repeatFold from "rabbit-ear/graph/flatFold/repeatFold.js";
+import { kawasakiSolutions } from "rabbit-ear/singleVertex/kawasaki.js";
+import {
 	Tool,
 } from "../../stores/UI.js";
 import Tools from "../../tools/index.js";
@@ -14,6 +21,7 @@ import {
 	doAxiom6,
 	doAxiom7,
 } from "../../js/axioms.js";
+import { doPleat } from "../../js/graph.js";
 import {
 	UIGraph,
 	UILines,
@@ -65,3 +73,35 @@ export const axiom6Preview = (...args) => (
 export const axiom7Preview = (...args) => (
 	UILines.set(doAxiom7(get(Graph), ...args))
 );
+
+export const repeatFoldLinePreview = (a, b) => {
+	const line = { vector: subtract2(b, a), origin: a };
+	// return repeatFold(get(Graph), line, "V");
+	try {
+		const result = repeatFold(get(Graph), line, "V")
+			.filter(a => a !== undefined);
+		// console.log("graph", {
+		// 	vertices_coords: result.flatMap(el => el.points),
+		// 	edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
+		// });
+		UIGraph.set({
+			vertices_coords: result.flatMap(el => el.points),
+			edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
+		});
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export const pleatPreview = (...args) => (
+	UILines.add(doPleat(get(Graph), ...args))
+);
+
+export const kawasakiRulerPreviews = (vertex) => {
+	const graph = get(Graph);
+	const origin = graph.vertices_coords[vertex];
+	const rays = kawasakiSolutions(graph, vertex)
+		.filter(a => a !== undefined)
+		.map(vector => ({ origin, vector }));
+	UIRays.set(rays);
+};

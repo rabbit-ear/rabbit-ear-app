@@ -2,10 +2,6 @@
 	import { assignmentCanBeFolded } from "rabbit-ear/fold/spec.js";
 	import { get } from "svelte/store";
 	import { Graph } from "../stores/Model.js";
-	import {
-		// DarkMode,
-		// Snapping,
-	} from "../stores/App.js";
 	import { Selection } from "../stores/Select.js";
 	import execute from "../kernel/execute.js";
 	import { loadFileDialog } from "../js/file.js";
@@ -18,7 +14,6 @@
 	} from "../stores/App.js";
 
 	let inputFile;
-	// const clickDarkMode = () => { $DarkMode = !$DarkMode; };
 	const invertAssignments = () => {
 		const graph = get(Graph);
 		const edges_assignment = graph.edges_assignment || [];

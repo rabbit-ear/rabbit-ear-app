@@ -11,6 +11,7 @@ const edge = {
 	key: "edge",
 	name: "edge",
 	group: "simple",
+	order: 2,
 	icon,
 	pointerEvent,
 	keyboardEvent,

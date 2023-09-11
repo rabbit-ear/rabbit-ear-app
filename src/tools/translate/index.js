@@ -6,6 +6,7 @@ const translate = {
 	key: "translate",
 	name: "translate",
 	group: "transform",
+	order: 1,
 	icon,
 	pointerEvent,
 	panel,
