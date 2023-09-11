@@ -37,8 +37,6 @@ ElementSelect.set = (e) => {
  *
  */
 export const resetUI = () => {
-	const tool = get(Tool);
-	if (tool && tool.reset) { tool.reset(); }
 	Pointer.set(undefined);
 	Highlight.reset();
 	UIGraph.set({});

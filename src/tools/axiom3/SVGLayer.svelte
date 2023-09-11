@@ -1,12 +1,12 @@
 <script>
 	import { VertexRadius } from "../../stores/App.js";
 	import {
-		Coords0,
-		Coords1,
+		Segment0,
+		Segment1,
 	} from "./stores.js";
 
 	let points = [];
-	$: points = [$Coords0, $Coords1]
+	$: points = [$Segment0, $Segment1]
 		.filter(a => a !== undefined);
 </script>
 
@@ -17,12 +17,12 @@
 		cy={point[1]} />
 {/each}
 
-{#if $Coords0 !== undefined && $Coords1 !== undefined}
+{#if $Segment0 !== undefined && $Segment1 !== undefined}
 	<line
-		x1={$Coords0[0]}
-		y1={$Coords0[1]}
-		x2={$Coords1[0]}
-		y2={$Coords1[1]} />
+		x1={$Segment0[0]}
+		y1={$Segment0[1]}
+		x2={$Segment1[0]}
+		y2={$Segment1[1]} />
 {/if}
 
 <style>

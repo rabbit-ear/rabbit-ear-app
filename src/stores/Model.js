@@ -9,13 +9,13 @@ import {
 	makeEmptyGraph,
 	renderFrames,
 } from "../js/graph.js";
-import { Selection } from "./Select.js";
-import { FileHistory } from "./History.js";
 import {
 	CameraMatrix,
 	ModelMatrix,
 	AutoSizeModelMatrix,
 } from "./ViewBox.js";
+import { FileHistory } from "./History.js";
+import { Selection } from "./Select.js";
 /**
  *
  */
@@ -55,15 +55,20 @@ FrameIndex.set = (n) => {
 /**
  * @description The currently selected (and currently being edited) frame.
  */
+// export const Graph = derived(
+// 	[FramesRendered, FrameIndex, AutoSizeModelMatrix],
+// 	([$FramesRendered, $FrameIndex, $AutoSizeModelMatrix]) => {
+// 		const newGraph = $FramesRendered[$FrameIndex];
+// 		if ($AutoSizeModelMatrix) {
+// 			ModelMatrix.set(graphToMatrix2(newGraph));
+// 		}
+// 		return newGraph;
+// 	},
+// 	makeEmptyGraph(),
+// );
 export const Graph = derived(
-	[FramesRendered, FrameIndex, AutoSizeModelMatrix],
-	([$FramesRendered, $FrameIndex, $AutoSizeModelMatrix]) => {
-		const newGraph = $FramesRendered[$FrameIndex];
-		if ($AutoSizeModelMatrix) {
-			ModelMatrix.set(graphToMatrix2(newGraph));
-		}
-		return newGraph;
-	},
+	[FramesRendered, FrameIndex],
+	([$FramesRendered, $FrameIndex]) => $FramesRendered[$FrameIndex],
 	makeEmptyGraph(),
 );
 /**

@@ -7,8 +7,8 @@ import {
 	Releases,
 	Edge0,
 	Edge1,
-	Coords0,
-	Coords1,
+	Segment0,
+	Segment1,
 	Step,
 	reset,
 } from "./stores.js";
@@ -27,10 +27,7 @@ const pointerEvent = (eventType, { point }) => {
 			execute("axiom3", get(Edge0), get(Edge1));
 			break;
 		case 4:
-			execute("addEdge",
-				execute("addVertex", get(Coords0)),
-				execute("addVertex", get(Coords1)),
-			);
+			execute("addEdge", get(Segment0), get(Segment1));
 			reset();
 			executeUI("resetUI");
 			break;

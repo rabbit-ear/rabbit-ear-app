@@ -45,10 +45,11 @@ const pointerEvent = (eventType, { point }) => {
 		}
 	break;
 	case "release":
-		execute("addEdge",
-			execute("addVertex", Data.pressCoords),
-			execute("addVertex", coords),
-		);
+		// execute("addEdge",
+		// 	execute("addVertex", Data.pressCoords),
+		// 	execute("addVertex", coords),
+		// );
+		execute("addEdge", Data.pressCoords, coords);
 		executeUI("resetUI");
 		Data.pressCoords = undefined;
 		UIGraph.set({ vertices_coords: [coords] });

@@ -19,18 +19,18 @@ import {
 	nearestEdge as reNearestEdge,
 	nearestFace as reNearestFace,
 } from "rabbit-ear/graph/nearest.js";
-import { ViewBox } from "../stores/ViewBox.js";
-import {
-	SnapPoints,
-	SnapRadius,
-} from "../stores/Snap.js";
 import { Graph } from "../stores/Model.js";
+import { ViewBox } from "../stores/ViewBox.js";
 import {
 	RulerPoints,
 	RulerLines,
 	RulerRays,
 } from "../stores/Ruler.js";
-import { Snapping } from "../stores/App.js";
+import {
+	SnapPoints,
+	SnapRadius,
+} from "../stores/Snap.js";
+// import { Snapping } from "../stores/App.js";
 
 // todo: for large crease patterns, this is overwriting the
 // intended behavior. grid resolution needs to be dependent
@@ -85,9 +85,10 @@ export const snapToPoint = (point, force = false) => {
 	if (!point) { return undefined; }
 	const snapRadius = get(SnapRadius);
 	// all the snap points
-	const gridCoord = get(Snapping)
-		? nearestGridPoint(point, snapRadius)
-		: undefined;
+	// const gridCoord = get(Snapping)
+	// 	? nearestGridPoint(point, snapRadius)
+	// 	: undefined;
+	const gridCoord = nearestGridPoint(point, snapRadius);
 	// const gridCoordDist = gridCoord === undefined
 	// 	? Infinity
 	// 	: distance2(point, gridCoord);

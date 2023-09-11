@@ -7,11 +7,11 @@ import { ExecuteUIInput } from "../stores/Debug.js";
  * execute event methods can be called, and the effect of calling
  * a method here will print it to the history log in the terminal.
  */
-const executeUI = (funcName, ...args) => {
-	ExecuteUIInput.set(funcName + "\n" + JSON.stringify(args));
-	const func = UICommands[funcName];
-	if (!func) {
-		const error = new Error(`no known function with the name "${funcName}"`);
+const executeUI = (name, ...args) => {
+	ExecuteUIInput.set(name + "\n" + JSON.stringify(args));
+	const fn = UICommands[name];
+	if (!fn) {
+		const error = new Error(`no known function with the name "${name}"`);
 		TerminalHistory.update(history => [
 			...history,
 			{ html: `<span class="error">${error}</span>` },
@@ -20,7 +20,7 @@ const executeUI = (funcName, ...args) => {
 	}
 	let result;
 	try {
-		result = func(...args);
+		result = fn(...args);
 	} catch (error) {
 		// ui requests will silently fail
 		// console.error(error);

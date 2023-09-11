@@ -1,5 +1,5 @@
 <script>
-	import Header from "./Header.svelte";
+	import Header from "./Header/Header.svelte";
 	import Terminal from "./Terminal.svelte";
 	import Toolbar from "./Toolbar.svelte";
 	import Canvases from "./Canvases.svelte";

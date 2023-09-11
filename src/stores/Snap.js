@@ -1,8 +1,8 @@
 import { writable, derived } from "svelte/store";
 // import { Snapping } from "./App.js";
-import { Graph } from "./Model.js";
 import { ViewBox } from "./ViewBox.js";
 import { RulerPoints } from "./Ruler.js";
+import { Graph } from "./Model.js";
 
 // modifiers
 export const RadialSnapDegrees = writable(22.5);
@@ -20,18 +20,12 @@ export const RadialSnapOffset = writable(0);
  * - intersections between ruler lines and ruler lines
  * - intersections between ruler lines and the background grid
  */
-// export const SnapPoints = derived(
-// 	[Snapping, Graph, RulerPoints],
-// 	([$Snapping, $Graph, $RulerPoints]) => $Snapping
-// 		? [...($Graph.vertices_coords || []), ...$RulerPoints]
-// 		: [],
-// 	[],
-// );
 export const SnapPoints = derived(
 	[Graph, RulerPoints],
 	([$Graph, $RulerPoints]) => [...($Graph.vertices_coords || []), ...$RulerPoints],
 	[],
 );
+// export const SnapPoints = writable([]);
 /**
  * @description Snapping is zoom-level dependent, this is the factor
  * (out of 1) which is scaled to the viewbox to get the snap radius.

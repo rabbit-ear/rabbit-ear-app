@@ -49,7 +49,10 @@ export const KeybindingsDown = {
 	},
 	// esc
 	27: {
-		0: (event) => executeUI("resetUI"),
+		0: (event) => {
+			executeUI("resetToolUI");
+			executeUI("resetUI");
+		},
 	},
 	// 1 - 7
 	49: {

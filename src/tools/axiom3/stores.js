@@ -8,7 +8,7 @@ import {
 	snapToRulerLine,
 } from "../../js/snap.js";
 import { zipArrays } from "../../js/arrays.js";
-import execute from "../../kernel/execute.js";
+import executeUI from "../../kernel/executeUI.js";
 import { Highlight } from "../../stores/Select.js";
 
 export const Move = writable(undefined);
@@ -37,13 +37,13 @@ export const Edge1 = derived(
 	undefined,
 );
 
-export const Coords0 = derived(
+export const Segment0 = derived(
 	Touches,
 	($Touches) => snapToRulerLine($Touches[2], false).coords,
 	undefined,
 );
 
-export const Coords1 = derived(
+export const Segment1 = derived(
 	Touches,
 	($Touches) => snapToRulerLine($Touches[3], false).coords,
 	undefined,
@@ -63,7 +63,7 @@ export const AxiomPreview = derived(
 	[Edge0, Edge1],
 	([$Edge0, $Edge1]) => (
 		($Edge0 !== undefined && $Edge1 !== undefined
-			? execute("axiom3Preview", $Edge0, $Edge1)
+			? executeUI("axiom3Preview", $Edge0, $Edge1)
 			: undefined)),
 	undefined,
 );

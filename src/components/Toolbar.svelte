@@ -56,7 +56,7 @@
 </div>
 
 <style>
-	label {
+	/*label {
 		user-select: none;
 	}
 	p {
@@ -72,7 +72,7 @@
 	}
 	.vertical-radio input {
 		grid-column: 1;
-	}
+	}*/
 
 	/* button grid layout */
 	.toolbar {

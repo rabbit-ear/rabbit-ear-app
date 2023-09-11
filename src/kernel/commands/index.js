@@ -1,4 +1,5 @@
 import { get } from "svelte/store";
+import { assignmentCanBeFolded } from "rabbit-ear/fold/spec.js";
 import removeGeometry from "rabbit-ear/graph/remove.js";
 import Planarize from "rabbit-ear/graph/planarize.js";
 import AddVertex from "rabbit-ear/graph/add/addVertex.js";
@@ -36,6 +37,7 @@ import {
 import {
 	downloadFile,
 } from "../../js/file.js";
+import { nearestTwoVertices } from "../../js/errors.js";
 import {
 	findEpsilon,
 } from "../../js/epsilon.js";
@@ -211,10 +213,12 @@ export const addVertex = (coords) => {
 	return newestVertex;
 };
 
-export const addEdge = (vertexA, vertexB) => {
+export const addEdge = (coords0, coords1) => {
 	FileHistory.cache();
 	const g = get(Graph);
-	const newestEdge = addNonPlanarEdge(g, [vertexA, vertexB]);
+	const vertex0 = AddVertex(g, coords0);
+	const vertex1 = AddVertex(g, coords1);
+	const newestEdge = addNonPlanarEdge(g, [vertex0, vertex1]);
 	doSetEdgesAssignment(g, [newestEdge], get(NewEdgeAssignment));
 	// Graph.set({ ...g });
 	UpdateFrame({ ...g });
@@ -222,6 +226,18 @@ export const addEdge = (vertexA, vertexB) => {
 	Selection.addEdges([newestEdge]);
 	return newestEdge;
 };
+
+// export const addEdge = (vertexA, vertexB) => {
+// 	FileHistory.cache();
+// 	const g = get(Graph);
+// 	const newestEdge = addNonPlanarEdge(g, [vertexA, vertexB]);
+// 	doSetEdgesAssignment(g, [newestEdge], get(NewEdgeAssignment));
+// 	// Graph.set({ ...g });
+// 	UpdateFrame({ ...g });
+// 	Selection.reset();
+// 	Selection.addEdges([newestEdge]);
+// 	return newestEdge;
+// };
 
 export const addLine = (line) => {
 	FileHistory.cache();
@@ -277,6 +293,15 @@ export const toggleAssignment = (edges) => {
 	IsoUpdateFrame({ ...graph });
 };
 
+export const invertAssignments = () => {
+	const graph = get(Graph);
+	const edges_assignment = graph.edges_assignment || [];
+	const edges = (graph.edges_vertices || [])
+		.map((_, i) => i)
+		.filter(e => assignmentCanBeFolded[graph.edges_assignment[e]])
+	toggleAssignment(edges);
+};
+
 export const setAssignment = (edges, assignment, foldAngle) => {
 	FileHistory.cache();
 	const graph = get(Graph);
@@ -289,6 +314,13 @@ export const setFoldAngle = (edges, foldAngle) => {
 	const graph = get(Graph);
 	doSetEdgesFoldAngle(graph, edges, foldAngle);
 	IsoUpdateFrame({ ...graph });
+};
+
+export const selectNearestVertices = () => {
+	const vertices = nearestTwoVertices(get(Graph));
+	if (vertices === undefined) { return; }
+	Selection.reset();
+	Selection.addVertices(vertices);
 };
 
 export const autoPlanarize = () => {
@@ -349,28 +381,6 @@ export const axiom6 = (...args) => (
 );
 export const axiom7 = (...args) => (
 	RulerLines.add(doAxiom7(get(Graph), ...args))
-);
-
-export const axiom1Preview = (...args) => (
-	UILines.set(doAxiom1(get(Graph), ...args))
-);
-export const axiom2Preview = (...args) => (
-	UILines.set(doAxiom2(get(Graph), ...args))
-);
-export const axiom3Preview = (...args) => (
-	UILines.set(doAxiom3(get(Graph), ...args))
-);
-export const axiom4Preview = (...args) => (
-	UILines.set(doAxiom4(get(Graph), ...args))
-);
-export const axiom5Preview = (...args) => (
-	UILines.set(doAxiom5(get(Graph), ...args))
-);
-export const axiom6Preview = (...args) => (
-	UILines.set(doAxiom6(get(Graph), ...args))
-);
-export const axiom7Preview = (...args) => (
-	UILines.set(doAxiom7(get(Graph), ...args))
 );
 
 export const repeatFoldLine = (a, b) => {

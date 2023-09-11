@@ -6,7 +6,7 @@
 	<span slot="title">kawasaki</span>
 	<span slot="body">
 		<div class="container">
-			<p class="instruction">fix a vertex with an odd-number of edges.</p>
+			<p class="instruction">flat-fold an odd-numbered degree vertex.</p>
 		</div>
 	</span>
 </Panel>

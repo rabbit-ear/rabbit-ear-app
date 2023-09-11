@@ -50,10 +50,7 @@ const pointerEventKawasaki = (eventType, { point }) => {
 		break;
 	default:
 		// release
-		execute("addEdge",
-			execute("addVertex", pressCoords),
-			execute("addVertex", snapToPoint(point, false)),
-		);
+		execute("addEdge", pressCoords, snapToPoint(point, false));
 		UIGraph.set({});
 		RulerRays.set([]);
 		Presses.set([]);

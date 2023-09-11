@@ -1,10 +1,4 @@
-import { get } from "svelte/store";
 import { writable, derived } from "svelte/store";
-import { autoPlanarize as autoPlanarizeFunc } from "../kernel/prePostEvents.js";
-import {
-	preExecuteEvents,
-	postExecuteEvents,
-} from "../kernel/execute.js";
 import { ViewBox } from "./ViewBox.js";
 
 // these are immutable. a bit like compiler directives.
@@ -14,9 +8,9 @@ export const UndoHistoryLength = 30;
 
 // app preferences and settings
 export const NewEdgeAssignment = writable("F");
-export const Snapping = writable(true);
+// export const Snapping = writable(true);
 export const ShowSimulator = writable(false);
-export const ShowTerminal = writable(false);
+export const ShowTerminal = writable(true);
 export const ShowFrames = writable(true);
 export const ShowFlatFoldableIssues = writable(true);
 export const ShowGrid = writable(true);
@@ -42,18 +36,3 @@ export const VertexRadius = derived(
 	),
 	0.00666,
 );
-// pre- and post- execute() events are managed by the kernel.
-// when an operation is finished, it's customary to re-planarize
-// the graph to resolve any edge crossings/duplicate vertices.
-// an advanced user can disable this feature.
-export const AutoPlanarize = writable(false);
-const AutoPlanarizeSet = AutoPlanarize.set;
-AutoPlanarize.set = (e) => {
-	const events = get(postExecuteEvents)
-		.filter(fn => fn !== autoPlanarizeFunc);
-	if (e) { events.push(autoPlanarizeFunc); }
-	postExecuteEvents.set(events);
-	return AutoPlanarizeSet(e);
-};
-
-AutoPlanarize.set(true);

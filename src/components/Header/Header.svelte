@@ -1,38 +1,16 @@
 <script>
-	import { assignmentCanBeFolded } from "rabbit-ear/fold/spec.js";
-	import { get } from "svelte/store";
-	import { Graph } from "../stores/Model.js";
+	import execute from "../../kernel/execute.js";
+	import { loadFileDialog } from "../../js/file.js";
 	import {
 		// DarkMode,
 		// Snapping,
-	} from "../stores/App.js";
-	import { Selection } from "../stores/Select.js";
-	import execute from "../kernel/execute.js";
-	import { loadFileDialog } from "../js/file.js";
-	import { nearestTwoVertices } from "../js/errors.js";
-	import {
 		ShowSimulator,
 		ShowTerminal,
 		ShowFlatFoldableIssues,
 		DialogNewFile,
-	} from "../stores/App.js";
+	} from "../../stores/App.js";
 
 	let inputFile;
-	// const clickDarkMode = () => { $DarkMode = !$DarkMode; };
-	const invertAssignments = () => {
-		const graph = get(Graph);
-		const edges_assignment = graph.edges_assignment || [];
-		const edges = (graph.edges_vertices || [])
-			.map((_, i) => i)
-			.filter(e => assignmentCanBeFolded[graph.edges_assignment[e]])
-		execute("toggleAssignment", edges);
-	};
-	const selectNearestVertices = () => {
-		const vertices = nearestTwoVertices(get(Graph));
-		if (vertices === undefined) { return; }
-		Selection.reset();
-		Selection.addVertices(vertices);
-	};
 </script>
 
 	<nav>
@@ -95,7 +73,7 @@
 			<li>assignment
 				<ul>
 					<li><button on:click={() => execute("findBoundary")}>rebuild boundary</button></li>
-					<li><button on:click={invertAssignments}>invert assignments</button></li>
+					<li><button on:click={() => execute("invertAssignments")}>invert assignments</button></li>
 					<li disabled>reassign selected
 						<!-- <ul>
 							<li><button on:click={() => {}}>boundary</button></li>
@@ -151,7 +129,7 @@
 						<input type="checkbox" id="checkbox-flat-foldable" bind:checked={$ShowFlatFoldableIssues}>
 						<label for="checkbox-flat-foldable">flat-foldable issues</label>
 					</li>
-					<li><button on:click={selectNearestVertices}>select nearest vertices</button></li>
+					<li><button on:click={() => execute("selectNearestVertices")}>select nearest vertices</button></li>
 					<hr />
 					<!-- <li>show face-winding</li> -->
 					<!-- <li>isolated vertices</li> -->
@@ -283,9 +261,6 @@
 	}
 	label {
 		user-select: none;
-	}
-	.popover {
-		display: none;
 	}
 	input[type=file] {
 		display: none;

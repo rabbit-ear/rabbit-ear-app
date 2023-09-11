@@ -1,10 +1,10 @@
 import { get, writable } from "svelte/store";
-import { UndoHistoryLength } from "./App.js";
-import { Selection } from "./Select.js";
 import {
 	Frames,
 	FrameIndex,
 } from "./Model.js";
+import { UndoHistoryLength } from "./App.js";
+import { Selection } from "./Select.js";
 /**
  * @description
  */

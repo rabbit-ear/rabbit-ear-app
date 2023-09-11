@@ -23,5 +23,4 @@
 	div {
 		overflow: hidden;
 	}
-	.value { font-weight: bold; }
 </style>

@@ -3,12 +3,12 @@
 	import {
 		Coords0,
 		Coords1,
-		Coords2,
-		Coords3,
+		Segment0,
+		Segment1,
 	} from "./stores.js";
 
 	let points = [];
-	$: points = [$Coords0, $Coords1, $Coords2, $Coords3]
+	$: points = [$Coords0, $Coords1, $Segment0, $Segment1]
 		.filter(a => a !== undefined);
 </script>
 
@@ -19,12 +19,12 @@
 		cy={point[1]} />
 {/each}
 
-{#if $Coords2 !== undefined && $Coords3 !== undefined}
+{#if $Segment0 !== undefined && $Segment1 !== undefined}
 	<line
-		x1={$Coords2[0]}
-		y1={$Coords2[1]}
-		x2={$Coords3[0]}
-		y2={$Coords3[1]} />
+		x1={$Segment0[0]}
+		y1={$Segment0[1]}
+		x2={$Segment1[0]}
+		y2={$Segment1[1]} />
 {/if}
 
 <style>
