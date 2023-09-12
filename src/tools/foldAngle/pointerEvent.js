@@ -1,25 +1,18 @@
 import { get } from "svelte/store";
-import { snapToEdge } from "../../js/snap.js";
-import { FoldAngleValue } from "./stores.js";
+import {
+	FoldAngleValue,
+	Move,
+	Edge,
+} from "./stores.js";
 import execute from "../../kernel/execute.js";
-import executeUI from "../../kernel/executeUI.js";
 
-const pointerEventFoldAngle = (eventType, { point }) => {
-	const { edge } = snapToEdge(point);
-	if (edge === undefined) {
-		executeUI("highlight", {});
-		return;
+const pointerEvent = (eventType, { point }) => {
+	if (eventType === "press") {
+		const edge = get(Edge);
+		if (edge === undefined) { return; }
+		return execute("setFoldAngle", [edge], get(FoldAngleValue));
 	}
-	executeUI("highlight", { edges: [edge] });
-	switch (eventType) {
-	case "press":
-		if (edge === undefined) { break; }
-		execute("setFoldAngle", [edge], get(FoldAngleValue));
-		break;
-	case "hover": break;
-	case "move": break;
-	case "release": break;
-	}
+	Move.set(point);
 };
 
-export default pointerEventFoldAngle;
+export default pointerEvent;

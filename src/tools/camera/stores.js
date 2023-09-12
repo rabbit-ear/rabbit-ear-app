@@ -10,8 +10,8 @@ import {
 import { getScreenPoint } from "../../js/matrix.js";
 import { CameraMatrix } from "../../stores/ViewBox.js";
 
-export const Drag = writable(undefined);
 export const Press = writable(undefined);
+export const Drag = writable(undefined);
 
 const PressCoords = derived(Press, getScreenPoint, undefined);
 const DragCoords = derived(Drag, getScreenPoint, undefined);

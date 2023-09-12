@@ -136,7 +136,7 @@ export const snapToRulerLine = (point) => {
 	// lines and rays in the same array, with a "type" key.
 	const lineTypes = rulerLines
 		.map(geo => ({ type: "line", geo }))
-		.concat(rulerRays.map(geo => ({ type: "ray", geo })))
+		.concat(rulerRays.map(geo => ({ type: "ray", geo })));
 	if (!lineTypes.length) {
 		return { index: undefined, line: undefined, coords: snapToPoint(point, false) };
 	}

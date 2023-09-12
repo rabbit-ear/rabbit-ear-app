@@ -35,13 +35,13 @@
 	<span slot="body">
 		<p>pointer: <span class="number">{formatPoint($Pointer)}</span></p>
 		<!-- <input type="text" readonly value={formatPoint(NotUndefined($PointerSnap, $Pointer))}> -->
-		<div class="center">
+		<!-- <div class="center">
 			{#if isSnapped}
 				<p class="alert">snapped</p>
 			{:else}
 				<p class="dim">not snapped</p>
 			{/if}
-		</div>
+		</div> -->
 		<hr />
 		<p>zoom: <span class="number">{zoom}</span></p>
 		<div class="center">
@@ -55,12 +55,12 @@
 	.number {
 		font-weight: bold;
 	}
-	.alert {
+	/*.alert {
 		color: var(--highlight);
-	}
-	.dim {
+	}*/
+	/*.dim {
 		color: var(--dim);
-	}
+	}*/
 	/*input[type=text] {
 		width: 100%;
 	}*/
