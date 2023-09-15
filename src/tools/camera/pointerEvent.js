@@ -1,4 +1,4 @@
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import {
 	Drag,
 	Press,

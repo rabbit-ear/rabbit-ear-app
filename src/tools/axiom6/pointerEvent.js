@@ -4,7 +4,7 @@ import { Selection } from "../../stores/Select.js";
 import {
 	UILines,
 } from "../../stores/UI.js";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import { RulerLines } from "../../stores/Ruler.js";
 import { Graph } from "../../stores/Model.js";
 import { RulersAutoClear } from "../../stores/App.js";
@@ -50,11 +50,11 @@ const pointerEventAxiom6 = (eventType, { point }) => {
 		if (edge1 !== undefined) { Selection.addEdges([edge1]); }
 		if (vertex !== undefined) { Selection.addVertices([vertex]); }
 		if (edge !== undefined) { Selection.addEdges([edge]); }
-		execute("axiom6Preview", edge1, edge, vertex1, vertex2);
+		executeCommand("axiom6Preview", edge1, edge, vertex1, vertex2);
 		break;
 	case 4:
 	default:
-		execute("axiom6Rulers", edge1, edge, vertex1, vertex2);
+		executeCommand("axiom6Rulers", edge1, edge, vertex1, vertex2);
 		vertex1 = undefined;
 		edge1 = undefined;
 		UILines.set([]);

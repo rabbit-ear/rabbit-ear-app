@@ -6,7 +6,7 @@ import {
 } from "./stores.js";
 import { Graph } from "../../stores/Model.js";
 import { Keyboard } from "../../stores/UI.js";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import { ElementSelect } from "../../stores/UI.js";
 import { SelectHoverIndex } from "./stores.js";
 /**
@@ -50,10 +50,10 @@ const pointerEventSelect = (eventType, { point }) => {
 	case "release":
 		const selected = getSelected();
 		if (get(Keyboard)[16]) { // shift
-			execute("addToSelection", get(ElementSelect), selected);
+			executeCommand("addToSelection", get(ElementSelect), selected);
 		} else {
-			execute("deselectAll");
-			execute("addToSelection", get(ElementSelect), selected);
+			executeCommand("deselectAll");
+			executeCommand("addToSelection", get(ElementSelect), selected);
 		}
 		SelectionRect.set(undefined);
 		break;

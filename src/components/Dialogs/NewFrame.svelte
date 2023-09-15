@@ -5,7 +5,7 @@
 		polygon,
 	} from "rabbit-ear/fold/bases.js";
 	import NewShape from "./NewShape.svelte";
-	import execute from "../../kernel/execute.js";
+	import { executeCommand } from "../../kernel/execute.js";
 	import { DialogNewFrame } from "../../stores/App.js";
 	import {
 		Frames,
@@ -17,19 +17,19 @@
 	const standAloneDidPress = ({ detail }) => {
 		switch (detail.shape) {
 		case "empty":
-			execute("appendFrame", {});
+			executeCommand("appendFrame", {});
 			break;
 		case "duplicate":
-			execute("appendFrame", structuredClone($Frames[$FrameIndex]));
+			executeCommand("appendFrame", structuredClone($Frames[$FrameIndex]));
 			break;
 		case "square":
-			execute("appendFrame", square(detail.size));
+			executeCommand("appendFrame", square(detail.size));
 			break;
 		case "rectangle":
-			execute("appendFrame", rectangle(detail.width, detail.height));
+			executeCommand("appendFrame", rectangle(detail.width, detail.height));
 			break;
 		case "regularPolygon":
-			execute("appendFrame", polygon(detail.sides));
+			executeCommand("appendFrame", polygon(detail.sides));
 			break;
 		}
 		panel = "standAlone";

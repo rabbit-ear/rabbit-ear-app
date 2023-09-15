@@ -5,7 +5,7 @@ import {
 	Release,
 	PolylineSmooth,
 } from "./stores.js";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 
 const pointerEvent = (eventType, { point, buttons }) => {
 	switch (eventType) {
@@ -21,7 +21,7 @@ const pointerEvent = (eventType, { point, buttons }) => {
 		break;
 	case "release":
 		Release.set(point);
-		execute("polyline", get(PolylineSmooth));
+		executeCommand("polyline", get(PolylineSmooth));
 		break;
 	}
 };

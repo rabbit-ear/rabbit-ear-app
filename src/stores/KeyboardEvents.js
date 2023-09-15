@@ -3,7 +3,7 @@ import {
 	readable,
 } from "svelte/store";
 import { isFormElementActive } from "../js/dom.js";
-import executeTerminal from "../kernel/executeTerminal.js";
+import { execute } from "../kernel/execute.js";
 import {
 	TerminalTextarea,
 	TerminalValue,
@@ -52,7 +52,7 @@ const FormKeyboardEvent = derived(
 			&& !event.shiftKey
 			&& eventType === "down") {
 			event.preventDefault();
-			executeTerminal($TerminalValue);
+			execute($TerminalValue);
 			TerminalValue.set("");
 		}
 	},

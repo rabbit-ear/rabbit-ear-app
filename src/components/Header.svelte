@@ -3,7 +3,7 @@
 	import { get } from "svelte/store";
 	import { Graph } from "../stores/Model.js";
 	import { Selection } from "../stores/Select.js";
-	import execute from "../kernel/execute.js";
+	import { executeCommand } from "../kernel/execute.js";
 	import { loadFileDialog } from "../js/file.js";
 	import { nearestTwoVertices } from "../js/errors.js";
 	import {
@@ -20,7 +20,7 @@
 		const edges = (graph.edges_vertices || [])
 			.map((_, i) => i)
 			.filter(e => assignmentCanBeFolded[graph.edges_assignment[e]])
-		execute("toggleAssignment", edges);
+		executeCommand("toggleAssignment", edges);
 	};
 	const selectNearestVertices = () => {
 		const vertices = nearestTwoVertices(get(Graph));
@@ -38,18 +38,18 @@
 					<hr />
 					<li><button on:click={() => inputFile.click()}>load</button></li>
 					<li>
-						<button on:click={() => execute("download", "origami.fold")}>save</button>
+						<button on:click={() => executeCommand("download", "origami.fold")}>save</button>
 					</li>
 				</ul>
 			</li>
 			<li>graph
 				<ul>
 					<li class="no-select description">repair</li>
-					<li><button on:click={() => execute("planarize")}>planarize</button></li>
-					<li><button title="fix floating point rounding errors" on:click={() => execute("cleanVertices")}>smart clean vertices</button></li>
-					<li><button on:click={() => execute("mergeNearbyVertices")}>merge nearby vertices</button></li>
+					<li><button on:click={() => executeCommand("planarize")}>planarize</button></li>
+					<li><button title="fix floating point rounding errors" on:click={() => executeCommand("cleanVertices")}>smart clean vertices</button></li>
+					<li><button on:click={() => executeCommand("mergeNearbyVertices")}>merge nearby vertices</button></li>
 					<li>
-						<button on:click={() => execute("snapAllVertices")}>snap all vertices to grid</button>
+						<button on:click={() => executeCommand("snapAllVertices")}>snap all vertices to grid</button>
 					</li>
 					<li disabled>insert
 						<!-- <ul>
@@ -89,7 +89,7 @@
 			</li>
 			<li>assignment
 				<ul>
-					<li><button on:click={() => execute("findBoundary")}>rebuild boundary</button></li>
+					<li><button on:click={() => executeCommand("rebuildBoundary")}>rebuild boundary</button></li>
 					<li><button on:click={invertAssignments}>invert assignments</button></li>
 					<li disabled>reassign selected
 						<!-- <ul>
@@ -107,8 +107,8 @@
 			</li>
 			<li>select
 				<ul>
-					<li><button on:click={() => execute("selectAll")}>select all</button></li>
-					<li><button on:click={() => execute("deselectAll")}>deselect all</button></li>
+					<li><button on:click={() => executeCommand("selectAll")}>select all</button></li>
+					<li><button on:click={() => executeCommand("deselectAll")}>deselect all</button></li>
 					<hr />
 					<li>select by assignment
 						<ul>

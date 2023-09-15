@@ -9,7 +9,7 @@ import {
 } from "../../js/snap.js";
 import { UIRays } from "../../stores/UI.js";
 import { RulerRays } from "../../stores/Ruler.js";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import executeUI from "../../kernel/executeUI.js";
 
 export const Move = writable(undefined);
@@ -53,7 +53,7 @@ export const PressCoords = derived(
 export const KawasakiRulers = derived(
 	PressVertex,
 	($PressVertex) => $PressVertex !== undefined
-		? execute("kawasakiRulers", $PressVertex)
+		? executeCommand("kawasakiRulers", $PressVertex)
 		: RulerRays.set([]),
 	undefined,
 );

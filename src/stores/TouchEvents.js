@@ -41,7 +41,7 @@ export const PointerEvent = derived(
 );
 
 export const ScrollEvent = readable(({ point, wheelDelta }) => {
-	const scaleOffset = (wheelDelta / 1000);
+	const scaleOffset = (wheelDelta / 666);
 	const scale = 1 + scaleOffset;
 	// the input point is in ModelViewMatrix space,
 	// which includes ModelMatrix. But, in the upcoming line we are only

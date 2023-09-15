@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import { Highlight } from "../../stores/Select.js";
 import { RulerLines } from "../../stores/Ruler.js";
 import {
@@ -47,7 +47,7 @@ const pointerEventAxiom5 = (eventType, { point }) => {
 		if (eventType === "release") { axiom5Edge = edge; }
 		if (axiom5Edge !== undefined) { Highlight.addEdges([axiom5Edge]); }
 		UIGraph.set({ vertices_coords: [axiom5Point1, axiom5Point2] });
-		execute("axiom5Preview", axiom5Edge, axiom5Point1, axiom5Point2);
+		executeCommand("axiom5Preview", axiom5Edge, axiom5Point1, axiom5Point2);
 	}
 		break;
 	case 3: {
@@ -55,7 +55,7 @@ const pointerEventAxiom5 = (eventType, { point }) => {
 		if (axiom5Edge !== undefined) { Highlight.addEdges([axiom5Edge]); }
 		UIGraph.set({});
 		UILines.set([]);
-		execute("axiom5Rulers", axiom5Edge, axiom5Point1, axiom5Point2);
+		executeCommand("axiom5Rulers", axiom5Edge, axiom5Point1, axiom5Point2);
 	}
 		break;
 	case 4:
@@ -70,9 +70,9 @@ const pointerEventAxiom5 = (eventType, { point }) => {
 		});
 		break;
 	default:
-		execute("segment",
-			execute("addVertex", segmentPoint1),
-			execute("addVertex", snapToRulerLine(point).coords),
+		executeCommand("segment",
+			executeCommand("addVertex", segmentPoint1),
+			executeCommand("addVertex", snapToRulerLine(point).coords),
 		);
 		UIGraph.set({});
 		RulerLines.set([]);

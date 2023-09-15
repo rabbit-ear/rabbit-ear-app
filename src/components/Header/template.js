@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import {
 	// Snapping,
 	ShowSimulator,
@@ -26,7 +26,7 @@ export default [
 			},
 			{
 				label: "save",
-				click: () => execute("download", "origami.fold"),
+				click: () => executeCommand("download", "origami.fold"),
 			},
 		],
 	},
@@ -38,22 +38,22 @@ export default [
 			},
 			{
 				label: "planarize",
-				click: () => execute("planarize"),
+				click: () => executeCommand("planarize"),
 				toolTip: "make the graph planar, split overlapping edges, rebuild faces",
 			},
 			{
 				label: "smart clean vertices",
-				click: () => execute("cleanVertices"),
+				click: () => executeCommand("cleanVertices"),
 				toolTip: "clean floating point rounding errors in coordinates",
 			},
 			{
 				label: "merge nearby vertices",
-				click: () => execute("mergeNearbyVertices"),
+				click: () => executeCommand("mergeNearbyVertices"),
 				toolTip: "convert nearby vertices into one vertex",
 			},
 			{
 				label: "snap to grid",
-				click: () => execute("snapAllVertices"),
+				click: () => executeCommand("snapAllVertices"),
 				toolTip: "snap all vertices to the nearest grid intersection",
 			},
 			{
@@ -84,12 +84,12 @@ export default [
 		submenu: [
 			{
 				label: "rebuild boundary",
-				click: () => execute("findBoundary"),
+				click: () => executeCommand("rebuildBoundary"),
 				toolTip: "walk around the graph to reassign boundaries",
 			},
 			{
 				label: "invert assignments",
-				click: () => execute("invertAssignments"),
+				click: () => executeCommand("invertAssignments"),
 				toolTip: "swap mountain and valley assignments",
 			},
 			{
@@ -116,11 +116,11 @@ export default [
 		submenu: [
 			{
 				label: "select all",
-				click: () => execute("selectAll"),
+				click: () => executeCommand("selectAll"),
 			},
 			{
 				label: "deselect all",
-				click: () => execute("deselectAll"),
+				click: () => executeCommand("deselectAll"),
 			},
 			{ type: "separator" },
 			{

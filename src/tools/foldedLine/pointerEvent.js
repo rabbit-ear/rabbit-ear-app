@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import {
 	Move,
 	Press,
@@ -18,7 +18,7 @@ const pointerEvent = (eventType, { point, buttons }) => {
 		const start = get(PressCoords);
 		const end = get(DragCoords);
 		if (start !== undefined && end !== undefined) {
-			execute("foldedLine", start, end);
+			executeCommand("foldedLine", start, end);
 		}
 		reset();
 		break;
@@ -47,7 +47,7 @@ export default pointerEvent;
 // 	snapToPoint,
 // 	snapToRulerLine,
 // } from "../../js/snap.js";
-// import execute from "../../kernel/execute.js";
+// import { executeCommand } from "../../kernel/execute.js";
 // import { Presses } from "./stores.js";
 
 // let pressCoords = undefined;
@@ -66,7 +66,7 @@ export default pointerEvent;
 // 		pressCoords = coords;
 // 		Presses.set([pressCoords]);
 // 		if (shift) { // Shift
-// 			execute("radialRulers",
+// 			executeCommand("radialRulers",
 // 				pressCoords,
 // 				get(RadialSnapDegrees),
 // 				get(RadialSnapOffset),
@@ -75,11 +75,11 @@ export default pointerEvent;
 // 		UIGraph.set({ vertices_coords: [coords] });
 // 	break;
 // 	case "move": {
-// 		execute("repeatFoldLinePreview", pressCoords, coords);
+// 		executeCommand("repeatFoldLinePreview", pressCoords, coords);
 // 	}
 // 	break;
 // 	case "release":
-// 		execute("repeatFoldLine", pressCoords, coords);
+// 		executeCommand("repeatFoldLine", pressCoords, coords);
 // 		Presses.set([]);
 // 		RulerLines.set([]);
 // 		RulerRays.set([]);

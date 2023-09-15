@@ -18,7 +18,7 @@ import {
 	RulerLines,
 	RulerRays,
 } from "../../stores/Ruler.js";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import executeUI from "../../kernel/executeUI.js";
 
 export const Move = writable(undefined);
@@ -49,7 +49,7 @@ export const ShiftRulers = derived(
 	[Keyboard, PressCoords, RadialSnapDegrees, RadialSnapOffset],
 	([$Keyboard, $PressCoords, $RadialSnapDegrees, $RadialSnapOffset]) => {
 		if ($Keyboard[16] && $PressCoords) {
-			execute("radialRulers",
+			executeCommand("radialRulers",
 				$PressCoords,
 				$RadialSnapDegrees,
 				$RadialSnapOffset,

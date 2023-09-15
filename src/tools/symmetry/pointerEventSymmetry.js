@@ -15,7 +15,7 @@ import {
 	snapToPoint,
 	snapToRulerLine,
 } from "../js/snap.js";
-import execute from "./execute.js";
+import { executeCommand } from "./execute.js";
 
 let pressCoords;
 
@@ -27,20 +27,20 @@ export const pointerEventSymmetry = (eventType, { point }) => {
 	switch (eventType) {
 	case "hover":
 		UIGraph.set({ vertices_coords: [coords] });
-	break;
+		break;
 	case "press":
 		pressCoords = coords;
 		SymmetryLines.add({ vector: [1, 0], origin: coords });
 		Presses.set([pressCoords]);
 		UIGraph.set({ vertices_coords: [coords] });
-	break;
+		break;
 	case "move":
 		UIGraph.set({ vertices_coords: [pressCoords, coords] });
 		SymmetryLines.update(lines => {
 			lines[lines.length - 1].vector = subtract2(coords, pressCoords);
 			return lines;
 		});
-	break;
+		break;
 	case "release":
 		SymmetryLines.update(lines => {
 			lines[lines.length - 1].vector = subtract2(coords, pressCoords);
@@ -48,6 +48,6 @@ export const pointerEventSymmetry = (eventType, { point }) => {
 		});
 		Presses.set([]);
 		UIGraph.set({ vertices_coords: [coords] });
-	break;
+		break;
 	}
 };

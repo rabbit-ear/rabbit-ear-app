@@ -17,7 +17,7 @@ import {
 } from "../../js/snap.js";
 import { getVerticesFromSelection } from "../../js/graph.js";
 import { Selection } from "../../stores/Select.js";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 
 let pressCoords;
 
@@ -29,19 +29,19 @@ const pointerEventTranslate = (eventType, { point }) => {
 	switch (eventType) {
 	case "hover":
 		UIGraph.set({ vertices_coords: [coords] });
-	break;
+		break;
 	case "press":
 		pressCoords = coords;
 		Presses.set([pressCoords]);
 		// if (shift) { // Shift
-		// 	execute("radialRulers",
+		// 	executeCommand("radialRulers",
 		// 		pressCoords,
 		// 		get(RadialSnapDegrees),
 		// 		get(RadialSnapOffset),
 		// 	);
 		// }
 		UIGraph.set({ vertices_coords: [coords] });
-	break;
+		break;
 	case "move":
 		const graph = get(Graph);
 		const vIndices = getVerticesFromSelection(graph, get(Selection));
@@ -52,9 +52,9 @@ const pointerEventTranslate = (eventType, { point }) => {
 			vertices_coords[v] = add2(vertices_coords[v], vector);
 		});
 		UIGraph.set({ ...graph, vertices_coords });
-	break;
+		break;
 	case "release":
-		execute("translateVertices",
+		executeCommand("translateVertices",
 			getVerticesFromSelection(get(Graph), get(Selection)),
 			subtract2(coords, pressCoords),
 		);
@@ -62,7 +62,7 @@ const pointerEventTranslate = (eventType, { point }) => {
 		// RulerLines.set([]);
 		// RulerRays.set([]);
 		UIGraph.set({ vertices_coords: [coords] });
-	break;
+		break;
 	}
 };
 

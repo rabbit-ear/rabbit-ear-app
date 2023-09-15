@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import { Highlight } from "../../stores/Select.js";
 import { RulerLines } from "../../stores/Ruler.js";
 import {
@@ -47,7 +47,7 @@ const pointerEventAxiom7 = (eventType, { point }) => {
 		if (releaseEdge !== undefined) { Highlight.addEdges([releaseEdge]); }
 		if (edge !== undefined) { Highlight.addEdges([edge]); }
 		UIGraph.set({ vertices_coords: [pressCoords] });
-		execute("axiom7Preview", releaseEdge, edge, pressCoords);
+		executeCommand("axiom7Preview", releaseEdge, edge, pressCoords);
 		// nearest point on line
 	}
 		break;
@@ -57,7 +57,7 @@ const pointerEventAxiom7 = (eventType, { point }) => {
 		if (edge !== undefined) { Highlight.addEdges([edge]); }
 		UIGraph.set({});
 		UILines.set([]);
-		execute("axiom7Rulers", releaseEdge, edge, pressCoords);
+		executeCommand("axiom7Rulers", releaseEdge, edge, pressCoords);
 	}
 		break;
 	case 4:
@@ -74,9 +74,9 @@ const pointerEventAxiom7 = (eventType, { point }) => {
 		break;
 	default:
 		// "release" drawing edge, reset all
-		execute("segment",
-			execute("addVertex", pressCoords),
-			execute("addVertex", snapToRulerLine(point).coords),
+		executeCommand("segment",
+			executeCommand("addVertex", pressCoords),
+			executeCommand("addVertex", snapToRulerLine(point).coords),
 		);
 		// if (get(RulersAutoClear)) { RulerLines.set([]); }
 		UIGraph.set({});

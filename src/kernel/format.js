@@ -1,3 +1,15 @@
+import jsTokens from "../lib/js-tokens/index.js";
+/**
+ *
+ */
+export const formatJavascript = (text) => {
+	const tokens = Array.from(jsTokens(text));
+	console.log("tokens", tokens);
+	const htmlString = tokens
+		.map(token => `<span class=${token.type}>${token.value}</span>`)
+		.join("");
+	return htmlString;
+};
 /**
  *
  */
@@ -12,26 +24,4 @@ export const formatCommandResult = (result) => {
 	case "function": break;
 	}
 	return undefined;
-};
-/**
- *
- */
-export const formatCommandCall = (name, args) => {
-	let params;
-	try {
-		params = structuredClone(args);
-	} catch (error) {
-		throw new Error(`<span class="error">${error}</span>`);
-	}
-	let paramsString = "";
-	try {
-		paramsString = params
-			? params
-				.map(arg => JSON.stringify(arg))
-				.map(string => string && string.length > 1000 ? "[JSON]" : string)
-				.map(a => `<span class="param">${a}</span>`)
-				.join(", ")
-			: ""
-	} catch (error) { }
-	return `<span class="function">${name}</span>(${paramsString})`
 };

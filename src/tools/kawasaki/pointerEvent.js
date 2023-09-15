@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import {
 	Move,
 	Drag,
@@ -18,7 +18,7 @@ const pointerEvent = (eventType, { point, buttons }) => {
 		const start = get(PressCoords);
 		const end = get(DragCoords);
 		if (start !== undefined && end !== undefined) {
-			execute("segment", start, end);
+			executeCommand("segment", start, end);
 		}
 		reset();
 		break;

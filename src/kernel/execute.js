@@ -1,18 +1,17 @@
 import { get } from "svelte/store";
 import { TerminalHistory } from "../stores/History.js";
 import { Modifiers } from "../stores/Modifiers.js";
-import { FileHistory } from "../stores/History.js";
-import { runCommand } from "./shell.js";
+import { run } from "./shell.js";
 /**
  *
  */
-const doNotSaveHistory = {
-	download: true,
-	kawasakiRulers: true,
-}
-/**
- *
- */
+export const execute = (string) => {
+	const commands = [string];
+	get(Modifiers).forEach(modifier => modifier(commands));
+	const output = commands.flatMap(command => run(command));
+	TerminalHistory.update(history => [...history, ...output]);
+};
+
 const stringifyCall = (name, ...args) => (
 	`${name}(${args.map(v => JSON.stringify(v)).join(", ")})`
 );
@@ -22,14 +21,6 @@ const stringifyCall = (name, ...args) => (
  * execute event methods can be called, and the effect of calling
  * a method here will print it to the history log in the terminal.
  */
-const execute = (name, ...args) => {
-	FileHistory.cache();
-	console.log("execute", stringifyCall(name, ...args));
-	const commands = [{ name, args }];
-	get(Modifiers).forEach(modifier => modifier(commands));
-	const output = commands
-		.flatMap(command => runCommand(command.name, ...command.args));
-	TerminalHistory.update(history => [...history, ...output]);
-};
-
-export default execute;
+export const executeCommand = (name, ...args) => (
+	execute(stringifyCall(name, ...args))
+);

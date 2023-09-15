@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import { Highlight } from "../../stores/Select.js";
 import { RulerLines } from "../../stores/Ruler.js";
 import {
@@ -42,7 +42,7 @@ const pointerEvent = (eventType, { point }) => {
 		if (coords !== undefined) { UIGraph.set({ vertices_coords: [coords] }); }
 		if (pressEdge !== undefined) {
 			Highlight.addEdges([pressEdge]);
-			execute("axiom4Preview", pressEdge, coords);
+			executeCommand("axiom4Preview", pressEdge, coords);
 		}
 	}
 		break;
@@ -50,7 +50,7 @@ const pointerEvent = (eventType, { point }) => {
 		const coords = snapToPoint(point, false);
 		UILines.set([]);
 		if (eventType === "release") {
-			execute("axiom4Rulers", pressEdge, coords);
+			executeCommand("axiom4Rulers", pressEdge, coords);
 			pressEdge = undefined;
 		}
 		// nearest point on line
@@ -67,9 +67,9 @@ const pointerEvent = (eventType, { point }) => {
 	}
 		break;
 	default:
-		execute("segment",
-			execute("addVertex", pressCoords),
-			execute("addVertex", snapToRulerLine(point).coords),
+		executeCommand("segment",
+			executeCommand("addVertex", pressCoords),
+			executeCommand("addVertex", snapToRulerLine(point).coords),
 		);
 		// if (get(RulersAutoClear)) { RulerLines.set([]); }
 		UIGraph.set({});

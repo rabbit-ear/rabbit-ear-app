@@ -14,7 +14,7 @@ import {
 } from "./App.js";
 import { Tool } from "./UI.js";
 import { Selection } from "./Select.js";
-import execute from "../kernel/execute.js";
+import { executeCommand } from "../kernel/execute.js";
 import executeUI from "../kernel/executeUI.js";
 
 let altCameraToolSwap;
@@ -30,10 +30,10 @@ export const KeybindingsDown = {
 				&& document.activeElement.classList.contains("button-frame-item");
 			if (frameSelected) {
 				// if a frame is selected, delete the frame
-				execute("deleteActiveFrame");
+				executeCommand("deleteActiveFrame");
 			} else {
 				// otherwise, the graph is selected. delete any selected components.
-				execute("deleteComponents", get(Selection));
+				executeCommand("deleteComponents", get(Selection));
 			}
 		},
 	},
@@ -78,7 +78,7 @@ export const KeybindingsDown = {
 	},
 	// "a"
 	65: {
-		2: (event) => execute("selectAll"),
+		2: (event) => executeCommand("selectAll"),
 	},
 	// "b"
 	66: {
@@ -148,7 +148,7 @@ export const KeybindingsDown = {
 	},
 	// "z"
 	90: {
-		2: (event) => execute("undo"),
+		2: (event) => executeCommand("undo"),
 		3: (event) => console.log("redo"),
 	},
 	// forward slash

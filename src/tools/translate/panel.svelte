@@ -1,6 +1,6 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
-	import execute from "../../kernel/execute.js";
+	import { executeCommand } from "../../kernel/execute.js";
 	let x = 0;
 	let y = 0;
 </script>
@@ -23,7 +23,7 @@
 					id="translate-y"
 					bind:value={y} >
 			</div>
-			<button on:click={() => execute("translate", [x, y])}>apply</button>
+			<button on:click={() => executeCommand("translate", [x, y])}>apply</button>
 		</div>
 	</span>
 </Panel>

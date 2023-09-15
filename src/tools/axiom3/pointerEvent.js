@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import executeUI from "../../kernel/executeUI.js";
 import {
 	Move,
@@ -24,10 +24,10 @@ const pointerEvent = (eventType, { point }) => {
 		Releases.update(p => [...p, point]);
 		switch (get(Step)) {
 		case 2:
-			execute("axiom3Rulers", get(Edge0), get(Edge1));
+			executeCommand("axiom3Rulers", get(Edge0), get(Edge1));
 			break;
 		case 4:
-			execute("segment", get(Segment0), get(Segment1));
+			executeCommand("segment", get(Segment0), get(Segment1));
 			reset();
 			executeUI("resetUI");
 			break;

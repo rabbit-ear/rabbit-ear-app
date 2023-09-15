@@ -5,22 +5,22 @@
 		rectangle,
 		polygon,
 	} from "rabbit-ear/fold/bases.js";
-	import execute from "../../kernel/execute.js";
+	import { executeCommand } from "../../kernel/execute.js";
 	import { DialogNewFile } from "../../stores/App.js";
 
 	const newDidPress = ({ detail }) => {
 		switch (detail.shape) {
 		case "empty":
-			execute("load", {});
+			executeCommand("load", {});
 			break;
 		case "square":
-			execute("load", square(detail.size));
+			executeCommand("load", square(detail.size));
 			break;
 		case "rectangle":
-			execute("load", rectangle(detail.width, detail.height));
+			executeCommand("load", rectangle(detail.width, detail.height));
 			break;
 		case "regularPolygon":
-			execute("load", polygon(detail.sides));
+			executeCommand("load", polygon(detail.sides));
 			break;
 		}
 		$DialogNewFile.close();

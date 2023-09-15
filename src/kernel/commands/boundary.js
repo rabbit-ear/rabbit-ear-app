@@ -5,7 +5,7 @@ import {
 	UpdateFrame,
 } from "../../stores/Model.js";
 
-export const findBoundary = () => {
+export const rebuildBoundary = () => {
 	const graph = get(Graph);
 	graph.edges_assignment = (graph.edges_assignment || [])
 		.map(a => a === "B" || a === "b" ? "F" : a);

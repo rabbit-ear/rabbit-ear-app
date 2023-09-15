@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import {
 	Move,
 	Edge,
@@ -9,7 +9,7 @@ const pointerEvent = (eventType, { point }) => {
 	if (eventType === "press") {
 		const edge = get(Edge);
 		if (edge !== undefined) {
-			execute("deleteComponents", { edges: [edge] });
+			executeCommand("deleteComponents", { edges: [edge] });
 		}
 	}
 	Move.set(point);

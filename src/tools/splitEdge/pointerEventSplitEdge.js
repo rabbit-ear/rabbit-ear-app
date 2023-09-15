@@ -2,7 +2,7 @@ import { nearest } from "rabbit-ear/graph/nearest.js";
 import { get } from "svelte/store";
 import { Graph } from "../stores/Model.js";
 // import { selected } from "../stores/Select.js";
-import execute from "./execute.js";
+import { executeCommand } from "./execute.js";
 
 const getNearestToPoint = (graph, point) => {
 	const result = { vertices: [], edges: [], faces: [] };
@@ -21,7 +21,7 @@ export const pointerEventSplitEdge = (eventType, { point }) => {
 		const edges = [];
 		edges[edge] = true;
 		// selected.set({ ...get(selected), edges });
-		execute("splitEdges", [edge]);
+		executeCommand("splitEdges", [edge]);
 	}
 		break;
 	case "hover": {

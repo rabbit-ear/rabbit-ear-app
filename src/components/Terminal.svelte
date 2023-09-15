@@ -88,9 +88,14 @@
 		outline-color: transparent;
 		background-color: var(--background-0);
 	}
-	pre :global(.function) { color: var(--lightblue); }
-	pre :global(.param) { color: var(--yellow); }
 	pre :global(.error) { color: var(--red); }
 	pre :global(.return) { color: var(--dim); }
 	pre :global(.prompt-symbol) { color: var(--dim); }
+
+	pre :global(.IdentifierName) { color: var(--green); }
+	pre :global(.Punctuator) { color: var(--text); }
+	pre :global(.NumericLiteral) { color: var(--lightblue); }
+	pre :global(.WhiteSpace) { color: var(--text); }
+	pre :global(.StringLiteral) { color: var(--yellow); }
+
 </style>

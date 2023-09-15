@@ -2,30 +2,11 @@ import ear from "rabbit-ear";
 import Commands from "./commands/index.js";
 import {
 	formatCommandResult,
-	formatCommandCall,
+	formatJavascript,
 } from "./format.js";
 
 // the context which will bind to the Function's this.
-const context = Object.assign({ ear }, Commands);
-
-// return array of terminal output lines
-export const runCommand = (name, ...args) => {
-	let result;
-	const fn = Commands[name];
-	try {
-		if (!fn) {
-			throw new Error(`no known function with the name "${name}"`);
-		}
-		result = fn(...args);
-	} catch (error) {
-		// console.error(error);
-		return [{ html: `<span class="error">${error}</span>` }];
-	}
-	return [
-		{ html: formatCommandCall(fn.name, args) },
-		{ html: formatCommandResult(result) },
-	].filter(a => a.html !== undefined);
-};
+const context = Object.assign({ ...ear }, Commands);
 
 // transfer all methods/constants from inside the "this."
 // and into the top level of the scope.
@@ -50,20 +31,17 @@ const scopedEval = (scope, script, result) => {
 };
 
 // return array of terminal output lines
-export const run = (command) => {
+export const run = (text) => {
 	let result;
-	// const result = { value: undefined, error: undefined };
 	try {
 		// files.forEach(f => { context[f.name] = f.contents; });
-		result = scopedEval(context, command, result);
+		result = scopedEval(context, text, result);
 	}
 	catch (error) {
 		return [{ html: `<span class="error">${error}</span>` }];
 	}
-	// updateHistory(command, result);
-	console.log(command, result);
 	return [
-		{ html: formatCommandCall(fn.name, args) },
+		{ html: formatJavascript(text) },
 		{ html: formatCommandResult(result) },
 	].filter(a => a.html !== undefined);
 };

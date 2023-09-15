@@ -6,7 +6,7 @@ import {
 import { get } from "svelte/store";
 import { Graph } from "../../stores/Model.js";
 import { UIGraph } from "../../stores/UI.js";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 
 let pressLength = 1;
 let ratio = 1;
@@ -32,7 +32,7 @@ const pointerEventScale = (eventType, { point }) => {
 	case "release":
 		ratio = getSnapPointLength(point) / pressLength;
 		if (isNaN(ratio) || !isFinite(ratio)) { break; }
-		execute("scale", ratio);
+		executeCommand("scale", ratio);
 		UIGraph.set({});
 		break;
 	}

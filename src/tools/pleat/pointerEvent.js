@@ -7,7 +7,7 @@ import {
 } from "../../js/snap.js";
 import { Highlight } from "../../stores/Select.js";
 import { RulerLines } from "../../stores/Ruler.js";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import executeUI from "../../kernel/executeUI.js";
 import {
 	Presses,
@@ -55,7 +55,7 @@ const pointerEventPleat = (eventType, { point }) => {
 		// RulerPreviews.set([]);
 		if (eventType === "release") {
 			UILines.set([]);
-			execute("pleat", pressEdge, edge, get(PleatCount));
+			executeCommand("pleat", pressEdge, edge, get(PleatCount));
 			pressEdge = undefined;
 		}
 		if (vertex !== undefined) { Highlight.addVertices([vertex]); }
@@ -81,7 +81,7 @@ const pointerEventPleat = (eventType, { point }) => {
 		const rulerLines = get(RulerLines);
 		const lines = Object.keys(selectedRulerLines).map(i => rulerLines[i]);
 		// todo "addLines" instead of one at a time.
-		lines.forEach(line => execute("line", line));
+		lines.forEach(line => executeCommand("line", line));
 		// console.log("lines", lines);
 		RulerLines.set([]);
 		UILines.set([]);

@@ -7,30 +7,31 @@ import {
 	Graph,
 	UpdateFrame,
 } from "../../stores/Model.js";
+import { setEdgesAssignment } from "../../js/graph.js";
 
 export const vertex = (coords) => {
 	const graph = get(Graph);
-	const newestVertex = AddVertex(graph, coords);
+	const vertex = AddVertex(graph, coords);
 	UpdateFrame({ ...graph });
-	return newestVertex;
+	return vertex;
 };
 
 export const segment = (coords0, coords1) => {
 	const graph = get(Graph);
 	const vertex0 = AddVertex(graph, coords0);
 	const vertex1 = AddVertex(graph, coords1);
-	const newestEdge = addNonPlanarEdge(graph, [vertex0, vertex1]);
-	doSetEdgesAssignment(graph, [newestEdge], get(NewEdgeAssignment));
+	const edge = addNonPlanarEdge(graph, [vertex0, vertex1]);
+	setEdgesAssignment(graph, [edge], get(NewEdgeAssignment));
 	UpdateFrame({ ...graph });
-	return newestEdge;
+	return edge;
 };
 
 export const edge = (vertexA, vertexB) => {
 	const g = get(Graph);
-	const newestEdge = addNonPlanarEdge(g, [vertexA, vertexB]);
-	doSetEdgesAssignment(g, [newestEdge], get(NewEdgeAssignment));
+	const edge = addNonPlanarEdge(g, [vertexA, vertexB]);
+	setEdgesAssignment(g, [edge], get(NewEdgeAssignment));
 	UpdateFrame({ ...g });
-	return newestEdge;
+	return edge;
 };
 
 export const line = (line) => {
@@ -46,7 +47,7 @@ export const polyline = (polyline) => {
 	const edges = Array.from(Array(vertices.length - 1))
 		.map((_, i) => i)
 		.map(i => addNonPlanarEdge(graph, [vertices[i], vertices[i + 1]]));
-	doSetEdgesAssignment(graph, edges, get(NewEdgeAssignment));
+	setEdgesAssignment(graph, edges, get(NewEdgeAssignment));
 	UpdateFrame({ ...graph });
 	return edges;
 };

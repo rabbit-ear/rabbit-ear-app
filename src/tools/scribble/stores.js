@@ -5,7 +5,7 @@ import {
 import {
 	snapToPoint,
 } from "../../js/snap.js";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import { zipArrays } from "../../js/arrays.js";
 
 export const ScribbleSmooth = writable(true);

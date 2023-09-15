@@ -1,6 +1,6 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
-	import execute from "../../kernel/execute.js";
+	import { executeCommand } from "../../kernel/execute.js";
 	let scaleFactor = 1;
 </script>
 
@@ -13,7 +13,7 @@
 				id="scaleValue"
 				bind:value={scaleFactor} >
 			<label for="scaleValue">scale</label>
-			<button on:click={() => execute("scale", scaleFactor)}>apply</button>
+			<button on:click={() => executeCommand("scale", scaleFactor)}>apply</button>
 		</div>
 	</span>
 </Panel>

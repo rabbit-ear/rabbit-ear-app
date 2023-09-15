@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 import {
 	Move,
 	Drag,
@@ -16,7 +16,7 @@ const pointerEvent = (eventType, { point, buttons }) => {
 	case "release":
 		const vertex = get(PressVertex);
 		if (vertex !== undefined) {
-			execute("translateVertices", [vertex], get(DragVector));
+			executeCommand("translateVertices", [vertex], get(DragVector));
 		}
 		Press.set(undefined);
 		break;

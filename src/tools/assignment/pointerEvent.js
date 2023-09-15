@@ -12,7 +12,7 @@ import {
 	Move,
 	Edge,
 } from "./stores.js";
-import execute from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 
 const lookup = {
 	[ASSIGN_FLAT]: "F",
@@ -25,8 +25,8 @@ const lookup = {
 const setAssignment = (edge, assignType) => {
 	if (edge === undefined) { return; }
 	return lookup[assignType]
-		? execute("setAssignment", [edge], lookup[assignType], 0)
-		: execute("toggleAssignment", [edge]);
+		? executeCommand("setAssignment", [edge], lookup[assignType], 0)
+		: executeCommand("toggleAssignment", [edge]);
 };
 
 const pointerEvent = (eventType, { point }) => {

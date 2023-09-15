@@ -1,10 +1,10 @@
-import execute from "../kernel/execute.js";
+import { executeCommand } from "../kernel/execute.js";
 /**
  * this can be expanded to include different file types.
  */
 export const tryLoadFile = (contents, filename, options) => {
 	// const { name, extension } = getFilenameParts(contents, filename);
-	execute("load", JSON.parse(contents));
+	executeCommand("load", JSON.parse(contents));
 };
 /**
  *
