@@ -20,9 +20,7 @@ import {
 	nearestFace as reNearestFace,
 } from "rabbit-ear/graph/nearest.js";
 import { Graph } from "../stores/Model.js";
-import { ViewBox } from "../stores/ViewBox.js";
 import {
-	RulerPoints,
 	RulerLines,
 	RulerRays,
 } from "../stores/Ruler.js";

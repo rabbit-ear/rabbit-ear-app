@@ -24,10 +24,10 @@ const pointerEvent = (eventType, { point }) => {
 		Releases.update(p => [...p, point]);
 		switch (get(Step)) {
 		case 2:
-			execute("axiom2", get(Coords0), get(Coords1));
+			execute("axiom2Rulers", get(Coords0), get(Coords1));
 			break;
 		case 4:
-			execute("addEdge", get(Segment0), get(Segment1));
+			execute("segment", get(Segment0), get(Segment1));
 			reset();
 			executeUI("resetUI");
 			break;

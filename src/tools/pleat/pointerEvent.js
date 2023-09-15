@@ -81,7 +81,7 @@ const pointerEventPleat = (eventType, { point }) => {
 		const rulerLines = get(RulerLines);
 		const lines = Object.keys(selectedRulerLines).map(i => rulerLines[i]);
 		// todo "addLines" instead of one at a time.
-		lines.forEach(line => execute("addLine", line));
+		lines.forEach(line => execute("line", line));
 		// console.log("lines", lines);
 		RulerLines.set([]);
 		UILines.set([]);

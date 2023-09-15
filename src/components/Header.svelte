@@ -108,7 +108,7 @@
 			<li>select
 				<ul>
 					<li><button on:click={() => execute("selectAll")}>select all</button></li>
-					<li><button on:click={() => execute("clearSelection")}>deselect all</button></li>
+					<li><button on:click={() => execute("deselectAll")}>deselect all</button></li>
 					<hr />
 					<li>select by assignment
 						<ul>

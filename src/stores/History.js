@@ -27,7 +27,7 @@ FileHistory.cache = () => FileHistory
 /**
  *
  */
-FileHistory.revert = () => FileHistory.update((history) => {
+FileHistory.undo = () => FileHistory.update((history) => {
 	const frames = history.pop();
 	// should mimic LoadFile, in terms of what gets reset.
 	if (frames) {
@@ -38,6 +38,10 @@ FileHistory.revert = () => FileHistory.update((history) => {
 	return history;
 	// return [...history];
 });
+/**
+ * todo
+ */
+FileHistory.redo = () => FileHistory.update((history) => history);
 /**
  *
  */

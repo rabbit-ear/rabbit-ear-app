@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "earcut": "^2.2.4",
+    "eslint-plugin-svelte": "^2.33.1",
     "rabbit-ear": "file:../../Origami/",
     "three": "^0.153.0"
   }

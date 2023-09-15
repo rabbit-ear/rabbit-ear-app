@@ -13,10 +13,11 @@
 	let pre;
 	afterUpdate(() => { pre.scrollTop = pre.scrollHeight; });
 	// onMount(() => $TerminalTextarea.focus());
-	$: {
-		$ShowTerminal;
-		if ($TerminalTextarea) $TerminalTextarea.focus();
-	};
+
+	// $: {
+	// 	$ShowTerminal;
+	// 	if ($TerminalTextarea) $TerminalTextarea.focus();
+	// };
 </script>
 
 {#if $ShowTerminal}

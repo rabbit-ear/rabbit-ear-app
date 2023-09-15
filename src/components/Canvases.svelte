@@ -5,10 +5,12 @@
 		ShowFrames,
 		ShowTerminal,
 		ShowSimulator,
+		ShowCodeEditor,
 	} from "../stores/App.js";
 	import SVGCanvas from "./SVGCanvas/SVGCanvas.svelte";
 	import WebGLCanvas from "./WebGLCanvas/WebGLCanvas.svelte";
 	import Simulator from "./OrigamiSimulator/Simulator.svelte";
+	import CodeEditor from "./CodeEditor/CodeEditor.svelte";
 
 	export let press;
 	export let move;
@@ -29,13 +31,20 @@
 	].filter(a => a !== "").join(" - ");
 </script>
 
+<!--
+	here, we can separate light and dark mode rendering styles.
+	css rules are children of .svg-canvas so we can append a
+	.light or .dark, even calculating in JS if we need, then
+	it should render appropriately.
+-->
+
 <div class="canvases horizontal">
 	{#if isFoldedForm}
-		<div class="webgl-canvas">
+		<div class="canvas">
 			<WebGLCanvas graph={$Graph}/>
 		</div>
 	{:else}
-		<div class="svg-canvas" style={`max-height: calc(${height})`}>
+		<div class="canvas svg-canvas" style={`max-height: calc(${height})`}>
 			<SVGCanvas
 				on:press={press}
 				on:move={move}
@@ -45,8 +54,13 @@
 		</div>
 	{/if}
 	{#if $ShowSimulator}
-		<div class="simulator-canvas">
+		<div class="canvas">
 			<Simulator />
+		</div>
+	{/if}
+	{#if $ShowCodeEditor}
+		<div class="canvas">
+			<CodeEditor />
 		</div>
 	{/if}
 </div>
@@ -59,6 +73,11 @@
 	.horizontal {
 		display: flex;
 		flex-direction: row;
+	}
+	.canvas {
+		width: 100%;
+		height: 100%;
+		flex: 1 1 auto;
 	}
 	.webgl-canvas {
 		width: 100%;

@@ -6,14 +6,12 @@ import {
 	add2,
 	subtract2,
 } from "rabbit-ear/math/vector.js";
+import { subgraphWithVertices } from "rabbit-ear/graph/subgraph.js";
+import normalize from "rabbit-ear/graph/normalize.js";
 import {
 	snapToPoint,
 	snapToVertex,
 } from "../../js/snap.js";
-import {
-	subgraphWithVertices,
-	normalize,
-} from "../../js/subgraph.js";
 import { Graph } from "../../stores/Model.js";
 import { UIGraph } from "../../stores/UI.js";
 // import { Selection } from "../../stores/Select.js";
@@ -64,7 +62,7 @@ export const DragVector = derived(
 export const GraphPreview = derived(
 	[DragVector, PressVertex, Graph],
 	([$DragVector, $PressVertex, $Graph]) => {
-		if (!$PressVertex) {
+		if ($PressVertex === undefined) {
 			return UIGraph.set({});
 		}
 		const subgraph = subgraphWithVertices($Graph, [$PressVertex]);

@@ -57,7 +57,7 @@ const pointerEventAxiom7 = (eventType, { point }) => {
 		if (edge !== undefined) { Highlight.addEdges([edge]); }
 		UIGraph.set({});
 		UILines.set([]);
-		execute("axiom7", releaseEdge, edge, pressCoords);
+		execute("axiom7Rulers", releaseEdge, edge, pressCoords);
 	}
 		break;
 	case 4:
@@ -74,7 +74,7 @@ const pointerEventAxiom7 = (eventType, { point }) => {
 		break;
 	default:
 		// "release" drawing edge, reset all
-		execute("addEdge",
+		execute("segment",
 			execute("addVertex", pressCoords),
 			execute("addVertex", snapToRulerLine(point).coords),
 		);

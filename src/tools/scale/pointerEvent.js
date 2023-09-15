@@ -6,14 +6,14 @@ import {
 import { get } from "svelte/store";
 import { Graph } from "../../stores/Model.js";
 import { UIGraph } from "../../stores/UI.js";
-import { getSnapPoint } from "../../js/nearest.js";
 import execute from "../../kernel/execute.js";
 
 let pressLength = 1;
 let ratio = 1;
 
 const getSnapPointLength = (point) => (
-	magnitude2(getSnapPoint(point).coords)
+	// magnitude2(getSnapPoint(point).coords)
+	magnitude2(point)
 );
 
 const pointerEventScale = (eventType, { point }) => {

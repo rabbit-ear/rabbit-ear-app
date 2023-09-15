@@ -1,4 +1,10 @@
+import { get } from "svelte/store";
+import {
+	Graph,
+	IsoUpdateFrame,
+} from "../../stores/Model.js";
 import { assignmentFlatFoldAngle } from "rabbit-ear/fold/spec.js";
+import { assignmentCanBeFolded } from "rabbit-ear/fold/spec.js";
 
 export const doSetEdgesAssignment = (graph, edges, assignment, foldAngle) => {
 	// ensure edges_assignment and edges_foldAngle exist
@@ -64,4 +70,31 @@ export const doSetEdgesFoldAngle = (g, edges, foldAngle) => {
 		edges.forEach(e => { g.edges_foldAngle[e] = foldAngle; });
 	}
 	return g;
+};
+
+export const toggleAssignment = (edges) => {
+	const graph = get(Graph);
+	doToggleEdgesAssignment(graph, edges);
+	IsoUpdateFrame({ ...graph });
+};
+
+export const invertAssignments = () => {
+	const graph = get(Graph);
+	const edges_assignment = graph.edges_assignment || [];
+	const edges = (graph.edges_vertices || [])
+		.map((_, i) => i)
+		.filter(e => assignmentCanBeFolded[graph.edges_assignment[e]])
+	toggleAssignment(edges);
+};
+
+export const setAssignment = (edges, assignment, foldAngle) => {
+	const graph = get(Graph);
+	doSetEdgesAssignment(graph, edges, assignment, foldAngle);
+	IsoUpdateFrame({ ...graph });
+};
+
+export const setFoldAngle = (edges, foldAngle) => {
+	const graph = get(Graph);
+	doSetEdgesFoldAngle(graph, edges, foldAngle);
+	IsoUpdateFrame({ ...graph });
 };

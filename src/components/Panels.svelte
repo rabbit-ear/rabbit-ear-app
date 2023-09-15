@@ -1,6 +1,7 @@
 <script>
 	import File from "./Panels/File.svelte";
 	import Frames from "./Panels/Frames.svelte";
+	import Modifiers from "./Panels/Modifiers.svelte";
 	import Canvas from "./Panels/Canvas.svelte";
 	import History from "./Panels/History.svelte";
 	import Debug from "./Panels/Debug.svelte";
@@ -19,6 +20,7 @@
 {#if $ShowSimulator}
 	<Simulator />
 {/if}
+<Modifiers />
 <File />
 <Frames />
 <History />

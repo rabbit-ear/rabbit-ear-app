@@ -55,7 +55,7 @@ const pointerEventAxiom5 = (eventType, { point }) => {
 		if (axiom5Edge !== undefined) { Highlight.addEdges([axiom5Edge]); }
 		UIGraph.set({});
 		UILines.set([]);
-		execute("axiom5", axiom5Edge, axiom5Point1, axiom5Point2);
+		execute("axiom5Rulers", axiom5Edge, axiom5Point1, axiom5Point2);
 	}
 		break;
 	case 4:
@@ -70,7 +70,7 @@ const pointerEventAxiom5 = (eventType, { point }) => {
 		});
 		break;
 	default:
-		execute("addEdge",
+		execute("segment",
 			execute("addVertex", segmentPoint1),
 			execute("addVertex", snapToRulerLine(point).coords),
 		);

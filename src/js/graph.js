@@ -64,9 +64,3 @@ export const renderFrames = (frames, tessellationRepeats) => {
 			? renderTessellationFrame(frames, i, tessellationRepeats)
 			: flattenFrame(FOLD, i));
 };
-
-export const doPleat = (graph, edgeA, edgeB, count) => {
-	if (edgeA === undefined || edgeB === undefined) { return []; }
-	const result = fnPleat(graph, edgeA, edgeB, count);
-	return result.flat();
-};

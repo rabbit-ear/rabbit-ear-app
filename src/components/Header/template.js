@@ -3,6 +3,7 @@ import execute from "../../kernel/execute.js";
 import {
 	// Snapping,
 	ShowSimulator,
+	ShowCodeEditor,
 	ShowTerminal,
 	ShowFlatFoldableIssues,
 	DialogNewFile,
@@ -119,7 +120,7 @@ export default [
 			},
 			{
 				label: "deselect all",
-				click: () => execute("clearSelection"),
+				click: () => execute("deselectAll"),
 			},
 			{ type: "separator" },
 			{
@@ -210,6 +211,11 @@ export default [
 				label: "show simulator",
 				type: "checkbox",
 				bind: ShowSimulator,
+			},
+			{
+				label: "show code editor",
+				type: "checkbox",
+				bind: ShowCodeEditor,
 			},
 			{
 				label: "show terminal",

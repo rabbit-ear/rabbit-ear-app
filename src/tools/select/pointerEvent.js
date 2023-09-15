@@ -52,7 +52,7 @@ const pointerEventSelect = (eventType, { point }) => {
 		if (get(Keyboard)[16]) { // shift
 			execute("addToSelection", get(ElementSelect), selected);
 		} else {
-			execute("clearSelection");
+			execute("deselectAll");
 			execute("addToSelection", get(ElementSelect), selected);
 		}
 		SelectionRect.set(undefined);

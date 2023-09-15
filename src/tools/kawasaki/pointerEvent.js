@@ -1,12 +1,12 @@
 import { get } from "svelte/store";
 import execute from "../../kernel/execute.js";
 import {
-	reset,
 	Move,
 	Drag,
 	Press,
 	PressCoords,
 	DragCoords,
+	reset,
 } from "./stores.js";
 
 const pointerEvent = (eventType, { point, buttons }) => {
@@ -18,7 +18,7 @@ const pointerEvent = (eventType, { point, buttons }) => {
 		const start = get(PressCoords);
 		const end = get(DragCoords);
 		if (start !== undefined && end !== undefined) {
-			execute("addEdge", start, end);
+			execute("segment", start, end);
 		}
 		reset();
 		break;

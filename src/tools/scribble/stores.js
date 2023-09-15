@@ -2,22 +2,65 @@ import {
 	writable,
 	derived,
 } from "svelte/store";
+import {
+	snapToPoint,
+} from "../../js/snap.js";
+import execute from "../../kernel/execute.js";
 import { zipArrays } from "../../js/arrays.js";
-
-export const Move = writable(undefined);
-export const Presses = writable([]);
-export const Moves = writable([]);
-export const Releases = writable([]);
-
-export const Touches = derived(
-	[Move, Presses, Releases],
-	([$Move, $Presses, $Releases]) => zipArrays($Presses, $Releases)
-		.concat([$Move])
-		.filter(a => a !== undefined),
-	[],
-);
 
 export const ScribbleSmooth = writable(true);
 export const ScribbleSmoothAmount = writable(0.5);
 export const ScribbleDensity = writable(0.5);
 export const ScribbleWaitForConfirmation = writable(false);
+
+export const Move = writable(undefined);
+export const Press = writable(undefined);
+export const Drags = writable([]);
+export const Release = writable(undefined);
+
+// export const MoveCoords = derived(
+// 	Move,
+// 	($Move) => snapToPoint($Move),
+// 	undefined,
+// );
+
+// export const PressCoords = derived(
+// 	Press,
+// 	($Press) => snapToPoint($Press),
+// 	undefined,
+// );
+
+export const Polyline = derived(
+	[Press, Drags, Release],
+	([$Press, $Drags, $Release]) => [$Press]
+		.concat($Drags)
+		.concat([$Release])
+		.filter(a => a !== undefined),
+	[],
+);
+
+// export const PolylineSmooth = derived(
+// 	[Polyline, ScribbleSmooth, ScribbleSmoothAmount],
+// 	([$Polyline, $ScribbleSmooth, $ScribbleSmoothAmount]) => {
+// 	},
+// 	[],
+// );
+
+export const PolylineSmooth = derived(Polyline, ($Polyline) => $Polyline, []);
+
+export const reset = () => {
+	Move.set(undefined);
+	Press.set(undefined);
+	Drag.set(undefined);
+};
+
+let unsub;
+
+export const subscribe = () => {
+	unsub = ShiftRulers.subscribe(() => {});
+};
+
+export const unsubscribe = () => {
+	if (unsub) { unsub(); }
+	reset();
+};

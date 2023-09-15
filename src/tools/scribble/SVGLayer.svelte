@@ -1,18 +1,11 @@
 <script>
 	import { ViewBox } from "../../stores/ViewBox.js";
 	import {
-		Presses,
-		Moves,
-		Releases,
+		Polyline,
 	} from "./stores.js";
 
 	let scribblePointString = "";
-	$: scribblePointString = []
-		.concat($Presses)
-		.concat($Moves)
-		.concat($Releases)
-		.map(p => p.join(","))
-		.join(" ")
+	$: scribblePointString = $Polyline.map(p => p.join(",")).join(" ");
 
 	let vmax;
 	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);

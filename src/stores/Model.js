@@ -3,7 +3,6 @@ import { writable, derived } from "svelte/store";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFramesAsFlatArray } from "rabbit-ear/fold/frames.js";
 import populate from "rabbit-ear/graph/populate.js";
-import { downloadFile } from "../js/file.js";
 import { graphToMatrix2 } from "../js/matrix.js";
 import {
 	makeEmptyGraph,

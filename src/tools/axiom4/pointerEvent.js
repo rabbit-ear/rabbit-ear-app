@@ -50,7 +50,7 @@ const pointerEvent = (eventType, { point }) => {
 		const coords = snapToPoint(point, false);
 		UILines.set([]);
 		if (eventType === "release") {
-			execute("axiom4", pressEdge, coords);
+			execute("axiom4Rulers", pressEdge, coords);
 			pressEdge = undefined;
 		}
 		// nearest point on line
@@ -67,7 +67,7 @@ const pointerEvent = (eventType, { point }) => {
 	}
 		break;
 	default:
-		execute("addEdge",
+		execute("segment",
 			execute("addVertex", pressCoords),
 			execute("addVertex", snapToRulerLine(point).coords),
 		);

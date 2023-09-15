@@ -52,8 +52,7 @@ export const isFormElementActive = () => {
 		case "submit": 
 		case "url": 
 		case "week":
-		default:
-		return false;
+		default: return false;
 		}
 	}
 	// an alternative approach would be to store a reference

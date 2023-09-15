@@ -11,6 +11,7 @@ export const NewEdgeAssignment = writable("F");
 // export const Snapping = writable(true);
 export const ShowSimulator = writable(false);
 export const ShowTerminal = writable(true);
+export const ShowCodeEditor = writable(false);
 export const ShowFrames = writable(true);
 export const ShowFlatFoldableIssues = writable(true);
 export const ShowGrid = writable(true);

@@ -1,35 +1,29 @@
 import { get } from "svelte/store";
-import { nearest } from "rabbit-ear/graph/nearest.js";
-import { Selection } from "../../stores/Select.js";
 import {
-	Presses,
-	Moves,
-	Releases,
+	Press,
+	Drags,
+	Release,
+	PolylineSmooth,
 } from "./stores.js";
-import { getSnapPoint } from "../../js/nearest.js";
-import { Graph } from "../../stores/Model.js";
-// import { ToolStep } from "./stores.js";
 import execute from "../../kernel/execute.js";
 
-let pressEdge = undefined;
-let pressVertex = undefined;
-
-const pointerEventScribble = (eventType, { point }) => {
-	// const { vertex, edge } = nearest(get(Graph), point);
+const pointerEvent = (eventType, { point, buttons }) => {
 	switch (eventType) {
 	case "press":
-		Presses.set([point]);
-		Moves.set([]);
-		Releases.set([]);
+		Press.set(point);
+		Drags.set([]);
+		Release.set(undefined);
 		break;
-	case "hover": break;
 	case "move":
-		Moves.update(p => [...p, point]);
+		if (buttons) {
+			Drags.update(p => [...p, point]);
+		}
 		break;
 	case "release":
-		Releases.set([point]);
+		Release.set(point);
+		execute("polyline", get(PolylineSmooth));
 		break;
 	}
 };
 
-export default pointerEventScribble;
+export default pointerEvent;

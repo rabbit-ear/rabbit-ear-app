@@ -1,11 +1,11 @@
 import pointerEvent from "./pointerEvent.js";
-import keyboardEvent from "./keyboardEvent.js";
 import panel from "./panel.svelte";
 import icon from "./icon.svelte";
-
-const options = {
-	postExecute: [{ func: "planarize", args: [] }],
-};
+import SVGLayer from "./SVGLayer.svelte";
+import {
+	subscribe,
+	unsubscribe,
+} from "./stores.js";
 
 const edge = {
 	key: "edge",
@@ -14,9 +14,10 @@ const edge = {
 	order: 2,
 	icon,
 	pointerEvent,
-	keyboardEvent,
-	options,
+	SVGLayer,
 	panel,
+	subscribe,
+	unsubscribe,
 };
 
 export default edge;

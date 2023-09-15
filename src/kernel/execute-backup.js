@@ -5,7 +5,7 @@ import {
 	formatCommandResult,
 	formatCommandCall,
 } from "./format.js";
-import * as Commands from "./commands/index.js";
+import Commands from "./commands/index.js";
 /**
  * @description pre and post execute event function parameters should
  * be in the form of (funcName: string, ...args: any[])

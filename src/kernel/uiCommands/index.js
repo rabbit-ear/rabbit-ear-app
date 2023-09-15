@@ -13,15 +13,14 @@ import Tools from "../../tools/index.js";
 import { Highlight } from "../../stores/Select.js";
 import { resetUI as ResetUI } from "../../stores/UI.js";
 import {
-	doAxiom1,
-	doAxiom2,
-	doAxiom3,
-	doAxiom4,
-	doAxiom5,
-	doAxiom6,
-	doAxiom7,
-} from "../../js/axioms.js";
-import { doPleat } from "../../js/graph.js";
+	axiom1,
+	axiom2,
+	axiom3,
+	axiom4,
+	axiom5,
+	axiom6,
+	axiom7,
+} from "../commands/axioms.js";
 import {
 	UIGraph,
 	UILines,
@@ -53,28 +52,28 @@ export const highlight = (components) => {
 };
 
 export const axiom1Preview = (...args) => (
-	UILines.set(doAxiom1(get(Graph), ...args))
+	UILines.set(axiom1(...args))
 );
 export const axiom2Preview = (...args) => (
-	UILines.set(doAxiom2(get(Graph), ...args))
+	UILines.set(axiom2(...args))
 );
 export const axiom3Preview = (...args) => (
-	UILines.set(doAxiom3(get(Graph), ...args))
+	UILines.set(axiom3(...args))
 );
 export const axiom4Preview = (...args) => (
-	UILines.set(doAxiom4(get(Graph), ...args))
+	UILines.set(axiom4(...args))
 );
 export const axiom5Preview = (...args) => (
-	UILines.set(doAxiom5(get(Graph), ...args))
+	UILines.set(axiom5(...args))
 );
 export const axiom6Preview = (...args) => (
-	UILines.set(doAxiom6(get(Graph), ...args))
+	UILines.set(axiom6(...args))
 );
 export const axiom7Preview = (...args) => (
-	UILines.set(doAxiom7(get(Graph), ...args))
+	UILines.set(axiom7(...args))
 );
 
-export const repeatFoldLinePreview = (a, b) => {
+export const foldedLinePreview = (a, b) => {
 	const line = { vector: subtract2(b, a), origin: a };
 	// return repeatFold(get(Graph), line, "V");
 	try {
@@ -93,8 +92,11 @@ export const repeatFoldLinePreview = (a, b) => {
 	}
 };
 
+// export const pleatPreview = (...args) => (
+// 	UILines.add(doPleat(get(Graph), ...args))
+// );
 export const pleatPreview = (...args) => (
-	UILines.add(doPleat(get(Graph), ...args))
+	[]
 );
 
 export const kawasakiRulerPreviews = (vertex) => {

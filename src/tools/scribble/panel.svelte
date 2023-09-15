@@ -1,9 +1,7 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
 	import {
-		Presses,
-		Moves,
-		Releases,
+		Polyline,
 	} from "./stores.js";
 	import {
 		ScribbleSmooth,
@@ -12,7 +10,7 @@
 		ScribbleWaitForConfirmation,
 	} from "./stores.js";
 	let pointCount;
-	$: pointCount = $Presses.length + $Moves.length + $Releases.length;
+	$: pointCount = $Polyline.length;
 </script>
 
 <Panel>

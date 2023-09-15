@@ -54,7 +54,7 @@ const pointerEventAxiom6 = (eventType, { point }) => {
 		break;
 	case 4:
 	default:
-		execute("axiom6", edge1, edge, vertex1, vertex2);
+		execute("axiom6Rulers", edge1, edge, vertex1, vertex2);
 		vertex1 = undefined;
 		edge1 = undefined;
 		UILines.set([]);
