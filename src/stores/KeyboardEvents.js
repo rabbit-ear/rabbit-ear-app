@@ -47,13 +47,22 @@ const ToolKeyboardEvent = derived(
 const FormKeyboardEvent = derived(
 	[TerminalTextarea, TerminalValue],
 	([$TerminalTextarea, $TerminalValue]) => (eventType, event) => {
-		if (document.activeElement === $TerminalTextarea
-			&& event.keyCode === 13 // return key
-			&& !event.shiftKey
-			&& eventType === "down") {
-			event.preventDefault();
-			execute($TerminalValue);
-			TerminalValue.set("");
+		if (eventType === "down" && document.activeElement === $TerminalTextarea) {
+			switch (event.keyCode) {
+			case 13: // return key
+				if (!event.shiftKey) {
+					event.preventDefault();
+					execute($TerminalValue);
+					TerminalValue.set("");
+				}
+				break;
+			case 38: // up arrow key
+				console.log("previous terminal history");
+				break;
+			case 40: // down arrow key
+				console.log("next terminal history");
+				break;
+			}
 		}
 	},
 	() => {},

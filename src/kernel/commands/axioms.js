@@ -12,6 +12,7 @@ import { pointsToLine } from "rabbit-ear/math/convert.js";
 import { get } from "svelte/store";
 import { Graph } from "../../stores/Model.js";
 import { RulerLines } from "../../stores/Ruler.js";
+import { UILines } from "../../stores/UI.js";
 
 const edgeToLine = ({ vertices_coords, edges_vertices }, edge) => (
 	pointsToLine(...edges_vertices[edge].map(v => vertices_coords[v]))
@@ -87,3 +88,26 @@ export const axiom6Rulers = (...args) => (
 export const axiom7Rulers = (...args) => (
 	RulerLines.add(axiom7(...args))
 );
+
+export const axiom1Preview = (...args) => (
+	UILines.set(axiom1(...args))
+);
+export const axiom2Preview = (...args) => (
+	UILines.set(axiom2(...args))
+);
+export const axiom3Preview = (...args) => (
+	UILines.set(axiom3(...args))
+);
+export const axiom4Preview = (...args) => (
+	UILines.set(axiom4(...args))
+);
+export const axiom5Preview = (...args) => (
+	UILines.set(axiom5(...args))
+);
+export const axiom6Preview = (...args) => (
+	UILines.set(axiom6(...args))
+);
+export const axiom7Preview = (...args) => (
+	UILines.set(axiom7(...args))
+);
+

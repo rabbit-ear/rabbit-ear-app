@@ -7,7 +7,9 @@ import {
 	snapToRulerLine,
 } from "../../js/snap.js";
 import { zipArrays } from "../../js/arrays.js";
-import executeUI from "../../kernel/executeUI.js";
+import { executeSilentCommand } from "../../kernel/execute.js";
+import { UILines } from "../../stores/UI.js";
+import { RulerLines } from "../../stores/Ruler.js";
 
 export const Move = writable(undefined);
 export const Presses = writable([]);
@@ -51,8 +53,8 @@ export const AxiomPreview = derived(
 	[Coords0, Coords1],
 	([$Coords0, $Coords1]) => (
 		($Coords0 !== undefined && $Coords1 !== undefined
-			? executeUI("axiom2Preview", $Coords0, $Coords1)
-			: undefined)),
+			? executeSilentCommand("axiom2Preview", $Coords0, $Coords1)
+			: UILines.set([]))),
 	undefined,
 );
 
@@ -60,6 +62,7 @@ export const reset = () => {
 	Move.set(undefined);
 	Presses.set([]);
 	Releases.set([]);
+	RulerLines.set([]);
 };
 
 let unsub;

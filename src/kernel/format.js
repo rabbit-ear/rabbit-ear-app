@@ -2,14 +2,10 @@ import jsTokens from "../lib/js-tokens/index.js";
 /**
  *
  */
-export const formatJavascript = (text) => {
-	const tokens = Array.from(jsTokens(text));
-	console.log("tokens", tokens);
-	const htmlString = tokens
-		.map(token => `<span class=${token.type}>${token.value}</span>`)
-		.join("");
-	return htmlString;
-};
+export const formatJavascript = (text) => Array
+	.from(jsTokens(text))
+	.map(({ type, value }) => `<span class=${type}>${value}</span>`)
+	.join("");
 /**
  *
  */
@@ -25,3 +21,9 @@ export const formatCommandResult = (result) => {
 	}
 	return undefined;
 };
+/**
+ *
+ */
+export const formatError = (error) => (
+	`<span class="error">${error}</span>`
+);

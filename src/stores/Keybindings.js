@@ -14,8 +14,10 @@ import {
 } from "./App.js";
 import { Tool } from "./UI.js";
 import { Selection } from "./Select.js";
-import { executeCommand } from "../kernel/execute.js";
-import executeUI from "../kernel/executeUI.js";
+import {
+	executeCommand,
+	executeSilentCommand,
+} from "../kernel/execute.js";
 
 let altCameraToolSwap;
 
@@ -44,37 +46,37 @@ export const KeybindingsDown = {
 		4: (event) => {
 			const tool = get(Tool);
 			altCameraToolSwap = tool ? tool.key : undefined;
-			executeUI("setTool", "camera");
+			executeSilentCommand("setTool", "camera");
 		},
 	},
 	// esc
 	27: {
 		0: (event) => {
-			executeUI("resetToolUI");
-			executeUI("resetUI");
+			executeSilentCommand("resetTool");
+			executeSilentCommand("resetRulers");
 		},
 	},
 	// 1 - 7
 	49: {
-		0: (event) => executeUI("setTool", "axiom1"),
+		0: (event) => executeSilentCommand("setTool", "axiom1"),
 	},
 	50: {
-		0: (event) => executeUI("setTool", "axiom2"),
+		0: (event) => executeSilentCommand("setTool", "axiom2"),
 	},
 	51: {
-		0: (event) => executeUI("setTool", "axiom3"),
+		0: (event) => executeSilentCommand("setTool", "axiom3"),
 	},
 	52: {
-		0: (event) => executeUI("setTool", "axiom4"),
+		0: (event) => executeSilentCommand("setTool", "axiom4"),
 	},
 	53: {
-		0: (event) => executeUI("setTool", "axiom5"),
+		0: (event) => executeSilentCommand("setTool", "axiom5"),
 	},
 	54: {
-		0: (event) => executeUI("setTool", "axiom6"),
+		0: (event) => executeSilentCommand("setTool", "axiom6"),
 	},
 	55: {
-		0: (event) => executeUI("setTool", "axiom7"),
+		0: (event) => executeSilentCommand("setTool", "axiom7"),
 	},
 	// "a"
 	65: {
@@ -83,40 +85,40 @@ export const KeybindingsDown = {
 	// "b"
 	66: {
 		0: (event) => {
-			executeUI("setTool", "assignment");
+			executeSilentCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_BOUNDARY);
 		},
 	},
 	// "c"
 	67: {
 		0: (event) => {
-			executeUI("setTool", "assignment");
+			executeSilentCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_CUT);
 		},
 	},
 	// "d"
 	68: {
-		0: (event) => executeUI("setTool", "deleteTool"),
+		0: (event) => executeSilentCommand("setTool", "deleteTool"),
 	},
 	// "e"
 	69: {
-		0: (event) => executeUI("setTool", "edge"),
+		0: (event) => executeSilentCommand("setTool", "edge"),
 	},
 	// "f"
 	70: {
 		0: (event) => {
-			executeUI("setTool", "assignment");
+			executeSilentCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_FLAT);
 		},
 	},
 	// "k"
 	75: {
-		0: (event) => executeUI("setTool", "kawasaki"),
+		0: (event) => executeSilentCommand("setTool", "kawasaki"),
 	},
 	// "m"
 	77: {
 		0: (event) => {
-			executeUI("setTool", "assignment");
+			executeSilentCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_SWAP);
 		},
 	},
@@ -126,30 +128,30 @@ export const KeybindingsDown = {
 	},
 	// "s"
 	83: {
-		0: (event) => executeUI("setTool", "select"),
+		0: (event) => executeSilentCommand("setTool", "select"),
 	},
 	// "t"
 	84: {
-		0: (event) => executeUI("setTool", "translate"),
+		0: (event) => executeSilentCommand("setTool", "translate"),
 	},
 	// "u"
 	85: {
 		0: (event) => {
-			executeUI("setTool", "assignment");
+			executeSilentCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_UNASSIGNED);
 		},
 	},
 	// "v"
 	86: {
 		0: (event) => {
-			executeUI("setTool", "assignment");
+			executeSilentCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_SWAP);
 		},
 	},
 	// "z"
 	90: {
 		2: (event) => executeCommand("undo"),
-		3: (event) => console.log("redo"),
+		3: (event) => executeCommand("redo"),
 	},
 	// forward slash
 	191: {
@@ -163,7 +165,7 @@ export const KeybindingsUp = {
 	// alt
 	18: {
 		0: (event) => {
-			executeUI("setTool", altCameraToolSwap);
+			executeSilentCommand("setTool", altCameraToolSwap);
 			altCameraToolSwap = undefined;
 		},
 	},

@@ -1,6 +1,7 @@
 import { get } from "svelte/store";
 import { Graph } from "../../stores/Model.js";
 import { Selection } from "../../stores/Select.js";
+import { Highlight } from "../../stores/Select.js";
 /**
  *
  */
@@ -26,4 +27,12 @@ export const addToSelection = (component = "vertices", components = []) => {
 	case "edges": return Selection.addEdges(components);
 	case "faces": return Selection.addFaces(components);
 	}
+};
+
+export const highlight = (components) => {
+	if (!components) { return; }
+	Highlight.reset();
+	if (components.vertices) { Highlight.addEdges(components.vertices); }
+	if (components.edges) { Highlight.addEdges(components.edges); }
+	if (components.faces) { Highlight.addEdges(components.faces); }
 };

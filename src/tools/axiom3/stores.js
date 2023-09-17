@@ -8,9 +8,10 @@ import {
 	snapToRulerLine,
 } from "../../js/snap.js";
 import { zipArrays } from "../../js/arrays.js";
-import executeUI from "../../kernel/executeUI.js";
+import { executeSilentCommand } from "../../kernel/execute.js";
 import { Highlight } from "../../stores/Select.js";
 import { UILines } from "../../stores/UI.js";
+import { RulerLines } from "../../stores/Ruler.js";
 
 export const Move = writable(undefined);
 export const Presses = writable([]);
@@ -64,7 +65,7 @@ export const AxiomPreview = derived(
 	[Edge0, Edge1],
 	([$Edge0, $Edge1]) => (
 		($Edge0 !== undefined && $Edge1 !== undefined
-			? executeUI("axiom3Preview", $Edge0, $Edge1)
+			? executeSilentCommand("axiom3Preview", $Edge0, $Edge1)
 			: UILines.set([]))),
 	undefined,
 );
@@ -73,6 +74,7 @@ export const reset = () => {
 	Move.set(undefined);
 	Presses.set([]);
 	Releases.set([]);
+	RulerLines.set([]);
 };
 
 let unsub0;

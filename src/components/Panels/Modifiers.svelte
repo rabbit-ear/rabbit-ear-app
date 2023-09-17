@@ -16,9 +16,3 @@
 		{/each}
 	</span>
 </Panel>
-
-<style>
-	input[type=text] {
-		width: 100%;
-	}
-</style>

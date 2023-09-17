@@ -7,8 +7,10 @@ import {
 } from "../../js/snap.js";
 import { Highlight } from "../../stores/Select.js";
 import { RulerLines } from "../../stores/Ruler.js";
-import { executeCommand } from "../../kernel/execute.js";
-import executeUI from "../../kernel/executeUI.js";
+import {
+	executeCommand,
+	executeSilentCommand
+} from "../../kernel/execute.js";
 import {
 	Presses,
 	Releases,
@@ -46,7 +48,7 @@ const pointerEventPleat = (eventType, { point }) => {
 		if (edge !== undefined) { Highlight.addEdges([edge]); }
 		if (pressEdge !== undefined) { Highlight.addEdges([pressEdge]); }
 		UILines.set([]);
-		executeUI("pleatPreview", pressEdge, edge, get(PleatCount));
+		executeSilentCommand("pleatPreview", pressEdge, edge, get(PleatCount));
 		break;
 	case 2: {
 		selectedRulerLines = {};

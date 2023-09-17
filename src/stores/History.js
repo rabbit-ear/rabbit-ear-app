@@ -46,3 +46,11 @@ FileHistory.redo = () => FileHistory.update((history) => history);
  *
  */
 export const TerminalHistory = writable([]);
+TerminalHistory.add = (newHistory => {});
+
+// todo: make .add method have a collapsing-history option where,
+// under certain method calls, the newest history replaces the previous one
+// because they will be happening repeatedly, and the information is
+// not important.
+
+

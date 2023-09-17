@@ -6,6 +6,7 @@ import {
 import repeatFold from "rabbit-ear/graph/flatFold/repeatFold.js";
 import { subtract2 } from "rabbit-ear/math/vector.js";
 import { edgeAssignmentToFoldAngle } from "rabbit-ear/fold/spec.js";
+import { UIGraph } from "../../stores/UI.js";
 
 export const foldedLine = (a, b) => {
 	const line = { vector: subtract2(b, a), origin: a };
@@ -22,6 +23,25 @@ export const foldedLine = (a, b) => {
 			.map(el => el.assignment)
 			.map(a => edgeAssignmentToFoldAngle(a)));
 		UpdateFrame({ ...graph });
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export const foldedLinePreview = (a, b) => {
+	const line = { vector: subtract2(b, a), origin: a };
+	// return repeatFold(get(Graph), line, "V");
+	try {
+		const result = repeatFold(get(Graph), line, "V")
+			.filter(a => a !== undefined);
+		// console.log("graph", {
+		// 	vertices_coords: result.flatMap(el => el.points),
+		// 	edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
+		// });
+		UIGraph.set({
+			vertices_coords: result.flatMap(el => el.points),
+			edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
+		});
 	} catch (error) {
 		console.error(error);
 	}

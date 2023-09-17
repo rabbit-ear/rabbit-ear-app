@@ -66,36 +66,23 @@
 </div>
 
 <style>
-	.canvases {
-		width: 100%;
-		height: 100%;
-	}
 	.horizontal {
 		display: flex;
 		flex-direction: row;
+	}
+	.canvases {
+		width: 100%;
+		height: 100%;
 	}
 	.canvas {
 		width: 100%;
 		height: 100%;
 		flex: 1 1 auto;
 	}
-	.webgl-canvas {
-		width: 100%;
-		height: 100%;
-		flex: 1 1 auto;
-	}
-	.svg-canvas {
-		width: 100%;
-		height: 100%;
+	/* .svg-canvas { */
 		/* svgs are especially unrully */
 		/* this part might need more attention */
 		/* now it is calculated in the Javascript section */
-		/* max-height: calc(100vh - 2rem - 6rem - 6rem);*/
-		flex: 1 1 auto;
-	}
-	.simulator-canvas {
-		width: 100%;
-		height: 100%;
-		flex: 1 1 auto;
-	}
+		/* max-height: calc(100vh - 2rem - 6rem - 6rem); */
+	/* } */
 </style>

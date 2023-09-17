@@ -1,6 +1,5 @@
 import { get } from "svelte/store";
 import { executeCommand } from "../../kernel/execute.js";
-import executeUI from "../../kernel/executeUI.js";
 import {
 	Move,
 	Presses,
@@ -29,7 +28,6 @@ const pointerEvent = (eventType, { point }) => {
 		case 4:
 			executeCommand("segment", get(Segment0), get(Segment1));
 			reset();
-			executeUI("resetUI");
 			break;
 		}
 	}

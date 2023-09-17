@@ -18,8 +18,10 @@ import {
 	RulerLines,
 	RulerRays,
 } from "../../stores/Ruler.js";
-import { executeCommand } from "../../kernel/execute.js";
-import executeUI from "../../kernel/executeUI.js";
+import {
+	executeCommand,
+	executeSilentCommand,
+} from "../../kernel/execute.js";
 
 export const Move = writable(undefined);
 export const Press = writable(undefined);
@@ -66,7 +68,7 @@ export const FoldedLinePreviews = derived(
 	[PressCoords, DragCoords],
 	([$PressCoords, $DragCoords]) => {
 		if ($PressCoords !== undefined && $DragCoords !== undefined) {
-			executeUI("foldedLinePreview", $PressCoords, $DragCoords);
+			executeSilentCommand("foldedLinePreview", $PressCoords, $DragCoords);
 		} else {
 			UIGraph.set({});
 		}
