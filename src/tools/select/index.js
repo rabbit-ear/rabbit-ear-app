@@ -2,6 +2,10 @@ import pointerEvent from "./pointerEvent.js";
 import panel from "./panel.svelte";
 import icon from "./icon.svelte";
 import SVGLayer from "./SVGLayer.svelte";
+import {
+	subscribe,
+	unsubscribe,
+} from "./stores.js";
 
 const selectTool = {
 	key: "selectTool",
@@ -12,6 +16,8 @@ const selectTool = {
 	pointerEvent,
 	panel,
 	SVGLayer,
+	subscribe,
+	unsubscribe,
 };
 
 export default selectTool;

@@ -1,6 +1,6 @@
 import { writable, derived } from "svelte/store";
 import { snapToEdge } from "../../js/snap.js";
-import { executeSilentCommand } from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 
 export const FoldAngleValue = writable(90);
 
@@ -15,8 +15,8 @@ export const Edge = derived(
 export const Highlights = derived(
 	Edge,
 	($Edge) => ($Edge !== undefined
-		? executeSilentCommand("highlight", { edges: [$Edge] })
-		: executeSilentCommand("highlight", {})),
+		? executeCommand("highlight", { edges: [$Edge] })
+		: executeCommand("highlight", {})),
 	undefined,
 );
 

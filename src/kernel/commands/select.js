@@ -36,3 +36,4 @@ export const highlight = (components) => {
 	if (components.edges) { Highlight.addEdges(components.edges); }
 	if (components.faces) { Highlight.addEdges(components.faces); }
 };
+

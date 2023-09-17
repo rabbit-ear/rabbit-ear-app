@@ -1,7 +1,13 @@
 import { writable, derived } from "svelte/store";
-import { ASSIGN_SWAP } from "../../app/keys.js";
 import { snapToEdge } from "../../js/snap.js";
-import { executeSilentCommand } from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
+
+export const ASSIGN_SWAP = "assignSwap";
+export const ASSIGN_FLAT = "assignFlat";
+export const ASSIGN_UNASSIGNED = "assignUnassigned";
+export const ASSIGN_JOIN = "assignJoin";
+export const ASSIGN_CUT = "assignCut";
+export const ASSIGN_BOUNDARY = "assignBoundary";
 
 export const AssignType = writable(ASSIGN_SWAP);
 
@@ -16,8 +22,8 @@ export const Edge = derived(
 export const Highlights = derived(
 	Edge,
 	($Edge) => ($Edge !== undefined
-		? executeSilentCommand("highlight", { edges: [$Edge] })
-		: executeSilentCommand("highlight", {})),
+		? executeCommand("highlight", { edges: [$Edge] })
+		: executeCommand("highlight", {})),
 	undefined,
 );
 

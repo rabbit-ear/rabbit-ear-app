@@ -1,13 +1,13 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
-	import { AssignType } from "./stores.js";
 	import {
+		AssignType,
 		ASSIGN_SWAP,
 		ASSIGN_FLAT,
 		ASSIGN_UNASSIGNED,
 		ASSIGN_CUT,
 		ASSIGN_BOUNDARY,
-	} from "../../app/keys.js";
+	} from "./stores.js";
 </script>
 
 <Panel>

@@ -1,69 +1,68 @@
 <script>
 	import { edgeFoldAngleIsFlat } from "rabbit-ear/fold/spec.js";
-	import { ViewBox } from "../../stores/ViewBox.js";
 	import {
 		StrokeWidth,
-		// lineOpacity,
-		BoundaryColor,
-		MountainColor,
-		ValleyColor,
-		FlatColor,
-		JoinColor,
-		CutColor,
-		UnassignedColor,
+		StrokeDashArray,
+		AssignmentColor,
 	} from "../../stores/Style.js";
 
+	// todo, make this an app wide variable
+	const HighlightWidthFactor = 3;
+
 	export let graph = {};
-	export let strokes = [];
-	export let strokeWidths = [];
+	export let selected = [];
+	export let highlighted = [];
 
-	let vmax;
-	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);
+	let selectedHash = {};
+	$: {
+		selectedHash = {};
+		selected.forEach(e => { selectedHash[e] = true; });
+	};
 
-	let edges_segment;
-	$: edges_segment = !graph.edges_vertices
+	let highlightedHash = [];
+	$: {
+		highlightedHash = [];
+		highlighted.forEach(i => { highlightedHash[i] = true; });
+	};
+
+	let coords = [];
+	$: coords = !graph.edges_vertices
 		? []
 		: graph.edges_vertices
-		.map(ev => ev.map(v => graph.vertices_coords[v]));
+			.map(ev => ev.map(v => graph.vertices_coords[v]))
+			.map(s => ({ x1: s[0][0], y1: s[0][1], x2: s[1][0], y2: s[1][1] }));
 
-	let edges_flat;
-	$: edges_flat = !graph.edges_foldAngle
+	let edgesFoldAngleIsFlat = [];
+	$: edgesFoldAngleIsFlat = !graph.edges_foldAngle
 		? []
 		: graph.edges_foldAngle.map(edgeFoldAngleIsFlat);
 
-	let colorMap = {};
-	$: colorMap = {
-		B: $BoundaryColor,
-		b: $BoundaryColor,
-		M: $MountainColor,
-		m: $MountainColor,
-		V: $ValleyColor,
-		v: $ValleyColor,
-		F: $FlatColor,
-		f: $FlatColor,
-		J: $JoinColor,
-		j: $JoinColor,
-		C: $CutColor,
-		c: $CutColor,
-		U: $UnassignedColor,
-		u: $UnassignedColor,
-	};
+	let strokes = [];
+	$: strokes = coords.map((_, i) => ($AssignmentColor[graph.edges_assignment
+		? graph.edges_assignment[i]
+		: ""]) || "#777");
 
-	let edgesColor = [];
-	$: edgesColor = graph.edges_assignment
-		?	(graph.edges_vertices || [])
-			.map((_, i) => graph.edges_assignment[i])
-			.map(a => colorMap[a] || "#777")
-		: (graph.edges_vertices || []).map(() => "#777");
+	let strokeWidths = []
+	$: strokeWidths = coords.map((_, i) => (highlightedHash[i]
+		? $StrokeWidth * HighlightWidthFactor
+		: $StrokeWidth));
+
+	let classes = [];
+	$: classes = coords.map((_, i) => [
+		selectedHash[i] ? "selected" : undefined,
+		highlightedHash[i] ? "highlighted" : undefined,
+	].filter(a => a !== undefined).join(" "));
+
+	let lines = [];
+	$: lines = coords.map((coord, i) => ({
+		...coord,
+		...(classes[i] === "" ? {} : { class: classes[i] }),
+		stroke: strokes[i],
+		"stroke-width": strokeWidths[i],
+		...(edgesFoldAngleIsFlat[i] ? {} : { "stroke-dasharray": $StrokeDashArray }),
+	}));
 </script>
 
-{#each edges_segment as seg, i}
-	<line
-		x1={seg[0][0]}
-		y1={seg[0][1]}
-		x2={seg[1][0]}
-		y2={seg[1][1]}
-		stroke-dasharray={edges_flat[i] ? "" : [vmax * 0.01, vmax * 0.01].join(" ")}
-		stroke-width={strokeWidths[i] || $StrokeWidth}
-		stroke={strokes[i] || edgesColor[i]} />
+{#each lines as line, i}
+	<line {...line} />
 {/each}

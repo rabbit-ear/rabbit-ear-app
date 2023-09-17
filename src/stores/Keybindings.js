@@ -1,12 +1,12 @@
 import { get } from "svelte/store";
 import {
+	AssignType,
 	ASSIGN_SWAP,
 	ASSIGN_FLAT,
 	ASSIGN_UNASSIGNED,
 	ASSIGN_CUT,
 	ASSIGN_BOUNDARY,
-} from "../app/keys.js";
-import { AssignType } from "../tools/assignment/stores.js";
+} from "../tools/assignment/stores.js";
 import {
 	DialogNewFile,
 	TerminalTextarea,
@@ -14,10 +14,7 @@ import {
 } from "./App.js";
 import { Tool } from "./UI.js";
 import { Selection } from "./Select.js";
-import {
-	executeCommand,
-	executeSilentCommand,
-} from "../kernel/execute.js";
+import { executeCommand } from "../kernel/execute.js";
 
 let altCameraToolSwap;
 
@@ -46,37 +43,37 @@ export const KeybindingsDown = {
 		4: (event) => {
 			const tool = get(Tool);
 			altCameraToolSwap = tool ? tool.key : undefined;
-			executeSilentCommand("setTool", "camera");
+			executeCommand("setTool", "camera");
 		},
 	},
 	// esc
 	27: {
 		0: (event) => {
-			executeSilentCommand("resetTool");
-			executeSilentCommand("resetRulers");
+			executeCommand("resetTool");
+			executeCommand("resetRulers");
 		},
 	},
 	// 1 - 7
 	49: {
-		0: (event) => executeSilentCommand("setTool", "axiom1"),
+		0: (event) => executeCommand("setTool", "axiom1"),
 	},
 	50: {
-		0: (event) => executeSilentCommand("setTool", "axiom2"),
+		0: (event) => executeCommand("setTool", "axiom2"),
 	},
 	51: {
-		0: (event) => executeSilentCommand("setTool", "axiom3"),
+		0: (event) => executeCommand("setTool", "axiom3"),
 	},
 	52: {
-		0: (event) => executeSilentCommand("setTool", "axiom4"),
+		0: (event) => executeCommand("setTool", "axiom4"),
 	},
 	53: {
-		0: (event) => executeSilentCommand("setTool", "axiom5"),
+		0: (event) => executeCommand("setTool", "axiom5"),
 	},
 	54: {
-		0: (event) => executeSilentCommand("setTool", "axiom6"),
+		0: (event) => executeCommand("setTool", "axiom6"),
 	},
 	55: {
-		0: (event) => executeSilentCommand("setTool", "axiom7"),
+		0: (event) => executeCommand("setTool", "axiom7"),
 	},
 	// "a"
 	65: {
@@ -85,40 +82,40 @@ export const KeybindingsDown = {
 	// "b"
 	66: {
 		0: (event) => {
-			executeSilentCommand("setTool", "assignment");
+			executeCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_BOUNDARY);
 		},
 	},
 	// "c"
 	67: {
 		0: (event) => {
-			executeSilentCommand("setTool", "assignment");
+			executeCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_CUT);
 		},
 	},
 	// "d"
 	68: {
-		0: (event) => executeSilentCommand("setTool", "deleteTool"),
+		0: (event) => executeCommand("setTool", "deleteTool"),
 	},
 	// "e"
 	69: {
-		0: (event) => executeSilentCommand("setTool", "edge"),
+		0: (event) => executeCommand("setTool", "edge"),
 	},
 	// "f"
 	70: {
 		0: (event) => {
-			executeSilentCommand("setTool", "assignment");
+			executeCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_FLAT);
 		},
 	},
 	// "k"
 	75: {
-		0: (event) => executeSilentCommand("setTool", "kawasaki"),
+		0: (event) => executeCommand("setTool", "kawasaki"),
 	},
 	// "m"
 	77: {
 		0: (event) => {
-			executeSilentCommand("setTool", "assignment");
+			executeCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_SWAP);
 		},
 	},
@@ -128,23 +125,23 @@ export const KeybindingsDown = {
 	},
 	// "s"
 	83: {
-		0: (event) => executeSilentCommand("setTool", "select"),
+		0: (event) => executeCommand("setTool", "select"),
 	},
 	// "t"
 	84: {
-		0: (event) => executeSilentCommand("setTool", "translate"),
+		0: (event) => executeCommand("setTool", "translate"),
 	},
 	// "u"
 	85: {
 		0: (event) => {
-			executeSilentCommand("setTool", "assignment");
+			executeCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_UNASSIGNED);
 		},
 	},
 	// "v"
 	86: {
 		0: (event) => {
-			executeSilentCommand("setTool", "assignment");
+			executeCommand("setTool", "assignment");
 			AssignType.set(ASSIGN_SWAP);
 		},
 	},
@@ -165,7 +162,7 @@ export const KeybindingsUp = {
 	// alt
 	18: {
 		0: (event) => {
-			executeSilentCommand("setTool", altCameraToolSwap);
+			executeCommand("setTool", altCameraToolSwap);
 			altCameraToolSwap = undefined;
 		},
 	},

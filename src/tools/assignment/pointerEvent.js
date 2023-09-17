@@ -1,16 +1,14 @@
 import { get } from "svelte/store";
 import {
+	Move,
+	Edge,
+	AssignType,
 	ASSIGN_SWAP,
 	ASSIGN_FLAT,
 	ASSIGN_UNASSIGNED,
 	ASSIGN_CUT,
 	ASSIGN_JOIN,
 	ASSIGN_BOUNDARY,
-} from "../../app/keys.js";
-import {
-	AssignType,
-	Move,
-	Edge,
 } from "./stores.js";
 import { executeCommand } from "../../kernel/execute.js";
 

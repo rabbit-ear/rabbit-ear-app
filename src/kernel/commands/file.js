@@ -9,14 +9,11 @@ import {
 	SaveFile,
 } from "../../stores/Model.js";
 import { makeEmptyGraph } from "../../js/graph.js";
-// import {
-// 	downloadFile,
-// } from "../../js/file.js";
 /**
  * @param {string} contents already in a string format
  * @param {string} filename
  */
-export const downloadFile = (contents, filename = "origami.fold") => {
+const downloadFile = (contents, filename = "origami.fold") => {
 	const element = document.createElement("a");
 	element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(contents));
 	element.setAttribute("download", filename);
@@ -25,6 +22,7 @@ export const downloadFile = (contents, filename = "origami.fold") => {
 	element.click();
 	document.body.removeChild(element);
 };
+
 export const load = (FOLD) => LoadFile(FOLD);
 
 export const clear = () => LoadFile(makeEmptyGraph());

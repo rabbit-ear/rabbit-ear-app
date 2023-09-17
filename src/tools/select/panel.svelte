@@ -1,20 +1,22 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
-	import { ElementSelect } from "../../stores/UI.js";
-	import { SelectHoverIndex } from "./stores.js";
-	import { Selection } from "../../stores/Select.js";
 	import {
+		ElementSelect,
 		SELECT_VERTEX,
 		SELECT_EDGE,
 		SELECT_FACE,
-	} from "../../app/keys.js";
+	} from "./stores.js";
+	import {
+		Selection,
+		Highlight,
+	} from "../../stores/Select.js";
 </script>
 
 <Panel>
 	<span slot="title">select</span>
 	<span slot="body">
 		<div class="container">
-			<p>select kind:</p>
+			<p class="info">select kind:</p>
 			<div>
 				<input
 					type="radio"
@@ -53,16 +55,16 @@
 					<p><strong>{$Selection.faces.length}</strong> faces</p>
 				{/if}
 			</div>
-			<div>
-				<p>nearest</p>
-				{#if $SelectHoverIndex.vertex}
-					<p>vertex: <strong>{$SelectHoverIndex.vertex}</strong></p>
+			<div class="top-pad">
+				<p class="info">hover inspect:</p>
+				{#if $Highlight.vertices.length}
+					<p>vertex: <strong>{$Highlight.vertices[0]}</strong></p>
 				{/if}
-				{#if $SelectHoverIndex.edge}
-					<p>edge: <strong>{$SelectHoverIndex.edge}</strong></p>
+				{#if $Highlight.edges.length}
+					<p>edge: <strong>{$Highlight.edges[0]}</strong></p>
 				{/if}
-				{#if $SelectHoverIndex.face}
-					<p>face: <strong>{$SelectHoverIndex.face}</strong></p>
+				{#if $Highlight.faces.length}
+					<p>face: <strong>{$Highlight.faces[0]}</strong></p>
 				{/if}
 			</div>
 		</div>
@@ -77,9 +79,11 @@
 	strong {
 		font-weight: bold;
 	}
-	p {
+	.info {
 		color: var(--dim);
-/*		margin: 1rem 0 0.25rem 0;*/
 		font-style: italic;
+	}
+	.top-pad {
+		margin-top: 0.5rem;
 	}
 </style>

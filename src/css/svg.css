@@ -1,9 +1,33 @@
 
-.svg-canvas .graph-preview line { stroke: var(--highlight); }
-.svg-canvas .graph-preview circle { fill: var(--highlight); }
-.svg-canvas .graph-preview polygon { opacity: 0.5; }
+.svg-canvas .graph-preview line {
+	stroke: var(--highlight);
+}
+
+.svg-canvas .graph-preview circle {
+	fill: var(--highlight);
+}
+
+.svg-canvas .graph-preview polygon {
+	opacity: 0.5;
+}
 
 .svg-canvas polygon {
 	fill: var(--background-1);
 	opacity: 0.75;
+}
+
+.svg-canvas polygon.highlighted {
+	fill: var(--dim);
+	opacity: 0.15;
+}
+
+.svg-canvas circle.selected {
+	fill: var(--highlight);
+}
+.svg-canvas line.selected {
+	stroke: var(--highlight);
+}
+.svg-canvas polygon.selected {
+	fill: var(--highlight);
+	opacity: 0.333;
 }

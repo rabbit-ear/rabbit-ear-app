@@ -1,63 +1,53 @@
 import { get } from "svelte/store";
-import { nearest } from "rabbit-ear/graph/nearest.js";
 import {
+	Move,
+	Drag,
+	Press,
+	Release,
 	SelectionRect,
-	getSelected,
+	ElementSelect,
+	reset,
+	vefName,
 } from "./stores.js";
 import { Graph } from "../../stores/Model.js";
-import { Keyboard } from "../../stores/UI.js";
+import {
+	Keyboard,
+	UIEpsilon,
+} from "../../stores/UI.js";
 import { executeCommand } from "../../kernel/execute.js";
-import { ElementSelect } from "../../stores/UI.js";
-import { SelectHoverIndex } from "./stores.js";
+import {
+	getComponentsNearPoint,
+	getComponentsInsideRect,
+} from "../../js/select.js";
+
 /**
- *
+ * @description get the selected components inside the SelectionRect
  */
-const rectFromTwoPoints = (p, q) => {
-	const xs = [p[0], q[0]].sort((a, b) => a - b);
-	const ys = [p[1], q[1]].sort((a, b) => a - b);
-	return {
-		min: [xs[0], ys[0]],
-		max: [xs[1], ys[1]],
-		span: [xs[1] - xs[0], ys[1] - ys[0]],
-	};
+export const getSelected = () => {
+	const rect = get(SelectionRect);
+	if (rect === undefined) { return {}; }
+	const uiEpsilon = get(UIEpsilon);
+	const nears = Math.max(...rect.span) < uiEpsilon
+		? getComponentsNearPoint(get(Graph), rect.min)
+		: getComponentsInsideRect(get(Graph), rect);
+	return nears[vefName[get(ElementSelect)]];
 };
 
-let press;
-/**
- *
- */
-const pointerEventSelect = (eventType, { point }) => {
+const pointerEvent = (eventType, { point, buttons }) => {
 	switch (eventType) {
-	case "hover":
-		const near = nearest(get(Graph), point);
-		SelectHoverIndex.set({
-			vertex: near.vertex,
-			edge: near.edge,
-			face: near.face,
-		})
-		break;
 	case "press":
-		press = point;
-		SelectionRect.set(undefined);
-		break;
-	case "move":
-		if (press === undefined) {
-			SelectionRect.set(undefined);
-			break;
-		}
-		SelectionRect.set(rectFromTwoPoints(press, point));
+		Press.set(point);
 		break;
 	case "release":
-		const selected = getSelected();
-		if (get(Keyboard)[16]) { // shift
-			executeCommand("addToSelection", get(ElementSelect), selected);
-		} else {
-			executeCommand("deselectAll");
-			executeCommand("addToSelection", get(ElementSelect), selected);
-		}
-		SelectionRect.set(undefined);
+		Release.set(point);
+		// if shift key is not pressed, clear selection.
+		if (!get(Keyboard)[16]) { executeCommand("deselectAll"); }
+		executeCommand("addToSelection", get(ElementSelect), getSelected());
+		reset();
 		break;
 	}
+	if (buttons) { Drag.set(point); }
+	else { Move.set(point); }
 };
 
-export default pointerEventSelect;
+export default pointerEvent;

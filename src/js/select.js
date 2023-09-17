@@ -1,18 +1,16 @@
-import { get } from "svelte/store";
 import { intersectLineLine } from "rabbit-ear/math/intersect.js";
 import { nearest } from "rabbit-ear/graph/nearest.js";
 import { includeS } from "rabbit-ear/math/compare.js";
 // import { pointInBoundingBox } from "rabbit-ear/math/encloses.js";
 import { ViewBox } from "../stores/ViewBox.js";
-import { ElementSelect } from "../stores/UI.js";
-import { SelectionRect } from "../tools/Select/stores.js"; // todo get rid of
-import { Graph } from "../stores/Model.js";
-// import { Releases } from "../stores/UI.js";
 import {
+	SelectionRect,
 	SELECT_VERTEX,
 	SELECT_EDGE,
 	SELECT_FACE,
-} from "../app/keys.js";
+} from "../tools/Select/stores.js"; // todo get rid of
+import { Graph } from "../stores/Model.js";
+// import { Releases } from "../stores/UI.js";
 
 const pointInRect = (p, rect) => (
 	p[0] > rect.min[0] && p[0] < rect.max[0] &&
@@ -47,7 +45,7 @@ const segmentBoxOverlap = (segment, box) => {
 	return ptInside;
 };
 
-const getSelectedFromPoint = (graph, point) => {
+export const getComponentsNearPoint = (graph, point) => {
 	const near = nearest(graph, point);
 	return {
 		vertices: [near.vertex],
@@ -56,7 +54,7 @@ const getSelectedFromPoint = (graph, point) => {
 	};
 };
 
-const getSelectedFromRect = (graph, rect) => {
+export const getComponentsInsideRect = (graph, rect) => {
 	if (!rect) { return { vertices: [], edges: [], faces: [] }; }
 	const verticesLookup = graph.vertices_coords
 		.map(p => pointInRect(p, rect));
@@ -82,10 +80,4 @@ const getSelectedFromRect = (graph, rect) => {
 			.map((sel, i) => sel ? i : undefined)
 			.filter(a => a !== undefined);
 	return { vertices, edges, faces };
-};
-
-const vefName = {
-	[SELECT_VERTEX]: "vertices",
-	[SELECT_EDGE]: "edges",
-	[SELECT_FACE]: "faces",
 };

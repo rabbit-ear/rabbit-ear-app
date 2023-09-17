@@ -1,10 +1,11 @@
 import { get, writable, derived } from "svelte/store";
-import { SELECT_EDGE } from "../app/keys.js";
+import { SELECT_EDGE } from "../tools/Select/stores.js"; // todo get rid of
 import {
 	RulerLines,
 	RulerRays,
 } from "./Ruler.js"
 import { Highlight } from "./Select.js";
+import { ViewBox } from "./ViewBox.js";
 // a hash lookup of every keyboard key currently being pressed
 // where the dictionary keys are the ______ (key characters?)
 export const Keyboard = writable({});
@@ -23,16 +24,6 @@ export const UILines = writable([]);
 export const UIRays = writable([]);
 UILines.add = (newRulers) => UILines.update((r) => [...r, ...newRulers]);
 UIRays.add = (newRulers) => UIRays.update((r) => [...r, ...newRulers]);
-/**
- * @description for the UI. which tool step is currently in progress
- * based on the collected touch data.
- */
-export const ElementSelect = writable(SELECT_EDGE);
-const ElementSelectSet = ElementSelect.set;
-ElementSelect.set = (e) => {
-	Selection.reset();
-	return ElementSelectSet(e);
-};
 /**
  *
  */
@@ -57,3 +48,15 @@ Tool.set = (newTool) => {
 	if (newTool && newTool.subscribe) { newTool.subscribe(); }
 	return ToolSet(newTool);
 };
+/**
+ * @description
+ */
+const UIEpsilonFactor = 0.01;
+/**
+ * @description
+ */
+export const UIEpsilon = derived(
+	ViewBox,
+	$ViewBox => Math.max($ViewBox[2], $ViewBox[3]) * UIEpsilonFactor,
+	0.05,
+);

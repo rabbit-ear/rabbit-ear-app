@@ -9,10 +9,7 @@ import {
 } from "../../js/snap.js";
 import { UIRays } from "../../stores/UI.js";
 import { RulerRays } from "../../stores/Ruler.js";
-import {
-	executeCommand,
-	executeSilentCommand,
-} from "../../kernel/execute.js";
+import { executeCommand } from "../../kernel/execute.js";
 
 export const Move = writable(undefined);
 export const Drag = writable(undefined);
@@ -63,7 +60,7 @@ export const KawasakiRulers = derived(
 export const KawasakiRulerPreviews = derived(
 	MoveVertex,
 	($MoveVertex) => $MoveVertex !== undefined
-		? executeSilentCommand("kawasakiRulerPreviews", $MoveVertex)
+		? executeCommand("kawasakiRulerPreviews", $MoveVertex)
 		: UIRays.set([]),
 	undefined,
 );

@@ -3,10 +3,18 @@ import { ViewBox } from "./ViewBox.js";
 
 // size
 
+const StrokeWidthFactor = (1 / 300);
+
 export const StrokeWidth = derived(
 	ViewBox,
-	($ViewBox) => Math.max($ViewBox[2], $ViewBox[3]) * 0.00333,
-	0.00333,
+	($ViewBox) => Math.max($ViewBox[2], $ViewBox[3]) * StrokeWidthFactor,
+	StrokeWidthFactor,
+);
+
+export const StrokeDashArray = derived(
+	StrokeWidth,
+	($StrokeWidth) => $StrokeWidth * 3,
+	0.01,
 );
 
 //
@@ -54,3 +62,24 @@ export const JoinColor = writable("#f80");
 export const UnassignedColor = writable("#80f");
 // cut is not used by origami simulator, used elsewhere.
 export const CutColor = writable("#8f0");
+
+export const AssignmentColor = derived(
+	[BoundaryColor, MountainColor, ValleyColor, FlatColor, JoinColor, CutColor, UnassignedColor],
+	([$BoundaryColor, $MountainColor, $ValleyColor, $FlatColor, $JoinColor, $CutColor, $UnassignedColor]) => ({
+		B: $BoundaryColor,
+		b: $BoundaryColor,
+		M: $MountainColor,
+		m: $MountainColor,
+		V: $ValleyColor,
+		v: $ValleyColor,
+		F: $FlatColor,
+		f: $FlatColor,
+		J: $JoinColor,
+		j: $JoinColor,
+		C: $CutColor,
+		c: $CutColor,
+		U: $UnassignedColor,
+		u: $UnassignedColor,
+	}),
+	{},
+);

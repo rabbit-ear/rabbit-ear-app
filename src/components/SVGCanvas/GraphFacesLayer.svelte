@@ -1,20 +1,40 @@
 <script>
 	export let graph = {};
-	export let fills = [];
+	export let selected = [];
+	export let highlighted = [];
 
-	let faces_polygon;
-	$: faces_polygon = !graph.faces_vertices
+	let selectedHash = {};
+	$: {
+		selectedHash = {};
+		selected.forEach(f => { selectedHash[f] = true; });
+	};
+
+	let highlightedHash = [];
+	$: {
+		highlightedHash = [];
+		highlighted.forEach(i => { highlightedHash[i] = true; });
+	};
+
+	let polygonsPoints = [];
+	$: polygonsPoints = !graph.faces_vertices
 		? []
 		: graph.faces_vertices
-		.map(fv => fv.map(v => graph.vertices_coords[v]));
+			.map(fv => fv.map(v => graph.vertices_coords[v].join(",")))
+			.map(points => points.join(" "));
+
+	let classes = [];
+	$: classes = polygonsPoints.map((_, i) => [
+		selectedHash[i] ? "selected" : undefined,
+		highlightedHash[i] ? "highlighted" : undefined,
+	].filter(a => a !== undefined).join(" "));
+
+	let polygons = [];
+	$: polygons = polygonsPoints
+		.map((points, i) => classes[i] === ""
+			? ({ points })
+			: ({ points, class: classes[i] }));
 </script>
 
-{#each faces_polygon as poly, i}
-	{#if fills[i]}
-		<polygon
-			points={poly.map(point => point.join(",")).join(" ")}
-			fill={fills[i]} />
-	{:else}
-		<polygon points={poly.map(point => point.join(",")).join(" ")} />
-	{/if}
+{#each polygons as polygon}
+	<polygon {...polygon} />
 {/each}

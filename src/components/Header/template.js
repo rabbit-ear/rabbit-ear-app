@@ -124,7 +124,7 @@ export default [
 			},
 			{ type: "separator" },
 			{
-				label: "select by assignment",
+				label: "select edges",
 				submenu: [
 					{
 						label: "boundary",
@@ -154,11 +154,9 @@ export default [
 						label: "unassigned",
 						click: () => {},
 					},
-				],
-			},
-			{
-				label: "select by fold angle",
-				submenu: [
+					{
+						type: "separator",
+					},
 					{
 						label: "flat-folded",
 						click: () => {},
