@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
 import Tools from "../../tools/index.js";
+import { Tool } from "../../stores/UI.js";
 
 export const resetTool = () => {
 	const tool = get(Tool);

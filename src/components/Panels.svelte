@@ -20,7 +20,7 @@
 {#if $ShowSimulator}
 	<Simulator />
 {/if}
-<Modifiers />
 <File />
 <Frames />
+<Modifiers />
 <History />

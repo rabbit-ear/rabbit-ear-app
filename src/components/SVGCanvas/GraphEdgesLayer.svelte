@@ -40,7 +40,7 @@
 	let strokes = [];
 	$: strokes = coords.map((_, i) => ($AssignmentColor[graph.edges_assignment
 		? graph.edges_assignment[i]
-		: ""]) || "#777");
+		: ""]) || "gray");
 
 	let strokeWidths = []
 	$: strokeWidths = coords.map((_, i) => (highlightedHash[i]

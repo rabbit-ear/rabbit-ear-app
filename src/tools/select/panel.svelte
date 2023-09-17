@@ -44,19 +44,22 @@
 					value={SELECT_FACE} />
 				<label for="selectFaces">faces</label>
 			</div>
-			<div>
-				{#if $Selection.vertices.length}
-					<p><strong>{$Selection.vertices.length}</strong> vertices</p>
-				{/if}
-				{#if $Selection.edges.length}
-					<p><strong>{$Selection.edges.length}</strong> edges</p>
-				{/if}
-				{#if $Selection.faces.length}
-					<p><strong>{$Selection.faces.length}</strong> faces</p>
-				{/if}
-			</div>
+			{#if $Selection.vertices.length || $Selection.edges.length || $Selection.faces.length}
+				<div class="top-pad">
+				<p class="info">selected:</p>
+					{#if $Selection.vertices.length}
+						<p><strong>{$Selection.vertices.length}</strong> vertices</p>
+					{/if}
+					{#if $Selection.edges.length}
+						<p><strong>{$Selection.edges.length}</strong> edges</p>
+					{/if}
+					{#if $Selection.faces.length}
+						<p><strong>{$Selection.faces.length}</strong> faces</p>
+					{/if}
+				</div>
+			{/if}
 			<div class="top-pad">
-				<p class="info">hover inspect:</p>
+				<p class="info">inspect:</p>
 				{#if $Highlight.vertices.length}
 					<p>vertex: <strong>{$Highlight.vertices[0]}</strong></p>
 				{/if}

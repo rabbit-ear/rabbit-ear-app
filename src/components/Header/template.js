@@ -5,6 +5,7 @@ import {
 	ShowSimulator,
 	ShowCodeEditor,
 	ShowTerminal,
+	ShowIndices,
 	ShowFlatFoldableIssues,
 	DialogNewFile,
 	InputFile,
@@ -186,20 +187,12 @@ export default [
 				click: () => {},
 				toolTip: "the distance between the two nearest vertices",
 			},
-			// { type: "separator" },
-			// { label: "show indices" },
-			// {
-			// 	label: "show vertices",
-			// 	click: () => {},
-			// },
-			// {
-			// 	label: "show edges",
-			// 	click: () => {},
-			// },
-			// {
-			// 	label: "show faces",
-			// 	click: () => {},
-			// },
+			{
+				label: "show graph indices",
+				type: "checkbox",
+				bind: ShowIndices,
+				toolTip: "indices of the vertices, edges, and faces",
+			},
 		],
 	},
 	{

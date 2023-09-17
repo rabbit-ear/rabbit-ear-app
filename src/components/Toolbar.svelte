@@ -99,7 +99,7 @@
 		border-radius: 0.25rem;
 		outline-offset: 0.125rem;
 		cursor: pointer;
-/*		background-color: var(--toolbar-button-color);*/
+		background-color: var(--background-0);
 	}
 	/* :global(svg) */
 	button {
@@ -107,7 +107,6 @@
 		fill: var(--text);
 	}
 	button:hover {
-/*		background-color: var(--toolbar-button-hover);*/
 		stroke: var(--bright);
 		fill: var(--bright);
 	}

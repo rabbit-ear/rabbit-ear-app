@@ -78,7 +78,7 @@
 		<svelte:component this={$Tool.SVGLayer} />
 	{/if}
 	{#if $ShowIndices}
-		<GraphIndices />
+		<GraphIndices graph={$Graph} />
 	{/if}
 </svg>
 

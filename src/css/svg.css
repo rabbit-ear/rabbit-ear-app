@@ -24,10 +24,33 @@
 .svg-canvas circle.selected {
 	fill: var(--highlight);
 }
+
 .svg-canvas line.selected {
 	stroke: var(--highlight);
 }
+
 .svg-canvas polygon.selected {
 	fill: var(--highlight);
-	opacity: 0.333;
+	opacity: 0.5;
 }
+
+/*.vertices-indices circle {
+	stroke: var(--yellow);
+}
+.vertices-indices text {
+	fill: var(--yellow);
+}
+
+.edges-indices circle {
+	stroke: var(--lightblue);
+}
+.edges-indices text {
+	fill: var(--lightblue);
+}
+
+.faces-indices circle {
+	stroke: var(--green);
+}
+.faces-indices text {
+	fill: var(--green);
+}*/
