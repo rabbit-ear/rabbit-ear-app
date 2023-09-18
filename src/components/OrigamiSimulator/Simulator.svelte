@@ -30,7 +30,7 @@
 		Active,
 		FoldAmount,
 		Strain,
-		Tool,
+		SimulatorTool,
 		VertexError,
 		Reset,
 		ExportModel,
@@ -100,8 +100,8 @@
 		light.position.setLength(lightRadius);
 		light.distance = lightRadius * Math.E;
 		light.castShadow = false;
-		light.shadow.mapSize.width = 512; // default
-		light.shadow.mapSize.height = 512; // default
+		light.shadow.mapSize.width = 2048; // default
+		light.shadow.mapSize.height = 2048; // default
 		return light;
 	});
 	/**
@@ -113,7 +113,7 @@
 		// The raycaster will update on a mousemove event, but if the origami is
 		// in a folding animation, the raycaster will not update and the visuals
 		// will mismatch, hence, the raycaster can fire on a frame update if needed
-		raycasters.animate($Tool === "pull");
+		raycasters.animate($SimulatorTool === "pull");
 	};
 	/**
 	 * @description This is the callback from ThreeView after three.js has
@@ -218,7 +218,7 @@
 	$: if (scene) { scene.background = new THREE.Color($BackgroundColor); }
 
 	// nitpicky. upon tool change we need raycasterPullVertex to be undefined
-	$: if (raycasters) { raycasters.raycasterReleaseHandler($Tool); }
+	$: if (raycasters) { raycasters.raycasterReleaseHandler($SimulatorTool); }
 
 	/**
 	 * @description cleanup all memory associated with origami simulator
@@ -231,7 +231,7 @@
 </script>
 
 <TrackballView
-	enabled={$Tool !== "pull"}
+	enabled={$SimulatorTool !== "pull"}
 	maxDistance={modelSize * 30}
 	minDistance={modelSize * 0.1}
 	panSpeed={1}

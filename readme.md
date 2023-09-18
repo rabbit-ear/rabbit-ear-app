@@ -4,6 +4,7 @@
 
 [ ] scale-up a crease pattern, reset zoom no longer works (fixed to old size).
 [x] viewport resize due to show/hide component does not re-scale origami simulator's html canvas.
+[ ] simulator "reset" should also reset it's camera
 
 ## 2023-09-18
 

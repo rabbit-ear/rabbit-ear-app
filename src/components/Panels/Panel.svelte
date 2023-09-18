@@ -28,11 +28,12 @@
 	}
 	.title {
 		padding: 0.25rem 0.5rem;
-		background-color: var(--background-3);
+		color: white;
+		background-color: var(--uiblue);
 		font-weight: bold;
 	}
 	.title:hover {
-		background-color: var(--background-1);
+		background-color: var(--uidarkblue);
 	}
 	.body {
 		padding: 0.25rem 0.5rem;

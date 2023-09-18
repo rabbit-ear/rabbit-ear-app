@@ -24,9 +24,9 @@ export const vertex = new THREE.PointsMaterial({
 // face
 export const frontFace = new THREE.MeshBasicMaterial({
 	side: THREE.FrontSide,
-	color: 0xFF8800,
+	color: 0x555555,
 });
 export const backFace = new THREE.MeshBasicMaterial({
 	side: THREE.FrontSide,
-	color: 0x888888,
+	color: 0x555555,
 });

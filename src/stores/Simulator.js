@@ -1,4 +1,8 @@
-import { writable } from "svelte/store";
+import {
+	writable,
+	derived,
+} from "svelte/store";
+import { Tool } from "./UI.js";
 
 //
 // communication from outside to Origami Simulator
@@ -15,7 +19,11 @@ export const Strain = writable(false);
 
 // tool is either ["trackball", "pull"], this determines how
 // to respond to a user interface: rotate model or pull a vertex
-export const Tool = writable("trackball");
+export const SimulatorTool = derived(
+	Tool,
+	($Tool) => $Tool && $Tool.name === "vertex" ? "pull" : "trackball",
+	"trackball",
+);
 
 //
 // communication from Origami Simulator to outside

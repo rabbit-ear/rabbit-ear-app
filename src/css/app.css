@@ -8,14 +8,18 @@
 	--background-1: #333;
 	--background-2: #3a3a3a;
 	--background-3: #444;
-	--yellow: #fb4;
-	--blue: #158;
-	--lightblue: #39e;
 	--red: #e53;
+	--yellow: #fb4;
 	--brightgreen: #5e3;
 	--green: #5c6;
+	--blue: #158;
+	--lightblue: #39e;
+	--uiblue: #1177FF;
+	--uidarkblue: #1155D4;
 	--purple: #80f;
+
 	--highlight: var(--yellow);
+	--body-background: var(--background-0);
 }
 
 /*:root {
@@ -23,16 +27,22 @@
 	--text: black;
 	--bright: black;
 	--dim: #888;
-	--background-0: #eee;
-	--background-1: #fff;
-	--background-2: #eee;
+	--background-0: #fff;
+	--background-1: #eee;
+	--background-2: #ddd;
 	--background-3: #ccc;
+	--red: #e53;
 	--yellow: #fb4;
+	--brightgreen: #5e3;
+	--green: #5e3;
 	--blue: #158;
 	--lightblue: #39e;
-	--red: #e53;
-	--green: #5e3;
-	--highlight: var(--lightblue);
+	--uiblue: #3478F6; #39e;
+	--uidarkblue: #0055CC;
+	--purple: #80f;
+
+	--highlight: var(--uiblue);
+	--body-background: var(--background-1);
 }*/
 
 :root {
@@ -45,7 +55,7 @@
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
 	color: var(--text);
-	background-color: var(--background-0);
+	background-color: var(--body-background);
 }
 
 * {
