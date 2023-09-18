@@ -1,12 +1,13 @@
 import { get } from "svelte/store";
+import replace from "rabbit-ear/graph/replace.js";
+import { cleanNumber } from "rabbit-ear/general/number.js";
+import { removeDuplicateVertices } from "rabbit-ear/graph/vertices/duplicate.js";
 import {
 	Graph,
 	UpdateFrame,
 } from "../../stores/Model.js";
 import { Selection } from "../../stores/Select.js";
 import { findEpsilon } from "../../js/epsilon.js";
-import { removeDuplicateVertices } from "rabbit-ear/graph/vertices/duplicate.js";
-import { cleanNumber } from "rabbit-ear/general/number.js";
 import { nearestTwoVertices } from "../../js/errors.js";
 
 export const mergeNearbyVertices = (epsilonFactor = 1e-4) => {
@@ -27,11 +28,12 @@ export const cleanVertices = () => {
 };
 
 export const snapAllVertices = () => {
-	const vertices_coords = get(Graph).vertices_coords || [];
+	const graph = get(Graph);
+	const vertices_coords = graph.vertices_coords || [];
 	vertices_coords.forEach((coord, i) => coord.forEach((n, j) => {
 		vertices_coords[i][j] = Math.round(n);
 	}));
-	UpdateFrame({ ...get(Graph), vertices_coords });
+	UpdateFrame({ ...graph, vertices_coords });
 };
 
 export const selectNearestVertices = () => {
@@ -40,3 +42,19 @@ export const selectNearestVertices = () => {
 	Selection.reset();
 	Selection.addVertices(vertices);
 };
+
+export const mergeVertices = (vertices = []) => {
+	if (vertices.length < 2) { return; }
+	vertices.sort((a, b) => a - b);
+	// this index will be the one vertex which remains
+	const remain = vertices.shift();
+	const replace_indices = [];
+	vertices.forEach(v => { replace_indices[v] = remain; });
+	const graph = get(Graph);
+	replace(graph, "vertices", replace_indices);
+	UpdateFrame({ ...graph });
+};
+
+export const mergeSelectedVertices = () => (
+	mergeVertices(get(Selection).vertices)
+);

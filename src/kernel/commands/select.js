@@ -37,3 +37,15 @@ export const highlight = (components) => {
 	if (components.faces) { Highlight.addEdges(components.faces); }
 };
 
+export const getSelectedVertices = () => get(Selection).vertices;
+export const getSelectedEdges = () => get(Selection).edges;
+export const getSelectedFaces = () => get(Selection).faces;
+
+export const selectEdgesWithAssignment = (assignment = "B") => {
+	const assign = assignment.toUpperCase();
+	Selection.reset();
+	Selection.addEdges((get(Graph).edges_assignment || [])
+		.map(a => a.toUpperCase())
+		.map((a, i) => a === assign ? i : undefined)
+		.filter(i => i !== undefined));
+};

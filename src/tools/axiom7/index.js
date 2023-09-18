@@ -1,7 +1,12 @@
 import pointerEvent from "./pointerEvent.js";
 import panel from "./panel.svelte";
-import * as stores from "./stores.js";
 import icon from "./icon.svelte";
+import SVGLayer from "./SVGLayer.svelte";
+import {
+	reset,
+	subscribe,
+	unsubscribe,
+} from "./stores.js";
 
 const axiom7 = {
 	key: "axiom7",
@@ -10,7 +15,10 @@ const axiom7 = {
 	icon,
 	pointerEvent,
 	panel,
-	stores,
+	SVGLayer,
+	reset,
+	subscribe,
+	unsubscribe,
 };
 
 export default axiom7;

@@ -3,10 +3,10 @@ import {
 	RulerRays,
 } from "../../stores/Ruler.js";
 
-const resetRulers = () => {
-	RulerLines.set([]);
-	RulerRays.set([]);
-};
+// export const resetRulers = () => {
+// 	RulerLines.set([]);
+// 	RulerRays.set([]);
+// };
 
 const RadialRays = (origin, degrees = 22.5, offset = 0) => Array
 	.from(Array(Math.ceil(360 / degrees)))

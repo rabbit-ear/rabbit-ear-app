@@ -3,8 +3,9 @@
  */
 export const silentMethods = {
 	setTool: true,
+	resetApp: true,
 	resetTool: true,
-	resetRulers: true,
+	// resetRulers: true,
 	highlight: true,
 	axiom1Preview: true,
 	axiom2Preview: true,

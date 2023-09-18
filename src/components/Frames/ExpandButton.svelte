@@ -29,7 +29,8 @@
 		justify-content: center;
 		position: absolute;
 		top: calc(-1.3rem);
-		left: calc(50% - 2rem);
+		left: 1rem;
+/*		left: calc(50% - 2rem);*/
 		width: 4rem;
 		height: 1.3rem;
 		cursor: pointer;

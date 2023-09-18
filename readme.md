@@ -2,7 +2,17 @@
 
 ## bug list:
 
-- scale-up a crease pattern, reset zoom no longer works (fixed to old size).
+[ ] scale-up a crease pattern, reset zoom no longer works (fixed to old size).
+[x] viewport resize due to show/hide component does not re-scale origami simulator's html canvas.
+
+## 2023-09-18
+
+Advanced feature list:
+
+- to be able to "clip inside crease pattern" more efficiently, create an alternative representation of the graph, using the existing boundary, remove non-important collinear vertices, run earcut algorithm to build a triangulation, then we can clip segments by running clip on every triangle of the new graph.
+
+- scribble tool requires an algorithm like [Ramer Douglas Peucker](like https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm).
+
 
 ## 2023-08-20
 

@@ -1,9 +1,13 @@
 import { get } from "svelte/store";
-import { executeCommand } from "../../kernel/execute.js";
+import {
+	execute,
+	executeCommand,
+} from "../../kernel/execute.js";
 import {
 	// Snapping,
 	ShowSimulator,
 	ShowCodeEditor,
+	ShowFrames,
 	ShowTerminal,
 	ShowIndices,
 	ShowFlatFoldableIssues,
@@ -43,6 +47,12 @@ export default [
 				toolTip: "make the graph planar, split overlapping edges, rebuild faces",
 			},
 			{
+				type: "separator",
+			},
+			{
+				label: "vertices",
+			},
+			{
 				label: "smart clean vertices",
 				click: () => executeCommand("cleanVertices"),
 				toolTip: "clean floating point rounding errors in coordinates",
@@ -58,25 +68,9 @@ export default [
 				toolTip: "snap all vertices to the nearest grid intersection",
 			},
 			{
-				type: "separator",
-			},
-			{
-				label: "modify selected",
-			},
-			{
 				label: "merge selected vertices",
-				click: () => {},
+				click: () => executeCommand("mergeSelectedVertices"),
 				toolTip: "convert selected vertices into one vertex",
-			},
-			{
-				label: "set edges assignment",
-				click: () => {},
-				toolTip: "set the assignment of all selected edges",
-			},
-			{
-				label: "set edges fold angle",
-				click: () => {},
-				toolTip: "set the fold angle of all selected edges",
 			},
 		],
 	},
@@ -95,21 +89,48 @@ export default [
 			},
 			{
 				label: "reassign selected",
+				toolTip: "set the assignment of all selected edges",
 				submenu: [
-					{ label: "boundary" },
-					{ label: "mountain" },
-					{ label: "valley" },
-					{ label: "flat" },
-					{ label: "cut" },
-					{ label: "join" },
-					{ label: "unassigned" },
+					{
+						label: "boundary",
+						click: () => execute(`setAssignment(getSelectedEdges(), "B")`),
+					},
+					{
+						label: "mountain",
+						click: () => execute(`setAssignment(getSelectedEdges(), "M")`),
+					},
+					{
+						label: "valley",
+						click: () => execute(`setAssignment(getSelectedEdges(), "V")`),
+					},
+					{
+						label: "flat",
+						click: () => execute(`setAssignment(getSelectedEdges(), "F")`),
+					},
+					{
+						label: "cut",
+						click: () => execute(`setAssignment(getSelectedEdges(), "C")`),
+					},
+					{
+						label: "join",
+						click: () => execute(`setAssignment(getSelectedEdges(), "J")`),
+					},
+					{
+						label: "unassigned",
+						click: () => execute(`setAssignment(getSelectedEdges(), "U")`),
+					},
 				],
 			},
-			{
-				label: "flatten 3D angles",
-				click: () => {},
-				toolTip: "make any 3D mountain or valley into flat-folded",
-			},
+			// {
+			// 	label: "set selected fold angles",
+			// 	click: () => {},
+			// 	toolTip: "set the fold angle of all selected edges",
+			// },
+			// {
+			// 	label: "flatten 3D angles",
+			// 	click: () => {},
+			// 	toolTip: "make any 3D mountain or valley into flat-folded",
+			// },
 		],
 	},
 	{
@@ -123,49 +144,52 @@ export default [
 				label: "deselect all",
 				click: () => executeCommand("deselectAll"),
 			},
-			{ type: "separator" },
+			// {
+			// 	label: "invert selection",
+			// 	click: () => {},
+			// },
 			{
 				label: "select edges",
 				submenu: [
 					{
 						label: "boundary",
-						click: () => {},
+						click: () => executeCommand("selectEdgesWithAssignment", "B"),
 					},
 					{
 						label: "mountain",
-						click: () => {},
+						click: () => executeCommand("selectEdgesWithAssignment", "M"),
 					},
 					{
 						label: "valley",
-						click: () => {},
+						click: () => executeCommand("selectEdgesWithAssignment", "V"),
 					},
 					{
 						label: "flat",
-						click: () => {},
+						click: () => executeCommand("selectEdgesWithAssignment", "F"),
 					},
 					{
 						label: "cut",
-						click: () => {},
+						click: () => executeCommand("selectEdgesWithAssignment", "C"),
 					},
 					{
 						label: "join",
-						click: () => {},
+						click: () => executeCommand("selectEdgesWithAssignment", "J"),
 					},
 					{
 						label: "unassigned",
-						click: () => {},
+						click: () => executeCommand("selectEdgesWithAssignment", "U"),
 					},
-					{
-						type: "separator",
-					},
-					{
-						label: "flat-folded",
-						click: () => {},
-					},
-					{
-						label: "3D angles",
-						click: () => {},
-					},
+					// {
+					// 	type: "separator",
+					// },
+					// {
+					// 	label: "flat-folded",
+					// 	click: () => {},
+					// },
+					// {
+					// 	label: "3D angles",
+					// 	click: () => {},
+					// },
 				],
 			},
 		],
@@ -183,8 +207,8 @@ export default [
 				toolTip: "violations of Kawasaki, Maekawa's theorems",
 			},
 			{
-				label: "nearest vertex distance",
-				click: () => {},
+				label: "nearest two vertices",
+				click: () => executeCommand("selectNearestVertices"),
 				toolTip: "the distance between the two nearest vertices",
 			},
 			{
@@ -203,15 +227,20 @@ export default [
 				type: "checkbox",
 				bind: ShowSimulator,
 			},
+			// {
+			// 	label: "show code editor",
+			// 	type: "checkbox",
+			// 	bind: ShowCodeEditor,
+			// },
+			// {
+			// 	label: "show terminal",
+			// 	type: "checkbox",
+			// 	bind: ShowTerminal,
+			// },
 			{
-				label: "show code editor",
+				label: "show frames",
 				type: "checkbox",
-				bind: ShowCodeEditor,
-			},
-			{
-				label: "show terminal",
-				type: "checkbox",
-				bind: ShowTerminal,
+				bind: ShowFrames,
 			},
 		],
 	},

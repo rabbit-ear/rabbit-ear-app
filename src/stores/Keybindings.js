@@ -49,8 +49,9 @@ export const KeybindingsDown = {
 	// esc
 	27: {
 		0: (event) => {
+			executeCommand("resetApp");
 			executeCommand("resetTool");
-			executeCommand("resetRulers");
+			// executeCommand("resetRulers");
 		},
 	},
 	// 1 - 7
@@ -96,6 +97,7 @@ export const KeybindingsDown = {
 	// "d"
 	68: {
 		0: (event) => executeCommand("setTool", "deleteTool"),
+		2: (event) => executeCommand("deselectAll"),
 	},
 	// "e"
 	69: {

@@ -7,7 +7,9 @@ const calcTextureSize = (numNodes) => {
 			return (2 ** i);
 		}
 	}
-	console.warn(`no texture size found for ${numNodes} items`);
+	if (numNodes !== 0) {
+		console.warn(`no texture size found for ${numNodes} items`);
+	}
 	return 2;
 };
 

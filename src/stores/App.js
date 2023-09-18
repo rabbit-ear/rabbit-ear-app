@@ -9,15 +9,17 @@ export const UndoHistoryLength = 30;
 // app preferences and settings
 export const NewEdgeAssignment = writable("F");
 // export const Snapping = writable(true);
-export const ShowSimulator = writable(false);
-export const ShowTerminal = writable(true);
-export const ShowCodeEditor = writable(false);
-export const ShowFrames = writable(true);
 export const ShowFlatFoldableIssues = writable(true);
 export const ShowGrid = writable(true);
 export const ShowAxes = writable(true);
 export const ShowIndices = writable(false);
 export const RulersAutoClear = writable(true);
+
+// show/hide components
+export const ShowSimulator = writable(true);
+export const ShowTerminal = writable(true);
+export const ShowCodeEditor = writable(false);
+export const ShowFrames = writable(true);
 
 // DOM element references
 export const DialogNewFile = writable(undefined);

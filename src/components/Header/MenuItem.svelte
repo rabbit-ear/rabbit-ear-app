@@ -40,7 +40,7 @@
 		user-select: none;
 	}
 	.description {
-		/* color: var(--dim);*/
+		 color: var(--dim);
 		font-style: italic;
 	}
 </style>

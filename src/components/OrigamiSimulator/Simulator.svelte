@@ -143,7 +143,7 @@
 			const box = boundingBox($Graph);
 			modelSize = box ? Math.max(...box.span) : 1;
 		} catch (error) {
-			window.alert(error);
+			// window.alert(error);
 		}
 	}
 

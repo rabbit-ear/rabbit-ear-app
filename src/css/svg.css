@@ -34,15 +34,16 @@
 	opacity: 0.5;
 }
 
-/*.vertices-indices circle {
+/*
+.vertices-indices circle {
 	stroke: var(--yellow);
 }
 .vertices-indices text {
 	fill: var(--yellow);
 }
-
+*/
 .edges-indices circle {
-	stroke: var(--lightblue);
+	stroke: var(--blue);
 }
 .edges-indices text {
 	fill: var(--lightblue);
@@ -52,5 +53,5 @@
 	stroke: var(--green);
 }
 .faces-indices text {
-	fill: var(--green);
-}*/
+	fill: var(--brightgreen);
+}

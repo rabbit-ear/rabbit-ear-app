@@ -2,76 +2,101 @@ import {
 	writable,
 	derived,
 } from "svelte/store";
+import {
+	snapToPoint,
+	snapToEdge,
+	snapToRulerLine,
+} from "../../js/snap.js";
+import { zipArrays } from "../../js/arrays.js";
+import { executeCommand } from "../../kernel/execute.js";
+import { Highlight } from "../../stores/Select.js";
+import { UILines } from "../../stores/UI.js";
+import { RulerLines } from "../../stores/Ruler.js";
 
-// export const Presses = [
-// 	writable(undefined),
-// 	writable(undefined),
-// 	writable(undefined),
-// ];
-// export const Releases = [
-// 	writable(undefined),
-// 	writable(undefined),
-// 	writable(undefined),
-// ];
-
-// export const Point1 = derived(
-// 	Presses[0],
-// 	($Press) => snapToPoint(point, false),
-// 	[]
-// );
-
-// export const DrawGraph = derived(
-// 	[Point1],
-// 	([$coords]) => {
-// 		if (coords !== undefined) {
-// 			UIGraph.set({ vertices_coords: [coords] });
-// 		}
-// 	}
-// );
-
-// const Preview = derived(
-// 	[Presses[0], Presses[1], Releases[0], Releases[1]],
-// 	([]) => {
-
-// 	},
-// 	undefined,
-// );
-
-// export const ToolStep = derived(
-// 	[Presses, Releases],
-// 	([$Presses, $Releases]) => {
-// 		const pressesCount = $Presses.length;
-// 		const releasesCount = $Releases.length;
-// 		if (pressesCount === 0) { return 0; }
-// 		if (pressesCount === 1 && releasesCount === 0) { return 1; }
-// 		if (pressesCount === 1 && releasesCount === 1) { return 2; }
-// 		if (pressesCount === 2 && releasesCount === 1) { return 3; }
-// 		if (pressesCount === 2 && releasesCount === 2) { return 4; }
-// 		if (pressesCount === 3 && releasesCount === 2) { return 5; }
-// 		if (pressesCount === 3 && releasesCount === 3) { return 6; }
-// 		return Infinity;
-// 	},
-// 	0,
-// );
-
-
+export const Move = writable(undefined);
 export const Presses = writable([]);
-
 export const Releases = writable([]);
 
-export const ToolStep = derived(
-	[Presses, Releases],
-	([$Presses, $Releases]) => {
-		const pressesCount = $Presses.length;
-		const releasesCount = $Releases.length;
-		if (pressesCount === 0) { return 0; }
-		if (pressesCount === 1 && releasesCount === 0) { return 1; }
-		if (pressesCount === 1 && releasesCount === 1) { return 2; }
-		if (pressesCount === 2 && releasesCount === 1) { return 3; }
-		if (pressesCount === 2 && releasesCount === 2) { return 4; }
-		if (pressesCount === 3 && releasesCount === 2) { return 5; }
-		if (pressesCount === 3 && releasesCount === 3) { return 6; }
-		return Infinity;
-	},
-	0,
+export const Touches = derived(
+	[Move, Presses, Releases],
+	([$Move, $Presses, $Releases]) => zipArrays($Presses, $Releases)
+		.concat([$Move])
+		.filter(a => a !== undefined),
+	[],
 );
+
+export const Step = derived(Touches, ($Touches) => $Touches.length, 0);
+
+export const InputPoint = derived(
+	Touches,
+	($Touches) => snapToPoint($Touches[0], false),
+	undefined,
+);
+
+export const InputEdge0 = derived(
+	Touches,
+	($Touches) => snapToEdge($Touches[1], false).edge,
+	undefined,
+);
+
+export const InputEdge1 = derived(
+	Touches,
+	($Touches) => snapToEdge($Touches[2], false).edge,
+	undefined,
+);
+
+// Touches[3] skipped
+
+export const Segment0 = derived(
+	Touches,
+	($Touches) => snapToRulerLine($Touches[4], false).coords,
+	undefined,
+);
+
+export const Segment1 = derived(
+	Touches,
+	($Touches) => snapToRulerLine($Touches[5], false).coords,
+	undefined,
+);
+
+export const Highlights = derived(
+	[InputEdge0, InputEdge1],
+	([$InputEdge0, $InputEdge1]) => {
+		Highlight.reset();
+		const edges = [$InputEdge0, $InputEdge1].filter(a => a !== undefined);
+		Highlight.addEdges(edges);
+	},
+	undefined,
+);
+
+export const AxiomPreview = derived(
+	[InputEdge0, InputEdge1, InputPoint],
+	([$InputEdge0, $InputEdge1, $InputPoint]) => (
+		($InputEdge0 !== undefined
+			&& $InputEdge1 !== undefined
+			&& $InputPoint !== undefined
+			? executeCommand("axiom7Preview", $InputEdge0, $InputEdge1, $InputPoint)
+			: UILines.set([]))),
+	undefined,
+);
+
+export const reset = () => {
+	Move.set(undefined);
+	Presses.set([]);
+	Releases.set([]);
+	RulerLines.set([]);
+};
+
+let unsub0;
+let unsub1;
+
+export const subscribe = () => {
+	unsub0 = AxiomPreview.subscribe(() => {});
+	unsub1 = Highlights.subscribe(() => {});
+};
+
+export const unsubscribe = () => {
+	reset();
+	if (unsub0) { unsub0(); }
+	if (unsub1) { unsub1(); }
+};

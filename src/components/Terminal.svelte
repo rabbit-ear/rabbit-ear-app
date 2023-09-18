@@ -98,4 +98,15 @@
 	pre :global(.WhiteSpace) { color: var(--text); }
 	pre :global(.StringLiteral) { color: var(--yellow); }
 
+	/* these have not been seen yet, setting purple by default */
+  pre :global(.NoSubstitutionTemplate) { color: var(--purple); }
+  pre :global(.TemplateHead) { color: var(--purple); }
+  pre :global(.TemplateMiddle) { color: var(--purple); }
+  pre :global(.TemplateTail) { color: var(--purple); }
+  pre :global(.RegularExpressionLiteral) { color: var(--purple); }
+  pre :global(.MultiLineComment) { color: var(--purple); }
+  pre :global(.SingleLineComment) { color: var(--purple); }
+  pre :global(.PrivateIdentifier) { color: var(--purple); }
+  pre :global(.LineTerminatorSequence) { color: var(--purple); }
+  pre :global(.Invalid) { color: var(--purple); }
 </style>

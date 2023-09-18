@@ -13,6 +13,7 @@
 	<text
 		x={0}
 		y={0}
+		fill="var(--text)"
 		style={`font-size: ${fontSize}px;`}>{index}</text>
 </g>
 
@@ -21,7 +22,6 @@
 		fill: var(--background-1);
 	}
 	text {
-		fill: var(--text);
 		text-anchor: middle;
 		dominant-baseline: central;
 	}
