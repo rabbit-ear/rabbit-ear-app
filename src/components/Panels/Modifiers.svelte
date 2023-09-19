@@ -8,7 +8,7 @@
 
 	let checked = {};
 	Object.keys(modifiers).forEach(name => {
-		checked[name] = $Modifiers.filter(el => el.name === name).length > 0;
+		checked[name] = $Modifiers.filter(el => el.key === name).length > 0;
 	});
 
 	$: $Modifiers = Object.keys(checked)
@@ -25,7 +25,7 @@
 					type="checkbox"
 					bind:checked={checked[name]}
 					id={`mod-check-${name}`}>
-				<label for={`mod-check-${name}`}>{name}</label>
+				<label for={`mod-check-${name}`}>{modifiers[name].name}</label>
 			</div>
 		{/each}
 	</span>

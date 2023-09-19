@@ -1,7 +1,7 @@
-import * as autoPlanarize from "./autoPlanarize/index.js";
-import * as undoHistory from "./undoHistory/index.js";
+import autoPlanarize from "./autoPlanarize/index.js";
+import undoHistory from "./undoHistory/index.js";
 
 export default {
-	...autoPlanarize,
-	...undoHistory,
+	autoPlanarize,
+	undoHistory,
 };

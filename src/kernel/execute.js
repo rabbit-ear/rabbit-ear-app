@@ -16,7 +16,7 @@ import {
  */
 export const execute = (js) => {
 	const commands = [js];
-	get(Modifiers).forEach(modifier => modifier(commands));
+	get(Modifiers).forEach(modifier => modifier.execute(commands));
 	// add to the undo stack. clear the redo stack
 	const output = commands.flatMap(command => run(command));
 	CommandHistory.update(history => [...history, ...output]);
@@ -27,7 +27,7 @@ export const execute = (js) => {
  */
 const executeSilent = (js) => {
 	const commands = [js];
-	get(Modifiers).forEach(modifier => modifier(commands));
+	get(Modifiers).forEach(modifier => modifier.execute(commands));
 	const output = commands.flatMap(command => runSilent(command));
 	CommandHistory.update(history => [...history, ...output]);
 };
