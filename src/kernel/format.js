@@ -1,13 +1,18 @@
 import jsTokens from "../lib/js-tokens/index.js";
 /**
- *
+ * @description Convert a Javascript snippet into a HTML string
+ * after processing it into tokens, wrapping each part in a span
+ * element marked with the class name of the token type.
+ * @returns {string} HTML string
  */
-export const formatJavascript = (text) => Array
-	.from(jsTokens(text))
+export const formatJavascript = (js) => Array
+	.from(jsTokens(js))
 	.map(({ type, value }) => `<span class=${type}>${value}</span>`)
 	.join("");
 /**
- *
+ * @description Convert a Javascript variable into an HTML string
+ * in one span element, with a class of "return".
+ * @returns {string} HTML string
  */
 export const formatCommandResult = (result) => {
 	if (result == null) { return undefined; }
@@ -22,7 +27,9 @@ export const formatCommandResult = (result) => {
 	return undefined;
 };
 /**
- *
+ * @description Convert an error or a string into an HTML string
+ * with one span marked class of "error".
+ * @returns {string} HTML string
  */
 export const formatError = (error) => (
 	`<span class="error">${error}</span>`

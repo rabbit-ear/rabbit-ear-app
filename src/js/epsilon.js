@@ -1,8 +1,11 @@
 import { boundingBox } from "rabbit-ear/graph/boundary.js";
-
 /**
- * @param {number} epsilonFactor the factor, a multiple of the
- * longest side length in the graph's bounding box.
+ * @description Scale up an epsilon value to become a factor of
+ * the extent of a list of vertices. The default epsilon factor
+ * is 1e-4, meaning if the bounding box of vertices is 10,000 long,
+ * the epsilon will be 1.
+ * @param {number} epsilonFactor the factor, to be multiplied by
+ * the longest side length in the graph's bounding box.
  */
 export const findEpsilon = ({ vertices_coords }, epsilonFactor = 1e-4) => {
 	const bounds = boundingBox({ vertices_coords });

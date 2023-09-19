@@ -1,5 +1,6 @@
 /**
- *
+ * @description These methods when called by "executeMethod",
+ * not by "execute" will not be printed in the console.
  */
 export const silentMethods = {
 	setTool: true,

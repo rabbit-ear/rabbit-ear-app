@@ -8,37 +8,41 @@ import {
 	runSilent,
 } from "./shell.js";
 /**
- *
+ * @description This is the main point of entry to execute
+ * a command in the context that contains all the app's functionality.
+ * The command will pass through the app's Modifiers, be executed,
+ * then print the output to the console.
+ * @param {string} js a valid Javascript blob
  */
-export const execute = (string) => {
-	const commands = [string];
+export const execute = (js) => {
+	const commands = [js];
 	get(Modifiers).forEach(modifier => modifier(commands));
+	// add to the undo stack. clear the redo stack
 	const output = commands.flatMap(command => run(command));
 	CommandHistory.update(history => [...history, ...output]);
 };
 /**
- * @description the main execution method. all methods, from UI to
- * graph-modifying should pass through this method. pre and post-
- * execute event methods can be called, and the effect of calling
- * a method here will print it to the history log in the terminal.
+ * @description UI methods will be redirected through here to avoid
+ * being printed out to the console.
  */
-export const executeSilent = (string) => {
-	const commands = [string];
+const executeSilent = (js) => {
+	const commands = [js];
 	get(Modifiers).forEach(modifier => modifier(commands));
 	const output = commands.flatMap(command => runSilent(command));
 	CommandHistory.update(history => [...history, ...output]);
 };
 /**
- *
+ * @description Convert a method name and its parameters into
+ * a stringified valid Javascript code blob.
  */
 const stringifyCall = (name, ...args) => (
 	`${name}(${args.map(v => JSON.stringify(v)).join(", ")})`
 );
 /**
- * @description the main execution method. all methods, from UI to
- * graph-modifying should pass through this method. pre and post-
- * execute event methods can be called, and the effect of calling
- * a method here will print it to the history log in the terminal.
+ * @description This is a more user-friendly alternative to "execute"
+ * intended for only one method call, and it can include method arguments.
+ * This allows the user to simply type the method name instead of
+ * constructing a valid Javascript blob.
  */
 export const executeCommand = (name, ...args) => (silentMethods[name]
 	? executeSilent(stringifyCall(name, ...args))

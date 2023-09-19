@@ -1,5 +1,8 @@
 import { distance2 } from "rabbit-ear/math/vector.js";
-
+/**
+ * @description compare every vertex against each other to find
+ * the nearest two vertices. n^2 algorithm.
+ */
 export const nearestTwoVertices = ({ vertices_coords }) => {
 	const nearest = [0, 1];
 	let distance = Infinity;

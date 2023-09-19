@@ -1,3 +1,8 @@
+/**
+ * @description Walk up the chain of parents of a DOM element
+ * until we find an element with a .nodeName property matching
+ * the supplied parameter. Return the matching element, or undefined.
+ */
 export const findInParents = (element, nodeName) => {
 	if ((element.nodeName || "") === nodeName) {
 		return element;
@@ -6,7 +11,10 @@ export const findInParents = (element, nodeName) => {
 		? findInParents(element.parentNode, nodeName)
 		: undefined;
 };
-
+/**
+ * @description Convert a 2D point coordinates from screen/canvas/
+ * pixel units, into viewBox units.
+ */
 export const convertToViewBox = function (svg, x, y) {
 	const pt = svg.createSVGPoint();
 	pt.x = x;
@@ -15,10 +23,12 @@ export const convertToViewBox = function (svg, x, y) {
 	const svgPoint = pt.matrixTransform(svg.getScreenCTM().inverse());
 	return [svgPoint.x, svgPoint.y];
 };
-
-// form element that take in text input (type=text, number, etc..)
-// form elements like radio do not count,
-// keyboard event should bubble through.
+/**
+ * @description Query the document.activeElement and depending on
+ * which element is active, return true if that element is a form
+ * element which typically accepts text input. This includes input
+ * type=text, does not include type=radio.
+ */
 export const isFormElementActive = () => {
 	const node = document.activeElement;
 	if (!node) { return false; }

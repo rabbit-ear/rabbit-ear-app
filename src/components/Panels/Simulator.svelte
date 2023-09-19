@@ -87,40 +87,52 @@
 				step="0.02"
 				bind:value={$LineOpacity} />
 		</div>
-		<button
-			class="button-collapse"
-			on:click={() => showAdvanced = !showAdvanced}>advanced</button>
+
+		<div>
+			<button
+				class="full-button"
+				on:click={() => showAdvanced = !showAdvanced}>advanced</button>
+		</div>
 
 		{#if showAdvanced}
-			<p>
-				error
+			<div>
+				<p>error</p>
+			</div>
+
+			<div>
 				<input
 					type="text"
-					class="long"
 					disabled={!$Active}
 					bind:value={$VertexError} />
-			</p>
+			</div>
 
-			<p>integration</p>
-			<input
-				type="radio"
-				name="radio-integration"
-				id="radio-integration-euler"
-				value="euler"
-				bind:group={$Integration} />
-			<label for="radio-integration-euler">euler</label>
-			<input
-				type="radio"
-				name="radio-integration"
-				id="radio-integration-verlet"
-				value="verlet"
-				bind:group={$Integration} />
-			<label for="radio-integration-verlet">verlet</label>
+			<div>
+				<p>integration</p>
+			</div>
 
-			<p>
-				axial stiffness
-				<input type="text" class="short" bind:value={$AxialStiffness} />
-			</p>
+			<div>
+				<input
+					type="radio"
+					name="radio-integration"
+					id="radio-integration-euler"
+					value="euler"
+					bind:group={$Integration} />
+				<label for="radio-integration-euler">euler</label>
+
+				<input
+					type="radio"
+					name="radio-integration"
+					id="radio-integration-verlet"
+					value="verlet"
+					bind:group={$Integration} />
+				<label for="radio-integration-verlet">verlet</label>
+			</div>
+
+			<div>
+				<p>axial stiffness</p>
+				<input type="text" bind:value={$AxialStiffness} />
+			</div>
+
 			<input
 				type="range"
 				min="10"
@@ -128,10 +140,10 @@
 				step="1"
 				bind:value={$AxialStiffness} />
 
-			<p>
-				face stiffness
-				<input type="text" class="short" bind:value={$FaceStiffness} />
-			</p>
+			<div>
+				<p>face stiffness</p>
+				<input type="text" bind:value={$FaceStiffness} />
+			</div>
 
 			<input
 				type="range"
@@ -139,11 +151,11 @@
 				max="5"
 				step="0.02"
 				bind:value={$FaceStiffness} />
-
-			<p>
-				join stiffness
-				<input type="text" class="short" bind:value={$JoinStiffness} />
-			</p>
+			
+			<div>
+				<p>join stiffness</p>
+				<input type="text" bind:value={$JoinStiffness} />
+			</div>
 
 			<input
 				type="range"
@@ -151,11 +163,11 @@
 				max="3"
 				step="0.01"
 				bind:value={$JoinStiffness} />
-
-			<p>
-				crease stiffness
-				<input type="text" class="short" bind:value={$CreaseStiffness} />
-			</p>
+			
+			<div>
+				<p>crease stiffness</p>
+				<input type="text" bind:value={$CreaseStiffness} />
+			</div>
 
 			<input
 				type="range"
@@ -163,11 +175,11 @@
 				max="3"
 				step="0.01"
 				bind:value={$CreaseStiffness} />
-
-			<p>
-				damping ratio
-				<input type="text" class="short" bind:value={$DampingRatio} />
-			</p>
+			
+			<div>
+				<p>damping ratio</p>
+				<input type="text" bind:value={$DampingRatio} />
+			</div>
 
 			<input
 				type="range"
@@ -177,6 +189,7 @@
 				bind:value={$DampingRatio} />
 
 			<button
+				class="full-button"
 				disabled={!$Active}
 				on:click={$Reset}>reset model</button>
 		{/if}
@@ -184,15 +197,27 @@
 </Panel>
 
 <style>
-	input[type=range] { width: 100%; }
-	.long { width: 8rem; }
-	.short { width: 2rem; }
-	.button-collapse {
+	input[type=range] {
+		width: 100%;
+	}
+	input[type=text] {
+		width: 100%;
+	}
+	.full-button {
 		width: 100%;
 	}
 	div {
+		width: 100%;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+		margin-bottom: 0.25rem;
+	}
+	div p {
+		flex: 1 0 auto;
+		margin-right: 0.5rem;
+	}
+	div input[type=text] {
+		flex: 0 1 auto;
 	}
 </style>

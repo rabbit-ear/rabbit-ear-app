@@ -13,7 +13,7 @@ import {
 	ModelMatrix,
 	AutoSizeModelMatrix,
 } from "./ViewBox.js";
-import { FileHistory } from "./History.js";
+// import { FileHistory } from "./History.js";
 import { Selection } from "./Select.js";
 /**
  *
@@ -145,7 +145,7 @@ export const LoadFile = (FOLD) => {
 	AutoSizeModelMatrix.set(true);
 	// load file
 	Selection.reset();
-	FileHistory.set([]);
+	// FileHistory.set([]);
 	FrameIndex.set(0);
 	File.set(getFileMetadata(FOLD));
 	Frames.set(getFramesAsFlatArray(FOLD).map(populate));

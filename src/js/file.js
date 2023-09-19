@@ -9,7 +9,7 @@ export const tryLoadFile = (contents, filename, options) => {
 	executeCommand("load", JSON.parse(contents));
 };
 /**
- *
+ * @description Bind this method to the <input type="file"> element.
  */
 export const loadFileDialog = (event) => {
 	let filename = "";
@@ -33,7 +33,10 @@ export const loadFileDialog = (event) => {
 	}
 	console.warn("FileReader no file selected");
 };
-
+/**
+ * @description Capture the current state of the simulator
+ * and store it..... TODO.
+ */
 export const saveSimulatorToFoldFile = () => {
 	const FOLD = get(ExportModel)();
 	const a = document.createElement("a");

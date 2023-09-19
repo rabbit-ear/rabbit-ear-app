@@ -65,8 +65,9 @@ export const run = (jsBlob) => {
 	].filter(a => a.html !== undefined);
 };
 /**
- * @description run a javascript blob in an eval context which includes
- * all commands from the core of the app.
+ * @description An alternative to "run", but the output does not
+ * generate any console messages, unless there is an error
+ * in which case it does generate the error HTML message.
  * @param {string} jsBlob a javascript snippet
  * @returns {object[]} an array of objects meant for printing
  * as output into the terminal.

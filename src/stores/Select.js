@@ -2,7 +2,7 @@ import { get } from "svelte/store";
 import { writable } from "svelte/store";
 import {
 	invertMap,
-	mergeArrays,
+	combineIntegerSets,
 } from "../js/arrays.js";
 
 export const emptyComponentObject = () => (
@@ -12,15 +12,15 @@ export const emptyComponentObject = () => (
 export const Selection = writable(emptyComponentObject());
 Selection.reset = () => Selection.set(emptyComponentObject());
 Selection.addVertices = (verts) => Selection.update(obj => {
-	obj.vertices = mergeArrays(obj.vertices, verts);
+	obj.vertices = combineIntegerSets(obj.vertices, verts);
 	return obj;
 });
 Selection.addEdges = (verts) => Selection.update(obj => {
-	obj.edges = mergeArrays(obj.edges, verts);
+	obj.edges = combineIntegerSets(obj.edges, verts);
 	return obj;
 });
 Selection.addFaces = (verts) => Selection.update(obj => {
-	obj.faces = mergeArrays(obj.faces, verts);
+	obj.faces = combineIntegerSets(obj.faces, verts);
 	return obj;
 });
 // Selection.lookup = () => {
@@ -35,14 +35,14 @@ Selection.addFaces = (verts) => Selection.update(obj => {
 export const Highlight = writable(emptyComponentObject());
 Highlight.reset = () => Highlight.set(emptyComponentObject()),
 Highlight.addVertices = (verts) => Highlight.update(obj => {
-	obj.vertices = mergeArrays(obj.vertices, verts);
+	obj.vertices = combineIntegerSets(obj.vertices, verts);
 	return obj;
 });
 Highlight.addEdges = (verts) => Highlight.update(obj => {
-	obj.edges = mergeArrays(obj.edges, verts);
+	obj.edges = combineIntegerSets(obj.edges, verts);
 	return obj;
 });
 Highlight.addFaces = (verts) => Highlight.update(obj => {
-	obj.faces = mergeArrays(obj.faces, verts);
+	obj.faces = combineIntegerSets(obj.faces, verts);
 	return obj;
 });
