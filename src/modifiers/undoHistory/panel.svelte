@@ -8,7 +8,7 @@
 </script>
 
 <Panel>
-	<span slot="title">history</span>
+	<span slot="title">undo history</span>
 	<span slot="body">
 		<p>undo: <span class="number">{$UndoStack.length}</span></p>
 		<p>redo: <span class="number">{$RedoStack.length}</span></p>

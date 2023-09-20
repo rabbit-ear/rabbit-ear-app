@@ -17,9 +17,30 @@ export const UndoHistoryLength = writable(30);
  */
 // export const UndoHistoryAvoidCommands = writable({
 export const UndoHistoryAvoidCommands = {
+	deselectAll: true,
+	addToSelection: true,
+	highlight: true,
 	download: true,
-	kawasakiRulers: true,
 	setTool: true,
+	axiom1Preview: true,
+	axiom2Preview: true,
+	axiom3Preview: true,
+	axiom4Preview: true,
+	axiom5Preview: true,
+	axiom6Preview: true,
+	axiom7Preview: true,
+	axiom1Rulers: true,
+	axiom2Rulers: true,
+	axiom3Rulers: true,
+	axiom4Rulers: true,
+	axiom5Rulers: true,
+	axiom6Rulers: true,
+	axiom7Rulers: true,
+	kawasakiRulerPreviews: true,
+	kawasakiRulers: true,
+	radialRulers: true,
+	foldedLinePreview: true,
+	pleatPreview: true,
 };
 /**
  *
@@ -38,7 +59,7 @@ export const cache = () => {
 	const clone = { file, frames };
 	UndoStack.update(undos => {
 		const undoList = [...undos, clone];
-		if (undoList.length > UndoHistoryLength) {
+		if (undoList.length > get(UndoHistoryLength)) {
 			undoList.shift();
 		}
 		return undoList;

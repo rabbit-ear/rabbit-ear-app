@@ -78,6 +78,7 @@ export const KeybindingsDown = {
 	},
 	// "a"
 	65: {
+		0: (event) => executeCommand("setTool", "assignment"),
 		2: (event) => executeCommand("selectAll"),
 	},
 	// "b"
