@@ -1,13 +1,5 @@
 import { get } from "svelte/store";
 import {
-	AssignType,
-	ASSIGN_SWAP,
-	ASSIGN_FLAT,
-	ASSIGN_UNASSIGNED,
-	ASSIGN_CUT,
-	ASSIGN_BOUNDARY,
-} from "../tools/assignment/stores.js";
-import {
 	DialogNewFile,
 	TerminalTextarea,
 	ShowTerminal,
@@ -83,17 +75,11 @@ export const KeybindingsDown = {
 	},
 	// "b"
 	66: {
-		0: (event) => {
-			executeCommand("setTool", "assignment");
-			AssignType.set(ASSIGN_BOUNDARY);
-		},
+		0: (event) => executeCommand("setToolAssignment", "B"),
 	},
 	// "c"
 	67: {
-		0: (event) => {
-			executeCommand("setTool", "assignment");
-			AssignType.set(ASSIGN_CUT);
-		},
+		0: (event) => executeCommand("setToolAssignment", "C"),
 	},
 	// "d"
 	68: {
@@ -106,10 +92,7 @@ export const KeybindingsDown = {
 	},
 	// "f"
 	70: {
-		0: (event) => {
-			executeCommand("setTool", "assignment");
-			AssignType.set(ASSIGN_FLAT);
-		},
+		0: (event) => executeCommand("setToolAssignment", "F"),
 	},
 	// "k"
 	75: {
@@ -117,10 +100,7 @@ export const KeybindingsDown = {
 	},
 	// "m"
 	77: {
-		0: (event) => {
-			executeCommand("setTool", "assignment");
-			AssignType.set(ASSIGN_SWAP);
-		},
+		0: (event) => executeCommand("setToolAssignment", "M"),
 	},
 	// "n"
 	78: {
@@ -129,6 +109,7 @@ export const KeybindingsDown = {
 	// "s"
 	83: {
 		0: (event) => executeCommand("setTool", "select"),
+		// 0: (event) => executeCommand("setTool", "edge"),
 	},
 	// "t"
 	84: {
@@ -136,17 +117,11 @@ export const KeybindingsDown = {
 	},
 	// "u"
 	85: {
-		0: (event) => {
-			executeCommand("setTool", "assignment");
-			AssignType.set(ASSIGN_UNASSIGNED);
-		},
+		0: (event) => executeCommand("setToolAssignment", "U"),
 	},
 	// "v"
 	86: {
-		0: (event) => {
-			executeCommand("setTool", "assignment");
-			AssignType.set(ASSIGN_SWAP);
-		},
+		0: (event) => executeCommand("setToolAssignment", "V"),
 	},
 	// "z"
 	90: {

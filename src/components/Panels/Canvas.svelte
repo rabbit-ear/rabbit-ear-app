@@ -1,4 +1,6 @@
 <script>
+	import SelectIcon from "../../tools/select/icon.svelte";
+	import ZoomIcon from "../../tools/camera/icon.svelte";
 	import Panel from "./Panel.svelte";
 	import {
 		ModelMatrix,
@@ -33,7 +35,14 @@
 <Panel>
 	<span slot="title">canvas</span>
 	<span slot="body">
-		<p>pointer: <span class="number">{formatPoint($Pointer)}</span></p>
+		<div class="flex-row">
+			<span class="svg-icon"><SelectIcon /></span>
+			<span class="number">{formatPoint($Pointer)}</span>
+		</div>
+		<div class="flex-row">
+			<span class="svg-icon"><ZoomIcon /></span>
+			<span class="number"><button on:click={CameraMatrix.reset}>{zoom}</button></span>
+		</div>
 		<!-- <input type="text" readonly value={formatPoint(NotUndefined($PointerSnap, $Pointer))}> -->
 		<!-- <div class="center">
 			{#if isSnapped}
@@ -42,18 +51,33 @@
 				<p class="dim">not snapped</p>
 			{/if}
 		</div> -->
-		<hr />
-		<p>zoom: <span class="number">{zoom}</span></p>
-		<div class="center">
-			<button on:click={CameraMatrix.reset}>reset zoom</button>
-		</div>
-		<input type="checkbox" bind:checked={$AutoSizeModelMatrix} id="auto-model-matrix"><label for="auto-model-matrix">camera track with changes</label>
+		<!-- <input type="checkbox" bind:checked={$AutoSizeModelMatrix} id="auto-model-matrix"><label for="auto-model-matrix">camera track with changes</label> -->
 	</span>
 </Panel>
 
 <style>
+	.flex-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+	}
+	.svg-icon {
+		display: inline-block;
+		height: 2rem;
+		width: 2rem;
+		fill: var(--text);
+		stroke: var(--text);
+	}
 	.number {
 		font-weight: bold;
+	}
+	button {
+		all: unset;
+		cursor: pointer;
+	}
+	button:hover {
+		color: var(--highlight);
 	}
 	/*.alert {
 		color: var(--highlight);

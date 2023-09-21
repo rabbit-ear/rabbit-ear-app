@@ -4,7 +4,7 @@ import {
 	makeMatrix2Reflect,
 } from "rabbit-ear/math/matrix2.js";
 import { parseToTokens } from "../general.js";
-import { ReflectionLines } from "./stores.js";
+import { ReflectionLines } from "../../tools/symmetry/stores.js";
 
 const repeatableMethods = {
 	"segment": true,

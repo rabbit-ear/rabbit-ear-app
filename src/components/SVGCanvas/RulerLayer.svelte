@@ -12,12 +12,13 @@
 		UIRays,
 	} from "../../stores/UI.js";
 	import { SnapPoints } from "../../stores/Snap.js";
-	// import { Tool } from "../../stores/UI.js";
+	import { Tool } from "../../stores/UI.js";
 	import { ViewBox } from "../../stores/ViewBox.js";
 
 	let showRulers = true;
-	// $: showRulers = $Tool !== TOOL_EDGE
-	// 	&& $Tool !== TOOL_FOLD_LINE;
+	$: showRulers = $Tool
+		&& $Tool.name !== "edge"
+		&& $Tool.name !== "folded line"
 
 	let vmax;
 	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);

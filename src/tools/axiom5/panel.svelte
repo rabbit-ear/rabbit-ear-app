@@ -1,5 +1,6 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
+	import Assignment from "../../components/PanelParts/Assignment.svelte";
 	import { Step } from "./stores.js";
 
 	let classes;
@@ -21,6 +22,8 @@
 				<li class={classes[3]}>draw segment</li>
 			</ol>
 		</div>
+		<hr />
+		<Assignment />
 	</span>
 </Panel>
 

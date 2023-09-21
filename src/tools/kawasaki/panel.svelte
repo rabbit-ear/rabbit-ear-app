@@ -1,5 +1,6 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
+	import Assignment from "../../components/PanelParts/Assignment.svelte";
 </script>
 
 <Panel>
@@ -8,6 +9,8 @@
 		<div class="container">
 			<p class="instruction">flat-fold an odd-numbered degree vertex.</p>
 		</div>
+		<hr />
+		<Assignment />
 	</span>
 </Panel>
 

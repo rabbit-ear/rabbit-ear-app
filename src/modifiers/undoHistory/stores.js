@@ -22,6 +22,7 @@ export const UndoHistoryAvoidCommands = {
 	highlight: true,
 	download: true,
 	setTool: true,
+	setToolAssignment: true,
 	axiom1Preview: true,
 	axiom2Preview: true,
 	axiom3Preview: true,

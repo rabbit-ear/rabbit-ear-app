@@ -1,16 +1,12 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
-	// import {
-	// 	RulerLines,
-	// 	RulerRays,
-	// } from "../../stores/Ruler.js";
-	import { SymmetryLines } from "./stores.js";
+	import { ReflectionLines } from "./stores.js";
 
 	const toDegree = (vector) => {
 		const radians = Math.atan2(vector[1], vector[0]);
 		return (radians * 180 / Math.PI).toFixed(1);
 	};
-	const deleteLine = (index) => SymmetryLines.update(lines => {
+	const deleteLine = (index) => ReflectionLines.update(lines => {
 		lines.splice(index, 1);
 		return lines;
 	});
@@ -20,9 +16,9 @@
 	<span slot="title">symmetry</span>
 	<span slot="body">
 		<div class="container">
-			<p>{$SymmetryLines.length} currently</p>
+			<p>{$ReflectionLines.length} currently</p>
 
-			{#each $SymmetryLines as line, i}
+			{#each $ReflectionLines as line, i}
 				<ul class="row">
 					<div>
 						<!-- <input type="checkbox" checked>

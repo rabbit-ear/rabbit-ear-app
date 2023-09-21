@@ -1,15 +1,21 @@
 <script>
 	import modifiers from "../../modifiers/index.js";
-	import { Modifiers } from "../../stores/Modifiers.js";
+	import {
+		Modifiers,
+		FixedModifiers,
+	} from "../../stores/Modifiers.js";
 	import Panel from "./Panel.svelte";
 
 	let modifierNames = [];
-	$: modifierNames = Object.keys(modifiers);
+	$: modifierNames = Object.keys(modifiers)
+		.filter(name => !(name in FixedModifiers));
 
 	let checked = {};
-	Object.keys(modifiers).forEach(name => {
-		checked[name] = $Modifiers.filter(el => el.key === name).length > 0;
-	});
+	Object.keys(modifiers)
+		.filter(name => !(name in FixedModifiers))
+		.forEach(name => {
+			checked[name] = $Modifiers.filter(el => el.key === name).length > 0;
+		});
 
 	$: $Modifiers = Object.keys(checked)
 		.filter(name => checked[name])

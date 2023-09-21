@@ -1,5 +1,6 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
+	import Assignment from "../../components/PanelParts/Assignment.svelte";
 	import {
 		Polyline,
 	} from "./stores.js";
@@ -37,6 +38,8 @@
 				<p class="info">applied upon release</p>
 			{/if}
 		</div>
+		<hr />
+		<Assignment />
 	</span>
 </Panel>
 

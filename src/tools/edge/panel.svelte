@@ -1,13 +1,13 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
-	import NewEdgeAssignment from "../../components/Panels/NewEdgeAssignment.svelte";
-	import ShiftLockAngle from "../../components/Panels/ShiftLockAngle.svelte";
+	import Assignment from "../../components/PanelParts/Assignment.svelte";
+	import ShiftLockAngle from "../../components/PanelParts/ShiftLockAngle.svelte";
 </script>
 
 <Panel>
-	<span slot="title">edge</span>
+	<span slot="title">segment</span>
 	<span slot="body">
-		<NewEdgeAssignment />
+		<Assignment />
 		<hr />
 		<ShiftLockAngle />
 	</span>
