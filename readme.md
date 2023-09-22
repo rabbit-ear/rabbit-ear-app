@@ -8,6 +8,7 @@ From the beginning, I promised to keep this app simple and make it have less to 
 
 ## bug list:
 
+[ ] rebuild boundary doesn't work when there are two separate crease patterns.
 [ ] scale-up a crease pattern, reset zoom no longer works (fixed to old size).
 [x] viewport resize due to show/hide component does not re-scale origami simulator's html canvas.
 [ ] simulator "reset", or better "reset zoom" should also reset it's camera

@@ -36,9 +36,26 @@ export const translate = (vector) => Selection.isEmpty()
 		vector,
 	);
 
-export const scale = (scaleFactor = 1) => {
+export const scaleAll = (scaleFactor) => {
 	const graph = get(Graph);
 	const vertices_coords = (graph.vertices_coords || [])
 		.map(coords => scale2(coords, scaleFactor));
 	IsoUpdateFrame({ ...graph, vertices_coords });
 };
+
+export const scaleVertices = (vertices, scaleFactor) => {
+	if (!vertices.length) { return "no vertices selected"; }
+	const graph = get(Graph);
+	const vertices_coords = graph.vertices_coords || [];
+	vertices.forEach(v => {
+		vertices_coords[v] = scale2(vertices_coords[v], scaleFactor)
+	});
+	IsoUpdateFrame({ ...graph, vertices_coords });
+};
+
+export const scale = (scaleFactor = 1) => Selection.isEmpty()
+	? scaleAll(scaleFactor)
+	: scaleVertices(
+		getVerticesFromSelection(get(Graph), get(Selection)),
+		scaleFactor,
+	);

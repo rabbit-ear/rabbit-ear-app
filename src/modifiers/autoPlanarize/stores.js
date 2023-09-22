@@ -4,11 +4,15 @@ import { writable } from "svelte/store";
 export const PlanarizeCommands = writable({
 	snapAllVertices: true,
 	segment: true,
-	translate: true,
-	translateVertices: true,
 	deleteComponents: true,
 	foldedLine: true,
 	mergeNearbyVertices: true,
 	mergeVertices: true,
 	mergeSelectedVertices: true,
+	// translateAll: true,
+	// translateVertices: true,
+	// translate: true,
+	// scaleAll: true,
+	// scaleVertices: true,
+	// scale: true,
 });
