@@ -1,9 +1,6 @@
 import { get } from "svelte/store";
 import { writable } from "svelte/store";
-import {
-	invertMap,
-	assignLists,
-} from "../js/arrays.js";
+import { assignLists } from "../js/arrays.js";
 
 export const emptyComponentObject = () => (
 	{ vertices: [], edges: [], faces: [] }

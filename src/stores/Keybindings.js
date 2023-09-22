@@ -94,7 +94,10 @@ export const KeybindingsDown = {
 	// "d"
 	68: {
 		0: (event) => executeCommand("setTool", "deleteTool"),
-		1: (event) => executeCommand("duplicate"),
+		1: (event) => {
+			executeCommand("duplicate");
+			executeCommand("setTool", "translate");
+		},
 		2: (event) => executeCommand("deselectAll"),
 	},
 	// "e"

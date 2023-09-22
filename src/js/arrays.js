@@ -12,15 +12,6 @@ export const assignLists = (a, b) => {
 	return a;
 };
 /**
- * @description Invert an integer array so that the
- * indices become values and values indices.
- */
-export const invertMap = (a) => {
-	const inverted = [];
-	a.forEach(i => { inverted[i] = true; });
-	return inverted;
-}
-/**
  * @description Zip two arrays together, starting with array "a",
  * take one from "a", then one from "b", one from "a", repeat.
  */

@@ -40,7 +40,10 @@ export default [
 		submenu: [
 			{
 				label: "duplicate",
-				click: () => executeCommand("duplicate"),
+				click: () => {
+					executeCommand("duplicate");
+					executeCommand("setTool", "translate");
+				},
 			},
 			{
 				type: "separator",
