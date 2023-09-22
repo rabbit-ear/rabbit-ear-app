@@ -27,6 +27,9 @@
 		background-color: var(--background-2);
 		color: var(--text);
 	}
+	/* unclear if setting display or visibility is the best way */
+	/* to hide the file input for compatibility across all browsers. */
+	/* I think: display */
 	input[type=file] {
 		display: none;
 		/* visibility: hidden; */

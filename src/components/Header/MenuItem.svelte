@@ -35,6 +35,7 @@
 		margin: 0;
 		padding: 0;
 		border: 0;
+		width: 100%;
 	}
 	label {
 		user-select: none;

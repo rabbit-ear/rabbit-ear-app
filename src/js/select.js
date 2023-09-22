@@ -81,3 +81,21 @@ export const getComponentsInsideRect = (graph, rect) => {
 			.filter(a => a !== undefined);
 	return { vertices, edges, faces };
 };
+
+export const getVerticesFromSelection = (graph, selection = {}) => {
+	const vertexHash = {};
+	if (selection.vertices) {
+		selection.vertices.forEach(v => { vertexHash[v] = true; });
+	}
+	if (selection.edges && graph.edges_vertices) {
+		selection.edges
+			.forEach(e => graph.edges_vertices[e]
+				.forEach(v => { vertexHash[v] = true; }));
+	}
+	if (selection.faces && graph.faces_vertices) {
+		selection.faces
+			.forEach(e => graph.faces_vertices[e]
+				.forEach(v => { vertexHash[v] = true; }));
+	}
+	return Object.keys(vertexHash).map(n => parseInt(n, 10));
+};

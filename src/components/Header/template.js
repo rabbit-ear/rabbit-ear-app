@@ -39,8 +39,15 @@ export default [
 		label: "graph",
 		submenu: [
 			{
-				label: "repair",
+				label: "duplicate",
+				click: () => executeCommand("duplicate"),
 			},
+			{
+				type: "separator",
+			},
+			// {
+			// 	label: "repair",
+			// },
 			{
 				label: "planarize",
 				click: () => executeCommand("planarize"),
@@ -49,9 +56,9 @@ export default [
 			{
 				type: "separator",
 			},
-			{
-				label: "vertices",
-			},
+			// {
+			// 	label: "vertices",
+			// },
 			{
 				label: "smart clean vertices",
 				click: () => executeCommand("cleanVertices"),
@@ -197,9 +204,9 @@ export default [
 	{
 		label: "analysis",
 		submenu: [
-			{
-				label: "single-vertex",
-			},
+			// {
+			// 	label: "single-vertex",
+			// },
 			{
 				label: "flat-foldable issues",
 				type: "checkbox",

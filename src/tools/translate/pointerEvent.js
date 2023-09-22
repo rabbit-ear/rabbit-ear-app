@@ -15,7 +15,7 @@ import {
 	snapToPoint,
 	snapToRulerLine,
 } from "../../js/snap.js";
-import { getVerticesFromSelection } from "../../js/graph.js";
+import { getVerticesFromSelection } from "../../js/select.js";
 import { Selection } from "../../stores/Select.js";
 import { executeCommand } from "../../kernel/execute.js";
 

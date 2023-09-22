@@ -10,6 +10,16 @@ import { executeCommand } from "../kernel/execute.js";
 
 let altCameraToolSwap;
 
+// bit-key lookup
+// compute from: shift << 0 | ctrl || cmd << 1 | alt << 2
+// 0: none
+// 1: shift
+// 2: ctrl/cmd
+// 3: shift + ctrl/cmd
+// 4: alt
+// 5: shift + alt
+// 6: ctrl/cmd + alt
+// 7: shift + ctrl/cmd + alt
 export const KeybindingsDown = {
 	// delete
 	8: {
@@ -84,6 +94,7 @@ export const KeybindingsDown = {
 	// "d"
 	68: {
 		0: (event) => executeCommand("setTool", "deleteTool"),
+		1: (event) => executeCommand("duplicate"),
 		2: (event) => executeCommand("deselectAll"),
 	},
 	// "e"

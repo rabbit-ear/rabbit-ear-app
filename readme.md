@@ -1,5 +1,11 @@
 # Blender-style graph maker
 
+## 2023-09-22
+
+In which I consider how to add folded-form folding back into the app.
+
+From the beginning, I promised to keep this app simple and make it have less to do with origami, more to do with a simple 2D graph creator/editor with some origami related construction UI tools.
+
 ## bug list:
 
 [ ] scale-up a crease pattern, reset zoom no longer works (fixed to old size).

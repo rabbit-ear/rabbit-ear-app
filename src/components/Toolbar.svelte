@@ -3,6 +3,12 @@
 	import { Tool } from "../stores/UI.js";
 	import { FrameIsLocked } from "../stores/Model.js";
 
+	const tempDisabled = {
+		"rabbit ear": true,
+		"pleat": true,
+		"scribble": true,
+	};
+
 	// const categories = Array.from(
 	// 	new Set(Object.values(Tools).map(el => el.group))
 	// );
@@ -52,7 +58,7 @@
 			<button
 				title={tool.name}
 				class={tool.name}
-				disabled={$FrameIsLocked}
+				disabled={$FrameIsLocked || tool.name in tempDisabled}
 				highlighted={$Tool && $Tool.name === tool.name}
 				on:click={() => Tool.set(tool)}>
 				{#if tool.icon}
@@ -114,6 +120,11 @@
 		background-color: var(--highlight);
 		stroke: var(--background-1);
 		fill: var(--background-1);
+	}
+	button[disabled], button[disabled]:hover {
+		stroke: var(--dim);
+		fill: var(--dim);
+		cursor: initial;
 	}
 	hr {
 		margin: 1.5px;

@@ -7,19 +7,17 @@
 	import Panel from "./Panel.svelte";
 
 	let modifierNames = [];
-	$: modifierNames = Object.keys(modifiers)
-		.filter(name => !(name in FixedModifiers));
+	$: modifierNames = Object.keys(modifiers);
 
 	let checked = {};
 	Object.keys(modifiers)
-		.filter(name => !(name in FixedModifiers))
 		.forEach(name => {
 			checked[name] = $Modifiers.filter(el => el.key === name).length > 0;
 		});
 
 	$: $Modifiers = Object.keys(checked)
 		.filter(name => checked[name])
-		.map(name => modifiers[name]);
+		.map(name => modifiers[name])
 </script>
 
 <Panel>
@@ -30,6 +28,7 @@
 				<input
 					type="checkbox"
 					bind:checked={checked[name]}
+					disabled={name in FixedModifiers}
 					id={`mod-check-${name}`}>
 				<label for={`mod-check-${name}`}>{modifiers[name].name}</label>
 			</div>

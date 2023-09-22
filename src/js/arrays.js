@@ -1,12 +1,15 @@
 /**
- * @description Merge two arrays together, output one
- * array that contains the union of integers.
+ * @description Create the union of two arrays of objects,
+ * the result will be written into the first array, and the first
+ * array will be returned. Duplicate values in the second array
+ * will not be transferred. However this does not check the first
+ * array, in the case that there are duplicate values inside of it.
  */
-export const combineIntegerSets = (a, b) => {
-	const inverted = [];
-	a.forEach(i => { inverted[i] = true; });
-	b.forEach(i => { inverted[i] = true; });
-	return inverted.map((_, i) => i).filter(() => true);
+export const assignLists = (a, b) => {
+	const hash = {};
+	a.forEach(value => { hash[value] = true; });
+	b.filter(value => !hash[value]).forEach(value => a.push(value));
+	return a;
 };
 /**
  * @description Invert an integer array so that the

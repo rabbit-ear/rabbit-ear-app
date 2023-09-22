@@ -7,8 +7,10 @@ import {
 	Graph,
 	IsoUpdateFrame,
 } from "../../stores/Model.js";
+import { Selection } from "../../stores/Select.js";
+import { getVerticesFromSelection } from "../../js/select.js";
 
-export const translate = (vector) => {
+export const translateAll = (vector) => {
 	const graph = get(Graph);
 	const vertices_coords = graph.vertices_coords || [];
 	vertices_coords.forEach((_, v) => {
@@ -26,6 +28,13 @@ export const translateVertices = (vertices, vector) => {
 	});
 	IsoUpdateFrame({ ...graph, vertices_coords });
 };
+
+export const translate = (vector) => Selection.isEmpty()
+	? translateAll(vector)
+	: translateVertices(
+		getVerticesFromSelection(get(Graph), get(Selection)),
+		vector,
+	);
 
 export const scale = (scaleFactor = 1) => {
 	const graph = get(Graph);

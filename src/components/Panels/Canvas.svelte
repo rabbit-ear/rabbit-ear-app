@@ -41,7 +41,7 @@
 		</div>
 		<div class="flex-row">
 			<span class="svg-icon"><ZoomIcon /></span>
-			<span class="number"><button on:click={CameraMatrix.reset}>{zoom}</button></span>
+			<span class="number"><button on:click={CameraMatrix.reset}>1 : {zoom}</button></span>
 		</div>
 		<!-- <input type="text" readonly value={formatPoint(NotUndefined($PointerSnap, $Pointer))}> -->
 		<!-- <div class="center">
@@ -88,8 +88,4 @@
 	/*input[type=text] {
 		width: 100%;
 	}*/
-	.center {
-		text-align: center;
-		margin: 0.333rem 0;
-	}
 </style>

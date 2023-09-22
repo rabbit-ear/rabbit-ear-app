@@ -94,18 +94,6 @@ export const setEdgesFoldAngle = (g, edges, foldAngle) => {
 	}
 	return g;
 };
-
-
-export const getVerticesFromSelection = (graph, selection) => {
-	const vertexHash = {};
-	selection.edges
-		.forEach(e => graph.edges_vertices[e]
-			.forEach(v => { vertexHash[v] = true; }));
-	selection.faces
-		.forEach(e => graph.faces_vertices[e]
-			.forEach(v => { vertexHash[v] = true; }));
-	return Object.keys(vertexHash).map(n => parseInt(n, 10));
-};
 /**
  * @description a FOLD object with frames is arranged such that
  * the top level is frame [0], and frames 1...N-1 are inside of
