@@ -11,10 +11,12 @@ import {
 import {
 	CameraMatrix,
 	ModelMatrix,
-	AutoSizeModelMatrix,
 } from "./ViewBox.js";
-// import { FileHistory } from "./History.js";
 import { Selection } from "./Select.js";
+/**
+ *
+ */
+const ResizeModelMatrix = writable(false);
 /**
  *
  */
@@ -29,6 +31,28 @@ export const File = writable({});
  * in the FOLD file, where the first item is the top level frame.
  */
 export const Frames = writable([makeEmptyGraph()]);
+// const FramesUpdate = Frames.update;
+// const FramesSet = Frames.set;
+// Frames.update = (updateMethod) => {
+// 	console.log("Frames.update", updateMethod);
+// 	// trigger model-matrix to update
+// 	ResizeModelMatrix.set(true);
+// 	FramesUpdate(updateMethod);
+// 	// reset model-matrix to no longer update
+// 	ResizeModelMatrix.set(false);
+// 	// also reset camera
+// 	CameraMatrix.reset();
+// };
+// Frames.set = (newFrames) => {
+// 	console.log("Frames.set", newFrames);
+// 	// trigger model-matrix to update
+// 	ResizeModelMatrix.set(true);
+// 	FramesSet(newFrames);
+// 	// reset model-matrix to no longer update
+// 	ResizeModelMatrix.set(false);
+// 	// also reset camera
+// 	CameraMatrix.reset();
+// };
 /**
  * @description Because FOLD frames can have parent-child inheritance,
  * To properly render a FOLD frame requires "flattening" all of the
@@ -48,28 +72,32 @@ export const FramesRendered = derived(
 export const FrameIndex = writable(0);
 const FrameIndexSet = FrameIndex.set;
 FrameIndex.set = (n) => {
+	// trigger model-matrix to update
+	ResizeModelMatrix.set(true);
 	Selection.reset();
 	FrameIndexSet(n);
+	// reset model-matrix to no longer update
+	ResizeModelMatrix.set(false);
+	// also reset camera
+	CameraMatrix.reset();
 };
 /**
  * @description The currently selected (and currently being edited) frame.
  */
-// export const Graph = derived(
-// 	[FramesRendered, FrameIndex, AutoSizeModelMatrix],
-// 	([$FramesRendered, $FrameIndex, $AutoSizeModelMatrix]) => {
-// 		const newGraph = $FramesRendered[$FrameIndex];
-// 		if ($AutoSizeModelMatrix) {
-// 			ModelMatrix.set(graphToMatrix2(newGraph));
-// 		}
-// 		return newGraph;
-// 	},
-// 	makeEmptyGraph(),
-// );
 export const Graph = derived(
-	[FramesRendered, FrameIndex],
-	([$FramesRendered, $FrameIndex]) => $FramesRendered[$FrameIndex],
+	[FramesRendered, FrameIndex, ResizeModelMatrix],
+	([$FramesRendered, $FrameIndex, $ResizeModelMatrix]) => {
+		const graph = $FramesRendered[$FrameIndex];
+		if ($ResizeModelMatrix) { ModelMatrix.set(graphToMatrix2(graph)); }
+		return graph;
+	},
 	makeEmptyGraph(),
 );
+// export const Graph = derived(
+// 	[FramesRendered, FrameIndex],
+// 	([$FramesRendered, $FrameIndex]) => $FramesRendered[$FrameIndex],
+// 	makeEmptyGraph(),
+// );
 /**
  * @description For each frame, does the frame inherit from a parent frame?
  */
@@ -122,6 +150,19 @@ export const UpdateFrame = (graph) => {
 	return IsoUpdateFrame(graph);
 };
 /**
+ *
+ */
+// export const UpdateModelMatrix = () => {
+// 	ModelMatrix.set(graphToMatrix2(get(Graph)));
+// }
+export const UpdateAndResizeFrame = (graph) => {
+	// trigger model-matrix to update
+	ResizeModelMatrix.set(true);
+	UpdateFrame(graph);
+	// reset model-matrix to no longer update
+	ResizeModelMatrix.set(false);
+};
+/**
  * @description If "IsoUpdateFrame" is a small update, "UpdateFrame" is a
  * larger update, "SetFrame" is an even larger update, where the
  * viewport is also reset. This is used when loading a new frame.
@@ -139,19 +180,16 @@ export const SetFrame = (graph) => {
  * update/set Frame methods.
  */
 export const LoadFile = (FOLD) => {
-	// ModelMatrix is a derived state. this is basically like
-	// calling "ModelMatrix.reset()" to resize it to the new Model.
-	const autoSize = get(AutoSizeModelMatrix);
-	AutoSizeModelMatrix.set(true);
+	// trigger model-matrix to update
+	ResizeModelMatrix.set(true);
 	// load file
 	Selection.reset();
-	// FileHistory.set([]);
 	FrameIndex.set(0);
 	File.set(getFileMetadata(FOLD));
 	Frames.set(getFramesAsFlatArray(FOLD).map(populate));
 	CameraMatrix.reset();
-	// end load file. return ModelMatrix setting back to what it was.
-	AutoSizeModelMatrix.set(autoSize);
+	// reset model-matrix to no longer update
+	ResizeModelMatrix.set(false);
 };
 /**
  *

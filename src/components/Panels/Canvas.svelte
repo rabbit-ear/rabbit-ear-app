@@ -1,15 +1,15 @@
 <script>
 	import SelectIcon from "../../tools/select/icon.svelte";
+	import SelectSnapIcon from "./icon-pointer-snap.svelte";
 	import ZoomIcon from "../../tools/camera/icon.svelte";
 	import Panel from "./Panel.svelte";
 	import {
 		ModelMatrix,
 		CameraMatrix,
-		AutoSizeModelMatrix,
 	} from "../../stores/ViewBox.js";
 	import {
 		Pointer,
-		// PointerSnap,
+		SnapPoint,
 	} from "../../stores/UI.js";
 
 	let zoom;
@@ -17,6 +17,9 @@
 		const value = $CameraMatrix[0] / $ModelMatrix[0];
 		zoom = !isNaN(value) ? (1 / value).toFixed(3) : 0;
 	};
+
+	let modelSize;
+	$: modelSize = $ModelMatrix[0];
 
 	let isSnapped = false;
 	// $: isSnapped = $PointerSnap !== undefined;
@@ -35,23 +38,21 @@
 <Panel>
 	<span slot="title">canvas</span>
 	<span slot="body">
-		<div class="flex-row">
-			<span class="svg-icon"><SelectIcon /></span>
-			<span class="number">{formatPoint($Pointer)}</span>
-		</div>
+		{#if $SnapPoint === undefined}
+			<div class="flex-row">
+				<span class="svg-icon"><SelectIcon /></span>
+				<span class="number">{formatPoint($Pointer)}</span>
+			</div>
+		{:else}
+			<div class="flex-row">
+				<span class="svg-icon"><SelectSnapIcon /></span>
+				<span class="number">{formatPoint($SnapPoint)}</span>
+			</div>
+		{/if}
 		<div class="flex-row">
 			<span class="svg-icon"><ZoomIcon /></span>
 			<span class="number"><button on:click={CameraMatrix.reset}>1 : {zoom}</button></span>
 		</div>
-		<!-- <input type="text" readonly value={formatPoint(NotUndefined($PointerSnap, $Pointer))}> -->
-		<!-- <div class="center">
-			{#if isSnapped}
-				<p class="alert">snapped</p>
-			{:else}
-				<p class="dim">not snapped</p>
-			{/if}
-		</div> -->
-		<!-- <input type="checkbox" bind:checked={$AutoSizeModelMatrix} id="auto-model-matrix"><label for="auto-model-matrix">camera track with changes</label> -->
 	</span>
 </Panel>
 
@@ -64,11 +65,16 @@
 	}
 	.svg-icon {
 		display: inline-block;
-		height: 2rem;
-		width: 2rem;
+		height: 1.75rem;
+		width: 1.75rem;
 		fill: var(--text);
 		stroke: var(--text);
 	}
+	/*.highlight {
+		fill: var(--highlight);
+		stroke: var(--highlight);
+		color: var(--highlight);
+	}*/
 	.number {
 		font-weight: bold;
 	}

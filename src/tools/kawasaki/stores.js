@@ -3,7 +3,6 @@ import {
 	derived,
 } from "svelte/store";
 import {
-	snapToPoint,
 	snapToVertex,
 	snapToRulerLine,
 } from "../../js/snap.js";

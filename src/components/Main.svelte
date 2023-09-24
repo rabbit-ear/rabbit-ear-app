@@ -102,7 +102,7 @@
 		flex: 1 1 auto;
 	}
 	.panels {
-		width: 12rem;
+		width: 16rem;
 		height: 100%;
 		flex: 0 0 auto;  /* shrink to 1 */
 		overflow-y: auto;

@@ -106,6 +106,33 @@ export const snapToPoint = (point, force = false) => {
 		: [...points[index]];
 };
 
+export const snapToPointWithInfo = (point, force = false) => {
+	if (!point) { return { snap: false, coord: undefined }; }
+	const snapRadius = get(SnapRadius);
+	// all the snap points
+	// const gridCoord = get(Snapping)
+	// 	? nearestGridPoint(point, snapRadius)
+	// 	: undefined;
+	const gridCoord = nearestGridPoint(point, snapRadius);
+	// const gridCoordDist = gridCoord === undefined
+	// 	? Infinity
+	// 	: distance2(point, gridCoord);
+	// if (gridCoord !== undefined) { return gridCoord; }
+	const points = gridCoord === undefined
+		? get(SnapPoints)
+		: [...get(SnapPoints), gridCoord];
+	// if (gridCoord !== undefined) { points.push(gridCoord); }
+	const distances = points.map(p => distance2(p, point));
+	const index = distances
+		.map((d, i) => d < snapRadius ? i : undefined)
+		.filter(a => a !== undefined)
+		.sort((a, b) => distances[a] - distances[b])
+		.shift();
+	return index === undefined
+		? { coords: [...point], snap: false }
+		: { coords: [...points[index]], snap: true };
+};
+
 // const isPointOnLine = (point, lines) => {
 // 	for (let i = 0; i < lines.length; i += 1) {
 // 		const line = lines[i];

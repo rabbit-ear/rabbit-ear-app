@@ -12,7 +12,8 @@ export const Keyboard = writable({});
 
 // every touch input
 export const Pointer = writable(undefined); // {number[]} point
-// export const PointerSnap = writable(undefined); // {number[]} point
+export const SnapPoint = writable(undefined); // {number[]} point
+// export const PointerDidSnap = writable(false); // {boolean}
 
 // there are a few different ways of offering the user UI feedback
 // Lines and Rays are infinite objects which get clipped in the viewbox,
@@ -29,6 +30,8 @@ UIRays.add = (newRulers) => UIRays.update((r) => [...r, ...newRulers]);
  */
 export const resetUI = () => {
 	Pointer.set(undefined);
+	SnapPoint.set(undefined);
+	// PointerDidSnap.set(false);
 	Highlight.reset();
 	UIGraph.set({});
 	UILines.set([]);
@@ -57,6 +60,6 @@ const UIEpsilonFactor = 0.01;
  */
 export const UIEpsilon = derived(
 	ViewBox,
-	$ViewBox => Math.max($ViewBox[2], $ViewBox[3]) * UIEpsilonFactor,
+	($ViewBox) => Math.max($ViewBox[2], $ViewBox[3]) * UIEpsilonFactor,
 	0.05,
 );

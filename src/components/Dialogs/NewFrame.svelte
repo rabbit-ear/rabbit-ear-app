@@ -7,10 +7,6 @@
 	import NewShape from "./NewShape.svelte";
 	import { executeCommand } from "../../kernel/execute.js";
 	import { DialogNewFrame } from "../../stores/App.js";
-	import {
-		Frames,
-		FrameIndex,
-	} from "../../stores/Model.js";
 
 	let panel = "standAlone";
 
@@ -20,7 +16,7 @@
 			executeCommand("appendFrame", {});
 			break;
 		case "duplicate":
-			executeCommand("appendFrame", structuredClone($Frames[$FrameIndex]));
+			executeCommand("duplicateActiveFrame");
 			break;
 		case "square":
 			executeCommand("appendFrame", square(detail.size));

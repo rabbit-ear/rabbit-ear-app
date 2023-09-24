@@ -1,4 +1,5 @@
 import { get } from "svelte/store";
+import { isFrameElementSelected } from "../js/dom.js";
 import {
 	DialogNewFile,
 	TerminalTextarea,
@@ -23,20 +24,9 @@ let altCameraToolSwap;
 export const KeybindingsDown = {
 	// delete
 	8: {
-		0: (event) => {
-			// currently selected a frame from the frame item panel.
-			// user would like to delete this frame.
-			const frameSelected = document.activeElement
-				&& document.activeElement.classList
-				&& document.activeElement.classList.contains("button-frame-item");
-			if (frameSelected) {
-				// if a frame is selected, delete the frame
-				executeCommand("deleteActiveFrame");
-			} else {
-				// otherwise, the graph is selected. delete any selected components.
-				executeCommand("deleteComponents", get(Selection));
-			}
-		},
+		0: (event) => isFrameElementSelected()
+			? executeCommand("deleteActiveFrame")
+			: executeCommand("deleteComponents", get(Selection)),
 	},
 	// shift
 	16: {},
@@ -95,8 +85,12 @@ export const KeybindingsDown = {
 	68: {
 		0: (event) => executeCommand("setTool", "deleteTool"),
 		1: (event) => {
-			executeCommand("duplicate");
-			executeCommand("setTool", "translate");
+			if (isFrameElementSelected()) {
+				executeCommand("duplicateActiveFrame");
+			} else {
+				executeCommand("duplicate");
+				executeCommand("setTool", "translate");
+			}
 		},
 		2: (event) => executeCommand("deselectAll"),
 	},

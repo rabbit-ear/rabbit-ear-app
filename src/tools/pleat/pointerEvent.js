@@ -1,7 +1,6 @@
 import { nearest } from "rabbit-ear/graph/nearest.js";
 import { get } from "svelte/store";
 import {
-	snapToPoint,
 	snapToEdge,
 	snapToRulerLine,
 } from "../../js/snap.js";

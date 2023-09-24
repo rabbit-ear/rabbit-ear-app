@@ -3,6 +3,12 @@
 	import Assignment from "../../components/PanelParts/Assignment.svelte";
 </script>
 
+<!--
+as you hover a vertex, describe the vertex.
+if it is a degree-N even number, state how there are
+only solutions possible for odd numbered degree vertices.
+-->
+
 <Panel>
 	<span slot="title">kawasaki</span>
 	<span slot="body">

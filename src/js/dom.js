@@ -70,3 +70,11 @@ export const isFormElementActive = () => {
 	// this list), and the compare directly to these references, like:
 	// if (document.activeElement === get(TerminalTextarea))
 };
+/**
+ * @description Check if one of the frames in the frame-timeline
+ * is selected. This is useful to add keyboard features to the frames,
+ * like the ability to delete or duplicate frames.
+ */
+export const isFrameElementSelected = () => document.activeElement
+	&& document.activeElement.classList
+	&& document.activeElement.classList.contains("button-frame-item");

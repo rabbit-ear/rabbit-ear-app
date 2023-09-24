@@ -1,10 +1,16 @@
 <script>
+	export let index = -1;
 	export let highlight = false;
 </script>
 
 	<!-- important, keep this string encapsulated -->
 	<!-- it needs to be able to be matched elsewhere in the app -->
-	<button class={"button-frame-item"} on:click {highlight} >
+	<button
+		class={"button-frame-item"}
+		data-frame-index={index}
+		on:click
+		on:mousedown
+		{highlight} >
 		<slot />
 	</button>
 
