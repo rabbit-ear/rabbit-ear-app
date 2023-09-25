@@ -63,6 +63,8 @@
 		height: 100vh;
 		max-width: 100vw;
 		max-height: 100vh;
+		overflow: hidden;
+		position: fixed;
 	}
 	.vertical {
 		display: flex;
@@ -87,7 +89,6 @@
 
 	/* .gui children */
 	.toolbar {
-/*		width: 6rem;*/
 		height: 100%;
 		flex: 0 0 auto;  /* shrink to 1 */
 /*		overflow-y: auto;*/

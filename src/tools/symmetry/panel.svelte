@@ -33,9 +33,9 @@
 					</div>
 				</ul>
 			{/each}
-			<div>
+			<!-- <div>
 				<button on:click={() => {}}>clear all lines</button>
-			</div>
+			</div> -->
 		</div>
 	</span>
 </Panel>

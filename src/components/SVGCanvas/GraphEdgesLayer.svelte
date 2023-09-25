@@ -1,9 +1,11 @@
 <script>
 	import { edgeFoldAngleIsFlat } from "rabbit-ear/fold/spec.js";
 	import {
+		AssignmentColor,
+		// todo: these are causing the renderer to re-draw edges
+		// anytime the viewbox is zoomed or panned.
 		StrokeWidth,
 		StrokeDashArray,
-		AssignmentColor,
 	} from "../../stores/Style.js";
 
 	// todo, make this an app wide variable

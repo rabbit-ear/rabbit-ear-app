@@ -2,7 +2,6 @@ import { intersectLineLine } from "rabbit-ear/math/intersect.js";
 import { nearest } from "rabbit-ear/graph/nearest.js";
 import { includeS } from "rabbit-ear/math/compare.js";
 // import { pointInBoundingBox } from "rabbit-ear/math/encloses.js";
-import { ViewBox } from "../stores/ViewBox.js";
 import {
 	SelectionRect,
 	SELECT_VERTEX,

@@ -1,5 +1,5 @@
 import pointerEvent from "./pointerEvent.js";
-import panel from "./panel.svelte";
+// import panel from "./panel.svelte";
 import icon from "./icon.svelte";
 import {
 	subscribe,
@@ -13,7 +13,7 @@ const camera = {
 	order: 3,
 	icon,
 	pointerEvent,
-	panel,
+	// panel,
 	subscribe,
 	unsubscribe,
 };
