@@ -5,7 +5,6 @@
 		// todo: these are causing the renderer to re-draw edges
 		// anytime the viewbox is zoomed or panned.
 		StrokeWidth,
-		StrokeDashArray,
 	} from "../../stores/Style.js";
 
 	// todo, make this an app wide variable
@@ -53,6 +52,7 @@
 	$: classes = coords.map((_, i) => [
 		selectedHash[i] ? "selected" : undefined,
 		highlightedHash[i] ? "highlighted" : undefined,
+		!edgesFoldAngleIsFlat[i] ? "dashed-line" : undefined,
 	].filter(a => a !== undefined).join(" "));
 
 	let lines = [];
@@ -61,7 +61,6 @@
 		...(classes[i] === "" ? {} : { class: classes[i] }),
 		stroke: strokes[i],
 		"stroke-width": strokeWidths[i],
-		...(edgesFoldAngleIsFlat[i] ? {} : { "stroke-dasharray": $StrokeDashArray }),
 	}));
 </script>
 

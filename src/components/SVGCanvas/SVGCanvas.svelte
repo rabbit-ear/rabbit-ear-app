@@ -46,6 +46,12 @@
 		view[2] + pad * 2,
 		view[3] + pad * 2,
 	];
+	// const padViewBox = (view, pad) => [
+	// 	100 * (view[0] - pad),
+	// 	100 * (view[1] - pad),
+	// 	100 * (view[2] + pad * 2),
+	// 	100 * (view[3] + pad * 2),
+	// ];
 </script>
 
 <!-- i'm not sure what role=presentation means, i just guessed -->
@@ -62,30 +68,35 @@
 	on:blur={() => {}}
 	role="presentation"
 >
-	{#if $ShowGrid}
-		<GridLayer />
-	{/if}
-	<GraphLayer />
-	{#if $ShowAxes}
-		<AxesLayer />
-	{/if}
-	{#if $ShowFlatFoldableIssues}
-		<FlatFoldable graph={$Graph} />
-	{/if}
-	<RulerLayer />
-	<UILayer />
-	{#if $Tool && $Tool.SVGLayer}
-		<svelte:component this={$Tool.SVGLayer} />
-	{/if}
-	{#if $ShowIndices}
-		<GraphIndices graph={$Graph} />
-	{/if}
+	<g class="wrapper-layer">
+		{#if $ShowGrid}
+			<GridLayer />
+		{/if}
+		<GraphLayer />
+		{#if $ShowAxes}
+			<AxesLayer />
+		{/if}
+		{#if $ShowFlatFoldableIssues}
+			<FlatFoldable graph={$Graph} />
+		{/if}
+		<RulerLayer />
+		<UILayer />
+		{#if $Tool && $Tool.SVGLayer}
+			<svelte:component this={$Tool.SVGLayer} />
+		{/if}
+		{#if $ShowIndices}
+			<GraphIndices graph={$Graph} />
+		{/if}
+	</g>
 </svg>
 
 <style>
 	svg {
 		width: 100%;
 		height: 100%;
-		transform: matrix(1, 0, 0, -1, 0, 1);
+	}
+	.wrapper-layer {
+/*		transform: scale(100, 100);*/
+/*		transform: matrix(1, 0, 0, -1, 0, 1);*/
 	}
 </style>

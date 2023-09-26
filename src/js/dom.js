@@ -17,7 +17,9 @@ export const findInParents = (element, nodeName) => {
  */
 export const convertToViewBox = function (svg, x, y) {
 	const pt = svg.createSVGPoint();
+	// transform: matrix(1, 0, 0, -1, 0, 1);
 	pt.x = x;
+	// pt.y = y;
 	pt.y = y;
 	// todo: i thought this threw an error once. something about getScreenCTM.
 	const svgPoint = pt.matrixTransform(svg.getScreenCTM().inverse());

@@ -9,7 +9,7 @@
 	} from "../../stores/Select.js";
 </script>
 
-<g>
+<g class="origami-layer">
 	<GraphFacesLayer
 		graph={$Graph}
 		selected={$Selection.faces}

@@ -3,7 +3,7 @@ import { ViewBox } from "./ViewBox.js";
 
 // these are immutable. a bit like compiler directives.
 // these will only change to target different builds.
-export const ShowHeader = true;
+export const ShowMenu = false;
 
 // app preferences and settings
 export const NewEdgeAssignment = writable("F");

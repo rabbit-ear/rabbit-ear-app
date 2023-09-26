@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
 import { executeCommand } from "../../kernel/execute.js";
+import { UILines } from "../../stores/UI.js";
 import {
 	Move,
 	Presses,
@@ -24,6 +25,7 @@ const pointerEvent = (eventType, { point }) => {
 		switch (get(Step)) {
 		case 2:
 			executeCommand("axiom3Rulers", get(Edge0), get(Edge1));
+			UILines.set([]);
 			break;
 		case 4:
 			executeCommand("segment", get(Segment0), get(Segment1));

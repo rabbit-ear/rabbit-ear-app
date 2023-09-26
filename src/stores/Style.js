@@ -11,11 +11,25 @@ export const StrokeWidth = derived(
 	StrokeWidthFactor,
 );
 
-export const StrokeDashArray = derived(
-	StrokeWidth,
-	($StrokeWidth) => $StrokeWidth * 3,
-	0.01,
+const CSSViewboxVariables = derived(
+	ViewBox,
+	($ViewBox) => {
+		const max = Math.max($ViewBox[2], $ViewBox[3]);
+		document.documentElement.style.setProperty("--viewbox-vmax", max);
+		document.documentElement.style.setProperty("--stroke-dash-length", max * 0.01);
+		document.documentElement.style.setProperty("--anim-stroke-dash-max", max * 5);
+	},
+	undefined,
 );
+CSSViewboxVariables.subscribe(() => {});
+
+// const StrokeDashAnimation = derived(
+// 	ViewBox,
+// 	$ViewBox => document.documentElement.style
+// 		.setProperty("--stroke-dash-max", Math.max($ViewBox[2], $ViewBox[3]) * 5),
+// 	undefined
+// );
+// StrokeDashAnimation.subscribe(() => {});
 
 //
 // show/hide things

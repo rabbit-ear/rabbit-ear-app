@@ -14,9 +14,6 @@
 	$: points = [$MoveCoords, $PressCoords, $DragCoords]
 		.filter(a => a !== undefined);
 
-	let vmax;
-	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);
-
 	let segments;
 	$: segments = $ReflectionLines
 		.map(line => clipLineInLargerViewBox(line, $ViewBox))
@@ -27,9 +24,6 @@
 	$: preview = $PointerLine === undefined
 		? undefined
 		: clipLineInLargerViewBox($PointerLine, $ViewBox);
-
-	let tick = 0
-	setInterval(() => { tick += (vmax * 0.002); }, 30);
 </script>
 
 <g>
@@ -39,8 +33,7 @@
 			y1={s[0][1]}
 			x2={s[1][0]}
 			y2={s[1][1]}
-			stroke-dasharray={[vmax * 0.01, vmax * 0.01].join(" ")}
-			stroke-dashoffset={tick}
+			class="animated-dashed-line"
 		/>
 	{/each}
 </g>
@@ -51,6 +44,7 @@
 		y1={preview[0][1]}
 		x2={preview[1][0]}
 		y2={preview[1][1]}
+		class="animated-dashed-line"
 	/>
 {/if}
 
@@ -61,13 +55,14 @@
 		cy={point[1]} />
 {/each}
 
-{#if $DragCoords !== undefined && $PressCoords !== undefined}
+<!-- {#if $DragCoords !== undefined && $PressCoords !== undefined}
 	<line
 		x1={$PressCoords[0]}
 		y1={$PressCoords[1]}
 		x2={$DragCoords[0]}
-		y2={$DragCoords[1]} />
-{/if}
+		y2={$DragCoords[1]}
+		/>
+{/if} -->
 
 <style>
 	line {

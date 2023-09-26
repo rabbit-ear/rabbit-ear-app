@@ -10,20 +10,22 @@
 		.filter(a => a !== undefined);
 </script>
 
-{#each points as point}
-	<circle
-		r={$VertexRadius * 1.5}
-		cx={point[0]}
-		cy={point[1]} />
-{/each}
+<g class="tool-layer">
+	{#each points as point}
+		<circle
+			r={$VertexRadius * 1.5}
+			cx={point[0]}
+			cy={point[1]} />
+	{/each}
 
-{#if $Segment0 !== undefined && $Segment1 !== undefined}
-	<line
-		x1={$Segment0[0]}
-		y1={$Segment0[1]}
-		x2={$Segment1[0]}
-		y2={$Segment1[1]} />
-{/if}
+	{#if $Segment0 !== undefined && $Segment1 !== undefined}
+		<line
+			x1={$Segment0[0]}
+			y1={$Segment0[1]}
+			x2={$Segment1[0]}
+			y2={$Segment1[1]} />
+	{/if}
+</g>
 
 <style>
 	circle {

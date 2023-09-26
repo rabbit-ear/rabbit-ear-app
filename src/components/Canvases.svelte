@@ -1,7 +1,7 @@
 <script>
 	import { Graph } from "../stores/Model.js";
 	import {
-		ShowHeader,
+		ShowMenu,
 		ShowFrames,
 		ShowTerminal,
 		ShowSimulator,
@@ -25,7 +25,7 @@
 	let height = "100vh";
 	$: height = [
 		"100vh - 5px",
-		ShowHeader ? "2rem" : "",
+		ShowMenu ? "2rem" : "",
 		$ShowFrames ? "6.5rem" : "",
 		$ShowTerminal ? "6rem" : "2rem",
 	].filter(a => a !== "").join(" - ");

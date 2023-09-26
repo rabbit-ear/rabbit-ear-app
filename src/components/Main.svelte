@@ -1,5 +1,5 @@
 <script>
-	import Header from "./Header/Header.svelte";
+	import Menu from "./Menu/Menu.svelte";
 	import Terminal from "./Terminal.svelte";
 	import Toolbar from "./Toolbar.svelte";
 	import Canvases from "./Canvases.svelte";
@@ -8,7 +8,7 @@
 	import Dialogs from "./Dialogs.svelte";
 	import FileManager from "./FileManager.svelte";
 	import DragAndDrop from "./DragAndDrop.svelte";
-	import { ShowHeader } from "../stores/App.js";
+	import { ShowMenu } from "../stores/App.js";
 	import { KeyboardEvent } from "../stores/KeyboardEvents.js";
 	import {
 		PointerEvent,
@@ -33,9 +33,9 @@
 <DragAndDrop />
 
 <main class="vertical">
-	{#if ShowHeader}
-		<div class="header">
-			<Header />
+	{#if ShowMenu}
+		<div class="menu">
+			<Menu />
 		</div>
 	{/if}
 	<Terminal />
@@ -76,7 +76,7 @@
 	}
 
 	/* main children: the top-most level */
-	.header {
+	.menu {
 		width: 100%;
 		height: 2rem;
 		flex: 0 0 auto;

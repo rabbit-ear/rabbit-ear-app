@@ -1,5 +1,6 @@
 <script>
 	import { BoundaryColor } from "../../stores/Style.js";
+
 	export let index = 0;
 	export let x = 0;
 	export let y = 0;
