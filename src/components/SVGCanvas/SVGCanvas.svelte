@@ -1,25 +1,10 @@
 <script>
 	import { createEventDispatcher } from "svelte";
-	import GridLayer from "./GridLayer.svelte";
-	import UILayer from "./UILayer.svelte";
-	import GraphLayer from "./GraphLayer.svelte";
-	import RulerLayer from "./RulerLayer.svelte";
-	import AxesLayer from "./AxesLayer.svelte";
-	import GraphIndices from "./GraphIndices.svelte";
-	import FlatFoldable from "./FlatFoldable.svelte";
 	import {
 		convertToViewBox,
 		findInParents,
 	} from "../../js/dom.js";
-	import { Graph } from "../../stores/Model.js";
 	import { ViewBox } from "../../stores/ViewBox.js";
-	import {
-		ShowGrid,
-		ShowAxes,
-		ShowFlatFoldableIssues,
-		ShowIndices,
-	} from "../../stores/App.js";
-	import { Tool } from "../../stores/UI.js";
 
 	const formatMouseEvent = (e) => ({
 		buttons: e.buttons,
@@ -66,27 +51,9 @@
 	on:wheel={wheel}
 	on:focus={() => {}}
 	on:blur={() => {}}
-	role="presentation"
->
+	role="presentation" >
 	<g class="wrapper-layer">
-		{#if $ShowGrid}
-			<GridLayer />
-		{/if}
-		<GraphLayer />
-		{#if $ShowAxes}
-			<AxesLayer />
-		{/if}
-		{#if $ShowFlatFoldableIssues}
-			<FlatFoldable graph={$Graph} />
-		{/if}
-		<RulerLayer />
-		<UILayer />
-		{#if $Tool && $Tool.SVGLayer}
-			<svelte:component this={$Tool.SVGLayer} />
-		{/if}
-		{#if $ShowIndices}
-			<GraphIndices graph={$Graph} />
-		{/if}
+		<slot />
 	</g>
 </svg>
 

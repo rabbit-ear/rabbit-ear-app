@@ -27,7 +27,7 @@ fn main() {
   let app_menu = Submenu::new(
     "Rabbit Ear",
     Menu::new()
-      .add_native_item(MenuItem::About("RabbitEar".to_string(), about_metadata))
+      .add_native_item(MenuItem::About("Rabbit Ear".to_string(), about_metadata))
       .add_native_item(MenuItem::Separator)
       .add_native_item(MenuItem::Services)
       .add_native_item(MenuItem::Separator)
@@ -45,6 +45,7 @@ fn main() {
 	let file_menu = Submenu::new("File", Menu::new()
 		.add_item(new_menu)
 		.add_item(open)
+		.add_native_item(MenuItem::Separator)
 		.add_item(save_as));
 
 	// let undo = CustomMenuItem::new("undo".to_string(), "Undo");
@@ -110,8 +111,8 @@ fn main() {
 		.add_item(near_verts)
 		.add_item(show_indices));
 
-	let show_simulator = CustomMenuItem::new("show_simulator".to_string(), "Show Simulator");
-	let show_frames = CustomMenuItem::new("show_frames".to_string(), "Show Frames");
+	let show_simulator = CustomMenuItem::new("show_simulator".to_string(), "Show Simulator").selected();
+	let show_frames = CustomMenuItem::new("show_frames".to_string(), "Show Frames").selected();
 	let window_menu = Submenu::new("Window", Menu::new()
 		.add_item(show_simulator)
 		.add_item(show_frames));

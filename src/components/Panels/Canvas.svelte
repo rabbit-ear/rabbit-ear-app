@@ -11,18 +11,12 @@
 		Pointer,
 		SnapPoint,
 	} from "../../stores/UI.js";
+	import {
+		ShowStaticOrSimulator,
+	} from "../../stores/App.js";
 
-	let zoom;
-	$: {
-		const value = $CameraMatrix[0] / $ModelMatrix[0];
-		zoom = !isNaN(value) ? (1 / value).toFixed(3) : 0;
-	};
-
-	let modelSize;
-	$: modelSize = $ModelMatrix[0];
-
-	let isSnapped = false;
-	// $: isSnapped = $PointerSnap !== undefined;
+	$: inverseZoom = $CameraMatrix[0] / $ModelMatrix[0];
+	$: zoom = !isNaN(inverseZoom) ? (1 / inverseZoom).toFixed(3) : 0;
 
 	const formatPoint = (p) => p === undefined ? "" : p
 		.map(n => {
@@ -53,6 +47,26 @@
 			<span class="svg-icon"><ZoomIcon /></span>
 			<span class="number"><button on:click={CameraMatrix.reset}>1 : {zoom}</button></span>
 		</div>
+		<hr />
+		<div class="flex-column gap">
+			<p>folded state</p>
+			<div>
+				<input
+					type="radio"
+					id="radio-folded-static"
+					bind:group={$ShowStaticOrSimulator}
+					value={false} />
+				<label for="radio-folded-static">static</label>
+			</div>
+			<div>
+				<input
+					type="radio"
+					id="radio-folded-simulator"
+					bind:group={$ShowStaticOrSimulator}
+					value={true} />
+				<label for="radio-folded-simulator">simulator</label>
+			</div>
+		</div>
 	</span>
 </Panel>
 
@@ -62,6 +76,13 @@
 		flex-direction: row;
 		align-items: center;
 		justify-content: flex-start;
+	}
+	.flex-column {
+		display: flex;
+		flex-direction: column;
+	}
+	.gap {
+		gap: 0.333rem;
 	}
 	.svg-icon {
 		display: inline-block;

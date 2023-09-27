@@ -7,8 +7,8 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "RabbitEar",
-    "version": "0.0.0"
+    "productName": "Rabbit Ear",
+    "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {

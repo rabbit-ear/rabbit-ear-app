@@ -6,8 +6,10 @@
 		ShowTerminal,
 		ShowSimulator,
 		ShowCodeEditor,
+		ShowStaticOrSimulator,
 	} from "../stores/App.js";
-	import SVGCanvas from "./SVGCanvas/SVGCanvas.svelte";
+	import CreasePattern from "./SVGCanvas/CreasePattern.svelte";
+	import FoldedForm from "./SVGCanvas/FoldedForm.svelte";
 	import WebGLCanvas from "./WebGLCanvas/WebGLCanvas.svelte";
 	import Simulator from "./OrigamiSimulator/Simulator.svelte";
 	import CodeEditor from "./CodeEditor/CodeEditor.svelte";
@@ -45,7 +47,7 @@
 		</div>
 	{:else}
 		<div class="canvas svg-canvas" style={`max-height: calc(${height})`}>
-			<SVGCanvas
+			<CreasePattern
 				on:press={press}
 				on:move={move}
 				on:release={release}
@@ -53,9 +55,13 @@
 			/>
 		</div>
 	{/if}
-	{#if $ShowSimulator}
+	{#if $ShowStaticOrSimulator}
 		<div class="canvas">
 			<Simulator />
+		</div>
+	{:else}
+		<div class="canvas" style={`max-height: calc(${height})`}>
+			<FoldedForm />
 		</div>
 	{/if}
 	{#if $ShowCodeEditor}

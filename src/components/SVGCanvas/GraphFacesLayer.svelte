@@ -19,7 +19,7 @@
 	$: polygonsPoints = !graph.faces_vertices
 		? []
 		: graph.faces_vertices
-			.map(fv => fv.map(v => graph.vertices_coords[v].join(",")))
+			.map(fv => fv.map(v => graph.vertices_coords[v].slice(0, 2).join(",")))
 			.map(points => points.join(" "));
 
 	let classes = [];

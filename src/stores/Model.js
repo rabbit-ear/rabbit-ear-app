@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 import { writable, derived } from "svelte/store";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFramesAsFlatArray } from "rabbit-ear/fold/frames.js";
+import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 import populate from "rabbit-ear/graph/populate.js";
 import { graphToMatrix2 } from "../js/matrix.js";
 import {
@@ -93,11 +94,22 @@ export const Graph = derived(
 	},
 	makeEmptyGraph(),
 );
-// export const Graph = derived(
-// 	[FramesRendered, FrameIndex],
-// 	([$FramesRendered, $FrameIndex]) => $FramesRendered[$FrameIndex],
-// 	makeEmptyGraph(),
-// );
+
+export const GraphVerticesFolded = derived(
+	Graph,
+	($Graph) => $Graph ? makeVerticesCoordsFolded($Graph) : [],
+	[],
+);
+
+export const GraphFolded = derived(
+	[Graph, GraphVerticesFolded],
+	([$Graph, $GraphVerticesFolded]) => ({
+		...$Graph,
+		vertices_coords: $GraphVerticesFolded,
+	}),
+	({}),
+);
+
 /**
  * @description For each frame, does the frame inherit from a parent frame?
  */

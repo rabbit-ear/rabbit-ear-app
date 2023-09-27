@@ -1,6 +1,6 @@
 <script>
 	import { afterUpdate } from "svelte";
-	import ExpandButton from "./Frames/ExpandButton.svelte";
+	// import ExpandButton from "./Frames/ExpandButton.svelte";
 	import Frames from "./Frames/Frames.svelte";
 	import { ShowFrames } from "../stores/App.js";
 
@@ -11,7 +11,7 @@
 </script>
 
 <div class="container">
-	<ExpandButton />
+	<!-- <ExpandButton /> -->
 	{#if $ShowFrames}
 		<Frames />
 	{/if}

@@ -91,7 +91,7 @@
 		<div>
 			<button
 				class="full-button"
-				on:click={() => showAdvanced = !showAdvanced}>advanced</button>
+				on:click={() => showAdvanced = !showAdvanced}>more</button>
 		</div>
 
 		{#if showAdvanced}

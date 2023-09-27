@@ -3,7 +3,7 @@ import { ViewBox } from "./ViewBox.js";
 
 // these are immutable. a bit like compiler directives.
 // these will only change to target different builds.
-export const ShowMenu = false;
+export const ShowMenu = true;
 
 // app preferences and settings
 export const NewEdgeAssignment = writable("F");
@@ -19,6 +19,8 @@ export const ShowSimulator = writable(true);
 export const ShowTerminal = writable(true);
 export const ShowCodeEditor = writable(false);
 export const ShowFrames = writable(true);
+// show static folded state, or origami simulator
+export const ShowStaticOrSimulator = writable(true);
 
 // DOM element references
 export const DialogNewFile = writable(undefined);
