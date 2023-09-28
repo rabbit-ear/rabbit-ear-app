@@ -19,3 +19,7 @@ export const silentMethods = {
 	foldedLinePreview: true,
 	kawasakiRulerPreviews: true,
 };
+
+export const collapseMethods = {
+
+};

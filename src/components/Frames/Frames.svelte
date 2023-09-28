@@ -34,8 +34,12 @@
 	};
 </script>
 
-<!-- todo: must have aria role -->
-<div class="frames horizontal" on:mousemove={mousemove} on:mouseup={mouseup}>
+<div
+	class="frames horizontal"
+	role="row"
+	tabindex="-1"
+	on:mousemove={mousemove}
+	on:mouseup={mouseup}>
 	{#each $FramesRendered as graph, index}
 		<FrameRender {graph} {index} {mousedown} />
 	{/each}

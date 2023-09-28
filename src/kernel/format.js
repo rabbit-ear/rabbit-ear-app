@@ -34,3 +34,14 @@ export const formatCommandResult = (result) => {
 export const formatError = (error) => (
 	`<span class="error">${error}</span>`
 );
+
+export const terminalOutputJavascript = (js) => {
+	const tokens = Array.from(jsTokens(js));
+	const commands = tokens
+		.filter(el => el.type === "IdentifierName")
+		.map(el => el.value);
+	const html = tokens
+		.map(({ type, value }) => `<span class=${type}>${value}</span>`)
+		.join("");
+	return { html, commands };
+};

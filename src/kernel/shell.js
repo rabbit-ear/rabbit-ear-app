@@ -4,6 +4,7 @@ import {
 	formatCommandResult,
 	formatJavascript,
 	formatError,
+	terminalOutputJavascript,
 } from "./format.js";
 
 // the context which will bind to the Function's this.
@@ -52,7 +53,7 @@ export const run = (jsBlob) => {
 	}
 	catch (error) {
 		return [
-			{ html: formatJavascript(jsBlob) },
+			terminalOutputJavascript(jsBlob),
 			{ html: formatError(error) },
 		];
 	}
@@ -60,7 +61,7 @@ export const run = (jsBlob) => {
 	// will be an empty string, if this is the case, don't include empty
 	// strings in the terminal output.
 	return [
-		{ html: formatJavascript(jsBlob) },
+		terminalOutputJavascript(jsBlob),
 		{ html: formatCommandResult(result) },
 	].filter(a => a.html !== undefined);
 };

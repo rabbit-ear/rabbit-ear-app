@@ -42,8 +42,13 @@
 		<div class="container">
 			<div class="flex-row">
 				<div>
-					<!-- todo: must have aria role -->
 					<svg
+						role="slider"
+						tabindex="0"
+						aria-label="fold angle select"
+						aria-valuemin={0}
+						aria-valuemax={180}
+						aria-valuenow={$FoldAngleValue}
 						version="1.1"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="-22 -22 44 24"

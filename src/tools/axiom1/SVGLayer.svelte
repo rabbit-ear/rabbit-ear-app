@@ -1,14 +1,15 @@
 <script>
 	import { VertexRadius } from "../../stores/App.js";
 	import {
+		MoveCoords,
+		DragCoords,
 		Coords0,
 		Coords1,
 		Segment0,
 		Segment1,
 	} from "./stores.js";
 
-	let points = [];
-	$: points = [$Coords0, $Coords1, $Segment0, $Segment1]
+	$: points = [$Coords0, $Coords1, $Segment0, $Segment1, $MoveCoords, $DragCoords]
 		.filter(a => a !== undefined);
 </script>
 
@@ -19,12 +20,13 @@
 		cy={point[1]} />
 {/each}
 
-{#if $Segment0 !== undefined && $Segment1 !== undefined}
+{#if $Segment0 !== undefined && $DragCoords !== undefined}
 	<line
 		x1={$Segment0[0]}
 		y1={$Segment0[1]}
-		x2={$Segment1[0]}
-		y2={$Segment1[1]} />
+		x2={$DragCoords[0]}
+		y2={$DragCoords[1]}
+		stroke-width={$VertexRadius * 3} />
 {/if}
 
 <style>

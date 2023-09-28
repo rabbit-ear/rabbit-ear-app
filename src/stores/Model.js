@@ -100,15 +100,36 @@ export const FoldedRootFace = writable(0);
 
 export const GraphVerticesFolded = derived(
 	[Graph, FoldedRootFace],
-	([$Graph, $FoldedRootFace]) => $Graph
-		? makeVerticesCoordsFolded($Graph, $FoldedRootFace)
-		: [],
+	([$Graph, $FoldedRootFace]) => {
+		try {
+			// if all edges_foldAngle are flat, makeVerticesCoordsFlatFolded instead
+			return $Graph
+				&& $Graph.vertices_coords
+				&& $Graph.edges_vertices
+				&& $Graph.faces_vertices
+				? makeVerticesCoordsFolded($Graph, $FoldedRootFace)
+				: [];
+		} catch (error) {
+			return [];
+		}
+	},
 	[],
 );
 
 export const GraphFacesWinding = derived(
-	[Graph, FoldedRootFace],
-	([$Graph, $FoldedRootFace]) => makeFacesWinding($Graph, $FoldedRootFace),
+	[Graph, GraphVerticesFolded],
+	([$Graph, $GraphVerticesFolded]) => {
+		try {
+			return $Graph && $Graph.faces_vertices && $GraphVerticesFolded.length
+				? makeFacesWinding({
+					vertices_coords: $GraphVerticesFolded,
+					faces_vertices: $Graph.faces_vertices,
+				})
+				: [];
+		} catch (error) {
+			return [];
+		}
+	},
 	[],
 );
 

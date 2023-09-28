@@ -6,14 +6,14 @@
 	let classes;
 	$: classes = Array.from(Array(5))
 		.map(() => "todo")
-		.map((str, i) => i === ($Step - 1) ? "current" : str)
-		.map((str, i) => i < ($Step - 1) ? "done" : str);
+		.map((str, i) => i === $Step ? "current" : str)
+		.map((str, i) => i < $Step ? "done" : str);
 </script>
 
 <Panel>
-	<span slot="title">axiom 1</span>
+	<span slot="title">Axiom 1</span>
 	<span slot="body">
-		<div class="container">
+		<div class="flex-column">
 			<p class="instruction">Make a line through two points.</p>
 			<ol>
 				<li class={classes[0]}>press on a point</li>
@@ -31,7 +31,7 @@
 		list-style: decimal;
 		padding-left: 1.2rem;
 	}
-	.container {
+	.flex-column {
 		display: flex;
 		flex-direction: column;
 	}

@@ -47,7 +47,7 @@
 		</div>
 	{/if}
 	<div class="gui horizontal">
-		<div class="toolbar">
+		<div class="toolbar" role="toolbar">
 			<Toolbar />
 		</div>
 		<div class="renderings vertical">

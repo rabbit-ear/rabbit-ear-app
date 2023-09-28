@@ -2,6 +2,10 @@ import {
 	RulerLines,
 	RulerRays,
 } from "../../stores/Ruler.js";
+import {
+	UILines,
+	UIRays,
+} from "../../stores/UI.js";
 
 // export const resetRulers = () => {
 // 	RulerLines.set([]);
@@ -16,6 +20,11 @@ const RadialRays = (origin, degrees = 22.5, offset = 0) => Array
 
 export const radialRulers = (origin, degrees = 22.5, offset = 0) => RulerRays
 	.set(RadialRays(origin, degrees, offset));
+
+export const setRulerLines = (lines = []) => RulerLines.set(lines.filter(a => a !== undefined));
+export const setRulerRays = (rays = []) => RulerRays.set(rays.filter(a => a !== undefined));
+export const setUILines = (lines = []) => UILines.set(lines.filter(a => a !== undefined));
+export const setUIRays = (rays = []) => UIRays.set(rays.filter(a => a !== undefined));
 
 // const RadialLines = (origin, count = 16) => Array
 // 	.from(Array(Math.floor(count / 2)))

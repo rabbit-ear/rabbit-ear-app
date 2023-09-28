@@ -1,5 +1,38 @@
 # Blender-style graph maker
 
+## 2023-09-28
+
+**Folded form**
+
+I have been putting this off- I need to re-introduce the foldedForm rendering of the crease pattern. Origami simulator is good, but origami simulator:
+
+- does not sort layers.
+- does not quickly (or is guaranteed to) report flat-foldability validity.
+- is energy expensive.
+- will be too difficult to perform folded-state fold operations on.
+
+One thing I realized is that origami simulator and the static folded state rendering serve such a similar purpose, they could potentially inhabit the same physical place on screen. And it's likely that a simple switch to toggle between the two will be enough, as most projects will tend to make heavy use of one or the other, not necessarily both at the same time.
+
+I have succesfully re-implemented the folded-form visualizer. The SVG renderer has become abstracted and now "CreasePattern" and "FoldedForm" inherit from it.
+
+Now, folded form needs to take the role of showing the WebGL View if:
+
+- the FOLD file isn't a crease pattern (just don't render a crease pattern).
+- the crease pattern's folded form is a 3D model.
+
+It's easy to check if the folded form is a valid flat-foldable model, which includes checking if the folded form has a valid layer-arrangement. What is more difficult is checking if the folded form has a valid 3D folding. Let me try to outline what that requires:
+
+preliminary: check if there are any edges_foldAngle that are not -180, 0, 180. if so the result is 3D. If the model is 3D:
+
+1. check every vertex individually, I think it's possible to check a single-vertex is foldable using transformation matrices. Similarly this is the first step of the flat-foldable check.
+2. run the layer solver, and this filter out any cases which do not have a valid layer folding. However, this does not confirm all cases which do not fail.
+3. The final step would be something that Erik or Tom mentioned, detecting face-intersections in 3D the expensive way, which is the only way to do this.
+
+**Feature wishlist**
+
+- [ ] drag vertex, ability to shift-lock to a radial line.
+- [x] refactor all the stores to be entirely reactive, encapsulating the final event call into the response for setting a "release". not sure if this is possible. with the more advanced axioms.
+
 ## 2023-09-22
 
 In which I consider how to add folded-form folding back into the app.
@@ -8,10 +41,10 @@ From the beginning, I promised to keep this app simple and make it have less to 
 
 ## bug list:
 
-[ ] rebuild boundary doesn't work when there are two separate crease patterns.
-[ ] scale-up a crease pattern, reset zoom no longer works (fixed to old size).
-[x] viewport resize due to show/hide component does not re-scale origami simulator's html canvas.
-[ ] simulator "reset", or better "reset zoom" should also reset it's camera
+- [ ] rebuild boundary doesn't work when there are two separate crease patterns.
+- [ ] scale-up a crease pattern, reset zoom no longer works (fixed to old size).
+- [x] viewport resize due to show/hide component does not re-scale origami simulator's html canvas.
+- [ ] simulator "reset", or better "reset zoom" should also reset it's camera
 
 ## 2023-09-18
 
