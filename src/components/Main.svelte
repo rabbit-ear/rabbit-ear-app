@@ -8,7 +8,10 @@
 	import Dialogs from "./Dialogs.svelte";
 	import FileManager from "./FileManager.svelte";
 	import DragAndDrop from "./DragAndDrop.svelte";
-	import { ShowMenu } from "../stores/App.js";
+	import {
+		ShowMenu,
+		ShowTerminal,
+	} from "../stores/App.js";
 	import { KeyboardEvent } from "../stores/KeyboardEvents.js";
 	import {
 		PointerEvent,
@@ -38,7 +41,11 @@
 			<Menu />
 		</div>
 	{/if}
-	<Terminal />
+	{#if $ShowTerminal}
+		<div class="terminal">
+			<Terminal />
+		</div>
+	{/if}
 	<div class="gui horizontal">
 		<div class="toolbar">
 			<Toolbar />
@@ -81,6 +88,11 @@
 		height: 2rem;
 		flex: 0 0 auto;
 	}
+	.terminal {
+		width: 100%;
+		height: 6rem;
+		flex: 0 1 auto;
+	}
 	.gui {
 		width: 100%;
 		flex: 1 1 auto;
@@ -90,9 +102,7 @@
 	/* .gui children */
 	.toolbar {
 		height: 100%;
-		flex: 0 0 auto;  /* shrink to 1 */
-/*		overflow-y: auto;*/
-		padding-top: 0.5rem;
+		flex: 0 0 auto;
 		overflow-x: hidden;
 		overflow-y: auto;
 	}
@@ -105,7 +115,7 @@
 	.panels {
 		width: 16rem;
 		height: 100%;
-		flex: 0 0 auto;  /* shrink to 1 */
+		flex: 0 0 auto;
 		overflow-y: auto;
 	}
 

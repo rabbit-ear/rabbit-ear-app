@@ -3,6 +3,7 @@ import { writable, derived } from "svelte/store";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFramesAsFlatArray } from "rabbit-ear/fold/frames.js";
 import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
+import { makeFacesWinding } from "rabbit-ear/graph/faces/winding.js";
 import populate from "rabbit-ear/graph/populate.js";
 import { graphToMatrix2 } from "../js/matrix.js";
 import {
@@ -95,9 +96,19 @@ export const Graph = derived(
 	makeEmptyGraph(),
 );
 
+export const FoldedRootFace = writable(0);
+
 export const GraphVerticesFolded = derived(
-	Graph,
-	($Graph) => $Graph ? makeVerticesCoordsFolded($Graph) : [],
+	[Graph, FoldedRootFace],
+	([$Graph, $FoldedRootFace]) => $Graph
+		? makeVerticesCoordsFolded($Graph, $FoldedRootFace)
+		: [],
+	[],
+);
+
+export const GraphFacesWinding = derived(
+	[Graph, FoldedRootFace],
+	([$Graph, $FoldedRootFace]) => makeFacesWinding($Graph, $FoldedRootFace),
 	[],
 );
 

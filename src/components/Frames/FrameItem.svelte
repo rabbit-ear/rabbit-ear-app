@@ -21,6 +21,7 @@
 		flex: 0 0 auto;
 		width: 5rem;
 		height: 5rem;
+/*		margin: 0.5rem 0;*/
 		background-color: var(--background-0);
 		border: 2px solid transparent;
 		border-radius: 4px;

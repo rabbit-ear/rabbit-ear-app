@@ -34,6 +34,7 @@
 	};
 </script>
 
+<!-- todo: must have aria role -->
 <div class="frames horizontal" on:mousemove={mousemove} on:mouseup={mouseup}>
 	{#each $FramesRendered as graph, index}
 		<FrameRender {graph} {index} {mousedown} />
@@ -46,8 +47,8 @@
 		width: 100%;
 		height: 100%;
 		overflow-x: auto;
-		border-top: 2px solid var(--background-1);
-		padding: 0.5rem;
+		border-top: 2px solid var(--background-2);
+/*		padding: 0.5rem;*/
 	}
 	.horizontal {
 		display: flex;

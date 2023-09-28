@@ -26,16 +26,16 @@
 
 	let height = "100vh";
 	$: height = [
-		"100vh - 5px",
+		"100vh",
 		ShowMenu ? "2rem" : "",
-		$ShowFrames ? "6.5rem" : "",
+		$ShowFrames ? "5rem - 4px - 2px" : "", // button height, button border, container border
 		$ShowTerminal ? "6rem" : "2rem",
 	].filter(a => a !== "").join(" - ");
 </script>
 
 <!--
 	here, we can separate light and dark mode rendering styles.
-	css rules are children of .svg-canvas so we can append a
+	css rules are children of .crease-pattern so we can append a
 	.light or .dark, even calculating in JS if we need, then
 	it should render appropriately.
 -->
@@ -46,7 +46,7 @@
 			<WebGLCanvas graph={$Graph}/>
 		</div>
 	{:else}
-		<div class="canvas svg-canvas" style={`max-height: calc(${height})`}>
+		<div class="canvas crease-pattern" style={`max-height: calc(${height})`}>
 			<CreasePattern
 				on:press={press}
 				on:move={move}
@@ -60,7 +60,7 @@
 			<Simulator />
 		</div>
 	{:else}
-		<div class="canvas" style={`max-height: calc(${height})`}>
+		<div class="canvas folded-form" style={`max-height: calc(${height})`}>
 			<FoldedForm />
 		</div>
 	{/if}
@@ -75,17 +75,20 @@
 	.horizontal {
 		display: flex;
 		flex-direction: row;
+		gap: 2px;
 	}
 	.canvases {
 		width: 100%;
 		height: 100%;
+		background-color: var(--background-2);
 	}
 	.canvas {
 		width: 100%;
 		height: 100%;
 		flex: 1 1 auto;
+		background-color: var(--background-0);
 	}
-	/* .svg-canvas { */
+	/* .crease-pattern { */
 		/* svgs are especially unrully */
 		/* this part might need more attention */
 		/* now it is calculated in the Javascript section */

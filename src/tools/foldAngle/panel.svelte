@@ -42,6 +42,7 @@
 		<div class="container">
 			<div class="flex-row">
 				<div>
+					<!-- todo: must have aria role -->
 					<svg
 						version="1.1"
 						xmlns="http://www.w3.org/2000/svg"

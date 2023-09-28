@@ -2,7 +2,9 @@
 	import SVGCanvas from "./SVGCanvas.svelte";
 	import GridLayer from "./GridLayer.svelte";
 	import UILayer from "./UILayer.svelte";
-	import GraphLayer from "./GraphLayer.svelte";
+	import GraphVerticesLayer from "./GraphVerticesLayer.svelte";
+	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
+	import GraphFacesLayer from "./GraphFacesLayer.svelte";
 	import RulerLayer from "./RulerLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
@@ -13,14 +15,30 @@
 		ShowAxes,
 		ShowIndices,
 	} from "../../stores/App.js";
-	import { Tool } from "../../stores/UI.js";
+	import {
+		Selection,
+		Highlight,
+	} from "../../stores/Select.js";
 </script>
 
 <SVGCanvas on:press on:move on:release on:scroll>
 	{#if $ShowGrid}
 		<GridLayer />
 	{/if}
-	<GraphLayer graph={$GraphFolded} />
+	<g class="origami-layer">
+		<GraphFacesLayer
+			graph={$GraphFolded}
+			selected={$Selection.faces}
+			highlighted={$Highlight.faces} />
+		<!-- <GraphEdgesLayer
+			graph={$GraphFolded}
+			selected={$Selection.edges}
+			highlighted={$Highlight.edges} /> -->
+		<!-- <GraphVerticesLayer
+			graph={$GraphFolded}
+			selected={$Selection.vertices}
+			highlighted={$Highlight.vertices} /> -->
+	</g>
 	{#if $ShowAxes}
 		<AxesLayer />
 	{/if}

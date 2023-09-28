@@ -127,8 +127,10 @@
 		cursor: initial;
 	}
 	hr {
-		margin: 1.5px;
-		border: 1.5px solid var(--dim);
-		opacity: 0.5;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		height: 2px;
+		background-color: var(--background-4);
 	}
 </style>

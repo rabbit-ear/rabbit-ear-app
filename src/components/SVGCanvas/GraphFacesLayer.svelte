@@ -1,4 +1,5 @@
 <script>
+	import { GraphFacesWinding } from "../../stores/Model.js";
 	export let graph = {};
 	export let selected = [];
 	export let highlighted = [];
@@ -26,13 +27,12 @@
 	$: classes = polygonsPoints.map((_, i) => [
 		selectedHash[i] ? "selected" : undefined,
 		highlightedHash[i] ? "highlighted" : undefined,
+		$GraphFacesWinding[i] ? "front" : "back",
 	].filter(a => a !== undefined).join(" "));
 
 	let polygons = [];
 	$: polygons = polygonsPoints
-		.map((points, i) => classes[i] === ""
-			? ({ points })
-			: ({ points, class: classes[i] }));
+		.map((points, i) => ({ points, class: classes[i] }));
 </script>
 
 {#each polygons as polygon}
