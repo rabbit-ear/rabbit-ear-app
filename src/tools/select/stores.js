@@ -3,10 +3,8 @@ import {
 	writable,
 	derived,
 } from "svelte/store";
-import {
-	Selection,
-	Highlight,
-} from "../../stores/Select.js";
+import { Selection } from "../../stores/Select.js";
+import { Highlight } from "../../stores/UI.js";
 import { Graph } from "../../stores/Model.js";
 import { zipArrays } from "../../js/arrays.js";
 import { nearest } from "rabbit-ear/graph/nearest.js";

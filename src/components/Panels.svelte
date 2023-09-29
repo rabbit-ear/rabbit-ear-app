@@ -5,7 +5,7 @@
 	import ModifiersPanel from "./Panels/Modifiers.svelte";
 	import Simulator from "./Panels/Simulator.svelte";
 	import { Modifiers } from "../stores/Modifiers.js";
-	import { ShowSimulator } from "../stores/App.js";
+	import { ShowStaticOrSimulator } from "../stores/App.js";
 	import { Tool } from "../stores/UI.js";
 
 	let ModifierPanels;
@@ -18,7 +18,7 @@
 {#if $Tool && $Tool.panel}
 	<svelte:component this={$Tool.panel} />
 {/if}
-{#if $ShowSimulator}
+{#if $ShowStaticOrSimulator}
 	<Simulator />
 {/if}
 <ModifiersPanel />

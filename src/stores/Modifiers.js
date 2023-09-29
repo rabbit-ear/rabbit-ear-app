@@ -16,5 +16,5 @@ export const Modifiers = writable([
  * function just fine if any modifier is turned off.
  */
 export const FixedModifiers = {
-	"undoHistory": true,
+	undoHistory: true,
 };

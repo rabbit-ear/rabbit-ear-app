@@ -5,7 +5,7 @@ import jsTokens from "../lib/js-tokens/index.js";
  * element marked with the class name of the token type.
  * @returns {string} HTML string
  */
-export const formatJavascript = (js) => Array
+const formatJavascript = (js) => Array
 	.from(jsTokens(js))
 	.map(({ type, value }) => `<span class=${type}>${value}</span>`)
 	.join("");
@@ -14,7 +14,7 @@ export const formatJavascript = (js) => Array
  * in one span element, with a class of "return".
  * @returns {string} HTML string
  */
-export const formatCommandResult = (result) => {
+const formatCommandResult = (result) => {
 	if (result == null) { return undefined; }
 	const prompt = `<span class="prompt-symbol">&gt;</span>`;
 	switch (typeof result) {
@@ -31,7 +31,7 @@ export const formatCommandResult = (result) => {
  * with one span marked class of "error".
  * @returns {string} HTML string
  */
-export const formatError = (error) => (
+const formatError = (error) => (
 	`<span class="error">${error}</span>`
 );
 
@@ -45,3 +45,11 @@ export const terminalOutputJavascript = (js) => {
 		.join("");
 	return { html, commands };
 };
+
+export const terminalOutputError = (error) => ({
+	html: `<span class="error">${error}</span>`,
+});
+
+export const terminalOutputCommandResult = (result) => ({
+	html: formatCommandResult(result),
+});

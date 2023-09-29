@@ -7,7 +7,7 @@ import {
 	UpdateFrame,
 } from "../../stores/Model.js";
 import { Selection } from "../../stores/Select.js";
-import { Highlight } from "../../stores/Select.js";
+import { Highlight } from "../../stores/UI.js";
 /**
  *
  */

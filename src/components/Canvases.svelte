@@ -3,8 +3,6 @@
 	import {
 		ShowMenu,
 		ShowFrames,
-		ShowTerminal,
-		ShowSimulator,
 		ShowCodeEditor,
 		ShowStaticOrSimulator,
 	} from "../stores/App.js";
@@ -29,7 +27,7 @@
 		"100vh",
 		ShowMenu ? "2rem" : "",
 		$ShowFrames ? "5rem - 4px - 2px" : "", // button height, button border, container border
-		$ShowTerminal ? "6rem" : "2rem",
+		"6rem" // terminal
 	].filter(a => a !== "").join(" - ");
 </script>
 

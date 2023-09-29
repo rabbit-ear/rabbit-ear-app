@@ -8,10 +8,7 @@
 	import Dialogs from "./Dialogs.svelte";
 	import FileManager from "./FileManager.svelte";
 	import DragAndDrop from "./DragAndDrop.svelte";
-	import {
-		ShowMenu,
-		ShowTerminal,
-	} from "../stores/App.js";
+	import { ShowMenu } from "../stores/App.js";
 	import { KeyboardEvent } from "../stores/KeyboardEvents.js";
 	import {
 		PointerEvent,
@@ -41,11 +38,9 @@
 			<Menu />
 		</div>
 	{/if}
-	{#if $ShowTerminal}
-		<div class="terminal">
-			<Terminal />
-		</div>
-	{/if}
+	<div class="terminal">
+		<Terminal />
+	</div>
 	<div class="gui horizontal">
 		<div class="toolbar" role="toolbar">
 			<Toolbar />

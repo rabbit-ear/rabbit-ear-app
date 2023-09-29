@@ -1,8 +1,9 @@
 import { writable, derived } from "svelte/store";
 import { ViewBox } from "./ViewBox.js";
-
-// size
-
+/**
+ * @description Stroke-width is zoom-level dependent, this is the factor
+ * (out of 1) which is scaled to the viewbox to get the stroke width.
+ */
 const StrokeWidthFactor = (1 / 300);
 
 export const StrokeWidth = derived(
@@ -10,7 +11,12 @@ export const StrokeWidth = derived(
 	($ViewBox) => Math.max($ViewBox[2], $ViewBox[3]) * StrokeWidthFactor,
 	StrokeWidthFactor,
 );
-
+/**
+ * @description Some SVG styles are zoom-level dependent, and require
+ * being updated when the ViewBox changes. Of course, these attributes could
+ * be set in Javascript, but some things are much easier to do in CSS,
+ * for example, animations like a selection box's dasharray animation.
+ */
 const CSSViewboxVariables = derived(
 	ViewBox,
 	($ViewBox) => {
@@ -22,14 +28,6 @@ const CSSViewboxVariables = derived(
 	undefined,
 );
 CSSViewboxVariables.subscribe(() => {});
-
-// const StrokeDashAnimation = derived(
-// 	ViewBox,
-// 	$ViewBox => document.documentElement.style
-// 		.setProperty("--stroke-dash-max", Math.max($ViewBox[2], $ViewBox[3]) * 5),
-// 	undefined
-// );
-// StrokeDashAnimation.subscribe(() => {});
 
 //
 // show/hide things

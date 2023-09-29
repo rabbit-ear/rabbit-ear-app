@@ -1,10 +1,11 @@
 import { writable, derived } from "svelte/store";
-// import { Snapping } from "./App.js";
 import { ViewBox } from "./ViewBox.js";
 import { RulerPoints } from "./Ruler.js";
 import { Graph } from "./Model.js";
-
-// modifiers
+/**
+ * @description Establish the angle between snapping lines, and the
+ * offset from 0deg for the initial line.
+ */
 export const RadialSnapDegrees = writable(22.5);
 export const RadialSnapOffset = writable(0);
 /**
@@ -25,7 +26,6 @@ export const SnapPoints = derived(
 	([$Graph, $RulerPoints]) => [...($Graph.vertices_coords || []), ...$RulerPoints],
 	[],
 );
-// export const SnapPoints = writable([]);
 /**
  * @description Snapping is zoom-level dependent, this is the factor
  * (out of 1) which is scaled to the viewbox to get the snap radius.

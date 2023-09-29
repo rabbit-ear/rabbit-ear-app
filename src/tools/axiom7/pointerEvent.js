@@ -121,7 +121,7 @@ export default pointerEvent;
 // 			executeCommand("addVertex", pressCoords),
 // 			executeCommand("addVertex", snapToRulerLine(point).coords),
 // 		);
-// 		// if (get(RulersAutoClear)) { RulerLines.set([]); }
+// 		RulerLines.set([]);
 // 		UIGraph.set({});
 // 		RulerLines.set([]);
 // 		Presses.set([]);

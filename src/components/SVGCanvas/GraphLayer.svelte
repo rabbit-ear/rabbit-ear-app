@@ -2,10 +2,8 @@
 	import GraphVerticesLayer from "./GraphVerticesLayer.svelte";
 	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
 	import GraphFacesLayer from "./GraphFacesLayer.svelte";
-	import {
-		Selection,
-		Highlight,
-	} from "../../stores/Select.js";
+	import { Selection } from "../../stores/Select.js";
+	import { Highlight } from "../../stores/UI.js";
 
 	export let graph = {};
 </script>

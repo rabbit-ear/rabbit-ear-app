@@ -12,17 +12,7 @@ import {
 	Tool,
 	Keyboard,
 } from "../stores/UI.js";
-import {
-	KeybindingsDown,
-	KeybindingsUp,
-} from "./Keybindings.js";
-
-// if KeybindingsDown/Up ever change to become stores
-// this needs to be refactored.
-const Keybindings = {
-	up: KeybindingsUp,
-	down: KeybindingsDown,
-};
+import Keybindings from "./Keybindings.js";
 
 export const AppKeyboardEvent = readable((eventType, event) => {
 	const { altKey, ctrlKey, metaKey, shiftKey } = event;

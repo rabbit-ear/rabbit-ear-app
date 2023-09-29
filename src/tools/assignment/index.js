@@ -7,7 +7,7 @@ import {
 } from "./stores.js";
 
 const assignment = {
-	uuid: "assignment",
+	key: "assignment",
 	name: "assignment",
 	group: "attributes",
 	icon,

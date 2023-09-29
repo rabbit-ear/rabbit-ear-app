@@ -4,11 +4,20 @@ import {
 } from "svelte/store";
 import {
 	snapToPoint,
+	snapToPointWithInfo,
 	snapToRulerLine,
 } from "../../js/snap.js";
-import { execute, executeCommand } from "../../kernel/execute.js";
-import { UILines } from "../../stores/UI.js";
-import { RulerLines } from "../../stores/Ruler.js";
+import {
+	execute,
+	executeCommand,
+} from "../../kernel/execute.js";
+import {
+	SnapPoint,
+	UILines,
+} from "../../stores/UI.js";
+import {
+	RulerLines,
+} from "../../stores/Ruler.js";
 
 export const Move = writable(undefined);
 export const Drag = writable(undefined);
@@ -21,19 +30,43 @@ export const Step = derived(
 	0,
 );
 
-export const MoveCoords = derived(
+const MoveSnap = derived(
 	[Move, Step],
 	([$Move, $Step]) => $Step < 2
-		? snapToPoint($Move, false)
-		: snapToRulerLine($Move, false).coords,
+		? snapToPointWithInfo($Move)
+		: snapToRulerLine($Move),
+	({}),
+);
+
+const DragSnap = derived(
+	[Drag, Step],
+	([$Drag, $Step]) => $Step < 2
+		? snapToPointWithInfo($Drag)
+		: snapToRulerLine($Drag),
+	({}),
+);
+
+export const SetSnapPoint = derived(
+	[MoveSnap, DragSnap],
+	([$MoveSnap, $DragSnap]) => {
+		const point = [$MoveSnap, $DragSnap]
+			.filter(a => a !== undefined)
+			.filter(el => el.snap)
+			.shift();
+		SnapPoint.set(point && point.snap ? point.coords : undefined);
+	},
+	undefined,
+);
+
+export const MoveCoords = derived(
+	MoveSnap,
+	($MoveSnap) => $MoveSnap.coords,
 	undefined,
 );
 
 export const DragCoords = derived(
-	[Drag, Step],
-	([$Drag, $Step]) => $Step < 2
-		? snapToPoint($Drag, false)
-		: snapToRulerLine($Drag, false).coords,
+	DragSnap,
+	($DragSnap) => $DragSnap.coords,
 	undefined,
 );
 
@@ -81,7 +114,6 @@ export const AxiomRulers = derived(
 			const point1 = $Coords0.join(", ");
 			const point2 = $Coords1.join(", ");
 			const args = `[${point1}], [${point2}]`;
-			// execute(`setUILines([])`);
 			UILines.set([]);
 			execute(`setRulerLines(axiom1(${args}))`);
 		}
@@ -112,14 +144,17 @@ export const reset = () => {
 let unsub = [];
 
 export const subscribe = () => {
+	console.log("subscribe");
 	unsub = [
 		AxiomPreview.subscribe(() => {}),
 		AxiomRulers.subscribe(() => {}),
 		DoAxiom.subscribe(() => {}),
+		SetSnapPoint.subscribe(() => {}),
 	];
 };
 
 export const unsubscribe = () => {
-	unsub.forEach(unsubFn => unsubFn());
+	console.log("unsubscribe");
+	unsub.forEach(u => u());
 	reset();
 };

@@ -26,7 +26,7 @@
 		y1={$Segment0[1]}
 		x2={$DragCoords[0]}
 		y2={$DragCoords[1]}
-		stroke-width={$VertexRadius * 3} />
+		stroke-width={$VertexRadius * 1.5} />
 {/if}
 
 <style>

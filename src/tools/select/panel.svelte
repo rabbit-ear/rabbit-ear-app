@@ -6,10 +6,9 @@
 		SELECT_EDGE,
 		SELECT_FACE,
 	} from "./stores.js";
-	import {
-		Selection,
-		Highlight,
-	} from "../../stores/Select.js";
+	import { Selection } from "../../stores/Select.js";
+	import { Highlight } from "../../stores/UI.js";
+
 </script>
 
 <Panel>

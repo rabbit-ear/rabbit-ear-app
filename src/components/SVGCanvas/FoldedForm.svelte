@@ -15,10 +15,8 @@
 		ShowAxes,
 		ShowIndices,
 	} from "../../stores/App.js";
-	import {
-		Selection,
-		Highlight,
-	} from "../../stores/Select.js";
+	import { Selection } from "../../stores/Select.js";
+	import { Highlight } from "../../stores/UI.js";
 </script>
 
 <SVGCanvas on:press on:move on:release on:scroll>

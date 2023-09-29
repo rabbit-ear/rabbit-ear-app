@@ -1,12 +1,7 @@
 import { get } from "svelte/store";
 import { CommandHistory } from "../stores/History.js";
 import { Modifiers } from "../stores/Modifiers.js";
-import Commands from "./commands/index.js";
-import { silentMethods } from "./settings.js";
-import {
-	run,
-	runSilent,
-} from "./shell.js";
+import { run } from "./shell.js";
 /**
  * @description This is the main point of entry to execute
  * a command in the context that contains all the app's functionality.
@@ -22,29 +17,11 @@ export const execute = (js) => {
 	CommandHistory.add(...output);
 };
 /**
- * @description UI methods will be redirected through here to avoid
- * being printed out to the console.
- */
-const executeSilent = (js) => {
-	const commands = [js];
-	get(Modifiers).forEach(modifier => modifier.execute(commands));
-	const output = commands.flatMap(command => runSilent(command));
-	CommandHistory.add(...output);
-};
-/**
- * @description Convert a method name and its parameters into
- * a stringified valid Javascript code blob.
- */
-const stringifyCall = (name, ...args) => (
-	`${name}(${args.map(v => JSON.stringify(v)).join(", ")})`
-);
-/**
  * @description This is a more user-friendly alternative to "execute"
  * intended for only one method call, and it can include method arguments.
  * This allows the user to simply type the method name instead of
  * constructing a valid Javascript blob.
  */
-export const executeCommand = (name, ...args) => (silentMethods[name]
-	? executeSilent(stringifyCall(name, ...args))
-	: execute(stringifyCall(name, ...args))
+export const executeCommand = (name, ...args) => (
+	execute(`${name}(${args.map(v => JSON.stringify(v)).join(", ")})`)
 );

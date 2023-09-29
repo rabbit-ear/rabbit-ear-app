@@ -23,3 +23,8 @@ export const zipArrays = (a, b) => {
 	}
 	return zipped;
 };
+/**
+ *
+ */
+export const arrayIntersection = (a = [], b = []) => a
+	.filter(value => b.includes(value));

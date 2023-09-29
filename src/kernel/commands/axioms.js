@@ -68,25 +68,25 @@ export const axiom7 = (...args) => (
 );
 
 export const axiom1Rulers = (...args) => (
-	RulerLines.add(axiom1(...args))
+	RulerLines.set(axiom1(...args))
 );
 export const axiom2Rulers = (...args) => (
-	RulerLines.add(axiom2(...args))
+	RulerLines.set(axiom2(...args))
 );
 export const axiom3Rulers = (...args) => (
-	RulerLines.add(axiom3(...args))
+	RulerLines.set(axiom3(...args))
 );
 export const axiom4Rulers = (...args) => (
-	RulerLines.add(axiom4(...args))
+	RulerLines.set(axiom4(...args))
 );
 export const axiom5Rulers = (...args) => (
-	RulerLines.add(axiom5(...args))
+	RulerLines.set(axiom5(...args))
 );
 export const axiom6Rulers = (...args) => (
-	RulerLines.add(axiom6(...args))
+	RulerLines.set(axiom6(...args))
 );
 export const axiom7Rulers = (...args) => (
-	RulerLines.add(axiom7(...args))
+	RulerLines.set(axiom7(...args))
 );
 
 export const axiom1Preview = (...args) => (

@@ -1,10 +1,9 @@
 import ear from "rabbit-ear";
 import Commands from "./commands/index.js";
 import {
-	formatCommandResult,
-	formatJavascript,
-	formatError,
+	terminalOutputCommandResult,
 	terminalOutputJavascript,
+	terminalOutputError,
 } from "./format.js";
 
 // the context which will bind to the Function's this.
@@ -54,7 +53,7 @@ export const run = (jsBlob) => {
 	catch (error) {
 		return [
 			terminalOutputJavascript(jsBlob),
-			{ html: formatError(error) },
+			terminalOutputError(error),
 		];
 	}
 	// if the scoped eval returns undefined, the resulting html string
@@ -62,20 +61,6 @@ export const run = (jsBlob) => {
 	// strings in the terminal output.
 	return [
 		terminalOutputJavascript(jsBlob),
-		{ html: formatCommandResult(result) },
+		terminalOutputCommandResult(result),
 	].filter(a => a.html !== undefined);
-};
-/**
- * @description An alternative to "run", but the output does not
- * generate any console messages, unless there is an error
- * in which case it does generate the error HTML message.
- * @param {string} jsBlob a javascript snippet
- * @returns {object[]} an array of objects meant for printing
- * as output into the terminal.
- */
-export const runSilent = (jsBlob) => {
-	const errors = [];
-	try { scopedEval(jsBlob, context); }
-	catch (error) { errors.push({ html: formatError(error) }); }
-	return errors;
 };

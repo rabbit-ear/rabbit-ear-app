@@ -2,6 +2,7 @@
 	import Tools from "../tools/index.js";
 	import { Tool } from "../stores/UI.js";
 	import { FrameIsLocked } from "../stores/Model.js";
+	import { executeCommand } from "../kernel/execute.js";
 
 	const tempDisabled = {
 		"rabbit ear": true,
@@ -60,7 +61,7 @@
 				class={tool.name}
 				disabled={$FrameIsLocked || tool.name in tempDisabled}
 				highlighted={$Tool && $Tool.name === tool.name}
-				on:click={() => Tool.set(tool)}>
+				on:click={() => executeCommand("setTool", tool.key)}>
 				{#if tool.icon}
 					<svelte:component this={tool.icon} />
 				{/if}
@@ -69,6 +70,8 @@
 	</div>
 	<hr />
 {/each}
+
+				<!-- on:click={() => Tool.set(tool)} -->
 
 <style>
 	/*label {

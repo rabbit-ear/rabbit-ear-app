@@ -1,39 +1,42 @@
 import { writable, derived } from "svelte/store";
 import { ViewBox } from "./ViewBox.js";
-
-// these are immutable. a bit like compiler directives.
-// these will only change to target different builds.
+/**
+ * @description App settings which are immutable compiler directives.
+ * these will only change to target different builds.
+ */
 export const ShowMenu = false;
-
-// app preferences and settings
-export const NewEdgeAssignment = writable("F");
-// export const Snapping = writable(true);
-export const ShowFlatFoldableIssues = writable(true);
+/**
+ * @description Show/Hide various things across the app.
+ */
 export const ShowGrid = writable(true);
 export const ShowAxes = writable(true);
 export const ShowIndices = writable(false);
-export const RulersAutoClear = writable(true);
-
-// show/hide components
-export const ShowSimulator = writable(true);
-export const ShowTerminal = writable(true);
+export const ShowFlatFoldableIssues = writable(true);
 export const ShowCodeEditor = writable(false);
 export const ShowFrames = writable(true);
-// show static folded state, or origami simulator
-export const ShowStaticOrSimulator = writable(false);
-
-// DOM element references
+export const ShowStaticOrSimulator = writable(false); // false: static, true: simulator
+/**
+ * @description A few various commands have the effect of creating
+ * new edges in the graph, by default, these new edges will
+ * take on this assignment.
+ */
+export const NewEdgeAssignment = writable("F");
+/**
+ * @description DOM element references.
+ */
 export const DialogNewFile = writable(undefined);
 export const DialogNewFrame = writable(undefined);
 export const TerminalTextarea = writable(undefined);
 export const TerminalValue = writable(undefined);
 export const InputFile = writable(undefined);
-
-// vertex radius is is dynamic according to the zoom level
-// this number is a scale of the size of the viewbox.
+/**
+ * @description vertex radius is is dynamic according to the zoom level
+ * this number is a scale of the size of the viewbox.
+ */
 export const VertexRadiusFactor = writable(0.00666);
-
-// svg circle elements query this for their radius value.
+/**
+ * @description SVG circle elements use this for their radius value.
+ */
 export const VertexRadius = derived(
 	[ViewBox, VertexRadiusFactor],
 	([$ViewBox, $VertexRadiusFactor]) => (

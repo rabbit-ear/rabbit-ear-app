@@ -5,10 +5,8 @@ import {
 } from "../../kernel/execute.js";
 import {
 	// Snapping,
-	ShowSimulator,
 	ShowCodeEditor,
 	ShowFrames,
-	ShowTerminal,
 	ShowIndices,
 	ShowFlatFoldableIssues,
 	DialogNewFile,
@@ -232,20 +230,10 @@ export default [
 	{
 		label: "window",
 		submenu: [
-			{
-				label: "show simulator",
-				type: "checkbox",
-				bind: ShowSimulator,
-			},
 			// {
 			// 	label: "show code editor",
 			// 	type: "checkbox",
 			// 	bind: ShowCodeEditor,
-			// },
-			// {
-			// 	label: "show terminal",
-			// 	type: "checkbox",
-			// 	bind: ShowTerminal,
 			// },
 			{
 				label: "show frames",

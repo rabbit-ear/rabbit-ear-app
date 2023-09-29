@@ -3,12 +3,15 @@ import { isFrameElementSelected } from "../js/dom.js";
 import {
 	DialogNewFile,
 	TerminalTextarea,
-	ShowTerminal,
 } from "./App.js";
 import { Tool } from "./UI.js";
 import { Selection } from "./Select.js";
 import { executeCommand } from "../kernel/execute.js";
-
+/**
+ * @description holding "alt" temporarily turns the pointer device
+ * into a camera, allowing the user to pan. Store in here which tool
+ * the user was using before pressing "alt", and we will switch back when done.
+ */
 let altCameraToolSwap;
 
 // bit-key lookup
@@ -21,7 +24,7 @@ let altCameraToolSwap;
 // 5: shift + alt
 // 6: ctrl/cmd + alt
 // 7: shift + ctrl/cmd + alt
-export const KeybindingsDown = {
+const KeybindingsDown = {
 	// delete
 	8: {
 		0: (event) => isFrameElementSelected()
@@ -44,6 +47,7 @@ export const KeybindingsDown = {
 			executeCommand("resetApp");
 			executeCommand("resetTool");
 			// executeCommand("resetRulers");
+			document.activeElement.blur();
 		},
 	},
 	// 1 - 7
@@ -138,13 +142,11 @@ export const KeybindingsDown = {
 	},
 	// forward slash
 	191: {
-		0: (event) => (!get(ShowTerminal)
-			? ShowTerminal.set(true)
-			: get(TerminalTextarea).focus()),
+		0: (event) => get(TerminalTextarea).focus(),
 	},
 };
 
-export const KeybindingsUp = {
+const KeybindingsUp = {
 	// alt
 	18: {
 		0: (event) => {
@@ -152,4 +154,9 @@ export const KeybindingsUp = {
 			altCameraToolSwap = undefined;
 		},
 	},
+};
+
+export default {
+	down: KeybindingsDown,
+	up: KeybindingsUp,
 };

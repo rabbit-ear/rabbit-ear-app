@@ -23,26 +23,3 @@ Selection.addFaces = (faces) => Selection.update(obj => {
 	assignLists(obj.faces, faces);
 	return obj;
 });
-// Selection.lookup = () => {
-// 	const obj = get(Selection);
-// 	return {
-// 		vertices: invertMap(obj.vertices),
-// 		edges: invertMap(obj.edges),
-// 		faces: invertMap(obj.faces),
-// 	};
-// }
-
-export const Highlight = writable(emptyComponentObject());
-Highlight.reset = () => Highlight.set(emptyComponentObject()),
-Highlight.addVertices = (verts) => Highlight.update(obj => {
-	assignLists(obj.vertices, verts);
-	return obj;
-});
-Highlight.addEdges = (edges) => Highlight.update(obj => {
-	assignLists(obj.edges, edges);
-	return obj;
-});
-Highlight.addFaces = (faces) => Highlight.update(obj => {
-	assignLists(obj.faces, faces);
-	return obj;
-});

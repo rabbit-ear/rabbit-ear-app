@@ -19,25 +19,41 @@ import { graphToMatrix2 } from "../js/matrix.js";
 // 	($Graph) => graphToMatrix2($Graph),
 // 	[...identity2x3],
 // );
-
+/**
+ * @description The model matrix is intended to describe a bounding box
+ * around the graph model. This model matrix will always maintain
+ * a 1:1 aspect ratio. Used to create the SVG's ViewBox.
+ */
 export const ModelMatrix = writable([...identity2x3]);
 ModelMatrix.reset = () => ModelMatrix.set([...identity2x3]);
-
+/**
+ * @description The camera matrix is what the user modifies when they
+ * pan around and scroll to zoom on the SVG canvas.
+ */
 export const CameraMatrix = writable([...identity2x3]);
 CameraMatrix.reset = () => CameraMatrix.set([...identity2x3]);
-
+/**
+ * @description The inverse of the camera matrix,
+ * used to build the SVG's ViewBox.
+ */
 export const ViewMatrix = derived(
 	CameraMatrix,
 	($CameraMatrix) => invertMatrix2($CameraMatrix),
 	[...identity2x3],
 );
-
+/**
+ * @description In a typical fashion, the model and view matrices are
+ * multiplied together to make this model-view matrix.
+ */
 export const ModelViewMatrix = derived(
 	[ModelMatrix, ViewMatrix],
 	([$ModelMatrix, $ViewMatrix]) => multiplyMatrices2($ModelMatrix, $ViewMatrix),
 	[...identity2x3],
 );
-
+/**
+ * @description The SVG will set its "viewBox" property with this value,
+ * a value which is based on the camera, as well as the model size.
+ */
 export const ViewBox = derived(
 	ModelViewMatrix,
 	($ModelViewMatrix) => {

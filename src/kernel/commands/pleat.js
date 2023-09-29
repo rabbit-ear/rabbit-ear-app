@@ -11,7 +11,7 @@ export const doPleat = (graph, edgeA, edgeB, count) => {
 };
 
 export const pleat = (...args) => (
-	RulerLines.add(doPleat(get(Graph), ...args))
+	RulerLines.set(doPleat(get(Graph), ...args))
 );
 
 // export const pleatPreview = (...args) => (

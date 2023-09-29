@@ -12,12 +12,28 @@ import { CameraMatrix } from "./ViewBox.js";
 import {
 	Tool,
 	Pointer,
-	// PointerSnap,
 } from "./UI.js";
 
-// todo: figure out how to scroll the view if there is
-// a mouse, and the user right-clicks.
+// todo: figure out how to scroll the view if there is a mouse
+// and the user right-clicks. exactly like how the keyboard "alt"
+// can trigger a temporary camera tool motion.
 
+/**
+ * @description When a pointer event fires from an SVG canvas (mousedown,
+ * mousemove, mouseup), this causes these methods to be called, no matter
+ * which UI tool is selected. Generally, these apply to the app itself.
+ * Currently, this is so small, it's almost unjustified (it's possible we
+ * can move the Pointer.set into the tools themselves, although, this would
+ * be duplicating this one line of code in >20x places around the app).
+ */
+const AppPointerEvent = readable((eventType, event) => {
+	Pointer.set(event.point);
+});
+/**
+ * @description When a pointer event fires from an SVG canvas (mousedown,
+ * mousemove, mouseup), the currently-selected UI tool is checked, and
+ * in the case that it has a custom pointer event, it gets called here.
+ */
 const ToolPointerEvent = derived(
 	Tool,
 	($Tool) => $Tool && $Tool.pointerEvent
@@ -25,12 +41,11 @@ const ToolPointerEvent = derived(
 		: () => {},
 	() => {},
 );
-
-const AppPointerEvent = readable((eventType, event) => {
-	Pointer.set(event.point);
-	// PointerSnap.set(undefined);
-});
-
+/**
+ * @description SVG canvas pointer event (mousedown, mousemove, mouseup)
+ * gets bound to this, which runs any app-wide pointer methods, and checks
+ * if there is a UI tool with a pointer event, call the tool's pointer event.
+ */
 export const PointerEvent = derived(
 	[AppPointerEvent, ToolPointerEvent],
 	([$AppPointerEvent, $ToolPointerEvent]) => (eventType, event) => {
@@ -39,7 +54,9 @@ export const PointerEvent = derived(
 	},
 	() => {},
 );
-
+/**
+ * @description SVG canvas scrolling event gets bound to this.
+ */
 export const ScrollEvent = readable(({ point, wheelDelta }) => {
 	const scaleOffset = (wheelDelta / 666);
 	const scale = 1 + scaleOffset;

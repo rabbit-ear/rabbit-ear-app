@@ -4,7 +4,6 @@ import {
 	snapToEdge,
 	snapToRulerLine,
 } from "../../js/snap.js";
-import { Highlight } from "../../stores/Select.js";
 import { RulerLines } from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";
 import {
@@ -15,6 +14,7 @@ import {
 } from "./stores.js";
 import {
 	UILines,
+	Highlight,
 } from "../../stores/UI.js";
 
 let pressEdge;
@@ -40,7 +40,6 @@ const pointerEventPleat = (eventType, { point }) => {
 			RulerLines.set([]);
 			pressEdge = edge;
 		}
-		// if (get(RulersAutoClear)) { Rulers.set([]); }
 		if (edge !== undefined) { Highlight.addEdges([edge]); }
 		if (pressEdge !== undefined) { Highlight.addEdges([pressEdge]); }
 		UILines.set([]);
@@ -62,7 +61,7 @@ const pointerEventPleat = (eventType, { point }) => {
 			// console.log("SEetting", get(RulerLines)[index]);
 			UILines.set([get(RulerLines)[index]]);
 		}
-		// if (get(RulersAutoClear)) { Rulers.set([]); }
+		Rulers.set([]);
 	}
 		break;
 	case 3: {

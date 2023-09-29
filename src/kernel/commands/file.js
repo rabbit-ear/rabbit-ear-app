@@ -23,7 +23,7 @@ const downloadFile = (contents, filename = "origami.fold") => {
 	document.body.removeChild(element);
 };
 
-export const load = (FOLD) => LoadFile(FOLD);
+export const load = (FOLD = {}) => LoadFile(FOLD);
 
 export const clear = () => LoadFile(makeEmptyGraph());
 

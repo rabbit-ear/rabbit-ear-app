@@ -8,7 +8,7 @@ import {
 } from "./stores.js";
 
 const selectTool = {
-	key: "selectTool",
+	key: "select",
 	name: "select",
 	group: "general",
 	order: 1,

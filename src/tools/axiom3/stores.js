@@ -8,9 +8,11 @@ import {
 } from "../../js/snap.js";
 import { zipArrays } from "../../js/arrays.js";
 import { executeCommand } from "../../kernel/execute.js";
-import { Highlight } from "../../stores/Select.js";
-import { UILines } from "../../stores/UI.js";
 import { RulerLines } from "../../stores/Ruler.js";
+import {
+	UILines,
+	Highlight,
+} from "../../stores/UI.js";
 
 export const Move = writable(undefined);
 export const Presses = writable([]);

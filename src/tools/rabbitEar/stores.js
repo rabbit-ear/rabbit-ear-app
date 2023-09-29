@@ -4,7 +4,7 @@ import {
 } from "svelte/store";
 import {
 	Highlight,
-} from "../../stores/Select.js";
+} from "../../stores/UI.js";
 import { Graph } from "../../stores/Model.js";
 import { nearest } from "rabbit-ear/graph/nearest.js";
 
