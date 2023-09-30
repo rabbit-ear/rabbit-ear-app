@@ -1,8 +1,15 @@
 import { get } from "svelte/store";
 import { writable, derived } from "svelte/store";
-import { getFileMetadata } from "rabbit-ear/fold/spec.js";
+import {
+	getFileMetadata,
+	edgesFoldAngleAreAllFlat,
+} from "rabbit-ear/fold/spec.js";
+import { linearOrderFaces } from "rabbit-ear/graph/orders.js";
 import { getFramesAsFlatArray } from "rabbit-ear/fold/frames.js";
-import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
+import {
+	makeVerticesCoordsFolded,
+	makeVerticesCoordsFlatFolded,
+} from "rabbit-ear/graph/vertices/folded.js";
 import { makeFacesWinding } from "rabbit-ear/graph/faces/winding.js";
 import populate from "rabbit-ear/graph/populate.js";
 import { graphToMatrix2 } from "../js/matrix.js";
@@ -96,20 +103,46 @@ export const Graph = derived(
 	makeEmptyGraph(),
 );
 
+// const GraphVertices2D = derived(
+// 	Graph,
+// 	($Graph) => {
+// 		for (let i = 0; i < $Graph.length; i += 1) {
+// 			if ($Graph[i].length === 3) { return false; }
+// 		}
+// 		return true;
+// 	},
+// 	true,
+// );
+
+export const FoldedFormIsFlat = derived(
+	Graph,
+	// ($Graph) => $Graph ? edgesFoldAngleAreAllFlat($Graph) : true,
+	($Graph) => {
+		console.log("Model: FoldedFormIsFlat");
+		return $Graph ? edgesFoldAngleAreAllFlat($Graph) : true
+	},
+	true,
+);
+
 export const FoldedRootFace = writable(0);
 
 export const GraphVerticesFolded = derived(
-	[Graph, FoldedRootFace],
-	([$Graph, $FoldedRootFace]) => {
+	[Graph, FoldedFormIsFlat, FoldedRootFace],
+	([$Graph, $FoldedFormIsFlat, $FoldedRootFace]) => {
 		try {
 			// if all edges_foldAngle are flat, makeVerticesCoordsFlatFolded instead
-			return $Graph
+			if ($Graph
 				&& $Graph.vertices_coords
 				&& $Graph.edges_vertices
-				&& $Graph.faces_vertices
-				? makeVerticesCoordsFolded($Graph, $FoldedRootFace)
-				: [];
+				&& $Graph.faces_vertices) {
+				console.log("Model: GraphVerticesFolded");
+				return $FoldedFormIsFlat
+					? makeVerticesCoordsFlatFolded($Graph, $FoldedRootFace)
+					: makeVerticesCoordsFolded($Graph, $FoldedRootFace);
+			}
+			return [];
 		} catch (error) {
+			console.warn("makeVerticesCoordsFolded", error)
 			return [];
 		}
 	},
@@ -120,6 +153,7 @@ export const GraphFacesWinding = derived(
 	[Graph, GraphVerticesFolded],
 	([$Graph, $GraphVerticesFolded]) => {
 		try {
+			console.log("Model: GraphFacesWinding");
 			return $Graph && $Graph.faces_vertices && $GraphVerticesFolded.length
 				? makeFacesWinding({
 					vertices_coords: $GraphVerticesFolded,
@@ -127,6 +161,7 @@ export const GraphFacesWinding = derived(
 				})
 				: [];
 		} catch (error) {
+			console.warn("makeFacesWinding", error)
 			return [];
 		}
 	},
@@ -140,6 +175,22 @@ export const GraphFolded = derived(
 		vertices_coords: $GraphVerticesFolded,
 	}),
 	({}),
+);
+
+export const GraphFaceLinearOrder = derived(
+	[GraphFolded, FoldedRootFace],
+	([$GraphFolded, $FoldedRootFace]) => {
+		try {
+			console.log("Model: GraphFaceLinearOrder");
+			return linearOrderFaces($GraphFolded, $FoldedRootFace);
+		} catch (error) {
+			console.warn("linearOrderFaces", error)
+			return $GraphFolded && $GraphFolded.faces_vertices
+				? $GraphFolded.faces_vertices.map((_, i) => i)
+				: [];
+		}
+	},
+	[],
 );
 
 /**

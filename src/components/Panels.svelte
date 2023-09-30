@@ -3,6 +3,7 @@
 	import File from "./Panels/File.svelte";
 	// import Frames from "./Panels/Frames.svelte";
 	import ModifiersPanel from "./Panels/Modifiers.svelte";
+	import FoldedForm from "./Panels/FoldedForm.svelte";
 	import Simulator from "./Panels/Simulator.svelte";
 	import { Modifiers } from "../stores/Modifiers.js";
 	import { ShowStaticOrSimulator } from "../stores/App.js";
@@ -20,6 +21,8 @@
 {/if}
 {#if $ShowStaticOrSimulator}
 	<Simulator />
+{:else}
+	<FoldedForm />
 {/if}
 <ModifiersPanel />
 {#each ModifierPanels as panel}

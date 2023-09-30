@@ -21,6 +21,7 @@
 		"many lines",
 		"single vertex",
 		"transform",
+		"undefined"
 	];
 	const filterAndSort = (tools, category) => {
 		const categoryTools = tools

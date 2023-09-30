@@ -5,7 +5,7 @@
 	import { UIGraph } from "../../stores/UI.js";
 </script>
 
-<g class="graph-preview">
+<g class="graph-preview-layer">
 	<GraphFacesLayer graph={$UIGraph} />
 	<GraphEdgesLayer graph={$UIGraph} />
 	<GraphVerticesLayer graph={$UIGraph} />

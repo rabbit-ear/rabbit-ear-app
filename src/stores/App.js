@@ -4,7 +4,7 @@ import { ViewBox } from "./ViewBox.js";
  * @description App settings which are immutable compiler directives.
  * these will only change to target different builds.
  */
-export const ShowMenu = false;
+export const ShowMenu = true;
 /**
  * @description Show/Hide various things across the app.
  */

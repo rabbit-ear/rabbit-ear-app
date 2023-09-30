@@ -14,6 +14,7 @@ import foldedLine from "./foldedLine/index.js";
 import kawasaki from "./kawasaki/index.js";
 import pleat from "./pleat/index.js";
 import rabbitEar from "./rabbitEar/index.js";
+import rootFace from "./rootFace/index.js";
 import scale from "./scale/index.js";
 import scribble from "./scribble/index.js";
 import select from "./select/index.js";
@@ -39,6 +40,7 @@ export default {
 	kawasaki,
 	pleat,
 	rabbitEar,
+	rootFace,
 	scale,
 	scribble,
 	select,

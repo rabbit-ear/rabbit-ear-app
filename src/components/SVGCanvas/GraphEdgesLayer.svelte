@@ -2,13 +2,9 @@
 	import { edgeFoldAngleIsFlat } from "rabbit-ear/fold/spec.js";
 	import {
 		AssignmentColor,
-		// todo: these are causing the renderer to re-draw edges
-		// anytime the viewbox is zoomed or panned.
 		StrokeWidth,
+		StrokeDashLength,
 	} from "../../stores/Style.js";
-
-	// todo, make this an app wide variable
-	const HighlightWidthFactor = 3;
 
 	export let graph = {};
 	export let selected = [];
@@ -43,11 +39,6 @@
 		? graph.edges_assignment[i]
 		: ""]) || "gray");
 
-	let strokeWidths = []
-	$: strokeWidths = coords.map((_, i) => (highlightedHash[i]
-		? $StrokeWidth * HighlightWidthFactor
-		: $StrokeWidth));
-
 	let classes = [];
 	$: classes = coords.map((_, i) => [
 		selectedHash[i] ? "selected" : undefined,
@@ -60,10 +51,25 @@
 		...coord,
 		...(classes[i] === "" ? {} : { class: classes[i] }),
 		stroke: strokes[i],
-		"stroke-width": strokeWidths[i],
 	}));
+
+	$: console.log("drawing svg edges", lines.length);
 </script>
 
-{#each lines as line, i}
-	<line {...line} />
-{/each}
+<g class="edges" style={`--stroke-width: ${$StrokeWidth}; --stroke-dash-length: ${$StrokeDashLength}`}>
+	{#each lines as line, i}
+		<line {...line} />
+	{/each}
+</g>
+
+<style>
+	line {
+		stroke-width: var(--stroke-width);
+	}
+	line.highlighted {
+		stroke-width: calc(var(--stroke-width) * 3pt);
+	}
+	.dashed-line {
+		stroke-dasharray: var(--stroke-dash-length);
+	}
+</style>

@@ -1,5 +1,8 @@
 <script>
-	import { GraphFacesWinding } from "../../stores/Model.js";
+	import {
+		GraphFacesWinding,
+		GraphFaceLinearOrder,
+	} from "../../stores/Model.js";
 	export let graph = {};
 	export let selected = [];
 	export let highlighted = [];
@@ -16,25 +19,30 @@
 		highlighted.forEach(i => { highlightedHash[i] = true; });
 	};
 
-	let polygonsPoints = [];
-	$: polygonsPoints = !graph.faces_vertices
+	let facesPolygon = [];
+	$: facesPolygon = !graph.faces_vertices
 		? []
 		: graph.faces_vertices
 			.map(fv => fv.map(v => graph.vertices_coords[v].slice(0, 2).join(",")))
 			.map(points => points.join(" "));
 
-	let classes = [];
-	$: classes = polygonsPoints.map((_, i) => [
+	let facesClass = [];
+	$: facesClass = facesPolygon.map((_, i) => [
 		selectedHash[i] ? "selected" : undefined,
 		highlightedHash[i] ? "highlighted" : undefined,
 		$GraphFacesWinding[i] ? "front" : "back",
 	].filter(a => a !== undefined).join(" "));
 
 	let polygons = [];
-	$: polygons = polygonsPoints
-		.map((points, i) => ({ points, class: classes[i] }));
+	$: polygons = $GraphFaceLinearOrder
+		.map(f => ({ points: facesPolygon[f], class: facesClass[f] }));
+
+	$: console.log("drawing svg faces", polygons.length);
+
 </script>
 
-{#each polygons as polygon}
-	<polygon {...polygon} />
-{/each}
+<g class="faces">
+	{#each polygons as polygon}
+		<polygon {...polygon} />
+	{/each}
+</g>

@@ -1,5 +1,9 @@
 <script>
-	import { Graph } from "../stores/Model.js";
+	import {
+		Graph,
+		GraphFolded,
+		FoldedFormIsFlat,
+	} from "../stores/Model.js";
 	import {
 		ShowMenu,
 		ShowFrames,
@@ -17,10 +21,10 @@
 	export let release;
 	export let scroll;
 
-	let isFoldedForm = false;
-	$: isFoldedForm = $Graph.frame_classes
-		&& $Graph.frame_classes.length
-		&& $Graph.frame_classes.includes("foldedForm");
+	// let is3D = false;
+	// $: is3D = $GraphFolded.frame_classes
+	// 	&& $GraphFolded.frame_classes.length
+	// 	&& $GraphFolded.frame_classes.includes("foldedForm");
 
 	let height = "100vh";
 	$: height = [
@@ -39,28 +43,28 @@
 -->
 
 <div class="canvases horizontal">
-	{#if isFoldedForm}
-		<div class="canvas">
-			<WebGLCanvas graph={$Graph}/>
-		</div>
-	{:else}
-		<div class="canvas crease-pattern" style={`max-height: calc(${height})`}>
-			<CreasePattern
-				on:press={press}
-				on:move={move}
-				on:release={release}
-				on:scroll={scroll}
-			/>
-		</div>
-	{/if}
+	<div class="canvas crease-pattern" style={`max-height: calc(${height})`}>
+		<CreasePattern
+			on:press={press}
+			on:move={move}
+			on:release={release}
+			on:scroll={scroll}
+		/>
+	</div>
 	{#if $ShowStaticOrSimulator}
 		<div class="canvas">
 			<Simulator />
 		</div>
 	{:else}
-		<div class="canvas folded-form" style={`max-height: calc(${height})`}>
-			<FoldedForm />
-		</div>
+		{#if $FoldedFormIsFlat}
+			<div class="canvas folded-form" style={`max-height: calc(${height})`}>
+				<FoldedForm />
+			</div>
+		{:else}
+			<div class="canvas">
+				<WebGLCanvas graph={$GraphFolded}/>
+			</div>
+		{/if}
 	{/if}
 	{#if $ShowCodeEditor}
 		<div class="canvas">

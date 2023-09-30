@@ -1,4 +1,5 @@
 <script>
+	import { StrokeDashLength } from "../../stores/Style.js";
 	import { SelectionRect } from "./stores.js";
 </script>
 
@@ -8,6 +9,7 @@
 		y={$SelectionRect.min[1]}
 		width={$SelectionRect.span[0]}
 		height={$SelectionRect.span[1]}
+		stroke-dasharray={`${$StrokeDashLength} ${$StrokeDashLength}`}
 		class="animated-dashed-line"
 	/>
 {/if}
@@ -16,5 +18,13 @@
 	rect {
 		fill: none;
 		stroke: var(--text);
+	}
+	@keyframes animate-dash {
+		from { stroke-dashoffset: 0; }
+		to { stroke-dashoffset: calc(500pt * var(--stroke-dash-length)); }
+	}
+	.animated-dashed-line {
+		stroke-dasharray: var(--stroke-dash-length);
+		animation: 60s linear 0s infinite reverse both running animate-dash;
 	}
 </style>

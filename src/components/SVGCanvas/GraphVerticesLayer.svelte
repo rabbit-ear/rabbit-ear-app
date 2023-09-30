@@ -41,9 +41,11 @@
 	}));
 </script>
 
-{#each circles as circle}
-	<circle {...circle} fill={$BoundaryColor} />
-{/each}
+<g class="vertices">
+	{#each circles as circle}
+		<circle {...circle} fill={$BoundaryColor} />
+	{/each}
+</g>
 
 <style>
 	circle {

@@ -4,6 +4,7 @@ import * as assignment from "./assignment.js";
 import * as axioms from "./axioms.js";
 import * as boundary from "./boundary.js";
 import * as deleteComponents from "./deleteComponents.js";
+import * as faceOrders from "./faceOrders.js";
 import * as file from "./file.js";
 import * as foldedLine from "./foldedLine.js";
 import * as frames from "./frames.js";
@@ -25,6 +26,7 @@ export default {
 	...axioms,
 	...boundary,
 	...deleteComponents,
+	...faceOrders,
 	...file,
 	...foldedLine,
 	...frames,
