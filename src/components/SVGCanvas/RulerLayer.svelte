@@ -7,7 +7,6 @@
 		RulerLines,
 		RulerRays,
 	} from "../../stores/Ruler.js";
-	// import { StrokeDashLength } from "../../stores/Style.js";
 	import {
 		UILines,
 		UIRays,
@@ -64,7 +63,6 @@
 <style>
 	.ruler-line {
 		stroke: var(--bright);
-/*		stroke: var(--dim);*/
 	}
 	@keyframes animate-dash {
 		from { stroke-dashoffset: 0; }

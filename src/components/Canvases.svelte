@@ -21,17 +21,12 @@
 	export let release;
 	export let scroll;
 
-	// let is3D = false;
-	// $: is3D = $GraphFolded.frame_classes
-	// 	&& $GraphFolded.frame_classes.length
-	// 	&& $GraphFolded.frame_classes.includes("foldedForm");
-
 	let height = "100vh";
 	$: height = [
 		"100vh",
 		ShowMenu ? "2rem" : "",
 		$ShowFrames ? "5rem - 4px - 2px" : "", // button height, button border, container border
-		"6rem" // terminal
+		"6rem", // terminal
 	].filter(a => a !== "").join(" - ");
 </script>
 
@@ -61,7 +56,7 @@
 				<FoldedForm />
 			</div>
 		{:else}
-			<div class="canvas">
+			<div class="canvas folded-form" style={`max-height: calc(${height})`}>
 				<WebGLCanvas graph={$GraphFolded}/>
 			</div>
 		{/if}

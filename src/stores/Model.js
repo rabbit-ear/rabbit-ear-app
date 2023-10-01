@@ -173,6 +173,7 @@ export const GraphFolded = derived(
 	([$Graph, $GraphVerticesFolded]) => ({
 		...$Graph,
 		vertices_coords: $GraphVerticesFolded,
+		frame_classes: ["foldedForm"],
 	}),
 	({}),
 );

@@ -9,7 +9,6 @@
 		y={$SelectionRect.min[1]}
 		width={$SelectionRect.span[0]}
 		height={$SelectionRect.span[1]}
-		stroke-dasharray={`${$StrokeDashLength} ${$StrokeDashLength}`}
 		class="animated-dashed-line"
 	/>
 {/if}

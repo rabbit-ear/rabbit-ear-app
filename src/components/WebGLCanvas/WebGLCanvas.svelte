@@ -1,115 +1,86 @@
 <script>
 	import {
-		onMount,
-		onDestroy,
-	} from "svelte";
-	import { identity4x4 } from "rabbit-ear/math/matrix4.js";
-	import initialize from "rabbit-ear/webgl/general/initialize.js";
+		magnitude2,
+		subtract2,
+	} from "rabbit-ear/math/vector.js";
 	import {
-		rebuildViewport,
-		makeProjectionMatrix,
-		makeModelMatrix,
-	} from "rabbit-ear/webgl/general/view.js";
-	import creasePattern from "rabbit-ear/webgl/creasePattern/index.js";
-	import foldedForm from "rabbit-ear/webgl/foldedForm/index.js";
+		identity4x4,
+		multiplyMatrices4,
+		invertMatrix4,
+		makeMatrix4Scale,
+		makeMatrix4Translate,
+	} from "rabbit-ear/math/matrix4.js";
 	import {
-		drawProgram,
-		deallocProgram,
-	} from "rabbit-ear/webgl/program.js";
+		quaternionFromTwoVectors,
+		matrix4FromQuaternion,
+	} from "rabbit-ear/math/quaternion.js";
+	import WebGLRender from "./WebGLRender.svelte";
 
 	export let graph = {};
 
-	let canvas;
+	let perspective = "perspective";
+	// let perspective = "orthographic";
+	let viewMatrix = identity4x4;
 
-	// the WebGL instance and which version: 1 or 2
-	let gl;
-	let version;
-
-	// all mesh and shader data
-	let programs = [];
-
-	// matrices
-	let projectionMatrix = identity4x4;
-	let modelViewMatrix = identity4x4;
-
-	$: rebuildAndDraw(graph);
-
-	const rebuildAndDraw = () => {
-		modelViewMatrix = makeModelMatrix(graph);
-		rebuildPrograms();
-		draw();
+	let prevVector;
+	const onPress = ({ detail }) => {
+		detail.preventDefault();
+		const { point, vector } = detail;
+		prevVector = vector;
 	};
 
-	const draw = () => {
-		if (!gl) { return; }
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		const inferredScale = 1 / modelViewMatrix[0];
-		const uniforms = programs.map(prog => prog.makeUniforms(gl, {
-			projectionMatrix,
-			modelViewMatrix,
-			canvas,
-			frontColor: "#369",
-			backColor: "white",
-			cpColor: "#333",
-			strokeWidth: inferredScale * 0.02,
-			opacity: 1,
-		}));
-		programs.forEach((program, i) => drawProgram(gl, version, program, uniforms[i]));
-	};
-
-	const dealloc = () => {
-		programs.forEach(program => deallocProgram(gl, program));
-		programs = [];
-	};
-
-	const rebuildPrograms = () => {
-		if (!gl) { return; }
-		dealloc();
-		const options = {
-			F: [0.3, 0.3, 0.3],
-			f: [0.3, 0.3, 0.3],
-			// layerNudge: $layerNudge,
-			// outlines: $showFoldedFaceOutlines,
-			// edges: $showFoldedCreases,
-			// faces: $showFoldedFaces,
-			// dark: $colorMode === "dark",
-		};
-		const isFoldedForm = graph
-			&& graph.frame_classes
-			&& graph.frame_classes.length
-			&& graph.frame_classes.includes("foldedForm");
-		programs = isFoldedForm
-			? foldedForm(gl, version, graph)
-			: creasePattern(gl, version, graph, options);
-	};
-
-	onMount(() => {
-		// force a particular WebGL version
-		// const init = initialize(canvas, 1); // WebGL version 1
-		// const init = initialize(canvas, 2); // WebGL version 2
-		const init = initialize(canvas);
-		gl = init.gl;
-		version = init.version;
-		if (!gl) {
-			const msg = "WebGL is not supported.";
-			alert(msg);
-			throw new Error(msg);
+	const onMove = ({ detail }) => {
+		detail.preventDefault();
+		if (!prevVector) { return; }
+		const { point, vector } = detail;
+		switch (perspective) {
+			case "perspective": {
+				const vectors = [
+					[...prevVector, -0.2 * Math.atan(1 / magnitude2(prevVector))],
+					[...vector, -0.2 * Math.atan(1 / magnitude2(vector))]
+				];
+				const quaternion = quaternionFromTwoVectors(...vectors);
+				const matrix = matrix4FromQuaternion(quaternion);
+				viewMatrix = multiplyMatrices4(matrix, viewMatrix);
+			} break;
+			case "orthographic": {
+				const translateVector = subtract2(vector, prevVector);
+				const translate = makeMatrix4Translate(...translateVector);
+				const matrix = invertMatrix4(translate);
+				viewMatrix = multiplyMatrices4(matrix, viewMatrix);
+			} break;
 		}
-		gl.enable(gl.BLEND);
-		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-		rebuildViewport(gl, canvas);
-		projectionMatrix = makeProjectionMatrix(canvas, "orthographic");
-		rebuildAndDraw();
-	});
+		prevVector = vector;
+	};
 
-	onDestroy(dealloc);
+	const onScroll = ({ detail }) => {
+		detail.preventDefault();
+		const scrollSensitivity = 1 / 100;
+		const delta = -detail.deltaY * scrollSensitivity;
+		if (Math.abs(delta) < 1e-3) { return; }
+		switch (perspective) {
+			case "perspective": {
+				const translateMatrix = makeMatrix4Translate(0, 0, delta);
+				viewMatrix = multiplyMatrices4(translateMatrix, viewMatrix);
+			} break;
+			case "orthographic": {
+				const scale = 1 + delta;
+				const scaleMatrix = makeMatrix4Scale([scale, scale, scale]);
+				viewMatrix = multiplyMatrices4(scaleMatrix, viewMatrix);
+			} break;
+		}
+	};
+
+	const onRelease = () => {
+		prevVector = undefined;
+	};
 </script>
 
-<canvas bind:this={canvas} />
-
-<style>
-	canvas {
-		width: 100%;
-		height: 100%;
-	}
-</style>
+<WebGLRender
+	{graph}
+	{viewMatrix}
+	on:press={onPress}
+	on:move={onMove}
+	on:release={onRelease}
+	on:scroll={onScroll}
+/>

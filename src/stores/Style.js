@@ -1,59 +1,39 @@
 import { writable, derived } from "svelte/store";
 import { ViewBox } from "./ViewBox.js";
-// import { LayerCPTools } from "./App.js";
 /**
- * @description Stroke-width is zoom-level dependent, this is the factor
- * (out of 1) which is scaled to the viewbox to get the stroke width.
+ * @description Stroke-width will use this value and multiply it against
+ * the viewport to get the absolute stroke-width value.
  */
 const StrokeWidthFactor = (1 / 300);
-
+/**
+ * @description Stroke-width is zoom-level dependent, styles everywhere
+ * can reference this value to use inside the app. Because this gets
+ * recalculated 120fps when the user zooms or pans, it's best to set
+ * this property as low in the DOM heirarchy, nearest to the elements
+ * as possible; as it turns out, browsers have a habbit of re-calculating
+ * styles on every child element, causing a redraw, causing a huge slow down
+ * if this is placed on a root element with many children.
+ */
 export const StrokeWidth = derived(
 	ViewBox,
 	($ViewBox) => Math.max($ViewBox[2], $ViewBox[3]) * StrokeWidthFactor,
 	StrokeWidthFactor,
 );
-
+/**
+ * @description Stroke-dasharray is zoom-level dependent, styles everywhere
+ * can reference this value to use inside the app. Because this gets
+ * recalculated 120fps when the user zooms or pans, it's best to set
+ * this property as low in the DOM heirarchy, nearest to the elements
+ * as possible; as it turns out, browsers have a habbit of re-calculating
+ * styles on every child element, causing a redraw, causing a huge slow down
+ * if this is placed on a root element with many children.
+ */
 export const StrokeDashLength = derived(
 	StrokeWidth,
 	($StrokeWidth) => $StrokeWidth * 3,
 	StrokeWidthFactor * 3,
 );
-/**
- * @description Some SVG styles are zoom-level dependent, and require
- * being updated when the ViewBox changes. Of course, these attributes could
- * be set in Javascript, but some things are much easier to do in CSS,
- * for example, animations like a selection box's dasharray animation.
- */
-// export const CSSViewboxVariables = derived(
-// 	[ViewBox, LayerCPTools],
-// 	([$ViewBox, $LayerCPTools]) => {
-// 		// console.log("CSSViewboxVariables");
-// 		const max = Math.max($ViewBox[2], $ViewBox[3]);
-// 		if ($LayerCPTools) {
-// 			// console.log("stroke-dash-length", max * 0.01, $LayerCPTools.style);
-// 			// $LayerCPTools.style.setProperty("--stroke-dash-length", max * 0.01);
-// 			// $LayerCPTools.style.setProperty("--stroke-width", max * 0.01);
-// 			$LayerCPTools.style.setProperty("--viewbox-vmax", max);
-// 		}
-// 		// document.documentElement.style.setProperty("--viewbox-vmax", max);
-// 		// document.documentElement.style.setProperty("--stroke-dash-length", max * 0.01);
-// 		// document.documentElement.style.setProperty("--anim-stroke-dash-max", max * 5);
-// 	},
-// 	undefined,
-// );
-// export const CSSViewboxVariables = derived(
-// 	[ViewBox],
-// 	([$ViewBox]) => {
-// 		const max = Math.max($ViewBox[2], $ViewBox[3]);
-// 		console.log("CSSViewboxVariables", max);
-// 		// document.documentElement.style.setProperty("--stroke-dash-length", max * 0.01);
-// 		// document.documentElement.style.setProperty("--stroke-width", max * 0.01);
-// 		document.documentElement.style.setProperty("--viewbox-vmax", max);
-// 		// document.documentElement.style.setProperty("--stroke-dash-length", max * 0.01);
-// 		// document.documentElement.style.setProperty("--anim-stroke-dash-max", max * 5);
-// 	},
-// 	undefined,
-// );
+
 //
 // show/hide things
 //
@@ -120,3 +100,39 @@ export const AssignmentColor = derived(
 	}),
 	{},
 );
+/**
+ * @description Some SVG styles are zoom-level dependent, and require
+ * being updated when the ViewBox changes. Of course, these attributes could
+ * be set in Javascript, but some things are much easier to do in CSS,
+ * for example, animations like a selection box's dasharray animation.
+ */
+// export const CSSViewboxVariables = derived(
+// 	[ViewBox, LayerCPTools],
+// 	([$ViewBox, $LayerCPTools]) => {
+// 		// console.log("CSSViewboxVariables");
+// 		const max = Math.max($ViewBox[2], $ViewBox[3]);
+// 		if ($LayerCPTools) {
+// 			// console.log("stroke-dash-length", max * 0.01, $LayerCPTools.style);
+// 			// $LayerCPTools.style.setProperty("--stroke-dash-length", max * 0.01);
+// 			// $LayerCPTools.style.setProperty("--stroke-width", max * 0.01);
+// 			$LayerCPTools.style.setProperty("--viewbox-vmax", max);
+// 		}
+// 		// document.documentElement.style.setProperty("--viewbox-vmax", max);
+// 		// document.documentElement.style.setProperty("--stroke-dash-length", max * 0.01);
+// 		// document.documentElement.style.setProperty("--anim-stroke-dash-max", max * 5);
+// 	},
+// 	undefined,
+// );
+// export const CSSViewboxVariables = derived(
+// 	[ViewBox],
+// 	([$ViewBox]) => {
+// 		const max = Math.max($ViewBox[2], $ViewBox[3]);
+// 		console.log("CSSViewboxVariables", max);
+// 		// document.documentElement.style.setProperty("--stroke-dash-length", max * 0.01);
+// 		// document.documentElement.style.setProperty("--stroke-width", max * 0.01);
+// 		document.documentElement.style.setProperty("--viewbox-vmax", max);
+// 		// document.documentElement.style.setProperty("--stroke-dash-length", max * 0.01);
+// 		// document.documentElement.style.setProperty("--anim-stroke-dash-max", max * 5);
+// 	},
+// 	undefined,
+// );
