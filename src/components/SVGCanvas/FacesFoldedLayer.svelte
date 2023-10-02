@@ -1,8 +1,10 @@
 <script>
 	import {
-		GraphFacesWinding,
-		GraphFaceLinearOrder,
+		FacesWinding,
+		LayerOrderKnown,
+		Faces2DDrawOrder,
 	} from "../../stores/Model.js";
+
 	export let graph = {};
 	export let selected = [];
 	export let highlighted = [];
@@ -30,14 +32,14 @@
 	$: facesClass = facesPolygon.map((_, i) => [
 		selectedHash[i] ? "selected" : undefined,
 		highlightedHash[i] ? "highlighted" : undefined,
-		$GraphFacesWinding[i] ? "front" : "back",
+		$LayerOrderKnown ? ($FacesWinding[i] ? "front" : "back") : "transparent",
 	].filter(a => a !== undefined).join(" "));
 
 	let polygons = [];
-	$: polygons = $GraphFaceLinearOrder
+	$: polygons = $Faces2DDrawOrder
 		.map(f => ({ points: facesPolygon[f], class: facesClass[f] }));
 
-	$: console.log("drawing svg faces", polygons.length);
+	// $: console.log("drawing svg faces", polygons.length);
 
 </script>
 

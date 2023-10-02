@@ -1,12 +1,12 @@
 <script>
-	import GraphVerticesLayer from "./GraphVerticesLayer.svelte";
-	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
-	import GraphFacesLayer from "./GraphFacesLayer.svelte";
+	import VerticesLayer from "./VerticesLayer.svelte";
+	import EdgesLayer from "./EdgesLayer.svelte";
+	import FacesCPLayer from "./FacesCPLayer.svelte";
 	import { UIGraph } from "../../stores/UI.js";
 </script>
 
 <g class="graph-preview-layer">
-	<GraphFacesLayer graph={$UIGraph} />
-	<GraphEdgesLayer graph={$UIGraph} />
-	<GraphVerticesLayer graph={$UIGraph} />
+	<FacesCPLayer graph={$UIGraph} />
+	<EdgesLayer graph={$UIGraph} />
+	<VerticesLayer graph={$UIGraph} />
 </g>

@@ -143,3 +143,30 @@ export const renderFrames = (frames, tessellationRepeats) => {
 			? renderTessellationFrame(frames, i, tessellationRepeats)
 			: flattenFrame(FOLD, i));
 };
+/**
+ * @description Is a FOLD object a crease pattern or a folded form?
+ * If folded form, return false, otherwise, even if there is too little
+ * information, return true (this is a crease pattern). This is used
+ * to know whether or not a graph is "editable" as a crease pattern.
+ * So, for example, if the graph is entirely empty, yes, we can begin
+ * to edit it like a crease pattern, so the method returns true.
+ * @returns {boolean} true if the graph is a crease pattern.
+ */
+export const graphIsCreasePattern = (graph) => {
+	// if graph is empty, it is a crease pattern
+	if (!graph) { return true; }
+	// if graph has "creasePattern" metadata, it is a crease pattern
+	if (graph.frame_classes) {
+		if (graph.frame_classes.includes("creasePattern")) { return true; }
+		if (graph.frame_classes.includes("foldedForm")) { return false; }
+	}
+	// if no metadata exists, check the vertices.
+	if (!graph.vertices_coords) { return true; }
+	// if graph has 3D vertices and if those Z components are outside
+	// of the XY plane, it's not a crease pattern. otherwise, yes.
+	return graph.vertices_coords
+		.map(coords => coords[2])
+		.filter(n => n !== undefined)
+		.filter(n => Math.abs(n) > 1e-2)
+		.length === 0;
+};

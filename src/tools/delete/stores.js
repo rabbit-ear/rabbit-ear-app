@@ -1,6 +1,6 @@
 import { writable, derived } from "svelte/store";
 import { snapToEdge } from "../../js/snap.js";
-import { executeCommand } from "../../kernel/execute.js";
+import { Highlight } from "../../stores/UI.js";
 
 export const Move = writable(undefined);
 
@@ -13,8 +13,8 @@ export const Edge = derived(
 export const Highlights = derived(
 	Edge,
 	($Edge) => ($Edge !== undefined
-		? executeCommand("highlight", { edges: [$Edge] })
-		: executeCommand("highlight", {})),
+		? Highlight.setEdges([$Edge])
+		: Highlight.reset()),
 	undefined,
 );
 

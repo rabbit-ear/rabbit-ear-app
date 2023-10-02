@@ -5,7 +5,7 @@ import {
 import { facesContainingPoint } from "rabbit-ear/graph/nearest.js";
 import { Selection } from "../../stores/Select.js";
 import {
-	Graph,
+	CreasePattern,
 	FoldedRootFace,
 } from "../../stores/Model.js";
 import { Highlight } from "../../stores/UI.js";
@@ -16,12 +16,12 @@ export const Press = writable(undefined);
 export const Release = writable(undefined);
 
 const HighlightedFace = derived(
-	[Move, Press, Graph],
-	([$Move, $Press, $Graph]) => {
+	[Move, Press, CreasePattern],
+	([$Move, $Press, $CreasePattern]) => {
 		try {
 			const point = [$Press, $Move].filter(a => a !== undefined).shift();
 			if (!point) { return; }
-			const face = facesContainingPoint($Graph, point, n => n > -1e-3);
+			const face = facesContainingPoint($CreasePattern, point, n => n > -1e-3).shift();
 			Highlight.reset();
 			if (face !== undefined) { Highlight.addFaces([face]); }
 		} catch (error) { console.warn(error); }
@@ -30,11 +30,11 @@ const HighlightedFace = derived(
 );
 
 const PressFace = derived(
-	[Press, Graph],
-	([$Press, $Graph]) => {
+	[Press, CreasePattern],
+	([$Press, $CreasePattern]) => {
 		try {
 			if (!$Press) { return; }
-			const face = facesContainingPoint($Graph, $Press, n => n > -1e-3);
+			const face = facesContainingPoint($CreasePattern, $Press, n => n > -1e-3).shift();
 			Highlight.reset();
 			if (face !== undefined) {
 				Highlight.addFaces([face]);

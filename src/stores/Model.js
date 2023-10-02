@@ -4,7 +4,7 @@ import {
 	getFileMetadata,
 	edgesFoldAngleAreAllFlat,
 } from "rabbit-ear/fold/spec.js";
-import { linearOrderFaces } from "rabbit-ear/graph/orders.js";
+import { linearize2DFaces } from "rabbit-ear/graph/orders.js";
 import { getFramesAsFlatArray } from "rabbit-ear/fold/frames.js";
 import {
 	makeVerticesCoordsFolded,
@@ -16,20 +16,27 @@ import { graphToMatrix2 } from "../js/matrix.js";
 import {
 	makeEmptyGraph,
 	renderFrames,
+	graphIsCreasePattern,
 } from "../js/graph.js";
 import {
 	CameraMatrix,
 	ModelMatrix,
 } from "./ViewBox.js";
 import { Selection } from "./Select.js";
+
+// most of the data stores in this document are essentially the
+// deconstructed constituent parts of the FOLD file.
+
 /**
  *
  */
-const ResizeModelMatrix = writable(false);
+// const ResizeModelMatrix = writable(false);
+let RecalculateModelMatrix = false;
 /**
  *
  */
 export const TessellationRepeats = writable(6);
+
 /**
  * @description an object which contains only FOLD file metadata,
  * any key that starts with "file_", for example "file_title".
@@ -39,7 +46,8 @@ export const File = writable({});
  * @description Contains an array of graphs, each being one frame
  * in the FOLD file, where the first item is the top level frame.
  */
-export const Frames = writable([makeEmptyGraph()]);
+// export const Frames = writable([makeEmptyGraph()]);
+export const Frames = writable([]);
 // const FramesUpdate = Frames.update;
 // const FramesSet = Frames.set;
 // Frames.update = (updateMethod) => {
@@ -63,6 +71,17 @@ export const Frames = writable([makeEmptyGraph()]);
 // 	CameraMatrix.reset();
 // };
 /**
+ * @description Which frame is currently visible in the main viewport?
+ */
+export const FrameIndex = writable(0);
+const FrameIndexSet = FrameIndex.set;
+FrameIndex.set = (n) => {
+	Selection.reset();
+	RecalculateModelMatrix = true;
+	FrameIndexSet(n);
+	CameraMatrix.reset();
+};
+/**
  * @description Because FOLD frames can have parent-child inheritance,
  * To properly render a FOLD frame requires "flattening" all of the
  * frame's parents (recursively) into one single FOLD object frame.
@@ -70,137 +89,25 @@ export const Frames = writable([makeEmptyGraph()]);
  * @todo This is going to be expensive to run when a single frame is modified,
  * currently this is the safe way, but some kind of caching would be ideal.
  */
-export const FramesRendered = derived(
+export const IsolatedFrames = derived(
 	[Frames, TessellationRepeats],
 	([$Frames, $TessellationRepeats]) => renderFrames($Frames, $TessellationRepeats),
-	[makeEmptyGraph()],
+	[],
 );
 /**
- * @description Which frame is currently visible in the main viewport?
+ *
  */
-export const FrameIndex = writable(0);
-const FrameIndexSet = FrameIndex.set;
-FrameIndex.set = (n) => {
-	// trigger model-matrix to update
-	ResizeModelMatrix.set(true);
-	Selection.reset();
-	FrameIndexSet(n);
-	// reset model-matrix to no longer update
-	ResizeModelMatrix.set(false);
-	// also reset camera
-	CameraMatrix.reset();
-};
-/**
- * @description The currently selected (and currently being edited) frame.
- */
-export const Graph = derived(
-	[FramesRendered, FrameIndex, ResizeModelMatrix],
-	([$FramesRendered, $FrameIndex, $ResizeModelMatrix]) => {
-		const graph = $FramesRendered[$FrameIndex];
-		if ($ResizeModelMatrix) { ModelMatrix.set(graphToMatrix2(graph)); }
-		return graph;
-	},
-	makeEmptyGraph(),
+export const IsolatedFrame = derived(
+	[IsolatedFrames, FrameIndex],
+	([$IsolatedFrames, $FrameIndex]) => $IsolatedFrames[$FrameIndex],
+	{},
 );
-
-// const GraphVertices2D = derived(
-// 	Graph,
-// 	($Graph) => {
-// 		for (let i = 0; i < $Graph.length; i += 1) {
-// 			if ($Graph[i].length === 3) { return false; }
-// 		}
-// 		return true;
-// 	},
-// 	true,
-// );
-
-export const FoldedFormIsFlat = derived(
-	Graph,
-	// ($Graph) => $Graph ? edgesFoldAngleAreAllFlat($Graph) : true,
-	($Graph) => {
-		console.log("Model: FoldedFormIsFlat");
-		return $Graph ? edgesFoldAngleAreAllFlat($Graph) : true
-	},
-	true,
-);
-
-export const FoldedRootFace = writable(0);
-
-export const GraphVerticesFolded = derived(
-	[Graph, FoldedFormIsFlat, FoldedRootFace],
-	([$Graph, $FoldedFormIsFlat, $FoldedRootFace]) => {
-		try {
-			// if all edges_foldAngle are flat, makeVerticesCoordsFlatFolded instead
-			if ($Graph
-				&& $Graph.vertices_coords
-				&& $Graph.edges_vertices
-				&& $Graph.faces_vertices) {
-				console.log("Model: GraphVerticesFolded");
-				return $FoldedFormIsFlat
-					? makeVerticesCoordsFlatFolded($Graph, $FoldedRootFace)
-					: makeVerticesCoordsFolded($Graph, $FoldedRootFace);
-			}
-			return [];
-		} catch (error) {
-			console.warn("makeVerticesCoordsFolded", error)
-			return [];
-		}
-	},
-	[],
-);
-
-export const GraphFacesWinding = derived(
-	[Graph, GraphVerticesFolded],
-	([$Graph, $GraphVerticesFolded]) => {
-		try {
-			console.log("Model: GraphFacesWinding");
-			return $Graph && $Graph.faces_vertices && $GraphVerticesFolded.length
-				? makeFacesWinding({
-					vertices_coords: $GraphVerticesFolded,
-					faces_vertices: $Graph.faces_vertices,
-				})
-				: [];
-		} catch (error) {
-			console.warn("makeFacesWinding", error)
-			return [];
-		}
-	},
-	[],
-);
-
-export const GraphFolded = derived(
-	[Graph, GraphVerticesFolded],
-	([$Graph, $GraphVerticesFolded]) => ({
-		...$Graph,
-		vertices_coords: $GraphVerticesFolded,
-		frame_classes: ["foldedForm"],
-	}),
-	({}),
-);
-
-export const GraphFaceLinearOrder = derived(
-	[GraphFolded, FoldedRootFace],
-	([$GraphFolded, $FoldedRootFace]) => {
-		try {
-			console.log("Model: GraphFaceLinearOrder");
-			return linearOrderFaces($GraphFolded, $FoldedRootFace);
-		} catch (error) {
-			console.warn("linearOrderFaces", error)
-			return $GraphFolded && $GraphFolded.faces_vertices
-				? $GraphFolded.faces_vertices.map((_, i) => i)
-				: [];
-		}
-	},
-	[],
-);
-
 /**
  * @description For each frame, does the frame inherit from a parent frame?
  */
 export const FramesInherit = derived(
 	Frames,
-	($Frames) => $Frames
-		.map(frame => frame.frame_inherit === true),
+	($Frames) => $Frames.map(frame => frame && frame.frame_inherit === true),
 	[false],
 );
 /**
@@ -211,6 +118,151 @@ export const FrameIsLocked = derived(
 	[FramesInherit, FrameIndex],
 	([$FramesInherit, $FrameIndex]) => $FramesInherit[$FrameIndex],
 	false,
+);
+/**
+ *
+ */
+export const FramesAreCreasePattern = derived(
+	IsolatedFrames,
+	($IsolatedFrames) => $IsolatedFrames.map(graphIsCreasePattern),
+	[],
+);
+/**
+ *
+ */
+export const FrameIsCreasePattern = derived(
+	[FramesAreCreasePattern, FrameIndex],
+	([$FramesAreCreasePattern, $FrameIndex]) => $FramesAreCreasePattern[$FrameIndex],
+	true,
+);
+/**
+ * @description The currently selected (and currently being edited) frame.
+ */
+export const CreasePattern = derived(
+	[IsolatedFrame, FrameIsCreasePattern],
+	([$IsolatedFrame, $FrameIsCreasePattern]) => {
+		if (!$FrameIsCreasePattern) { return {}; }
+		if (RecalculateModelMatrix) {
+			ModelMatrix.set(graphToMatrix2($IsolatedFrame));
+			RecalculateModelMatrix = false;
+		}
+		return $IsolatedFrame;
+	},
+	{},
+);
+/**
+ *
+ */
+export const FrameEdgesAreFlat = derived(
+	IsolatedFrame,
+	// ($IsolatedFrame) => $IsolatedFrame ? edgesFoldAngleAreAllFlat($IsolatedFrame) : true,
+	($IsolatedFrame) => {
+		// console.log("Model: FrameEdgesAreFlat");
+		return $IsolatedFrame ? edgesFoldAngleAreAllFlat($IsolatedFrame) : true;
+	},
+	true,
+);
+/**
+ *
+ */
+export const FoldedRootFace = writable(0);
+/**
+ *
+ */
+export const ComputedFoldedCoords = derived(
+	[CreasePattern, FrameEdgesAreFlat, FoldedRootFace],
+	([$CreasePattern, $FrameEdgesAreFlat, $FoldedRootFace]) => {
+		// if source frame is not a crease pattern, we can't fold its vertices.
+		try {
+			// if all edges_foldAngle are flat, makeVerticesCoordsFlatFolded instead
+			if ($CreasePattern
+				&& $CreasePattern.vertices_coords
+				&& $CreasePattern.edges_vertices
+				&& $CreasePattern.faces_vertices) {
+				// console.log("Model: ComputedFoldedCoords");
+				return $FrameEdgesAreFlat
+					? makeVerticesCoordsFlatFolded($CreasePattern, $FoldedRootFace)
+					: makeVerticesCoordsFolded($CreasePattern, $FoldedRootFace);
+			}
+			return [];
+		} catch (error) {
+			console.warn("ComputedFoldedCoords", error)
+			return [];
+		}
+	},
+	[],
+);
+/**
+ *
+ */
+export const FoldedForm = derived(
+	[FrameIsCreasePattern, IsolatedFrame, ComputedFoldedCoords],
+	([$FrameIsCreasePattern, $IsolatedFrame, $ComputedFoldedCoords]) => (
+		// if the frame is a folded form, return the frame itself.
+		// otherwise, compute the folded form from the crease pattern.
+		!$FrameIsCreasePattern
+			? $IsolatedFrame
+			: {
+				...$IsolatedFrame,
+				// ...structuredClone($IsolatedFrame),
+				vertices_coords: $ComputedFoldedCoords,
+				frame_classes: ["foldedForm"],
+			}
+	),
+	({}),
+);
+/**
+ *
+ */
+export const LayerOrderKnown = derived(
+	FoldedForm,
+	($FoldedForm) => $FoldedForm
+		&& $FoldedForm.faceOrders
+		&& $FoldedForm.faceOrders.length,
+	true,
+);
+/**
+ *
+ */
+export const Faces2DDrawOrder = derived(
+	[FoldedForm, FoldedRootFace, FrameEdgesAreFlat],
+	([$FoldedForm, $FoldedRootFace, $FrameEdgesAreFlat]) => {
+		if ($FoldedForm
+			&& $FoldedForm.vertices_coords
+			&& $FoldedForm.faces_vertices
+			&& $FrameEdgesAreFlat) {
+			try {
+				// console.log("Model: Faces2DDrawOrder");
+				return linearize2DFaces($FoldedForm, $FoldedRootFace);
+			} catch (error) {
+				console.warn("Faces2DDrawOrder", error);
+			}
+		}
+		return $FoldedForm && $FoldedForm.faces_vertices
+			? $FoldedForm.faces_vertices.map((_, i) => i)
+			: []
+	},
+	[],
+);
+/**
+ *
+ */
+export const FacesWinding = derived(
+	FoldedForm,
+	($FoldedForm) => {
+		try {
+			// console.log("Model: FacesWinding");
+			return $FoldedForm
+				&& $FoldedForm.faces_vertices && $FoldedForm.faces_vertices.length
+				&& $FoldedForm.vertices_coords && $FoldedForm.vertices_coords.length
+				? makeFacesWinding($FoldedForm)
+				: [];
+		} catch (error) {
+			console.warn("FacesWinding", error)
+			return [];
+		}
+	},
+	[],
 );
 /**
  *
@@ -249,14 +301,12 @@ export const UpdateFrame = (graph) => {
  *
  */
 // export const UpdateModelMatrix = () => {
-// 	ModelMatrix.set(graphToMatrix2(get(Graph)));
+// 	ModelMatrix.set(graphToMatrix2(get(CreasePattern)));
 // }
 export const UpdateAndResizeFrame = (graph) => {
 	// trigger model-matrix to update
-	ResizeModelMatrix.set(true);
+	RecalculateModelMatrix = true;
 	UpdateFrame(graph);
-	// reset model-matrix to no longer update
-	ResizeModelMatrix.set(false);
 };
 /**
  * @description If "IsoUpdateFrame" is a small update, "UpdateFrame" is a
@@ -276,16 +326,20 @@ export const SetFrame = (graph) => {
  * update/set Frame methods.
  */
 export const LoadFile = (FOLD) => {
-	// trigger model-matrix to update
-	ResizeModelMatrix.set(true);
 	// load file
+	let frames = [];
+	try {
+		frames = getFramesAsFlatArray(FOLD).map(populate);
+	} catch (error) {
+		console.warn("LoadFile", error);
+		return;
+	}
 	Selection.reset();
 	FrameIndex.set(0);
 	File.set(getFileMetadata(FOLD));
-	Frames.set(getFramesAsFlatArray(FOLD).map(populate));
+	RecalculateModelMatrix = true;
+	Frames.set(frames);
 	CameraMatrix.reset();
-	// reset model-matrix to no longer update
-	ResizeModelMatrix.set(false);
 };
 /**
  *

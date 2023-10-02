@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import {
-	Graph,
+	CreasePattern,
 	UpdateFrame,
 } from "../../stores/Model.js";
 import repeatFold from "rabbit-ear/graph/flatFold/repeatFold.js";
@@ -11,7 +11,7 @@ import { UIGraph } from "../../stores/UI.js";
 export const foldedLine = (a, b) => {
 	const line = { vector: subtract2(b, a), origin: a };
 	try {
-		const graph = get(Graph);
+		const graph = get(CreasePattern);
 		const result = repeatFold(graph, line, "V")
 			.filter(a => a !== undefined);
 		const vertCount = graph.vertices_coords.length;
@@ -30,9 +30,9 @@ export const foldedLine = (a, b) => {
 
 export const foldedLinePreview = (a, b) => {
 	const line = { vector: subtract2(b, a), origin: a };
-	// return repeatFold(get(Graph), line, "V");
+	// return repeatFold(get(CreasePattern), line, "V");
 	try {
-		const result = repeatFold(get(Graph), line, "V")
+		const result = repeatFold(get(CreasePattern), line, "V")
 			.filter(a => a !== undefined);
 		// console.log("graph", {
 		// 	vertices_coords: result.flatMap(el => el.points),

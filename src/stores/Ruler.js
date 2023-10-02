@@ -3,7 +3,7 @@ import {
 	intersectGraphLine,
 	intersectGraphRay,
 } from "../js/intersect.js";
-import { Graph } from "./Model.js";
+import { CreasePattern } from "./Model.js";
 /**
  * @description Lines which are intended to be a step towards
  * adding new geometry to the graph; affects the list of UI snap points.
@@ -20,13 +20,13 @@ export const RulerRays = writable([]);
  */
 // export const RulerPoints = writable([]);
 export const RulerPoints = derived(
-	[Graph, RulerLines, RulerRays],
-	([$Graph, $RulerLines, $RulerRays]) => {
+	[CreasePattern, RulerLines, RulerRays],
+	([$CreasePattern, $RulerLines, $RulerRays]) => {
 		// todo, filter, remove duplicates
 		const intersectedLines = $RulerLines
-			.flatMap(line => intersectGraphLine($Graph, line));
+			.flatMap(line => intersectGraphLine($CreasePattern, line));
 		const intersectedRays = $RulerRays
-			.flatMap(ray => intersectGraphRay($Graph, ray));
+			.flatMap(ray => intersectGraphRay($CreasePattern, ray));
 		// todo: intersect lines and rays against themselves
 		return [...intersectedLines, ...intersectedRays];
 	},

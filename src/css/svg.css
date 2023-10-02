@@ -47,6 +47,11 @@
 	fill: var(--blue);
 	stroke: var(--black);
 }
+.folded-form polygon.transparent {
+	fill: var(--background-4);
+	stroke: var(--dim);
+	opacity: 0.25;
+}
 
 /*
 .vertices-indices circle {

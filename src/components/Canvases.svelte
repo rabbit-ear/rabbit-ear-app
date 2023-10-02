@@ -1,8 +1,7 @@
 <script>
 	import {
-		Graph,
-		GraphFolded,
-		FoldedFormIsFlat,
+		FoldedForm,
+		FrameEdgesAreFlat,
 	} from "../stores/Model.js";
 	import {
 		ShowMenu,
@@ -10,8 +9,8 @@
 		ShowCodeEditor,
 		ShowStaticOrSimulator,
 	} from "../stores/App.js";
-	import CreasePattern from "./SVGCanvas/CreasePattern.svelte";
-	import FoldedForm from "./SVGCanvas/FoldedForm.svelte";
+	import CreasePatternCanvas from "./SVGCanvas/CreasePattern.svelte";
+	import FoldedFormCanvas from "./SVGCanvas/FoldedForm.svelte";
 	import WebGLCanvas from "./WebGLCanvas/WebGLCanvas.svelte";
 	import Simulator from "./OrigamiSimulator/Simulator.svelte";
 	import CodeEditor from "./CodeEditor/CodeEditor.svelte";
@@ -39,7 +38,7 @@
 
 <div class="canvases horizontal">
 	<div class="canvas crease-pattern" style={`max-height: calc(${height})`}>
-		<CreasePattern
+		<CreasePatternCanvas
 			on:press={press}
 			on:move={move}
 			on:release={release}
@@ -51,13 +50,13 @@
 			<Simulator />
 		</div>
 	{:else}
-		{#if $FoldedFormIsFlat}
+		{#if $FrameEdgesAreFlat}
 			<div class="canvas folded-form" style={`max-height: calc(${height})`}>
-				<FoldedForm />
+				<FoldedFormCanvas />
 			</div>
 		{:else}
 			<div class="canvas folded-form" style={`max-height: calc(${height})`}>
-				<WebGLCanvas graph={$GraphFolded}/>
+				<WebGLCanvas graph={$FoldedForm}/>
 			</div>
 		{/if}
 	{/if}

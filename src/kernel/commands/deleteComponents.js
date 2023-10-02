@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import {
-	Graph,
+	CreasePattern,
 	UpdateFrame,
 } from "../../stores/Model.js";
 import removeGeometry from "rabbit-ear/graph/remove.js";
@@ -41,6 +41,6 @@ export const deleteComponents = (components) => {
 	if (components.faces) {
 		components.faces.forEach(v => { remove.faces[v] = true; });
 	}
-	const g = deleteComponentsFromGraph(get(Graph), remove);
+	const g = deleteComponentsFromGraph(get(CreasePattern), remove);
 	UpdateFrame({ ...g });
 };

@@ -9,7 +9,7 @@ import {
 	reset,
 	vefName,
 } from "./stores.js";
-import { Graph } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/Model.js";
 import {
 	Keyboard,
 	UIEpsilon,
@@ -28,8 +28,8 @@ export const getSelected = () => {
 	if (rect === undefined) { return {}; }
 	const uiEpsilon = get(UIEpsilon);
 	const nears = Math.max(...rect.span) < uiEpsilon
-		? getComponentsNearPoint(get(Graph), rect.min)
-		: getComponentsInsideRect(get(Graph), rect);
+		? getComponentsNearPoint(get(CreasePattern), rect.min)
+		: getComponentsInsideRect(get(CreasePattern), rect);
 	return nears[vefName[get(ElementSelect)]];
 };
 

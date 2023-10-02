@@ -4,20 +4,20 @@ import addNonPlanarEdge from "rabbit-ear/graph/add/addNonPlanarEdge.js";
 import { get } from "svelte/store";
 import { NewEdgeAssignment } from "../../stores/App.js";
 import {
-	Graph,
+	CreasePattern,
 	UpdateFrame,
 } from "../../stores/Model.js";
 import { setEdgesAssignment } from "../../js/graph.js";
 
 export const vertex = (coords) => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const vertex = AddVertex(graph, coords);
 	UpdateFrame({ ...graph });
 	return vertex;
 };
 
 export const segment = (coords0, coords1) => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const vertex0 = AddVertex(graph, coords0);
 	const vertex1 = AddVertex(graph, coords1);
 	const edge = addNonPlanarEdge(graph, [vertex0, vertex1]);
@@ -27,7 +27,7 @@ export const segment = (coords0, coords1) => {
 };
 
 export const edge = (vertexA, vertexB) => {
-	const g = get(Graph);
+	const g = get(CreasePattern);
 	const edge = addNonPlanarEdge(g, [vertexA, vertexB]);
 	setEdgesAssignment(g, [edge], get(NewEdgeAssignment));
 	UpdateFrame({ ...g });
@@ -35,14 +35,14 @@ export const edge = (vertexA, vertexB) => {
 };
 
 export const line = (line) => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const result = addPlanarLine(graph, line);
 	UpdateFrame({ ...graph });
 	return result;
 };
 
 export const polyline = (polyline) => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const vertices = polyline.map(point => AddVertex(graph, point));
 	const edges = Array.from(Array(vertices.length - 1))
 		.map((_, i) => i)

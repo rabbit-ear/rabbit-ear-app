@@ -53,7 +53,8 @@
 		stroke: strokes[i],
 	}));
 
-	$: console.log("drawing svg edges", lines.length);
+	// $: console.log("drawing svg edges", lines.length);
+
 </script>
 
 <g class="edges" style={`--stroke-width: ${$StrokeWidth}; --stroke-dash-length: ${$StrokeDashLength}`}>

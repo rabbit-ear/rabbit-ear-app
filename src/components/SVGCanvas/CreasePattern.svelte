@@ -1,8 +1,8 @@
 <script>
 	import SVGCanvas from "./SVGCanvas.svelte";
-	import GraphVerticesLayer from "./GraphVerticesLayer.svelte";
-	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
-	import GraphFacesLayer from "./GraphFacesLayer.svelte";
+	import VerticesLayer from "./VerticesLayer.svelte";
+	import EdgesLayer from "./EdgesLayer.svelte";
+	import FacesCPLayer from "./FacesCPLayer.svelte";
 	import GridLayer from "./GridLayer.svelte";
 	import UILayer from "./UILayer.svelte";
 	import GraphLayer from "./GraphLayer.svelte";
@@ -10,7 +10,7 @@
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
 	import FlatFoldable from "./FlatFoldable.svelte";
-	import { Graph } from "../../stores/Model.js";
+	import { CreasePattern } from "../../stores/Model.js";
 	import {
 		ShowGrid,
 		ShowAxes,
@@ -30,16 +30,16 @@
 		<GridLayer />
 	{/if}
 	<g class="origami-layer">
-		<GraphFacesLayer
-			graph={$Graph}
+		<FacesCPLayer
+			graph={$CreasePattern}
 			selected={$Selection.faces}
 			highlighted={$Highlight.faces} />
-		<GraphEdgesLayer
-			graph={$Graph}
+		<EdgesLayer
+			graph={$CreasePattern}
 			selected={$Selection.edges}
 			highlighted={$Highlight.edges} />
-		<!-- <GraphVerticesLayer
-			graph={$Graph}
+		<!-- <VerticesLayer
+			graph={$CreasePattern}
 			selected={$Selection.vertices}
 			highlighted={$Highlight.vertices} /> -->
 	</g>
@@ -47,7 +47,7 @@
 		<AxesLayer />
 	{/if}
 	{#if $ShowFlatFoldableIssues}
-		<FlatFoldable graph={$Graph} />
+		<FlatFoldable graph={$CreasePattern} />
 	{/if}
 	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLength};`} >
 		<RulerLayer />
@@ -57,6 +57,6 @@
 		{/if}
 	</g>
 	{#if $ShowIndices}
-		<GraphIndices graph={$Graph} />
+		<GraphIndices graph={$CreasePattern} />
 	{/if}
 </SVGCanvas>

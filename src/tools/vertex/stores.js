@@ -12,7 +12,7 @@ import {
 	snapToPoint,
 	snapToVertex,
 } from "../../js/snap.js";
-import { Graph } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/Model.js";
 import { UIGraph } from "../../stores/UI.js";
 // import { Selection } from "../../stores/Select.js";
 
@@ -60,12 +60,12 @@ export const DragVector = derived(
 );
 
 export const GraphPreview = derived(
-	[DragVector, PressVertex, Graph],
-	([$DragVector, $PressVertex, $Graph]) => {
+	[DragVector, PressVertex, CreasePattern],
+	([$DragVector, $PressVertex, $CreasePattern]) => {
 		if ($PressVertex === undefined) {
 			return UIGraph.set({});
 		}
-		const subgraph = subgraphWithVertices($Graph, [$PressVertex]);
+		const subgraph = subgraphWithVertices($CreasePattern, [$PressVertex]);
 		[$PressVertex].forEach(v => {
 			subgraph.vertices_coords[v] = add2(subgraph.vertices_coords[v], $DragVector);
 		});
@@ -76,10 +76,10 @@ export const GraphPreview = derived(
 );
 
 // export const GraphPreview = derived(
-// 	[DragVector, Selection, Graph],
-// 	([$DragVector, $Selection, $Graph]) => {
+// 	[DragVector, Selection, CreasePattern],
+// 	([$DragVector, $Selection, $CreasePattern]) => {
 // 		const selectedVertices = $Selection.vertices;
-// 		const subgraph = subgraphWithVertices($Graph, selectedVertices);
+// 		const subgraph = subgraphWithVertices($CreasePattern, selectedVertices);
 // 		selectedVertices.forEach(v => {
 // 			subgraph.vertices_coords[v] = add2(subgraph.vertices_coords[v], $DragVector);
 // 		});

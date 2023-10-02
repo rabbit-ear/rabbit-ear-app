@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 	import GraphVerticesLayer from "./GraphVerticesLayer.svelte";
 	import GraphEdgesLayer from "./GraphEdgesLayer.svelte";
 	import GraphFacesLayer from "./GraphFacesLayer.svelte";
@@ -21,4 +21,4 @@
 		{graph}
 		selected={$Selection.vertices}
 		highlighted={$Highlight.vertices} />
-</g>
+</g> -->

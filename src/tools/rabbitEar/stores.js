@@ -5,7 +5,7 @@ import {
 import {
 	Highlight,
 } from "../../stores/UI.js";
-import { Graph } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/Model.js";
 import { nearest } from "rabbit-ear/graph/nearest.js";
 
 export const Move = writable(undefined);
@@ -14,9 +14,9 @@ export const Drag = writable(undefined);
 export const Release = writable(undefined);
 
 export const HighlightHover = derived(
-	[Graph, Move],
-	([$Graph, $Move]) => {
-		const nears = nearest($Graph, $Move);
+	[CreasePattern, Move],
+	([$CreasePattern, $Move]) => {
+		const nears = nearest($CreasePattern, $Move);
 		Highlight.reset();
 		// Highlight.addVertices([nears.vertex]);
 		// Highlight.addEdges([nears.edge]);

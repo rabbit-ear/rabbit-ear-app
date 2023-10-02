@@ -1,7 +1,7 @@
 import { writable, derived } from "svelte/store";
 import { ViewBox } from "./ViewBox.js";
 import { RulerPoints } from "./Ruler.js";
-import { Graph } from "./Model.js";
+import { CreasePattern } from "./Model.js";
 /**
  * @description Establish the angle between snapping lines, and the
  * offset from 0deg for the initial line.
@@ -22,8 +22,11 @@ export const RadialSnapOffset = writable(0);
  * - intersections between ruler lines and the background grid
  */
 export const SnapPoints = derived(
-	[Graph, RulerPoints],
-	([$Graph, $RulerPoints]) => [...($Graph.vertices_coords || []), ...$RulerPoints],
+	[CreasePattern, RulerPoints],
+	([$CreasePattern, $RulerPoints]) => [
+		...($CreasePattern.vertices_coords || []),
+		...$RulerPoints,
+	],
 	[],
 );
 /**

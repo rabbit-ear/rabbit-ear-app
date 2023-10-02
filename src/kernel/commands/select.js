@@ -3,7 +3,7 @@ import { subgraph } from "rabbit-ear/graph/subgraph.js";
 import normalize from "rabbit-ear/graph/normalize.js";
 import { join } from "rabbit-ear/graph/join.js";
 import {
-	Graph,
+	CreasePattern,
 	UpdateFrame,
 } from "../../stores/Model.js";
 import { Selection } from "../../stores/Select.js";
@@ -12,7 +12,7 @@ import { Highlight } from "../../stores/UI.js";
  *
  */
 export const selectAll = () => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const vertices = (graph.vertices_coords || []).map((_, i) => i);
 	const edges = (graph.edges_vertices || []).map((_, i) => i);
 	const faces = (graph.faces_vertices || []).map((_, i) => i);
@@ -50,7 +50,7 @@ export const getSelectedFaces = () => get(Selection).faces;
 export const selectEdgesWithAssignment = (assignment = "B") => {
 	const assign = assignment.toUpperCase();
 	Selection.reset();
-	Selection.addEdges((get(Graph).edges_assignment || [])
+	Selection.addEdges((get(CreasePattern).edges_assignment || [])
 		.map(a => a.toUpperCase())
 		.map((a, i) => a === assign ? i : undefined)
 		.filter(i => i !== undefined));
@@ -60,7 +60,7 @@ export const selectEdgesWithAssignment = (assignment = "B") => {
  */
 export const duplicateSelection = () => {
 	const selection = get(Selection);
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const sub = subgraph(graph, selection);
 	const norm = normalize(sub);
 	if ((!norm.vertices_coords || !norm.vertices_coords.length)
@@ -81,7 +81,7 @@ export const duplicateSelection = () => {
  *
  */
 export const duplicateAll = () => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const vertices = (graph.vertices_coords || []).map((_, i) => i);
 	Selection.addVertices(vertices);
 	return duplicateSelection();

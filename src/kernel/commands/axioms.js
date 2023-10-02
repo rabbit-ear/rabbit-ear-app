@@ -10,7 +10,7 @@ import {
 // } from "rabbit-ear/graph/axioms.js";
 import { pointsToLine } from "rabbit-ear/math/convert.js";
 import { get } from "svelte/store";
-import { Graph } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/Model.js";
 import { RulerLines } from "../../stores/Ruler.js";
 import { UILines } from "../../stores/UI.js";
 
@@ -46,25 +46,25 @@ const axiom7Safe = (graph, a, b, c) => (
 		: []);
 
 export const axiom1 = (...args) => (
-	axiom1Safe(get(Graph), ...args)
+	axiom1Safe(get(CreasePattern), ...args)
 );
 export const axiom2 = (...args) => (
-	axiom2Safe(get(Graph), ...args)
+	axiom2Safe(get(CreasePattern), ...args)
 );
 export const axiom3 = (...args) => (
-	axiom3Safe(get(Graph), ...args)
+	axiom3Safe(get(CreasePattern), ...args)
 );
 export const axiom4 = (...args) => (
-	axiom4Safe(get(Graph), ...args)
+	axiom4Safe(get(CreasePattern), ...args)
 );
 export const axiom5 = (...args) => (
-	axiom5Safe(get(Graph), ...args)
+	axiom5Safe(get(CreasePattern), ...args)
 );
 export const axiom6 = (...args) => (
-	axiom6Safe(get(Graph), ...args)
+	axiom6Safe(get(CreasePattern), ...args)
 );
 export const axiom7 = (...args) => (
-	axiom7Safe(get(Graph), ...args)
+	axiom7Safe(get(CreasePattern), ...args)
 );
 
 export const axiom1Rulers = (...args) => (

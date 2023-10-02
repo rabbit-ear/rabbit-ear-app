@@ -19,7 +19,7 @@ import {
 	nearestEdge as reNearestEdge,
 	nearestFace as reNearestFace,
 } from "rabbit-ear/graph/nearest.js";
-import { Graph } from "../stores/Model.js";
+import { CreasePattern } from "../stores/Model.js";
 import {
 	RulerLines,
 	RulerRays,
@@ -44,13 +44,13 @@ const nearestGridPoint = (point, snapRadius) => {
 	return isNear ? coords : undefined
 };
 
-// export const nearestVertex = (point) => reNearestVertex(get(Graph), point);
-// export const nearestEdge = (point) => reNearestEdge(get(Graph), point);
-// export const nearestFace = (point) => reNearestFace(get(Graph), point);
+// export const nearestVertex = (point) => reNearestVertex(get(CreasePattern), point);
+// export const nearestEdge = (point) => reNearestEdge(get(CreasePattern), point);
+// export const nearestFace = (point) => reNearestFace(get(CreasePattern), point);
 
 export const snapToVertex = (point, force = false) => {
 	if (!point) { return { vertex: undefined, coords: undefined }; }
-	const vertices = get(Graph).vertices_coords || [];
+	const vertices = get(CreasePattern).vertices_coords || [];
 	if (!vertices.length) { return { vertex: undefined, coords: undefined }; }
 	const distances = vertices.map(p => distance2(p, point));
 	let index = 0;
@@ -64,7 +64,7 @@ export const snapToVertex = (point, force = false) => {
 
 export const snapToEdge = (point, force = false) => {
 	if (!point) { return { edge: undefined, coords: undefined }; }
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const edge = reNearestEdge(graph, point);
 	if (edge === undefined) { return { edge: undefined, coords: point}; }
 	const seg = graph.edges_vertices[edge].map(v => graph.vertices_coords[v]);

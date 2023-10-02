@@ -1,12 +1,12 @@
 import { planarBoundary } from "rabbit-ear/graph/boundary.js";
 import { get } from "svelte/store";
 import {
-	Graph,
+	CreasePattern,
 	UpdateFrame,
 } from "../../stores/Model.js";
 
 export const rebuildBoundary = () => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	graph.edges_assignment = (graph.edges_assignment || [])
 		.map(a => a === "B" || a === "b" ? "F" : a);
 	graph.edges_foldAngle = (graph.edges_foldAngle || []);

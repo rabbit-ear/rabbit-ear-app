@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import splitEdge from "rabbit-ear/graph/splitEdge/index.js";
 import {
-	Graph,
+	CreasePattern,
 	UpdateFrame,
 } from "../../stores/Model.js";
 /**
@@ -16,7 +16,7 @@ export const test = (...args) => console.log(["test():"]
  */
 
 export const splitEdges = (edges) => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const result = edges
 		.slice()
 		.sort((a, b) => b - a)

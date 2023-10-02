@@ -65,7 +65,7 @@
 		JoinColor,
 		UnassignedColor,
 	} from "../../stores/style.js";
-	import { Graph } from "../../stores/Model.js";
+	import { CreasePattern } from "../../stores/Model.js";
 
 	const lightVertices = [
 		[+1, +1, +1],
@@ -139,8 +139,8 @@
 	// load a new origami model. thrown errors are because of a bad file format
 	$: {
 		try {
-			simulator.load($Graph);
-			const box = boundingBox($Graph);
+			simulator.load($CreasePattern);
+			const box = boundingBox($CreasePattern);
 			modelSize = box ? Math.max(...box.span) : 1;
 		} catch (error) {
 			// window.alert(error);

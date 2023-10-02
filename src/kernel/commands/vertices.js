@@ -3,7 +3,7 @@ import replace from "rabbit-ear/graph/replace.js";
 import { cleanNumber } from "rabbit-ear/general/number.js";
 import { removeDuplicateVertices } from "rabbit-ear/graph/vertices/duplicate.js";
 import {
-	Graph,
+	CreasePattern,
 	UpdateFrame,
 } from "../../stores/Model.js";
 import { Selection } from "../../stores/Select.js";
@@ -11,7 +11,7 @@ import { findEpsilon } from "../../js/epsilon.js";
 import { nearestTwoVertices } from "../../js/errors.js";
 
 export const mergeNearbyVertices = (epsilonFactor = 1e-4) => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const epsilon = findEpsilon(graph, epsilonFactor);
 	const result = removeDuplicateVertices(graph, epsilon);
 	return result.remove.length
@@ -20,7 +20,7 @@ export const mergeNearbyVertices = (epsilonFactor = 1e-4) => {
 };
 
 export const cleanVertices = () => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const vertices_coords = graph.vertices_coords
 		.map(coord => coord.map(n => cleanNumber(n, 12)));
 	UpdateFrame({ ...graph, vertices_coords });
@@ -28,7 +28,7 @@ export const cleanVertices = () => {
 };
 
 export const snapAllVertices = () => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const vertices_coords = graph.vertices_coords || [];
 	vertices_coords.forEach((coord, i) => coord.forEach((n, j) => {
 		vertices_coords[i][j] = Math.round(n);
@@ -37,7 +37,7 @@ export const snapAllVertices = () => {
 };
 
 export const selectNearestVertices = () => {
-	const vertices = nearestTwoVertices(get(Graph));
+	const vertices = nearestTwoVertices(get(CreasePattern));
 	if (vertices === undefined) { return; }
 	Selection.reset();
 	Selection.addVertices(vertices);
@@ -50,7 +50,7 @@ export const mergeVertices = (vertices = []) => {
 	const remain = vertices.shift();
 	const replace_indices = [];
 	vertices.forEach(v => { replace_indices[v] = remain; });
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	replace(graph, "vertices", replace_indices);
 	UpdateFrame({ ...graph });
 };

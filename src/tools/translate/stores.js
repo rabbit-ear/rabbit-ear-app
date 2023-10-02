@@ -18,7 +18,7 @@ import {
 } from "../../stores/UI.js";
 import { Selection } from "../../stores/Select.js";
 import {
-	Graph,
+	CreasePattern,
 } from "../../stores/Model.js";
 import {
 	RadialSnapDegrees,
@@ -70,8 +70,8 @@ const DragVector = derived(
 );
 
 export const Subgraph = derived(
-	[Graph, Selection],
-	([$Graph, $Selection]) => subgraph($Graph, $Selection),
+	[CreasePattern, Selection],
+	([$CreasePattern, $Selection]) => subgraph($CreasePattern, $Selection),
 	({}),
 );
 

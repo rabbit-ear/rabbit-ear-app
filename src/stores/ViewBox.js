@@ -15,8 +15,8 @@ import { graphToMatrix2 } from "../js/matrix.js";
 // Otherwise, this would be ideal, so, in case a more elegant work-around
 // is found, I'm leaving this here for now.
 // export const ModelMatrix = derived(
-// 	Graph,
-// 	($Graph) => graphToMatrix2($Graph),
+// 	CreasePattern,
+// 	($CreasePattern) => graphToMatrix2($CreasePattern),
 // 	[...identity2x3],
 // );
 /**

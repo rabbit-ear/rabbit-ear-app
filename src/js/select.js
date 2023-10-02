@@ -8,7 +8,6 @@ import {
 	SELECT_EDGE,
 	SELECT_FACE,
 } from "../tools/Select/stores.js"; // todo get rid of
-import { Graph } from "../stores/Model.js";
 // import { Releases } from "../stores/UI.js";
 
 const pointInRect = (p, rect) => (

@@ -8,10 +8,10 @@
 		stroke-width="1"
 		stroke-dasharray="2 2"/>
 	<rect
-		x="2"
+		x="7"
 		y="7"
-		width="11"
-		height="11"
-		stroke-width="1.5"
+		width="6"
+		height="6"
+		stroke-width="1"
 		fill="none"/>
 </svg>

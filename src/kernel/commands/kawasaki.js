@@ -1,11 +1,11 @@
 import { get } from "svelte/store";
-import { Graph } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/Model.js";
 import { kawasakiSolutions } from "rabbit-ear/singleVertex/kawasaki.js";
 import { RulerRays } from "../../stores/Ruler.js";
 import { UIRays } from "../../stores/UI.js";
 
 export const kawasakiRulers = (vertex) => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const origin = graph.vertices_coords[vertex];
 	const rays = kawasakiSolutions(graph, vertex)
 		.filter(a => a !== undefined)
@@ -14,7 +14,7 @@ export const kawasakiRulers = (vertex) => {
 };
 
 export const kawasakiRulerPreviews = (vertex) => {
-	const graph = get(Graph);
+	const graph = get(CreasePattern);
 	const origin = graph.vertices_coords[vertex];
 	const rays = kawasakiSolutions(graph, vertex)
 		.filter(a => a !== undefined)

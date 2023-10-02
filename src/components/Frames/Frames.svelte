@@ -1,7 +1,7 @@
 <script>
 	import FrameRender from "./FrameRender.svelte";
 	import NewFrameButton from "./NewFrameButton.svelte";
-	import { FramesRendered } from "../../stores/Model.js"
+	import { IsolatedFrames } from "../../stores/Model.js"
 	import { executeCommand } from "../../kernel/execute.js";
 
 	let pressIndex;
@@ -40,7 +40,7 @@
 	tabindex="-1"
 	on:mousemove={mousemove}
 	on:mouseup={mouseup}>
-	{#each $FramesRendered as graph, index}
+	{#each $IsolatedFrames as graph, index}
 		<FrameRender {graph} {index} {mousedown} />
 	{/each}
 	<NewFrameButton />
