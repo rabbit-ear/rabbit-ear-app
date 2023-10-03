@@ -3,7 +3,7 @@
 		validateKawasaki,
 		validateMaekawa,
 	} from "rabbit-ear/singleVertex/validate.js";
-	import { VertexRadius } from "../../stores/App.js";
+	import { VertexRadius } from "../../stores/Style.js";
 
 	export let graph = {};
 

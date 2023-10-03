@@ -1,5 +1,4 @@
 <script>
-	import { StrokeDashLength } from "../../stores/Style.js";
 	import { SelectionRect } from "./stores.js";
 </script>
 

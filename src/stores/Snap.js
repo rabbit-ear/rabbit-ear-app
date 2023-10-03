@@ -1,5 +1,5 @@
 import { writable, derived } from "svelte/store";
-import { ViewBox } from "./ViewBox.js";
+import { ViewBoxCP } from "./ViewBox.js";
 import { RulerPoints } from "./Ruler.js";
 import { CreasePattern } from "./Model.js";
 /**
@@ -9,7 +9,7 @@ import { CreasePattern } from "./Model.js";
 export const RadialSnapDegrees = writable(22.5);
 export const RadialSnapOffset = writable(0);
 /**
- * @description SnapPoints contains a list of 2D points
+ * @description SnapPointsCreasePattern contains a list of 2D points
  * in the plane which the UI should be able to snap to.
  * This list notably does not contain a list of grid-points
  * (snap to grid) because that list is infinite and calculated
@@ -21,7 +21,7 @@ export const RadialSnapOffset = writable(0);
  * - intersections between ruler lines and ruler lines
  * - intersections between ruler lines and the background grid
  */
-export const SnapPoints = derived(
+export const SnapPointsCreasePattern = derived(
 	[CreasePattern, RulerPoints],
 	([$CreasePattern, $RulerPoints]) => [
 		...($CreasePattern.vertices_coords || []),
@@ -38,8 +38,10 @@ const SnapRadiusFactor = 0.05;
  * @description This is the radius of the snapping range to the
  * nearest snappable point, it is dependent upon the current view zoom.
  */
-export const SnapRadius = derived(
-	ViewBox,
-	$ViewBox => Math.max($ViewBox[2], $ViewBox[3]) * SnapRadiusFactor,
+export const SnapRadiusCreasePattern = derived(
+	ViewBoxCP,
+	$ViewBoxCP => (
+		Math.max($ViewBoxCP[2], $ViewBoxCP[3]) * SnapRadiusFactor
+	),
 	0.05,
 );

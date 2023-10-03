@@ -8,13 +8,27 @@ import {
 	multiplyMatrices2,
 } from "rabbit-ear/math/matrix2.js";
 import { getScreenPoint } from "../../js/matrix.js";
-import { CameraMatrix } from "../../stores/ViewBox.js";
+import {
+	ModelMatrixCP,
+	ModelMatrixFolded,
+	CameraMatrixCP,
+} from "../../stores/ViewBox.js";
 
 export const Press = writable(undefined);
 export const Drag = writable(undefined);
 
-const PressCoords = derived(Press, getScreenPoint, undefined);
-const DragCoords = derived(Drag, getScreenPoint, undefined);
+// const PressCoords = derived(Press, getScreenPoint, undefined);
+// const DragCoords = derived(Drag, getScreenPoint, undefined);
+const PressCoords = derived(
+	[Press, ModelMatrixCP],
+	([$Press, $ModelMatrixCP]) => getScreenPoint($Press, $ModelMatrixCP),
+	undefined,
+);
+const DragCoords = derived(
+	[Drag, ModelMatrixCP],
+	([$Drag, $ModelMatrixCP]) => getScreenPoint($Drag, $ModelMatrixCP),
+	undefined,
+);
 
 export const DragVector = derived(
 	[DragCoords, PressCoords],
@@ -26,7 +40,7 @@ export const DragVector = derived(
 
 export const MoveCamera = derived(
 	[DragVector],
-	([$DragVector]) => CameraMatrix.update(camera => (
+	([$DragVector]) => CameraMatrixCP.update(camera => (
 		multiplyMatrices2(camera, makeMatrix2Translate(...$DragVector))
 	)),
 	undefined,

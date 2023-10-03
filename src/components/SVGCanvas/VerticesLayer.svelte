@@ -1,5 +1,5 @@
 <script>
-	import { VertexRadius } from "../../stores/App.js";
+	import { VertexRadius } from "../../stores/Style.js";
 	import { BoundaryColor } from "../../stores/Style.js";
 
 	export let graph = {};

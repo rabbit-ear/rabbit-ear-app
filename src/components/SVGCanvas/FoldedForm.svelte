@@ -15,11 +15,19 @@
 	} from "../../stores/App.js";
 	import { Selection } from "../../stores/Select.js";
 	import { Highlight } from "../../stores/UI.js";
+	import { StrokeWidthFoldedForm } from "../../stores/Style.js";
+	import { ViewBoxFolded } from "../../stores/ViewBox.js";
 </script>
 
-<SVGCanvas on:press on:move on:release on:scroll>
+<SVGCanvas
+	viewBox={$ViewBoxFolded}
+	strokeWidth={$StrokeWidthFoldedForm}
+	on:press
+	on:move
+	on:release
+	on:scroll>
 	{#if $ShowGrid}
-		<GridLayer />
+		<GridLayer viewBox={$ViewBoxFolded} />
 	{/if}
 	<g class="origami-layer">
 		<FacesFoldedLayer
@@ -28,7 +36,7 @@
 			highlighted={$Highlight.faces} />
 	</g>
 	{#if $ShowAxes}
-		<AxesLayer />
+		<AxesLayer viewBox={$ViewBoxFolded} />
 	{/if}
 	{#if $ShowIndices}
 		<GraphIndices graph={$FoldedForm} />

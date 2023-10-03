@@ -15,10 +15,15 @@
 	import Simulator from "./OrigamiSimulator/Simulator.svelte";
 	import CodeEditor from "./CodeEditor/CodeEditor.svelte";
 
-	export let press;
-	export let move;
-	export let release;
-	export let scroll;
+	export let pressCP;
+	export let moveCP;
+	export let releaseCP;
+	export let scrollCP;
+
+	export let pressFolded;
+	export let moveFolded;
+	export let releaseFolded;
+	export let scrollFolded;
 
 	let height = "100vh";
 	$: height = [
@@ -39,10 +44,10 @@
 <div class="canvases horizontal">
 	<div class="canvas crease-pattern" style={`max-height: calc(${height})`}>
 		<CreasePatternCanvas
-			on:press={press}
-			on:move={move}
-			on:release={release}
-			on:scroll={scroll}
+			on:press={pressCP}
+			on:move={moveCP}
+			on:release={releaseCP}
+			on:scroll={scrollCP}
 		/>
 	</div>
 	{#if $ShowStaticOrSimulator}
@@ -52,7 +57,12 @@
 	{:else}
 		{#if $FrameEdgesAreFlat}
 			<div class="canvas folded-form" style={`max-height: calc(${height})`}>
-				<FoldedFormCanvas />
+				<FoldedFormCanvas
+					on:press={pressFolded}
+					on:move={moveFolded}
+					on:release={releaseFolded}
+					on:scroll={scrollFolded}
+				/>
 			</div>
 		{:else}
 			<div class="canvas folded-form" style={`max-height: calc(${height})`}>

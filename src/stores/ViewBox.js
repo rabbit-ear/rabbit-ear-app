@@ -24,40 +24,79 @@ import { graphToMatrix2 } from "../js/matrix.js";
  * around the graph model. This model matrix will always maintain
  * a 1:1 aspect ratio. Used to create the SVG's ViewBox.
  */
-export const ModelMatrix = writable([...identity2x3]);
-ModelMatrix.reset = () => ModelMatrix.set([...identity2x3]);
+export const ModelMatrixCP = writable([...identity2x3]);
+ModelMatrixCP.reset = () => ModelMatrixCP.set([...identity2x3]);
+
+export const ModelMatrixFolded = writable([...identity2x3]);
+ModelMatrixFolded.reset = () => ModelMatrixFolded.set([...identity2x3]);
+
 /**
  * @description The camera matrix is what the user modifies when they
  * pan around and scroll to zoom on the SVG canvas.
  */
-export const CameraMatrix = writable([...identity2x3]);
-CameraMatrix.reset = () => CameraMatrix.set([...identity2x3]);
+export const CameraMatrixCP = writable([...identity2x3]);
+CameraMatrixCP.reset = () => CameraMatrixCP.set([...identity2x3]);
+
+export const CameraMatrixFolded = writable([...identity2x3]);
+CameraMatrixFolded.reset = () => CameraMatrixFolded.set([...identity2x3]);
+
 /**
  * @description The inverse of the camera matrix,
  * used to build the SVG's ViewBox.
  */
-export const ViewMatrix = derived(
-	CameraMatrix,
-	($CameraMatrix) => invertMatrix2($CameraMatrix),
+export const ViewMatrixCP = derived(
+	CameraMatrixCP,
+	($CameraMatrixCP) => invertMatrix2($CameraMatrixCP),
+	[...identity2x3],
+);
+
+export const ViewMatrixFolded = derived(
+	CameraMatrixFolded,
+	($CameraMatrixFolded) => invertMatrix2($CameraMatrixFolded),
 	[...identity2x3],
 );
 /**
  * @description In a typical fashion, the model and view matrices are
  * multiplied together to make this model-view matrix.
  */
-export const ModelViewMatrix = derived(
-	[ModelMatrix, ViewMatrix],
-	([$ModelMatrix, $ViewMatrix]) => multiplyMatrices2($ModelMatrix, $ViewMatrix),
+export const ModelViewMatrixCP = derived(
+	[ModelMatrixCP, ViewMatrixCP],
+	([$ModelMatrixCP, $ViewMatrixCP]) => (
+		multiplyMatrices2($ModelMatrixCP, $ViewMatrixCP)
+	),
+	[...identity2x3],
+);
+
+export const ModelViewMatrixFolded = derived(
+	[ModelMatrixFolded, ViewMatrixFolded],
+	([$ModelMatrixFolded, $ViewMatrixFolded]) => (
+		multiplyMatrices2($ModelMatrixFolded, $ViewMatrixFolded)
+	),
 	[...identity2x3],
 );
 /**
  * @description The SVG will set its "viewBox" property with this value,
  * a value which is based on the camera, as well as the model size.
  */
-export const ViewBox = derived(
-	ModelViewMatrix,
-	($ModelViewMatrix) => {
-		const m = [...$ModelViewMatrix];
+export const ViewBoxCP = derived(
+	ModelViewMatrixCP,
+	($ModelViewMatrixCP) => {
+		const m = [...$ModelViewMatrixCP];
+		// get the translation component
+		const [, , , , x, y] = m;
+		// remove the translation component
+		m[4] = m[5] = 0;
+		// multiply by unit basis vectors
+		const [w, h] = multiplyMatrix2Vector2(m, [1, 1]);
+		return [x, y, w, h];
+	},
+	[0, 0, 1, 1],
+);
+
+export const ViewBoxFolded = derived(
+	ModelViewMatrixFolded,
+	($ModelViewMatrixFolded) => {
+		const m = [...$ModelViewMatrixFolded];
 		// get the translation component
 		const [, , , , x, y] = m;
 		// remove the translation component

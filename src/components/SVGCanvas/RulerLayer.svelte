@@ -11,9 +11,9 @@
 		UILines,
 		UIRays,
 	} from "../../stores/UI.js";
-	import { SnapPoints } from "../../stores/Snap.js";
 	import { Tool } from "../../stores/UI.js";
-	import { ViewBox } from "../../stores/ViewBox.js";
+
+	export let viewBox = [0, 0, 1, 1];
 
 	let showRulers = true;
 	$: showRulers = $Tool
@@ -21,22 +21,22 @@
 		&& $Tool.name !== "folded line"
 
 	$: rulerLineSegments = $RulerLines
-		.map(line => clipLineInLargerViewBox(line, $ViewBox))
+		.map(line => clipLineInLargerViewBox(line, viewBox))
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 
 	$: rulerRaySegments = $RulerRays
-		.map(ray => clipRayInLargerViewBox(ray, $ViewBox))
+		.map(ray => clipRayInLargerViewBox(ray, viewBox))
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 
 	$: uiLineSegments = $UILines
-		.map(line => clipLineInLargerViewBox(line, $ViewBox))
+		.map(line => clipLineInLargerViewBox(line, viewBox))
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 
 	$: uiRaySegments = $UIRays
-		.map(line => clipRayInLargerViewBox(line, $ViewBox))
+		.map(line => clipRayInLargerViewBox(line, viewBox))
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 

@@ -1,5 +1,5 @@
 <script>
-	import { VertexRadius } from "../../stores/App.js";
+	import { VertexRadius } from "../../stores/Style.js";
 	import {
 		InputPoint,
 		Segment0,

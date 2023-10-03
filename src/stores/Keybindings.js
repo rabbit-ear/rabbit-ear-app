@@ -157,6 +157,8 @@ const KeybindingsUp = {
 };
 
 export default {
-	down: KeybindingsDown,
-	up: KeybindingsUp,
+	// down: KeybindingsDown,
+	// up: KeybindingsUp,
+	down: {},
+	up: {},
 };

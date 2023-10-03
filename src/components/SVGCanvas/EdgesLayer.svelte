@@ -2,8 +2,8 @@
 	import { edgeFoldAngleIsFlat } from "rabbit-ear/fold/spec.js";
 	import {
 		AssignmentColor,
-		StrokeWidth,
-		StrokeDashLength,
+		StrokeWidthCreasePattern,
+		StrokeDashLengthCreasePattern,
 	} from "../../stores/Style.js";
 
 	export let graph = {};
@@ -57,7 +57,7 @@
 
 </script>
 
-<g class="edges" style={`--stroke-width: ${$StrokeWidth}; --stroke-dash-length: ${$StrokeDashLength}`}>
+<g class="edges" style={`--stroke-width: ${$StrokeWidthCreasePattern}; --stroke-dash-length: ${$StrokeDashLengthCreasePattern}`}>
 	{#each lines as line, i}
 		<line {...line} />
 	{/each}

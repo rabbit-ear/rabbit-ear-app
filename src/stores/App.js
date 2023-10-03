@@ -1,10 +1,9 @@
 import { writable, derived } from "svelte/store";
-import { ViewBox } from "./ViewBox.js";
 /**
  * @description App settings which are immutable compiler directives.
  * these will only change to target different builds.
  */
-export const ShowMenu = true;
+export const ShowMenu = false;
 /**
  * @description Show/Hide various things across the app.
  */
@@ -29,18 +28,3 @@ export const DialogNewFrame = writable(undefined);
 export const TerminalTextarea = writable(undefined);
 export const TerminalValue = writable(undefined);
 export const InputFile = writable(undefined);
-/**
- * @description vertex radius is is dynamic according to the zoom level
- * this number is a scale of the size of the viewbox.
- */
-export const VertexRadiusFactor = writable(0.00666);
-/**
- * @description SVG circle elements use this for their radius value.
- */
-export const VertexRadius = derived(
-	[ViewBox, VertexRadiusFactor],
-	([$ViewBox, $VertexRadiusFactor]) => (
-		Math.max($ViewBox[2], $ViewBox[3]) * $VertexRadiusFactor
-	),
-	0.00666,
-);

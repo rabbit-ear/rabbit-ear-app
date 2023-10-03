@@ -22,12 +22,22 @@
 		Tool,
 		Highlight,
 	} from "../../stores/UI.js";
-	import { StrokeDashLength } from "../../stores/Style.js";
+	import {
+		StrokeWidthCreasePattern,
+		StrokeDashLengthCreasePattern,
+	} from "../../stores/Style.js";
+	import { ViewBoxCP } from "../../stores/ViewBox.js";
 </script>
 
-<SVGCanvas on:press on:move on:release on:scroll>
+<SVGCanvas
+	viewBox={$ViewBoxCP}
+	strokeWidth={$StrokeWidthCreasePattern}
+	on:press
+	on:move
+	on:release
+	on:scroll>
 	{#if $ShowGrid}
-		<GridLayer />
+		<GridLayer viewBox={$ViewBoxCP} />
 	{/if}
 	<g class="origami-layer">
 		<FacesCPLayer
@@ -44,13 +54,13 @@
 			highlighted={$Highlight.vertices} /> -->
 	</g>
 	{#if $ShowAxes}
-		<AxesLayer />
+		<AxesLayer viewBox={$ViewBoxCP} />
 	{/if}
 	{#if $ShowFlatFoldableIssues}
 		<FlatFoldable graph={$CreasePattern} />
 	{/if}
-	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLength};`} >
-		<RulerLayer />
+	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLengthCreasePattern};`} >
+		<RulerLayer viewBox={$ViewBoxCP} />
 		<UILayer />
 		{#if $Tool && $Tool.SVGLayer}
 			<svelte:component this={$Tool.SVGLayer} />

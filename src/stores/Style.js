@@ -1,10 +1,23 @@
-import { writable, derived } from "svelte/store";
-import { ViewBox } from "./ViewBox.js";
+import {
+	writable,
+	derived,
+} from "svelte/store";
+import {
+	ViewBoxCP,
+	ViewBoxFolded,
+} from "./ViewBox.js";
 /**
  * @description Stroke-width will use this value and multiply it against
  * the viewport to get the absolute stroke-width value.
  */
 const StrokeWidthFactor = (1 / 300);
+/**
+ * @description On Safari only, no matter the viewBox size,
+ * if a stroke width is below 0.001 it disappears, even if the viewBox
+ * is highly zoomed-in and 0.001 is a very thick line, it still disappears.
+ * It feels like a bug. But, we have to work around it.
+ */
+const StrokeWidthMin = 0.001;
 /**
  * @description Stroke-width is zoom-level dependent, styles everywhere
  * can reference this value to use inside the app. Because this gets
@@ -14,9 +27,25 @@ const StrokeWidthFactor = (1 / 300);
  * styles on every child element, causing a redraw, causing a huge slow down
  * if this is placed on a root element with many children.
  */
-export const StrokeWidth = derived(
-	ViewBox,
-	($ViewBox) => Math.max($ViewBox[2], $ViewBox[3]) * StrokeWidthFactor,
+export const StrokeWidthCreasePattern = derived(
+	ViewBoxCP,
+	($ViewBoxCP) => (
+		Math.max(
+			StrokeWidthMin,
+			Math.max($ViewBoxCP[2], $ViewBoxCP[3]) * StrokeWidthFactor,
+		)
+	),
+	StrokeWidthFactor,
+);
+
+export const StrokeWidthFoldedForm = derived(
+	ViewBoxFolded,
+	($ViewBoxFolded) => (
+		Math.max(
+			StrokeWidthMin,
+			Math.max($ViewBoxFolded[2], $ViewBoxFolded[3]) * StrokeWidthFactor,
+		)
+	),
 	StrokeWidthFactor,
 );
 /**
@@ -28,10 +57,33 @@ export const StrokeWidth = derived(
  * styles on every child element, causing a redraw, causing a huge slow down
  * if this is placed on a root element with many children.
  */
-export const StrokeDashLength = derived(
-	StrokeWidth,
-	($StrokeWidth) => $StrokeWidth * 3,
+export const StrokeDashLengthCreasePattern = derived(
+	StrokeWidthCreasePattern,
+	($StrokeWidthCreasePattern) => $StrokeWidthCreasePattern * 3,
 	StrokeWidthFactor * 3,
+);
+
+export const StrokeDashLengthFoldedForm = derived(
+	StrokeWidthFoldedForm,
+	($StrokeWidthFoldedForm) => $StrokeWidthFoldedForm * 3,
+	StrokeWidthFactor * 3,
+);
+
+/**
+ * @description vertex radius is is dynamic according to the zoom level
+ * this number is a scale of the size of the viewbox.
+ */
+export const VertexRadiusFactor = writable(0.00666);
+
+/**
+ * @description SVG circle elements use this for their radius value.
+ */
+export const VertexRadius = derived(
+	[ViewBoxCP, VertexRadiusFactor],
+	([$ViewBoxCP, $VertexRadiusFactor]) => (
+		Math.max($ViewBoxCP[2], $ViewBoxCP[3]) * $VertexRadiusFactor
+	),
+	0.00666,
 );
 
 //

@@ -1,12 +1,12 @@
 <script>
 	import { midpoint2 } from "rabbit-ear/math/vector.js";
 	import { centroid } from "rabbit-ear/math/polygon.js";
-	import { ViewBox } from "../../stores/ViewBox.js";
+	import { ViewBoxCP } from "../../stores/ViewBox.js";
 	import { BoundaryColor } from "../../stores/Style.js";
 	import GraphIndexItem from "./GraphIndexItem.svelte";
 
 	let vmin = 1;
-	$: vmin = Math.min($ViewBox[2], $ViewBox[3]);
+	$: vmin = Math.min($ViewBoxCP[2], $ViewBoxCP[3]);
 
 	let fontSize = 0.02;
 	$: fontSize = vmin * 0.0333;

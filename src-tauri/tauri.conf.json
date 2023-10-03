@@ -1,46 +1,52 @@
 {
-  "build": {
-    "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": false
-  },
-  "package": {
-    "productName": "Rabbit Ear",
-    "version": "0.1.0"
-  },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "shell": {
-        "all": false,
-        "open": true
-      }
-    },
-    "bundle": {
-      "active": true,
-      "targets": "all",
-      "identifier": "com.tauri.dev",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ]
-    },
-    "security": {
-      "csp": null
-    },
-    "windows": [
-      {
-        "fullscreen": false,
-        "resizable": true,
-        "title": "Rabbit Ear",
-        "width": 1232,
-        "height": 800
-      }
-    ]
-  }
+	"build": {
+		"beforeDevCommand": "npm run dev",
+		"beforeBuildCommand": "npm run build",
+		"devPath": "http://localhost:1420",
+		"distDir": "../dist",
+		"withGlobalTauri": false
+	},
+	"package": {
+		"productName": "Rabbit Ear",
+		"version": "0.1.0"
+	},
+	"tauri": {
+		"allowlist": {
+			"all": false,
+			"shell": {
+				"all": false,
+				"open": true
+			},
+			"dialog": {
+				"confirm": true,
+				"message": true,
+				"open": true,
+				"save": true
+			}
+		},
+		"bundle": {
+			"active": true,
+			"targets": "all",
+			"identifier": "com.tauri.dev",
+			"icon": [
+				"icons/32x32.png",
+				"icons/128x128.png",
+				"icons/128x128@2x.png",
+				"icons/icon.icns",
+				"icons/icon.ico"
+			]
+		},
+		"security": {
+			"csp": null
+		},
+		"windows": [
+			{
+				"fullscreen": false,
+				"resizable": true,
+				"title": "Rabbit Ear",
+				"width": 1440,
+				"height": 810
+			}
+		]
+	}
 }

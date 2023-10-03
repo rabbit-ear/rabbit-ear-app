@@ -12,14 +12,22 @@
 	import { ShowMenu } from "../stores/App.js";
 	import { KeyboardEvent } from "../stores/KeyboardEvents.js";
 	import {
-		PointerEvent,
-		ScrollEvent,
+		PointerEventCP,
+		PointerEventFolded,
+		ScrollEventCP,
+		ScrollEventFolded,
 	} from "../stores/TouchEvents.js";
 
-	const press = (e) => $PointerEvent("press", e.detail);
-	const move = (e) => $PointerEvent("move", e.detail);
-	const release = (e) => $PointerEvent("release", e.detail);
-	const scroll = (e) => $ScrollEvent(e.detail);
+	const pressCP = (e) => $PointerEventCP("press", e.detail);
+	const moveCP = (e) => $PointerEventCP("move", e.detail);
+	const releaseCP = (e) => $PointerEventCP("release", e.detail);
+	const scrollCP = (e) => $ScrollEventCP(e.detail);
+
+	const pressFolded = (e) => $PointerEventFolded("press", e.detail);
+	const moveFolded = (e) => $PointerEventFolded("move", e.detail);
+	const releaseFolded = (e) => $PointerEventFolded("release", e.detail);
+	const scrollFolded = (e) => $ScrollEventFolded(e.detail);
+
 	const keydown = (e) => $KeyboardEvent("down", e);
 	const keyup = (e) => $KeyboardEvent("up", e);
 </script>
@@ -49,7 +57,15 @@
 		</div>
 		<div class="renderings vertical">
 			<div class="canvases">
-				<Canvases {press} {move} {release} {scroll} />
+				<Canvases
+					{pressCP}
+					{moveCP}
+					{releaseCP}
+					{scrollCP}
+					{pressFolded}
+					{moveFolded}
+					{releaseFolded}
+					{scrollFolded} />
 			</div>
 			<div class="frames">
 				<Frames />

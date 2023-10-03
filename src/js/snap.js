@@ -25,8 +25,8 @@ import {
 	RulerRays,
 } from "../stores/Ruler.js";
 import {
-	SnapPoints,
-	SnapRadius,
+	SnapPointsCreasePattern,
+	SnapRadiusCreasePattern,
 } from "../stores/Snap.js";
 // import { Snapping } from "../stores/App.js";
 
@@ -57,7 +57,7 @@ export const snapToVertex = (point, force = false) => {
 	for (let i = 1; i < distances.length; i += 1) {
 		if (distances[i] < distances[index]) { index = i; }
 	}
-	return force || distances[index] < get(SnapRadius)
+	return force || distances[index] < get(SnapRadiusCreasePattern)
 		? { vertex: index, coords: vertices[index] }
 		: { vertex: undefined, coords: undefined };
 };
@@ -74,14 +74,14 @@ export const snapToEdge = (point, force = false) => {
 		clampSegment,
 	);
 	const distance = distance2(point, nearestPoint);
-	return force || distance < get(SnapRadius)
+	return force || distance < get(SnapRadiusCreasePattern)
 		? { edge, coords: nearestPoint }
 		: { edge: undefined, coords: point };
 };
 
 export const snapToPoint = (point, force = false) => {
 	if (!point) { return undefined; }
-	const snapRadius = get(SnapRadius);
+	const snapRadius = get(SnapRadiusCreasePattern);
 	// all the snap points
 	// const gridCoord = get(Snapping)
 	// 	? nearestGridPoint(point, snapRadius)
@@ -92,8 +92,8 @@ export const snapToPoint = (point, force = false) => {
 	// 	: distance2(point, gridCoord);
 	// if (gridCoord !== undefined) { return gridCoord; }
 	const points = gridCoord === undefined
-		? get(SnapPoints)
-		: [...get(SnapPoints), gridCoord];
+		? get(SnapPointsCreasePattern)
+		: [...get(SnapPointsCreasePattern), gridCoord];
 	// if (gridCoord !== undefined) { points.push(gridCoord); }
 	const distances = points.map(p => distance2(p, point));
 	const index = distances
@@ -108,7 +108,7 @@ export const snapToPoint = (point, force = false) => {
 
 export const snapToPointWithInfo = (point, force = false) => {
 	if (!point) { return { snap: false, coord: undefined }; }
-	const snapRadius = get(SnapRadius);
+	const snapRadius = get(SnapRadiusCreasePattern);
 	// all the snap points
 	// const gridCoord = get(Snapping)
 	// 	? nearestGridPoint(point, snapRadius)
@@ -119,8 +119,8 @@ export const snapToPointWithInfo = (point, force = false) => {
 	// 	: distance2(point, gridCoord);
 	// if (gridCoord !== undefined) { return gridCoord; }
 	const points = gridCoord === undefined
-		? get(SnapPoints)
-		: [...get(SnapPoints), gridCoord];
+		? get(SnapPointsCreasePattern)
+		: [...get(SnapPointsCreasePattern), gridCoord];
 	// if (gridCoord !== undefined) { points.push(gridCoord); }
 	const distances = points.map(p => distance2(p, point));
 	const index = distances
@@ -181,7 +181,7 @@ export const snapToRulerLine = (point) => {
 };
 
 // export const snapToPoint = (point, force = false) => {
-// 	const snapRadius = get(SnapRadius);
+// 	const snapRadius = get(SnapRadiusCreasePattern);
 // 	// all the snap points
 // 	const gridCoord = get(Snapping)
 // 		? nearestGridPoint(point, snapRadius)
@@ -191,7 +191,7 @@ export const snapToRulerLine = (point) => {
 // 	const vertexDistance = (vertex === undefined
 // 		? Infinity
 // 		: distance2(point, coords));
-// 	const points = get(SnapPoints);
+// 	const points = get(SnapPointsCreasePattern);
 // 	const distances = points.map(p => distance2(p, point));
 // 	const index = distances
 // 		.map((d, i) => d < snapRadius ? i : undefined)

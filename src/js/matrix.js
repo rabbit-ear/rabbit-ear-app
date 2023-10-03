@@ -5,7 +5,6 @@ import {
 	invertMatrix2,
 	multiplyMatrix2Vector2,
 } from "rabbit-ear/math/matrix2.js";
-import { ModelMatrix } from "../stores/ViewBox.js";
 
 export const graphToMatrix2 = (graph) => {
 	const box = boundingBox(graph);
@@ -27,9 +26,9 @@ export const graphToMatrix2 = (graph) => {
  * CameraMatrix with this point, we need to "remove" the ModelMatrix
  * out of this point (multiply by the inverse of ModelMatrix).
  */
-export const getScreenPoint = (point) => {
+export const getScreenPoint = (point, modelMatrix) => {
 	if (point === undefined) { return undefined; }
-	const inverseModelMatrix = invertMatrix2(get(ModelMatrix));
+	const inverseModelMatrix = invertMatrix2(modelMatrix);
 	return inverseModelMatrix === undefined
 		? point
 		: multiplyMatrix2Vector2(inverseModelMatrix, point);

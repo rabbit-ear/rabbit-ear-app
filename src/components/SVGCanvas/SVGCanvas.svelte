@@ -4,7 +4,6 @@
 		convertToViewBox,
 		findInParents,
 	} from "../../js/dom.js";
-	import { ViewBox } from "../../stores/ViewBox.js";
 
 	const formatMouseEvent = (e) => ({
 		buttons: e.buttons,
@@ -22,29 +21,21 @@
 	const mouseup = (e) => dispatch("release", formatMouseEvent(e));
 	const wheel = (e) => dispatch("scroll", formatWheelEvent(e));
 
-	let vmax
-	$: vmax = Math.max($ViewBox[2], $ViewBox[3]);
+	export let viewBox = [0, 0, 1, 1];
+	export let strokeWidth = 0.001;
 
-	const padViewBox = (view, pad) => [
-		view[0] - pad,
-		view[1] - pad,
-		view[2] + pad * 2,
-		view[3] + pad * 2,
-	];
-	// const padViewBox = (view, pad) => [
-	// 	100 * (view[0] - pad),
-	// 	100 * (view[1] - pad),
-	// 	100 * (view[2] + pad * 2),
-	// 	100 * (view[3] + pad * 2),
-	// ];
+	const padViewBox = (box) => {
+		const pad = Math.max(box[2], box[3]) * 0.05;
+		return [box[0] - pad, box[1] - pad, box[2] + pad * 2, box[3] + pad * 2];
+	};
 </script>
 
 <!-- i'm not sure what role=presentation means, i just guessed -->
 
 <svg
 	xmlns="http://www.w3.org/2000/svg"
-	viewBox={padViewBox($ViewBox, vmax * 0.05).join(" ")}
-	stroke-width={$ViewBox[2] * 0.0033}
+	viewBox={padViewBox(viewBox).join(" ")}
+	stroke-width={strokeWidth}
 	on:mousedown={mousedown}
 	on:mousemove={mousemove}
 	on:mouseup={mouseup}

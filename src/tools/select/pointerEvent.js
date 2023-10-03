@@ -12,7 +12,7 @@ import {
 import { CreasePattern } from "../../stores/Model.js";
 import {
 	Keyboard,
-	UIEpsilon,
+	UIEpsilonCP,
 } from "../../stores/UI.js";
 import { executeCommand } from "../../kernel/execute.js";
 import {
@@ -26,7 +26,7 @@ import {
 export const getSelected = () => {
 	const rect = get(SelectionRect);
 	if (rect === undefined) { return {}; }
-	const uiEpsilon = get(UIEpsilon);
+	const uiEpsilon = get(UIEpsilonCP);
 	const nears = Math.max(...rect.span) < uiEpsilon
 		? getComponentsNearPoint(get(CreasePattern), rect.min)
 		: getComponentsInsideRect(get(CreasePattern), rect);

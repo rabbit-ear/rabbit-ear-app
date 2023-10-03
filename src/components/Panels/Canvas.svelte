@@ -4,8 +4,10 @@
 	import ZoomIcon from "../../tools/camera/icon.svelte";
 	import Panel from "./Panel.svelte";
 	import {
-		ModelMatrix,
-		CameraMatrix,
+		ModelMatrixCP,
+		CameraMatrixCP,
+		ModelMatrixFolded,
+		CameraMatrixFolded,
 	} from "../../stores/ViewBox.js";
 	import {
 		Pointer,
@@ -15,8 +17,10 @@
 		ShowStaticOrSimulator,
 	} from "../../stores/App.js";
 
-	$: inverseZoom = $CameraMatrix[0] / $ModelMatrix[0];
-	$: zoom = !isNaN(inverseZoom) ? (1 / inverseZoom).toFixed(3) : 0;
+	$: inverseZoomCP = $CameraMatrixCP[0] / $ModelMatrixCP[0];
+	$: zoomCP = !isNaN(inverseZoomCP) ? (1 / inverseZoomCP).toFixed(5) : 0;
+	$: inverseZoomFolded = $CameraMatrixFolded[0] / $ModelMatrixFolded[0];
+	$: zoomFolded = !isNaN(inverseZoomFolded) ? (1 / inverseZoomFolded).toFixed(5) : 0;
 
 	const formatPoint = (p) => p === undefined ? "" : p
 		.map(n => {
@@ -27,6 +31,11 @@
 	const NotUndefined = (...args) => args
 		.filter(a => a !== undefined)
 		.shift();
+
+	const resetZoom = () => {
+		CameraMatrixCP.reset();
+		CameraMatrixFolded.reset();
+	};
 </script>
 
 <Panel>
@@ -45,7 +54,7 @@
 		{/if}
 		<div class="flex-row">
 			<span class="svg-icon"><ZoomIcon /></span>
-			<span class="number"><button on:click={CameraMatrix.reset}>1 : {zoom}</button></span>
+			<span class="number"><button on:click={resetZoom}>{zoomCP} / {zoomFolded}</button></span>
 		</div>
 		<hr />
 		<div class="flex-column gap">

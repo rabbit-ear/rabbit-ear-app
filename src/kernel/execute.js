@@ -16,6 +16,10 @@ export const execute = (js) => {
 	const output = commands.flatMap(command => run(command));
 	CommandHistory.add(...output);
 };
+// const stringifyArgs = (...args) => {
+// 	const string = args.map(v => JSON.stringify(v)).join(", ");
+// 	return string.length > 1000 ? "[LARGE_DATA]" : string;
+// }
 /**
  * @description This is a more user-friendly alternative to "execute"
  * intended for only one method call, and it can include method arguments.

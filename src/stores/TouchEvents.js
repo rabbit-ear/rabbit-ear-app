@@ -1,4 +1,5 @@
 import {
+	get,
 	derived,
 	readable,
 } from "svelte/store";
@@ -8,7 +9,12 @@ import {
 	determinant2,
 } from "rabbit-ear/math/matrix2.js";
 import { getScreenPoint } from "../js/matrix.js";
-import { CameraMatrix } from "./ViewBox.js";
+import {
+	CameraMatrixCP,
+	CameraMatrixFolded,
+	ModelMatrixCP,
+	ModelMatrixFolded,
+} from "./ViewBox.js";
 import {
 	Tool,
 	Pointer,
@@ -46,7 +52,17 @@ const ToolPointerEvent = derived(
  * gets bound to this, which runs any app-wide pointer methods, and checks
  * if there is a UI tool with a pointer event, call the tool's pointer event.
  */
-export const PointerEvent = derived(
+// todo
+export const PointerEventCP = derived(
+	[AppPointerEvent, ToolPointerEvent],
+	([$AppPointerEvent, $ToolPointerEvent]) => (eventType, event) => {
+		$AppPointerEvent(eventType, event);
+		$ToolPointerEvent(eventType, event);
+	},
+	() => {},
+);
+// todo
+export const PointerEventFolded = derived(
 	[AppPointerEvent, ToolPointerEvent],
 	([$AppPointerEvent, $ToolPointerEvent]) => (eventType, event) => {
 		$AppPointerEvent(eventType, event);
@@ -57,7 +73,7 @@ export const PointerEvent = derived(
 /**
  * @description SVG canvas scrolling event gets bound to this.
  */
-export const ScrollEvent = readable(({ point, wheelDelta }) => {
+export const ScrollEventCP = readable(({ point, wheelDelta }) => {
 	const scaleOffset = (wheelDelta / 666);
 	const scale = 1 + scaleOffset;
 	// the input point is in ModelViewMatrix space,
@@ -65,8 +81,31 @@ export const ScrollEvent = readable(({ point, wheelDelta }) => {
 	// applying a change to the CameraMatrix. So, before we modify the
 	// CameraMatrix with this point, we need to "remove" the ModelMatrix
 	// out of this point (multiply by the inverse of ModelMatrix).
-	const matrix = makeMatrix2UniformScale(scale, getScreenPoint(point));
-	CameraMatrix.update(cam => {
+	const matrix = makeMatrix2UniformScale(scale, getScreenPoint(point, get(ModelMatrixCP)));
+	CameraMatrixCP.update(cam => {
+		// safety check.
+		// if the determininat is too small, return unchanged matrix
+		// the reason is because the viewMatrix is built from the
+		// inverse of this matrix, a bad det makes an invalid inverse.
+		const newMatrix = multiplyMatrices2(cam, matrix);
+		const det = determinant2(newMatrix)
+		const tooSmall = Math.abs(det) < 1e-11;
+		const tooLarge = Math.abs(det) > 1e+11;
+		if (tooSmall) { return [1e-5, 0, 0, 1e-5, cam[4], cam[5]]; }
+		if (tooLarge) { return [1e+5, 0, 0, 1e+5, 0, 0]; }
+		return newMatrix;
+	});
+});
+export const ScrollEventFolded = readable(({ point, wheelDelta }) => {
+	const scaleOffset = (wheelDelta / 666);
+	const scale = 1 + scaleOffset;
+	// the input point is in ModelViewMatrix space,
+	// which includes ModelMatrix. But, in the upcoming line we are only
+	// applying a change to the CameraMatrix. So, before we modify the
+	// CameraMatrix with this point, we need to "remove" the ModelMatrix
+	// out of this point (multiply by the inverse of ModelMatrix).
+	const matrix = makeMatrix2UniformScale(scale, getScreenPoint(point, get(ModelMatrixFolded)));
+	CameraMatrixFolded.update(cam => {
 		// safety check.
 		// if the determininat is too small, return unchanged matrix
 		// the reason is because the viewMatrix is built from the

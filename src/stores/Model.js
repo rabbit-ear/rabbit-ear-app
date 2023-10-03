@@ -19,8 +19,10 @@ import {
 	graphIsCreasePattern,
 } from "../js/graph.js";
 import {
-	CameraMatrix,
-	ModelMatrix,
+	CameraMatrixCP,
+	CameraMatrixFolded,
+	ModelMatrixCP,
+	ModelMatrixFolded,
 } from "./ViewBox.js";
 import { Selection } from "./Select.js";
 
@@ -58,7 +60,7 @@ export const Frames = writable([]);
 // 	// reset model-matrix to no longer update
 // 	ResizeModelMatrix.set(false);
 // 	// also reset camera
-// 	CameraMatrix.reset();
+// 	CameraMatrixCP.reset();
 // };
 // Frames.set = (newFrames) => {
 // 	console.log("Frames.set", newFrames);
@@ -68,7 +70,7 @@ export const Frames = writable([]);
 // 	// reset model-matrix to no longer update
 // 	ResizeModelMatrix.set(false);
 // 	// also reset camera
-// 	CameraMatrix.reset();
+// 	CameraMatrixCP.reset();
 // };
 /**
  * @description Which frame is currently visible in the main viewport?
@@ -79,7 +81,8 @@ FrameIndex.set = (n) => {
 	Selection.reset();
 	RecalculateModelMatrix = true;
 	FrameIndexSet(n);
-	CameraMatrix.reset();
+	CameraMatrixCP.reset();
+	CameraMatrixFolded.reset();
 };
 /**
  * @description Because FOLD frames can have parent-child inheritance,
@@ -143,7 +146,7 @@ export const CreasePattern = derived(
 	([$IsolatedFrame, $FrameIsCreasePattern]) => {
 		if (!$FrameIsCreasePattern) { return {}; }
 		if (RecalculateModelMatrix) {
-			ModelMatrix.set(graphToMatrix2($IsolatedFrame));
+			ModelMatrixCP.set(graphToMatrix2($IsolatedFrame));
 			RecalculateModelMatrix = false;
 		}
 		return $IsolatedFrame;
@@ -197,10 +200,10 @@ export const ComputedFoldedCoords = derived(
  */
 export const FoldedForm = derived(
 	[FrameIsCreasePattern, IsolatedFrame, ComputedFoldedCoords],
-	([$FrameIsCreasePattern, $IsolatedFrame, $ComputedFoldedCoords]) => (
+	([$FrameIsCreasePattern, $IsolatedFrame, $ComputedFoldedCoords]) => {
 		// if the frame is a folded form, return the frame itself.
 		// otherwise, compute the folded form from the crease pattern.
-		!$FrameIsCreasePattern
+		const foldedForm = !$FrameIsCreasePattern
 			? $IsolatedFrame
 			: {
 				...$IsolatedFrame,
@@ -208,7 +211,9 @@ export const FoldedForm = derived(
 				vertices_coords: $ComputedFoldedCoords,
 				frame_classes: ["foldedForm"],
 			}
-	),
+		ModelMatrixFolded.set(graphToMatrix2(foldedForm));
+		return foldedForm;
+	},
 	({}),
 );
 /**
@@ -232,7 +237,6 @@ export const Faces2DDrawOrder = derived(
 			&& $FoldedForm.faces_vertices
 			&& $FrameEdgesAreFlat) {
 			try {
-				// console.log("Model: Faces2DDrawOrder");
 				return linearize2DFaces($FoldedForm, $FoldedRootFace);
 			} catch (error) {
 				console.warn("Faces2DDrawOrder", error);
@@ -301,7 +305,7 @@ export const UpdateFrame = (graph) => {
  *
  */
 // export const UpdateModelMatrix = () => {
-// 	ModelMatrix.set(graphToMatrix2(get(CreasePattern)));
+// 	ModelMatrixCP.set(graphToMatrix2(get(CreasePattern)));
 // }
 export const UpdateAndResizeFrame = (graph) => {
 	// trigger model-matrix to update
@@ -314,8 +318,9 @@ export const UpdateAndResizeFrame = (graph) => {
  * viewport is also reset. This is used when loading a new frame.
  */
 export const SetFrame = (graph) => {
-	// ModelMatrix.set(graphToMatrix2(graph));
-	CameraMatrix.reset();
+	// ModelMatrixCP.set(graphToMatrix2(graph));
+	CameraMatrixCP.reset();
+	CameraMatrixFolded.reset();
 	return UpdateFrame(graph);
 };
 /**
@@ -339,7 +344,8 @@ export const LoadFile = (FOLD) => {
 	File.set(getFileMetadata(FOLD));
 	RecalculateModelMatrix = true;
 	Frames.set(frames);
-	CameraMatrix.reset();
+	CameraMatrixCP.reset();
+	CameraMatrixFolded.reset();
 };
 /**
  *
