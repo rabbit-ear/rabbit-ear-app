@@ -1,18 +1,23 @@
 <script>
 	import { createEventDispatcher } from "svelte";
+	import { InvertY } from "../../stores/App.js";
 	import {
 		convertToViewBox,
 		findInParents,
 	} from "../../js/dom.js";
 
+	$: yScale = $InvertY ? 1 : -1;
+
+	const unwrap = (point) => [point[0], point[1] * yScale];
+
 	const formatMouseEvent = (e) => ({
 		buttons: e.buttons,
-		point: convertToViewBox(findInParents(e.target, "svg"), e.x, e.y),
+		point: unwrap(convertToViewBox(findInParents(e.target, "svg"), [e.x, e.y])),
 	});
 
 	const formatWheelEvent = (e) => ({
 		wheelDelta: e.wheelDelta, // wheelDeltaX, wheelDeltaY
-		point: convertToViewBox(findInParents(e.target, "svg"), e.x, e.y),
+		point: convertToViewBox(findInParents(e.target, "svg"), [e.x, e.y]),
 	});
 
 	const dispatch = createEventDispatcher();
@@ -43,7 +48,7 @@
 	on:focus={() => {}}
 	on:blur={() => {}}
 	role="presentation" >
-	<g class="wrapper-layer">
+	<g class="wrapper-layer" style={`transform: matrix(1, 0, 0, ${yScale}, 0, 0)`}>
 		<slot />
 	</g>
 </svg>
@@ -56,5 +61,6 @@
 	.wrapper-layer {
 /*		transform: scale(100, 100);*/
 /*		transform: matrix(1, 0, 0, -1, 0, 1);*/
+/*		transform: matrix(1, 0, 0, -1, 0, 0);*/
 	}
 </style>

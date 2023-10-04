@@ -5,6 +5,10 @@ import { writable, derived } from "svelte/store";
  */
 export const ShowMenu = false;
 /**
+ * @description App settings, mutable.
+ */
+export const InvertY = writable(false);
+/**
  * @description Show/Hide various things across the app.
  */
 export const ShowGrid = writable(true);

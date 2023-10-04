@@ -1,5 +1,6 @@
 <script>
-	import { Frames } from "../stores/Model.js";
+	import { executeCommand } from "../kernel/execute.js";
 	import { base1 } from "rabbit-ear/fold/bases.js";
-	$: $Frames = [base1()];
+
+	executeCommand("load", base1());
 </script>

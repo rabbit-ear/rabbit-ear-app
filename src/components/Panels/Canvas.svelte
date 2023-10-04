@@ -18,9 +18,9 @@
 	} from "../../stores/App.js";
 
 	$: inverseZoomCP = $CameraMatrixCP[0] / $ModelMatrixCP[0];
-	$: zoomCP = !isNaN(inverseZoomCP) ? (1 / inverseZoomCP).toFixed(5) : 0;
+	$: zoomCP = !isNaN(inverseZoomCP) ? (1 / inverseZoomCP).toFixed(3) : 0;
 	$: inverseZoomFolded = $CameraMatrixFolded[0] / $ModelMatrixFolded[0];
-	$: zoomFolded = !isNaN(inverseZoomFolded) ? (1 / inverseZoomFolded).toFixed(5) : 0;
+	$: zoomFolded = !isNaN(inverseZoomFolded) ? (1 / inverseZoomFolded).toFixed(3) : 0;
 
 	const formatPoint = (p) => p === undefined ? "" : p
 		.map(n => {

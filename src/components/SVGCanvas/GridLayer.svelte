@@ -1,6 +1,10 @@
 <script>
+	import { viewBoxOrigin } from "../../js/matrix.js";
+
 	export let viewBox = [0, 0, 1, 1];
 
+	$: origin = viewBoxOrigin(viewBox, true);
+	$: strokeWidth = Math.max(viewBox[2], viewBox[3]) / 400;
 	/**
 	 * @description create a set of evenly spaced intervals that fit
 	 * inside the viewbox, one dimension at a time.
@@ -19,13 +23,13 @@
 	let xs = [];
 	let ys = [];
 	$: xs = makeIntervals(viewBox[0] - viewBox[2], viewBox[2] * 3);
-	$: ys = makeIntervals(viewBox[1] - viewBox[3], viewBox[3] * 3);
+	$: ys = makeIntervals(origin[1] - viewBox[3], viewBox[3] * 3);
 </script>
 
-<g class="grid" stroke-width={Math.max(viewBox[2], viewBox[3]) / 400}>
+<g class="grid" stroke-width={strokeWidth}>
 	<!-- <rect
 		x={viewBox[0]}
-		y={viewBox[1]}
+		y={origin[1]}
 		width={viewBox[2]}
 		height={viewBox[3]}
 		fill="none"
@@ -35,9 +39,9 @@
 	{#each xs as x}
 		<line
 			x1={x}
-			y1={viewBox[1] - viewBox[3]}
+			y1={origin[1] - viewBox[3]}
 			x2={x}
-			y2={viewBox[1] + viewBox[3] * 2}
+			y2={origin[1] + viewBox[3] * 2}
 		/>
 	{/each}
 	{#each ys as y}

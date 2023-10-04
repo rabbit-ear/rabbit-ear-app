@@ -24,6 +24,7 @@ import {
 	ModelMatrixCP,
 	ModelMatrixFolded,
 } from "./ViewBox.js";
+import { InvertY } from "./App.js";
 import { Selection } from "./Select.js";
 
 // most of the data stores in this document are essentially the
@@ -142,11 +143,11 @@ export const FrameIsCreasePattern = derived(
  * @description The currently selected (and currently being edited) frame.
  */
 export const CreasePattern = derived(
-	[IsolatedFrame, FrameIsCreasePattern],
-	([$IsolatedFrame, $FrameIsCreasePattern]) => {
+	[IsolatedFrame, FrameIsCreasePattern, InvertY],
+	([$IsolatedFrame, $FrameIsCreasePattern, $InvertY]) => {
 		if (!$FrameIsCreasePattern) { return {}; }
 		if (RecalculateModelMatrix) {
-			ModelMatrixCP.set(graphToMatrix2($IsolatedFrame));
+			ModelMatrixCP.set(graphToMatrix2($IsolatedFrame, $InvertY));
 			RecalculateModelMatrix = false;
 		}
 		return $IsolatedFrame;
@@ -199,8 +200,8 @@ export const ComputedFoldedCoords = derived(
  *
  */
 export const FoldedForm = derived(
-	[FrameIsCreasePattern, IsolatedFrame, ComputedFoldedCoords],
-	([$FrameIsCreasePattern, $IsolatedFrame, $ComputedFoldedCoords]) => {
+	[FrameIsCreasePattern, IsolatedFrame, ComputedFoldedCoords, InvertY],
+	([$FrameIsCreasePattern, $IsolatedFrame, $ComputedFoldedCoords, $InvertY]) => {
 		// if the frame is a folded form, return the frame itself.
 		// otherwise, compute the folded form from the crease pattern.
 		const foldedForm = !$FrameIsCreasePattern
@@ -211,7 +212,7 @@ export const FoldedForm = derived(
 				vertices_coords: $ComputedFoldedCoords,
 				frame_classes: ["foldedForm"],
 			}
-		ModelMatrixFolded.set(graphToMatrix2(foldedForm));
+		ModelMatrixFolded.set(graphToMatrix2(foldedForm, $InvertY));
 		return foldedForm;
 	},
 	({}),

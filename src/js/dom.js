@@ -15,7 +15,7 @@ export const findInParents = (element, nodeName) => {
  * @description Convert a 2D point coordinates from screen/canvas/
  * pixel units, into viewBox units.
  */
-export const convertToViewBox = function (svg, x, y) {
+export const convertToViewBox = function (svg, [x, y]) {
 	const pt = svg.createSVGPoint();
 	// transform: matrix(1, 0, 0, -1, 0, 1);
 	pt.x = x;

@@ -24,7 +24,7 @@
 	const mousemove = (e) => {
 		if (!e.buttons) { return; }
 		// findInParents
-		const point = convertToViewBox(svg, e.x, e.y);
+		const point = convertToViewBox(svg, [e.x, e.y]);
 		const radiansUnclamp = Math.atan2(point[1], point[0]);
 		const radians = radiansUnclamp;//Math.min(Math.PI, Math.max(0, radiansUnclamp));
 		const degrees = (radians / Math.PI) * 180 + 180;

@@ -56,7 +56,7 @@ export default [
 							name: "FOLD",
 							extensions: ["fold"]
 						}]
-					});					
+					});
 				}
 			},
 		],

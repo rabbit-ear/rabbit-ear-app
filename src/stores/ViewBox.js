@@ -5,7 +5,6 @@ import {
 	multiplyMatrices2,
 	multiplyMatrix2Vector2,
 } from "rabbit-ear/math/matrix2.js";
-import { graphToMatrix2 } from "../js/matrix.js";
 
 // This approach does not work under the current arrangement,
 // the ModelViewMatrix will update every single time the graph changes,
