@@ -10,6 +10,8 @@
 		data-frame-index={index}
 		on:click
 		on:mousedown
+		on:mousemove
+		on:mouseup
 		{highlight} >
 		<slot />
 	</button>

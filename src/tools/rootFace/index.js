@@ -1,7 +1,6 @@
 import pointerEvent from "./pointerEvent.js";
 // import panel from "./panel.svelte";
 import icon from "./icon.svelte";
-import SVGLayer from "./SVGLayer.svelte";
 import {
 	subscribe,
 	unsubscribe,
@@ -16,7 +15,6 @@ const rootFace = {
 	icon,
 	pointerEvent,
 	// panel,
-	SVGLayer,
 	subscribe,
 	unsubscribe,
 	reset,

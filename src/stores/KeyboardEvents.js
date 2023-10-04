@@ -1,4 +1,5 @@
 import {
+	get,
 	derived,
 	readable,
 } from "svelte/store";
@@ -12,8 +13,14 @@ import {
 	Tool,
 	Keyboard,
 } from "../stores/UI.js";
+import {
+	ReplayCommand,
+	ReplayCommandIndex,
+} from "../stores/History.js";
 import Keybindings from "./Keybindings.js";
-
+/**
+ * 
+ */
 export const AppKeyboardEvent = readable((eventType, event) => {
 	const { altKey, ctrlKey, metaKey, shiftKey } = event;
 	const modifier = (shiftKey << 0) | ((ctrlKey || metaKey) << 1) | (altKey << 2);
@@ -25,7 +32,9 @@ export const AppKeyboardEvent = readable((eventType, event) => {
 	boundFunction(event);
 	return true;
 });
-
+/**
+ * 
+ */
 const ToolKeyboardEvent = derived(
 	Tool,
 	($Tool) => $Tool && $Tool.keyboardEvent
@@ -33,7 +42,9 @@ const ToolKeyboardEvent = derived(
 		: () => {},
 	() => {},
 );
-
+/**
+ * 
+ */
 const FormKeyboardEvent = derived(
 	[TerminalTextarea, TerminalValue],
 	([$TerminalTextarea, $TerminalValue]) => (eventType, event) => {
@@ -47,17 +58,21 @@ const FormKeyboardEvent = derived(
 				}
 				break;
 			case 38: // up arrow key
-				console.log("previous terminal history");
+				ReplayCommandIndex.decrement();
+				TerminalValue.set(get(ReplayCommand).text);
 				break;
 			case 40: // down arrow key
-				console.log("next terminal history");
+				ReplayCommandIndex.increment();
+				TerminalValue.set(get(ReplayCommand).text);
 				break;
 			}
 		}
 	},
 	() => {},
 );
-
+/**
+ * 
+ */
 const WindowKeyboardEvent = derived(
 	[AppKeyboardEvent, ToolKeyboardEvent],
 	([$AppKeyboardEvent, $ToolKeyboardEvent]) => (eventType, event) => {
@@ -66,7 +81,9 @@ const WindowKeyboardEvent = derived(
 	},
 	() => {},
 );
-
+/**
+ * 
+ */
 export const KeyboardEvent = derived(
 	[FormKeyboardEvent, WindowKeyboardEvent],
 	([$FormKeyboardEvent, $WindowKeyboardEvent]) => (eventType, event) => {

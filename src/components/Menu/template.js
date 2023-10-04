@@ -32,32 +32,32 @@ export default [
 			},
 			{
 				label: "open",
-				// click: () => get(InputFile).click(),
-				click: async () => {
-					const selected = await open({
-						multiple: false,
-						// filters: [{
-						// 	name: "Image",
-						// 	extensions: ["png", "jpeg"]
-						// }]
-						filters: [{
-							name: "FOLD",
-							extensions: ["fold"]
-						}]
-					});
-				}
+				click: () => get(InputFile).click(),
+				// click: async () => {
+				// 	const selected = await open({
+				// 		multiple: false,
+				// 		// filters: [{
+				// 		// 	name: "Image",
+				// 		// 	extensions: ["png", "jpeg"]
+				// 		// }]
+				// 		filters: [{
+				// 			name: "FOLD",
+				// 			extensions: ["fold"]
+				// 		}]
+				// 	});
+				// }
 			},
 			{
 				label: "save",
-				// click: () => executeCommand("download", "origami.fold"),
-				click: async () => {
-					const filePath = await save({
-						filters: [{
-							name: "FOLD",
-							extensions: ["fold"]
-						}]
-					});
-				}
+				click: () => executeCommand("download", "origami.fold"),
+				// click: async () => {
+				// 	const filePath = await save({
+				// 		filters: [{
+				// 			name: "FOLD",
+				// 			extensions: ["fold"]
+				// 		}]
+				// 	});
+				// }
 			},
 		],
 	},

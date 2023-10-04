@@ -1,9 +1,13 @@
 import { writable, derived } from "svelte/store";
 /**
+ * @description Build Target, either Tauri (false) or Browsers (true).
+ */
+export const BuildTargetWeb = false;
+/**
  * @description App settings which are immutable compiler directives.
  * these will only change to target different builds.
  */
-export const ShowMenu = false;
+export const ShowMenu = true;
 /**
  * @description App settings, mutable.
  */

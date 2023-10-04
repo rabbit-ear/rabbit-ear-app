@@ -2,6 +2,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{CustomMenuItem, Menu, MenuItem, Submenu, AboutMetadata};
+use tauri::Manager;
+use std::sync::{Arc, Mutex};
+use std::cell::Cell;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 // #[tauri::command]
@@ -9,7 +12,15 @@ use tauri::{CustomMenuItem, Menu, MenuItem, Submenu, AboutMetadata};
 // 	format!("Hello, {}! You've been greeted from Rust!", name)
 // }
 
+// static mut ShowIndices: bool = false;
+
+
 fn main() {
+	// let mut ShowIndices = false;
+	// let ShowIndices = Cell::new(false);
+	// let ShowIndices = Arc::new(Mutex::new(false));
+	// let mut ShowIndices: Arc<Mutex<bool>> = Arc::new(Mutex::from(false));
+
 	// let authors_list = vec!["Kraft".to_string()];
 	let mut about_metadata = AboutMetadata::new();
 	about_metadata.version = Some("0.9".to_string());
@@ -24,19 +35,19 @@ fn main() {
 	// 			website_label: Some("Rabbit Ear".to_string()),
 	// 		}
 	#[cfg(target_os = "macos")]
-  let app_menu = Submenu::new(
-    "Rabbit Ear",
-    Menu::new()
-      .add_native_item(MenuItem::About("Rabbit Ear".to_string(), about_metadata))
-      .add_native_item(MenuItem::Separator)
-      .add_native_item(MenuItem::Services)
-      .add_native_item(MenuItem::Separator)
-      .add_native_item(MenuItem::Hide)
-      .add_native_item(MenuItem::HideOthers)
-      .add_native_item(MenuItem::ShowAll)
-      .add_native_item(MenuItem::Separator)
-      .add_native_item(MenuItem::Quit)
-  );
+	let app_menu = Submenu::new(
+		"Rabbit Ear",
+		Menu::new()
+			.add_native_item(MenuItem::About("Rabbit Ear".to_string(), about_metadata))
+			.add_native_item(MenuItem::Separator)
+			.add_native_item(MenuItem::Services)
+			.add_native_item(MenuItem::Separator)
+			.add_native_item(MenuItem::Hide)
+			.add_native_item(MenuItem::HideOthers)
+			.add_native_item(MenuItem::ShowAll)
+			.add_native_item(MenuItem::Separator)
+			.add_native_item(MenuItem::Quit)
+	);
 
 	// CustomMenuItem::new(menu item id, menu item label)
 	let new_menu = CustomMenuItem::new("new".to_string(), "New");
@@ -53,23 +64,26 @@ fn main() {
 		.add_item(import)
 		.add_item(export));
 
-	// let undo = CustomMenuItem::new("undo".to_string(), "Undo");
-	// let redo = CustomMenuItem::new("redo".to_string(), "Redo");
-	let duplicate = CustomMenuItem::new("duplicate".to_string(), "Duplicate").accelerator("shift+D");
+	let undo = CustomMenuItem::new("undo".to_string(), "Undo")
+		.accelerator("cmdOrControl+Z");
+	let redo = CustomMenuItem::new("redo".to_string(), "Redo")
+		.accelerator("cmdOrControl+Shift+Z");
+	let duplicate = CustomMenuItem::new("duplicate".to_string(), "Duplicate")
+		.accelerator("shift+D");
 	let edit_menu = Submenu::new("Edit", Menu::new()
-		// .add_item(undo)
-		// .add_item(redo)
-		.add_native_item(MenuItem::Undo)
-		.add_native_item(MenuItem::Redo)
+		.add_item(undo)
+		.add_item(redo)
+		// .add_native_item(MenuItem::Undo)
+		// .add_native_item(MenuItem::Redo)
 		.add_native_item(MenuItem::Separator)
 		.add_item(duplicate));
 
-	let planarize = CustomMenuItem::new("planarize".to_string(), "Planarize").accelerator("cmdOrControl+P");
+	let planarize = CustomMenuItem::new("planarize".to_string(), "Planarize")
+		.accelerator("cmdOrControl+P");
 	let clean_verts = CustomMenuItem::new("clean_verts".to_string(), "Smart clean vertices");
 	let merge_near_verts = CustomMenuItem::new("merge_near_verts".to_string(), "Merge nearby vertices");
 	let snap_vertices = CustomMenuItem::new("snap_vertices".to_string(), "Snap to grid");
 	let merge_sel_verts = CustomMenuItem::new("merge_sel_verts".to_string(), "Merge selected vertices");
-	let newmenu = CustomMenuItem::new("newmenu".to_string(), "newmenu");
 	let graph_menu = Submenu::new("Graph", Menu::new()
 		.add_item(planarize)
 		.add_native_item(MenuItem::Separator)
@@ -78,8 +92,10 @@ fn main() {
 		.add_item(snap_vertices)
 		.add_item(merge_sel_verts));
 
-	let sel_all = CustomMenuItem::new("select_all".to_string(), "Select All").accelerator("cmdOrControl+S");
-	let desel_all = CustomMenuItem::new("deselect_all".to_string(), "Deselect All").accelerator("cmdOrControl+D");
+	let sel_all = CustomMenuItem::new("select_all".to_string(), "Select All")
+		.accelerator("cmdOrControl+A");
+	let desel_all = CustomMenuItem::new("deselect_all".to_string(), "Deselect All")
+		.accelerator("cmdOrControl+D");
 	let sel_assign = Submenu::new("Select Assignment", Menu::new()
 		.add_item(CustomMenuItem::new("select_boundary".to_string(), "Boundary"))
 		.add_item(CustomMenuItem::new("select_valley".to_string(), "Valley"))
@@ -108,15 +124,15 @@ fn main() {
 		.add_item(inv_assign)
 		.add_submenu(assign_sel));
 
-	let flat_issues = CustomMenuItem::new("flat_foldable_issues".to_string(), "Flat-Foldable Issues").selected();
+	let flat_issues = CustomMenuItem::new("flat_foldable_issues".to_string(), "Flat-Foldable Issues");//.selected();
 	let near_verts = CustomMenuItem::new("nearest_two_vertices".to_string(), "Nearest two vertices");
-	let show_indices = CustomMenuItem::new("show_graph_indices".to_string(), "Show Graph Indices");
+	let show_indices = CustomMenuItem::new("show_graph_indices".to_string(), "Show/Hide Graph Indices");
 	let analysis_menu = Submenu::new("Analysis", Menu::new()
 		.add_item(flat_issues)
 		.add_item(near_verts)
 		.add_item(show_indices));
 
-	let show_frames = CustomMenuItem::new("show_frames".to_string(), "Show Frames").selected();
+	let show_frames = CustomMenuItem::new("show_frames".to_string(), "Show Frames");//.selected();
 	let window_menu = Submenu::new("Window", Menu::new()
 		.add_item(show_frames));
 
@@ -135,7 +151,7 @@ fn main() {
 	// 	.add_item(f));
 
 	let menu = Menu::new()
-    .add_submenu(app_menu)
+		.add_submenu(app_menu)
 		.add_submenu(file_menu)
 		.add_submenu(edit_menu)
 		.add_submenu(graph_menu)
@@ -146,6 +162,11 @@ fn main() {
 
 	tauri::Builder::default()
 		.menu(menu)
+		.setup(|app| {
+		  #[cfg(debug_assertions)]
+		  app.get_window("main").unwrap().open_devtools();
+		  Ok(())
+		})
 		// .setup(|app| {
 		// 	let main_window = app.get_window("main").unwrap();
 		// 	let menu_handle = main_window.menu_handle();
@@ -156,6 +177,10 @@ fn main() {
 		// 	Ok(())
 		// })
 		.on_menu_event(|event| {
+			let mut ShowIndices = false;
+
+			// let main_window = app.get_window("main").unwrap();
+			// let menu_handle = main_window.menu_handle();
 			match event.menu_item_id() {
 				// file
 				// "new"
@@ -171,90 +196,90 @@ fn main() {
 				// }
 
 				// edit
-				// "undo" => {
-				// 	event.window().eval("window['executeCommand']('undo')");
-				// }
-				// "redo" => {
-				// 	event.window().eval("window['executeCommand']('redo')");
-				// }
+				"undo" => {
+					let _ = event.window().eval("window['executeCommand']('undo')");
+				}
+				"redo" => {
+					let _ = event.window().eval("window['executeCommand']('redo')");
+				}
 				"duplicate" => {
-					event.window().eval("window['executeCommand']('duplicate')");
-					event.window().eval("window['executeCommand']('setTool', 'translate')");
+					let _ = event.window().eval("window['executeCommand']('duplicate')");
+					let _ = event.window().eval("window['executeCommand']('setTool', 'translate')");
 				}
 
 				// graph
 				"planarize" => {
-					event.window().eval("window['executeCommand']('planarize')");
+					let _ = event.window().eval("window['executeCommand']('planarize')");
 				}
 				"clean_verts" => {
-					event.window().eval("window['executeCommand']('cleanVertices')");
+					let _ = event.window().eval("window['executeCommand']('cleanVertices')");
 				}
 				"merge_near_verts" => {
-					event.window().eval("window['executeCommand']('mergeNearbyVertices')");
+					let _ = event.window().eval("window['executeCommand']('mergeNearbyVertices')");
 				}
 				"snap_vertices" => {
-					event.window().eval("window['executeCommand']('snapAllVertices')");
+					let _ = event.window().eval("window['executeCommand']('snapAllVertices')");
 				}
 				"merge_sel_verts" => {
-					event.window().eval("window['executeCommand']('mergeSelectedVertices')");
+					let _ = event.window().eval("window['executeCommand']('mergeSelectedVertices')");
 				}
 
 				// assignment
 				"rebuild_boundary" => {
-					event.window().eval("window['executeCommand']('rebuildBoundary')");
+					let _ = event.window().eval("window['executeCommand']('rebuildBoundary')");
 				}
 				"invert_assignments" => {
-					event.window().eval("window['executeCommand']('invertAssignments')");
+					let _ = event.window().eval("window['executeCommand']('invertAssignments')");
 				}
 				"reassign_boundary" => {
-					event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'B')')");
+					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'B')')");
 				}
 				"reassign_valley" => {
-					event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'V')')");
+					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'V')')");
 				}
 				"reassign_mountain" => {
-					event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'M')')");
+					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'M')')");
 				}
 				"reassign_flat" => {
-					event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'F')')");
+					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'F')')");
 				}
 				"reassign_cut" => {
-					event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'C')')");
+					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'C')')");
 				}
 				"reassign_join" => {
-					event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'J')')");
+					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'J')')");
 				}
 				"reassign_unassigned" => {
-					event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'U')')");
+					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'U')')");
 				}
 
 				// selection
 				"select_all" => {
-					event.window().eval("window['executeCommand']('selectAll')");
+					let _ = event.window().eval("window['executeCommand']('selectAll')");
 				}
 				"deselect_all" => {
-					event.window().eval("window['executeCommand']('deselectAll')");
+					let _ = event.window().eval("window['executeCommand']('deselectAll')");
 				}
 				"select_boundary" => {
-					event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'B')");
+					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'B')");
 				}
 				"select_valley" => {
-					event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'V')");
+					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'V')");
 				}
 				"select_mountain" => {
-					event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'M')");
+					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'M')");
 				}
 				"select_flat" => {
-					event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'F')");
+					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'F')");
 				}
 				"select_cut" => {
-					event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'C')");
+					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'C')");
 				}
 				"select_join" => {
-					event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'J')");
+					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'J')");
 				}
 				"select_unassigned" => {
-					event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'U')");
+					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'U')");
 				}
 
 				// analysis
@@ -262,16 +287,24 @@ fn main() {
 					// ShowFlatFoldableIssues
 				}
 				"nearest_two_vertices" => {
-					event.window().eval("window['executeCommand']('selectNearestVertices')");
+					let _ = event.window().eval("window['executeCommand']('selectNearestVertices')");
 				}
 				"show_graph_indices" => {
-					// ShowIndices
+					// Arc::try_unwrap(result).unwrap().into_inner();
+					ShowIndices = !ShowIndices;
+					// ShowIndices.set(!ShowIndices.get());
+					// let statement = format!("window['setStore']('ShowIndices', '{}')", ShowIndices.get()).to_string();
+					let statement = format!("window['setStore']('ShowIndices', '{}')", ShowIndices).to_string();
+					let _ = event.window().eval(&statement);
+					// let main_window = app.get_window("main").unwrap();
+					// let menu_handle = main_window.menu_handle();
+					// menu_handle.get_item("show_indices").selected();
 				}
 
 				// window
 				"show_frames" => {
 					// ShowFrames
-					// event.window().eval("window['executeCommand']('selectNearestVertices')");
+					let _ = event.window().eval("window['setStore']('ShowFrames', 'true')");
 				}
 
 				_ => {}

@@ -1,5 +1,5 @@
 [package]
-name = "RabbitEar"
+name = "rabbit_ear"
 version = "0.0.0"
 description = "origami design tool"
 authors = ["Kraft"]

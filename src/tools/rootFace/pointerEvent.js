@@ -1,15 +1,9 @@
-import {
-	Move,
-	Press,
-	Release,
-} from "./stores.js";
+import { Press } from "./stores.js";
 
 const pointerEvent = (eventType, { point, buttons }) => {
-	switch (eventType) {
-	case "press": Press.set(point); break;
-	case "release": Release.set(point); break;
+	if (eventType === "press") {
+		Press.set(point);
 	}
-	Move.set(point);
 };
 
 export default pointerEvent;

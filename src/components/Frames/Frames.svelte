@@ -6,21 +6,11 @@
 
 	let pressIndex;
 	let hoverIndex;
-	const mousemove = (e) => {
-		if (e.buttons && pressIndex !== undefined) {
-			const hoverElement = document
-				.querySelectorAll("button[class^='button-frame-item']:hover")[0];
-			if (!hoverElement) {
-				hoverIndex = undefined;
-				return;
-			}
-			hoverIndex = parseInt(hoverElement.dataset.frameIndex, 10);
-		}
-	}
-	const mousedown = (index) => {
-		pressIndex = index;
-	}
-	const mouseup = (e) => {
+
+	const mousemove = (index) => { hoverIndex = index; };
+	const mousedown = (index) => { pressIndex = index; };
+	const mouseup = (index) => {
+		hoverIndex = index;
 		if (pressIndex !== undefined
 			&& hoverIndex !== undefined
 			&& pressIndex >= 0
@@ -36,12 +26,10 @@
 
 <div
 	class="frames horizontal"
-	role="row"
 	tabindex="-1"
-	on:mousemove={mousemove}
-	on:mouseup={mouseup}>
+	role="row">
 	{#each $IsolatedFrames as graph, index}
-		<FrameRender {graph} {index} {mousedown} />
+		<FrameRender {graph} {index} {mousedown} {mousemove} {mouseup} />
 	{/each}
 	<NewFrameButton />
 </div>

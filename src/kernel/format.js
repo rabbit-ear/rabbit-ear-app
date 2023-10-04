@@ -21,6 +21,20 @@ const capLength = str => str.length > MAX_LENGTH
 	? `${str.slice(0, MAX_LENGTH)}...`
 	: str;
 /**
+ * 
+ */
+const stringifyAny = (el) => {
+	if (el == null) { return ""; }
+	switch (typeof el) {
+	case "boolean": return `${el}`;
+	case "number": return `${el}`;
+	case "string": return `${capLength(el)}`;
+	case "object": return `${capLength(JSON.stringify(el))}`;
+	case "function": break;
+	}
+	return "";
+};
+/**
  * @description Convert a Javascript variable into an HTML string
  * in one span element, with a class of "return".
  * @returns {string} HTML string
@@ -45,7 +59,9 @@ const formatCommandResult = (result) => {
 const formatError = (error) => (
 	`<span class="error">${error}</span>`
 );
-
+/**
+ * 
+ */
 export const terminalOutputJavascript = (js) => {
 	const tokens = Array.from(jsTokens(capLength(js)));
 	const commands = tokens
@@ -54,13 +70,19 @@ export const terminalOutputJavascript = (js) => {
 	const html = tokens
 		.map(({ type, value }) => `<span class=${type}>${value}</span>`)
 		.join("");
-	return { html, commands };
+	return { html, commands, text: js };
 };
-
+/**
+ * 
+ */
 export const terminalOutputError = (error) => ({
 	html: `<span class="error">${error}</span>`,
+	text: `${error}`,
 });
-
+/**
+ * 
+ */
 export const terminalOutputCommandResult = (result) => ({
 	html: formatCommandResult(result),
+	text: stringifyAny(result),
 });

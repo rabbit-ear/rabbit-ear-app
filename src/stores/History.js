@@ -73,6 +73,25 @@ CommandHistory.add = (...args) => CommandHistory.update(history => {
 	return result;
 });
 /**
+ *
+ */
+export const ReplayCommandIndex = writable(0);
+ReplayCommandIndex.increment = () => ReplayCommandIndex.update((n) => n + 1);
+ReplayCommandIndex.decrement = () => ReplayCommandIndex.update((n) => n - 1);
+/**
+ *
+ */
+export const ReplayCommand = derived(
+	[CommandHistory, ReplayCommandIndex],
+	([$CommandHistory, $ReplayCommandIndex]) => {
+		let absIndex = $ReplayCommandIndex;
+		while (absIndex < 0) { absIndex += $CommandHistory.length; }
+		while (absIndex >= $CommandHistory.length) { absIndex -= $CommandHistory.length; }
+		return $CommandHistory[absIndex];
+	},
+	"",
+);
+/**
  * @description A derived state of the CommandHistory, where each item
  * is converted into an HTML string inside of a span element.
  */
