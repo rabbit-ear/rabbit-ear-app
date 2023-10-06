@@ -9,7 +9,7 @@
 	import RulerLayer from "./RulerLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
-	import FlatFoldable from "./FlatFoldable.svelte";
+	import FoldableVertices from "./FoldableVertices.svelte";
 	import { CreasePattern } from "../../stores/Model.js";
 	import {
 		ShowGrid,
@@ -27,6 +27,10 @@
 		StrokeDashLengthCreasePattern,
 	} from "../../stores/Style.js";
 	import { ViewBoxCP } from "../../stores/ViewBox.js";
+
+	$: showVertices = $Tool
+		&& ($Tool.key === "select"
+		|| $Tool.key === "vertex");
 </script>
 
 <SVGCanvas
@@ -48,16 +52,18 @@
 			graph={$CreasePattern}
 			selected={$Selection.edges}
 			highlighted={$Highlight.edges} />
-		<!-- <VerticesLayer
-			graph={$CreasePattern}
-			selected={$Selection.vertices}
-			highlighted={$Highlight.vertices} /> -->
+		{#if showVertices}
+			<VerticesLayer
+				graph={$CreasePattern}
+				selected={$Selection.vertices}
+				highlighted={$Highlight.vertices} />
+		{/if}
 	</g>
 	{#if $ShowAxes}
 		<AxesLayer viewBox={$ViewBoxCP} />
 	{/if}
 	{#if $ShowFlatFoldableIssues}
-		<FlatFoldable graph={$CreasePattern} />
+		<FoldableVertices graph={$CreasePattern} />
 	{/if}
 	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLengthCreasePattern};`} >
 		<RulerLayer viewBox={$ViewBoxCP} />

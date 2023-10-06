@@ -11,13 +11,6 @@ import {
 } from "./Model.js";
 // import { invoke } from "@tauri-apps/api/tauri";
 /**
- * @description Basically, when this is false "Save" is disabled but "Save as"
- * is available. Once this is true, we have knowledge about where the file
- * is we are currently editing, meaning, "FileName" and "FilePath" relate to
- * an existing file, and "Save" menu will be enabled.
- */
-export const FileExists = writable(false);
-/**
  * @description The currently opened filename
  */
 export const FileName = writable("untitled.fold");
@@ -31,8 +24,7 @@ export const FileName = writable("untitled.fold");
  */
 export const NewFile = (FOLD = {}) => {
 	SetNewModel(FOLD);
-	FileName.set("untitled.fold");
-	FileExists.set(false);
+	FileName.set(undefined);
 };
 /**
  * @description Load a FOLD file and bind the app to be "editing" this
@@ -41,7 +33,6 @@ export const NewFile = (FOLD = {}) => {
 export const LoadFile = (FOLD, filename = "untitled.fold") => {
 	SetNewModel(FOLD);
 	FileName.set(filename);
-	FileExists.set(true);
 };
 /**
  *
@@ -54,11 +45,17 @@ export const GetFile = () => {
 	}
 	return FOLD;
 };
-
+/**
+ * @description Basically, when this is false "Save" is disabled but "Save as"
+ * is available. Once this is true, we have knowledge about where the file
+ * is we are currently editing, meaning, "FileName" and "FilePath" relate to
+ * an existing file, and "Save" menu will be enabled.
+ */
 const OnFileNameChange = derived(
 	FileName,
 	async $FileName => {
-		await appWindow.setTitle(`Rabbit Ear - ${$FileName}`);
+		const displayName = $FileName === undefined ? "untitled.fold" : $FileName;
+		await appWindow.setTitle(`Rabbit Ear - ${displayName}`);
 	},
 	undefined,
 );

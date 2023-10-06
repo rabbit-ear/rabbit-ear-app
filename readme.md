@@ -23,21 +23,21 @@ todo list:
 - [ ] style modal popups
 - [ ] create custom UI elements (radio, slider, buttons)
 - [ ] glitchy graphics, need to (secretly) scale up the graphics.
-- [ ] selecting vertices, vertices are no longer being shown.
+- [x] selecting vertices, vertices are no longer being shown.
+- [ ] right mouse click changes to camera to pan around.
 
 - [x] finish menu events
-- [ ] snap to SQRT2 points
 - [ ] "reassign selected" doesn't work
 - [ ] menu boolean, checkmark reflecting state (Show/Hide)
 
-- [ ] bring back keyboard shortcuts (that are not menu items)
+- [x] bring back keyboard shortcuts (that are not menu items)
 - [x] bring back basic drag and drop
 - [ ] implement drag and drop into the frames window (append instead of replace)
 
-- [ ] folded form should report when it cannot fold the crease pattern (and not show it)
+- [x] folded form should report when it cannot fold the crease pattern (and not show it)
 - [ ] hovering on folded form/simulator shows dots on crease pattern
 
-- [ ] recode axioms 4-7 to use new system of embeded execute methods
+- [x] recode axioms 4-7 to use new system of embeded execute methods
 - [ ] foldedLine tool should re-assign existing creases that lay along the path.
 - [ ] rabbit ear tool. except make it the straight skeleton. only works for convex shapes.
 
@@ -48,12 +48,18 @@ todo list:
 
 bug list:
 
-- [ ] grid lines are disappearing too soon up top. visible when canvas is in vertical portrait mode.
+- [ ] grid lines are messed up when zooming. "viewBoxOrigin" is buggy.
 - [ ] cmd+A in the text box, intended to select the text, instead gets run by Rust due to the menu shortcut.
 - [ ] Moosers train, make layers, clear, make again, somehow different
 - [ ] svg text in graph indices drifts away when zooming in
 - [ ] pressing "delete" for some reason changes the tool to "translate".
 - [ ] "blintz-frames.fold" possible error when loading more than 17 WebGL contexts.
+
+could be better / save for later:
+
+- [ ] axioms 4-7 could be coded better
+- [ ] snap to SQRT2 points
+
 
 ## 2023-09-28
 

@@ -26,7 +26,6 @@ import {
 	DialogNewFile,
 } from "./stores/App.js";
 import {
-	FileExists,
 	FileName,
 	LoadFile,
 	GetFile,
@@ -114,9 +113,8 @@ window.fs.open = async () => {
  * A file save dialog request has been made, open file picker to save file.
  */
 window.fs.save = async () => {
-	const fileExists = get(FileExists);
 	const filePath = get(FileName);
-	if (!fileExists || filePath == null) {
+	if (filePath == null) {
 		// file does not yet exist. Trigger "SaveAs"
 		return window.fs.saveAs();
 	}
@@ -135,7 +133,6 @@ window.fs.saveAs = async () => {
 	});
 	if (filePath == null) { return; }
 	await writeTextFile(filePath, JSON.stringify(GetFile()));
-	FileExists.set(true);
 	FileName.set(filePath);
 };
 /**

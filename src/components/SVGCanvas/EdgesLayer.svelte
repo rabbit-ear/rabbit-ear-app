@@ -22,6 +22,10 @@
 		highlighted.forEach(i => { highlightedHash[i] = true; });
 	};
 
+	// just learned this:
+	// if edge endpoints are floating point values with 12-16 digits,
+	// the rendering is MUCH slower than if the same edges' endpoints
+	// are integers.
 	let coords = [];
 	$: coords = !graph.edges_vertices
 		? []

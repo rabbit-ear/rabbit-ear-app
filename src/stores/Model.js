@@ -11,6 +11,10 @@ import {
 	makeVerticesCoordsFlatFolded,
 } from "rabbit-ear/graph/vertices/folded.js";
 import { makeFacesWinding } from "rabbit-ear/graph/faces/winding.js";
+import {
+	validateKawasaki,
+	validateMaekawa,
+} from "rabbit-ear/singleVertex/validate.js";
 import populate from "rabbit-ear/graph/populate.js";
 import { graphToMatrix2 } from "../js/matrix.js";
 import {
@@ -169,6 +173,48 @@ export const FrameEdgesAreFlat = derived(
 /**
  *
  */
+export const InvalidKawasaki = derived(
+	CreasePattern,
+	$CreasePattern => {
+		if (!$CreasePattern || !$CreasePattern.edges_vertices) { return []; }
+		try {
+			return validateKawasaki($CreasePattern, 1e-3);
+		} catch (error) {
+			console.warn("InvalidKawasaki", error);
+		}
+		return [];
+	},
+	[],
+);
+/**
+ *
+ */
+export const InvalidMaekawa = derived(
+	CreasePattern,
+	$CreasePattern => {
+		if (!$CreasePattern || !$CreasePattern.edges_vertices) { return []; }
+		try {
+			return validateMaekawa($CreasePattern);
+		} catch (error) {
+			console.warn("InvalidMaekawa", error);
+		}
+		return [];
+	},
+	[],
+);
+/**
+ *
+ */
+export const VerticesFlatFoldable = derived(
+	[InvalidKawasaki, InvalidMaekawa],
+	([$InvalidKawasaki, $InvalidMaekawa]) => (
+		!$InvalidKawasaki.length && !$InvalidMaekawa.length
+	),
+	[],
+);
+/**
+ *
+ */
 export const FoldedRootFace = writable(0);
 /**
  *
@@ -268,6 +314,16 @@ export const FacesWinding = derived(
 		}
 	},
 	[],
+);
+/**
+ *
+ */
+export const FlatFoldable = derived(
+	[VerticesFlatFoldable, FrameEdgesAreFlat],
+	([$VerticesFlatFoldable, $FrameEdgesAreFlat]) => (
+		$VerticesFlatFoldable && $FrameEdgesAreFlat
+	),
+	true,
 );
 /**
  *

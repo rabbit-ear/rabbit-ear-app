@@ -26,8 +26,9 @@ const pointerEvent = (eventType, { point }) => {
 			executeCommand("axiom4Rulers", get(InputEdge), get(InputPoint));
 			break;
 		case 4:
-			executeCommand("segment", get(Segment0), get(Segment1));
+			const segments = [get(Segment0), get(Segment1)]
 			reset();
+			executeCommand("segment", ...segments);
 			break;
 		}
 	}

@@ -148,6 +148,15 @@ fn main() {
 	let item_show_frames = CustomMenuItem::new(
 		"show_frames".to_string(),
 		"Show/Hide Frames");
+	let item_show_grid = CustomMenuItem::new(
+		"show_grid".to_string(),
+		"Show/Hide Grid");
+	let item_show_axes = CustomMenuItem::new(
+		"show_axes".to_string(),
+		"Show/Hide Axes");
+	let item_invert_vertical_axis = CustomMenuItem::new(
+		"invert_vertical_axis".to_string(),
+		"Invert Vertical Axis");
 
 	// menus
 	#[cfg(target_os = "macos")]
@@ -197,7 +206,10 @@ fn main() {
 		.add_native_item(MenuItem::Separator)
 		.add_item(item_near_verts));
 	let menu_window = Submenu::new("Window", Menu::new()
-		.add_item(item_show_frames));
+		.add_item(item_show_frames)
+		.add_item(item_show_axes)
+		.add_item(item_show_grid)
+		.add_item(item_invert_vertical_axis));
 		// .add_item(ITEM_SHOW_FRAMES.lock().unwrap()));
 
 	// the menu
@@ -357,11 +369,12 @@ fn main() {
 					let statement = format!("window.store.toggle('ShowFlatFoldableIssues')").to_string();
 					let _ = event.window().eval(&statement);
 				}
-				"nearest_two_vertices" => {
-					let _ = event.window().eval("window['executeCommand']('selectNearestVertices')");
-				}
 				"show_graph_indices" => {
 					let statement = format!("window.store.toggle('ShowIndices')").to_string();
+					let _ = event.window().eval(&statement);
+				}
+				"nearest_two_vertices" => {
+					let statement = "window.execute('selectNearestVertices()')\nwindow.execute('setTool(\"select\")')".to_string();
 					let _ = event.window().eval(&statement);
 				}
 
@@ -377,6 +390,15 @@ fn main() {
 					// item_show_frames.selected = true;
 
 					// println!("Called {}", ARRAY.lock().unwrap().len());
+				}
+				"invert_vertical_axis" => {
+					let _ = event.window().eval("window.store.toggle('InvertY')");
+				}
+				"show_grid" => {
+					let _ = event.window().eval("window.store.toggle('ShowGrid')");
+				}
+				"show_axes" => {
+					let _ = event.window().eval("window.store.toggle('ShowAxes')");
 				}
 
 				_ => {}

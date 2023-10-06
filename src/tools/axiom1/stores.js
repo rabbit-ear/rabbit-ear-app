@@ -144,7 +144,6 @@ export const reset = () => {
 let unsub = [];
 
 export const subscribe = () => {
-	console.log("subscribe");
 	unsub = [
 		AxiomPreview.subscribe(() => {}),
 		AxiomRulers.subscribe(() => {}),
@@ -154,7 +153,6 @@ export const subscribe = () => {
 };
 
 export const unsubscribe = () => {
-	console.log("unsubscribe");
 	unsub.forEach(u => u());
 	reset();
 };

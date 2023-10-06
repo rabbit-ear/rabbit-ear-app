@@ -22,13 +22,13 @@
 
 	let xs = [];
 	let ys = [];
-	$: xs = makeIntervals(viewBox[0] - viewBox[2], viewBox[2] * 3);
-	$: ys = makeIntervals(origin[1] - viewBox[3], viewBox[3] * 3);
+	$: xs = makeIntervals(origin[0] - viewBox[2]*1, viewBox[2] * 3);
+	$: ys = makeIntervals(origin[1] - viewBox[3]*1, viewBox[3] * 4);
 </script>
 
 <g class="grid" stroke-width={strokeWidth}>
 	<!-- <rect
-		x={viewBox[0]}
+		x={origin[0]}
 		y={origin[1]}
 		width={viewBox[2]}
 		height={viewBox[3]}
@@ -41,7 +41,7 @@
 			x1={x}
 			y1={origin[1] - viewBox[3]}
 			x2={x}
-			y2={origin[1] + viewBox[3] * 2}
+			y2={origin[1] + viewBox[3] * 3}
 		/>
 	{/each}
 	{#each ys as y}

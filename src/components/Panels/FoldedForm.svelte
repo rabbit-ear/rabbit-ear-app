@@ -5,6 +5,7 @@
 		LayerOrderKnown,
 		FrameEdgesAreFlat,
 		FrameIsCreasePattern,
+		VerticesFlatFoldable,
 	} from "../../stores/Model.js";
 	import { executeCommand } from "../../kernel/execute.js";
 
@@ -17,16 +18,29 @@
 	<span slot="title">Folded</span>
 	<span slot="body">
 		<div class="flex-column gap">
-			<p>Folded state is {$FrameEdgesAreFlat ? "2D" : "3D"}</p>
-			<p>Layer order: 
+			<p>Vertices are
+				{#if $VerticesFlatFoldable && $FrameEdgesAreFlat}
+					<span class="good">flat-foldable</span>
+				{:else}
+					<span class="bad">not flat-foldable</span>
+				{/if}
+			</p>
+			{#if $FrameEdgesAreFlat}
+				<p>All edges are flat</p>
+			{:else}
+				<p>Some edges are <span class="strong">3D</span></p>
+			{/if}
+			<p>Folded state is <span class="strong">{$FrameEdgesAreFlat ? "2D" : "3D"}</span></p>
+			<hr />
+			<p>Layer order is 
 				{#if $LayerOrderKnown}
 					<span class="highlight">known</span>
 				{:else}
-					<span>unknown</span>
+					<span class="strong">unknown</span>
 				{/if}
 			</p>
 			<div class="flex-row">
-				<p>relationships: <span class="number">{faceOrders.length}</span></p>
+				<p>relationships: <span class="strong">{faceOrders.length}</span></p>
 			</div>
 		</div>
 		<div class="flex-row">
@@ -41,7 +55,19 @@
 </Panel>
 
 <style>
-	.number {
+	hr {
+		width: 100%;
+	}
+	.good {
+	}
+	.strong {
+		font-weight: bold;
+	}
+	.bad {
+		font-weight: bold;
+		color: var(--red);
+	}
+	.strong {
 		font-weight: bold;
 	}
 	.highlight {

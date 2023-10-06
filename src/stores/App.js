@@ -1,4 +1,7 @@
-import { writable, derived } from "svelte/store";
+import {
+	writable,
+	derived,
+} from "svelte/store";
 /**
  * @description Build Target, either Tauri (false) or Browsers (true).
  */

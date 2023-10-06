@@ -45,14 +45,14 @@ const KeybindingsDown = {
 		},
 	},
 	// esc
-	27: {
-		0: (event) => {
-			executeCommand("resetApp");
-			executeCommand("resetTool");
-			// executeCommand("resetRulers");
-			document.activeElement.blur();
-		},
-	},
+	// 27: {
+	// 	0: (event) => {
+	// 		executeCommand("resetApp");
+	// 		executeCommand("resetTool");
+	// 		// executeCommand("resetRulers");
+	// 		document.activeElement.blur();
+	// 	},
+	// },
 	// 1 - 7
 	49: {
 		0: (event) => executeCommand("setTool", "axiom1"),
@@ -78,7 +78,7 @@ const KeybindingsDown = {
 	// "a"
 	65: {
 		0: (event) => executeCommand("setTool", "assignment"),
-		2: (event) => executeCommand("selectAll"),
+		// 2: (event) => executeCommand("selectAll"),
 	},
 	// "b"
 	66: {
@@ -91,15 +91,15 @@ const KeybindingsDown = {
 	// "d"
 	68: {
 		0: (event) => executeCommand("setTool", "deleteTool"),
-		1: (event) => {
-			if (isFrameElementSelected()) {
-				executeCommand("duplicateActiveFrame");
-			} else {
-				executeCommand("duplicate");
-				executeCommand("setTool", "translate");
-			}
-		},
-		2: (event) => executeCommand("deselectAll"),
+		// 1: (event) => {
+		// 	if (isFrameElementSelected()) {
+		// 		executeCommand("duplicateActiveFrame");
+		// 	} else {
+		// 		executeCommand("duplicate");
+		// 		executeCommand("setTool", "translate");
+		// 	}
+		// },
+		// 2: (event) => executeCommand("deselectAll"),
 	},
 	// "e"
 	69: {
@@ -119,7 +119,7 @@ const KeybindingsDown = {
 	},
 	// "n"
 	78: {
-		2: (event) => get(DialogNewFile).showModal(),
+		// 2: (event) => get(DialogNewFile).showModal(),
 	},
 	// "s"
 	83: {
@@ -139,10 +139,10 @@ const KeybindingsDown = {
 		0: (event) => executeCommand("setToolAssignment", "V"),
 	},
 	// "z"
-	90: {
-		2: (event) => executeCommand("undo"),
-		3: (event) => executeCommand("redo"),
-	},
+	// 90: {
+	// 	2: (event) => executeCommand("undo"),
+	// 	3: (event) => executeCommand("redo"),
+	// },
 	// forward slash
 	191: {
 		0: (event) => get(TerminalTextarea).focus(),
@@ -160,8 +160,6 @@ const KeybindingsUp = {
 };
 
 export default {
-	// down: KeybindingsDown,
-	// up: KeybindingsUp,
-	down: {},
-	up: {},
+	down: KeybindingsDown,
+	up: KeybindingsUp,
 };

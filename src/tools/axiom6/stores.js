@@ -8,7 +8,10 @@ import {
 	snapToRulerLine,
 } from "../../js/snap.js";
 import { zipArrays } from "../../js/arrays.js";
-import { executeCommand } from "../../kernel/execute.js";
+import {
+	execute,
+	executeCommand,
+} from "../../kernel/execute.js";
 import {
 	UILines,
 	Highlight,
@@ -82,7 +85,7 @@ export const AxiomPreview = derived(
 			&& $InputEdge1 !== undefined
 			&& $InputPoint0 !== undefined
 			&& $InputPoint1 !== undefined
-			? executeCommand("axiom6Preview", $InputEdge0, $InputEdge1, $InputPoint0, $InputPoint1)
+			? execute(`setUILines(axiom6(${$InputEdge0}, ${$InputEdge1}, ${JSON.stringify($InputPoint0)}, ${JSON.stringify($InputPoint1)}))`)
 			: UILines.set([]))),
 	undefined,
 );

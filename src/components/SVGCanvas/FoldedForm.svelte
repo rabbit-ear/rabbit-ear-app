@@ -6,8 +6,10 @@
 	import RulerLayer from "./RulerLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
-	import FlatFoldable from "./FlatFoldable.svelte";
-	import { FoldedForm } from "../../stores/Model.js";
+	import {
+		FoldedForm,
+		FlatFoldable,
+	} from "../../stores/Model.js";
 	import {
 		ShowGrid,
 		ShowAxes,
@@ -29,16 +31,19 @@
 	{#if $ShowGrid}
 		<GridLayer viewBox={$ViewBoxFolded} />
 	{/if}
-	<g class="origami-layer">
-		<FacesFoldedLayer
-			graph={$FoldedForm}
-			selected={$Selection.faces}
-			highlighted={$Highlight.faces} />
-	</g>
+	{#if $FlatFoldable}
+		<g class="origami-layer">
+			<FacesFoldedLayer
+				graph={$FoldedForm}
+				selected={$Selection.faces}
+				highlighted={$Highlight.faces} />
+		</g>
+		{#if $ShowIndices}
+			<GraphIndices graph={$FoldedForm} />
+		{/if}
+	{:else}
+	{/if}
 	{#if $ShowAxes}
 		<AxesLayer viewBox={$ViewBoxFolded} />
-	{/if}
-	{#if $ShowIndices}
-		<GraphIndices graph={$FoldedForm} />
 	{/if}
 </SVGCanvas>
