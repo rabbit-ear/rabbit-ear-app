@@ -1,5 +1,5 @@
 <script>
-	import { File } from "../../stores/Model.js";
+	import { FileMetadata } from "../../stores/Model.js";
 	import Panel from "./Panel.svelte";
 
 	const file_classes = [
@@ -13,9 +13,9 @@
 <Panel>
 	<span slot="title">file</span>
 	<span slot="body">
-		<input type="text" placeholder="title" bind:value={$File.file_title} >
-		<input type="text" placeholder="author" bind:value={$File.file_author} >
-		<textarea placeholder="description" bind:value={$File.file_description}></textarea>
+		<input type="text" placeholder="title" bind:value={$FileMetadata.file_title} >
+		<input type="text" placeholder="author" bind:value={$FileMetadata.file_author} >
+		<textarea placeholder="description" bind:value={$FileMetadata.file_description}></textarea>
 		<p>file class</p>
 	</span>
 </Panel>

@@ -10,9 +10,11 @@
 <Panel>
 	<span slot="title">undo history</span>
 	<span slot="body">
-		<p>undo: <span class="number">{$UndoStack.length}</span></p>
-		<p>redo: <span class="number">{$RedoStack.length}</span></p>
-		<p>max: <span class="number">{$UndoHistoryLength}</span></p>
+		<div class="flex-column gap">
+			<p>undo: <span class="number">{$UndoStack.length}</span></p>
+			<p>redo: <span class="number">{$RedoStack.length}</span></p>
+			<p>max: <span class="number">{$UndoHistoryLength}</span></p>
+		</div>
 	</span>
 </Panel>
 

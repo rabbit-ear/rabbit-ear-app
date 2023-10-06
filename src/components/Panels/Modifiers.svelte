@@ -23,15 +23,17 @@
 <Panel>
 	<span slot="title">modifiers</span>
 	<span slot="body">
- 		{#each modifierNames as name}
-	 		<div>
-				<input
-					type="checkbox"
-					bind:checked={checked[name]}
-					disabled={name in FixedModifiers}
-					id={`mod-check-${name}`}>
-				<label for={`mod-check-${name}`}>{modifiers[name].name}</label>
-			</div>
-		{/each}
+		<div class="flex-column gap">
+	 		{#each modifierNames as name}
+		 		<div class="flex-row">
+					<input
+						type="checkbox"
+						bind:checked={checked[name]}
+						disabled={name in FixedModifiers}
+						id={`mod-check-${name}`}>
+					<label for={`mod-check-${name}`}>{modifiers[name].name}</label>
+				</div>
+			{/each}
+		</div>
 	</span>
 </Panel>

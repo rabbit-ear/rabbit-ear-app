@@ -1,5 +1,15 @@
 # Blender-style graph maker
 
+## How to build this app
+
+Prerequisites: npm, Rust
+
+1. Clone this repository
+2. run `npm i`
+3. run `npm run tauri dev`
+
+If this doesn't work, please let me know and I'll amend whatever steps are necessary to this list.
+
 ## 2023-10-05
 
 Need to start to think about tools for modifying the folded form. some ideas:
@@ -9,26 +19,32 @@ Need to start to think about tools for modifying the folded form. some ideas:
 
 todo list:
 
-- [x] finish menu events
-- [ ] file protocol, filename in title. save button
-- [ ] css style panels
-- [ ] selecting vertices, vertices are no longer being shown.
-- [ ] hovering on folded form/simulator shows dots on crease pattern
-- [ ] rabbit ear tool. except make it the straight skeleton. only works for convex shapes.
-- [ ] "reassign selected" doesn't work
-- [ ] glitchy graphics, need to (secretly) scale up the graphics.
-- [ ] foldedLine tool should re-assign existing creases that lay along the path.
-- [ ] bring back keyboard shortcuts (that are not menu items)
-- [ ] folded form should report when it cannot fold the crease pattern (and not show it)
-- [ ] recode axioms 4-7 to use new system of embeded execute methods
-- [ ] bring back basic drag and drop
-- [ ] implement drag and drop into the frames window (append instead of replace)
-- [ ] export, multiple file formats, multiple arrangements of crease patterns and folded forms
-- [ ] import, svg, opx, obj
+- [x] css style panels
 - [ ] style modal popups
 - [ ] create custom UI elements (radio, slider, buttons)
+- [ ] glitchy graphics, need to (secretly) scale up the graphics.
+- [ ] selecting vertices, vertices are no longer being shown.
+
+- [x] finish menu events
 - [ ] snap to SQRT2 points
+- [ ] "reassign selected" doesn't work
 - [ ] menu boolean, checkmark reflecting state (Show/Hide)
+
+- [ ] bring back keyboard shortcuts (that are not menu items)
+- [x] bring back basic drag and drop
+- [ ] implement drag and drop into the frames window (append instead of replace)
+
+- [ ] folded form should report when it cannot fold the crease pattern (and not show it)
+- [ ] hovering on folded form/simulator shows dots on crease pattern
+
+- [ ] recode axioms 4-7 to use new system of embeded execute methods
+- [ ] foldedLine tool should re-assign existing creases that lay along the path.
+- [ ] rabbit ear tool. except make it the straight skeleton. only works for convex shapes.
+
+- [x] file protocol, filename in title. save button
+- [ ] import, svg, opx, obj
+- [ ] export, multiple file formats, multiple arrangements of crease patterns and folded forms
+- [ ] when Svelte 5 comes out, replace GraphUpdate with an effect.
 
 bug list:
 
@@ -37,6 +53,7 @@ bug list:
 - [ ] Moosers train, make layers, clear, make again, somehow different
 - [ ] svg text in graph indices drifts away when zooming in
 - [ ] pressing "delete" for some reason changes the tool to "translate".
+- [ ] "blintz-frames.fold" possible error when loading more than 17 WebGL contexts.
 
 ## 2023-09-28
 

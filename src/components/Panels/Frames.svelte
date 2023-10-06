@@ -1,6 +1,5 @@
 <script>
 	import {
-		File,
 		FrameIndex,
 		Frames,
 	} from "../../stores/Model.js";

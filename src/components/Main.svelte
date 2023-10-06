@@ -8,7 +8,7 @@
 	import Frames from "./Frames.svelte";
 	import Dialogs from "./Dialogs.svelte";
 	import FileManager from "./FileManager.svelte";
-	import DragAndDrop from "./DragAndDrop.svelte";
+	// import DragAndDrop from "./DragAndDrop.svelte";
 	import { ShowMenu } from "../stores/App.js";
 	import { KeyboardEvent } from "../stores/KeyboardEvents.js";
 	import {
@@ -40,7 +40,7 @@
 <!-- <Stores /> -->
 <Dialogs />
 <FileManager />
-<DragAndDrop />
+<!-- <DragAndDrop /> -->
 
 <main class="vertical">
 	{#if ShowMenu}

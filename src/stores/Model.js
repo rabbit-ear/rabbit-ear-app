@@ -44,7 +44,7 @@ export const TessellationRepeats = writable(6);
  * @description an object which contains only FOLD file metadata,
  * any key that starts with "file_", for example "file_title".
  */
-export const File = writable({});
+export const FileMetadata = writable({});
 /**
  * @description Contains an array of graphs, each being one frame
  * in the FOLD file, where the first item is the top level frame.
@@ -325,37 +325,25 @@ export const SetFrame = (graph) => {
 	return UpdateFrame(graph);
 };
 /**
- * @description Load a FOLD file and fill all relevant data models,
- * including the file metadata and frames, and reset the current frame
- * to frame 0.
+ * @description Load a new file, replace everything currently open.
+ * Instead of calling this, call "LoadFile" from inside the File store.
+ * Load file metadata and frames and reset the current frame to frame 0.
  * This should include everything that happens in all the other
  * update/set Frame methods.
  */
-export const LoadFile = (FOLD) => {
-	// load file
+export const SetNewModel = (FOLD) => {
 	let frames = [];
 	try {
 		frames = getFramesAsFlatArray(FOLD).map(populate);
 	} catch (error) {
-		console.warn("LoadFile", error);
+		console.warn("SetNewModel", error);
 		return;
 	}
 	Selection.reset();
 	FrameIndex.set(0);
-	File.set(getFileMetadata(FOLD));
+	FileMetadata.set(getFileMetadata(FOLD));
 	RecalculateModelMatrix = true;
 	Frames.set(frames);
 	CameraMatrixCP.reset();
 	CameraMatrixFolded.reset();
-};
-/**
- *
- */
-export const SaveFile = () => {
-	const frames = get(Frames);
-	const FOLD = { ...get(File), ...frames[0] };
-	if (frames.length > 1) {
-		FOLD.file_frames = frames.slice(1);
-	}
-	return FOLD;
 };

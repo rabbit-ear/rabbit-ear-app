@@ -6,13 +6,15 @@
 	const options = ["B", "V", "M", "F", "C", "U"];
 </script>
 
-<p>new edges are: <span class="bold">{edgesAssignmentNames[$NewEdgeAssignment]}</span></p>
-<div class="flex-row">
-	{#each options as assign}
-		<button
-			class={$NewEdgeAssignment === assign ? "highlighted" : ""}
-			on:click={() => $NewEdgeAssignment = assign }>{assign}</button>
-	{/each}
+<div class="flex-column gap">
+	<p>new edges are: <span class="bold">{edgesAssignmentNames[$NewEdgeAssignment]}</span></p>
+	<div class="flex-row">
+		{#each options as assign}
+			<button
+				class={$NewEdgeAssignment === assign ? "highlighted" : ""}
+				on:click={() => $NewEdgeAssignment = assign }>{assign}</button>
+		{/each}
+	</div>
 </div>
 <!-- <select bind:value={$NewEdgeAssignment}>
 	{#each options as option, i}
@@ -21,12 +23,12 @@
 </select> -->
 
 <style>
-	.flex-row {
+	/*.flex-row {
 		display: flex;
 		flex-direction: row;
 		gap: 0.25rem;
 		margin: 0.5rem 0;
-	}
+	}*/
 	button {
 		flex: 1;
 		height: 1.5rem;

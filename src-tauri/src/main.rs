@@ -40,19 +40,27 @@ fn main() {
 	// file menu items
 	let item_new = CustomMenuItem::new(
 		"new".to_string(),
-		"New");
+		"New")
+		.accelerator("cmdOrControl+N");
 	let item_open = CustomMenuItem::new(
 		"open".to_string(),
-		"Open");
+		"Open")
+		.accelerator("cmdOrControl+O");
+	let item_save = CustomMenuItem::new(
+		"save".to_string(),
+		"Save")
+		.accelerator("cmdOrControl+S");
 	let item_save_as = CustomMenuItem::new(
 		"save_as".to_string(),
-		"Save As...");
+		"Save As...")
+		.accelerator("cmdOrControl+Shift+S");
 	let item_import = CustomMenuItem::new(
 		"import".to_string(),
 		"Import");
 	let item_export = CustomMenuItem::new(
 		"export".to_string(),
-		"Export As...");
+		"Export As...")
+		.accelerator("cmdOrControl+Alt+Shift+S");
 
 	// edit menu items
 	let item_undo = CustomMenuItem::new(
@@ -157,6 +165,7 @@ fn main() {
 		.add_item(item_new)
 		.add_item(item_open)
 		.add_native_item(MenuItem::Separator)
+		.add_item(item_save)
 		.add_item(item_save_as)
 		.add_native_item(MenuItem::Separator)
 		.add_item(item_import)
@@ -204,7 +213,7 @@ fn main() {
 
 	tauri::Builder::default()
 		.menu(menu)
-		.invoke_handler(tauri::generate_handler![save_as])
+		// .invoke_handler(tauri::generate_handler![save_as])
 		.invoke_handler(tauri::generate_handler![store_boolean_update])
 		.setup(|app| {
 			#[cfg(debug_assertions)]
@@ -236,6 +245,9 @@ fn main() {
 				}
 				"open" => {
 					let _ = event.window().eval("window.fs.open()");
+				}
+				"save" => {
+					let _ = event.window().eval("window.fs.save()");
 				}
 				"save_as" => {
 					let _ = event.window().eval("window.fs.saveAs()");
@@ -375,10 +387,15 @@ fn main() {
 		.expect("error while running tauri application");
 }
 
-#[tauri::command]
-fn save_as(fold:String) {
-	println!("{}", fold);
-}
+// #[tauri::command]
+// fn save(fold:String) {
+// 	println!("{}", fold);
+// }
+
+// #[tauri::command]
+// fn save_as(fold:String) {
+// 	println!("{}", fold);
+// }
 
 #[tauri::command]
 fn store_boolean_update(name:String, value:bool) {

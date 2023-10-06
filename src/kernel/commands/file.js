@@ -4,11 +4,15 @@ import {
 	UpdateFrame,
 	IsoUpdateFrame,
 	SetFrame,
-	LoadFile,
-	SaveFile,
 } from "../../stores/Model.js";
+import {
+	NewFile,
+	LoadFile,
+	GetFile,
+} from "../../stores/File.js";
 import { makeEmptyGraph } from "../../js/graph.js";
 /**
+ * @description Browser only. Download a file with text contents.
  * @param {string} contents already in a string format
  * @param {string} filename
  */
@@ -21,15 +25,28 @@ const downloadFile = (contents, filename = "origami.fold") => {
 	element.click();
 	document.body.removeChild(element);
 };
-
-export const load = (FOLD = {}) => LoadFile(FOLD);
-
-export const clear = () => LoadFile(makeEmptyGraph());
-
+/**
+ * @description load a FOLD object and replace the currently loaded file
+ */
+export const newFile = (FOLD = {}) => NewFile(FOLD);
+/**
+ * @description load a FOLD object and replace the currently loaded file
+ */
+// export const load = (FOLD = {}, filename) => LoadFile(FOLD, filename);
+/**
+ * @description load an empty FOLD object and replace the currently loaded file
+ */
+// export const clear = () => NewFile(); // NewFile(makeEmptyGraph());
+/**
+ * @description Trigger an in-browser downloading of a file to the
+ * browser's default download location. Not useful for native app build.
+ */
 export const download = (filename) => (
-	downloadFile(JSON.stringify(SaveFile()), filename)
+	downloadFile(JSON.stringify(GetFile()), filename)
 );
-
+/**
+ * @description
+ */
 export const exportImage = (format = "svg") => {
 	switch (format) {
 	case "svg":
@@ -40,4 +57,3 @@ export const exportImage = (format = "svg") => {
 		break;
 	}
 };
-

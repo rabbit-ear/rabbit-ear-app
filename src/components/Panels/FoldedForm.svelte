@@ -16,7 +16,7 @@
 <Panel>
 	<span slot="title">Folded</span>
 	<span slot="body">
-		<div class="flex-column">
+		<div class="flex-column gap">
 			<p>Folded state is {$FrameEdgesAreFlat ? "2D" : "3D"}</p>
 			<p>Layer order: 
 				{#if $LayerOrderKnown}
@@ -29,29 +29,18 @@
 				<p>relationships: <span class="number">{faceOrders.length}</span></p>
 			</div>
 		</div>
-		{#if $LayerOrderKnown}
-			<button on:click={() => executeCommand("makeFaceOrders")}>recalculate order</button>
-			<button on:click={() => executeCommand("clearFaceOrders")}>remove orders</button>
-		{:else}
-			<button on:click={() => executeCommand("makeFaceOrders")}>solve layer order</button>
-		{/if}
+		<div class="flex-row">
+			{#if $LayerOrderKnown}
+				<button on:click={() => executeCommand("makeFaceOrders")}>recalculate order</button>
+				<button on:click={() => executeCommand("clearFaceOrders")}>remove orders</button>
+			{:else}
+				<button on:click={() => executeCommand("makeFaceOrders")}>solve layer order</button>
+			{/if}
+		</div>
 	</span>
 </Panel>
 
 <style>
-	.flex-row {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: flex-start;
-	}
-	/*.flex-column {
-		display: flex;
-		flex-direction: column;
-	}
-	.gap {
-		gap: 0.333rem;
-	}*/
 	.number {
 		font-weight: bold;
 	}

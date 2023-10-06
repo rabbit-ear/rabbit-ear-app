@@ -12,7 +12,7 @@ only solutions possible for odd numbered degree vertices.
 <Panel>
 	<span slot="title">kawasaki</span>
 	<span slot="body">
-		<div class="container">
+		<div class="flex-column gap">
 			<p class="instruction">flat-fold an odd-numbered degree vertex.</p>
 		</div>
 		<hr />
@@ -21,10 +21,6 @@ only solutions possible for odd numbered degree vertices.
 </Panel>
 
 <style>
-	.container {
-		display: flex;
-		flex-direction: column;
-	}
 	.instruction {
 		color: var(--dim);
 		font-style: italic;

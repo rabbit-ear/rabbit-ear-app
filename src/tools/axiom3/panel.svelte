@@ -13,7 +13,7 @@
 <Panel>
 	<span slot="title">axiom 3</span>
 	<span slot="body">
-		<div class="container">
+		<div class="flex-column gap">
 			<p class="instruction">Bring a line to another line.</p>
 			<ol>
 				<li class={classes[0]}>press on a line</li>
@@ -30,10 +30,6 @@
 	ol {
 		list-style: decimal;
 		padding-left: 1.2rem;
-	}
-	.container {
-		display: flex;
-		flex-direction: column;
 	}
 	.done {
 		color: var(--dim);

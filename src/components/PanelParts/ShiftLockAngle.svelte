@@ -3,19 +3,20 @@
 	import { RadialSnapDegrees } from "../../stores/Snap.js";
 </script>
 
-<p>snap edge to angle</p>
-<input type="number" step="0.5" id="snapAngle" bind:value={$RadialSnapDegrees}><label for="snapAngle">degrees</label>
-{#if $Keyboard[16]}
-	<p><span class="highlight">shift</span> key</p>
-{:else}
-	<p>shift key</p>
-{/if}
+<div class="flex-column gap">
+	<p class={$Keyboard[16] ? "highlight" : ""}>angle snap</p>
+	<div class="flex-row">
+		<input type="number" step="0.5" id="snapAngle" bind:value={$RadialSnapDegrees}>
+		<label for="snapAngle">degrees</label>
+	</div>
+</div>
 
 <style>
 	input[type=number] {
 		width: 6rem;
 	}
 	.highlight {
+		font-weight: bold;
 		color: var(--highlight);
 	}
 </style>

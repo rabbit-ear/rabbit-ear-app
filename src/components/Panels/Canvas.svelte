@@ -80,19 +80,6 @@
 </Panel>
 
 <style>
-	.flex-row {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: flex-start;
-	}
-	.flex-column {
-		display: flex;
-		flex-direction: column;
-	}
-	.gap {
-		gap: 0.333rem;
-	}
 	.svg-icon {
 		display: inline-block;
 		height: 1.75rem;
@@ -100,11 +87,6 @@
 		fill: var(--text);
 		stroke: var(--text);
 	}
-	/*.highlight {
-		fill: var(--highlight);
-		stroke: var(--highlight);
-		color: var(--highlight);
-	}*/
 	.number {
 		font-weight: bold;
 	}
@@ -115,13 +97,4 @@
 	button:hover {
 		color: var(--highlight);
 	}
-	/*.alert {
-		color: var(--highlight);
-	}*/
-	/*.dim {
-		color: var(--dim);
-	}*/
-	/*input[type=text] {
-		width: 100%;
-	}*/
 </style>

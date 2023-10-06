@@ -13,7 +13,7 @@
 <Panel>
 	<span slot="title">Axiom 1</span>
 	<span slot="body">
-		<div class="flex-column">
+		<div class="flex-column gap">
 			<p class="instruction">Make a line through two points.</p>
 			<ol>
 				<li class={classes[0]}>press on a point</li>
@@ -30,10 +30,6 @@
 	ol {
 		list-style: decimal;
 		padding-left: 1.2rem;
-	}
-	.flex-column {
-		display: flex;
-		flex-direction: column;
 	}
 	.done {
 		color: var(--dim);

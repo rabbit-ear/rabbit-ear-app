@@ -11,16 +11,16 @@
 	const newDidPress = ({ detail }) => {
 		switch (detail.shape) {
 		case "empty":
-			executeCommand("load", {});
+			executeCommand("newFile");
 			break;
 		case "square":
-			executeCommand("load", square(detail.size));
+			executeCommand("newFile", square(detail.size));
 			break;
 		case "rectangle":
-			executeCommand("load", rectangle(detail.width, detail.height));
+			executeCommand("newFile", rectangle(detail.width, detail.height));
 			break;
 		case "regularPolygon":
-			executeCommand("load", polygon(detail.sides));
+			executeCommand("newFile", polygon(detail.sides));
 			break;
 		}
 		$DialogNewFile.close();

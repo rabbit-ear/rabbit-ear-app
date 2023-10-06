@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/tauri";
+import { appWindow } from "@tauri-apps/api/window";
 import {
 	open,
 	save,
@@ -25,9 +26,11 @@ import {
 	DialogNewFile,
 } from "./stores/App.js";
 import {
+	FileExists,
+	FileName,
 	LoadFile,
-	SaveFile,
-} from "./stores/Model.js";
+	GetFile,
+} from "./stores/File.js";
 
 // bind kernel execution methods to the window,
 // this is how we call Javascript from Tauri/Rust.
@@ -36,7 +39,10 @@ window.executeCommand = executeCommand;
 window.dialog = {};
 window.store = {};
 window.fs = {};
-
+/**
+ * @description Communicate from Rust to Javascript.
+ * Rust would like to update a store variable and set it's value.
+ */
 window.store.set = (name, value) => {
 	console.log("setting", name, value);
 	switch (name) {
@@ -44,7 +50,11 @@ window.store.set = (name, value) => {
 	default: break;
 	}
 }
-
+/**
+ * @description Communicate from Rust to Javascript.
+ * Rust would like to update a store variable, specifically, a boolean store,
+ * specifically, toggle the boolean value.
+ */
 window.store.toggle = (name) => {
 	let store;
 	switch (name) {
@@ -66,27 +76,17 @@ window.store.toggle = (name) => {
 	invoke("store_boolean_update", { name, value });
 	return value;
 }
-
+/**
+ * @description Communicate from Rust to Javascript.
+ * A new file dialog request has been made, open in-app new file dialog.
+ */
 window.dialog.newFile = () => {
 	get(DialogNewFile).showModal();
 }
-
-// window.saveAs = () => {
-// 	invoke("save_as", { fold: JSON.stringify(SaveFile()) });
-// };
-
-window.fs.saveAs = async () => {
-	const filePath = await save({
-		filters: [{
-			name: "origami",
-			extensions: ["fold"]
-		}]
-	});
-	if (filePath == null) { return; }
-	// console.log("filePath", filePath);
-	await writeTextFile(filePath, JSON.stringify(SaveFile())); // , { dir: BaseDirectory.AppConfig });
-};
-
+/**
+ * @description Communicate from Rust to Javascript.
+ * A file open dialog request has been made, open file picker.
+ */
 window.fs.open = async () => {
 // Open a selection dialog for image files
 	const selected = await open({
@@ -97,14 +97,70 @@ window.fs.open = async () => {
 		}]
 	});
 	if (selected == null) { return; }
+	// todo: hardcoded ignoring more than 1 file
 	const filePath = Array.isArray(selected)
 		? selected[0]
 		: selected;
 	// console.log("filePath", filePath);
-	const contents = await readTextFile(filePath); // , { dir: BaseDirectory.AppConfig });
+	const contents = await readTextFile(filePath);
 	try {
-		LoadFile(JSON.parse(contents));
+		LoadFile(JSON.parse(contents), filePath);
 	} catch (error) {
 		console.warn(error);
 	}
 };
+/**
+ * @description Communicate from Rust to Javascript.
+ * A file save dialog request has been made, open file picker to save file.
+ */
+window.fs.save = async () => {
+	const fileExists = get(FileExists);
+	const filePath = get(FileName);
+	if (!fileExists || filePath == null) {
+		// file does not yet exist. Trigger "SaveAs"
+		return window.fs.saveAs();
+	}
+	await writeTextFile(filePath, JSON.stringify(GetFile()));
+};
+/**
+ * @description Communicate from Rust to Javascript.
+ * A file save dialog request has been made, open file picker to save file.
+ */
+window.fs.saveAs = async () => {
+	const filePath = await save({
+		filters: [{
+			name: "origami",
+			extensions: ["fold"]
+		}]
+	});
+	if (filePath == null) { return; }
+	await writeTextFile(filePath, JSON.stringify(GetFile()));
+	FileExists.set(true);
+	FileName.set(filePath);
+};
+/**
+ * @description Drag and drop to load file
+ */
+const unlisten = await appWindow.onFileDropEvent(async (event) => {
+	// console.log("DRAG AND DROP", event);
+	if (event.payload.type === "hover") {
+		// console.log("User hovering", event.payload.paths);
+	} else if (event.payload.type === "drop") {
+		// console.log("User dropped", event.payload.paths);
+		if (!event.payload.paths.length) { return; }
+		// todo: hardcoded ignoring more than 1 file
+		const filePath = event.payload.paths[0];
+		const contents = await readTextFile(filePath);
+		try {
+			LoadFile(JSON.parse(contents), filePath);
+		} catch (error) {
+			console.warn(error);
+		}
+	} else {
+		// console.log("File drop cancelled");
+	}
+});
+
+// you need to call unlisten if your handler goes
+// out of scope e.g. the component is unmounted
+// unlisten();

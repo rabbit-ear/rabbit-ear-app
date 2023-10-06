@@ -6,7 +6,11 @@ import { ExportModel } from "../stores/Simulator.js";
  */
 export const tryLoadFile = (contents, filename, options) => {
 	// const { name, extension } = getFilenameParts(contents, filename);
-	executeCommand("load", JSON.parse(contents));
+	try {
+		executeCommand("newFile", JSON.parse(contents));
+	} catch (error) {
+		console.warn(error);
+	}
 };
 /**
  * @description Bind this method to the <input type="file"> element.
@@ -21,6 +25,7 @@ export const loadFileDialog = (event) => {
 	reader.onabort = abort => console.warn("FileReader abort", abort);
 	reader.onload = (e) => {
 		try {
+			// todo: does "filename" contain the path as well? it should.
 			tryLoadFile(e.target.result, filename);
 		} catch (error) {
 			console.error(error);

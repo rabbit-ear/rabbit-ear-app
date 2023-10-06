@@ -9,7 +9,7 @@
 <Panel>
 	<span slot="title">debug</span>
 	<span slot="body">
-		<div>
+		<div class="flex-column">
 			<p>Execute</p>
 			<p>{$ExecuteInput}</p>
 			<hr/>

@@ -7,7 +7,7 @@ export const BuildTargetWeb = false;
  * @description App settings which are immutable compiler directives.
  * these will only change to target different builds.
  */
-export const ShowMenu = true;
+export const ShowMenu = false;
 /**
  * @description App settings, mutable.
  */

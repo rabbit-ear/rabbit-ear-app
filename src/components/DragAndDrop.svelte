@@ -9,7 +9,9 @@
 
 		const fileOnLoad = (event) => {
 			try {
-				tryLoadFile(event.target.result, filename);
+				const contents = JSON.parse()
+				// executeCommand("load", contents, filename);
+				// tryLoadFile(event.target.result, filename);
 			} catch (error) {
 				window.alert(error);
 			}

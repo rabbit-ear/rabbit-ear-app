@@ -39,4 +39,17 @@
 		padding: 0.25rem 0.5rem;
 		background-color: var(--background-2);
 	}
+	.container :global(.flex-column) {
+		display: flex;
+		flex-direction: column;
+	}
+	.container :global(.flex-row) {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+	}
+	.container :global(.gap) {
+		gap: 0.333rem;
+	}
 </style>
