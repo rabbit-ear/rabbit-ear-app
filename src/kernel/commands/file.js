@@ -29,3 +29,15 @@ export const clear = () => LoadFile(makeEmptyGraph());
 export const download = (filename) => (
 	downloadFile(JSON.stringify(SaveFile()), filename)
 );
+
+export const exportImage = (format = "svg") => {
+	switch (format) {
+	case "svg":
+		break;
+	case "png":
+		break;
+	default:
+		break;
+	}
+};
+

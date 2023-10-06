@@ -43,7 +43,8 @@ const ToolKeyboardEvent = derived(
 	() => {},
 );
 /**
- * 
+ * todo: i think this needs to be refactored. writable(). not a derived.
+ * it's probably reloading a new function every single state update.
  */
 const FormKeyboardEvent = derived(
 	[TerminalTextarea, TerminalValue],

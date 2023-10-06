@@ -5,8 +5,10 @@ import {
 	TerminalTextarea,
 } from "./App.js";
 import { Tool } from "./UI.js";
-import { Selection } from "./Select.js";
-import { executeCommand } from "../kernel/execute.js";
+import {
+	execute,
+	executeCommand,
+} from "../kernel/execute.js";
 /**
  * @description holding "alt" temporarily turns the pointer device
  * into a camera, allowing the user to pan. Store in here which tool
@@ -29,7 +31,8 @@ const KeybindingsDown = {
 	8: {
 		0: (event) => isFrameElementSelected()
 			? executeCommand("deleteActiveFrame")
-			: executeCommand("deleteComponents", get(Selection)),
+			: execute("deleteComponents(getSelected())"),
+		// : executeCommand("deleteComponents", get(Selection)),
 	},
 	// shift
 	16: {},

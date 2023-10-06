@@ -1,5 +1,43 @@
 # Blender-style graph maker
 
+## 2023-10-05
+
+Need to start to think about tools for modifying the folded form. some ideas:
+
+- all-layers fold through line, the simplest operation, already implemented in past versions.
+- similar, but, segment, segment with "flat" assignment. segment through all layers. the cool thing is that this can be used to draw shapes on the folded form and see it in the crease pattern.
+
+todo list:
+
+- [x] finish menu events
+- [ ] file protocol, filename in title. save button
+- [ ] css style panels
+- [ ] selecting vertices, vertices are no longer being shown.
+- [ ] hovering on folded form/simulator shows dots on crease pattern
+- [ ] rabbit ear tool. except make it the straight skeleton. only works for convex shapes.
+- [ ] "reassign selected" doesn't work
+- [ ] glitchy graphics, need to (secretly) scale up the graphics.
+- [ ] foldedLine tool should re-assign existing creases that lay along the path.
+- [ ] bring back keyboard shortcuts (that are not menu items)
+- [ ] folded form should report when it cannot fold the crease pattern (and not show it)
+- [ ] recode axioms 4-7 to use new system of embeded execute methods
+- [ ] bring back basic drag and drop
+- [ ] implement drag and drop into the frames window (append instead of replace)
+- [ ] export, multiple file formats, multiple arrangements of crease patterns and folded forms
+- [ ] import, svg, opx, obj
+- [ ] style modal popups
+- [ ] create custom UI elements (radio, slider, buttons)
+- [ ] snap to SQRT2 points
+- [ ] menu boolean, checkmark reflecting state (Show/Hide)
+
+bug list:
+
+- [ ] grid lines are disappearing too soon up top. visible when canvas is in vertical portrait mode.
+- [ ] cmd+A in the text box, intended to select the text, instead gets run by Rust due to the menu shortcut.
+- [ ] Moosers train, make layers, clear, make again, somehow different
+- [ ] svg text in graph indices drifts away when zooming in
+- [ ] pressing "delete" for some reason changes the tool to "translate".
+
 ## 2023-09-28
 
 **Folded form**

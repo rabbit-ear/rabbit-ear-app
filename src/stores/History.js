@@ -3,6 +3,7 @@ import {
 	derived,
 } from "svelte/store";
 import { arrayIntersection } from "../js/arrays.js";
+import { TerminalValue } from "./App.js";
 /**
  * @description On boot or after the history is cleared,
  * terminal will pad the history with empty new lines
@@ -70,6 +71,8 @@ CommandHistory.add = (...args) => CommandHistory.update(history => {
 	if (result.length > maxLineCount) {
 		result.splice(0, result.length - maxLineCount);
 	}
+	TerminalValue.set("");
+	ReplayCommandIndex.set(0);
 	return result;
 });
 /**

@@ -1,29 +1,27 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{CustomMenuItem, Menu, MenuItem, Submenu, AboutMetadata};
-use tauri::Manager;
-use std::sync::{Arc, Mutex};
-use std::cell::Cell;
+use tauri::{Manager, CustomMenuItem, Menu, MenuItem, Submenu, AboutMetadata};
+// use lazy_static::lazy_static;
+// use std::sync::Mutex;
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-// #[tauri::command]
-// fn greet(name: &str) -> String {
-// 	format!("Hello, {}! You've been greeted from Rust!", name)
+// lazy_static! {
+// 	static ref ARRAY: Mutex<Vec<u8>> = Mutex::new(vec![]);
+// }
+// fn do_a_call() {
+// 	ARRAY.lock().unwrap().push(1);
 // }
 
-// static mut ShowIndices: bool = false;
+
+// lazy_static! {
+// 	static ref ITEM_SHOW_FRAMES: Mutex<CustomMenuItem> = Mutex::new(CustomMenuItem::new(
+// 		"show_frames".to_string(),
+// 		"Show Frames"));
+// }
 
 
 fn main() {
-	// let mut ShowIndices = false;
-	// let ShowIndices = Cell::new(false);
-	// let ShowIndices = Arc::new(Mutex::new(false));
-	// let mut ShowIndices: Arc<Mutex<bool>> = Arc::new(Mutex::from(false));
-
 	// let authors_list = vec!["Kraft".to_string()];
-	let mut about_metadata = AboutMetadata::new();
-	about_metadata.version = Some("0.9".to_string());
 	// AboutMetadata {
 	// 			version: Some("0.9".to_string()),
 	// 			// authors: Option<Vec<String, Global>>,
@@ -34,69 +32,74 @@ fn main() {
 	// 			website: Some("rabbitear.org".to_string()),
 	// 			website_label: Some("Rabbit Ear".to_string()),
 	// 		}
-	#[cfg(target_os = "macos")]
-	let app_menu = Submenu::new(
-		"Rabbit Ear",
-		Menu::new()
-			.add_native_item(MenuItem::About("Rabbit Ear".to_string(), about_metadata))
-			.add_native_item(MenuItem::Separator)
-			.add_native_item(MenuItem::Services)
-			.add_native_item(MenuItem::Separator)
-			.add_native_item(MenuItem::Hide)
-			.add_native_item(MenuItem::HideOthers)
-			.add_native_item(MenuItem::ShowAll)
-			.add_native_item(MenuItem::Separator)
-			.add_native_item(MenuItem::Quit)
-	);
 
-	// CustomMenuItem::new(menu item id, menu item label)
-	let new_menu = CustomMenuItem::new("new".to_string(), "New");
-	let open = CustomMenuItem::new("open".to_string(), "Open");
-	let save_as = CustomMenuItem::new("save_as".to_string(), "Save As...");
-	let import = CustomMenuItem::new("import".to_string(), "Import");
-	let export = CustomMenuItem::new("export".to_string(), "Export As...");
-	let file_menu = Submenu::new("File", Menu::new()
-		.add_item(new_menu)
-		.add_item(open)
-		.add_native_item(MenuItem::Separator)
-		.add_item(save_as)
-		.add_native_item(MenuItem::Separator)
-		.add_item(import)
-		.add_item(export));
+	// app menu items
+	let mut about_metadata = AboutMetadata::new();
+	about_metadata.version = Some("0.9".to_string());
 
-	let undo = CustomMenuItem::new("undo".to_string(), "Undo")
+	// file menu items
+	let item_new = CustomMenuItem::new(
+		"new".to_string(),
+		"New");
+	let item_open = CustomMenuItem::new(
+		"open".to_string(),
+		"Open");
+	let item_save_as = CustomMenuItem::new(
+		"save_as".to_string(),
+		"Save As...");
+	let item_import = CustomMenuItem::new(
+		"import".to_string(),
+		"Import");
+	let item_export = CustomMenuItem::new(
+		"export".to_string(),
+		"Export As...");
+
+	// edit menu items
+	let item_undo = CustomMenuItem::new(
+		"undo".to_string(),
+		"Undo")
 		.accelerator("cmdOrControl+Z");
-	let redo = CustomMenuItem::new("redo".to_string(), "Redo")
+	let item_redo = CustomMenuItem::new(
+		"redo".to_string(),
+		"Redo")
 		.accelerator("cmdOrControl+Shift+Z");
-	let duplicate = CustomMenuItem::new("duplicate".to_string(), "Duplicate")
+	let item_duplicate = CustomMenuItem::new(
+		"duplicate".to_string(),
+		"Duplicate")
 		.accelerator("shift+D");
-	let edit_menu = Submenu::new("Edit", Menu::new()
-		.add_item(undo)
-		.add_item(redo)
-		// .add_native_item(MenuItem::Undo)
-		// .add_native_item(MenuItem::Redo)
-		.add_native_item(MenuItem::Separator)
-		.add_item(duplicate));
+	let item_delete = CustomMenuItem::new(
+		"delete".to_string(),
+		"Delete")
+		.accelerator("Backspace");
 
-	let planarize = CustomMenuItem::new("planarize".to_string(), "Planarize")
+	// graph menu items
+	let item_planarize = CustomMenuItem::new(
+		"planarize".to_string(),
+		"Planarize")
 		.accelerator("cmdOrControl+P");
-	let clean_verts = CustomMenuItem::new("clean_verts".to_string(), "Smart clean vertices");
-	let merge_near_verts = CustomMenuItem::new("merge_near_verts".to_string(), "Merge nearby vertices");
-	let snap_vertices = CustomMenuItem::new("snap_vertices".to_string(), "Snap to grid");
-	let merge_sel_verts = CustomMenuItem::new("merge_sel_verts".to_string(), "Merge selected vertices");
-	let graph_menu = Submenu::new("Graph", Menu::new()
-		.add_item(planarize)
-		.add_native_item(MenuItem::Separator)
-		.add_item(clean_verts)
-		.add_item(merge_near_verts)
-		.add_item(snap_vertices)
-		.add_item(merge_sel_verts));
+	let item_clean_verts = CustomMenuItem::new(
+		"clean_verts".to_string(),
+		"Smart clean vertices");
+	let item_merge_near_verts = CustomMenuItem::new(
+		"merge_near_verts".to_string(),
+		"Merge nearby vertices");
+	let item_snap_vertices = CustomMenuItem::new(
+		"snap_vertices".to_string(),
+		"Snap to grid");
+	let item_merge_sel_verts = CustomMenuItem::new(
+		"merge_sel_verts".to_string(),
+		"Merge selected vertices");
 
-	let sel_all = CustomMenuItem::new("select_all".to_string(), "Select All")
+	// select menu items
+	let item_sel_all = CustomMenuItem::new(
+		"select_all".to_string(),
+		"Select All")
 		.accelerator("cmdOrControl+A");
-	let desel_all = CustomMenuItem::new("deselect_all".to_string(), "Deselect All")
+	let item_desel_all = CustomMenuItem::new(
+		"deselect_all".to_string(),
+		"Deselect All")
 		.accelerator("cmdOrControl+D");
-	let sel_assign = Submenu::new("Select Assignment", Menu::new()
+	let submenu_sel_assign = Submenu::new("Select Assignment", Menu::new()
 		.add_item(CustomMenuItem::new("select_boundary".to_string(), "Boundary"))
 		.add_item(CustomMenuItem::new("select_valley".to_string(), "Valley"))
 		.add_item(CustomMenuItem::new("select_mountain".to_string(), "Mountain"))
@@ -104,14 +107,15 @@ fn main() {
 		.add_item(CustomMenuItem::new("select_cut".to_string(), "Cut"))
 		.add_item(CustomMenuItem::new("select_join".to_string(), "Join"))
 		.add_item(CustomMenuItem::new("select_unassigned".to_string(), "Unassigned")));
-	let select_menu = Submenu::new("Select", Menu::new()
-		.add_item(sel_all)
-		.add_item(desel_all)
-		.add_submenu(sel_assign));
 
-	let rebuild_bound = CustomMenuItem::new("rebuild_boundary".to_string(), "Rebuild boundary");
-	let inv_assign = CustomMenuItem::new("invert_assignments".to_string(), "Invert assignments");
-	let assign_sel = Submenu::new("Reassign selected", Menu::new()
+	// assign menu items
+	let item_rebuild_bound = CustomMenuItem::new(
+		"rebuild_boundary".to_string(),
+		"Rebuild boundary");
+	let item_inv_assign = CustomMenuItem::new(
+		"invert_assignments".to_string(),
+		"Invert assignments");
+	let submenu_assign_sel = Submenu::new("Reassign selected", Menu::new()
 		.add_item(CustomMenuItem::new("reassign_boundary".to_string(), "Boundary"))
 		.add_item(CustomMenuItem::new("reassign_valley".to_string(), "Valley"))
 		.add_item(CustomMenuItem::new("reassign_mountain".to_string(), "Mountain"))
@@ -119,53 +123,93 @@ fn main() {
 		.add_item(CustomMenuItem::new("reassign_cut".to_string(), "Cut"))
 		.add_item(CustomMenuItem::new("reassign_join".to_string(), "Join"))
 		.add_item(CustomMenuItem::new("reassign_unassigned".to_string(), "Unassigned")));
-	let assign_menu = Submenu::new("Assignment", Menu::new()
-		.add_item(rebuild_bound)
-		.add_item(inv_assign)
-		.add_submenu(assign_sel));
 
-	let flat_issues = CustomMenuItem::new("flat_foldable_issues".to_string(), "Flat-Foldable Issues");//.selected();
-	let near_verts = CustomMenuItem::new("nearest_two_vertices".to_string(), "Nearest two vertices");
-	let show_indices = CustomMenuItem::new("show_graph_indices".to_string(), "Show/Hide Graph Indices");
-	let analysis_menu = Submenu::new("Analysis", Menu::new()
-		.add_item(flat_issues)
-		.add_item(near_verts)
-		.add_item(show_indices));
+	// analysis menu items
+	let item_flat_issues = CustomMenuItem::new(
+		"flat_foldable_issues".to_string(),
+		"Show/Hide Vertex Foldability Issues");
+		//.selected();
+	let item_show_indices = CustomMenuItem::new(
+		"show_graph_indices".to_string(),
+		"Show/Hide Graph Indices");
+	let item_near_verts = CustomMenuItem::new(
+		"nearest_two_vertices".to_string(),
+		"Select Nearest two vertices");
 
-	let show_frames = CustomMenuItem::new("show_frames".to_string(), "Show Frames");//.selected();
-	let window_menu = Submenu::new("Window", Menu::new()
-		.add_item(show_frames));
+	// window menu items
+	let item_show_frames = CustomMenuItem::new(
+		"show_frames".to_string(),
+		"Show/Hide Frames");
 
-	// let a = CustomMenuItem::new("".to_string(), "");
-	// let b = CustomMenuItem::new("".to_string(), "");
-	// let c = CustomMenuItem::new("".to_string(), "");
-	// let d = CustomMenuItem::new("".to_string(), "");
-	// let e = CustomMenuItem::new("".to_string(), "");
-	// let f = CustomMenuItem::new("".to_string(), "");
-	// let m = Submenu::new("MENU", Menu::new()
-	// 	.add_item(a)
-	// 	.add_item(b)
-	// 	.add_item(c)
-	// 	.add_item(d)
-	// 	.add_item(e)
-	// 	.add_item(f));
+	// menus
+	#[cfg(target_os = "macos")]
+	let menu_app = Submenu::new("Rabbit Ear", Menu::new()
+		.add_native_item(MenuItem::About("Rabbit Ear".to_string(), about_metadata))
+		.add_native_item(MenuItem::Separator)
+		.add_native_item(MenuItem::Services)
+		.add_native_item(MenuItem::Separator)
+		.add_native_item(MenuItem::Hide)
+		.add_native_item(MenuItem::HideOthers)
+		.add_native_item(MenuItem::ShowAll)
+		.add_native_item(MenuItem::Separator)
+		.add_native_item(MenuItem::Quit));
+	let menu_file = Submenu::new("File", Menu::new()
+		.add_item(item_new)
+		.add_item(item_open)
+		.add_native_item(MenuItem::Separator)
+		.add_item(item_save_as)
+		.add_native_item(MenuItem::Separator)
+		.add_item(item_import)
+		.add_item(item_export));
+	let menu_edit = Submenu::new("Edit", Menu::new()
+		.add_item(item_undo)
+		.add_item(item_redo)
+		.add_native_item(MenuItem::Separator)
+		.add_item(item_duplicate)
+		.add_item(item_delete));
+	let menu_graph = Submenu::new("Graph", Menu::new()
+		.add_item(item_planarize)
+		.add_native_item(MenuItem::Separator)
+		.add_item(item_clean_verts)
+		.add_item(item_merge_near_verts)
+		.add_item(item_snap_vertices)
+		.add_item(item_merge_sel_verts));
+	let menu_select = Submenu::new("Select", Menu::new()
+		.add_item(item_sel_all)
+		.add_item(item_desel_all)
+		.add_submenu(submenu_sel_assign));
+	let menu_assign = Submenu::new("Assignment", Menu::new()
+		.add_item(item_rebuild_bound)
+		.add_item(item_inv_assign)
+		.add_submenu(submenu_assign_sel));
+	let menu_analysis = Submenu::new("Analysis", Menu::new()
+		.add_item(item_flat_issues)
+		.add_item(item_show_indices)
+		.add_native_item(MenuItem::Separator)
+		.add_item(item_near_verts));
+	let menu_window = Submenu::new("Window", Menu::new()
+		.add_item(item_show_frames));
+		// .add_item(ITEM_SHOW_FRAMES.lock().unwrap()));
 
+	// the menu
 	let menu = Menu::new()
-		.add_submenu(app_menu)
-		.add_submenu(file_menu)
-		.add_submenu(edit_menu)
-		.add_submenu(graph_menu)
-		.add_submenu(select_menu)
-		.add_submenu(assign_menu)
-		.add_submenu(analysis_menu)
-		.add_submenu(window_menu);
+		.add_submenu(menu_app)
+		.add_submenu(menu_file)
+		.add_submenu(menu_edit)
+		.add_submenu(menu_graph)
+		.add_submenu(menu_select)
+		.add_submenu(menu_assign)
+		.add_submenu(menu_analysis)
+		.add_submenu(menu_window);
 
 	tauri::Builder::default()
 		.menu(menu)
+		.invoke_handler(tauri::generate_handler![save_as])
+		.invoke_handler(tauri::generate_handler![store_boolean_update])
 		.setup(|app| {
-		  #[cfg(debug_assertions)]
-		  app.get_window("main").unwrap().open_devtools();
-		  Ok(())
+			#[cfg(debug_assertions)]
+			app.get_window("main").unwrap().open_devtools();
+			Ok(())
 		})
 		// .setup(|app| {
 		// 	let main_window = app.get_window("main").unwrap();
@@ -177,7 +221,7 @@ fn main() {
 		// 	Ok(())
 		// })
 		.on_menu_event(|event| {
-			let mut ShowIndices = false;
+			// let mut show_indices = false;
 
 			// let main_window = app.get_window("main").unwrap();
 			// let menu_handle = main_window.menu_handle();
@@ -187,7 +231,15 @@ fn main() {
 				// "open" => {
 				// 	std::process::exit(0);
 				// }
-				// "save_as"
+				"new" => {
+					let _ = event.window().eval("window.dialog.newFile()");
+				}
+				"open" => {
+					let _ = event.window().eval("window.fs.open()");
+				}
+				"save_as" => {
+					let _ = event.window().eval("window.fs.saveAs()");
+				}
 				"quit" => {
 					std::process::exit(0);
 				}
@@ -204,6 +256,10 @@ fn main() {
 				}
 				"duplicate" => {
 					let _ = event.window().eval("window['executeCommand']('duplicate')");
+					let _ = event.window().eval("window['executeCommand']('setTool', 'translate')");
+				}
+				"delete" => {
+					let _ = event.window().eval("window['execute']('deleteComponents(getSelected())')");
 					let _ = event.window().eval("window['executeCommand']('setTool', 'translate')");
 				}
 
@@ -225,6 +281,7 @@ fn main() {
 				}
 
 				// assignment
+				// todo: reassign fold angle: 45, 90, 135, 180
 				"rebuild_boundary" => {
 					let _ = event.window().eval("window['executeCommand']('rebuildBoundary')");
 				}
@@ -254,6 +311,7 @@ fn main() {
 				}
 
 				// selection
+				// todo: select non-flat-folded fold angles
 				"select_all" => {
 					let _ = event.window().eval("window['executeCommand']('selectAll')");
 				}
@@ -284,27 +342,29 @@ fn main() {
 
 				// analysis
 				"flat_foldable_issues" => {
-					// ShowFlatFoldableIssues
+					let statement = format!("window.store.toggle('ShowFlatFoldableIssues')").to_string();
+					let _ = event.window().eval(&statement);
 				}
 				"nearest_two_vertices" => {
 					let _ = event.window().eval("window['executeCommand']('selectNearestVertices')");
 				}
 				"show_graph_indices" => {
-					// Arc::try_unwrap(result).unwrap().into_inner();
-					ShowIndices = !ShowIndices;
-					// ShowIndices.set(!ShowIndices.get());
-					// let statement = format!("window['setStore']('ShowIndices', '{}')", ShowIndices.get()).to_string();
-					let statement = format!("window['setStore']('ShowIndices', '{}')", ShowIndices).to_string();
+					let statement = format!("window.store.toggle('ShowIndices')").to_string();
 					let _ = event.window().eval(&statement);
-					// let main_window = app.get_window("main").unwrap();
-					// let menu_handle = main_window.menu_handle();
-					// menu_handle.get_item("show_indices").selected();
 				}
 
 				// window
 				"show_frames" => {
 					// ShowFrames
-					let _ = event.window().eval("window['setStore']('ShowFrames', 'true')");
+					let _ = event.window().eval("window.store.toggle('ShowFrames')");
+					// println!("{:?}", eval_result);
+					// match eval_result {
+					// 	Ok(value) => println!("{:?}", value),
+					// 	Err(e) => println!("error parsing header: {e:?}"),
+					// }
+					// item_show_frames.selected = true;
+
+					// println!("Called {}", ARRAY.lock().unwrap().len());
 				}
 
 				_ => {}
@@ -313,4 +373,18 @@ fn main() {
 		// .invoke_handler(tauri::generate_handler![greet])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");
+}
+
+#[tauri::command]
+fn save_as(fold:String) {
+	println!("{}", fold);
+}
+
+#[tauri::command]
+fn store_boolean_update(name:String, value:bool) {
+	println!("'{}': {:?}", name, value);
+	match name.as_str() {
+		// "ShowFrames" => item_show_frames.selected = value,
+		_ => println!("match not found"),
+	}
 }
