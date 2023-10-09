@@ -5,6 +5,7 @@ import {
 } from "../../stores/App.js";
 
 export const resetApp = () => {
-	get(DialogNewFile).close();
-	get(DialogNewFrame).close();
+	[get(DialogNewFile), get(DialogNewFrame)]
+		.filter(a => a !== undefined)
+		.forEach(dialog => dialog.close());
 };

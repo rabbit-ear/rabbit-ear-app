@@ -27,7 +27,7 @@ export const intersectGraphRay = (graph, ray) => (
 	intersectGraphLineFunc(graph, ray, includeR)
 );
 
-// const clipLineInViewBox = (line, box, lineFn = includeL) => {
+// const clipLineInViewport = (line, box, lineFn = includeL) => {
 // 	const polygon = [
 // 		[box[0], box[1]],
 // 		[box[0] + box[2], box[1]],
@@ -37,7 +37,7 @@ export const intersectGraphRay = (graph, ray) => (
 // 	return clipLineConvexPolygon(polygon, line, include, lineFn);
 // };
 
-const clipLineFuncInLargerViewBox = (line, box, lineFn = includeL) => {
+const clipLineFuncInLargerViewport = (line, box, lineFn = includeL) => {
 	const [x, y, w, h] = box;
 	const polygon = [
 		[x - (w * 10), y - (h * 10)],
@@ -48,10 +48,10 @@ const clipLineFuncInLargerViewBox = (line, box, lineFn = includeL) => {
 	return clipLineConvexPolygon(polygon, line, include, lineFn);
 };
 
-export const clipLineInLargerViewBox = (line, box) => (
-	clipLineFuncInLargerViewBox(line, box, includeL)
+export const clipLineInLargerViewport = (line, box) => (
+	clipLineFuncInLargerViewport(line, box, includeL)
 );
 
-export const clipRayInLargerViewBox = (line, box) => (
-	clipLineFuncInLargerViewBox(line, box, includeR)
+export const clipRayInLargerViewport = (line, box) => (
+	clipLineFuncInLargerViewport(line, box, includeR)
 );

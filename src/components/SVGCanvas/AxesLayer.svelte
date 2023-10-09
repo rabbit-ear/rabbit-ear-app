@@ -1,8 +1,8 @@
 <script>
-	export let viewBox = [0, 0, 1, 1];
+	export let viewport = [0, 0, 1, 1];
 
 	let length = 1;
-	$: length = Math.min(viewBox[2], viewBox[3]) * 0.1;
+	$: length = Math.min(viewport[2], viewport[3]) * 0.1;
 </script>
 
 <g class="axis-layer">

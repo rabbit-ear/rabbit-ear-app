@@ -1,31 +1,32 @@
 <script>
 	import { midpoint2 } from "rabbit-ear/math/vector.js";
 	import { centroid } from "rabbit-ear/math/polygon.js";
-	import { ViewBoxCP } from "../../stores/ViewBox.js";
+	import { ViewportCP } from "../../stores/ViewBox.js";
 	import { BoundaryColor } from "../../stores/Style.js";
 	import GraphIndexItem from "./GraphIndexItem.svelte";
 
 	let vmin = 1;
-	$: vmin = Math.min($ViewBoxCP[2], $ViewBoxCP[3]);
+	$: vmin = Math.min($ViewportCP[2], $ViewportCP[3]);
 
 	let fontSize = 0.02;
 	$: fontSize = vmin * 0.0333;
 
 	export let graph = {};
+	export let invertVertical = false;
 
 	let vertices = [];
-	$: vertices = (!graph.vertices_coords ? [] : graph.vertices_coords)
+	$: vertices = (!graph || !graph.vertices_coords ? [] : graph.vertices_coords)
 		.map(coord => ({ x: coord[0], y: coord[1] }));
 
 	let edges = [];
-	$: edges = (!graph.edges_vertices || !graph.vertices_coords
+	$: edges = (!graph || !graph.edges_vertices || !graph.vertices_coords
 		? []
 		: graph.edges_vertices.map(ev => ev.map(v => graph.vertices_coords[v])))
 		.map(segment => midpoint2(...segment))
 		.map(coord => ({ x: coord[0], y: coord[1] }));
 
 	let faces = [];
-	$: faces = (!graph.faces_vertices || !graph.vertices_coords
+	$: faces = (!graph || !graph.faces_vertices || !graph.vertices_coords
 		? []
 		: graph.faces_vertices.map(fv => fv.map(v => graph.vertices_coords[v])))
 		.map(points => centroid(points))
@@ -34,13 +35,13 @@
 
 <g class="graph-indices">
 	{#each faces as face, index}
-		<GraphIndexItem name="faces" {...face} {index} {fontSize} />
+		<GraphIndexItem name="faces" {...face} {index} {fontSize} {invertVertical} />
 	{/each}
 	{#each edges as edge, index}
-		<GraphIndexItem name="edges" {...edge} {index} {fontSize} />
+		<GraphIndexItem name="edges" {...edge} {index} {fontSize} {invertVertical} />
 	{/each}
 	{#each vertices as vertex, index}
-		<GraphIndexItem name="vertices" {...vertex} {index} {fontSize} />
+		<GraphIndexItem name="vertices" {...vertex} {index} {fontSize} {invertVertical} />
 	{/each}
 </g>
 

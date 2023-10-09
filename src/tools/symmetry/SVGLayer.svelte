@@ -1,8 +1,8 @@
 <script>
 	import { VertexRadius } from "../../stores/Style.js";
-	import { clipLineInLargerViewBox } from "../../js/intersect.js";
+	import { clipLineInLargerViewport } from "../../js/intersect.js";
 	import { ReflectionLines } from "./stores.js";
-	import { ViewBoxCP } from "../../stores/ViewBox.js";
+	import { ViewportCP } from "../../stores/ViewBox.js";
 	import {
 		MoveCoords,
 		PressCoords,
@@ -16,14 +16,14 @@
 
 	let segments;
 	$: segments = $ReflectionLines
-		.map(line => clipLineInLargerViewBox(line, $ViewBoxCP))
+		.map(line => clipLineInLargerViewport(line, $ViewportCP))
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 
 	let preview;
 	$: preview = $PointerLine === undefined
 		? undefined
-		: clipLineInLargerViewBox($PointerLine, $ViewBoxCP);
+		: clipLineInLargerViewport($PointerLine, $ViewportCP);
 </script>
 
 <g>

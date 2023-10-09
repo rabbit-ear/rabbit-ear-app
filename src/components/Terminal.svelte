@@ -46,6 +46,13 @@
 	pre > * {
 		margin: 0;
 	}
+	/* all text selection has been disabled in the app. */
+	/* we have to explicitly re-enable it here */
+	pre :global(*) {
+		-webkit-user-select: initial;
+		user-select: initial;
+		cursor: auto;
+	}
 	textarea {
 		height: 1rem;
 		flex: 0 0 auto;

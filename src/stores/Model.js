@@ -28,7 +28,7 @@ import {
 	ModelMatrixCP,
 	ModelMatrixFolded,
 } from "./ViewBox.js";
-import { InvertY } from "./App.js";
+import { VerticalUp } from "./App.js";
 import { Selection } from "./Select.js";
 
 // most of the data stores in this document are essentially the
@@ -38,7 +38,13 @@ import { Selection } from "./Select.js";
  *
  */
 // const ResizeModelMatrix = writable(false);
-let RecalculateModelMatrix = false;
+let _recalcModelMatrix = false;
+let _recalcModelMatrixTimeout = undefined;
+export const RecalculateModelMatrix = () => {
+	if (_recalcModelMatrixTimeout) { clearTimeout(_recalcModelMatrixTimeout); }
+	_recalcModelMatrixTimeout = setTimeout(() => { _recalcModelMatrix = false; }, 100);
+	_recalcModelMatrix = true;
+};
 /**
  *
  */
@@ -84,7 +90,7 @@ export const FrameIndex = writable(0);
 const FrameIndexSet = FrameIndex.set;
 FrameIndex.set = (n) => {
 	Selection.reset();
-	RecalculateModelMatrix = true;
+	RecalculateModelMatrix();
 	FrameIndexSet(n);
 	CameraMatrixCP.reset();
 	CameraMatrixFolded.reset();
@@ -147,12 +153,11 @@ export const FrameIsCreasePattern = derived(
  * @description The currently selected (and currently being edited) frame.
  */
 export const CreasePattern = derived(
-	[IsolatedFrame, FrameIsCreasePattern, InvertY],
-	([$IsolatedFrame, $FrameIsCreasePattern, $InvertY]) => {
+	[IsolatedFrame, FrameIsCreasePattern, VerticalUp],
+	([$IsolatedFrame, $FrameIsCreasePattern, $VerticalUp]) => {
 		if (!$FrameIsCreasePattern) { return {}; }
-		if (RecalculateModelMatrix) {
-			ModelMatrixCP.set(graphToMatrix2($IsolatedFrame, $InvertY));
-			RecalculateModelMatrix = false;
+		if (_recalcModelMatrix) {
+			ModelMatrixCP.set(graphToMatrix2($IsolatedFrame, $VerticalUp));
 		}
 		return $IsolatedFrame;
 	},
@@ -246,8 +251,8 @@ export const ComputedFoldedCoords = derived(
  *
  */
 export const FoldedForm = derived(
-	[FrameIsCreasePattern, IsolatedFrame, ComputedFoldedCoords, InvertY],
-	([$FrameIsCreasePattern, $IsolatedFrame, $ComputedFoldedCoords, $InvertY]) => {
+	[FrameIsCreasePattern, IsolatedFrame, ComputedFoldedCoords, VerticalUp],
+	([$FrameIsCreasePattern, $IsolatedFrame, $ComputedFoldedCoords, $VerticalUp]) => {
 		// if the frame is a folded form, return the frame itself.
 		// otherwise, compute the folded form from the crease pattern.
 		const foldedForm = !$FrameIsCreasePattern
@@ -258,7 +263,7 @@ export const FoldedForm = derived(
 				vertices_coords: $ComputedFoldedCoords,
 				frame_classes: ["foldedForm"],
 			}
-		ModelMatrixFolded.set(graphToMatrix2(foldedForm, $InvertY));
+		ModelMatrixFolded.set(graphToMatrix2(foldedForm, $VerticalUp));
 		return foldedForm;
 	},
 	({}),
@@ -366,7 +371,8 @@ export const UpdateFrame = (graph) => {
 // }
 export const UpdateAndResizeFrame = (graph) => {
 	// trigger model-matrix to update
-	RecalculateModelMatrix = true;
+	RecalculateModelMatrix();
+
 	UpdateFrame(graph);
 };
 /**
@@ -395,10 +401,10 @@ export const SetNewModel = (FOLD) => {
 		console.warn("SetNewModel", error);
 		return;
 	}
+	RecalculateModelMatrix();
 	Selection.reset();
 	FrameIndex.set(0);
 	FileMetadata.set(getFileMetadata(FOLD));
-	RecalculateModelMatrix = true;
 	Frames.set(frames);
 	CameraMatrixCP.reset();
 	CameraMatrixFolded.reset();

@@ -7,20 +7,9 @@
 	} from "../../stores/Style.js";
 
 	export let graph = {};
-	export let selected = [];
-	export let highlighted = [];
-
-	let selectedHash = {};
-	$: {
-		selectedHash = {};
-		selected.forEach(e => { selectedHash[e] = true; });
-	};
-
-	let highlightedHash = [];
-	$: {
-		highlightedHash = [];
-		highlighted.forEach(i => { highlightedHash[i] = true; });
-	};
+	export let strokeWidth = 0.01;
+	export let strokeDasharray = 0.05;
+	export let attributes = [];
 
 	// just learned this:
 	// if edge endpoints are floating point values with 12-16 digits,
@@ -33,35 +22,32 @@
 			.map(ev => ev.map(v => graph.vertices_coords[v]))
 			.map(s => ({ x1: s[0][0], y1: s[0][1], x2: s[1][0], y2: s[1][1] }));
 
-	let edgesFoldAngleIsFlat = [];
-	$: edgesFoldAngleIsFlat = !graph.edges_foldAngle
-		? []
-		: graph.edges_foldAngle.map(edgeFoldAngleIsFlat);
-
 	let strokes = [];
 	$: strokes = coords.map((_, i) => ($AssignmentColor[graph.edges_assignment
 		? graph.edges_assignment[i]
 		: ""]) || "gray");
 
-	let classes = [];
-	$: classes = coords.map((_, i) => [
-		selectedHash[i] ? "selected" : undefined,
-		highlightedHash[i] ? "highlighted" : undefined,
-		!edgesFoldAngleIsFlat[i] ? "dashed-line" : undefined,
-	].filter(a => a !== undefined).join(" "));
+	let edgesFoldAngleIsFlat = []
+	$: edgesFoldAngleIsFlat = (graph.edges_foldAngle || []).map(edgeFoldAngleIsFlat);
 
 	let lines = [];
 	$: lines = coords.map((coord, i) => ({
 		...coord,
-		...(classes[i] === "" ? {} : { class: classes[i] }),
+		...(attributes[i] || {}),
 		stroke: strokes[i],
-	}));
-
-	// $: console.log("drawing svg edges", lines.length);
-
+	})).map((attrs, i) => {
+		if (!edgesFoldAngleIsFlat[i]) {
+			attrs.class = attrs.class
+				? attrs.class + " " + "dashed-line"
+				: "dashed-line";
+		}
+		return attrs;
+	});
 </script>
 
-<g class="edges" style={`--stroke-width: ${$StrokeWidthCreasePattern}; --stroke-dash-length: ${$StrokeDashLengthCreasePattern}`}>
+<g
+	class="edges"
+	style={`--stroke-width: ${strokeWidth}; --stroke-dasharray: ${strokeDasharray}`}>
 	{#each lines as line, i}
 		<line {...line} />
 	{/each}
@@ -75,6 +61,6 @@
 		stroke-width: calc(var(--stroke-width) * 3pt);
 	}
 	.dashed-line {
-		stroke-dasharray: var(--stroke-dash-length);
+		stroke-dasharray: var(--stroke-dasharray);
 	}
 </style>

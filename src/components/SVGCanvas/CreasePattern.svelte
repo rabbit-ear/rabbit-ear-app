@@ -1,5 +1,5 @@
 <script>
-	import SVGCanvas from "./SVGCanvas.svelte";
+	import SVGTouchCanvas from "./SVGTouchCanvas.svelte";
 	import VerticesLayer from "./VerticesLayer.svelte";
 	import EdgesLayer from "./EdgesLayer.svelte";
 	import FacesCPLayer from "./FacesCPLayer.svelte";
@@ -10,7 +10,9 @@
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
 	import FoldableVertices from "./FoldableVertices.svelte";
+	import { makeSelectedAttributes } from "./attributes.js";
 	import { CreasePattern } from "../../stores/Model.js";
+	import { VerticalUp } from "../../stores/App.js";
 	import {
 		ShowGrid,
 		ShowAxes,
@@ -26,22 +28,38 @@
 		StrokeWidthCreasePattern,
 		StrokeDashLengthCreasePattern,
 	} from "../../stores/Style.js";
-	import { ViewBoxCP } from "../../stores/ViewBox.js";
+	import { ViewportCP } from "../../stores/ViewBox.js";
 
 	$: showVertices = $Tool
 		&& ($Tool.key === "select"
 		|| $Tool.key === "vertex");
+
+	const padViewport = (view, pad) => {
+		const p = Math.max(view[2], view[3]) * pad;
+		return [view[0] - p, view[1] - p, view[2] + p * 2, view[3] + p * 2];
+	};
+
+	$: viewport = padViewport($ViewportCP, 0.05);
+
+	$: invertVertical = $VerticalUp;
+
+	$: edgesAttributes = makeSelectedAttributes(
+		$CreasePattern,
+		$Selection.edges,
+		$Highlight.edges,
+	);
 </script>
 
-<SVGCanvas
-	viewBox={$ViewBoxCP}
+<SVGTouchCanvas
+	viewBox={viewport.join(" ")}
 	strokeWidth={$StrokeWidthCreasePattern}
+	{invertVertical}
 	on:press
 	on:move
 	on:release
 	on:scroll>
 	{#if $ShowGrid}
-		<GridLayer viewBox={$ViewBoxCP} />
+		<GridLayer {viewport} />
 	{/if}
 	<g class="origami-layer">
 		<FacesCPLayer
@@ -50,8 +68,10 @@
 			highlighted={$Highlight.faces} />
 		<EdgesLayer
 			graph={$CreasePattern}
-			selected={$Selection.edges}
-			highlighted={$Highlight.edges} />
+			attributes={edgesAttributes}
+			strokeWidth={$StrokeWidthCreasePattern}
+			strokeDasharray={$StrokeDashLengthCreasePattern}
+			/>
 		{#if showVertices}
 			<VerticesLayer
 				graph={$CreasePattern}
@@ -60,19 +80,19 @@
 		{/if}
 	</g>
 	{#if $ShowAxes}
-		<AxesLayer viewBox={$ViewBoxCP} />
+		<AxesLayer {viewport} />
 	{/if}
 	{#if $ShowFlatFoldableIssues}
 		<FoldableVertices graph={$CreasePattern} />
 	{/if}
 	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLengthCreasePattern};`} >
-		<RulerLayer viewBox={$ViewBoxCP} />
+		<RulerLayer {viewport} />
 		<UILayer />
 		{#if $Tool && $Tool.SVGLayer}
 			<svelte:component this={$Tool.SVGLayer} />
 		{/if}
 	</g>
 	{#if $ShowIndices}
-		<GraphIndices graph={$CreasePattern} />
+		<GraphIndices graph={$CreasePattern} {invertVertical} />
 	{/if}
-</SVGCanvas>
+</SVGTouchCanvas>

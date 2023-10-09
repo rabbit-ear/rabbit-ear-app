@@ -3,8 +3,8 @@ import {
 	derived,
 } from "svelte/store";
 import {
-	ViewBoxCP,
-	ViewBoxFolded,
+	ViewportCP,
+	ViewportFolded,
 } from "./ViewBox.js";
 /**
  * @description Stroke-width will use this value and multiply it against
@@ -28,22 +28,22 @@ const StrokeWidthMin = 0.001;
  * if this is placed on a root element with many children.
  */
 export const StrokeWidthCreasePattern = derived(
-	ViewBoxCP,
-	($ViewBoxCP) => (
+	ViewportCP,
+	($ViewportCP) => (
 		Math.max(
 			StrokeWidthMin,
-			Math.max($ViewBoxCP[2], $ViewBoxCP[3]) * StrokeWidthFactor,
+			Math.max($ViewportCP[2], $ViewportCP[3]) * StrokeWidthFactor,
 		)
 	),
 	StrokeWidthFactor,
 );
 
 export const StrokeWidthFoldedForm = derived(
-	ViewBoxFolded,
-	($ViewBoxFolded) => (
+	ViewportFolded,
+	($ViewportFolded) => (
 		Math.max(
 			StrokeWidthMin,
-			Math.max($ViewBoxFolded[2], $ViewBoxFolded[3]) * StrokeWidthFactor,
+			Math.max($ViewportFolded[2], $ViewportFolded[3]) * StrokeWidthFactor,
 		)
 	),
 	StrokeWidthFactor,
@@ -79,9 +79,9 @@ export const VertexRadiusFactor = writable(0.00666);
  * @description SVG circle elements use this for their radius value.
  */
 export const VertexRadius = derived(
-	[ViewBoxCP, VertexRadiusFactor],
-	([$ViewBoxCP, $VertexRadiusFactor]) => (
-		Math.max($ViewBoxCP[2], $ViewBoxCP[3]) * $VertexRadiusFactor
+	[ViewportCP, VertexRadiusFactor],
+	([$ViewportCP, $VertexRadiusFactor]) => (
+		Math.max($ViewportCP[2], $ViewportCP[3]) * $VertexRadiusFactor
 	),
 	0.00666,
 );
@@ -115,10 +115,10 @@ export const ShowCut = writable(true);
 //
 
 // the background of the WebGL canvas
-export const BackgroundColor = writable("#2a2a2a");
+export const BackgroundColor = writable("#231f1f");
 
 // front and back are the mesh faces
-export const FrontColor = writable("#333");
+export const FrontColor = writable("#272222");
 export const BackColor = writable("#1133a1");
 
 // line color by assignment

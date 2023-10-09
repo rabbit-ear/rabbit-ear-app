@@ -4,7 +4,7 @@ import {
 	RulerLines,
 	RulerRays,
 } from "./Ruler.js"
-import { ViewBoxCP } from "./ViewBox.js";
+import { ViewportCP } from "./ViewBox.js";
 /**
  * @description a UI touch event, coming from a pointer device, will have some
  * built-in error correcting (like snapping, for example), and this behavior
@@ -19,9 +19,9 @@ const UIEpsilonFactor = 0.01;
  * correcting value.
  */
 export const UIEpsilonCP = derived(
-	ViewBoxCP,
-	($ViewBoxCP) => (
-		Math.max($ViewBoxCP[2], $ViewBoxCP[3]) * UIEpsilonFactor
+	ViewportCP,
+	($ViewportCP) => (
+		Math.max($ViewportCP[2], $ViewportCP[3]) * UIEpsilonFactor
 	),
 	0.05,
 );

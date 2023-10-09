@@ -1,4 +1,14 @@
 <script>
+	import { boundingBox } from "rabbit-ear/graph/boundary.js";
+	import { boundingBoxToViewBox } from "rabbit-ear/convert/foldToSvg/general.js";
+	import {
+		square,
+		rectangle,
+		polygon,
+	} from "rabbit-ear/fold/bases.js";
+	import SVGCanvas from "../SVGCanvas/SVGCanvas.svelte";
+	import FacesLayer from "../SVGCanvas/FacesCPLayer.svelte";
+	import EdgesLayer from "../SVGCanvas/EdgesLayer.svelte";
 	import { createEventDispatcher } from "svelte";
 
 	const dispatch = createEventDispatcher();
@@ -29,15 +39,56 @@
 	let rectangleWidth = 2;
 	let rectangleHeight = 1;
 	let polygonSides = 6;
+
+	$: graphSquare = square(squareSize);
+	$: graphSquareViewBox = boundingBoxToViewBox(boundingBox(graphSquare))
+		.split(" ")
+		.map(n => parseInt(n, 10));
+
+	$: graphRectangle = rectangle(rectangleWidth, rectangleHeight);
+	$: graphRectangleViewBox = boundingBoxToViewBox(boundingBox(graphRectangle))
+		.split(" ")
+		.map(n => parseInt(n, 10));
+
+	$: graphPolygon = polygon(polygonSides);
+	$: graphPolygonViewBox = boundingBoxToViewBox(boundingBox(graphPolygon))
+		.split(" ")
+		.map(n => parseFloat(n));
 </script>
 
 	<p>new crease pattern shape</p>
 	<div class="input-row">
-		<button on:click={newEmpty}>empty</button>
-		<button on:click={newSquare}>square</button>
-		<button on:click={() => panel = "nxnSquare"}>NxN square</button>
-		<button on:click={() => panel = "rectangle"}>rectangle</button>
-		<button on:click={() => panel = "polygon"}>regular polygon</button>
+		<button class="svg-button" on:click={newEmpty}>
+			<SVGCanvas />
+		</button>
+
+		<button class="svg-button" on:click={newSquare}>
+			<SVGCanvas viewBox={graphSquareViewBox} >
+				<FacesLayer graph={graphSquare} />
+				<EdgesLayer graph={graphSquare} />
+			</SVGCanvas>
+		</button>
+
+		<button class="svg-button" on:click={() => panel = "nxnSquare"}>
+			<SVGCanvas viewBox={graphSquareViewBox} >
+				<FacesLayer graph={graphSquare} />
+				<EdgesLayer graph={graphSquare} />
+			</SVGCanvas>
+		</button>
+
+		<button class="svg-button" on:click={() => panel = "rectangle"}>
+			<SVGCanvas viewBox={graphRectangleViewBox} >
+				<FacesLayer graph={graphRectangle} />
+				<EdgesLayer graph={graphRectangle} />
+			</SVGCanvas>
+		</button>
+
+		<button class="svg-button" on:click={() => panel = "polygon"}>
+			<SVGCanvas viewBox={graphPolygonViewBox} >
+				<FacesLayer graph={graphPolygon} />
+				<EdgesLayer graph={graphPolygon} />
+			</SVGCanvas>
+		</button>
 	</div>
 	<slot />
 
@@ -96,6 +147,16 @@
 	{/if}
 
 <style>
+	button.svg-button {
+		background-color: var(--background-1);
+		width: 6rem;
+		height: 6rem;
+		border: 2px solid var(--background-4);
+		border-radius: 0.5rem;
+	}
+	button.svg-button:hover {
+		border: 2px solid var(--dim);
+	}
 	input[type=number] {
 		width: 5rem;
 	}

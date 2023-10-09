@@ -16,11 +16,13 @@
 	$: kawasaki = graph && graph.vertices_coords
 		? $InvalidKawasaki
 			.map(v => graph.vertices_coords[v])
+			.filter(a => a !== undefined)
 			.map(([cx, cy]) => ({ cx, cy, r: $VertexRadius * 3, class: "kawasaki" }))
 		: [];
 	$: maekawa = graph && graph.vertices_coords
 		?	$InvalidMaekawa
 			.map(v => graph.vertices_coords[v])
+			.filter(a => a !== undefined)
 			.map(([cx, cy]) => ({
 				cx, cy, r: $VertexRadius * 3, class: "maekawa", "stroke-width": $VertexRadius,
 			}))

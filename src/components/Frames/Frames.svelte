@@ -40,7 +40,12 @@
 		height: 100%;
 		overflow-x: auto;
 		border-top: 2px solid var(--background-2);
-/*		padding: 0.5rem;*/
+		background-color: var(--background-1);
+	}
+	/* prevent the tab-selection outline on the frame container. */
+	/* it doesn't make sense what it would be doing anyway. */
+	.frames:focus-visible {
+		outline: none;
 	}
 	.horizontal {
 		display: flex;

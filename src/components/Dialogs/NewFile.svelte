@@ -45,13 +45,13 @@
 	}
 	dialog::backdrop {
 		background-color: #0004;
-/*		background: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.2));*/
+		/* background: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.2)); */
 	}
 	dialog > * {
 		margin: 1rem;
 	}
 	h1 {
 		font-size: 2rem;
-/*		margin: 0.5rem 0.5rem;*/
+		/* margin: 0.5rem 0.5rem; */
 	}
 </style>

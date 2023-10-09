@@ -34,6 +34,8 @@ import {
  */
 const AppPointerEvent = readable((eventType, event) => {
 	Pointer.set(event.point);
+	// here. if button 2 is pressed, pan camera around and return true
+	return false;
 });
 /**
  * @description When a pointer event fires from an SVG canvas (mousedown,
@@ -56,7 +58,7 @@ const ToolPointerEvent = derived(
 export const PointerEventCP = derived(
 	[AppPointerEvent, ToolPointerEvent],
 	([$AppPointerEvent, $ToolPointerEvent]) => (eventType, event) => {
-		$AppPointerEvent(eventType, event);
+		if ($AppPointerEvent(eventType, event)) { return; }
 		$ToolPointerEvent(eventType, event);
 	},
 	() => {},
@@ -65,7 +67,7 @@ export const PointerEventCP = derived(
 export const PointerEventFolded = derived(
 	[AppPointerEvent, ToolPointerEvent],
 	([$AppPointerEvent, $ToolPointerEvent]) => (eventType, event) => {
-		$AppPointerEvent(eventType, event);
+		if ($AppPointerEvent(eventType, event)) { return; }
 		$ToolPointerEvent(eventType, event);
 	},
 	() => {},

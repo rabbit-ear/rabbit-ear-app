@@ -1,7 +1,7 @@
 <script>
 	import {
-		clipLineInLargerViewBox,
-		clipRayInLargerViewBox,
+		clipLineInLargerViewport,
+		clipRayInLargerViewport,
 	} from "../../js/intersect.js";
 	import {
 		RulerLines,
@@ -13,7 +13,7 @@
 	} from "../../stores/UI.js";
 	import { Tool } from "../../stores/UI.js";
 
-	export let viewBox = [0, 0, 1, 1];
+	export let viewport = [0, 0, 1, 1];
 
 	let showRulers = true;
 	$: showRulers = $Tool
@@ -21,22 +21,22 @@
 		&& $Tool.name !== "folded line"
 
 	$: rulerLineSegments = $RulerLines
-		.map(line => clipLineInLargerViewBox(line, viewBox))
+		.map(line => clipLineInLargerViewport(line, viewport))
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 
 	$: rulerRaySegments = $RulerRays
-		.map(ray => clipRayInLargerViewBox(ray, viewBox))
+		.map(ray => clipRayInLargerViewport(ray, viewport))
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 
 	$: uiLineSegments = $UILines
-		.map(line => clipLineInLargerViewBox(line, viewBox))
+		.map(line => clipLineInLargerViewport(line, viewport))
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 
 	$: uiRaySegments = $UIRays
-		.map(line => clipRayInLargerViewBox(line, viewBox))
+		.map(line => clipRayInLargerViewport(line, viewport))
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 

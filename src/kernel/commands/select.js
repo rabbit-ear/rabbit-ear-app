@@ -7,6 +7,7 @@ import { Highlight } from "../../stores/UI.js";
  */
 export const selectAll = () => {
 	const graph = get(CreasePattern);
+	if (!graph) { return; }
 	const vertices = (graph.vertices_coords || []).map((_, i) => i);
 	const edges = (graph.edges_vertices || []).map((_, i) => i);
 	const faces = (graph.faces_vertices || []).map((_, i) => i);

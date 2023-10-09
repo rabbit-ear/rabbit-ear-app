@@ -79,4 +79,6 @@ export const isFormElementActive = () => {
  */
 export const isFrameElementSelected = () => document.activeElement
 	&& document.activeElement.classList
-	&& document.activeElement.classList.contains("button-frame-item");
+	&& (document.activeElement.classList.contains("button-frame-item")
+		|| document.activeElement.classList.contains("frames"));
+	

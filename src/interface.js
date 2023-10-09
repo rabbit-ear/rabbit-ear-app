@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { appWindow } from "@tauri-apps/api/window";
 import {
+	ask,
 	open,
 	save,
 } from "@tauri-apps/api/dialog";
@@ -15,7 +16,7 @@ import {
 	executeCommand,
 } from "./kernel/execute.js";
 import {
-	InvertY,
+	VerticalUp,
 	ShowGrid,
 	ShowAxes,
 	ShowIndices,
@@ -24,11 +25,16 @@ import {
 	ShowFrames,
 	ShowStaticOrSimulator,
 	DialogNewFile,
+	DialogNewFrame,
+	DialogImportFile,
+	DialogExportAs,
 } from "./stores/App.js";
 import {
 	FileName,
 	LoadFile,
-	GetFile,
+	ExportFile,
+	// ImportFileMetadata,
+	// ImportFileContents,
 } from "./stores/File.js";
 
 // bind kernel execution methods to the window,
@@ -59,7 +65,7 @@ window.store.toggle = (name) => {
 	switch (name) {
 	case "ShowFrames": store = ShowFrames; break;
 	case "ShowIndices": store = ShowIndices; break;
-	case "InvertY": store = InvertY; break;
+	case "VerticalUp": store = VerticalUp; break;
 	case "ShowGrid": store = ShowGrid; break;
 	case "ShowAxes": store = ShowAxes; break;
 	case "ShowIndices": store = ShowIndices; break;
@@ -79,9 +85,26 @@ window.store.toggle = (name) => {
  * @description Communicate from Rust to Javascript.
  * A new file dialog request has been made, open in-app new file dialog.
  */
-window.dialog.newFile = () => {
-	get(DialogNewFile).showModal();
-}
+window.dialog.newFile = async () => {
+	// const yes = await ask("Are you sure?", "Tauri");
+	const confirmNewFile = await ask("This will erase all current progress", {
+		title: "Start a new file?",
+		type: "warning",
+		okLabel: "New File",
+		cancelLabel: "Cancel",
+	});
+	if (confirmNewFile) {
+		executeCommand("newFile");
+		get(DialogNewFrame).showModal();
+	}
+};
+/**
+ * @description Communicate from Rust to Javascript.
+ * A new file dialog request has been made, open in-app new file dialog.
+ */
+window.dialog.newFrame = async () => {
+	get(DialogNewFrame).showModal();
+};
 /**
  * @description Communicate from Rust to Javascript.
  * A file open dialog request has been made, open file picker.
@@ -89,7 +112,7 @@ window.dialog.newFile = () => {
 window.fs.open = async () => {
 // Open a selection dialog for image files
 	const selected = await open({
-		multiple: true,
+		multiple: false,
 		filters: [{
 			name: "origami",
 			extensions: ["fold"]
@@ -103,7 +126,7 @@ window.fs.open = async () => {
 	// console.log("filePath", filePath);
 	const contents = await readTextFile(filePath);
 	try {
-		LoadFile(JSON.parse(contents), filePath);
+		LoadFOLDFile(JSON.parse(contents), filePath);
 	} catch (error) {
 		console.warn(error);
 	}
@@ -118,7 +141,7 @@ window.fs.save = async () => {
 		// file does not yet exist. Trigger "SaveAs"
 		return window.fs.saveAs();
 	}
-	await writeTextFile(filePath, JSON.stringify(GetFile()));
+	await writeTextFile(filePath, JSON.stringify(ExportFile()));
 };
 /**
  * @description Communicate from Rust to Javascript.
@@ -128,17 +151,62 @@ window.fs.saveAs = async () => {
 	const filePath = await save({
 		filters: [{
 			name: "origami",
-			extensions: ["fold"]
+			extensions: ["fold"],
 		}]
 	});
 	if (filePath == null) { return; }
-	await writeTextFile(filePath, JSON.stringify(GetFile()));
+	await writeTextFile(filePath, JSON.stringify(ExportFile()));
 	FileName.set(filePath);
+};
+/**
+ * @description Communicate from Rust to Javascript.
+ * A new file dialog request has been made, open in-app new file dialog.
+ */
+window.dialog.exportAs = async () => {
+	get(DialogExportAs).showModal();
+};
+/**
+ * @description Communicate from Rust to Javascript.
+ * A new file dialog request has been made, open in-app new file dialog.
+ */
+window.dialog.importFile = async () => {
+// Open a selection dialog for image files
+	const selected = await open({
+		multiple: false,
+		filters: [{
+			name: "image",
+			extensions: ["svg", "obj", "opx", "cp"],
+		}]
+	});
+	if (selected == null) { return; }
+	// todo: hardcoded ignoring more than 1 file
+	const filePath = Array.isArray(selected)
+		? selected[0]
+		: selected;
+	// console.log("filePath", filePath);
+	const contents = await readTextFile(filePath);
+	// const { filename, name, extension } = getFilenameParts(filePath);
+
+	const files = LoadFile(contents, filePath);
+
+	// ImportFileMetadata.set({ filename, name, extension });
+	// ImportFileContents.set(contents);
+
+	// console.log("filePath", filePath);
+	// console.log("name", name);
+	// console.log("extension", extension);
+	// console.log("contents", contents);
+	// try {
+	// 	LoadFOLDFile(JSON.parse(contents), filePath);
+	// } catch (error) {
+	// 	console.warn(error);
+	// }
+	get(DialogImportFile).showModal();
 };
 /**
  * @description Drag and drop to load file
  */
-const unlisten = await appWindow.onFileDropEvent(async (event) => {
+appWindow.onFileDropEvent(async (event) => {
 	// console.log("DRAG AND DROP", event);
 	if (event.payload.type === "hover") {
 		// console.log("User hovering", event.payload.paths);
@@ -149,7 +217,7 @@ const unlisten = await appWindow.onFileDropEvent(async (event) => {
 		const filePath = event.payload.paths[0];
 		const contents = await readTextFile(filePath);
 		try {
-			LoadFile(JSON.parse(contents), filePath);
+			LoadFOLDFile(JSON.parse(contents), filePath);
 		} catch (error) {
 			console.warn(error);
 		}

@@ -1,54 +1,23 @@
 <script>
-	import { createEventDispatcher } from "svelte";
-	import { InvertY } from "../../stores/App.js";
-	import {
-		convertToViewBox,
-		findInParents,
-	} from "../../js/dom.js";
-
-	$: yScale = $InvertY ? 1 : -1;
-
-	const unwrap = (point) => [point[0], point[1] * yScale];
-
-	const formatMouseEvent = (e) => ({
-		buttons: e.buttons,
-		point: unwrap(convertToViewBox(findInParents(e.target, "svg"), [e.x, e.y])),
-	});
-
-	const formatWheelEvent = (e) => ({
-		wheelDelta: e.wheelDelta, // wheelDeltaX, wheelDeltaY
-		point: convertToViewBox(findInParents(e.target, "svg"), [e.x, e.y]),
-	});
-
-	const dispatch = createEventDispatcher();
-	const mousedown = (e) => dispatch("press", formatMouseEvent(e));
-	const mousemove = (e) => dispatch("move", formatMouseEvent(e));
-	const mouseup = (e) => dispatch("release", formatMouseEvent(e));
-	const wheel = (e) => dispatch("scroll", formatWheelEvent(e));
-
-	export let viewBox = [0, 0, 1, 1];
+	export let viewBox = "0 0 1 1";
 	export let strokeWidth = 0.001;
+	export let invertVertical = false;
 
-	const padViewBox = (box) => {
-		const pad = Math.max(box[2], box[3]) * 0.05;
-		return [box[0] - pad, box[1] - pad, box[2] + pad * 2, box[3] + pad * 2];
-	};
+	$: matrix = [1, 0, 0, invertVertical ? -1 : 1, 0, 0].join(", ");
 </script>
-
-<!-- i'm not sure what role=presentation means, i just guessed -->
 
 <svg
 	xmlns="http://www.w3.org/2000/svg"
-	viewBox={padViewBox(viewBox).join(" ")}
+	role="presentation"
 	stroke-width={strokeWidth}
-	on:mousedown={mousedown}
-	on:mousemove={mousemove}
-	on:mouseup={mouseup}
-	on:wheel={wheel}
+	{viewBox}
+	on:mousedown
+	on:mousemove
+	on:mouseup
+	on:wheel
 	on:focus={() => {}}
-	on:blur={() => {}}
-	role="presentation" >
-	<g class="wrapper-layer" style={`transform: matrix(1, 0, 0, ${yScale}, 0, 0)`}>
+	on:blur={() => {}}>
+	<g class="wrapper-layer" style={`transform: matrix(${matrix})`}>
 		<slot />
 	</g>
 </svg>
@@ -57,10 +26,5 @@
 	svg {
 		width: 100%;
 		height: 100%;
-	}
-	.wrapper-layer {
-/*		transform: scale(100, 100);*/
-/*		transform: matrix(1, 0, 0, -1, 0, 1);*/
-/*		transform: matrix(1, 0, 0, -1, 0, 0);*/
 	}
 </style>

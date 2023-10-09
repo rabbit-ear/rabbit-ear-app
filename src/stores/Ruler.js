@@ -22,13 +22,18 @@ export const RulerRays = writable([]);
 export const RulerPoints = derived(
 	[CreasePattern, RulerLines, RulerRays],
 	([$CreasePattern, $RulerLines, $RulerRays]) => {
-		// todo, filter, remove duplicates
-		const intersectedLines = $RulerLines
-			.flatMap(line => intersectGraphLine($CreasePattern, line));
-		const intersectedRays = $RulerRays
-			.flatMap(ray => intersectGraphRay($CreasePattern, ray));
-		// todo: intersect lines and rays against themselves
-		return [...intersectedLines, ...intersectedRays];
+		try {
+			// todo, filter, remove duplicates
+			const intersectedLines = $RulerLines
+				.flatMap(line => intersectGraphLine($CreasePattern, line));
+			const intersectedRays = $RulerRays
+				.flatMap(ray => intersectGraphRay($CreasePattern, ray));
+			// todo: intersect lines and rays against themselves
+			return [...intersectedLines, ...intersectedRays];
+		} catch (error) {
+			console.warn("RulerPoints", error);
+		}
+		return [];
 	},
 	[],
 );

@@ -42,6 +42,10 @@ fn main() {
 		"new".to_string(),
 		"New")
 		.accelerator("cmdOrControl+N");
+	let item_new_frame = CustomMenuItem::new(
+		"new_frame".to_string(),
+		"New Frame")
+		.accelerator("cmdOrControl+Shift+N");
 	let item_open = CustomMenuItem::new(
 		"open".to_string(),
 		"Open")
@@ -58,7 +62,7 @@ fn main() {
 		"import".to_string(),
 		"Import");
 	let item_export = CustomMenuItem::new(
-		"export".to_string(),
+		"export_as".to_string(),
 		"Export As...")
 		.accelerator("cmdOrControl+Alt+Shift+S");
 
@@ -172,6 +176,8 @@ fn main() {
 		.add_native_item(MenuItem::Quit));
 	let menu_file = Submenu::new("File", Menu::new()
 		.add_item(item_new)
+		.add_item(item_new_frame)
+		.add_native_item(MenuItem::Separator)
 		.add_item(item_open)
 		.add_native_item(MenuItem::Separator)
 		.add_item(item_save)
@@ -255,6 +261,9 @@ fn main() {
 				"new" => {
 					let _ = event.window().eval("window.dialog.newFile()");
 				}
+				"new_frame" => {
+					let _ = event.window().eval("window.dialog.newFrame()");
+				}
 				"open" => {
 					let _ = event.window().eval("window.fs.open()");
 				}
@@ -263,6 +272,12 @@ fn main() {
 				}
 				"save_as" => {
 					let _ = event.window().eval("window.fs.saveAs()");
+				}
+				"import" => {
+					let _ = event.window().eval("window.dialog.importFile()");
+				}
+				"export_as" => {
+					let _ = event.window().eval("window.dialog.exportAs()");
 				}
 				"quit" => {
 					std::process::exit(0);
@@ -313,25 +328,25 @@ fn main() {
 					let _ = event.window().eval("window['executeCommand']('invertAssignments')");
 				}
 				"reassign_boundary" => {
-					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'B')')");
+					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"B\")')");
 				}
 				"reassign_valley" => {
-					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'V')')");
+					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"V\")')");
 				}
 				"reassign_mountain" => {
-					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'M')')");
+					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"M\")')");
 				}
 				"reassign_flat" => {
-					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'F')')");
+					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"F\")')");
 				}
 				"reassign_cut" => {
-					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'C')')");
+					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"C\")')");
 				}
 				"reassign_join" => {
-					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'J')')");
+					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"J\")')");
 				}
 				"reassign_unassigned" => {
-					let _ = event.window().eval("window['execute']('setAssignment(getSelectedEdges(), 'U')')");
+					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"U\")')");
 				}
 
 				// selection
@@ -392,7 +407,7 @@ fn main() {
 					// println!("Called {}", ARRAY.lock().unwrap().len());
 				}
 				"invert_vertical_axis" => {
-					let _ = event.window().eval("window.store.toggle('InvertY')");
+					let _ = event.window().eval("window.store.toggle('VerticalUp')");
 				}
 				"show_grid" => {
 					let _ = event.window().eval("window.store.toggle('ShowGrid')");
@@ -424,6 +439,6 @@ fn store_boolean_update(name:String, value:bool) {
 	println!("'{}': {:?}", name, value);
 	match name.as_str() {
 		// "ShowFrames" => item_show_frames.selected = value,
-		_ => println!("match not found"),
+		_ => println!("RUST store boolean update callback"),
 	}
 }

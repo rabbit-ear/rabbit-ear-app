@@ -4,12 +4,17 @@
 	--text: #ddd;
 	--bright: #fff;
 	--dim: #888;
-	--background-0: #2a2a2a;
-	--background-1: #333;
-	--background-2: #3a3a3a;
-	--background-3: #444;
-	--background-4: #4b4b4b;
-	--black: #0a0a0a;
+	--background-0: #231f1f;
+	--background-1: #272222;
+	--background-2: #2f2a2a;
+	--background-3: #383333;
+	--background-4: #4e4b4b;
+	/*--background-0: #2c2929;
+	--background-1: #3b3634;
+	--background-2: #443c39;
+	--background-3: #484444;
+	--background-4: #4e4b4b;*/
+	--black: #0c0a0a;
 	--red: #e53;
 	--yellow: #fb4;
 	--brightgreen: #5e3;
@@ -71,13 +76,20 @@ html, body, #app {
 	position: fixed;
 }
 
-h1 { font-size: 2rem; }
-h2 { font-size: 1.75rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
+h1 { font-size: 1.8rem; }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.4rem; }
+h4 { font-size: 1.2rem; }
 h5 { font-size: 1rem; }
 h1, h2, h3, h4, h5 {
 	font-weight: bold;
+}
+
+h1, h2, h3, h4, h5,
+p, span, label, ul, ol, li {
+	-webkit-user-select: none;
+	user-select: none;
+	cursor: default;
 }
 
 /*@media (prefers-color-scheme: light) {

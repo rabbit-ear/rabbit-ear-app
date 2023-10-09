@@ -22,7 +22,7 @@
 	};
 
 	let facesPolygon = [];
-	$: facesPolygon = !graph.faces_vertices
+	$: facesPolygon = !graph || !graph.faces_vertices
 		? []
 		: graph.faces_vertices
 			.map(fv => fv.map(v => graph.vertices_coords[v].slice(0, 2).join(",")))

@@ -148,4 +148,10 @@
 	.panels {
 		background-color: var(--background-1);
 	}
+
+	/* disable text-style drag and highlight on the buttons */
+	.toolbar, .toolbar :global(*) {
+		-webkit-user-select: none;
+		user-select: none;
+	}
 </style>

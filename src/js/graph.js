@@ -2,6 +2,7 @@ import planarize from "rabbit-ear/graph/planarize.js";
 import populate from "rabbit-ear/graph/populate.js";
 import { flattenFrame } from "rabbit-ear/fold/frames.js";
 import { assignmentFlatFoldAngle } from "rabbit-ear/fold/spec.js";
+import { distance } from "rabbit-ear/math/vector.js";
 /**
  * @description Create an empty FOLD graph.
  */
@@ -169,4 +170,14 @@ export const graphIsCreasePattern = (graph) => {
 		.filter(n => n !== undefined)
 		.filter(n => Math.abs(n) > 1e-2)
 		.length === 0;
+};
+
+export const shortestEdgeLength = (graph) => {
+	if (!graph || !graph.vertices_coords || !graph.edges_vertices) { return 0; }
+	const lengths = graph.edges_vertices
+		.map(ev => ev.map(v => graph.vertices_coords[v]))
+		.map(segment => distance(...segment));
+	const minLen = lengths
+		.reduce((a, b) => Math.min(a, b), Infinity);
+	return minLen === Infinity ? undefined : minLen;
 };

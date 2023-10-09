@@ -5,16 +5,28 @@ import {
 	invertMatrix2,
 	multiplyMatrix2Vector2,
 } from "rabbit-ear/math/matrix2.js";
+import { foldToViewBox as FOLDToViewBox } from "rabbit-ear/svg/general/viewBox.js";
+
+export const getFOLDViewport = (graph, verticalUp = false) => {
+	if (!graph) { return [0, 0, 1, 1]; }
+	// move the origin up, if not inverted.
+	const viewBox = FOLDToViewBox(graph);
+	if (!viewBox) { return [0, 0, 1, 1]; }
+	const viewBoxValues = viewBox.split(" ").map(parseFloat)
+	return !verticalUp
+		? viewBoxValues
+		: [viewBoxValues[0], -(viewBoxValues[1] + viewBoxValues[3]), viewBoxValues[2], viewBoxValues[3]];
+};
 /**
  *
  */
-export const viewBoxOrigin = (box, invertY = false) => invertY
+export const viewBoxOrigin = (box, verticalUp = false) => !verticalUp
 	? [box[0], box[1]]
 	: [box[0], -box[1] - box[3]];
 /**
  *
  */
-export const graphToMatrix2 = (graph = {}, invertY = false) => {
+export const graphToMatrix2 = (graph = {}, verticalUp = false) => {
 	const box = boundingBox(graph);
 	// no vertices
 	if (!box || !box.span || !box.min) { return [...identity2x3]; }
@@ -26,7 +38,7 @@ export const graphToMatrix2 = (graph = {}, invertY = false) => {
 		return [...identity2x3];
 	}
 	const translation = [0, 1].map(i => box.min[i] + padding[i]);
-	if (!invertY) { translation[1] = -box.max[1] + padding[1]; }
+	if (verticalUp) { translation[1] = -box.max[1] + padding[1]; }
 	return [vmax, 0, 0, vmax, translation[0], translation[1]];
 };
 /**

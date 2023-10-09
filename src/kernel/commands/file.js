@@ -7,8 +7,8 @@ import {
 } from "../../stores/Model.js";
 import {
 	NewFile,
-	LoadFile,
-	GetFile,
+	LoadFOLDFile,
+	ExportFile,
 } from "../../stores/File.js";
 import { makeEmptyGraph } from "../../js/graph.js";
 /**
@@ -28,11 +28,11 @@ const downloadFile = (contents, filename = "origami.fold") => {
 /**
  * @description load a FOLD object and replace the currently loaded file
  */
-export const newFile = (FOLD = {}) => NewFile(FOLD);
+export const newFile = (FOLD) => NewFile(FOLD);
 /**
  * @description load a FOLD object and replace the currently loaded file
  */
-// export const load = (FOLD = {}, filename) => LoadFile(FOLD, filename);
+// export const load = (FOLD = {}, filename) => LoadFOLDFile(FOLD, filename);
 /**
  * @description load an empty FOLD object and replace the currently loaded file
  */
@@ -42,7 +42,7 @@ export const newFile = (FOLD = {}) => NewFile(FOLD);
  * browser's default download location. Not useful for native app build.
  */
 export const download = (filename) => (
-	downloadFile(JSON.stringify(GetFile()), filename)
+	downloadFile(JSON.stringify(ExportFile()), filename)
 );
 /**
  * @description

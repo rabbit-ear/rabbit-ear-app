@@ -1,4 +1,8 @@
-import { get, writable, derived } from "svelte/store";
+import {
+	get,
+	writable,
+	derived,
+} from "svelte/store";
 import {
 	identity2x3,
 	invertMatrix2,
@@ -77,7 +81,7 @@ export const ModelViewMatrixFolded = derived(
  * @description The SVG will set its "viewBox" property with this value,
  * a value which is based on the camera, as well as the model size.
  */
-export const ViewBoxCP = derived(
+export const ViewportCP = derived(
 	ModelViewMatrixCP,
 	($ModelViewMatrixCP) => {
 		const m = [...$ModelViewMatrixCP];
@@ -92,7 +96,7 @@ export const ViewBoxCP = derived(
 	[0, 0, 1, 1],
 );
 
-export const ViewBoxFolded = derived(
+export const ViewportFolded = derived(
 	ModelViewMatrixFolded,
 	($ModelViewMatrixFolded) => {
 		const m = [...$ModelViewMatrixFolded];

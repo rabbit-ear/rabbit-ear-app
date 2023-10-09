@@ -1,5 +1,5 @@
 import { writable, derived } from "svelte/store";
-import { ViewBoxCP } from "./ViewBox.js";
+import { ViewportCP } from "./ViewBox.js";
 import { RulerPoints } from "./Ruler.js";
 import { CreasePattern } from "./Model.js";
 /**
@@ -39,9 +39,9 @@ const SnapRadiusFactor = 0.05;
  * nearest snappable point, it is dependent upon the current view zoom.
  */
 export const SnapRadiusCreasePattern = derived(
-	ViewBoxCP,
-	$ViewBoxCP => (
-		Math.max($ViewBoxCP[2], $ViewBoxCP[3]) * SnapRadiusFactor
+	ViewportCP,
+	$ViewportCP => (
+		Math.max($ViewportCP[2], $ViewportCP[3]) * SnapRadiusFactor
 	),
 	0.05,
 );

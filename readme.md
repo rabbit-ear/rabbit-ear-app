@@ -20,22 +20,28 @@ Need to start to think about tools for modifying the folded form. some ideas:
 todo list:
 
 - [x] css style panels
-- [ ] style modal popups
+- [x] "new file" should be a simple yes/no and then trigger "new frame" modal
+- [x] style modal popups
 - [ ] create custom UI elements (radio, slider, buttons)
 - [ ] glitchy graphics, need to (secretly) scale up the graphics.
 - [x] selecting vertices, vertices are no longer being shown.
 - [ ] right mouse click changes to camera to pan around.
+- [x] save preferences in localStorage
 
 - [x] finish menu events
-- [ ] "reassign selected" doesn't work
+- [x] "reassign selected" doesn't work
 - [ ] menu boolean, checkmark reflecting state (Show/Hide)
 
 - [x] bring back keyboard shortcuts (that are not menu items)
 - [x] bring back basic drag and drop
+- [x] bring back "delete" key to delete frame
 - [ ] implement drag and drop into the frames window (append instead of replace)
 
 - [x] folded form should report when it cannot fold the crease pattern (and not show it)
 - [ ] hovering on folded form/simulator shows dots on crease pattern
+- [ ] folded form layer separation distance
+- [ ] ability to use line tools on folded form (edge, axioms).
+- [ ] when hovering over folded form, dim actions which cannot be used on it.
 
 - [x] recode axioms 4-7 to use new system of embeded execute methods
 - [ ] foldedLine tool should re-assign existing creases that lay along the path.
@@ -46,8 +52,12 @@ todo list:
 - [ ] export, multiple file formats, multiple arrangements of crease patterns and folded forms
 - [ ] when Svelte 5 comes out, replace GraphUpdate with an effect.
 
+- [ ] "toggleAssignment" to "toggleAssignments"
+- [ ] deleting all frames, drawing edges with no frame is buggy. also, creating empty frame is buggy.
+
 bug list:
 
+- [ ] the tool-svg-layer is disappearing. turning simulator on, folding simulator, going back to cp... using the edge tool
 - [ ] grid lines are messed up when zooming. "viewBoxOrigin" is buggy.
 - [ ] cmd+A in the text box, intended to select the text, instead gets run by Rust due to the menu shortcut.
 - [ ] Moosers train, make layers, clear, make again, somehow different

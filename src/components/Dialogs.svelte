@@ -1,7 +1,9 @@
 <script>
-	import NewFile from "./Dialogs/NewFile.svelte";
-	import NewFrame from "./Dialogs/NewFrame.svelte";
+	import DialogNewFrame from "./Dialogs/NewFrame.svelte";
+	import DialogExportAs from "./Dialogs/ExportAs.svelte";
+	import DialogImportFile from "./Dialogs/ImportFile.svelte";
 </script>
 
-<NewFile />
-<NewFrame />
+<DialogNewFrame />
+<DialogExportAs />
+<DialogImportFile />
