@@ -1,7 +1,11 @@
 import objToFold from "rabbit-ear/convert/objToFold/index.js";
 import opxToFold from "rabbit-ear/convert/opxToFold/index.js";
 import svgToFold from "rabbit-ear/convert/svgToFold/index.js";
+import svgSegments from "rabbit-ear/convert/svgToFold/svgSegments.js";
+import { rgbToAssignment } from "rabbit-ear/fold/colors.js";
+import { parseColorToRgb } from "rabbit-ear/svg/colors/parseColor.js";
 import { boundingBox } from "rabbit-ear/graph/boundary.js";
+import { xmlStringToElement } from "rabbit-ear/svg/general/dom.js";
 import {
 	get,
 	writable,
@@ -15,6 +19,8 @@ import {
 } from "./Model.js";
 import { getFilenameParts } from "../js/file.js";
 import { shortestEdgeLength } from "../js/graph.js";
+import { DialogImportFile } from "./App.js";
+
 // import { invoke } from "@tauri-apps/api/tauri";
 /**
  * @description The currently opened filename
@@ -55,6 +61,18 @@ ImportFileContents.set = (contents) => {
  *
  */
 export const ImportFileOptions = writable({});
+
+const makeAssignments = (segments) => {
+	const edgesStroke = segments.map(el => el.stroke);
+	const strokes = Array.from(new Set(edgesStroke))
+		.filter(el => typeof el === "string");
+	const assignments = {};
+	strokes.forEach(stroke => {
+		assignments[stroke] = rgbToAssignment(...parseColorToRgb(stroke))
+	});
+	return assignments;
+};
+
 /**
  * @description
  */
@@ -65,20 +83,44 @@ export const ImportFilePreview = derived(
 		try {
 			switch ($ImportFileMetadata.extension) {
 			// case "fold": fold = JSON.parse($ImportFileContents);
-			case "opx": fold = opxToFold($ImportFileContents); break;
-			case "obj": fold = objToFold($ImportFileContents); break;
-			case "svg": fold = svgToFold($ImportFileContents); break;
-			default: fold = {}; break;
+			case "opx": {
+				fold = opxToFold($ImportFileContents);
+				const epsilon = shortestEdgeLength(fold) / 24;
+				ImportFileOptions.set({
+					epsilon,
+					suggestedEpsilon: epsilon,
+					boundingBox: boundingBox(fold),
+					invertVertical: false,
+				});
+			}
+				break;
+			case "obj":
+				fold = objToFold($ImportFileContents);
+				break;
+			case "svg": {
+				fold = svgToFold($ImportFileContents);
+				const epsilon = shortestEdgeLength(fold) / 24;
+				const svg = xmlStringToElement($ImportFileContents, "image/svg+xml");
+				const segments = svgSegments(svg);
+				const assignments = makeAssignments(segments);
+				console.log("epsilon", epsilon);
+				console.log("svg", svg);
+				console.log("segments", segments);
+				console.log("assignments", assignments);
+				ImportFileOptions.set({
+					epsilon,
+					suggestedEpsilon: epsilon,
+					boundingBox: boundingBox(fold),
+					assignments,
+					invertVertical: false,
+				});
+			}
+				break;
+			default:
+				fold = {};
+				break;
 			}
 		} catch (error) {}
-		//
-		const epsilon = shortestEdgeLength(fold) / 24;
-		ImportFileOptions.set({
-			epsilon,
-			suggestedEpsilon: epsilon,
-			boundingBox: boundingBox(fold),
-			invertVertical: false,
-		});
 		return fold;
 	},
 	({}),
@@ -130,21 +172,32 @@ export const LoadFOLDFile = (FOLD, filename = "untitled.fold") => {
  */
 export const LoadFile = (contents, filePath) => {
 	const { filename, name, extension } = getFilenameParts(filePath);
-	// console.log("filePath", filePath);
-	// console.log("name", name);
-	// console.log("extension", extension);
-	// console.log("contents", contents);
 	switch (extension.toLowerCase()) {
 	case "fold": return LoadFOLDFile(contents, filePath);
 	default:
 		ImportFileMetadata.set({ filename, name, extension });
 		ImportFileContents.set(contents);
+		get(DialogImportFile).showModal();
 		break;
 	}
 };
 
 export const finishImport = () => {
-
+	const metadata = get(ImportFileMetadata);
+	const contents = get(ImportFileContents);
+	const options = get(ImportFileOptions);
+	// const preview = get(ImportFilePreview);
+	let fold = {};
+	try {
+		switch (metadata.extension) {
+		// case "fold": fold = JSON.parse($ImportFileContents);
+		case "opx": fold = opxToFold(contents, options); break;
+		case "obj": fold = objToFold(contents, options); break;
+		case "svg": fold = svgToFold(contents, options); break;
+		default: fold = {}; break;
+		}
+	} catch (error) {}
+	LoadFOLDFile(fold);
 };
 
 // todo: top level subscribe has no unsubscribe call.

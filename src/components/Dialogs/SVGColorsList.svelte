@@ -1,6 +1,5 @@
 <script>
-import { edgesAssignmentNames } from "rabbit-ear/fold/spec.js";
-	import { onMount, onDestroy } from "svelte";
+	import { edgesAssignmentNames } from "rabbit-ear/fold/spec.js";
 	export let assignments = {};
 	const allAssignments = ["B", "M", "V", "F", "J", "C", "U"];
 </script>

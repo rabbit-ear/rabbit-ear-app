@@ -4,7 +4,7 @@ import {
 	derived,
 } from "svelte/store";
 import { Selection } from "../../stores/Select.js";
-import { Highlight } from "../../stores/UI.js";
+// import { Highlight } from "../../stores/UI.js";
 import { CreasePattern } from "../../stores/Model.js";
 import { zipArrays } from "../../js/arrays.js";
 import { nearest } from "rabbit-ear/graph/nearest.js";
@@ -41,17 +41,17 @@ export const SelectionRect = derived(
 	undefined,
 );
 
-export const HighlightHover = derived(
-	[CreasePattern, Move],
-	([$CreasePattern, $Move]) => {
-		const nears = nearest($CreasePattern, $Move);
-		Highlight.reset();
-		Highlight.addVertices([nears.vertex]);
-		Highlight.addEdges([nears.edge]);
-		Highlight.addFaces([nears.face]);
-	},
-	{},
-);
+// export const HighlightHover = derived(
+// 	[CreasePattern, Move],
+// 	([$CreasePattern, $Move]) => {
+// 		const nears = nearest($CreasePattern, $Move);
+// 		Highlight.reset();
+// 		Highlight.addVertices([nears.vertex]);
+// 		Highlight.addEdges([nears.edge]);
+// 		Highlight.addFaces([nears.face]);
+// 	},
+// 	{},
+// );
 
 export const reset = () => {
 	Move.set(undefined);
@@ -63,10 +63,10 @@ export const reset = () => {
 let unsub;
 
 export const subscribe = () => {
-	unsub = HighlightHover.subscribe(() => {});
+	// unsub = HighlightHover.subscribe(() => {});
 };
 
 export const unsubscribe = () => {
-	if (unsub) { unsub(); }
+	// if (unsub) { unsub(); }
 	reset();
 };

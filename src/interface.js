@@ -26,15 +26,13 @@ import {
 	ShowStaticOrSimulator,
 	DialogNewFile,
 	DialogNewFrame,
-	DialogImportFile,
 	DialogExportAs,
 } from "./stores/App.js";
 import {
 	FileName,
 	LoadFile,
+	LoadFOLDFile,
 	ExportFile,
-	// ImportFileMetadata,
-	// ImportFileContents,
 } from "./stores/File.js";
 
 // bind kernel execution methods to the window,
@@ -110,7 +108,7 @@ window.dialog.newFrame = async () => {
  * A file open dialog request has been made, open file picker.
  */
 window.fs.open = async () => {
-// Open a selection dialog for image files
+	// Open a selection dialog for image files
 	const selected = await open({
 		multiple: false,
 		filters: [{
@@ -170,7 +168,7 @@ window.dialog.exportAs = async () => {
  * A new file dialog request has been made, open in-app new file dialog.
  */
 window.dialog.importFile = async () => {
-// Open a selection dialog for image files
+	// Open a selection dialog for image files
 	const selected = await open({
 		multiple: false,
 		filters: [{
@@ -183,49 +181,22 @@ window.dialog.importFile = async () => {
 	const filePath = Array.isArray(selected)
 		? selected[0]
 		: selected;
-	// console.log("filePath", filePath);
 	const contents = await readTextFile(filePath);
-	// const { filename, name, extension } = getFilenameParts(filePath);
-
-	const files = LoadFile(contents, filePath);
-
-	// ImportFileMetadata.set({ filename, name, extension });
-	// ImportFileContents.set(contents);
-
-	// console.log("filePath", filePath);
-	// console.log("name", name);
-	// console.log("extension", extension);
-	// console.log("contents", contents);
-	// try {
-	// 	LoadFOLDFile(JSON.parse(contents), filePath);
-	// } catch (error) {
-	// 	console.warn(error);
-	// }
-	get(DialogImportFile).showModal();
+	LoadFile(contents, filePath);
 };
 /**
- * @description Drag and drop to load file
+ * @description Drag and drop to load file. Works with FOLD and import-formats
  */
 appWindow.onFileDropEvent(async (event) => {
-	// console.log("DRAG AND DROP", event);
 	if (event.payload.type === "hover") {
-		// console.log("User hovering", event.payload.paths);
+
 	} else if (event.payload.type === "drop") {
-		// console.log("User dropped", event.payload.paths);
 		if (!event.payload.paths.length) { return; }
 		// todo: hardcoded ignoring more than 1 file
 		const filePath = event.payload.paths[0];
 		const contents = await readTextFile(filePath);
-		try {
-			LoadFOLDFile(JSON.parse(contents), filePath);
-		} catch (error) {
-			console.warn(error);
-		}
+		LoadFile(contents, filePath);
 	} else {
-		// console.log("File drop cancelled");
+		// File drop cancelled
 	}
 });
-
-// you need to call unlisten if your handler goes
-// out of scope e.g. the component is unmounted
-// unlisten();

@@ -57,6 +57,7 @@ todo list:
 
 bug list:
 
+- [ ] snapping to vertices doesn't work for large cps, 400x, snap to grid points overrides.
 - [ ] the tool-svg-layer is disappearing. turning simulator on, folding simulator, going back to cp... using the edge tool
 - [ ] grid lines are messed up when zooming. "viewBoxOrigin" is buggy.
 - [ ] cmd+A in the text box, intended to select the text, instead gets run by Rust due to the menu shortcut.

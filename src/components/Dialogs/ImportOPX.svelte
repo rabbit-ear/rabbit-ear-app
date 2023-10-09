@@ -23,8 +23,13 @@
 	$: strokeWidth = $ImportFileOptions.boundingBox
 		&& $ImportFileOptions.boundingBox.span
 		? Math.max($ImportFileOptions.boundingBox.span[0],
-			$ImportFileOptions.boundingBox.span[0]) / 50
+			$ImportFileOptions.boundingBox.span[0]) / 100
 		: 0.01;
+
+	let circles = [];
+	$: circles = ($ImportFilePreview && $ImportFilePreview.vertices_coords
+		? $ImportFilePreview.vertices_coords
+		: []).map(coord => ({ cx: coord[0], cy: coord[1], r: epsilon }));
 
 	// let bootLoop;
 	// onMount(() => {
@@ -45,11 +50,16 @@
 </script>
 
 <h1>Import OPX File</h1>
-<!-- <SVGCanvas data={$ImportedFile} {epsilon} showEpsilon={pageIndex === 1}> -->
 
 <div class="svg-preview">
-	<SVGCanvas viewBox={previewViewBox} {strokeWidth} invertVertical={$ImportFileOptions.invertVertical} >
+	<SVGCanvas
+		{strokeWidth}
+		viewBox={previewViewBox}
+		invertVertical={$ImportFileOptions.invertVertical}>
 		<EdgesLayer graph={$ImportFilePreview} {strokeWidth} />
+		<g class="vertices">
+			{#each circles as circle}<circle {...circle} />{/each}
+		</g>
 	</SVGCanvas>
 </div>
 
@@ -83,8 +93,12 @@
 
 <style>
 	.svg-preview {
-		width: 8rem;
-		height: 8rem;
+		width: 12rem;
+		height: 12rem;
 		margin: auto;
+	}
+	.vertices circle {
+		fill: var(--highlight);
+		opacity: 0.666;
 	}
 </style>

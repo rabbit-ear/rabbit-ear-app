@@ -1,6 +1,6 @@
 <script>
 	import Dialog from "./Dialog.svelte";
-	// import ImportSVG from "./ImportSVG.svelte";
+	import ImportSVG from "./ImportSVG.svelte";
 	import ImportOPX from "./ImportOPX.svelte";
 	import { DialogImportFile } from "../../stores/App.js";
 	import {
@@ -8,17 +8,17 @@
 		finishImport,
 	} from "../../stores/File.js";
 
-	const convertDidPress = () => {
-		// $ImportedFile.options = { epsilon };
-		// // $ImportedFile.options = { epsilon, yFlip };
-		// completeFileImport();
-	};
+	const cancel = () => $DialogImportFile.close();
+	const confirm = () => {
+		finishImport();
+		$DialogImportFile.close()
+	}
 </script>
 
 <Dialog bind:This={$DialogImportFile}>
 
 	{#if $ImportFileMetadata && $ImportFileMetadata.extension === "svg"}
-		<!-- <ImportSVG /> -->
+		<ImportSVG />
 	{:else if $ImportFileMetadata && $ImportFileMetadata.extension === "opx"}
 		<ImportOPX />
 	{:else}
@@ -26,8 +26,8 @@
 	{/if}
 
 	<div class="flex-row">
-		<button on:click={() => $DialogImportFile.close()}>cancel</button>
-		<button on:click={finishImport}>import</button>
+		<button on:click={cancel}>cancel</button>
+		<button on:click={confirm}>import</button>
 	</div>
 </Dialog>
 
