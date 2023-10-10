@@ -48,7 +48,8 @@ todo list:
 - [ ] rabbit ear tool. except make it the straight skeleton. only works for convex shapes.
 
 - [x] file protocol, filename in title. save button
-- [ ] import, svg, opx, obj
+- [x] import, svg, opx, obj
+- [x] basic export
 - [ ] export, multiple file formats, multiple arrangements of crease patterns and folded forms
 - [ ] when Svelte 5 comes out, replace GraphUpdate with an effect.
 

@@ -15,10 +15,9 @@ export const getFilenameParts = (filePath) => {
 		filename = filePath.match(/[^/]*$/)[0];
 	} catch (error) {}
 	try {
-		const [___, noExtension] = filePath.match(/(.*)\.[^.]+$/);
-		// const [noExtension, extension] = filePath.match(/[^\\]*\.(\w+)$/);
-		const [_, extension] = filename.match(/[^\\]*\.(\w+)$/);
-		const [__, name] = filename.match(/(.*)\.[^.]+$/);
+		const [_, noExtension] = filePath.match(/(.*)\.[^.]+$/);
+		const [__, extension] = filename.match(/[^\\]*\.(\w+)$/);
+		const [___, name] = filename.match(/(.*)\.[^.]+$/);
 		return { filename, name, extension, noExtension };
 	} catch (error) {}
 	return { filename, name: filename, extension: "", noExtension: filename };

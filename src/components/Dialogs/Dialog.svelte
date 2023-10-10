@@ -2,7 +2,10 @@
 	export let This;
 </script>
 
-<dialog bind:this={This}>
+<dialog
+	on:close
+	on:cancel
+	bind:this={This}>
 	<slot />
 </dialog>
 

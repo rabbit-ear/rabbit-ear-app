@@ -1,46 +1,42 @@
 <script>
 	import { edgesAssignmentNames } from "rabbit-ear/fold/spec.js";
+	import { rgbToHex } from "rabbit-ear/svg/colors/convert.js";
 	export let assignments = {};
 	const allAssignments = ["B", "M", "V", "F", "J", "C", "U"];
+
+	const formatRGB = (color) => {
+		const matches = color.match(/\(([^)]+)\)/);
+		if (matches == null) { return color; }
+		const numberString = matches[1];
+		const numbers = numberString.split(/[ ,]+/).map(n => parseInt(n));
+		return numbers.length === 3 ? rgbToHex(...numbers) : color;
+	};
 </script>
 
 <div class="container">
-	{#each Object.keys(assignments) as stroke, i}
+	{#each Object.keys(assignments) as color, i}
 		<div>
-			<select bind:value={assignments[stroke]} style="border-color: {stroke};">
+			<select bind:value={assignments[color]}>
 				{#each allAssignments as assign}
 					<option value={assign}>
 						{edgesAssignmentNames[assign]}
 					</option>
 				{/each}
 			</select>
-			<span>{stroke}</span>
+			<span style={`color: ${color};`}>{formatRGB(color)}</span>
 		</div>
 	{/each}
 </div>
 
 <style>
-	:global(body) span { color: #333; }
-	:global(body.dark) span { color: #bbb; }
-	:global(body) select {
-		color: initial;
-		background-color: initial;
-	}
-	:global(body.dark) select {
-		color: #bbb;
-		background-color: #222;
-	}
 	.container {
 		max-height: 10rem;
 		overflow-y: scroll;
+		margin: auto;
 	}
 	span {
+		color: #bbb;
 		font-weight: bold;
 		margin-left: 0.5rem;
-	}
-	select {
-		border: 4px solid;
-		padding: 0.15rem;
-		border-radius: 0.25rem;
 	}
 </style>

@@ -14,7 +14,11 @@ export const findEpsilon = ({ vertices_coords }, epsilonFactor = 1e-4) => {
 	return sideLength * epsilonFactor;
 };
 /**
- *
+ * @description Pretty print a floating point number, where the exact
+ * value does not matter, by iterating through the leading zeros until
+ * the first digit is found. You can also specify how many digits to
+ * include, meaning, non-zero digits.
+ * So for example, 0.0002458236492835 becomes 0.0002.
  */
 export const niceNumber = (number, digits = 1) => {
 	if (number > 10) { return String(parseInt(number)); }

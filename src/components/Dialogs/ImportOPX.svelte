@@ -1,25 +1,19 @@
 <script>
-	import { onMount, onDestroy } from "svelte";
+	import { onMount } from "svelte";
 	import { foldToViewBox } from "rabbit-ear/svg/general/viewBox.js";
 	import Pages from "./Pages.svelte";
 	import SVGCanvas from "../SVGCanvas/SVGCanvas.svelte";
 	import EdgesLayer from "../SVGCanvas/EdgesLayer.svelte";
 	import {
-		ImportFileMetadata,
 		ImportFilePreview,
 		ImportFileOptions,
-		finishImport,
 	} from "../../stores/File.js";
 	import { niceNumber } from "../../js/epsilon.js";
 
-	let pageIndex;
-
-	// let epsilon;
 	let epsilonSlider = 10;
 	let invertVertical = false;
 
 	$: $ImportFileOptions.epsilon = Math.pow(2, epsilonSlider) / 10000;
-	// $: epsilonSlider = Math.log2(($ImportFileOptions.suggestedEpsilon) * 10000);
 
 	$: previewViewBox = foldToViewBox($ImportFilePreview);
 	$: strokeWidth = $ImportFileOptions.boundingBox
@@ -34,7 +28,6 @@
 		: []).map(coord => ({ cx: coord[0], cy: coord[1], r: $ImportFileOptions.epsilon }));
 
 	onMount(() => {
-		// console.log("on mount", $ImportFileOptions.epsilon);
 		epsilonSlider = Math.log2(($ImportFileOptions.suggestedEpsilon) * 10000);
 	});
 </script>

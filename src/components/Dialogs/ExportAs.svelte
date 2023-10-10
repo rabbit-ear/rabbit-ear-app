@@ -2,10 +2,16 @@
 	import Dialog from "./Dialog.svelte";
 	import { DialogExportAs } from "../../stores/App.js";
 	import {
+		CurrentFrameToSVG,
+		CurrentFrameToPNG,
+		CurrentFrameToJPG,
 		FramesToSVGs,
 		FramesToPNGs,
 		FramesToJPGs,
-		WriteSVGFiles,
+		WriteTextFile,
+		WriteTextFiles,
+		WriteBinaryFile,
+		WriteBinaryFiles,
 	} from "../../stores/Convert.js";
 
 	let format = "svg";
@@ -13,12 +19,22 @@
 
 	const cancel = () => $DialogExportAs.close();
 	const confirm = () => {
-		switch (format) {
-		case "svg": break;
-		case "png": break;
-		case "jpg": break;
+		if (!allFrames) {
+			switch (format) {
+			case "svg": WriteTextFile(CurrentFrameToSVG(), "svg"); break;
+			case "png": WriteBinaryFile(CurrentFrameToPNG(), "png"); break;
+			case "jpg": WriteBinaryFile(CurrentFrameToJPG(), "jpg"); break;
+			default: break;
+			}
+		} else {
+			switch (format) {
+			case "svg": WriteTextFiles(FramesToSVGs(), "svg"); break;
+			case "png": WriteBinaryFiles(FramesToPNGs(), "png"); break;
+			case "jpg": WriteBinaryFiles(FramesToJPGs(), "jpg"); break;
+			default: break;
+			}
 		}
-		WriteSVGFiles(FramesToSVGs());
+		$DialogExportAs.close();
 	};
 </script>
 
@@ -39,6 +55,7 @@
 				type="radio"
 				name="exportFormat"
 				id="exportFormatPNG"
+				disabled={true}
 				bind:group={format}
 				value="png">
 			<label for="exportFormatPNG">png</label>
@@ -48,6 +65,7 @@
 				type="radio"
 				name="exportFormat"
 				id="exportFormatJPG"
+				disabled={true}
 				bind:group={format}
 				value="jpg">
 			<label for="exportFormatJPG">jpg</label>

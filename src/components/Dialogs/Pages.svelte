@@ -37,7 +37,7 @@
 
 <div class="tab-bar">
 	{#each names as name, i}
-		<button on:click={() => index = i}>{name}</button>
+		<button highlighted={index === i} on:click={() => index = i}>{name}</button>
 	{/each}
 </div>
 
@@ -47,14 +47,16 @@
 	button {
 		width: 100%;
 		font-weight: bold;
-		color: var(--text);
+		color: var(--dim);
 		font-size: 1rem;
-/*		height: 3rem;*/
 		border: none;
-		background-color: transparent; /*var(--background-1);*/
+		background-color: transparent;
 	}
 	button:hover {
 		color: var(--highlight);
+	}
+	button[highlighted=true] {
+		color: var(--text);
 	}
 	hr {
 		width: 100%;

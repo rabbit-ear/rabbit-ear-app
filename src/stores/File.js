@@ -66,6 +66,7 @@ const makeAssignments = (segments) => {
 	const edgesStroke = segments.map(el => el.stroke);
 	const strokes = Array.from(new Set(edgesStroke))
 		.filter(el => typeof el === "string");
+	// console.log("strokes", strokes);
 	const assignments = {};
 	strokes.forEach(stroke => {
 		assignments[stroke] = rgbToAssignment(...parseColorToRgb(stroke))
@@ -103,10 +104,10 @@ export const ImportFilePreview = derived(
 				const svg = xmlStringToElement($ImportFileContents, "image/svg+xml");
 				const segments = svgSegments(svg);
 				const assignments = makeAssignments(segments);
-				console.log("epsilon", epsilon);
-				console.log("svg", svg);
-				console.log("segments", segments);
-				console.log("assignments", assignments);
+				// console.log("epsilon", epsilon);
+				// console.log("svg", svg);
+				// console.log("segments", segments);
+				// console.log("assignments", assignments);
 				ImportFileOptions.set({
 					epsilon,
 					suggestedEpsilon: epsilon,
@@ -181,7 +182,9 @@ export const LoadFile = (contents, filePath) => {
 		break;
 	}
 };
-
+/**
+ *
+ */
 export const finishImport = () => {
 	const metadata = get(ImportFileMetadata);
 	const contents = get(ImportFileContents);

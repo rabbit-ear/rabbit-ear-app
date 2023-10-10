@@ -157,7 +157,8 @@
 	on:touchmove={touchmove}
 	on:touchend={touchend}
 />
- <!-- set the second parameter of the addEventListener to "false" -->
+
+<!-- set the second parameter of the addEventListener to "false" -->
 
 <style>
 	canvas {
