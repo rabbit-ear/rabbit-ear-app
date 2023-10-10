@@ -23,6 +23,7 @@
 				"save": true
 			},
 			"fs": {
+				"scope": ["**"],
 				"readFile": true,
 				"writeFile": true,
 				"readDir": true,

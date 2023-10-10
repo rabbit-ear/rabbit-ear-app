@@ -1,5 +1,5 @@
 <script>
-	// import { onMount, onDestroy } from "svelte";
+	import { onMount, onDestroy } from "svelte";
 	import { foldToViewBox } from "rabbit-ear/svg/general/viewBox.js";
 	import Pages from "./Pages.svelte";
 	import SVGCanvas from "../SVGCanvas/SVGCanvas.svelte";
@@ -10,15 +10,17 @@
 		ImportFileOptions,
 		finishImport,
 	} from "../../stores/File.js";
+	import { niceNumber } from "../../js/epsilon.js";
 
 	let pageIndex;
 
-	let epsilon;
+	// let epsilon;
 	let epsilonSlider = 10;
 	let invertVertical = false;
 
-	$: epsilon = Math.pow(2, epsilonSlider) / 10000;
+	$: $ImportFileOptions.epsilon = Math.pow(2, epsilonSlider) / 10000;
 	// $: epsilonSlider = Math.log2(($ImportFileOptions.suggestedEpsilon) * 10000);
+
 	$: previewViewBox = foldToViewBox($ImportFilePreview);
 	$: strokeWidth = $ImportFileOptions.boundingBox
 		&& $ImportFileOptions.boundingBox.span
@@ -29,24 +31,12 @@
 	let circles = [];
 	$: circles = ($ImportFilePreview && $ImportFilePreview.vertices_coords
 		? $ImportFilePreview.vertices_coords
-		: []).map(coord => ({ cx: coord[0], cy: coord[1], r: epsilon }));
+		: []).map(coord => ({ cx: coord[0], cy: coord[1], r: $ImportFileOptions.epsilon }));
 
-	// let bootLoop;
-	// onMount(() => {
-	// 	if (bootLoop) { clearInterval(bootLoop); }
-	// 	bootLoop = setInterval(() => {
-	// 		if ($ImportFilePreview && $ImportFileOptions) {
-	// 			epsilonSlider = Math.log2(($ImportFileOptions.epsilon) * 10000);
-	// 			clearInterval(bootLoop);
-	// 		}
-	// 	}, 50)
-	// });
-	// onDestroy(() => {
-	// 	if (bootLoop) { clearInterval(bootLoop); }
-	// });
-	// onMount(() => {
-	// 	epsilonSlider = Math.log2(($ImportFileOptions.epsilon) * 10000);
-	// })
+	onMount(() => {
+		// console.log("on mount", $ImportFileOptions.epsilon);
+		epsilonSlider = Math.log2(($ImportFileOptions.suggestedEpsilon) * 10000);
+	});
 </script>
 
 <h1>Import OPX File</h1>
@@ -63,35 +53,45 @@
 	</SVGCanvas>
 </div>
 
-<Pages names={["size", "epsilon"]}>
-	<div slot="0">
-		<h3>dimensions</h3>
+<Pages names={["canvas", "epsilon"]}>
+	<div slot="0" class="flex-column gap">
+		<h3>canvas</h3>
 		<!-- <p>{$ImportFileOptions.boundingBox.span
 			.slice(0, 2)
 			.map(n => n.toFixed(3))
 			.join(" × ")}</p> -->
-		<input
-			type="checkbox"
-			id="checkbox-y-flip"
-			bind:checked={$ImportFileOptions.invertVertical}>
-		<label for="checkbox-y-flip">flip y-axis</label>
+		<div>
+			<input
+				type="checkbox"
+				id="checkbox-y-flip"
+				bind:checked={$ImportFileOptions.invertVertical}>
+			<label for="checkbox-y-flip">flip y-axis</label>
+		</div>
 	</div>
 
-	<div slot="1">
-		<h3>epsilon</h3>
-		<p>suggested: {$ImportFileOptions.epsilon ? $ImportFileOptions.epsilon.toFixed(3) : 0}</p>
-		<input type="text" bind:value={epsilon}>
-		<br />
+	<div slot="1" class="flex-column gap">
+		<h3>merge distance</h3>
+		<p class="explain">Touching endpoints will become one vertex.</p>
 		<input
 			type="range"
 			min="1"
 			max="20"
 			step="0.01"
+			id="epsilon-slider"
 			bind:value={epsilonSlider}>
+		<p>distance: <span class="number">{niceNumber($ImportFileOptions.epsilon)}</span></p>
+		<p>suggested: <span class="number">{niceNumber($ImportFileOptions.suggestedEpsilon || 0)}</span></p>
 	</div>
 </Pages>
 
 <style>
+	input[type=text], input[type=range] {
+		width: 100%;
+	}
+	p {
+		max-width: 12rem;
+		margin: auto;
+	}
 	.svg-preview {
 		width: 12rem;
 		height: 12rem;
@@ -100,5 +100,23 @@
 	.vertices circle {
 		fill: var(--highlight);
 		opacity: 0.666;
+	}
+	.flex-column {
+		display: flex;
+		flex-direction: column;
+	}
+	.flex-row {
+		display: flex;
+		flex-direction: row;
+	}
+	.gap {
+		gap: 0.5rem;
+	}
+	.number {
+		font-weight: bold;
+	}
+	.explain {
+		font-style: italic;
+		color: var(--dim);
 	}
 </style>

@@ -19,13 +19,29 @@
 	{#if index === 4}
 		<slot name="4" />
 	{/if}
+	{#if index === 5}
+		<slot name="5" />
+	{/if}
+	{#if index === 6}
+		<slot name="6" />
+	{/if}
+	{#if index === 7}
+		<slot name="7" />
+	{/if}
+	{#if index === 8}
+		<slot name="8" />
+	{/if}
 </div>
+
+<hr />
 
 <div class="tab-bar">
 	{#each names as name, i}
 		<button on:click={() => index = i}>{name}</button>
 	{/each}
 </div>
+
+<hr />
 
 <style>
 	button {
@@ -39,6 +55,14 @@
 	}
 	button:hover {
 		color: var(--highlight);
+	}
+	hr {
+		width: 100%;
+		border: 0;
+		margin: 0;
+		padding: 0;
+		height: 1px;
+		background-color: var(--background-4);
 	}
 	.tab-bar {
 		display: flex;

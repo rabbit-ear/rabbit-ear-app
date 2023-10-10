@@ -56,7 +56,7 @@ const ImportFileContentsSet = ImportFileContents.set;
 ImportFileContents.set = (contents) => {
 	// reset other stores
 	return ImportFileContentsSet(contents);
-}
+};
 /**
  *
  */
@@ -144,7 +144,7 @@ export const NewFile = (FOLD) => {
 /**
  *
  */
-export const ExportFile = () => {
+export const GetCurrentFOLDFile = () => {
 	const frames = get(Frames);
 	const FOLD = { ...get(FileMetadata), ...frames[0] };
 	if (frames.length > 1) {

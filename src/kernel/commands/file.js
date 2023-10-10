@@ -8,7 +8,7 @@ import {
 import {
 	NewFile,
 	LoadFOLDFile,
-	ExportFile,
+	GetCurrentFOLDFile,
 } from "../../stores/File.js";
 import { makeEmptyGraph } from "../../js/graph.js";
 /**
@@ -42,7 +42,7 @@ export const newFile = (FOLD) => NewFile(FOLD);
  * browser's default download location. Not useful for native app build.
  */
 export const download = (filename) => (
-	downloadFile(JSON.stringify(ExportFile()), filename)
+	downloadFile(JSON.stringify(GetCurrentFOLDFile()), filename)
 );
 /**
  * @description

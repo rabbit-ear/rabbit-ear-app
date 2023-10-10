@@ -12,7 +12,7 @@
 	const confirm = () => {
 		finishImport();
 		$DialogImportFile.close()
-	}
+	};
 </script>
 
 <Dialog bind:This={$DialogImportFile}>

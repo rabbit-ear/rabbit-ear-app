@@ -6,20 +6,23 @@ import {
 	flattenDomTreeWithStyle,
 } from "rabbit-ear/svg/general/dom.js";
 import svgToFold from "rabbit-ear/convert/svgToFold/index.js";
-
+/**
+ *
+ */
 export const getFilenameParts = (filePath) => {
 	let filename = filePath;
 	try {
 		filename = filePath.match(/[^/]*$/)[0];
 	} catch (error) {}
 	try {
+		const [___, noExtension] = filePath.match(/(.*)\.[^.]+$/);
+		// const [noExtension, extension] = filePath.match(/[^\\]*\.(\w+)$/);
 		const [_, extension] = filename.match(/[^\\]*\.(\w+)$/);
 		const [__, name] = filename.match(/(.*)\.[^.]+$/);
-		return { filename, name, extension };
+		return { filename, name, extension, noExtension };
 	} catch (error) {}
-	return { filename, name: filename, extension: "" };
+	return { filename, name: filename, extension: "", noExtension: filename };
 };
-
 /**
  * @param {string} contents the file contents as a string
  * @param {string} filename the name of the file hopefully with an extension

@@ -13,6 +13,7 @@ import {
 	ModelMatrixFolded,
 	CameraMatrixCP,
 } from "../../stores/ViewBox.js";
+import { VerticalUp } from "../../stores/App.js";
 
 export const Press = writable(undefined);
 export const Drag = writable(undefined);
@@ -24,6 +25,7 @@ const PressCoords = derived(
 	([$Press, $ModelMatrixCP]) => getScreenPoint($Press, $ModelMatrixCP),
 	undefined,
 );
+
 const DragCoords = derived(
 	[Drag, ModelMatrixCP],
 	([$Drag, $ModelMatrixCP]) => getScreenPoint($Drag, $ModelMatrixCP),
@@ -38,10 +40,12 @@ export const DragVector = derived(
 	[0, 0],
 );
 
+const rewrap = (point, invert) => [point[0], point[1] * (invert ? -1 : 1)];
+
 export const MoveCamera = derived(
-	[DragVector],
-	([$DragVector]) => CameraMatrixCP.update(camera => (
-		multiplyMatrices2(camera, makeMatrix2Translate(...$DragVector))
+	[DragVector, VerticalUp],
+	([$DragVector, $VerticalUp]) => CameraMatrixCP.update(camera => (
+		multiplyMatrices2(camera, makeMatrix2Translate(...rewrap($DragVector, $VerticalUp)))
 	)),
 	undefined,
 );

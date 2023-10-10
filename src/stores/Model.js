@@ -163,6 +163,14 @@ export const CreasePattern = derived(
 	},
 	{},
 );
+
+// here. if VerticalUp ever changes, call this to update the matrix
+// ModelMatrixCP.set(graphToMatrix2($IsolatedFrame, $VerticalUp));
+VerticalUp.subscribe(($VerticalUp) => {
+	ModelMatrixCP.set(graphToMatrix2(get(IsolatedFrame), $VerticalUp))
+});
+
+
 /**
  *
  */

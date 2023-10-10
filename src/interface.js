@@ -32,7 +32,7 @@ import {
 	FileName,
 	LoadFile,
 	LoadFOLDFile,
-	ExportFile,
+	GetCurrentFOLDFile,
 } from "./stores/File.js";
 
 // bind kernel execution methods to the window,
@@ -139,7 +139,7 @@ window.fs.save = async () => {
 		// file does not yet exist. Trigger "SaveAs"
 		return window.fs.saveAs();
 	}
-	await writeTextFile(filePath, JSON.stringify(ExportFile()));
+	await writeTextFile(filePath, JSON.stringify(GetCurrentFOLDFile()));
 };
 /**
  * @description Communicate from Rust to Javascript.
@@ -153,7 +153,7 @@ window.fs.saveAs = async () => {
 		}]
 	});
 	if (filePath == null) { return; }
-	await writeTextFile(filePath, JSON.stringify(ExportFile()));
+	await writeTextFile(filePath, JSON.stringify(GetCurrentFOLDFile()));
 	FileName.set(filePath);
 };
 /**
