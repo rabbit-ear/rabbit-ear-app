@@ -1,5 +1,8 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
+	import IconVertex from "./icon-vertex.svelte";
+	import IconEdge from "./icon-edge.svelte";
+	import IconFace from "./icon-face.svelte";
 	import {
 		ElementSelect,
 		SELECT_VERTEX,
@@ -8,43 +11,36 @@
 	} from "./stores.js";
 	import { Selection } from "../../stores/Select.js";
 	import { Highlight } from "../../stores/UI.js";
-
 </script>
 
 <Panel>
 	<span slot="title">select</span>
 	<span slot="body">
 		<div class="flex-column gap">
-			<p class="info">select kind:</p>
-			<div class="flex-row">
-				<input
-					type="radio"
-					name="VEF"
-					id="selectVertices"
-					bind:group={$ElementSelect}
-					value={SELECT_VERTEX} />
-				<label for="selectVertices">vertices</label>
+			<div class="flex-row gap center">
+				<button
+					class="svg-icon"
+					on:click={() => $ElementSelect = SELECT_VERTEX}
+					highlighted={$ElementSelect === SELECT_VERTEX}>
+					<IconVertex />
+				</button>
+				<button
+					class="svg-icon"
+					on:click={() => $ElementSelect = SELECT_EDGE}
+					highlighted={$ElementSelect === SELECT_EDGE}>
+					<IconEdge />
+				</button>
+				<button
+					class="svg-icon"
+					on:click={() => $ElementSelect = SELECT_FACE}
+					highlighted={$ElementSelect === SELECT_FACE}>
+					<IconFace />
+				</button>
 			</div>
-			<div class="flex-row">
-				<input
-					type="radio"
-					name="VEF"
-					id="selectEdges"
-					bind:group={$ElementSelect}
-					value={SELECT_EDGE} />
-				<label for="selectEdges">edges</label>
-			</div>
-			<div class="flex-row">
-				<input
-					type="radio"
-					name="VEF"
-					id="selectFaces"
-					bind:group={$ElementSelect}
-					value={SELECT_FACE} />
-				<label for="selectFaces">faces</label>
-			</div>
+			<p>select <span class="strong">{$ElementSelect}</span></p>
+
 			{#if $Selection.vertices.length || $Selection.edges.length || $Selection.faces.length}
-				<p class="info">selected:</p>
+				<hr />
 				{#if $Selection.vertices.length}
 					<p><span class="number">{$Selection.vertices.length}</span> vertices</p>
 				{/if}
@@ -55,7 +51,7 @@
 					<p><span class="number">{$Selection.faces.length}</span> faces</p>
 				{/if}
 			{/if}
-			<p class="info">inspect:</p>
+			<!-- <p class="info">inspect:</p>
 			{#if $Highlight.vertices.length}
 				<p>vertex: <span class="number">{$Highlight.vertices[0]}</span></p>
 			{/if}
@@ -64,17 +60,46 @@
 			{/if}
 			{#if $Highlight.faces.length}
 				<p>face: <span class="number">{$Highlight.faces[0]}</span></p>
-			{/if}
+			{/if} -->
 		</div>
 	</span>
 </Panel>
 
 <style>
-	.number {
+	hr {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		height: 1px;
+		background-color: var(--background-4);
+	}
+	button {
+		all: unset;
+		cursor: pointer;
+	}
+	button:hover {
+		color: var(--highlight);
+	}
+	.strong {
 		font-weight: bold;
 	}
 	.info {
 		color: var(--dim);
 		font-style: italic;
+	}
+	.svg-icon {
+		display: inline-block;
+		height: 2.5rem;
+		width: 2.5rem;
+		fill: var(--dim);
+		stroke: var(--dim);
+	}
+	.svg-icon:hover {
+		fill: var(--text);
+		stroke: var(--text);
+	}
+	.svg-icon[highlighted=true] :global(.highlightable) {
+		fill: var(--highlight);
+		stroke: var(--highlight);
 	}
 </style>

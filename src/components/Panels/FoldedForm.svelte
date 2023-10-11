@@ -42,14 +42,14 @@
 			<div class="flex-row">
 				<p>relationships: <span class="strong">{faceOrders.length}</span></p>
 			</div>
-		</div>
-		<div class="flex-row">
-			{#if $LayerOrderKnown}
-				<button on:click={() => executeCommand("makeFaceOrders")}>recalculate order</button>
-				<button on:click={() => executeCommand("clearFaceOrders")}>remove orders</button>
-			{:else}
-				<button on:click={() => executeCommand("makeFaceOrders")}>solve layer order</button>
-			{/if}
+			<div class="flex-row gap center">
+				{#if $LayerOrderKnown}
+					<button on:click={() => executeCommand("makeFaceOrders")}>recalculate</button>
+					<button on:click={() => executeCommand("clearFaceOrders")}>clear</button>
+				{:else}
+					<button on:click={() => executeCommand("makeFaceOrders")}>solve layer order</button>
+				{/if}
+			</div>
 		</div>
 	</span>
 </Panel>

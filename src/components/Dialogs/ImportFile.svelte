@@ -36,7 +36,7 @@
 		<p>unknown file type</p>
 	{/if}
 
-	<div class="flex-row">
+	<div class="flex-row gap">
 		<button on:click={cancel}>cancel</button>
 		<button on:click={confirm}>import</button>
 	</div>
@@ -46,5 +46,8 @@
 	.flex-row {
 		display:flex;
 		flex-direction: row;
+	}
+	.gap {
+		gap: 0.5rem;
 	}
 </style>

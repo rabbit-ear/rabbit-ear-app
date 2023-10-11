@@ -66,8 +66,10 @@ const FormKeyboardEvent = derived(
 				ReplayCommandIndex.increment();
 				TerminalValue.set(get(ReplayCommand).text);
 				break;
+			default: break;
 			}
 		}
+		return false;
 	},
 	() => {},
 );
@@ -83,7 +85,7 @@ const WindowKeyboardEvent = derived(
 	() => {},
 );
 /**
- * 
+ * 0.61812
  */
 export const KeyboardEvent = derived(
 	[FormKeyboardEvent, WindowKeyboardEvent],

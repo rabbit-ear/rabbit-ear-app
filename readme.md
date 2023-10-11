@@ -8,7 +8,7 @@ Prerequisites: npm, Rust
 2. run `npm i`
 3. run `npm run tauri dev`
 
-If this doesn't work, please let me know and I'll amend whatever steps are necessary to this list.
+If this doesn't work, please let me know, it's likely there are additional setup steps I'm missing.
 
 ## 2023-10-05
 
@@ -22,7 +22,7 @@ todo list:
 - [x] css style panels
 - [x] "new file" should be a simple yes/no and then trigger "new frame" modal
 - [x] style modal popups
-- [ ] create custom UI elements (radio, slider, buttons)
+- [x] create custom UI elements (radio, slider, buttons)
 - [ ] glitchy graphics, need to (secretly) scale up the graphics.
 - [x] selecting vertices, vertices are no longer being shown.
 - [ ] right mouse click changes to camera to pan around.
@@ -58,6 +58,7 @@ todo list:
 
 bug list:
 
+- [ ] origami simulator doesn't work for large imported svgs
 - [ ] snapping to vertices doesn't work for large cps, 400x, snap to grid points overrides.
 - [ ] the tool-svg-layer is disappearing. turning simulator on, folding simulator, going back to cp... using the edge tool
 - [x] grid lines are messed up when zooming. "viewBoxOrigin" is buggy.
@@ -69,6 +70,7 @@ bug list:
 
 could be better / save for later:
 
+- [ ] copy/paste in the app menu doesn't make UI sense
 - [ ] axioms 4-7 could be coded better
 - [ ] snap to SQRT2 points
 

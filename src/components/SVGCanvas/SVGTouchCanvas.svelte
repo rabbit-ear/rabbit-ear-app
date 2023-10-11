@@ -1,6 +1,6 @@
 <script>
-	import SVGCanvas from "./SVGCanvas.svelte";
 	import { createEventDispatcher } from "svelte";
+	import SVGCanvas from "./SVGCanvas.svelte";
 	import {
 		convertToViewBox,
 		findInParents,
@@ -9,8 +9,12 @@
 	export let viewBox;
 	export let strokeWidth = 0.001;
 	export let invertVertical = false;
+	export let scale = 1;
 
-	const unwrap = (point) => [point[0], point[1] * (invertVertical ? -1 : 1)];
+	const unwrap = (point) => [
+		(1 / scale) * point[0],
+		(1 / scale) * point[1] * (invertVertical ? -1 : 1),
+	];
 
 	const formatMouseEvent = (e) => ({
 		buttons: e.buttons,
@@ -34,6 +38,7 @@
 	on:mousemove={mousemove}
 	on:mouseup={mouseup}
 	on:wheel={wheel}
+	{scale}
 	{viewBox}
 	{strokeWidth}
 	{invertVertical}>

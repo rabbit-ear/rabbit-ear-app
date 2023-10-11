@@ -81,7 +81,7 @@
 			canvas,
 			frontColor: "white",
 			backColor: "#369",
-			cpColor: "#333",
+			cpColor: "#272222", // variable --background-1
 			strokeWidth: inferredScale * 0.02,
 			opacity: 1,
 		}));

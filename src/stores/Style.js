@@ -7,6 +7,13 @@ import {
 	ViewportFolded,
 } from "./ViewBox.js";
 /**
+ * @description Buggy Safari SVG graphics led to this ability to artificially
+ * scale up the canvas without the user knowing about it, especially in the
+ * case of 1x1 graphs. Safari has a hard limit of 0.001 for stroke width for
+ * example, the viewBox has a zoom limit. This is a work around for that.
+ */
+export const ArtificialScale = 1;
+/**
  * @description Stroke-width will use this value and multiply it against
  * the viewport to get the absolute stroke-width value.
  */
@@ -33,18 +40,17 @@ export const StrokeWidthCreasePattern = derived(
 		Math.max(
 			StrokeWidthMin,
 			Math.max($ViewportCP[2], $ViewportCP[3]) * StrokeWidthFactor,
-		)
+		) / ArtificialScale
 	),
 	StrokeWidthFactor,
 );
-
 export const StrokeWidthFoldedForm = derived(
 	ViewportFolded,
 	($ViewportFolded) => (
 		Math.max(
 			StrokeWidthMin,
 			Math.max($ViewportFolded[2], $ViewportFolded[3]) * StrokeWidthFactor,
-		)
+		) / ArtificialScale
 	),
 	StrokeWidthFactor,
 );
@@ -59,16 +65,14 @@ export const StrokeWidthFoldedForm = derived(
  */
 export const StrokeDashLengthCreasePattern = derived(
 	StrokeWidthCreasePattern,
-	($StrokeWidthCreasePattern) => $StrokeWidthCreasePattern * 3,
+	($StrokeWidthCreasePattern) => ($StrokeWidthCreasePattern * 3) / ArtificialScale,
 	StrokeWidthFactor * 3,
 );
-
 export const StrokeDashLengthFoldedForm = derived(
 	StrokeWidthFoldedForm,
-	($StrokeWidthFoldedForm) => $StrokeWidthFoldedForm * 3,
+	($StrokeWidthFoldedForm) => ($StrokeWidthFoldedForm * 3) / ArtificialScale,
 	StrokeWidthFactor * 3,
 );
-
 /**
  * @description vertex radius is is dynamic according to the zoom level
  * this number is a scale of the size of the viewbox.
@@ -82,7 +86,7 @@ export const VertexRadius = derived(
 	[ViewportCP, VertexRadiusFactor],
 	([$ViewportCP, $VertexRadiusFactor]) => (
 		Math.max($ViewportCP[2], $ViewportCP[3]) * $VertexRadiusFactor
-	),
+	) / ArtificialScale,
 	0.00666,
 );
 

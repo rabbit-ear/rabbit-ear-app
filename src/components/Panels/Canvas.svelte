@@ -1,6 +1,7 @@
 <script>
 	import SelectIcon from "../../tools/select/icon.svelte";
 	import SelectSnapIcon from "./icon-pointer-snap.svelte";
+	import FoldedIcon from "./icon-folded.svelte";
 	import ZoomIcon from "../../tools/camera/icon.svelte";
 	import Panel from "./Panel.svelte";
 	import {
@@ -54,26 +55,20 @@
 		{/if}
 		<div class="flex-row">
 			<span class="svg-icon"><ZoomIcon /></span>
-			<span class="number"><button on:click={resetZoom}>{zoomCP} / {zoomFolded}</button></span>
+			<span class="number">
+				<button class="text-button" on:click={resetZoom}>{zoomCP} / {zoomFolded}</button>
+			</span>
 		</div>
 		<hr />
-		<div class="flex-column gap">
-			<p>folded state</p>
-			<div>
-				<input
-					type="radio"
-					id="radio-folded-static"
-					bind:group={$ShowStaticOrSimulator}
-					value={false} />
-				<label for="radio-folded-static">static</label>
-			</div>
-			<div>
-				<input
-					type="radio"
-					id="radio-folded-simulator"
-					bind:group={$ShowStaticOrSimulator}
-					value={true} />
-				<label for="radio-folded-simulator">simulator</label>
+		<div class="flex-row gap">
+			<span class="svg-icon"><FoldedIcon /></span>
+			<div class="flex-row toggle-row">
+				<button
+					highlighted={!$ShowStaticOrSimulator}
+					on:click={() => $ShowStaticOrSimulator = false}>static</button>
+				<button
+					highlighted={$ShowStaticOrSimulator}
+					on:click={() => $ShowStaticOrSimulator = true}>simulator</button>
 			</div>
 		</div>
 	</span>
@@ -90,11 +85,11 @@
 	.number {
 		font-weight: bold;
 	}
-	button {
+	button.text-button {
 		all: unset;
 		cursor: pointer;
 	}
-	button:hover {
+	button.text-button:hover {
 		color: var(--highlight);
 	}
 </style>

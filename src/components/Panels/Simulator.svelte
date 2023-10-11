@@ -88,10 +88,8 @@
 				bind:value={$LineOpacity} />
 		</div>
 
-		<div>
-			<button
-				class="full-button"
-				on:click={() => showAdvanced = !showAdvanced}>more</button>
+		<div class="flex-row center">
+			<button on:click={() => showAdvanced = !showAdvanced}>more</button>
 		</div>
 
 		{#if showAdvanced}
@@ -188,10 +186,11 @@
 				step="0.01"
 				bind:value={$DampingRatio} />
 
-			<button
-				class="full-button"
-				disabled={!$Active}
-				on:click={$Reset}>reset model</button>
+			<div class="flex-row center">
+				<button
+					disabled={!$Active}
+					on:click={$Reset}>reset model</button>
+			</div>
 		{/if}
 	</span>
 </Panel>

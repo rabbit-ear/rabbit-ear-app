@@ -2,13 +2,10 @@
 		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		viewBox="-3 -3 26 26"
+		fill="none">
+	<path
+		d="M3,3L19,1L17,17L1,19z"
 		fill="none"
-		stroke="black">
-	<rect
-		x="1"
-		y="1"
-		width="18"
-		height="18"
 		stroke-width="1" />
 	<line
 		x1="3"

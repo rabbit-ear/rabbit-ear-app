@@ -189,6 +189,9 @@ fn main() {
 		.add_item(item_undo)
 		.add_item(item_redo)
 		.add_native_item(MenuItem::Separator)
+		.add_native_item(MenuItem::Copy)
+		.add_native_item(MenuItem::Paste)
+		.add_native_item(MenuItem::Separator)
 		.add_item(item_duplicate)
 		.add_item(item_delete));
 	let menu_graph = Submenu::new("Graph", Menu::new()

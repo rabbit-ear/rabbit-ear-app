@@ -93,7 +93,7 @@
 </Pages>
 
 <style>
-	input[type=text], input[type=range] {
+	input[type=range] {
 		width: 100%;
 	}
 	p {

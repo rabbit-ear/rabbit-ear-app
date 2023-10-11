@@ -52,4 +52,7 @@
 	.container :global(.gap) {
 		gap: 0.333rem;
 	}
+	.container :global(.center) {
+		justify-content: center;
+	}
 </style>

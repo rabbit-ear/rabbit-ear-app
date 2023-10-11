@@ -25,6 +25,7 @@
 		Highlight,
 	} from "../../stores/UI.js";
 	import {
+		ArtificialScale,
 		StrokeWidthCreasePattern,
 		StrokeDashLengthCreasePattern,
 	} from "../../stores/Style.js";
@@ -32,7 +33,9 @@
 
 	$: showVertices = $Tool
 		&& ($Tool.key === "select"
-		|| $Tool.key === "vertex");
+		|| $Tool.key === "vertex"
+		|| $Tool.key === "translate"
+		|| $Tool.key === "scale");
 
 	const padViewport = (view, pad) => {
 		const p = Math.max(view[2], view[3]) * pad;
@@ -40,6 +43,9 @@
 	};
 
 	$: viewport = padViewport($ViewportCP, 0.05);
+	// $: viewport = padViewport($ViewportCP, 0.05).map(n => n / ArtificialScale);
+
+	// $: console.log("viewport", viewport);
 
 	$: invertVertical = $VerticalUp;
 
@@ -53,6 +59,7 @@
 <SVGTouchCanvas
 	viewBox={viewport.join(" ")}
 	strokeWidth={$StrokeWidthCreasePattern}
+	scale={ArtificialScale}
 	{invertVertical}
 	on:press
 	on:move
@@ -85,7 +92,7 @@
 	{#if $ShowFlatFoldableIssues}
 		<FoldableVertices graph={$CreasePattern} />
 	{/if}
-	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLengthCreasePattern};`} >
+	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLengthCreasePattern};`}>
 		<RulerLayer {viewport} />
 		<UILayer />
 		{#if $Tool && $Tool.SVGLayer}

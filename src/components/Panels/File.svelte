@@ -16,7 +16,6 @@
 		<input type="text" placeholder="title" bind:value={$FileMetadata.file_title} >
 		<input type="text" placeholder="author" bind:value={$FileMetadata.file_author} >
 		<textarea placeholder="description" bind:value={$FileMetadata.file_description}></textarea>
-		<p>file class</p>
 	</span>
 </Panel>
 
