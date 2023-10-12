@@ -26,6 +26,10 @@
 		width: 100%;
 		cursor: pointer;
 	}
+	button:focus {
+		outline: 2px solid var(--uiblue);
+		outline-offset: 2px;
+	}
 	.title {
 		padding: 0.25rem 0.5rem;
 		color: white;

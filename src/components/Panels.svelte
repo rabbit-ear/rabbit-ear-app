@@ -1,7 +1,6 @@
 <script>
 	import Canvas from "./Panels/Canvas.svelte";
 	import File from "./Panels/File.svelte";
-	// import Frames from "./Panels/Frames.svelte";
 	import ModifiersPanel from "./Panels/Modifiers.svelte";
 	import FoldedForm from "./Panels/FoldedForm.svelte";
 	import Simulator from "./Panels/Simulator.svelte";
@@ -24,9 +23,8 @@
 {:else}
 	<FoldedForm />
 {/if}
+<File />
 <ModifiersPanel />
 {#each ModifierPanels as panel}
 	<svelte:component this={panel} />
 {/each}
-<File />
-<!-- <Frames /> -->

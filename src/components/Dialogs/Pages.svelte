@@ -46,6 +46,7 @@
 <style>
 	button {
 		width: 100%;
+		padding: 0 0.5rem;
 		font-weight: bold;
 		color: var(--dim);
 		font-size: 1rem;

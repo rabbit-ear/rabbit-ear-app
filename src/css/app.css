@@ -115,6 +115,10 @@ button {
 button:hover {
 	background-color: var(--uidarkblue);
 }
+button:focus {
+	outline-offset: 2px;
+	outline: 2px solid var(--uiblue);
+}
 
 input[type=text],
 input[type=number],
@@ -122,6 +126,12 @@ textarea {
 	font-size: 1rem;
 	background-color: var(--background-0);
 	border: 0;
+}
+input[type=text]:focus,
+input[type=number]:focus,
+textarea:focus {
+	outline-offset: 2px;
+	outline: 2px solid var(--uiblue);
 }
 
 input[type=checkbox] {
@@ -131,6 +141,10 @@ input[type=checkbox] {
 input[type=checkbox] + label {
 	margin-left: 0.5rem;
 }
+input[type=checkbox]:focus {
+	outline-offset: 2px;
+	outline: 2px solid var(--uiblue);
+}
 
 /* button-style replacement for radio buttons */
 .toggle-row {
@@ -139,8 +153,9 @@ input[type=checkbox] + label {
 	gap: 1px;
 }
 .toggle-row button {
-	background-color: var(--background-4);
+	padding: 0.25rem 1rem;
 	border-radius: 0;
+	background-color: var(--background-4);
 }
 .toggle-row button[highlighted=true] {
 	background-color: var(--uiblue);
@@ -158,4 +173,74 @@ input[type=checkbox] + label {
 .toggle-row button:last-of-type {
 	border-top-right-radius: 0.5rem;
 	border-bottom-right-radius: 0.5rem;
+}
+
+input[type=range] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background: transparent;
+	cursor: pointer;
+	width: 100%;
+	margin: 0.85rem 0;
+}
+/*slider track*/
+input[type=range]::-webkit-slider-runnable-track {
+	height: 4px;
+}
+input[type=range]::-moz-range-track {
+	height: 4px;
+}
+/*slider dot*/
+input[type=range]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	margin-top: calc(-0.75rem + 2px); /* Centers thumb on the track */
+	width: 1.5rem;
+	height: 1.5rem;
+	border-radius: 0.25rem;
+}
+input[type=range]::-moz-range-thumb {
+	width: 1.5rem;
+	height: 1.5rem;
+	border: none; /*Removes extra border that FF applies*/
+	border-radius: 0.25rem;
+}
+/*accessibility focus indicator*/
+input[type=range]:focus {
+	outline: none;
+}
+input[type=range]:focus::-webkit-slider-thumb {
+	outline: 3px solid;
+	outline-offset: 0.125rem;
+}
+input[type=range]:focus::-moz-range-thumb {
+	outline: 3px solid;
+	outline-offset: 0.125rem;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+	background-color: var(--background-4);
+}
+input[type=range]::-moz-range-track {
+	background-color: var(--background-4);
+}
+input[type=range]::-webkit-slider-thumb {
+	background-color: var(--uiblue);
+}
+input[type=range]::-moz-range-thumb {
+	background-color: var(--uiblue);
+}
+input[type=range]:focus::-webkit-slider-thumb {
+	outline-color: var(--uiblue);
+}
+input[type=range]:focus::-moz-range-thumb {
+	outline-color: var(--uiblue);
+}
+input[type=range][disabled]::-webkit-slider-thumb {
+	background-color: var(--dim);
+}
+input[type=range][disabled]::-moz-range-thumb {
+	background-color: var(--dim);
 }

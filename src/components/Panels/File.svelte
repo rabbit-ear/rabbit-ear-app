@@ -1,6 +1,7 @@
 <script>
 	import { FileMetadata } from "../../stores/Model.js";
 	import Panel from "./Panel.svelte";
+	import FileFrames from "./FileFrames.svelte";
 
 	const file_classes = [
 		"singleModel",
@@ -16,6 +17,8 @@
 		<input type="text" placeholder="title" bind:value={$FileMetadata.file_title} >
 		<input type="text" placeholder="author" bind:value={$FileMetadata.file_author} >
 		<textarea placeholder="description" bind:value={$FileMetadata.file_description}></textarea>
+		<hr />
+		<FileFrames />
 	</span>
 </Panel>
 

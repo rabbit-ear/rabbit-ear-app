@@ -36,9 +36,9 @@
 		<p>unknown file type</p>
 	{/if}
 
-	<div class="flex-row gap">
-		<button on:click={cancel}>cancel</button>
+	<div class="flex-row gap right">
 		<button on:click={confirm}>import</button>
+		<button on:click={cancel}>cancel</button>
 	</div>
 </Dialog>
 
@@ -49,5 +49,8 @@
 	}
 	.gap {
 		gap: 0.5rem;
+	}
+	.right {
+		justify-content: flex-end;
 	}
 </style>

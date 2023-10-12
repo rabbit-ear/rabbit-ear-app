@@ -107,7 +107,6 @@
 		padding: 0;
 		border: 0px solid;
 		border-radius: 0.25rem;
-		outline-offset: 0.125rem;
 		cursor: pointer;
 		background-color: var(--background-0);
 	}
@@ -129,5 +128,9 @@
 		stroke: var(--dim);
 		fill: var(--dim);
 		cursor: initial;
+	}
+	button:focus {
+		outline-offset: -1px;
+		outline: 2px solid var(--uiblue);
 	}
 </style>

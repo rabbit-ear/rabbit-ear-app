@@ -42,4 +42,8 @@
 	button:hover {
 		stroke: var(--text);
 	}
+	button:focus {
+		outline-offset: -2px;
+		outline: 2px solid var(--uiblue);
+	}
 </style>

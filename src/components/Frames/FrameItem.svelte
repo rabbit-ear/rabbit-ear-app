@@ -33,4 +33,8 @@
 	button[highlight=true] {
 		border-color: var(--highlight);
 	}
+	button:focus {
+		outline-offset: -2px;
+		outline: 2px solid var(--uiblue);
+	}
 </style>
