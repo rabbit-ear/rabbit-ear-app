@@ -130,11 +130,4 @@
 		fill: var(--dim);
 		cursor: initial;
 	}
-	hr {
-		margin: 0;
-		padding: 0;
-		border: 0;
-		height: 2px;
-		background-color: var(--background-4);
-	}
 </style>

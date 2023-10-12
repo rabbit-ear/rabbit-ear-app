@@ -26,10 +26,6 @@
 {/if}
 
 <style>
-	hr {
-		margin: 0.25rem auto;
-		width: 90%;
-	}
 	button {
 		all: unset;
 		margin: 0;

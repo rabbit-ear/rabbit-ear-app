@@ -37,6 +37,7 @@ todo list:
 - [x] bring back "delete" key to delete frame
 - [ ] implement drag and drop into the frames window (append instead of replace)
 
+- [ ] UI touch interaction on folded form / simulator
 - [x] folded form should report when it cannot fold the crease pattern (and not show it)
 - [ ] hovering on folded form/simulator shows dots on crease pattern
 - [ ] folded form layer separation distance
@@ -58,6 +59,7 @@ todo list:
 
 bug list:
 
+- [ ] frames can vertically scroll
 - [ ] origami simulator doesn't work for large imported svgs
 - [ ] snapping to vertices doesn't work for large cps, 400x, snap to grid points overrides.
 - [ ] the tool-svg-layer is disappearing. turning simulator on, folding simulator, going back to cp... using the edge tool

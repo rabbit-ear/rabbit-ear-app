@@ -1,5 +1,9 @@
 import { get } from "svelte/store";
 import {
+	open,
+	save,
+} from "@tauri-apps/api/dialog";
+import {
 	execute,
 	executeCommand,
 } from "../../kernel/execute.js";
@@ -12,13 +16,6 @@ import {
 	DialogNewFile,
 	InputFile,
 } from "../../stores/App.js";
-
-
-import {
-	open,
-	save,
-} from "@tauri-apps/api/dialog";
-
 /**
  *
  */

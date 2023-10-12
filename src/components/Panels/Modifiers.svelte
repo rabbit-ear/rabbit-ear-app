@@ -21,7 +21,7 @@
 </script>
 
 <Panel>
-	<span slot="title">modifiers</span>
+	<span slot="title">Modifiers</span>
 	<span slot="body">
 		<div class="flex-column gap">
 	 		{#each modifierNames as name}

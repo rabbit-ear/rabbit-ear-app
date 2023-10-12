@@ -11,7 +11,7 @@
 </script>
 
 <Panel>
-	<span slot="title">file</span>
+	<span slot="title">File</span>
 	<span slot="body">
 		<input type="text" placeholder="title" bind:value={$FileMetadata.file_title} >
 		<input type="text" placeholder="author" bind:value={$FileMetadata.file_author} >

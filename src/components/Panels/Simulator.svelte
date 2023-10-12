@@ -37,7 +37,7 @@
 </script>
 
 <Panel>
-	<span slot="title">origami simulator</span>
+	<span slot="title">Simulator</span>
 	<span slot="body">
 		<input id="checkbox-active" type="checkbox" bind:checked={$Active} />
 		<label for="checkbox-active">active</label>
@@ -200,9 +200,6 @@
 		width: 100%;
 	}
 	input[type=text] {
-		width: 100%;
-	}
-	.full-button {
 		width: 100%;
 	}
 	div {

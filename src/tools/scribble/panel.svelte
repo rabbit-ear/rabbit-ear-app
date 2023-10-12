@@ -52,5 +52,4 @@
 		font-style: italic;
 		color: var(--dim);
 	}
-	hr { width: 100%; }
 </style>

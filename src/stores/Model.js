@@ -33,11 +33,9 @@ import { Selection } from "./Select.js";
 
 // most of the data stores in this document are essentially the
 // deconstructed constituent parts of the FOLD file.
-
 /**
  *
  */
-// const ResizeModelMatrix = writable(false);
 let _recalcModelMatrix = false;
 let _recalcModelMatrixTimeout = undefined;
 export const RecalculateModelMatrix = () => {
@@ -49,7 +47,6 @@ export const RecalculateModelMatrix = () => {
  *
  */
 export const TessellationRepeats = writable(6);
-
 /**
  * @description an object which contains only FOLD file metadata,
  * any key that starts with "file_", for example "file_title".

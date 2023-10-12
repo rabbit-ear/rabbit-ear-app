@@ -6,7 +6,9 @@ import {
 	multiplyMatrix2Vector2,
 } from "rabbit-ear/math/matrix2.js";
 import { foldToViewBox as FOLDToViewBox } from "rabbit-ear/svg/general/viewBox.js";
-
+/**
+ *
+ */
 export const getFOLDViewport = (graph, verticalUp = false) => {
 	if (!graph) { return [0, 0, 1, 1]; }
 	// move the origin up, if not inverted.

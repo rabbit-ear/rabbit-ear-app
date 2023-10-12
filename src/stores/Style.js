@@ -115,7 +115,7 @@ export const ShowUnassigned = writable(true);
 export const ShowCut = writable(true);
 
 //
-// colors
+// Styles for origami simulator
 //
 
 // the background of the WebGL canvas

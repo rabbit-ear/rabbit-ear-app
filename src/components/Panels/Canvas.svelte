@@ -40,7 +40,7 @@
 </script>
 
 <Panel>
-	<span slot="title">canvas</span>
+	<span slot="title">Canvas</span>
 	<span slot="body">
 		{#if $SnapPoint === undefined}
 			<div class="flex-row">

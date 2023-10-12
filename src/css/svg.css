@@ -1,9 +1,3 @@
-/*:root {
-	--viewbox-vmax: 1;
-	--stroke-dash-length: 0.05;
-	--anim-stroke-dash-max: 5;
-}*/
-
 .crease-pattern .graph-preview line {
 	stroke: var(--highlight);
 }
@@ -53,7 +47,6 @@
 	opacity: 0.25;
 }
 
-
 .vertices-indices circle {
 	stroke: var(--dim);
 }
@@ -72,17 +65,3 @@
 .faces-indices text {
 	fill: var(--brightgreen);
 }
-
-/*@keyframes animate-dash {
-	from { stroke-dashoffset: 0; }
-	to { stroke-dashoffset: var(--anim-stroke-dash-max); }
-	to { stroke-dashoffset: calc(60pt * var(--viewbox-vmax)); }
-}*/
-
-/*.dashed-line {
-	stroke-dasharray: var(--stroke-dash-length);
-}*/
-
-/*.animated-dashed-line {
-	animation: 60s linear 0s infinite reverse both running animate-dash;
-}*/

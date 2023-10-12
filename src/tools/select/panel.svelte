@@ -66,13 +66,6 @@
 </Panel>
 
 <style>
-	hr {
-		margin: 0;
-		padding: 0;
-		border: 0;
-		height: 1px;
-		background-color: var(--background-4);
-	}
 	button {
 		all: unset;
 		cursor: pointer;
@@ -82,10 +75,6 @@
 	}
 	.strong {
 		font-weight: bold;
-	}
-	.info {
-		color: var(--dim);
-		font-style: italic;
 	}
 	.svg-icon {
 		display: inline-block;

@@ -152,6 +152,9 @@ fn main() {
 	let item_show_frames = CustomMenuItem::new(
 		"show_frames".to_string(),
 		"Show/Hide Frames");
+	let item_show_code_editor = CustomMenuItem::new(
+		"show_code_editor".to_string(),
+		"Show/Hide Code Editor");
 	let item_show_grid = CustomMenuItem::new(
 		"show_grid".to_string(),
 		"Show/Hide Grid");
@@ -216,6 +219,7 @@ fn main() {
 		.add_item(item_near_verts));
 	let menu_window = Submenu::new("Window", Menu::new()
 		.add_item(item_show_frames)
+		.add_item(item_show_code_editor)
 		.add_item(item_show_axes)
 		.add_item(item_show_grid)
 		.add_item(item_invert_vertical_axis));
@@ -408,6 +412,9 @@ fn main() {
 					// item_show_frames.selected = true;
 
 					// println!("Called {}", ARRAY.lock().unwrap().len());
+				}
+				"show_code_editor" => {
+					let _ = event.window().eval("window.store.toggle('ShowCodeEditor')");
 				}
 				"invert_vertical_axis" => {
 					let _ = event.window().eval("window.store.toggle('VerticalUp')");

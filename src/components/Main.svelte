@@ -1,5 +1,4 @@
 <script>
-	// import Stores from "./Stores.svelte";
 	import Menu from "./Menu/Menu.svelte";
 	import Terminal from "./Terminal.svelte";
 	import Toolbar from "./Toolbar.svelte";
@@ -37,7 +36,6 @@
 	on:keyup={keyup}
 />
 
-<!-- <Stores /> -->
 <Dialogs />
 <FileManager />
 <!-- <DragAndDrop /> -->

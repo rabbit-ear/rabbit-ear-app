@@ -9,12 +9,16 @@ import {
 	SELECT_FACE,
 } from "../tools/Select/stores.js"; // todo get rid of
 // import { Releases } from "../stores/UI.js";
-
+/**
+ *
+ */
 const pointInRect = (p, rect) => (
 	p[0] > rect.min[0] && p[0] < rect.max[0] &&
 	p[1] > rect.min[1] && p[1] < rect.max[1]
 );
-
+/**
+ *
+ */
 const segmentBoxOverlap = (segment, box) => {
 	const boxSegments = [
 		[box.min, [box.max[0], box.min[1]]],
@@ -42,7 +46,9 @@ const segmentBoxOverlap = (segment, box) => {
 	const ptInside = pointInRect(segment[0], box);
 	return ptInside;
 };
-
+/**
+ *
+ */
 export const getComponentsNearPoint = (graph, point) => {
 	const near = nearest(graph, point);
 	return {
@@ -51,7 +57,9 @@ export const getComponentsNearPoint = (graph, point) => {
 		faces: [near.face],
 	};
 };
-
+/**
+ *
+ */
 export const getComponentsInsideRect = (graph, rect) => {
 	if (!graph || !rect) { return { vertices: [], edges: [], faces: [] }; }
 	const verticesLookup = graph.vertices_coords
@@ -79,7 +87,9 @@ export const getComponentsInsideRect = (graph, rect) => {
 			.filter(a => a !== undefined);
 	return { vertices, edges, faces };
 };
-
+/**
+ *
+ */
 export const getVerticesFromSelection = (graph, selection = {}) => {
 	const vertexHash = {};
 	if (selection.vertices) {

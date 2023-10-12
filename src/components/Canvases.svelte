@@ -25,13 +25,17 @@
 	export let releaseFolded;
 	export let scrollFolded;
 
-	let height = "100vh";
-	$: height = [
+	let fullHeight = "100vh";
+	$: fullHeight = [
 		"100vh",
 		ShowMenu ? "2rem" : "",
 		$ShowFrames ? "5rem - 4px - 2px" : "", // button height, button border, container border
 		"6rem", // terminal
 	].filter(a => a !== "").join(" - ");
+
+	// I think we may need to add -2px for the flex gap. idk, appears not.
+	$: halfHeight = `(${fullHeight}) / 2`;
+	$: height = $ShowCodeEditor ? halfHeight : fullHeight;
 </script>
 
 <!--
@@ -42,39 +46,68 @@
 -->
 
 <div class="canvases horizontal">
-	<div class="canvas crease-pattern" style={`max-height: calc(${height})`}>
-		<CreasePatternCanvas
-			on:press={pressCP}
-			on:move={moveCP}
-			on:release={releaseCP}
-			on:scroll={scrollCP}
-		/>
-	</div>
-	{#if $ShowStaticOrSimulator}
-		<div class="canvas">
-			<Simulator />
-		</div>
-	{:else}
-		{#if $FrameEdgesAreFlat}
-			<div class="canvas folded-form" style={`max-height: calc(${height})`}>
-				<FoldedFormCanvas
-					on:press={pressFolded}
-					on:move={moveFolded}
-					on:release={releaseFolded}
-					on:scroll={scrollFolded}
+
+	{#if $ShowCodeEditor}
+		<div class="vertical">
+			<div class="canvas crease-pattern" style={`max-height: calc(${height})`}>
+				<CreasePatternCanvas
+					on:press={pressCP}
+					on:move={moveCP}
+					on:release={releaseCP}
+					on:scroll={scrollCP}
 				/>
+			</div>
+			{#if $ShowStaticOrSimulator}
+				<div class="canvas">
+					<Simulator />
+				</div>
+			{:else}
+				<div class="canvas folded-form" style={`max-height: calc(${height})`}>
+					{#if $FrameEdgesAreFlat}
+						<FoldedFormCanvas
+							on:press={pressFolded}
+							on:move={moveFolded}
+							on:release={releaseFolded}
+							on:scroll={scrollFolded} />
+					{:else}
+						<WebGLCanvas graph={$FoldedForm} />
+					{/if}
+				</div>
+			{/if}
+		</div>
+		<div class="canvas code-canvas">
+			<CodeEditor />
+		</div>
+
+	{:else}
+
+		<div class="canvas crease-pattern" style={`max-height: calc(${height})`}>
+			<CreasePatternCanvas
+				on:press={pressCP}
+				on:move={moveCP}
+				on:release={releaseCP}
+				on:scroll={scrollCP}
+			/>
+		</div>
+		{#if $ShowStaticOrSimulator}
+			<div class="canvas">
+				<Simulator />
 			</div>
 		{:else}
 			<div class="canvas folded-form" style={`max-height: calc(${height})`}>
-				<WebGLCanvas graph={$FoldedForm}/>
+				{#if $FrameEdgesAreFlat}
+					<FoldedFormCanvas
+						on:press={pressFolded}
+						on:move={moveFolded}
+						on:release={releaseFolded}
+						on:scroll={scrollFolded} />
+				{:else}
+					<WebGLCanvas graph={$FoldedForm} />
+				{/if}
 			</div>
 		{/if}
 	{/if}
-	{#if $ShowCodeEditor}
-		<div class="canvas">
-			<CodeEditor />
-		</div>
-	{/if}
+
 </div>
 
 <style>
@@ -82,6 +115,12 @@
 		display: flex;
 		flex-direction: row;
 		gap: 2px;
+	}
+	.vertical {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		flex: 1 1 auto;
 	}
 	.canvases {
 		width: 100%;
@@ -93,6 +132,9 @@
 		height: 100%;
 		flex: 1 1 auto;
 		background-color: var(--background-0);
+	}
+	.code-canvas {
+		flex: 1 1 auto;
 	}
 	/* .crease-pattern { */
 		/* svgs are especially unrully */

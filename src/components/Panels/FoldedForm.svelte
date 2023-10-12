@@ -55,9 +55,6 @@
 </Panel>
 
 <style>
-	hr {
-		width: 100%;
-	}
 	.good {
 	}
 	.strong {

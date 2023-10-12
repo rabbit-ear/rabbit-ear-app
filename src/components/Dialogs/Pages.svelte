@@ -58,14 +58,6 @@
 	button[highlighted=true] {
 		color: var(--text);
 	}
-	hr {
-		width: 100%;
-		border: 0;
-		margin: 0;
-		padding: 0;
-		height: 1px;
-		background-color: var(--background-4);
-	}
 	.tab-bar {
 		display: flex;
 		flex-direction: row;

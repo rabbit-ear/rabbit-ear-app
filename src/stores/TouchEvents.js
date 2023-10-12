@@ -19,7 +19,11 @@ import {
 	Tool,
 	Pointer,
 } from "./UI.js";
-
+import {
+	SVGFoldedFormPointerEvent,
+	WebGLFoldedFormPointerEvent,
+	SimulatorPointerEvent,
+} from "./FoldedFormTools.js";
 // todo: figure out how to scroll the view if there is a mouse
 // and the user right-clicks. exactly like how the keyboard "alt"
 // can trigger a temporary camera tool motion.
@@ -54,7 +58,6 @@ const ToolPointerEvent = derived(
  * gets bound to this, which runs any app-wide pointer methods, and checks
  * if there is a UI tool with a pointer event, call the tool's pointer event.
  */
-// todo
 export const PointerEventCP = derived(
 	[AppPointerEvent, ToolPointerEvent],
 	([$AppPointerEvent, $ToolPointerEvent]) => (eventType, event) => {
@@ -63,12 +66,12 @@ export const PointerEventCP = derived(
 	},
 	() => {},
 );
-// todo
 export const PointerEventFolded = derived(
 	[AppPointerEvent, ToolPointerEvent],
 	([$AppPointerEvent, $ToolPointerEvent]) => (eventType, event) => {
 		if ($AppPointerEvent(eventType, event)) { return; }
-		$ToolPointerEvent(eventType, event);
+		// $ToolPointerEvent(eventType, event);
+		SVGFoldedFormPointerEvent(eventType, event);
 	},
 	() => {},
 );
@@ -98,6 +101,9 @@ export const ScrollEventCP = readable(({ point, wheelDelta }) => {
 		return newMatrix;
 	});
 });
+/**
+ * @description
+ */
 export const ScrollEventFolded = readable(({ point, wheelDelta }) => {
 	const scaleOffset = (wheelDelta / 666);
 	const scale = 1 + scaleOffset;

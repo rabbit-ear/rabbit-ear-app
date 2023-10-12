@@ -88,6 +88,15 @@ p, span, label, ul, ol, li {
 	cursor: default;
 }
 
+hr {
+	width: 100%;
+	height: 1px;
+	border: 0;
+	padding: 0;
+	margin: 0.25rem auto;
+	background-color: var(--background-4);
+}
+
 button {
 	cursor: pointer;
 	border: 0;
@@ -106,12 +115,21 @@ button {
 button:hover {
 	background-color: var(--uidarkblue);
 }
+
 input[type=text],
 input[type=number],
 textarea {
 	font-size: 1rem;
 	background-color: var(--background-0);
 	border: 0;
+}
+
+input[type=checkbox] {
+	width: 1rem;
+	height: 1rem;
+}
+input[type=checkbox] + label {
+	margin-left: 0.5rem;
 }
 
 /* button-style replacement for radio buttons */
