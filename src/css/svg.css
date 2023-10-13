@@ -1,3 +1,26 @@
+:root {
+	--boundary-color: #888888;
+	--valley-color: #0088ff;
+	--mountain-color: #ee5533;
+	--flat-color: #555555;
+	--join-color: #ff8800;
+	--cut-color: #88ff00;
+	--unassigned-color: #8800ff;
+
+	--front-color: var(--background-1);
+	--back-color: var(--uiblue);
+
+	--vertex-color: #888888;
+}
+
+.crease-pattern .boundary { stroke: var(--boundary-color); }
+.crease-pattern .valley { stroke: var(--valley-color); }
+.crease-pattern .mountain { stroke: var(--mountain-color); }
+.crease-pattern .flat { stroke: var(--flat-color); }
+.crease-pattern .join { stroke: var(--join-color); }
+.crease-pattern .cut { stroke: var(--cut-color); }
+.crease-pattern .unassigned { stroke: var(--unassigned-color); }
+
 .crease-pattern .graph-preview line {
 	stroke: var(--highlight);
 }
@@ -20,7 +43,12 @@
 	opacity: 0.15;
 }
 
-.crease-pattern circle.selected {
+.crease-pattern circle.vertex {
+	stroke: none;	
+	fill: var(--vertex-color);
+}
+
+.crease-pattern circle.vertex.selected {
 	fill: var(--highlight);
 }
 
@@ -34,11 +62,11 @@
 }
 
 .folded-form polygon.front {
-	fill: var(--background-1);
+	fill: var(--front-color);
 	stroke: var(--black);
 }
 .folded-form polygon.back {
-	fill: var(--blue);
+	fill: var(--back-color);
 	stroke: var(--black);
 }
 .folded-form polygon.transparent {

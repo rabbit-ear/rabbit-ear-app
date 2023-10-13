@@ -1,16 +1,11 @@
-
-export const makeSelectedAttributes = (graph, selected = [], highlighted = []) => {
-	if (!graph) { return []; }
-
-	const selectedHash = {};
-	selected.forEach(e => { selectedHash[e] = true; });
-
-	const highlightedHash = [];
-	highlighted.forEach(i => { highlightedHash[i] = true; });
-
-	return (graph.edges_vertices || []).map((_, i) => [
-		selectedHash[i] ? "selected" : undefined,
-		highlightedHash[i] ? "highlighted" : undefined,
-	].filter(a => a !== undefined).join(" "))
-		.map(className => (className ? { class: className } : {}));
+/**
+ *
+ */
+export const joinSelectedHighlighted = (selected = [], highlighted = []) => {
+	const hash = {};
+	selected.forEach(i => hash[i] = [])
+	highlighted.forEach(i => hash[i] = []);
+	selected.forEach(i => hash[i].push("selected"));
+	highlighted.forEach(i => hash[i].push("highlighted"));
+	return hash;
 };

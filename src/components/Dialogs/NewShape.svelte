@@ -7,7 +7,7 @@
 		polygon,
 	} from "rabbit-ear/fold/bases.js";
 	import SVGCanvas from "../SVGCanvas/SVGCanvas.svelte";
-	import FacesLayer from "../SVGCanvas/FacesCPLayer.svelte";
+	import FacesLayer from "../SVGCanvas/FacesLayer.svelte";
 	import EdgesLayer from "../SVGCanvas/EdgesLayer.svelte";
 	import { createEventDispatcher } from "svelte";
 

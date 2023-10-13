@@ -78,59 +78,61 @@ export const snapToEdge = (point, force = false) => {
 		? { edge, coords: nearestPoint }
 		: { edge: undefined, coords: point };
 };
-
+/**
+ * @description The most robust case is when the CP is very large,
+ * imagine 50 snap points are closer to the pointer, closer than
+ * the nearest graph vertex, but still, the graph vertex is within
+ * the snapRadius, we want to snap to the graph vertex.
+ */
 export const snapToPoint = (point, force = false) => {
 	if (!point) { return undefined; }
 	const snapRadius = get(SnapRadiusCreasePattern);
-	// all the snap points
-	// const gridCoord = get(Snapping)
-	// 	? nearestGridPoint(point, snapRadius)
-	// 	: undefined;
-	const gridCoord = nearestGridPoint(point, snapRadius);
-	// const gridCoordDist = gridCoord === undefined
-	// 	? Infinity
-	// 	: distance2(point, gridCoord);
-	// if (gridCoord !== undefined) { return gridCoord; }
-	const points = gridCoord === undefined
-		? get(SnapPointsCreasePattern)
-		: [...get(SnapPointsCreasePattern), gridCoord];
-	// if (gridCoord !== undefined) { points.push(gridCoord); }
-	const distances = points.map(p => distance2(p, point));
-	const index = distances
+	// these points take priority over grid points.
+	const points = get(SnapPointsCreasePattern);
+	const pointsDistance = points.map(p => distance2(p, point));
+	const nearestPointIndex = pointsDistance
 		.map((d, i) => d < snapRadius ? i : undefined)
 		.filter(a => a !== undefined)
-		.sort((a, b) => distances[a] - distances[b])
+		.sort((a, b) => pointsDistance[a] - pointsDistance[b])
 		.shift();
-	return index === undefined
-		? [...point]
-		: [...points[index]];
+	// if a point exists within our snap radius, use that
+	if (nearestPointIndex !== undefined) {
+		return [...points[nearestPointIndex]];
+	}
+	// fallback, use a grid point if it exists.
+	// we only need the nearest of the grid coordinates.
+	const grid = nearestGridPoint(point, snapRadius);
+	if (grid !== undefined) { return grid; }
+	// const gridDistance = grid === undefined
+	// 	? Infinity
+	// 	: distance2(point, grid);
+	// fallback, return the input point.
+	return [...point];
 };
 
 export const snapToPointWithInfo = (point, force = false) => {
 	if (!point) { return { snap: false, coord: undefined }; }
 	const snapRadius = get(SnapRadiusCreasePattern);
-	// all the snap points
-	// const gridCoord = get(Snapping)
-	// 	? nearestGridPoint(point, snapRadius)
-	// 	: undefined;
-	const gridCoord = nearestGridPoint(point, snapRadius);
-	// const gridCoordDist = gridCoord === undefined
-	// 	? Infinity
-	// 	: distance2(point, gridCoord);
-	// if (gridCoord !== undefined) { return gridCoord; }
-	const points = gridCoord === undefined
-		? get(SnapPointsCreasePattern)
-		: [...get(SnapPointsCreasePattern), gridCoord];
-	// if (gridCoord !== undefined) { points.push(gridCoord); }
-	const distances = points.map(p => distance2(p, point));
-	const index = distances
+	// these points take priority over grid points.
+	const points = get(SnapPointsCreasePattern);
+	const pointsDistance = points.map(p => distance2(p, point));
+	const nearestPointIndex = pointsDistance
 		.map((d, i) => d < snapRadius ? i : undefined)
 		.filter(a => a !== undefined)
-		.sort((a, b) => distances[a] - distances[b])
+		.sort((a, b) => pointsDistance[a] - pointsDistance[b])
 		.shift();
-	return index === undefined
-		? { coords: [...point], snap: false }
-		: { coords: [...points[index]], snap: true };
+	// if a point exists within our snap radius, use that
+	if (nearestPointIndex !== undefined) {
+		return { coords: [...points[nearestPointIndex]], snap: true };
+	}
+	// fallback, use a grid point if it exists.
+	// we only need the nearest of the grid coordinates.
+	const grid = nearestGridPoint(point, snapRadius);
+	if (grid !== undefined) {
+		return { coords: grid, snap: true };
+	}
+	// fallback, return the input point.
+	return { coords: [...point], snap: false };
 };
 
 // const isPointOnLine = (point, lines) => {

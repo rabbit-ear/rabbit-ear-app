@@ -2,6 +2,7 @@
 	import Canvas from "./Panels/Canvas.svelte";
 	import File from "./Panels/File.svelte";
 	import ModifiersPanel from "./Panels/Modifiers.svelte";
+	import StylePanel from "./Panels/Style.svelte";
 	import FoldedForm from "./Panels/FoldedForm.svelte";
 	import Simulator from "./Panels/Simulator.svelte";
 	import { Modifiers } from "../stores/Modifiers.js";
@@ -15,16 +16,23 @@
 </script>
 
 <Canvas />
+
 {#if $Tool && $Tool.panel}
 	<svelte:component this={$Tool.panel} />
 {/if}
+
 {#if $ShowStaticOrSimulator}
 	<Simulator />
 {:else}
 	<FoldedForm />
 {/if}
+
+<StylePanel />
+
 <File />
+
 <ModifiersPanel />
+
 {#each ModifierPanels as panel}
 	<svelte:component this={panel} />
 {/each}

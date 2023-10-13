@@ -2,7 +2,7 @@
 	import SVGTouchCanvas from "./SVGTouchCanvas.svelte";
 	import VerticesLayer from "./VerticesLayer.svelte";
 	import EdgesLayer from "./EdgesLayer.svelte";
-	import FacesCPLayer from "./FacesCPLayer.svelte";
+	import FacesLayer from "./FacesLayer.svelte";
 	import GridLayer from "./GridLayer.svelte";
 	import UILayer from "./UILayer.svelte";
 	import GraphLayer from "./GraphLayer.svelte";
@@ -10,7 +10,6 @@
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
 	import FoldableVertices from "./FoldableVertices.svelte";
-	import { makeSelectedAttributes } from "./attributes.js";
 	import { CreasePattern } from "../../stores/Model.js";
 	import { VerticalUp } from "../../stores/App.js";
 	import {
@@ -44,16 +43,9 @@
 
 	$: viewport = padViewport($ViewportCP, 0.05);
 	// $: viewport = padViewport($ViewportCP, 0.05).map(n => n / ArtificialScale);
-
 	// $: console.log("viewport", viewport);
 
 	$: invertVertical = $VerticalUp;
-
-	$: edgesAttributes = makeSelectedAttributes(
-		$CreasePattern,
-		$Selection.edges,
-		$Highlight.edges,
-	);
 </script>
 
 <SVGTouchCanvas
@@ -69,13 +61,14 @@
 		<GridLayer {viewport} />
 	{/if}
 	<g class="origami-layer">
-		<FacesCPLayer
+		<FacesLayer
 			graph={$CreasePattern}
 			selected={$Selection.faces}
 			highlighted={$Highlight.faces} />
 		<EdgesLayer
 			graph={$CreasePattern}
-			attributes={edgesAttributes}
+			selected={$Selection.edges}
+			highlighted={$Highlight.edges}
 			strokeWidth={$StrokeWidthCreasePattern}
 			strokeDasharray={$StrokeDashLengthCreasePattern}
 			/>

@@ -10,72 +10,75 @@ Prerequisites: npm, Rust
 
 If this doesn't work, please let me know, it's likely there are additional setup steps I'm missing.
 
+# Dev log
+
+high priority:
+
+- [x] snapping for large cps, 400x, snap to grid points overrides.
+- [x] folded form layer separation distance
+- [ ] layer order solved - change assignment - layer order needs to be deleted
+- [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
+- [ ] ability to change folded form paper colors
+- [ ] right mouse click changes to camera to pan around.
+- [ ] foldedLine tool should re-assign existing creases that lay along the path.
+- [ ] rabbit ear tool. except make it the straight skeleton. convex only.
+- [ ] export multiple arrangements of crease patterns and folded forms
+- [ ] "toggleAssignment" to "toggleAssignments"
+- [ ] delete all frames and draw edges with no frame. also, make empty frame is buggy.
+- [ ] svg import bug, path parse error i think
+- [ ] better single vertex analysis.
+- [ ] frames can vertically scroll.
+- [ ] origami simulator doesn't work for large imported svgs.
+- [ ] Moosers train, make layers, clear, make again, somehow different
+- [ ] ability to change snap grid to hexagons.
+
+low priority:
+
+- [ ] axioms 4-7 could be coded better
+- [ ] copy/paste in the app menu doesn't make UI sense
+- [ ] menu boolean, checkmark reflecting state (Show/Hide)
+- [ ] somehow "import into frame", drag and drop into frames.
+- [ ] hovering on folded form/simulator shows dots on crease pattern
+- [ ] ability to use line tools on folded form (edge, axioms).
+- [ ] when hovering over folded form, dim actions which cannot be used on it.
+- [ ] when Svelte 5 comes out, replace GraphUpdate with an effect.
+- [ ] snap to SQRT2 points
+
+unknown:
+
+- [ ] the tool-svg-layer is disappearing. turning simulator on, folding simulator, going back to cp... using the edge tool.
+- [ ] cmd+A in the text box, intended to select the text, instead gets run by Rust due to the menu shortcut.
+- [ ] svg text in graph indices drifts away when zooming in
+- [ ] pressing "delete" for some reason changes the tool to "translate".
+- [ ] "blintz-frames.fold" possible error when loading more than 17 WebGL contexts.
+
+done:
+
+- [x] css style panels
+- [x] "new file" should be a simple yes/no and then trigger "new frame" modal
+- [x] style modal popups
+- [x] create custom UI elements (radio, slider, buttons)
+- [x] selecting vertices, vertices are no longer being shown.
+- [x] save preferences in localStorage
+- [x] finish menu events
+- [x] "reassign selected" doesn't work
+- [x] bring back keyboard shortcuts (that are not menu items)
+- [x] bring back basic drag and drop
+- [x] bring back "delete" key to delete frame
+- [x] folded form should report when it cannot fold the crease pattern (and not show it)
+- [x] recode axioms 4-7 to use new system of embeded execute methods
+- [x] file protocol, filename in title. save button
+- [x] import, svg, opx, obj
+- [x] basic export
+- [x] grid lines are messed up when zooming. "viewBoxOrigin" is buggy.
+- [x] UI touch interaction on folded form / simulator
+
 ## 2023-10-05
 
 Need to start to think about tools for modifying the folded form. some ideas:
 
 - all-layers fold through line, the simplest operation, already implemented in past versions.
 - similar, but, segment, segment with "flat" assignment. segment through all layers. the cool thing is that this can be used to draw shapes on the folded form and see it in the crease pattern.
-
-todo list:
-
-- [x] css style panels
-- [x] "new file" should be a simple yes/no and then trigger "new frame" modal
-- [x] style modal popups
-- [x] create custom UI elements (radio, slider, buttons)
-- [ ] glitchy graphics, need to (secretly) scale up the graphics.
-- [x] selecting vertices, vertices are no longer being shown.
-- [ ] right mouse click changes to camera to pan around.
-- [x] save preferences in localStorage
-
-- [x] finish menu events
-- [x] "reassign selected" doesn't work
-- [ ] menu boolean, checkmark reflecting state (Show/Hide)
-
-- [x] bring back keyboard shortcuts (that are not menu items)
-- [x] bring back basic drag and drop
-- [x] bring back "delete" key to delete frame
-- [ ] implement drag and drop into the frames window (append instead of replace)
-
-- [ ] UI touch interaction on folded form / simulator
-- [x] folded form should report when it cannot fold the crease pattern (and not show it)
-- [ ] hovering on folded form/simulator shows dots on crease pattern
-- [ ] folded form layer separation distance
-- [ ] ability to use line tools on folded form (edge, axioms).
-- [ ] when hovering over folded form, dim actions which cannot be used on it.
-
-- [x] recode axioms 4-7 to use new system of embeded execute methods
-- [ ] foldedLine tool should re-assign existing creases that lay along the path.
-- [ ] rabbit ear tool. except make it the straight skeleton. only works for convex shapes.
-
-- [x] file protocol, filename in title. save button
-- [x] import, svg, opx, obj
-- [x] basic export
-- [ ] export, multiple file formats, multiple arrangements of crease patterns and folded forms
-- [ ] when Svelte 5 comes out, replace GraphUpdate with an effect.
-
-- [ ] "toggleAssignment" to "toggleAssignments"
-- [ ] deleting all frames, drawing edges with no frame is buggy. also, creating empty frame is buggy.
-
-bug list:
-
-- [ ] frames can vertically scroll
-- [ ] origami simulator doesn't work for large imported svgs
-- [ ] snapping to vertices doesn't work for large cps, 400x, snap to grid points overrides.
-- [ ] the tool-svg-layer is disappearing. turning simulator on, folding simulator, going back to cp... using the edge tool
-- [x] grid lines are messed up when zooming. "viewBoxOrigin" is buggy.
-- [ ] cmd+A in the text box, intended to select the text, instead gets run by Rust due to the menu shortcut.
-- [ ] Moosers train, make layers, clear, make again, somehow different
-- [ ] svg text in graph indices drifts away when zooming in
-- [ ] pressing "delete" for some reason changes the tool to "translate".
-- [ ] "blintz-frames.fold" possible error when loading more than 17 WebGL contexts.
-
-could be better / save for later:
-
-- [ ] copy/paste in the app menu doesn't make UI sense
-- [ ] axioms 4-7 could be coded better
-- [ ] snap to SQRT2 points
-
 
 ## 2023-09-28
 

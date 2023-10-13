@@ -2,7 +2,7 @@
 	import SVGTouchCanvas from "./SVGTouchCanvas.svelte";
 	import GridLayer from "./GridLayer.svelte";
 	import UILayer from "./UILayer.svelte";
-	import FacesFoldedLayer from "./FacesFoldedLayer.svelte";
+	import FacesLayer from "./FacesLayer.svelte";
 	import RulerLayer from "./RulerLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
@@ -52,7 +52,7 @@
 	{/if}
 	{#if $FlatFoldable}
 		<g class="origami-layer">
-			<FacesFoldedLayer
+			<FacesLayer
 				graph={$FoldedForm}
 				selected={$Selection.faces}
 				highlighted={$Highlight.faces} />

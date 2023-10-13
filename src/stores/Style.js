@@ -5,6 +5,7 @@ import {
 import {
 	ViewportCP,
 	ViewportFolded,
+	ModelViewMatrixFolded,
 } from "./ViewBox.js";
 /**
  * @description Buggy Safari SVG graphics led to this ability to artificially
@@ -78,7 +79,6 @@ export const StrokeDashLengthFoldedForm = derived(
  * this number is a scale of the size of the viewbox.
  */
 export const VertexRadiusFactor = writable(0.00666);
-
 /**
  * @description SVG circle elements use this for their radius value.
  */
@@ -89,6 +89,65 @@ export const VertexRadius = derived(
 	) / ArtificialScale,
 	0.00666,
 );
+/**
+ *
+ */
+export const LayerGap = writable(0.001);
+/**
+ *
+ */
+export const LayerGapScaled = derived(
+	[LayerGap, ModelViewMatrixFolded],
+	([$LayerGap, $ModelViewMatrixFolded]) => {
+		const inferredScale = 1 / $ModelViewMatrixFolded[0];
+		const value = inferredScale * $LayerGap;
+		return !isNaN(value) && isFinite(value) ? value : 0.001;
+	},
+	0.001,
+);
+
+//
+// colors
+//
+
+// the background of the WebGL canvas
+export const BackgroundColor = writable("#231f1f");
+
+// front and back are the mesh faces
+// export const FrontColor = writable("#272222");
+export const FrontColor = writable("#373333");
+export const BackColor = writable("#1177FF");
+
+// line color by assignment
+export const LineOpacity = writable(1);
+export const BoundaryColor = writable("#888888");
+export const ValleyColor = writable("#0088ff");
+export const MountainColor = writable("#ee5533");
+export const FlatColor = writable("#555555");
+export const JoinColor = writable("#ff8800");
+export const CutColor = writable("#88ff00");
+export const UnassignedColor = writable("#8800ff");
+// cut is not used by origami simulator, used elsewhere.
+
+FrontColor.subscribe(color => document.documentElement.style
+	.setProperty("--front-color", color));
+BackColor.subscribe(color => document.documentElement.style
+	.setProperty("--back-color", color));
+
+BoundaryColor.subscribe(color => document.documentElement.style
+	.setProperty("--boundary-color", color));
+ValleyColor.subscribe(color => document.documentElement.style
+	.setProperty("--valley-color", color));
+MountainColor.subscribe(color => document.documentElement.style
+	.setProperty("--mountain-color", color));
+FlatColor.subscribe(color => document.documentElement.style
+	.setProperty("--flat-color", color));
+JoinColor.subscribe(color => document.documentElement.style
+	.setProperty("--join-color", color));
+CutColor.subscribe(color => document.documentElement.style
+	.setProperty("--cut-color", color));
+UnassignedColor.subscribe(color => document.documentElement.style
+	.setProperty("--unassigned-color", color));
 
 //
 // show/hide things
@@ -114,48 +173,6 @@ export const ShowUnassigned = writable(true);
 // cut is not used by origami simulator
 export const ShowCut = writable(true);
 
-//
-// Styles for origami simulator
-//
-
-// the background of the WebGL canvas
-export const BackgroundColor = writable("#231f1f");
-
-// front and back are the mesh faces
-export const FrontColor = writable("#272222");
-export const BackColor = writable("#1133a1");
-
-// line color by assignment
-export const LineOpacity = writable(1);
-export const BoundaryColor = writable("#888");
-export const MountainColor = writable("#e53");
-export const ValleyColor = writable("#08f");
-export const FlatColor = writable("#555");
-export const JoinColor = writable("#f80");
-export const UnassignedColor = writable("#80f");
-// cut is not used by origami simulator, used elsewhere.
-export const CutColor = writable("#8f0");
-
-export const AssignmentColor = derived(
-	[BoundaryColor, MountainColor, ValleyColor, FlatColor, JoinColor, CutColor, UnassignedColor],
-	([$BoundaryColor, $MountainColor, $ValleyColor, $FlatColor, $JoinColor, $CutColor, $UnassignedColor]) => ({
-		B: $BoundaryColor,
-		b: $BoundaryColor,
-		M: $MountainColor,
-		m: $MountainColor,
-		V: $ValleyColor,
-		v: $ValleyColor,
-		F: $FlatColor,
-		f: $FlatColor,
-		J: $JoinColor,
-		j: $JoinColor,
-		C: $CutColor,
-		c: $CutColor,
-		U: $UnassignedColor,
-		u: $UnassignedColor,
-	}),
-	{},
-);
 /**
  * @description Some SVG styles are zoom-level dependent, and require
  * being updated when the ViewBox changes. Of course, these attributes could

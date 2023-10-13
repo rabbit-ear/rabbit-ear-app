@@ -39,8 +39,10 @@
 <Panel>
 	<span slot="title">Simulator</span>
 	<span slot="body">
-		<input id="checkbox-active" type="checkbox" bind:checked={$Active} />
-		<label for="checkbox-active">active</label>
+		<div class="flex-row">
+			<input id="checkbox-active" type="checkbox" bind:checked={$Active} />
+			<label for="checkbox-active">active</label>
+		</div>
 
 		<input
 			id="range-fold-amount"
@@ -78,7 +80,7 @@
 		</div>
 
 		<div>
-			<label for="line-opacity">lines:</label>
+			<label for="line-opacity">lines</label>
 			<input
 				id="line-opacity"
 				type="range"
@@ -215,5 +217,8 @@
 	}
 	div input[type=text] {
 		flex: 0 1 auto;
+	}
+	.flex-row {
+		align-items: center;
 	}
 </style>

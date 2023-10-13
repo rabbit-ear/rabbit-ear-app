@@ -11,7 +11,7 @@
 	import { getFOLDViewport } from "../../js/matrix.js";
 	import { VerticalUp } from "../../stores/App.js";
 	import SVGCanvas from "../SVGCanvas/SVGCanvas.svelte";
-	import FacesLayer from "../SVGCanvas/FacesCPLayer.svelte";
+	import FacesLayer from "../SVGCanvas/FacesLayer.svelte";
 	import EdgesLayer from "../SVGCanvas/EdgesLayer.svelte";
 	import {
 		CreasePattern,
