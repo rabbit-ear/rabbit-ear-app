@@ -41,7 +41,7 @@ export const StrokeWidthCreasePattern = derived(
 		Math.max(
 			StrokeWidthMin,
 			Math.max($ViewportCP[2], $ViewportCP[3]) * StrokeWidthFactor,
-		) / ArtificialScale
+		)
 	),
 	StrokeWidthFactor,
 );
@@ -51,7 +51,7 @@ export const StrokeWidthFoldedForm = derived(
 		Math.max(
 			StrokeWidthMin,
 			Math.max($ViewportFolded[2], $ViewportFolded[3]) * StrokeWidthFactor,
-		) / ArtificialScale
+		)
 	),
 	StrokeWidthFactor,
 );
@@ -66,12 +66,12 @@ export const StrokeWidthFoldedForm = derived(
  */
 export const StrokeDashLengthCreasePattern = derived(
 	StrokeWidthCreasePattern,
-	($StrokeWidthCreasePattern) => ($StrokeWidthCreasePattern * 3) / ArtificialScale,
+	($StrokeWidthCreasePattern) => ($StrokeWidthCreasePattern * 3),
 	StrokeWidthFactor * 3,
 );
 export const StrokeDashLengthFoldedForm = derived(
 	StrokeWidthFoldedForm,
-	($StrokeWidthFoldedForm) => ($StrokeWidthFoldedForm * 3) / ArtificialScale,
+	($StrokeWidthFoldedForm) => ($StrokeWidthFoldedForm * 3),
 	StrokeWidthFactor * 3,
 );
 /**
@@ -86,7 +86,7 @@ export const VertexRadius = derived(
 	[ViewportCP, VertexRadiusFactor],
 	([$ViewportCP, $VertexRadiusFactor]) => (
 		Math.max($ViewportCP[2], $ViewportCP[3]) * $VertexRadiusFactor
-	) / ArtificialScale,
+	),
 	0.00666,
 );
 /**
@@ -114,9 +114,9 @@ export const LayerGapScaled = derived(
 export const BackgroundColor = writable("#231f1f");
 
 // front and back are the mesh faces
-// export const FrontColor = writable("#272222");
-export const FrontColor = writable("#373333");
+export const FrontColor = writable("#272222");
 export const BackColor = writable("#1177FF");
+export const CPColor = writable("#272222");
 
 // line color by assignment
 export const LineOpacity = writable(1);
@@ -133,6 +133,8 @@ FrontColor.subscribe(color => document.documentElement.style
 	.setProperty("--front-color", color));
 BackColor.subscribe(color => document.documentElement.style
 	.setProperty("--back-color", color));
+CPColor.subscribe(color => document.documentElement.style
+	.setProperty("--cp-color", color));
 
 BoundaryColor.subscribe(color => document.documentElement.style
 	.setProperty("--boundary-color", color));

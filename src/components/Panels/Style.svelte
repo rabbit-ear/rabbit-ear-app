@@ -12,9 +12,11 @@
 		JoinColor,
 		UnassignedColor,
 	} from "../../stores/Style.js";
+
+	export let showPanel;
 </script>
 
-<Panel>
+<Panel {showPanel}>
 	<span slot="title">Style</span>
 	<span slot="body">
 		<div class="flex-column gap">

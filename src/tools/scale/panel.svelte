@@ -1,11 +1,14 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
 	import { executeCommand } from "../../kernel/execute.js";
+
+	export let showPanel;
+
 	let scaleFactor = 1;
 </script>
 
-<Panel>
-	<span slot="title">scale</span>
+<Panel {showPanel}>
+	<span slot="title">Scale</span>
 	<span slot="body">
 		<div class="container">
 			<input

@@ -3,6 +3,8 @@
 	import Assignment from "../../components/PanelParts/Assignment.svelte";
 	import { Step } from "./stores.js";
 
+	export let showPanel;
+
 	let classes;
 	$: classes = Array.from(Array(5))
 		.map(() => "todo")
@@ -10,7 +12,7 @@
 		.map((str, i) => i < $Step ? "done" : str);
 </script>
 
-<Panel>
+<Panel {showPanel}>
 	<span slot="title">Axiom 2</span>
 	<span slot="body">
 		<div class="flex-column gap">

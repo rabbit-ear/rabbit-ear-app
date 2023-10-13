@@ -9,8 +9,8 @@
 	export let viewBox;
 	export let strokeWidth = 0.001;
 	export let invertVertical = false;
-	export let scale = 1;
 
+	let scale = 1;
 	const unwrap = (point) => [
 		(1 / scale) * point[0],
 		(1 / scale) * point[1] * (invertVertical ? -1 : 1),
@@ -38,7 +38,6 @@
 	on:mousemove={mousemove}
 	on:mouseup={mouseup}
 	on:wheel={wheel}
-	{scale}
 	{viewBox}
 	{strokeWidth}
 	{invertVertical}>

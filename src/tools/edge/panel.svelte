@@ -2,10 +2,12 @@
 	import Panel from "../../components/Panels/Panel.svelte";
 	import Assignment from "../../components/PanelParts/Assignment.svelte";
 	import ShiftLockAngle from "../../components/PanelParts/ShiftLockAngle.svelte";
+
+	export let showPanel;
 </script>
 
-<Panel>
-	<span slot="title">segment</span>
+<Panel {showPanel}>
+	<span slot="title">Segment</span>
 	<span slot="body">
 		<Assignment />
 		<hr />

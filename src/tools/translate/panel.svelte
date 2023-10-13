@@ -1,12 +1,13 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
 	import { executeCommand } from "../../kernel/execute.js";
+	export let showPanel;
 	let x = 0;
 	let y = 0;
 </script>
 
-<Panel>
-	<span slot="title">translate</span>
+<Panel {showPanel}>
+	<span slot="title">Translate</span>
 	<span slot="body">
 		<div class="container">
 			<div class="row">

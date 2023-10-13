@@ -21,121 +21,91 @@
 		deallocProgram,
 	} from "rabbit-ear/webgl/program.js";
 	import { vectorFromScreenLocation } from "./general.js";
-	import { LayerGapScaled } from "../../stores/Style.js";
+	import {
+		FrontColor,
+		BackColor,
+		CPColor,
+		LayerGapScaled,
+	} from "../../stores/Style.js";
 
 	export let graph = {};
 	export let fov = 30.25;
-	export let perspective = "orthographic";
-	// export let perspective = "perspective";
-
-	// bind to this
-	let canvas;
-
-	$: canvasSize = canvas ? [canvas.clientWidth, canvas.clientHeight] : [1, 1];
-
-	// matrices
-	let modelMatrix = identity4x4;
+	export let perspective = "orthographic"; // "perspective";
 	export let viewMatrix = identity4x4;
-	let projectionMatrix = identity4x4;
 
-	// the WebGL instance and which version: 1 or 2
 	let gl;
 	let version;
-
-	// all mesh and shader data
+	let canvas;
 	let programs = [];
 
+	$: canvasSize = canvas ? [canvas.clientWidth, canvas.clientHeight] : [1, 1];
 	$: modelMatrix = makeModelMatrix(graph);
 	$: modelViewMatrix = multiplyMatrices4(viewMatrix, modelMatrix);
 	$: projectionMatrix = makeProjectionMatrix(canvas, perspective, fov);
+	$: inferredScale = 1 / modelViewMatrix[0];
+	$: isFoldedForm = graph
+		&& graph.frame_classes
+		&& graph.frame_classes.length
+		&& graph.frame_classes.includes("foldedForm");
 
-	// $: inferredScale = 1 / modelViewMatrix[0];
-	// $: uniforms = programs.map(prog => prog.makeUniforms(gl, {
-	// 	projectionMatrix,
-	// 	modelViewMatrix,
-	// 	canvas,
-	// 	frontColor: "white",
-	// 	backColor: "#369",
-	// 	cpColor: "#272222", // variable --background-1
-	// 	strokeWidth: inferredScale * 0.02,
-	// 	opacity: 1,
-	// }));
+	$: uniformOptions = {
+		projectionMatrix,
+		modelViewMatrix,
+		canvas,
+		frontColor: $FrontColor,
+		backColor: $BackColor,
+		cpColor: $CPColor,
+		strokeWidth: inferredScale * 0.02,
+		opacity: 1,
+	};
 
-	$: rebuildAndDraw(graph, projectionMatrix, $LayerGapScaled);
-	$: draw(modelViewMatrix, perspective, fov);
+	$: programOptions = {
+		B: [0.5, 0.5, 0.5],
+		b: [0.5, 0.5, 0.5],
+		F: [0.3, 0.3, 0.3],
+		f: [0.3, 0.3, 0.3],
+		layerNudge: $LayerGapScaled,
+		// outlines: $showFoldedFaceOutlines,
+		// edges: $showFoldedCreases,
+		// faces: $showFoldedFaces,
+	};
+
+	$: uniforms = programs
+		.map((prog, i) => prog
+			.makeUniforms(gl, uniformOptions));
+
+	$: {
+		try {
+			dealloc();
+			programs = isFoldedForm
+				? foldedForm(gl, version, graph, programOptions)
+				: creasePattern(gl, version, graph, programOptions);
+		} catch (error) { }
+	};
+
+	$: if (gl) {
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		programs.forEach((program, i) => drawProgram(gl, version, program, uniforms[i]));
+	};
 
 	const dealloc = () => {
 		programs.forEach(program => deallocProgram(gl, program));
 		programs = [];
 	};
 
-	const draw = () => {
-		if (!gl) { return; }
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		const inferredScale = 1 / modelViewMatrix[0];
-		const uniforms = programs.map(prog => prog.makeUniforms(gl, {
-			projectionMatrix,
-			modelViewMatrix,
-			canvas,
-			frontColor: "white",
-			backColor: "#369",
-			cpColor: "#272222", // variable --background-1
-			strokeWidth: inferredScale * 0.02,
-			opacity: 1,
-		}));
-		programs.forEach((program, i) => drawProgram(gl, version, program, uniforms[i]));
-	};
-
-	const rebuildAndDraw = () => {
-		rebuildPrograms();
-		draw();
-	};
-
-	const rebuildPrograms = () => {
-		if (!gl) { return; }
-		dealloc();
-		const options = {
-			B: [0.5, 0.5, 0.5],
-			b: [0.5, 0.5, 0.5],
-			F: [0.3, 0.3, 0.3],
-			f: [0.3, 0.3, 0.3],
-			layerNudge: $LayerGapScaled,
-			// outlines: $showFoldedFaceOutlines,
-			// edges: $showFoldedCreases,
-			// faces: $showFoldedFaces,
-			// dark: $colorMode === "dark",
-		};
-		const isFoldedForm = graph
-			&& graph.frame_classes
-			&& graph.frame_classes.length
-			&& graph.frame_classes.includes("foldedForm");
-		try {
-			programs = isFoldedForm
-				? foldedForm(gl, version, graph, options)
-				: creasePattern(gl, version, graph, options);
-		} catch (error) { }
-	};
-
-	const onResize = (event) => {
-		// trigger a recalculation of canvasSize
-		// canvasSize = [canvas.clientWidth, canvas.clientHeight];
+	const onResize = () => {
 		if (!canvas) { return; }
 		canvas = canvas;
 		rebuildViewport(gl, canvas);
-		rebuildAndDraw();
 	};
 
 	onMount(() => {
-		// force a particular WebGL version
-		// const init = initialize(canvas, 1); // WebGL version 1
-		// const init = initialize(canvas, 2); // WebGL version 2
-		const init = initialize(canvas);
+		const init = initialize(canvas); // initialize(canvas, 1); // WebGL 1
 		gl = init.gl;
 		version = init.version;
 		if (!gl) {
 			const msg = "WebGL is not supported.";
-			alert(msg);
-			throw new Error(msg);
+			return alert(msg);
 		}
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -174,7 +144,7 @@
 	on:touchend={touchend}
 />
 
-<!-- set the second parameter of the addEventListener to "false" -->
+<!-- previously, the second parameter of addEventListener was "false" -->
 
 <style>
 	canvas {

@@ -3,6 +3,8 @@
 	import Panel from "./Panel.svelte";
 	import FileFrames from "./FileFrames.svelte";
 
+	export let showPanel;
+
 	const file_classes = [
 		"singleModel",
 		"multiModel",
@@ -11,7 +13,7 @@
 	];
 </script>
 
-<Panel>
+<Panel {showPanel} >
 	<span slot="title">File</span>
 	<span slot="body">
 		<input type="text" placeholder="title" bind:value={$FileMetadata.file_title} >

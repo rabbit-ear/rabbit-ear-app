@@ -18,6 +18,8 @@
 		ShowStaticOrSimulator,
 	} from "../../stores/App.js";
 
+	export let showPanel;
+
 	$: inverseZoomCP = $CameraMatrixCP[0] / $ModelMatrixCP[0];
 	$: zoomCP = !isNaN(inverseZoomCP) ? (1 / inverseZoomCP).toFixed(3) : 0;
 	$: inverseZoomFolded = $CameraMatrixFolded[0] / $ModelMatrixFolded[0];
@@ -39,7 +41,7 @@
 	};
 </script>
 
-<Panel>
+<Panel {showPanel}>
 	<span slot="title">Canvas</span>
 	<span slot="body">
 		{#if $SnapPoint === undefined}

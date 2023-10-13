@@ -1,8 +1,10 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
+
+	export let showPanel;
 </script>
 
-<Panel>
+<Panel {showPanel}>
 	<span slot="title">camera</span>
 	<span slot="body">
 		<div class="container">

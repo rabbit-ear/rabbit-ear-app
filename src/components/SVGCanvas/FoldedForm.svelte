@@ -19,7 +19,6 @@
 	import { Selection } from "../../stores/Select.js";
 	import { Highlight } from "../../stores/UI.js";
 	import {
-		ArtificialScale,
 		StrokeWidthFoldedForm,
 	} from "../../stores/Style.js";
 	import { ViewportFolded } from "../../stores/ViewBox.js";
@@ -41,7 +40,6 @@
 <SVGTouchCanvas
 	viewBox={viewport.join(" ")}
 	strokeWidth={$StrokeWidthFoldedForm}
-	scale={ArtificialScale}
 	{invertVertical}
 	on:press
 	on:move

@@ -11,10 +11,12 @@
 	} from "./stores.js";
 	import { Selection } from "../../stores/Select.js";
 	import { Highlight } from "../../stores/UI.js";
+
+	export let showPanel;
 </script>
 
-<Panel>
-	<span slot="title">select</span>
+<Panel {showPanel}>
+	<span slot="title">Select</span>
 	<span slot="body">
 		<div class="flex-column gap">
 			<div class="flex-row gap center">

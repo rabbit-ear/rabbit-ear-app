@@ -2,6 +2,8 @@
 	import Panel from "../../components/Panels/Panel.svelte";
 	import { ReflectionLines } from "./stores.js";
 
+	export let showPanel;
+
 	const toDegree = (vector) => {
 		const radians = Math.atan2(vector[1], vector[0]);
 		return (radians * 180 / Math.PI).toFixed(1);
@@ -12,8 +14,8 @@
 	});
 </script>
 
-<Panel>
-	<span slot="title">symmetry</span>
+<Panel {showPanel}>
+	<span slot="title">Symmetry</span>
 	<span slot="body">
 		<div class="container">
 			<p>{$ReflectionLines.length} currently</p>

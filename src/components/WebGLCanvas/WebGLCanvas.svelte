@@ -1,61 +1,19 @@
 <script>
-	import {
-		magnitude2,
-		subtract2,
-	} from "rabbit-ear/math/vector.js";
-	import {
-		identity4x4,
-		multiplyMatrices4,
-		invertMatrix4,
-		makeMatrix4Scale,
-		makeMatrix4Translate,
-	} from "rabbit-ear/math/matrix4.js";
-	import {
-		quaternionFromTwoVectors,
-		matrix4FromQuaternion,
-	} from "rabbit-ear/math/quaternion.js";
+	import { identity4x4 } from "rabbit-ear/math/matrix4.js";
 	import WebGLRender from "./WebGLRender.svelte";
 	import {
 		WebGLFoldedFormPointerEvent,
 	} from "../../stores/FoldedFormTools.js";
+	import {
+		rotateViewMatrix,
+		zoomViewMatrix,
+	} from "./general.js";
 
 	export let graph = {};
 
 	let perspective = "perspective";
 	// let perspective = "orthographic";
 	let viewMatrix = identity4x4;
-
-	const rotateViewMatrix = (vector, prevVector) => {
-		switch (perspective) {
-		case "perspective":
-			const vectors = [
-				[...prevVector, -0.2 * Math.atan(1 / magnitude2(prevVector))],
-				[...vector, -0.2 * Math.atan(1 / magnitude2(vector))]
-			];
-			const quaternion = quaternionFromTwoVectors(...vectors);
-			const matrix = matrix4FromQuaternion(quaternion);
-			return multiplyMatrices4(matrix, viewMatrix);
-		case "orthographic":
-			const translateVector = subtract2(vector, prevVector);
-			const translate = makeMatrix4Translate(...translateVector);
-			const invertTranslate = invertMatrix4(translate);
-			return multiplyMatrices4(invertTranslate, viewMatrix);
-		default: return viewMatrix;
-		}
-	};
-
-	const zoomViewMatrix = (delta) => {
-		switch (perspective) {
-		case "perspective":
-			const translateMatrix = makeMatrix4Translate(0, 0, delta);
-			return multiplyMatrices4(translateMatrix, viewMatrix);
-		case "orthographic":
-			const scale = 1 + delta;
-			const scaleMatrix = makeMatrix4Scale([scale, scale, scale]);
-			return multiplyMatrices4(scaleMatrix, viewMatrix);
-		default: return viewMatrix;
-		}
-	};
 
 	let prevVector;
 	const onPress = ({ detail }) => {
@@ -70,7 +28,7 @@
 		const { point, vector } = detail;
 		const buttons = prevVector ? 1 : 0;
 		if (buttons) {
-			viewMatrix = rotateViewMatrix(vector, prevVector);
+			viewMatrix = rotateViewMatrix(perspective, viewMatrix, vector, prevVector);
 			prevVector = vector;
 		}
 		WebGLFoldedFormPointerEvent("move", { point, vector, buttons });
@@ -86,7 +44,7 @@
 		const scrollSensitivity = 1 / 100;
 		const delta = -detail.deltaY * scrollSensitivity;
 		if (Math.abs(delta) < 1e-3) { return; }
-		viewMatrix = zoomViewMatrix(delta);
+		viewMatrix = zoomViewMatrix(perspective, viewMatrix, delta);
 	};
 </script>
 

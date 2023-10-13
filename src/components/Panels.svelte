@@ -6,7 +6,16 @@
 	import FoldedForm from "./Panels/FoldedForm.svelte";
 	import Simulator from "./Panels/Simulator.svelte";
 	import { Modifiers } from "../stores/Modifiers.js";
-	import { ShowStaticOrSimulator } from "../stores/App.js";
+	import {
+		ShowPanelCanvas,
+		ShowPanelTool,
+		ShowPanelSimulator,
+		ShowPanelFoldedForm,
+		ShowPanelFile,
+		ShowPanelStylePanel,
+		ShowPanelModifiersPanel,
+		ShowStaticOrSimulator,
+	} from "../stores/App.js";
 	import { Tool } from "../stores/UI.js";
 
 	let ModifierPanels;
@@ -15,23 +24,23 @@
 		.map(modifier => modifier.panel);
 </script>
 
-<Canvas />
+<Canvas showPanel={$ShowPanelCanvas} />
 
 {#if $Tool && $Tool.panel}
-	<svelte:component this={$Tool.panel} />
+	<svelte:component this={$Tool.panel} showPanel={$ShowPanelTool} />
 {/if}
 
 {#if $ShowStaticOrSimulator}
-	<Simulator />
+	<Simulator showPanel={$ShowPanelSimulator} />
 {:else}
-	<FoldedForm />
+	<FoldedForm showPanel={$ShowPanelFoldedForm} />
 {/if}
 
-<StylePanel />
+<File showPanel={$ShowPanelFile} />
 
-<File />
+<StylePanel showPanel={$ShowPanelStylePanel} />
 
-<ModifiersPanel />
+<ModifiersPanel showPanel={$ShowPanelModifiersPanel} />
 
 {#each ModifierPanels as panel}
 	<svelte:component this={panel} />

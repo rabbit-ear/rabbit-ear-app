@@ -10,12 +10,15 @@
 		ScribbleDensity,
 		ScribbleWaitForConfirmation,
 	} from "./stores.js";
+
+	export let showPanel;
+
 	let pointCount;
 	$: pointCount = $Polyline.length;
 </script>
 
-<Panel>
-	<span slot="title">scribble</span>
+<Panel {showPanel}>
+	<span slot="title">Scribble</span>
 	<span slot="body">
 		<div class="container">
 			<p>{pointCount} points</p>

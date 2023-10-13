@@ -5,10 +5,12 @@
 		RedoStack,
 		UndoHistoryLength,
 	} from "./stores.js";
+
+	let showPanel = false;
 </script>
 
-<Panel>
-	<span slot="title">undo history</span>
+<Panel {showPanel}>
+	<span slot="title">Undo History</span>
 	<span slot="body">
 		<div class="flex-column gap">
 			<p>undo: <span class="number">{$UndoStack.length}</span></p>

@@ -1,15 +1,15 @@
 <script>
-	let expanded = true;
+	export let showPanel = true;
 </script>
 
 <div class="container">
-	<button class="title" on:click={() => expanded = !expanded}>
+	<button class="title" on:click={() => showPanel = !showPanel}>
 		<slot name="title">
 			<span class="missing">Panel</span>
 		</slot>
 	</button>
 
-	{#if expanded}
+	{#if showPanel}
 		<div class="body">
 			<slot name="body" />
 		</div>

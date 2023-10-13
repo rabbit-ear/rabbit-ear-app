@@ -9,6 +9,8 @@
 		ASSIGN_BOUNDARY,
 	} from "./stores.js";
 
+	export let showPanel;
+
 	const printable = {
 		[ASSIGN_SWAP]: "valley / mountain",
 		[ASSIGN_FLAT]: "flat",
@@ -18,8 +20,8 @@
 	};
 </script>
 
-<Panel>
-	<span slot="title">assignment</span>
+<Panel {showPanel}>
+	<span slot="title">Assignment</span>
 	<span slot="body">
 		<div class="flex-column gap">
 			<div class="toggle-row">

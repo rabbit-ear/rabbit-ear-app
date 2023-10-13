@@ -1,9 +1,11 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
+
+	export let showPanel;
 </script>
 
-<Panel>
-	<span slot="title">folded line</span>
+<Panel {showPanel}>
+	<span slot="title">Folded Line</span>
 	<span slot="body">
 		<div class="container">
 		</div>

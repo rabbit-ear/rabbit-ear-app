@@ -8,6 +8,7 @@
 		ShowFrames,
 		ShowCodeEditor,
 		ShowStaticOrSimulator,
+		Prefer3D,
 	} from "../stores/App.js";
 	import CreasePatternCanvas from "./SVGCanvas/CreasePattern.svelte";
 	import FoldedFormCanvas from "./SVGCanvas/FoldedForm.svelte";
@@ -63,7 +64,7 @@
 				</div>
 			{:else}
 				<div class="canvas folded-form" style={`max-height: calc(${height})`}>
-					{#if $FrameEdgesAreFlat}
+					{#if $FrameEdgesAreFlat && !$Prefer3D}
 						<FoldedFormCanvas
 							on:press={pressFolded}
 							on:move={moveFolded}
@@ -95,7 +96,7 @@
 			</div>
 		{:else}
 			<div class="canvas folded-form" style={`max-height: calc(${height})`}>
-				{#if $FrameEdgesAreFlat}
+				{#if $FrameEdgesAreFlat && !$Prefer3D}
 					<FoldedFormCanvas
 						on:press={pressFolded}
 						on:move={moveFolded}

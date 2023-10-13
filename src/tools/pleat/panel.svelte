@@ -1,10 +1,12 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
 	import { PleatCount } from "./stores.js";
+
+	export let showPanel;
 </script>
 
-<Panel>
-	<span slot="title">pleat</span>
+<Panel {showPanel}>
+	<span slot="title">Pleat</span>
 	<span slot="body">
 		<div class="container">
 			<input

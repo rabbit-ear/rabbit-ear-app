@@ -1,10 +1,22 @@
 import {
-	invertMatrix4,
-	multiplyMatrix4Vector3,
-} from "rabbit-ear/math/matrix4.js";
+	magnitude2,
+	subtract2,
+} from "rabbit-ear/math/vector.js";
 import {
 	multiplyMatrix2Vector2,
 } from "rabbit-ear/math/matrix2.js";
+import {
+	invertMatrix4,
+	makeMatrix4Scale,
+	makeMatrix4Translate,
+	multiplyMatrices4,
+	multiplyMatrix4Vector3,
+} from "rabbit-ear/math/matrix4.js";
+import {
+	quaternionFromTwoVectors,
+	matrix4FromQuaternion,
+} from "rabbit-ear/math/quaternion.js";
+
 /**
  * @description Convert a point on a canvas into a 2D vector in the
  * projection space that points from the center of the canvas
@@ -28,4 +40,40 @@ export const vectorFromScreenLocation = (point, canvasSize, projectionMatrix) =>
 	// now in corrected world-coordinates (aspect ratio is correct).
 	// however it is still in 2D, as a flat screen is really only a 2D surface.
 	return multiplyMatrix4Vector3(inverse, [...screenVector, 1]).slice(0, 2);
+};
+/**
+ *
+ */
+export const rotateViewMatrix = (perspective, viewMatrix, vector, prevVector) => {
+	switch (perspective) {
+	case "perspective":
+		const vectors = [
+			[...prevVector, -0.2 * Math.atan(1 / magnitude2(prevVector))],
+			[...vector, -0.2 * Math.atan(1 / magnitude2(vector))]
+		];
+		const quaternion = quaternionFromTwoVectors(...vectors);
+		const matrix = matrix4FromQuaternion(quaternion);
+		return multiplyMatrices4(matrix, viewMatrix);
+	case "orthographic":
+		const translateVector = subtract2(vector, prevVector);
+		const translate = makeMatrix4Translate(...translateVector);
+		const invertTranslate = invertMatrix4(translate);
+		return multiplyMatrices4(invertTranslate, viewMatrix);
+	default: return viewMatrix;
+	}
+};
+/**
+ *
+ */
+export const zoomViewMatrix = (perspective, viewMatrix, delta) => {
+	switch (perspective) {
+	case "perspective":
+		const translateMatrix = makeMatrix4Translate(0, 0, delta);
+		return multiplyMatrices4(translateMatrix, viewMatrix);
+	case "orthographic":
+		const scale = 1 + delta;
+		const scaleMatrix = makeMatrix4Scale([scale, scale, scale]);
+		return multiplyMatrices4(scaleMatrix, viewMatrix);
+	default: return viewMatrix;
+	}
 };

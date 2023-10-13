@@ -3,6 +3,8 @@
 	import { FoldAngleValue } from "./stores.js";
 	import { convertToViewBox } from "../../js/dom.js";
 
+	export let showPanel;
+
 	let svg;
 
 	let lineX, lineY;
@@ -36,8 +38,8 @@
 	}
 </script>
 
-<Panel>
-	<span slot="title">fold angle</span>
+<Panel {showPanel}>
+	<span slot="title">Fold Angle</span>
 	<span slot="body">
 		<div class="container">
 			<div class="flex-row">

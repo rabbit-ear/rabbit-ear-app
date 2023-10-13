@@ -1,4 +1,9 @@
 :root {
+	/* faces */
+	--front-color: var(--background-1);
+	--back-color: var(--uiblue);
+	--cp-color: var(--background-1);
+	/* edges */
 	--boundary-color: #888888;
 	--valley-color: #0088ff;
 	--mountain-color: #ee5533;
@@ -6,10 +11,7 @@
 	--join-color: #ff8800;
 	--cut-color: #88ff00;
 	--unassigned-color: #8800ff;
-
-	--front-color: var(--background-1);
-	--back-color: var(--uiblue);
-
+	/* vertices */
 	--vertex-color: #888888;
 }
 
@@ -34,7 +36,7 @@
 }
 
 .crease-pattern polygon {
-	fill: var(--background-1);
+	fill: var(--cp-color);
 	opacity: 0.75;
 }
 

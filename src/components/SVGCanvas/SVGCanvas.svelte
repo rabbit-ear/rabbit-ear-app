@@ -2,8 +2,8 @@
 	export let viewBox = "0 0 1 1";
 	export let strokeWidth = 0.001;
 	export let invertVertical = false;
-	export let scale = 1;
 
+	let scale = 1;
 	$: matrix = [scale, 0, 0, invertVertical ? -scale : scale, 0, 0].join(", ");
 </script>
 

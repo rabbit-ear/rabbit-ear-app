@@ -1,6 +1,8 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
 	import Assignment from "../../components/PanelParts/Assignment.svelte";
+
+	export let showPanel;
 </script>
 
 <!--
@@ -9,8 +11,8 @@ if it is a degree-N even number, state how there are
 only solutions possible for odd numbered degree vertices.
 -->
 
-<Panel>
-	<span slot="title">kawasaki</span>
+<Panel {showPanel}>
+	<span slot="title">Kawasaki</span>
 	<span slot="body">
 		<div class="flex-column gap">
 			<p class="instruction">flat-fold an odd-numbered degree vertex.</p>

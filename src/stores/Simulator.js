@@ -9,7 +9,7 @@ import { Tool } from "./UI.js";
 //
 
 // turn on/off Origami Simulator's folding engine
-export const Active = writable(false);
+export const Active = writable(true);
 
 // fold the origami model, float (0.0-1.0)
 export const FoldAmount = writable(0.15);

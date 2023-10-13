@@ -16,9 +16,11 @@ high priority:
 
 - [x] snapping for large cps, 400x, snap to grid points overrides.
 - [x] folded form layer separation distance
+- [x] ability to change folded form paper colors
+- [ ] layer order - report number of face-pairs, auto solve if number is low
+- [ ] layer order - report multiple solutions, somehow allow them to toggle it.
 - [ ] layer order solved - change assignment - layer order needs to be deleted
 - [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
-- [ ] ability to change folded form paper colors
 - [ ] right mouse click changes to camera to pan around.
 - [ ] foldedLine tool should re-assign existing creases that lay along the path.
 - [ ] rabbit ear tool. except make it the straight skeleton. convex only.

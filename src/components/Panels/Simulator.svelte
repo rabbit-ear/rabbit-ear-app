@@ -33,10 +33,12 @@
 		LineOpacity,
 	} from "../../stores/Style.js";
 
+	export let showPanel;
+
 	let showAdvanced = false;
 </script>
 
-<Panel>
+<Panel {showPanel}>
 	<span slot="title">Simulator</span>
 	<span slot="body">
 		<div class="flex-row">

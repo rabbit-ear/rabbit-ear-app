@@ -24,7 +24,6 @@
 		Highlight,
 	} from "../../stores/UI.js";
 	import {
-		ArtificialScale,
 		StrokeWidthCreasePattern,
 		StrokeDashLengthCreasePattern,
 	} from "../../stores/Style.js";
@@ -46,12 +45,17 @@
 	// $: console.log("viewport", viewport);
 
 	$: invertVertical = $VerticalUp;
+
+	// $: scaledGraph = {
+	// 	...$CreasePattern,
+	// 	vertices_coords: $CreasePattern.vertices_coords
+	// 		.map(coords => coords.map(n => n * 100))
+	// };
 </script>
 
 <SVGTouchCanvas
 	viewBox={viewport.join(" ")}
 	strokeWidth={$StrokeWidthCreasePattern}
-	scale={ArtificialScale}
 	{invertVertical}
 	on:press
 	on:move
@@ -60,6 +64,7 @@
 	{#if $ShowGrid}
 		<GridLayer {viewport} />
 	{/if}
+	<!-- <g class="origami-layer" style={`transform: matrix(0.01, 0, 0, 0.01, 0, 0);`}> -->
 	<g class="origami-layer">
 		<FacesLayer
 			graph={$CreasePattern}

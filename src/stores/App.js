@@ -49,7 +49,12 @@ export const ShowCodeEditor = writable(
 export const ShowFrames = writable(
 	localStorage.getItem("ShowFrames") === "true" || true,
 );
+
 export const ShowStaticOrSimulator = writable(false); // false: static, true: simulator
+
+// flat foldable folded forms will render in SVG by default.
+export const Prefer3D = writable(false);
+
 /**
  * @description A few various commands have the effect of creating
  * new edges in the graph, by default, these new edges will
@@ -68,6 +73,15 @@ export const DialogExportAs = writable(undefined);
 export const TerminalTextarea = writable(undefined);
 export const TerminalValue = writable(undefined);
 export const InputFile = writable(undefined);
+
+export const ShowPanelCanvas = writable(true);
+export const ShowPanelTool = writable(true);
+export const ShowPanelSimulator = writable(true);
+export const ShowPanelFoldedForm = writable(true);
+export const ShowPanelFile = writable(true);
+export const ShowPanelStylePanel = writable(false);
+export const ShowPanelModifiersPanel = writable(false);
+export const ShowPanelModifiersSubPanel = writable(false);
 
 // todo: global-level subscribe. needs unsubscribe
 ShowGrid.subscribe(value => localStorage

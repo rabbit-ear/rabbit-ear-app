@@ -6,6 +6,8 @@
 	} from "../../stores/Modifiers.js";
 	import Panel from "./Panel.svelte";
 
+	export let showPanel;
+
 	let modifierNames = [];
 	$: modifierNames = Object.keys(modifiers);
 
@@ -20,7 +22,7 @@
 		.map(name => modifiers[name])
 </script>
 
-<Panel>
+<Panel {showPanel}>
 	<span slot="title">Modifiers</span>
 	<span slot="body">
 		<div class="flex-column gap">
