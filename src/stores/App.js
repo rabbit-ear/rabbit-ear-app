@@ -49,12 +49,6 @@ export const ShowCodeEditor = writable(
 export const ShowFrames = writable(
 	localStorage.getItem("ShowFrames") === "true" || true,
 );
-
-export const ShowStaticOrSimulator = writable(false); // false: static, true: simulator
-
-// flat foldable folded forms will render in SVG by default.
-export const Prefer3D = writable(false);
-
 /**
  * @description A few various commands have the effect of creating
  * new edges in the graph, by default, these new edges will

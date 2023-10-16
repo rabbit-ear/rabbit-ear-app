@@ -225,6 +225,15 @@ export const VerticesFlatFoldable = derived(
 /**
  *
  */
+// export const VerticesFoldable = derived(
+// 	InvalidKawasaki,
+// 	($InvalidKawasaki) => !$InvalidKawasaki.length,
+// 	[],
+// );
+export const VerticesFoldable = derived(InvalidKawasaki, () => true, []);
+/**
+ *
+ */
 export const FoldedRootFace = writable(0);
 /**
  *
@@ -328,7 +337,17 @@ export const FacesWinding = derived(
 /**
  *
  */
-export const FlatFoldable = derived(
+export const IsFoldable = derived(
+	[VerticesFoldable],
+	([$VerticesFoldable]) => (
+		$VerticesFoldable
+	),
+	true,
+);
+/**
+ *
+ */
+export const IsFlatFoldable = derived(
 	[VerticesFlatFoldable, FrameEdgesAreFlat],
 	([$VerticesFlatFoldable, $FrameEdgesAreFlat]) => (
 		$VerticesFlatFoldable && $FrameEdgesAreFlat

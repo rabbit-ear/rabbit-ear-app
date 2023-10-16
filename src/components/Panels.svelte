@@ -14,8 +14,10 @@
 		ShowPanelFile,
 		ShowPanelStylePanel,
 		ShowPanelModifiersPanel,
-		ShowStaticOrSimulator,
 	} from "../stores/App.js";
+	import {
+		FoldedStaticOrSimulator,
+	} from "../stores/Renderer.js";
 	import { Tool } from "../stores/UI.js";
 
 	let ModifierPanels;
@@ -30,7 +32,7 @@
 	<svelte:component this={$Tool.panel} showPanel={$ShowPanelTool} />
 {/if}
 
-{#if $ShowStaticOrSimulator}
+{#if $FoldedStaticOrSimulator}
 	<Simulator showPanel={$ShowPanelSimulator} />
 {:else}
 	<FoldedForm showPanel={$ShowPanelFoldedForm} />

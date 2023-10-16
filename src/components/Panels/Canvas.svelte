@@ -2,6 +2,7 @@
 	import SelectIcon from "../../tools/select/icon.svelte";
 	import SelectSnapIcon from "./icon-pointer-snap.svelte";
 	import FoldedIcon from "./icon-folded.svelte";
+	import PerspectiveIcon from "./icon-perspective.svelte";
 	import ZoomIcon from "../../tools/camera/icon.svelte";
 	import Panel from "./Panel.svelte";
 	import {
@@ -15,8 +16,9 @@
 		SnapPoint,
 	} from "../../stores/UI.js";
 	import {
-		ShowStaticOrSimulator,
-	} from "../../stores/App.js";
+		FoldedPrefer3D,
+		FoldedStaticOrSimulator,
+	} from "../../stores/Renderer.js";
 
 	export let showPanel;
 
@@ -66,11 +68,25 @@
 			<span class="svg-icon"><FoldedIcon /></span>
 			<div class="flex-row toggle-row">
 				<button
-					highlighted={!$ShowStaticOrSimulator}
-					on:click={() => $ShowStaticOrSimulator = false}>static</button>
+					highlighted={!$FoldedStaticOrSimulator}
+					on:click={() => $FoldedStaticOrSimulator = false}>static</button>
 				<button
-					highlighted={$ShowStaticOrSimulator}
-					on:click={() => $ShowStaticOrSimulator = true}>simulator</button>
+					highlighted={$FoldedStaticOrSimulator}
+					on:click={() => $FoldedStaticOrSimulator = true}>simulator</button>
+			</div>
+		</div>
+
+		<div class="flex-row gap">
+			<span class="svg-icon"><PerspectiveIcon /></span>
+			<div class="toggle-row center">
+				<button
+					disabled={$FoldedStaticOrSimulator}
+					highlighted={!$FoldedPrefer3D}
+					on:click={() => $FoldedPrefer3D = false}>2D</button>
+				<button
+					disabled={$FoldedStaticOrSimulator}
+					highlighted={$FoldedPrefer3D}
+					on:click={() => $FoldedPrefer3D = true}>3D</button>
 			</div>
 		</div>
 	</span>

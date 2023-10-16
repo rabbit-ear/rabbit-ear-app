@@ -12,11 +12,18 @@ If this doesn't work, please let me know, it's likely there are additional setup
 
 # Dev log
 
+new:
+
+- [x] move FF violations below edges
+- [x] 3D gap only on 3D
+- [ ] folded form (svg) is choppy on zoom (even empty, I think).
+
 high priority:
 
 - [x] snapping for large cps, 400x, snap to grid points overrides.
 - [x] folded form layer separation distance
 - [x] ability to change folded form paper colors
+- [ ] webgl perspective zoom broken.
 - [ ] layer order - report number of face-pairs, auto solve if number is low
 - [ ] layer order - report multiple solutions, somehow allow them to toggle it.
 - [ ] layer order solved - change assignment - layer order needs to be deleted

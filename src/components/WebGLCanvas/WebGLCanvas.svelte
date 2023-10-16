@@ -3,7 +3,7 @@
 	import WebGLRender from "./WebGLRender.svelte";
 	import {
 		WebGLFoldedFormPointerEvent,
-	} from "../../stores/FoldedFormTools.js";
+	} from "../../stores/FoldedFormEvents.js";
 	import {
 		rotateViewMatrix,
 		zoomViewMatrix,
@@ -12,7 +12,6 @@
 	export let graph = {};
 
 	let perspective = "perspective";
-	// let perspective = "orthographic";
 	let viewMatrix = identity4x4;
 
 	let prevVector;

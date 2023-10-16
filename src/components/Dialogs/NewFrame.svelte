@@ -79,8 +79,8 @@
 		{#if canDuplicate}
 			<div class="flex-row gap">
 				<div class="flex-column">
-					<button class="svg-button" on:click={duplicate}>
-						<SVGCanvas viewBox={graphCurrentFrameViewBox} {invertVertical} >
+					<button class="svg-button crease-pattern" on:click={duplicate}>
+						<SVGCanvas viewBox={graphCurrentFrameViewBox} {invertVertical}>
 							<FacesLayer graph={graphCurrentFrame} />
 							<EdgesLayer graph={graphCurrentFrame} />
 						</SVGCanvas>
@@ -92,13 +92,13 @@
 
 		<div class="flex-row gap">
 			<div class="flex-column">
-				<button class="svg-button" on:click={newEmpty} />
+				<button class="svg-button crease-pattern" on:click={newEmpty} />
 				<p>empty</p>
 			</div>
 
 			<div class="flex-column">
-				<button class="svg-button" on:click={newSquare}>
-					<SVGCanvas viewBox={graphSquareViewBox} {invertVertical} >
+				<button class="svg-button crease-pattern" on:click={newSquare}>
+					<SVGCanvas viewBox={graphSquareViewBox} {invertVertical}>
 						<FacesLayer graph={graphSquare} />
 						<EdgesLayer graph={graphSquare} />
 					</SVGCanvas>
@@ -107,8 +107,8 @@
 			</div>
 
 			<div class="flex-column">
-				<button class="svg-button" on:click={() => panel = "nxnSquare"}>
-					<SVGCanvas viewBox={graphSquareViewBox} {invertVertical} >
+				<button class="svg-button crease-pattern" on:click={() => panel = "nxnSquare"}>
+					<SVGCanvas viewBox={graphSquareViewBox} {invertVertical}>
 						<FacesLayer graph={graphSquare} />
 						<EdgesLayer graph={graphSquare} />
 					</SVGCanvas>
@@ -117,8 +117,8 @@
 			</div>
 
 			<div class="flex-column">
-				<button class="svg-button" on:click={() => panel = "rectangle"}>
-					<SVGCanvas viewBox={graphRectangleViewBox} {invertVertical} >
+				<button class="svg-button crease-pattern" on:click={() => panel = "rectangle"}>
+					<SVGCanvas viewBox={graphRectangleViewBox} {invertVertical}>
 						<FacesLayer graph={graphRectangle} />
 						<EdgesLayer graph={graphRectangle} />
 					</SVGCanvas>
@@ -127,8 +127,8 @@
 			</div>
 
 			<div class="flex-column">
-				<button class="svg-button" on:click={() => panel = "polygon"}>
-					<SVGCanvas viewBox={graphPolygonViewBox} {invertVertical} >
+				<button class="svg-button crease-pattern" on:click={() => panel = "polygon"}>
+					<SVGCanvas viewBox={graphPolygonViewBox} {invertVertical}>
 						<FacesLayer graph={graphPolygon} />
 						<EdgesLayer graph={graphPolygon} />
 					</SVGCanvas>
@@ -188,6 +188,10 @@
 			</div>
 		{/if}
 
+		<div class="flex-row">
+			<button class="text-button" on:click={() => $DialogNewFrame.close()}>Cancel</button>
+		</div>
+
 	</div>
 </Dialog>
 
@@ -212,10 +216,10 @@
 		gap: 0.333rem;
 	}
 	button.svg-button {
+		padding: 0.5rem;
 		background-color: var(--background-1);
 		width: 6rem;
 		height: 6rem;
-/*		border: 1px solid var(--background-4);*/
 		border: 1px solid var(--dim);
 		border-radius: 0.5rem;
 	}

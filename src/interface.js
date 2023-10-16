@@ -23,11 +23,13 @@ import {
 	ShowFlatFoldableIssues,
 	ShowCodeEditor,
 	ShowFrames,
-	ShowStaticOrSimulator,
 	DialogNewFile,
 	DialogNewFrame,
 	DialogExportAs,
 } from "./stores/App.js";
+import {
+	FoldedStaticOrSimulator,
+} from "./stores/Renderer.js";
 import {
 	FileName,
 	LoadFile,
@@ -70,7 +72,7 @@ window.store.toggle = (name) => {
 	case "ShowFlatFoldableIssues": store = ShowFlatFoldableIssues; break;
 	case "ShowCodeEditor": store = ShowCodeEditor; break;
 	case "ShowFrames": store = ShowFrames; break;
-	case "ShowStaticOrSimulator": store = ShowStaticOrSimulator; break;
+	case "FoldedStaticOrSimulator": store = FoldedStaticOrSimulator; break;
 	default: console.log("store not found"); return false;
 	}
 	// console.log("toggle", name, store);

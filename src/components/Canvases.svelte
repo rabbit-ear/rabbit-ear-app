@@ -1,20 +1,23 @@
 <script>
 	import {
 		FoldedForm,
-		FrameEdgesAreFlat,
+		IsFoldable,
+		IsFlatFoldable,
 	} from "../stores/Model.js";
 	import {
 		ShowMenu,
 		ShowFrames,
 		ShowCodeEditor,
-		ShowStaticOrSimulator,
-		Prefer3D,
 	} from "../stores/App.js";
+	import {
+		FoldedRenderer,
+	} from "../stores/Renderer.js";
 	import CreasePatternCanvas from "./SVGCanvas/CreasePattern.svelte";
 	import FoldedFormCanvas from "./SVGCanvas/FoldedForm.svelte";
 	import WebGLCanvas from "./WebGLCanvas/WebGLCanvas.svelte";
 	import Simulator from "./OrigamiSimulator/Simulator.svelte";
 	import CodeEditor from "./CodeEditor/CodeEditor.svelte";
+	import ErrorCanvas from "./SVGCanvas/ErrorCanvas.svelte";
 
 	export let pressCP;
 	export let moveCP;
@@ -25,6 +28,8 @@
 	export let moveFolded;
 	export let releaseFolded;
 	export let scrollFolded;
+
+	const errorMessage = "can't";
 
 	let fullHeight = "100vh";
 	$: fullHeight = [
@@ -39,13 +44,6 @@
 	$: height = $ShowCodeEditor ? halfHeight : fullHeight;
 </script>
 
-<!--
-	here, we can separate light and dark mode rendering styles.
-	css rules are children of .crease-pattern so we can append a
-	.light or .dark, even calculating in JS if we need, then
-	it should render appropriately.
--->
-
 <div class="canvases horizontal">
 
 	{#if $ShowCodeEditor}
@@ -58,23 +56,27 @@
 					on:scroll={scrollCP}
 				/>
 			</div>
-			{#if $ShowStaticOrSimulator}
-				<div class="canvas">
+			<div class="canvas folded-form" style={`max-height: calc(${height})`}>
+				{#if $FoldedRenderer === "simulator"}
 					<Simulator />
-				</div>
-			{:else}
-				<div class="canvas folded-form" style={`max-height: calc(${height})`}>
-					{#if $FrameEdgesAreFlat && !$Prefer3D}
+				{:else if $FoldedRenderer === "webgl"}
+					{#if $IsFoldable}
+						<WebGLCanvas graph={$FoldedForm} />
+					{:else}
+						<ErrorCanvas message={errorMessage} />
+					{/if}
+				{:else if $FoldedRenderer === "svg"}
+					{#if $IsFlatFoldable}
 						<FoldedFormCanvas
 							on:press={pressFolded}
 							on:move={moveFolded}
 							on:release={releaseFolded}
 							on:scroll={scrollFolded} />
 					{:else}
-						<WebGLCanvas graph={$FoldedForm} />
+						<ErrorCanvas message={errorMessage} />
 					{/if}
-				</div>
-			{/if}
+				{/if}
+			</div>
 		</div>
 		<div class="canvas code-canvas">
 			<CodeEditor />
@@ -90,23 +92,27 @@
 				on:scroll={scrollCP}
 			/>
 		</div>
-		{#if $ShowStaticOrSimulator}
-			<div class="canvas">
+		<div class="canvas folded-form" style={`max-height: calc(${height})`}>
+			{#if $FoldedRenderer === "simulator"}
 				<Simulator />
-			</div>
-		{:else}
-			<div class="canvas folded-form" style={`max-height: calc(${height})`}>
-				{#if $FrameEdgesAreFlat && !$Prefer3D}
+			{:else if $FoldedRenderer === "webgl"}
+				{#if $IsFoldable}
+					<WebGLCanvas graph={$FoldedForm} />
+				{:else}
+					<ErrorCanvas message={errorMessage} />
+				{/if}
+			{:else if $FoldedRenderer === "svg"}
+				{#if $IsFlatFoldable}
 					<FoldedFormCanvas
 						on:press={pressFolded}
 						on:move={moveFolded}
 						on:release={releaseFolded}
 						on:scroll={scrollFolded} />
 				{:else}
-					<WebGLCanvas graph={$FoldedForm} />
+					<ErrorCanvas message={errorMessage} />
 				{/if}
-			</div>
-		{/if}
+			{/if}
+		</div>
 	{/if}
 
 </div>

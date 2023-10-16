@@ -108,7 +108,7 @@
 		border: 0px solid;
 		border-radius: 0.25rem;
 		cursor: pointer;
-		background-color: var(--background-0);
+		background-color: transparent;
 	}
 	/* :global(svg) */
 	button {
@@ -125,6 +125,7 @@
 		fill: var(--background-1);
 	}
 	button[disabled], button[disabled]:hover {
+		background-color: transparent;
 		stroke: var(--dim);
 		fill: var(--dim);
 		cursor: initial;

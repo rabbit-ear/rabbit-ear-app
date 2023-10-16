@@ -55,8 +55,8 @@
 		ShowJoin,
 		ShowUnassigned,
 		BackgroundColor,
-		FrontColor,
-		BackColor,
+		SimulatorFrontColor,
+		SimulatorBackColor,
 		LineOpacity,
 		BoundaryColor,
 		MountainColor,
@@ -205,8 +205,8 @@
 	$: simulator.getLines().J.visible = $ShowJoin;
 	$: simulator.getLines().U.visible = $ShowUnassigned;
 	// colors
-	$: simulator.setFrontColor($FrontColor);
-	$: simulator.setBackColor($BackColor);
+	$: simulator.setFrontColor($SimulatorFrontColor);
+	$: simulator.setBackColor($SimulatorBackColor);
 	$: Object.values(simulator.getMaterials().line)
 		.forEach(m => { m.opacity = $LineOpacity; });
 	$: simulator.setBoundaryColor($BoundaryColor);

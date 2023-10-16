@@ -4,6 +4,8 @@
 		BackgroundColor,
 		FrontColor,
 		BackColor,
+		SimulatorFrontColor,
+		SimulatorBackColor,
 		LineOpacity,
 		BoundaryColor,
 		MountainColor,
@@ -12,6 +14,9 @@
 		JoinColor,
 		UnassignedColor,
 	} from "../../stores/Style.js";
+	import {
+		FoldedRenderer
+	} from "../../stores/Renderer.js";
 
 	export let showPanel;
 </script>
@@ -23,10 +28,17 @@
 
 			<p>Folded</p>
 
-			<div class="flex-row center">
-				<input type="color" bind:value={$BackColor} />
-				<input type="color" bind:value={$FrontColor} />
-			</div>
+			{#if $FoldedRenderer === "simulator"}
+				<div class="flex-row center">
+					<input type="color" bind:value={$SimulatorBackColor} />
+					<input type="color" bind:value={$SimulatorFrontColor} />
+				</div>
+			{:else}
+				<div class="flex-row center">
+					<input type="color" bind:value={$BackColor} />
+					<input type="color" bind:value={$FrontColor} />
+				</div>
+			{/if}
 
 			<p>Crease Pattern</p>
 

@@ -28,8 +28,6 @@
 		ShowJoin,
 		ShowUnassigned,
 		BackgroundColor,
-		FrontColor,
-		BackColor,
 		LineOpacity,
 	} from "../../stores/Style.js";
 

@@ -16,6 +16,7 @@
 	$: facesPoints = !graph || !graph.faces_vertices
 		? []
 		: graph.faces_vertices
+			.filter(fv => fv.reduce((prev, v) => prev && graph.vertices_coords[v], true))
 			.map(fv => fv.map(v => graph.vertices_coords[v].slice(0, 2).join(",")))
 			.map(points => points.join(" "));
 

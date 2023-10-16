@@ -119,6 +119,13 @@ button:focus {
 	outline-offset: 2px;
 	outline: 2px solid var(--uiblue);
 }
+button[disabled] {
+	color: #fff4;
+	cursor: not-allowed;
+}
+button[disabled]:hover {
+	background-color: var(--uiblue);
+}
 
 input[type=text],
 input[type=number],
@@ -168,6 +175,13 @@ input[type=checkbox]:focus {
 .toggle-row button[highlighted=true]:hover {
 	background-color: var(--uidarkblue);
 }
+.toggle-row button[disabled]:hover {
+	background-color: var(--background-4);
+}
+.toggle-row button[disabled][highlighted=true]:hover {
+	background-color: var(--uiblue);
+}
+
 .toggle-row button:first-of-type {
 	border-top-left-radius: 0.5rem;
 	border-bottom-left-radius: 0.5rem;

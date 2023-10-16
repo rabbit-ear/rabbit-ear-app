@@ -23,7 +23,7 @@ import {
 	SVGFoldedFormPointerEvent,
 	WebGLFoldedFormPointerEvent,
 	SimulatorPointerEvent,
-} from "./FoldedFormTools.js";
+} from "./FoldedFormEvents.js";
 // todo: figure out how to scroll the view if there is a mouse
 // and the user right-clicks. exactly like how the keyboard "alt"
 // can trigger a temporary camera tool motion.

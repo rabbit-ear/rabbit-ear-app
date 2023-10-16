@@ -114,9 +114,11 @@ export const LayerGapScaled = derived(
 export const BackgroundColor = writable("#231f1f");
 
 // front and back are the mesh faces
-export const FrontColor = writable("#272222");
+export const FrontColor = writable("#bbbbbb");
 export const BackColor = writable("#1177FF");
 export const CPColor = writable("#272222");
+export const SimulatorFrontColor = writable("#272222");
+export const SimulatorBackColor = writable("#1177FF");
 
 // line color by assignment
 export const LineOpacity = writable(1);

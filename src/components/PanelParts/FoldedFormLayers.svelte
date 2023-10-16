@@ -5,6 +5,9 @@
 		IsolatedFrame,
 		LayerOrderKnown,
 	} from "../../stores/Model.js";
+	import {
+		FoldedRenderer,
+	} from "../../stores/Renderer.js";
 	import { executeCommand } from "../../kernel/execute.js";
 
 	$: faceOrders = $IsolatedFrame && $IsolatedFrame.faceOrders
@@ -28,6 +31,7 @@
 	<div class="flex-row">
 		<label for="layer-gap">Gap</label>
 		<input
+			disabled={$FoldedRenderer !== "webgl"}
 			type="range"
 			min="1"
 			max="20"

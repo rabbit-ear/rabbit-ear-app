@@ -65,30 +65,30 @@
 		<GridLayer {viewport} />
 	{/if}
 	<!-- <g class="origami-layer" style={`transform: matrix(0.01, 0, 0, 0.01, 0, 0);`}> -->
-	<g class="origami-layer">
-		<FacesLayer
-			graph={$CreasePattern}
-			selected={$Selection.faces}
-			highlighted={$Highlight.faces} />
-		<EdgesLayer
-			graph={$CreasePattern}
-			selected={$Selection.edges}
-			highlighted={$Highlight.edges}
-			strokeWidth={$StrokeWidthCreasePattern}
-			strokeDasharray={$StrokeDashLengthCreasePattern}
-			/>
-		{#if showVertices}
-			<VerticesLayer
-				graph={$CreasePattern}
-				selected={$Selection.vertices}
-				highlighted={$Highlight.vertices} />
-		{/if}
-	</g>
-	{#if $ShowAxes}
-		<AxesLayer {viewport} />
-	{/if}
+	<!-- <g class="origami-layer"> -->
+	<FacesLayer
+		graph={$CreasePattern}
+		selected={$Selection.faces}
+		highlighted={$Highlight.faces} />
 	{#if $ShowFlatFoldableIssues}
 		<FoldableVertices graph={$CreasePattern} />
+	{/if}
+	<EdgesLayer
+		graph={$CreasePattern}
+		selected={$Selection.edges}
+		highlighted={$Highlight.edges}
+		strokeWidth={$StrokeWidthCreasePattern}
+		strokeDasharray={$StrokeDashLengthCreasePattern}
+		/>
+	{#if showVertices}
+		<VerticesLayer
+			graph={$CreasePattern}
+			selected={$Selection.vertices}
+			highlighted={$Highlight.vertices} />
+	{/if}
+	<!-- </g> -->
+	{#if $ShowAxes}
+		<AxesLayer {viewport} />
 	{/if}
 	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLengthCreasePattern};`}>
 		<RulerLayer {viewport} />

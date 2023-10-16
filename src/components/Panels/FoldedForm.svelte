@@ -7,7 +7,6 @@
 		FrameIsCreasePattern,
 		VerticesFlatFoldable,
 	} from "../../stores/Model.js";
-	import { Prefer3D } from "../../stores/App.js";
 
 	export let showPanel;
 </script>
@@ -16,17 +15,6 @@
 	<span slot="title">Folded</span>
 	<span slot="body">
 		<div class="flex-column gap">
-
-			<div class="toggle-row center">
-				<button
-					highlighted={!$Prefer3D}
-					on:click={() => $Prefer3D = false}>2D</button>
-				<button
-					highlighted={$Prefer3D}
-					on:click={() => $Prefer3D = true}>3D</button>
-			</div>
-
-			<hr />
 
 			<p>Vertices are
 				{#if $VerticesFlatFoldable && $FrameEdgesAreFlat}
