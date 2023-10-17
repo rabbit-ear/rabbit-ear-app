@@ -5,6 +5,7 @@
 		IsolatedFrame,
 		FrameEdgesAreFlat,
 		FrameIsCreasePattern,
+		VerticesFoldable,
 		VerticesFlatFoldable,
 	} from "../../stores/Model.js";
 
@@ -16,20 +17,32 @@
 	<span slot="body">
 		<div class="flex-column gap">
 
-			<p>Vertices are
-				{#if $VerticesFlatFoldable && $FrameEdgesAreFlat}
-					<span class="good">flat-foldable</span>
+			<p>Edge angles are
+				{#if $FrameEdgesAreFlat}
+					<span class="strong">2D</span>
 				{:else}
-					<span class="bad">not flat-foldable</span>
+					<span class="strong">3D</span>
 				{/if}
 			</p>
-			{#if $FrameEdgesAreFlat}
-				<p>All edges are flat</p>
-			{:else}
-				<p>Some edges are <span class="strong">3D</span></p>
-			{/if}
-			<p>Folded state is <span class="strong">{$FrameEdgesAreFlat ? "2D" : "3D"}</span></p>
+				
+			<p>Vertices are
+				{#if $FrameEdgesAreFlat}
+					{#if $VerticesFlatFoldable}
+						<span class="good">flat-foldable</span>
+					{:else}
+						<span class="bad">not flat-foldable</span>
+					{/if}
+				{:else}
+					{#if $VerticesFoldable}
+						<span class="good">foldable</span>
+					{:else}
+						<span class="bad">not foldable</span>
+					{/if}
+				{/if}
+			</p>
+
 			<hr />
+
 			<FoldedFormLayers />
 		</div>
 	</span>
@@ -37,6 +50,7 @@
 
 <style>
 	.good {
+		font-weight: bold;
 	}
 	.bad {
 		font-weight: bold;
