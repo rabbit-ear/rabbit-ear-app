@@ -4,13 +4,6 @@ import {
 	getFileMetadata,
 	edgesFoldAngleAreAllFlat,
 } from "rabbit-ear/fold/spec.js";
-import {
-	identity3x4,
-	invertMatrix3,
-	makeMatrix3RotateX,
-	makeMatrix3RotateZ,
-	multiplyMatrices3,
-} from "rabbit-ear/math/matrix3.js";
 import { linearize2DFaces } from "rabbit-ear/graph/orders.js";
 import { getFramesAsFlatArray } from "rabbit-ear/fold/frames.js";
 import {
@@ -18,13 +11,6 @@ import {
 	makeVerticesCoordsFlatFolded,
 } from "rabbit-ear/graph/vertices/folded.js";
 import { makeFacesWinding } from "rabbit-ear/graph/faces/winding.js";
-import { makeFacesMatrix } from "rabbit-ear/graph/faces/matrix.js";
-import {
-	makeVerticesVertices,
-	makeVerticesEdges,
-	makeVerticesFaces,
-	makeVerticesVerticesVector,
-} from "rabbit-ear/graph/make.js";
 import {
 	validateKawasaki,
 	validateMaekawa,
@@ -183,8 +169,6 @@ export const CreasePattern = derived(
 VerticalUp.subscribe(($VerticalUp) => {
 	ModelMatrixCP.set(graphToMatrix2(get(IsolatedFrame), $VerticalUp))
 });
-
-
 /**
  *
  */
@@ -200,9 +184,23 @@ export const FrameEdgesAreFlat = derived(
 /**
  *
  */
+const VerticesFoldable = derived(
+	[FrameEdgesAreFlat, CreasePattern],
+	([$FrameEdgesAreFlat, $CreasePattern]) => {
+		if ($FrameEdgesAreFlat) { return []; }
+		try {
+			return verticesFoldable($CreasePattern);
+		} catch (error) { console.warn("VerticesFoldable", error); }
+		return [];
+	},
+	[],
+);
+/**
+ *
+ */
 export const InvalidKawasaki = derived(
 	CreasePattern,
-	$CreasePattern => {
+	($CreasePattern) => {
 		if (!$CreasePattern || !$CreasePattern.edges_vertices) { return []; }
 		try {
 			return validateKawasaki($CreasePattern, 1e-3);
@@ -218,7 +216,7 @@ export const InvalidKawasaki = derived(
  */
 export const InvalidMaekawa = derived(
 	CreasePattern,
-	$CreasePattern => {
+	($CreasePattern) => {
 		if (!$CreasePattern || !$CreasePattern.edges_vertices) { return []; }
 		try {
 			return validateMaekawa($CreasePattern);
@@ -232,164 +230,45 @@ export const InvalidMaekawa = derived(
 /**
  *
  */
-export const VerticesFlatFoldable = derived(
-	[InvalidKawasaki, InvalidMaekawa],
-	([$InvalidKawasaki, $InvalidMaekawa]) => (
-		!$InvalidKawasaki.length && !$InvalidMaekawa.length
-	),
+export const InvalidVertices = derived(
+	VerticesFoldable,
+	($VerticesFoldable) => $VerticesFoldable
+		.map((valid, v) => !valid ? v : undefined)
+		.filter(a => a !== undefined),
 	[],
+)
+/**
+ *
+ */
+export const IsFlatFoldable = derived(
+	[FrameEdgesAreFlat, InvalidKawasaki, InvalidMaekawa],
+	([$FrameEdgesAreFlat, $InvalidKawasaki, $InvalidMaekawa]) => (
+		$FrameEdgesAreFlat && !$InvalidKawasaki.length && !$InvalidMaekawa.length
+	),
+	true,
+);
+/**
+ *
+ */
+export const Is3DFoldable = derived(
+	InvalidVertices,
+	($InvalidVertices) => !$InvalidVertices.length,
+	true,
+);
+/**
+ *
+ */
+export const IsFoldable = derived(
+	[FrameEdgesAreFlat, IsFlatFoldable, Is3DFoldable],
+	([$FrameEdgesAreFlat, $IsFlatFoldable, $Is3DFoldable]) => (
+		$FrameEdgesAreFlat ? $IsFlatFoldable : $Is3DFoldable
+	),
+	true,
 );
 /**
  *
  */
 export const FoldedRootFace = writable(0);
-/**
- * 
- */
-const FacesMatrix3D = derived(
-	[IsolatedFrame, FrameEdgesAreFlat, FoldedRootFace],
-	([$IsolatedFrame, $FrameEdgesAreFlat, $FoldedRootFace]) => {
-		if (!$IsolatedFrame) { return []; }
-		if (!$FrameEdgesAreFlat) {
-			try {
-				return makeFacesMatrix($IsolatedFrame, $FoldedRootFace);
-			} catch (error) {}
-		}
-		return $IsolatedFrame.faces_vertices
-			? $IsolatedFrame.faces_vertices.map(() => [])
-			: [];
-	},
-	[],
-);
-/**
- *
- */
-const FacesInverseMatrix3D = derived(
-	FacesMatrix3D,
-	($FacesMatrix3D) => $FacesMatrix3D.map(m => invertMatrix3(m)),
-	[],
-);
-/**
- *
- */
-const VerticesFaces = derived(
-	IsolatedFrame,
-	$IsolatedFrame => {
-		if (!$IsolatedFrame) { return []; }
-		if ($IsolatedFrame.vertices_faces) {
-			return $IsolatedFrame.vertices_faces;
-		}
-		try {
-			// todo: see if we can use this one.
-			// return makeVerticesFacesUnsorted($IsolatedFrame);
-			return makeVerticesFaces($IsolatedFrame);
-		} catch (error) {}
-		return $IsolatedFrame.vertices_coords
-			? $IsolatedFrame.vertices_coords.map(() => [])
-			: [];
-	},
-	[],
-);
-/**
- *
- */
-const VerticesMatrices = derived(
-	[VerticesFaces, FacesMatrix3D],
-	([$VerticesFaces, $FacesMatrix3D]) => $VerticesFaces
-		.map((faces, v) => faces.constructor === Array
-			? faces.map(f => $FacesMatrix3D[f])
-			: []),
-	[],
-);
-/**
- *
- */
-const VerticesInverseMatrices = derived(
-	[VerticesFaces, FacesInverseMatrix3D],
-	([$VerticesFaces, $FacesInverseMatrix3D]) => $VerticesFaces
-		.map((faces, v) => faces.constructor === Array
-			? faces.map(f => $FacesInverseMatrix3D[f])
-			: []),
-	[],
-);
-/**
- *
- */
-// export const VerticesFoldableFirst = derived(
-// 	[FrameEdgesAreFlat, VerticesMatrices, VerticesInverseMatrices],
-// 	([$FrameEdgesAreFlat, $VerticesMatrices, $VerticesInverseMatrices]) => {
-// 		if ($FrameEdgesAreFlat) { return []; }
-// 		try {
-// 			return $VerticesMatrices.map((matrices, v) => {
-// 				if (matrices.includes(undefined)) { return true; }
-// 				if (matrices.length < 2) { return true; }
-// 				const locals = matrices
-// 					.map((_, i, arr) => [i, (i + 1) % arr.length])
-// 					.map(([a, b]) => [
-// 						$VerticesMatrices[v][b],
-// 						$VerticesInverseMatrices[v][a],
-// 					])
-// 					.map(([m1, m2]) => multiplyMatrices3(m1, m2));
-// 				let result = identity3x4;
-// 				locals.forEach(m => { result = multiplyMatrices3(m, result); });
-// 				// console.log("locals", locals);
-// 				// console.log("result", result); // [9], result[10], result[11]);
-// 				return Array.from(Array(9))
-// 					.map((_, i) => Math.abs(result[i] - identity3x4[i]) < 1e-3)
-// 					.reduce((a, b) => a && b, true);
-// 			});
-// 		} catch (error) {}
-// 		return [];
-// 	},
-// 	[],
-// );
-
-// export const VerticesFoldable = derived(
-// 	[FrameEdgesAreFlat, IsolatedFrame, VerticesFaces],
-// 	([$FrameEdgesAreFlat, $IsolatedFrame, $VerticesFaces]) => {
-// 		if ($FrameEdgesAreFlat) { return []; }
-// 		try {
-// 			if (!$IsolatedFrame.vertices_vertices) {
-// 				$IsolatedFrame.vertices_vertices = makeVerticesVertices($IsolatedFrame);
-// 			}
-// 			const verticesVectors = makeVerticesVerticesVector($IsolatedFrame);
-// 			const verticesEdges = $IsolatedFrame.vertices_edges
-// 				? $IsolatedFrame.vertices_edges
-// 				: makeVerticesEdges($IsolatedFrame);
-// 			return $IsolatedFrame.vertices_coords.map((_, v) => {
-// 				if ($VerticesFaces[v].includes(undefined)) { return true; }
-// 				const vectors = verticesVectors[v];
-// 				const angles = vectors.map(vec => Math.atan2(vec[1], vec[0]));
-// 				const aM = angles.map(a => makeMatrix3RotateZ(a));
-// 				const aiM = aM.map(m => invertMatrix3(m));
-// 				const edges = verticesEdges[v];
-// 				const edgesFoldAngle = edges.map(e => $IsolatedFrame.edges_foldAngle[e]);
-// 				const fM = edgesFoldAngle.map(a => makeMatrix3RotateX(a * (Math.PI / 180)));
-// 				const locals = vectors
-// 					.map((_, i) => multiplyMatrices3(aM[i], multiplyMatrices3(fM[i], aiM[i])));
-// 				let result = identity3x4;
-// 				locals.forEach(m => { result = multiplyMatrices3(result, m); });
-// 				return Array.from(Array(9))
-// 					.map((_, i) => Math.abs(result[i] - identity3x4[i]) < 1e-3)
-// 					.reduce((a, b) => a && b, true);
-// 			});
-// 		} catch (error) { console.warn("error", error); }
-// 		return [];
-// 	},
-// 	[],
-// );
-
-export const VerticesFoldable = derived(
-	[FrameEdgesAreFlat, IsolatedFrame],
-	([$FrameEdgesAreFlat, $IsolatedFrame]) => {
-		if ($FrameEdgesAreFlat) { return []; }
-		try {
-			return verticesFoldable($IsolatedFrame);
-		} catch (error) { console.warn("VerticesFoldable", error); }
-		return [];
-	},
-	[],
-);
 /**
  *
  */
@@ -472,18 +351,18 @@ export const Faces2DDrawOrder = derived(
 /**
  *
  */
-export const FacesWinding = derived(
-	FoldedForm,
-	($FoldedForm) => {
+export const CPFacesWinding = derived(
+	CreasePattern,
+	($CreasePattern) => {
 		try {
-			// console.log("Model: FacesWinding");
-			return $FoldedForm
-				&& $FoldedForm.faces_vertices && $FoldedForm.faces_vertices.length
-				&& $FoldedForm.vertices_coords && $FoldedForm.vertices_coords.length
-				? makeFacesWinding($FoldedForm)
+			// console.log("Model: CPFacesWinding");
+			return $CreasePattern
+				&& $CreasePattern.faces_vertices && $CreasePattern.faces_vertices.length
+				&& $CreasePattern.vertices_coords && $CreasePattern.vertices_coords.length
+				? makeFacesWinding($CreasePattern)
 				: [];
 		} catch (error) {
-			console.warn("FacesWinding", error)
+			console.warn("CPFacesWinding", error)
 			return [];
 		}
 	},
@@ -492,22 +371,22 @@ export const FacesWinding = derived(
 /**
  *
  */
-export const IsFoldable = derived(
-	[VerticesFoldable],
-	([$VerticesFoldable]) => (
-		true // $VerticesFoldable
-	),
-	true,
-);
-/**
- *
- */
-export const IsFlatFoldable = derived(
-	[VerticesFlatFoldable, FrameEdgesAreFlat],
-	([$VerticesFlatFoldable, $FrameEdgesAreFlat]) => (
-		$VerticesFlatFoldable && $FrameEdgesAreFlat
-	),
-	true,
+export const FoldedFacesWinding = derived(
+	FoldedForm,
+	($FoldedForm) => {
+		try {
+			// console.log("Model: FoldedFacesWinding");
+			return $FoldedForm
+				&& $FoldedForm.faces_vertices && $FoldedForm.faces_vertices.length
+				&& $FoldedForm.vertices_coords && $FoldedForm.vertices_coords.length
+				? makeFacesWinding($FoldedForm)
+				: [];
+		} catch (error) {
+			console.warn("FoldedFacesWinding", error)
+			return [];
+		}
+	},
+	[],
 );
 /**
  *

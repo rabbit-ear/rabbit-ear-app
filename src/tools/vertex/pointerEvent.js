@@ -16,7 +16,7 @@ const pointerEvent = (eventType, { point, buttons }) => {
 	case "release":
 		const vertex = get(PressVertex);
 		if (vertex !== undefined) {
-			executeCommand("translateVertices", [vertex], get(DragVector));
+			executeCommand("translateVertices", get(DragVector), [vertex]);
 		}
 		Press.set(undefined);
 		break;

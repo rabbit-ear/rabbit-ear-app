@@ -10,6 +10,7 @@
 	--background-4: #4e4b4b;
 	--black: #0c0a0a;
 	--red: #e53;
+	--darkred: #B00020;
 	--yellow: #fb4;
 	--brightgreen: #5e3;
 	--green: #5c6;
@@ -18,6 +19,22 @@
 	--uiblue: #1177FF;
 	--uidarkblue: #1155D4;
 	--purple: #80f;
+
+	--darkmode-darkblue: #113959;
+	--darkmode-blue-dark: #2D39C0;
+	--darkmode-blue: #414FF1;
+	--darkmode-purple-dark: #624C82;
+	--darkmode-purple: #B388F5;
+	--darkmode-pink-dark: #626;
+	--darkmode-pink-medium: #A130A3;
+	--darkmode-pink-dark-2: #A63BA8;
+	--darkmode-pink: #E150E3;
+	--darkmode-pink-light: #EC66F3;
+	--darkmode-pink-very-light: #F0A4F5;
+	--darkmode-green: #63D7C6;
+	--darkmode-yellow: #EDAB46;
+	--darkmode-red: #B00020;
+
 
 	--highlight: var(--yellow);
 	--body-background: var(--background-0);

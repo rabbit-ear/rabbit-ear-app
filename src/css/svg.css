@@ -45,6 +45,10 @@
 	opacity: 0.15;
 }
 
+.crease-pattern polygon.clockwise {
+	fill: var(--darkred);
+}
+
 .crease-pattern circle.vertex {
 	stroke: none;	
 	fill: var(--vertex-color);

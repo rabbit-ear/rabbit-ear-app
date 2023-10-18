@@ -5,7 +5,6 @@ import {
 import {
 	add2,
 	subtract2,
-	magnitude2,
 } from "rabbit-ear/math/vector.js";
 import { subgraph } from "rabbit-ear/graph/subgraph.js";
 import normalize from "rabbit-ear/graph/normalize.js";
@@ -61,19 +60,13 @@ export const DragCoords = derived(
 	undefined,
 );
 
-const ScaleRatio = derived(
+const DragVector = derived(
 	[PressCoords, DragCoords],
-	([$PressCoords, $DragCoords]) => {
-		if ($PressCoords === undefined || $DragCoords === undefined) {
-			return 1;
-		}
-		const pressLength = magnitude2($PressCoords);
-		if (pressLength === 0) { return 1; }
-		const ratio = magnitude2($DragCoords) / pressLength;
-		if (isNaN(ratio) || !isFinite(ratio)) { return 1; }
-		return ratio;
-	},
-	1,
+	([$PressCoords, $DragCoords]) => (
+		$PressCoords !== undefined && $DragCoords !== undefined
+			? subtract2($DragCoords, $PressCoords)
+			: undefined),
+	undefined,
 );
 
 export const Subgraph = derived(
@@ -83,12 +76,12 @@ export const Subgraph = derived(
 );
 
 const UIGraphPreview = derived(
-	[Subgraph, ScaleRatio],
-	([$Subgraph, $ScaleRatio]) => {
+	[Subgraph, DragVector],
+	([$Subgraph, $DragVector]) => {
 		const clone = structuredClone($Subgraph);
-		if ($ScaleRatio !== undefined) {
+		if ($DragVector !== undefined) {
 			clone.vertices_coords = clone.vertices_coords
-				.map(coords => coords.map(n => n * $ScaleRatio));
+				.map(coords => add2(coords, $DragVector));
 		}
 		UIGraph.set(clone);
 	},
@@ -96,12 +89,10 @@ const UIGraphPreview = derived(
 );
 
 export const DoTransform = derived(
-	[ScaleRatio, ReleaseCoords],
-	([$ScaleRatio, $ReleaseCoords]) => {
-		if ($ScaleRatio !== undefined && $ReleaseCoords !== undefined) {
-			if (!isNaN($ScaleRatio) && isFinite($ScaleRatio)) {
-				executeCommand("scaleUniform", $ScaleRatio);
-			}
+	[DragVector, ReleaseCoords],
+	([$DragVector, $ReleaseCoords]) => {
+		if ($DragVector !== undefined && $ReleaseCoords !== undefined) {
+			executeCommand("translate", $DragVector);
 			reset();
 		}
 	},

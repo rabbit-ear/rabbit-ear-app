@@ -89,6 +89,12 @@ fn main() {
 		"planarize".to_string(),
 		"Planarize")
 		.accelerator("cmdOrControl+P");
+	let item_flip_horiz = CustomMenuItem::new(
+		"flip_horiz".to_string(),
+		"Flip Horizontally");
+	let item_flip_vert = CustomMenuItem::new(
+		"flip_vert".to_string(),
+		"Flip Vertically");
 	let item_clean_verts = CustomMenuItem::new(
 		"clean_verts".to_string(),
 		"Smart clean vertices");
@@ -200,6 +206,9 @@ fn main() {
 	let menu_graph = Submenu::new("Graph", Menu::new()
 		.add_item(item_planarize)
 		.add_native_item(MenuItem::Separator)
+		.add_item(item_flip_horiz)
+		.add_item(item_flip_vert)
+		.add_native_item(MenuItem::Separator)
 		.add_item(item_clean_verts)
 		.add_item(item_merge_near_verts)
 		.add_item(item_snap_vertices)
@@ -295,35 +304,41 @@ fn main() {
 
 				// edit
 				"undo" => {
-					let _ = event.window().eval("window['executeCommand']('undo')");
+					let _ = event.window().eval("window.executeCommand('undo')");
 				}
 				"redo" => {
-					let _ = event.window().eval("window['executeCommand']('redo')");
+					let _ = event.window().eval("window.executeCommand('redo')");
 				}
 				"duplicate" => {
-					let _ = event.window().eval("window['executeCommand']('duplicate')");
-					let _ = event.window().eval("window['executeCommand']('setTool', 'translate')");
+					let _ = event.window().eval("window.executeCommand('duplicate')");
+					let _ = event.window().eval("window.executeCommand('setTool', 'translate')");
 				}
 				"delete" => {
-					let _ = event.window().eval("window['execute']('deleteComponents(getSelected())')");
-					let _ = event.window().eval("window['executeCommand']('setTool', 'translate')");
+					let _ = event.window().eval("window.execute('deleteComponents(getSelected())')");
+					let _ = event.window().eval("window.executeCommand('setTool', 'translate')");
 				}
 
 				// graph
 				"planarize" => {
-					let _ = event.window().eval("window['executeCommand']('planarize')");
+					let _ = event.window().eval("window.executeCommand('planarize')");
+				}
+				"flip_horiz" => {
+					let _ = event.window().eval("window.execute('scale(-1, 1)')");
+				}
+				"flip_vert" => {
+					let _ = event.window().eval("window.execute('scale(1, -1)')");
 				}
 				"clean_verts" => {
-					let _ = event.window().eval("window['executeCommand']('cleanVertices')");
+					let _ = event.window().eval("window.executeCommand('cleanVertices')");
 				}
 				"merge_near_verts" => {
-					let _ = event.window().eval("window['executeCommand']('mergeNearbyVertices')");
+					let _ = event.window().eval("window.executeCommand('mergeNearbyVertices')");
 				}
 				"snap_vertices" => {
-					let _ = event.window().eval("window['executeCommand']('snapAllVertices')");
+					let _ = event.window().eval("window.executeCommand('snapAllVertices')");
 				}
 				"merge_sel_verts" => {
-					let _ = event.window().eval("window['executeCommand']('mergeSelectedVertices')");
+					let _ = event.window().eval("window.executeCommand('mergeSelectedVertices')");
 				}
 
 				// assignment

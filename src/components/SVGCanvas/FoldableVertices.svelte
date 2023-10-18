@@ -3,7 +3,7 @@
 		FrameEdgesAreFlat,
 		InvalidKawasaki,
 		InvalidMaekawa,
-		VerticesFoldable,
+		InvalidVertices,
 	} from "../../stores/Model.js";
 	import {
 		VertexRadius,
@@ -34,18 +34,13 @@
 			}))
 		: [];
 	$: invalid3D = graph && graph.vertices_coords
-		?	$VerticesFoldable
-			.map((valid, v) => !valid ? v : undefined)
-			.filter(a => a !== undefined)
+		?	$InvalidVertices
 			.map(v => graph.vertices_coords[v])
 			.filter(a => a !== undefined)
 			.map(([cx, cy]) => ({
 				cx, cy, r: rM, class: "kawasaki", "stroke-width": $VertexRadius,
 			}))
 		: [];
-	$: console.log("$VerticesFoldable", $VerticesFoldable
-		.map((valid, v) => !valid ? v : undefined)
-		.filter(a => a !== undefined));
 </script>
 
 {#if $FrameEdgesAreFlat}

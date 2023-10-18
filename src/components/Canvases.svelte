@@ -2,7 +2,6 @@
 	import {
 		FoldedForm,
 		IsFoldable,
-		IsFlatFoldable,
 	} from "../stores/Model.js";
 	import {
 		ShowMenu,
@@ -66,7 +65,7 @@
 						<ErrorCanvas message={errorMessage} />
 					{/if}
 				{:else if $FoldedRenderer === "svg"}
-					{#if $IsFlatFoldable}
+					{#if $IsFoldable}
 						<FoldedFormCanvas
 							on:press={pressFolded}
 							on:move={moveFolded}
@@ -102,7 +101,7 @@
 					<ErrorCanvas message={errorMessage} />
 				{/if}
 			{:else if $FoldedRenderer === "svg"}
-				{#if $IsFlatFoldable}
+				{#if $IsFoldable}
 					<FoldedFormCanvas
 						on:press={pressFolded}
 						on:move={moveFolded}

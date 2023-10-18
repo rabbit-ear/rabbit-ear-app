@@ -5,8 +5,8 @@
 		IsolatedFrame,
 		FrameEdgesAreFlat,
 		FrameIsCreasePattern,
-		VerticesFoldable,
-		VerticesFlatFoldable,
+		Is3DFoldable,
+		IsFlatFoldable,
 	} from "../../stores/Model.js";
 
 	export let showPanel;
@@ -27,13 +27,13 @@
 				
 			<p>Vertices are
 				{#if $FrameEdgesAreFlat}
-					{#if $VerticesFlatFoldable}
+					{#if $IsFlatFoldable}
 						<span class="good">flat-foldable</span>
 					{:else}
 						<span class="bad">not flat-foldable</span>
 					{/if}
 				{:else}
-					{#if $VerticesFoldable}
+					{#if $Is3DFoldable}
 						<span class="good">foldable</span>
 					{:else}
 						<span class="bad">not foldable</span>

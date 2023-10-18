@@ -15,49 +15,28 @@
 </script>
 
 <Panel {showPanel}>
-	<span slot="title">Symmetry</span>
+	<span slot="title">Symmetry Lines</span>
 	<span slot="body">
-		<div class="container">
-			<p>{$ReflectionLines.length} currently</p>
-
+		<div class="flex-column">
+			<!-- <p>{$ReflectionLines.length} currently</p> -->
 			{#each $ReflectionLines as line, i}
-				<ul class="row">
-					<div>
-						<!-- <input type="checkbox" checked>
-						<p>{toDegree(line.vector)}&deg;</p> -->
-						<li>
-							<p>{toDegree(line.vector)}&deg;</p>
-						</li>
-
-					</div>
-					<div>
-						<button on:click={() => deleteLine(i)}>delete</button>
-					</div>
+				<ul class="flex-row between">
+					<li>
+						<p>{toDegree(line.vector)}&deg;</p>
+					</li>
+					<button on:click={() => deleteLine(i)}>delete</button>
 				</ul>
 			{/each}
-			<!-- <div>
-				<button on:click={() => {}}>clear all lines</button>
-			</div> -->
 		</div>
 	</span>
 </Panel>
 
 <style>
-	li { margin-left: 1rem; }
 	li {
+		margin-left: 1rem;
 		list-style: disc;
-/*		list-style-type: circle;*/
 	}
-	button {
-/*		all: unset;*/
-	}
-	.container {
-		display: flex;
-		flex-direction: column;
-	}
-	.row {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
+	.between {
+		justify-content: space-between !important;
 	}
 </style>

@@ -17,6 +17,9 @@ new:
 - [x] move FF violations below edges
 - [x] 3D gap only on 3D
 - [ ] folded form (svg) is choppy on zoom (even empty, I think).
+- [ ] modify CP (scale, transform), zoom doesn't work.
+- [ ] need new draw tools: rect, circle, etc...
+- [ ] need new transform: reflect horiz/vert
 
 high priority:
 

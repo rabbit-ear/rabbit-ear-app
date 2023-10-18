@@ -1,6 +1,7 @@
 <script>
 	import {
-		FacesWinding,
+		CPFacesWinding,
+		FoldedFacesWinding,
 		LayerOrderKnown,
 		Faces2DDrawOrder,
 	} from "../../stores/Model.js";
@@ -22,7 +23,9 @@
 
 	let facesClass = [];
 	$: facesClass = facesPoints.map((_, i) => [
-		$LayerOrderKnown ? ($FacesWinding[i] ? "front" : "back") : "transparent",
+		$CPFacesWinding[i] ? "counter-clockwise" : "clockwise",
+		$FoldedFacesWinding[i] ? "front" : "back",
+		$LayerOrderKnown ? undefined : "transparent",
 		...(selectedHighlighted[i] || []),
 	].filter(a => a !== undefined).join(" "));
 

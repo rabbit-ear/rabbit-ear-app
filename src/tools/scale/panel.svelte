@@ -16,7 +16,7 @@
 				id="scaleValue"
 				bind:value={scaleFactor} >
 			<label for="scaleValue">scale</label>
-			<button on:click={() => executeCommand("scale", scaleFactor)}>apply</button>
+			<button on:click={() => executeCommand("scaleUniform", scaleFactor)}>apply</button>
 		</div>
 	</span>
 </Panel>
