@@ -1,5 +1,5 @@
 import { edgeAssignmentToFoldAngle } from "rabbit-ear/fold/spec.js";
-import { planarBoundary } from "rabbit-ear/graph/boundary.js";
+import { planarBoundaries } from "rabbit-ear/graph/boundary.js";
 import { get } from "svelte/store";
 import {
 	CreasePattern,
@@ -12,13 +12,11 @@ export const rebuildBoundary = () => {
 		.map(a => a === "B" || a === "b" ? "F" : a);
 	graph.edges_foldAngle = (graph.edges_foldAngle
 		|| graph.edges_assignment.map(a => edgeAssignmentToFoldAngle[a]));
-	let edges = [];
 	try {
-		edges = planarBoundary(graph).edges;
-	} catch (error) {
-		// silent error
-	}
-	edges.forEach(e => { graph.edges_assignment[e] = "B"; });
-	edges.forEach(e => { graph.edges_foldAngle[e] = 0; });
-	UpdateFrame({ ...graph });
+		planarBoundaries(graph).forEach(({ edges }) => {
+			edges.forEach(e => { graph.edges_assignment[e] = "B"; });
+			edges.forEach(e => { graph.edges_foldAngle[e] = 0; });
+		});
+		UpdateFrame({ ...graph });
+	} catch (error) { console.warn("rebuildBoundary", error); }
 };

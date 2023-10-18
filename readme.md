@@ -15,6 +15,7 @@ If this doesn't work, please let me know, it's likely there are additional setup
 new:
 
 - [x] need a new RecalculateModelMatrix which compensates for changes in ViewMatrix, removing jumping.
+- [x] scale-up a crease pattern, reset zoom no longer works (fixed to old size).
 - [ ] ability to adjust epsilon app-wide
 - [ ] folded form (svg) is choppy on zoom (even empty, I think).
 - [ ] modify CP (scale, transform), zoom doesn't work.
@@ -24,14 +25,13 @@ new:
 
 high priority:
 
-- [ ] rebuild boundary doesn't work when there are two separate crease patterns.
-- [ ] scale-up a crease pattern, reset zoom no longer works (fixed to old size).
+- [x] rebuild boundary doesn't work when there are two separate crease patterns.
+- [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
 - [ ] simulator "reset", or better "reset zoom" should also reset it's camera
 - [ ] webgl perspective zoom broken.
 - [ ] layer order - report number of face-pairs, auto solve if number is low
 - [ ] layer order - report multiple solutions, somehow allow them to toggle it.
 - [ ] layer order solved - change assignment - layer order needs to be deleted
-- [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
 - [ ] right mouse click changes to camera to pan around.
 - [ ] foldedLine tool should re-assign existing creases that lay along the path.
 - [ ] rabbit ear tool. except make it the straight skeleton. convex only.
