@@ -27,6 +27,9 @@
 		CPColor,
 		LayerGapScaled,
 	} from "../../stores/Style.js";
+	import {
+		LayerOrderKnown,
+	} from "../../stores/Model.js";
 
 	export let graph = {};
 	export let fov = 30.25;
@@ -56,7 +59,7 @@
 		backColor: $BackColor,
 		cpColor: $CPColor,
 		strokeWidth: inferredScale * 0.02,
-		opacity: 1,
+		opacity: 1, // $LayerOrderKnown ? 1 : 0.25,
 	};
 
 	$: programOptions = {

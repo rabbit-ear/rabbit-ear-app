@@ -8,6 +8,8 @@ import {
 	invertMatrix2,
 	multiplyMatrices2,
 	multiplyMatrix2Vector2,
+	makeMatrix2Translate,
+	makeMatrix2UniformScale,
 } from "rabbit-ear/math/matrix2.js";
 
 // This approach does not work under the current arrangement,
@@ -29,6 +31,44 @@ import {
  */
 export const ModelMatrixCP = writable([...identity2x3]);
 ModelMatrixCP.reset = () => ModelMatrixCP.set([...identity2x3]);
+const ModelMatrixCPSet = ModelMatrixCP.set;
+ModelMatrixCP.set = (matrix) => {
+	// We are about to set the model matrix, and the new model matrix
+	// will be fed into the ModelViewMatrix which affects the viewport,
+	// however, we want the view to not move, but we can't abort the
+	// changes to the model matrix, instead, we have to compute the
+	// difference between the two model matrices before and after update,
+	// and apply the inverse of the difference to the viewport.
+	// Unfortunately we don't set the viewport, we don't set the view
+	// matrix either, we set the camera matrix, but the camera is the
+	// inverse of the view matrix, simple enough.
+	// ModelView = Model * View = Model * inv(Camera)
+	// newModel = oldModel * Difference
+	// oldModelView = oldModel * View
+	// newModelView = (oldModel * Difference) * View
+	// we want: newModelView = oldModelView
+	// we can't modify model matrix, but we can modify the view matrix
+	// oldModelView = oldModel * View
+	// newModelView = (oldModel * Difference) * View
+	// newModelView = (oldModel * Difference) * (View * inv(Difference))
+	// which factors into
+	// newModelView = oldModel * View * Difference * inv(Difference)
+	// newModelView = oldModel * View
+	// which is what we want. (god i think rearranging matrices is wrong)
+	// but anyway, View needs to become View * inv(Difference)
+	// View is inv(Camera), so: inv(Camera) * inv(Difference)
+	// can that simplify into: Camera * Difference?
+	// then take the inverse to get the view again?
+	const old = get(ModelMatrixCP);
+	const scale = matrix[0] / old[0];
+	const x = (matrix[4] - old[4]) / old[0];
+	const y = (matrix[5] - old[5]) / old[0];
+	const difference = [scale, 0, 0, scale, x, y];
+	const cameraMatrix = get(CameraMatrixCP);
+	const newCameraMatrix = multiplyMatrices2(cameraMatrix, difference);
+	CameraMatrixCP.set(newCameraMatrix);
+	return ModelMatrixCPSet(matrix);
+};
 
 export const ModelMatrixFolded = writable([...identity2x3]);
 ModelMatrixFolded.reset = () => ModelMatrixFolded.set([...identity2x3]);

@@ -11,6 +11,8 @@
 		"animation",
 		"diagrams",
 	];
+
+	$: console.log("$FileMetadata", $FileMetadata);
 </script>
 
 <Panel {showPanel} >

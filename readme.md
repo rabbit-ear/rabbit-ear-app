@@ -14,18 +14,19 @@ If this doesn't work, please let me know, it's likely there are additional setup
 
 new:
 
-- [x] move FF violations below edges
-- [x] 3D gap only on 3D
+- [x] need a new RecalculateModelMatrix which compensates for changes in ViewMatrix, removing jumping.
+- [ ] ability to adjust epsilon app-wide
 - [ ] folded form (svg) is choppy on zoom (even empty, I think).
 - [ ] modify CP (scale, transform), zoom doesn't work.
 - [ ] need new draw tools: rect, circle, etc...
 - [ ] need new transform: reflect horiz/vert
+- [ ] file_ metadata made it into a frame. caused issues when saving
 
 high priority:
 
-- [x] snapping for large cps, 400x, snap to grid points overrides.
-- [x] folded form layer separation distance
-- [x] ability to change folded form paper colors
+- [ ] rebuild boundary doesn't work when there are two separate crease patterns.
+- [ ] scale-up a crease pattern, reset zoom no longer works (fixed to old size).
+- [ ] simulator "reset", or better "reset zoom" should also reset it's camera
 - [ ] webgl perspective zoom broken.
 - [ ] layer order - report number of face-pairs, auto solve if number is low
 - [ ] layer order - report multiple solutions, somehow allow them to toggle it.
@@ -66,6 +67,11 @@ unknown:
 
 done:
 
+- [x] move FF violations below edges
+- [x] 3D gap only on 3D
+- [x] snapping for large cps, 400x, snap to grid points overrides.
+- [x] folded form layer separation distance
+- [x] ability to change folded form paper colors
 - [x] css style panels
 - [x] "new file" should be a simple yes/no and then trigger "new frame" modal
 - [x] style modal popups
@@ -133,10 +139,7 @@ From the beginning, I promised to keep this app simple and make it have less to 
 
 ## bug list:
 
-- [ ] rebuild boundary doesn't work when there are two separate crease patterns.
-- [ ] scale-up a crease pattern, reset zoom no longer works (fixed to old size).
 - [x] viewport resize due to show/hide component does not re-scale origami simulator's html canvas.
-- [ ] simulator "reset", or better "reset zoom" should also reset it's camera
 
 ## 2023-09-18
 

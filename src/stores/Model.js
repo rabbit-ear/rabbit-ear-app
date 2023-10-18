@@ -419,20 +419,21 @@ export const IsoUpdateFrame = (graph) => {
  */
 export const UpdateFrame = (graph) => {
 	Selection.reset();
+	RecalculateModelMatrix();
 	return IsoUpdateFrame(graph);
 };
 /**
- *
+ * update: i just moved RecalculateModelMatrix into UpdateFrame,
+ * which makes this next method kinda useless
  */
+// export const UpdateAndResizeFrame = (graph) => {
+// 	// trigger model-matrix to update
+// 	RecalculateModelMatrix();
+// 	UpdateFrame(graph);
+// };
 // export const UpdateModelMatrix = () => {
 // 	ModelMatrixCP.set(graphToMatrix2(get(CreasePattern)));
 // }
-export const UpdateAndResizeFrame = (graph) => {
-	// trigger model-matrix to update
-	RecalculateModelMatrix();
-
-	UpdateFrame(graph);
-};
 /**
  * @description If "IsoUpdateFrame" is a small update, "UpdateFrame" is a
  * larger update, "SetFrame" is an even larger update, where the
@@ -440,7 +441,7 @@ export const UpdateAndResizeFrame = (graph) => {
  */
 export const SetFrame = (graph) => {
 	// ModelMatrixCP.set(graphToMatrix2(graph));
-	CameraMatrixCP.reset();
+	// CameraMatrixCP.reset();
 	CameraMatrixFolded.reset();
 	return UpdateFrame(graph);
 };
@@ -454,7 +455,7 @@ export const SetFrame = (graph) => {
 export const SetNewModel = (FOLD) => {
 	let frames = [];
 	try {
-		frames = getFramesAsFlatArray(FOLD).map(populate);
+		frames = getFramesAsFlatArray(FOLD).map(graph => populate(graph));
 	} catch (error) {
 		console.warn("SetNewModel", error);
 		return;

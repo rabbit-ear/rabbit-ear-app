@@ -86,7 +86,10 @@ export const ScrollEventCP = readable(({ point, wheelDelta }) => {
 	// applying a change to the CameraMatrix. So, before we modify the
 	// CameraMatrix with this point, we need to "remove" the ModelMatrix
 	// out of this point (multiply by the inverse of ModelMatrix).
-	const matrix = makeMatrix2UniformScale(scale, getScreenPoint(point, get(ModelMatrixCP)));
+	const matrix = makeMatrix2UniformScale(
+		scale,
+		getScreenPoint(point, get(ModelMatrixCP)),
+	);
 	CameraMatrixCP.update(cam => {
 		// safety check.
 		// if the determininat is too small, return unchanged matrix
@@ -112,7 +115,10 @@ export const ScrollEventFolded = readable(({ point, wheelDelta }) => {
 	// applying a change to the CameraMatrix. So, before we modify the
 	// CameraMatrix with this point, we need to "remove" the ModelMatrix
 	// out of this point (multiply by the inverse of ModelMatrix).
-	const matrix = makeMatrix2UniformScale(scale, getScreenPoint(point, get(ModelMatrixFolded)));
+	const matrix = makeMatrix2UniformScale(
+		scale,
+		getScreenPoint(point, get(ModelMatrixFolded)),
+	);
 	CameraMatrixFolded.update(cam => {
 		// safety check.
 		// if the determininat is too small, return unchanged matrix
