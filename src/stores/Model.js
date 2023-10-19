@@ -19,6 +19,7 @@ import {
 	verticesFoldable,
 } from "rabbit-ear/singleVertex/foldable.js";
 import populate from "rabbit-ear/graph/populate.js";
+import planarize from "rabbit-ear/graph/planarize.js";
 import { graphToMatrix2 } from "../js/matrix.js";
 import {
 	makeEmptyGraph,
@@ -313,6 +314,19 @@ export const FoldedForm = derived(
 			}
 		ModelMatrixFolded.set(graphToMatrix2(foldedForm, $VerticalUp));
 		return foldedForm;
+	},
+	({}),
+);
+/**
+ *
+ */
+export const FoldedFormPlanar = derived(
+	[FoldedForm, FrameEdgesAreFlat],
+	([$FoldedForm, $FrameEdgesAreFlat]) => {
+		try {
+			return $FrameEdgesAreFlat ? planarize($FoldedForm) : {};
+		} catch (error) {}
+		return {};
 	},
 	({}),
 );

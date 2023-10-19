@@ -1,5 +1,6 @@
 <script>
-	import { VertexRadius } from "../../stores/Style.js";
+	import { VertexRadiusCP } from "../../stores/Style.js";
+	import { DrawRect } from "./stores.js";
 	import {
 		MoveCoords,
 		PressCoords,
@@ -13,17 +14,18 @@
 
 {#each points as point}
 	<circle
-		r={$VertexRadius * 1.5}
+		r={$VertexRadiusCP * 1.5}
 		cx={point[0]}
 		cy={point[1]} />
 {/each}
 
-{#if $DragCoords !== undefined && $PressCoords !== undefined}
-	<line
-		x1={$PressCoords[0]}
-		y1={$PressCoords[1]}
-		x2={$DragCoords[0]}
-		y2={$DragCoords[1]} />
+{#if $DrawRect !== undefined}
+	<rect
+		x={$DrawRect.min[0]}
+		y={$DrawRect.min[1]}
+		width={$DrawRect.span[0]}
+		height={$DrawRect.span[1]}
+	/>
 {/if}
 
 <style>
@@ -31,7 +33,8 @@
 		stroke: none;
 		fill: var(--highlight);
 	}
-	line {
+	rect {
+		fill: none;
 		stroke: var(--highlight);
 	}
 </style>

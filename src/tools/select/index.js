@@ -13,9 +13,11 @@ const selectTool = {
 	group: "general",
 	order: 1,
 	icon,
-	pointerEvent,
 	panel,
-	SVGLayer,
+	cp: {
+		pointerEvent,
+		SVGLayer,
+	},
 	subscribe,
 	unsubscribe,
 };

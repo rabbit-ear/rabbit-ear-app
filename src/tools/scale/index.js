@@ -14,9 +14,11 @@ const scale = {
 	group: "transform",
 	order: 2,
 	icon,
-	pointerEvent,
 	panel,
-	SVGLayer,
+	cp: {
+		pointerEvent,
+		SVGLayer,
+	},
 	subscribe,
 	unsubscribe,
 	reset,

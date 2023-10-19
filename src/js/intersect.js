@@ -2,8 +2,10 @@ import {
 	include,
 	includeL,
 	includeR,
+	includeS,
 	excludeS,
 } from "rabbit-ear/math/compare.js";
+import { pointsToLine } from "rabbit-ear/math/convert.js";
 import { intersectLineLine } from "rabbit-ear/math/intersect.js";
 import { makeEdgesVector } from "rabbit-ear/graph/make.js";
 import { clipLineConvexPolygon } from "rabbit-ear/math/clip.js";
@@ -25,6 +27,10 @@ export const intersectGraphLine = (graph, line) => (
 
 export const intersectGraphRay = (graph, ray) => (
 	intersectGraphLineFunc(graph, ray, includeR)
+);
+
+export const intersectGraphSegment = (graph, segment) => (
+	intersectGraphLineFunc(graph, pointsToLine(...segment), includeS)
 );
 
 // const clipLineInViewport = (line, box, lineFn = includeL) => {

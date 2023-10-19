@@ -46,10 +46,17 @@ const AppPointerEvent = readable((eventType, event) => {
  * mousemove, mouseup), the currently-selected UI tool is checked, and
  * in the case that it has a custom pointer event, it gets called here.
  */
-const ToolPointerEvent = derived(
+const ToolPointerEventCP = derived(
 	Tool,
-	($Tool) => $Tool && $Tool.pointerEvent
-		? $Tool.pointerEvent
+	($Tool) => $Tool && $Tool.cp && $Tool.cp.pointerEvent
+		? $Tool.cp.pointerEvent
+		: () => {},
+	() => {},
+);
+const ToolPointerEventFolded = derived(
+	Tool,
+	($Tool) => $Tool && $Tool.folded && $Tool.folded.pointerEvent
+		? $Tool.folded.pointerEvent
 		: () => {},
 	() => {},
 );
@@ -59,18 +66,18 @@ const ToolPointerEvent = derived(
  * if there is a UI tool with a pointer event, call the tool's pointer event.
  */
 export const PointerEventCP = derived(
-	[AppPointerEvent, ToolPointerEvent],
-	([$AppPointerEvent, $ToolPointerEvent]) => (eventType, event) => {
+	[AppPointerEvent, ToolPointerEventCP],
+	([$AppPointerEvent, $ToolPointerEventCP]) => (eventType, event) => {
 		if ($AppPointerEvent(eventType, event)) { return; }
-		$ToolPointerEvent(eventType, event);
+		$ToolPointerEventCP(eventType, event);
 	},
 	() => {},
 );
 export const PointerEventFolded = derived(
-	[AppPointerEvent, ToolPointerEvent],
-	([$AppPointerEvent, $ToolPointerEvent]) => (eventType, event) => {
+	[AppPointerEvent, ToolPointerEventFolded],
+	([$AppPointerEvent, $ToolPointerEventFolded]) => (eventType, event) => {
 		if ($AppPointerEvent(eventType, event)) { return; }
-		// $ToolPointerEvent(eventType, event);
+		$ToolPointerEventFolded(eventType, event);
 		SVGFoldedFormPointerEvent(eventType, event);
 	},
 	() => {},

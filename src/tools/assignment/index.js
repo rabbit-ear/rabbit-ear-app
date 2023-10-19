@@ -11,7 +11,9 @@ const assignment = {
 	name: "assignment",
 	group: "attributes",
 	icon,
-	pointerEvent,
+	cp: {
+		pointerEvent,
+	},
 	panel,
 	subscribe,
 	unsubscribe,

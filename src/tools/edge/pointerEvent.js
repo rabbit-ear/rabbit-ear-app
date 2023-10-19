@@ -1,30 +1,28 @@
-import { get } from "svelte/store";
-import { executeCommand } from "../../kernel/execute.js";
 import {
-	Move,
-	Press,
-	Drag,
-	PressCoords,
-	DragCoords,
-	reset,
+	CPMove,
+	CPPress,
+	CPRelease,
+	CPDrag,
+	FoldedMove,
+	FoldedPress,
+	FoldedRelease,
+	FoldedDrag,
 } from "./stores.js";
 
-const pointerEvent = (eventType, { point, buttons }) => {
+export const cpPointerEvent = (eventType, { point, buttons }) => {
 	switch (eventType) {
-	case "press":
-		Press.set(point);
-		break;
-	case "release":
-		const start = get(PressCoords);
-		const end = get(DragCoords);
-		if (start !== undefined && end !== undefined) {
-			executeCommand("segment", start, end);
-		}
-		reset();
-		break;
+	case "press": CPPress.set(point); break;
+	case "release": CPRelease.set(point); break;
 	}
-	if (buttons) { Drag.set(point); }
-	else { Move.set(point); }
+	CPMove.set(buttons ? undefined : point);
+	CPDrag.set(buttons ? point : undefined);
 };
 
-export default pointerEvent;
+export const foldedPointerEvent = (eventType, { point, buttons }) => {
+	switch (eventType) {
+	case "press": FoldedPress.set(point); break;
+	case "release": FoldedRelease.set(point); break;
+	}
+	FoldedMove.set(buttons ? undefined : point);
+	FoldedDrag.set(buttons ? point : undefined);
+};

@@ -1,7 +1,11 @@
-import pointerEvent from "./pointerEvent.js";
+import {
+	cpPointerEvent,
+	foldedPointerEvent,
+} from "./pointerEvent.js";
 import panel from "./panel.svelte";
 import icon from "./icon.svelte";
-import SVGLayer from "./SVGLayer.svelte";
+import cpSVGLayer from "./cpSVGLayer.svelte";
+import foldedSVGLayer from "./foldedSVGLayer.svelte";
 import {
 	subscribe,
 	unsubscribe,
@@ -13,8 +17,14 @@ const edge = {
 	group: "simple",
 	order: 2,
 	icon,
-	pointerEvent,
-	SVGLayer,
+	cp: {
+		pointerEvent: cpPointerEvent,
+		SVGLayer: cpSVGLayer,
+	},
+	folded: {
+		pointerEvent: foldedPointerEvent,
+		SVGLayer: foldedSVGLayer,
+	},
 	panel,
 	subscribe,
 	unsubscribe,

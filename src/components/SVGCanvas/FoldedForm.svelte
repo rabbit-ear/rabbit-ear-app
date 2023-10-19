@@ -16,9 +16,13 @@
 		ShowIndices,
 	} from "../../stores/App.js";
 	import { Selection } from "../../stores/Select.js";
-	import { Highlight } from "../../stores/UI.js";
+	import {
+		Tool,
+		Highlight,
+	} from "../../stores/UI.js";
 	import {
 		StrokeWidthFoldedForm,
+		StrokeDashLengthFoldedForm,
 	} from "../../stores/Style.js";
 	import { ViewportFolded } from "../../stores/ViewBox.js";
 
@@ -53,10 +57,15 @@
 			selected={$Selection.faces}
 			highlighted={$Highlight.faces} />
 	</g>
-	{#if $ShowIndices}
-		<GraphIndices graph={$FoldedForm} {invertVertical} />
-	{/if}
 	{#if $ShowAxes}
 		<AxesLayer {viewport} />
+	{/if}
+	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLengthFoldedForm};`}>
+		{#if $Tool && $Tool.folded && $Tool.folded.SVGLayer}
+			<svelte:component this={$Tool.folded.SVGLayer} />
+		{/if}
+	</g>
+	{#if $ShowIndices}
+		<GraphIndices graph={$FoldedForm} {invertVertical} />
 	{/if}
 </SVGTouchCanvas>

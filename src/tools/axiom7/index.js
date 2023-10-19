@@ -13,9 +13,11 @@ const axiom7 = {
 	name: "axiom 7",
 	group: "lines",
 	icon,
-	pointerEvent,
 	panel,
-	SVGLayer,
+	cp: {
+		pointerEvent,
+		SVGLayer,
+	},
 	reset,
 	subscribe,
 	unsubscribe,

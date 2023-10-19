@@ -2,8 +2,8 @@
 	import Panel from "./Panel.svelte";
 	import {
 		BackgroundColor,
-		FrontColor,
-		BackColor,
+		FoldedFrontColor,
+		FoldedBackColor,
 		SimulatorFrontColor,
 		SimulatorBackColor,
 		LineOpacity,
@@ -13,6 +13,7 @@
 		FlatColor,
 		JoinColor,
 		UnassignedColor,
+		ResetStyleDefaults,
 	} from "../../stores/Style.js";
 	import {
 		FoldedRenderer
@@ -35,8 +36,8 @@
 				</div>
 			{:else}
 				<div class="flex-row center">
-					<input type="color" bind:value={$BackColor} />
-					<input type="color" bind:value={$FrontColor} />
+					<input type="color" bind:value={$FoldedBackColor} />
+					<input type="color" bind:value={$FoldedFrontColor} />
 				</div>
 			{/if}
 
@@ -96,6 +97,12 @@
 						bind:value={$UnassignedColor} />
 					<label for="color-unassigned">U</label>
 				</div>
+			</div>
+
+			<hr/>
+
+			<div class="flex-row center">
+				<button on:click={ResetStyleDefaults}>Reset Defaults</button>
 			</div>
 
 		</div>

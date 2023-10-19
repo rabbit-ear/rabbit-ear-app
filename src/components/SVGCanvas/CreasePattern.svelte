@@ -93,8 +93,8 @@
 	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLengthCreasePattern};`}>
 		<RulerLayer {viewport} />
 		<UILayer />
-		{#if $Tool && $Tool.SVGLayer}
-			<svelte:component this={$Tool.SVGLayer} />
+		{#if $Tool && $Tool.cp && $Tool.cp.SVGLayer}
+			<svelte:component this={$Tool.cp.SVGLayer} />
 		{/if}
 	</g>
 	{#if $ShowIndices}

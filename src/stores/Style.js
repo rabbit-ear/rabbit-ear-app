@@ -82,10 +82,17 @@ export const VertexRadiusFactor = writable(0.00666);
 /**
  * @description SVG circle elements use this for their radius value.
  */
-export const VertexRadius = derived(
+export const VertexRadiusCP = derived(
 	[ViewportCP, VertexRadiusFactor],
 	([$ViewportCP, $VertexRadiusFactor]) => (
 		Math.max($ViewportCP[2], $ViewportCP[3]) * $VertexRadiusFactor
+	),
+	0.00666,
+);
+export const VertexRadiusFolded = derived(
+	[ViewportFolded, VertexRadiusFactor],
+	([$ViewportFolded, $VertexRadiusFactor]) => (
+		Math.max($ViewportFolded[2], $ViewportFolded[3]) * $VertexRadiusFactor
 	),
 	0.00666,
 );
@@ -106,34 +113,88 @@ export const LayerGapScaled = derived(
 	0.001,
 );
 
+const Defaults = {
+	FoldedFrontColor: "#bbbbbb",
+	FoldedBackColor: "#1177FF",
+	CPColor: "#272222",
+	SimulatorFrontColor: "#272222",
+	SimulatorBackColor: "#1177FF",
+	BoundaryColor: "#888888",
+	ValleyColor: "#0088ff",
+	MountainColor: "#ee5533",
+	FlatColor: "#555555",
+	JoinColor: "#ff8800",
+	CutColor: "#88ff00",
+	UnassignedColor: "#8800ff",
+};
+
 //
 // colors
 //
 
 // the background of the WebGL canvas
 export const BackgroundColor = writable("#231f1f");
+export const LineOpacity = writable(1);
 
 // front and back are the mesh faces
-export const FrontColor = writable("#bbbbbb");
-export const BackColor = writable("#1177FF");
-export const CPColor = writable("#272222");
-export const SimulatorFrontColor = writable("#272222");
-export const SimulatorBackColor = writable("#1177FF");
+export const FoldedFrontColor = writable(
+	localStorage.getItem("FoldedFrontColor") || Defaults.FoldedFrontColor);
+export const FoldedBackColor = writable(
+	localStorage.getItem("FoldedBackColor") || Defaults.FoldedBackColor);
+export const CPColor = writable(
+	localStorage.getItem("CPColor") || Defaults.CPColor);
+export const SimulatorFrontColor = writable(
+	localStorage.getItem("SimulatorFrontColor") || Defaults.SimulatorFrontColor);
+export const SimulatorBackColor = writable(
+	localStorage.getItem("SimulatorBackColor") || Defaults.SimulatorBackColor);
 
 // line color by assignment
-export const LineOpacity = writable(1);
-export const BoundaryColor = writable("#888888");
-export const ValleyColor = writable("#0088ff");
-export const MountainColor = writable("#ee5533");
-export const FlatColor = writable("#555555");
-export const JoinColor = writable("#ff8800");
-export const CutColor = writable("#88ff00");
-export const UnassignedColor = writable("#8800ff");
-// cut is not used by origami simulator, used elsewhere.
+export const BoundaryColor = writable(
+	localStorage.getItem("BoundaryColor") || Defaults.BoundaryColor);
+export const ValleyColor = writable(
+	localStorage.getItem("ValleyColor") || Defaults.ValleyColor);
+export const MountainColor = writable(
+	localStorage.getItem("MountainColor") || Defaults.MountainColor);
+export const FlatColor = writable(
+	localStorage.getItem("FlatColor") || Defaults.FlatColor);
+export const JoinColor = writable(
+	localStorage.getItem("JoinColor") || Defaults.JoinColor);
+export const CutColor = writable(
+	localStorage.getItem("CutColor") || Defaults.CutColor);
+export const UnassignedColor = writable(
+	localStorage.getItem("UnassignedColor") || Defaults.UnassignedColor);
 
-FrontColor.subscribe(color => document.documentElement.style
+FoldedFrontColor.subscribe(value => localStorage
+	.setItem("FoldedFrontColor", value));
+FoldedBackColor.subscribe(value => localStorage
+	.setItem("FoldedBackColor", value));
+CPColor.subscribe(value => localStorage
+	.setItem("CPColor", value));
+SimulatorFrontColor.subscribe(value => localStorage
+	.setItem("SimulatorFrontColor", value));
+SimulatorBackColor.subscribe(value => localStorage
+	.setItem("SimulatorBackColor", value));
+
+BoundaryColor.subscribe(value => localStorage
+	.setItem("BoundaryColor", value));
+ValleyColor.subscribe(value => localStorage
+	.setItem("ValleyColor", value));
+MountainColor.subscribe(value => localStorage
+	.setItem("MountainColor", value));
+FlatColor.subscribe(value => localStorage
+	.setItem("FlatColor", value));
+JoinColor.subscribe(value => localStorage
+	.setItem("JoinColor", value));
+CutColor.subscribe(value => localStorage
+	.setItem("CutColor", value));
+UnassignedColor.subscribe(value => localStorage
+	.setItem("UnassignedColor", value));
+
+//
+
+FoldedFrontColor.subscribe(color => document.documentElement.style
 	.setProperty("--front-color", color));
-BackColor.subscribe(color => document.documentElement.style
+FoldedBackColor.subscribe(color => document.documentElement.style
 	.setProperty("--back-color", color));
 CPColor.subscribe(color => document.documentElement.style
 	.setProperty("--cp-color", color));
@@ -152,6 +213,7 @@ CutColor.subscribe(color => document.documentElement.style
 	.setProperty("--cut-color", color));
 UnassignedColor.subscribe(color => document.documentElement.style
 	.setProperty("--unassigned-color", color));
+
 
 //
 // show/hide things
@@ -176,6 +238,24 @@ export const ShowJoin = writable(false);
 export const ShowUnassigned = writable(true);
 // cut is not used by origami simulator
 export const ShowCut = writable(true);
+
+/**
+ *
+ */
+export const ResetStyleDefaults = () => {
+	FoldedFrontColor.set(Defaults.FoldedFrontColor);
+	FoldedBackColor.set(Defaults.FoldedBackColor);
+	CPColor.set(Defaults.CPColor);
+	SimulatorFrontColor.set(Defaults.SimulatorFrontColor);
+	SimulatorBackColor.set(Defaults.SimulatorBackColor);
+	BoundaryColor.set(Defaults.BoundaryColor);
+	ValleyColor.set(Defaults.ValleyColor);
+	MountainColor.set(Defaults.MountainColor);
+	FlatColor.set(Defaults.FlatColor);
+	JoinColor.set(Defaults.JoinColor);
+	CutColor.set(Defaults.CutColor);
+	UnassignedColor.set(Defaults.UnassignedColor);
+};
 
 /**
  * @description Some SVG styles are zoom-level dependent, and require

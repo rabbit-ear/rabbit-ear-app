@@ -52,8 +52,10 @@ export const SnapPoint = writable(undefined); // {number[]} point
 export const UIGraph = writable({});
 export const UILines = writable([]);
 export const UIRays = writable([]);
+export const UISegment = writable([]);
 UILines.add = (newRulers) => UILines.update((r) => [...r, ...newRulers]);
 UIRays.add = (newRulers) => UIRays.update((r) => [...r, ...newRulers]);
+UISegment.add = (newRulers) => UISegment.update((r) => [...r, ...newRulers]);
 /**
  * @description This is the currently selected UI tool, as seen on the
  * toolbar (left side of screen). Tool definitions can be found inside
@@ -121,6 +123,7 @@ export const resetUI = () => {
 	UIGraph.set({});
 	UILines.set([]);
 	UIRays.set([]);
+	UISegment.set([]);
 	RulerLines.set([]);
 	RulerRays.set([]);
 };

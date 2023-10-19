@@ -4,6 +4,7 @@ import { writable } from "svelte/store";
 export const PlanarizeCommands = writable({
 	snapAllVertices: true,
 	segment: true,
+	rect: true,
 	deleteComponents: true,
 	foldedLine: true,
 	mergeNearbyVertices: true,

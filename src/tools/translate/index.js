@@ -14,9 +14,11 @@ const translate = {
 	group: "transform",
 	order: 1,
 	icon,
-	pointerEvent,
 	panel,
-	SVGLayer,
+	cp: {
+		pointerEvent,
+		SVGLayer,
+	},
 	subscribe,
 	unsubscribe,
 	reset,

@@ -1,5 +1,5 @@
 <script>
-	import { VertexRadius } from "../../stores/Style.js";
+	import { VertexRadiusCP } from "../../stores/Style.js";
 	import {
 		MoveCoords,
 		DragCoords,
@@ -15,7 +15,7 @@
 
 {#each points as point}
 	<circle
-		r={$VertexRadius * 1.5}
+		r={$VertexRadiusCP * 1.5}
 		cx={point[0]}
 		cy={point[1]} />
 {/each}
@@ -26,7 +26,7 @@
 		y1={$Segment0[1]}
 		x2={$DragCoords[0]}
 		y2={$DragCoords[1]}
-		stroke-width={$VertexRadius * 1.5} />
+		stroke-width={$VertexRadiusCP * 1.5} />
 {/if}
 
 <style>

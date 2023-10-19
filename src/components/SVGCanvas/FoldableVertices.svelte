@@ -6,13 +6,13 @@
 		InvalidVertices,
 	} from "../../stores/Model.js";
 	import {
-		VertexRadius,
+		VertexRadiusCP,
 	} from "../../stores/Style.js";
 
 	export let graph = {};
 
-	$: rK = $VertexRadius * 2;
-	$: rM = $VertexRadius * 3;
+	$: rK = $VertexRadiusCP * 2;
+	$: rM = $VertexRadiusCP * 3;
 
 	// todo: show smallest-sector assignment violation
 	let kawasaki = [];
@@ -30,7 +30,7 @@
 			.map(v => graph.vertices_coords[v])
 			.filter(a => a !== undefined)
 			.map(([cx, cy]) => ({
-				cx, cy, r: rM, class: "maekawa", "stroke-width": $VertexRadius,
+				cx, cy, r: rM, class: "maekawa", "stroke-width": $VertexRadiusCP,
 			}))
 		: [];
 	$: invalid3D = graph && graph.vertices_coords
@@ -38,7 +38,7 @@
 			.map(v => graph.vertices_coords[v])
 			.filter(a => a !== undefined)
 			.map(([cx, cy]) => ({
-				cx, cy, r: rM, class: "kawasaki", "stroke-width": $VertexRadius,
+				cx, cy, r: rM, class: "kawasaki", "stroke-width": $VertexRadiusCP,
 			}))
 		: [];
 </script>

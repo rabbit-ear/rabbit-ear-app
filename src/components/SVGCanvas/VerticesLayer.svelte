@@ -1,5 +1,5 @@
 <script>
-	import { VertexRadius } from "../../stores/Style.js";
+	import { VertexRadiusCP } from "../../stores/Style.js";
 	import { joinSelectedHighlighted } from "./attributes.js";
 
 	export let graph = {};
@@ -14,8 +14,8 @@
 
 	let radiuses = [];
 	$: radiuses = coords.map((_, i) => (selectedHighlight[i]
-		? $VertexRadius * (5 / 3)
-		: $VertexRadius));
+		? $VertexRadiusCP * (5 / 3)
+		: $VertexRadiusCP));
 
 	let classes = [];
 	$: classes = coords.map((_, i) => [

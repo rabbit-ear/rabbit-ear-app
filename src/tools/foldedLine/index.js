@@ -12,9 +12,11 @@ const foldedLine = {
 	name: "folded line",
 	group: "many lines",
 	icon,
-	pointerEvent,
-	SVGLayer,
 	// panel,
+	cp: {
+		pointerEvent,
+		SVGLayer,
+	},
 	subscribe,
 	unsubscribe,
 };

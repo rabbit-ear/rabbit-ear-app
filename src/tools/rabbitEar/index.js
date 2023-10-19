@@ -10,7 +10,9 @@ const rabbitEar = {
 	name: "rabbit ear",
 	group: "many lines",
 	icon,
-	pointerEvent,
+	cp: {
+		pointerEvent,
+	},
 	subscribe,
 	unsubscribe,
 };

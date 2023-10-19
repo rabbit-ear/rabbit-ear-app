@@ -12,9 +12,11 @@ const kawasaki = {
 	name: "kawasaki",
 	group: "single vertex",
 	icon,
-	pointerEvent,
-	SVGLayer,
 	panel,
+	cp: {
+		pointerEvent,
+		SVGLayer,
+	},
 	subscribe,
 	unsubscribe,
 };

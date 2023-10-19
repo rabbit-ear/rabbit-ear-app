@@ -11,10 +11,10 @@ const rootFace = {
 	key: "rootFace",
 	name: "rootFace",
 	group: "undefined", // "layers",
-	// order: 2,
 	icon,
-	pointerEvent,
-	// panel,
+	cp: {
+		pointerEvent,
+	},
 	subscribe,
 	unsubscribe,
 	reset,

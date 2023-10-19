@@ -1,5 +1,5 @@
 <script>
-	import { VertexRadius } from "../../stores/Style.js";
+	import { VertexRadiusCP } from "../../stores/Style.js";
 	import {
 		MoveCoords,
 		PressCoords,
@@ -11,7 +11,7 @@
 
 {#each points as point}
 	<circle
-		r={$VertexRadius * 1.5}
+		r={$VertexRadiusCP * 1.5}
 		cx={point[0]}
 		cy={point[1]} />
 {/each}

@@ -14,18 +14,13 @@ If this doesn't work, please let me know, it's likely there are additional setup
 
 new:
 
-- [x] need a new RecalculateModelMatrix which compensates for changes in ViewMatrix, removing jumping.
-- [x] scale-up a crease pattern, reset zoom no longer works (fixed to old size).
 - [ ] ability to adjust epsilon app-wide
-- [ ] folded form (svg) is choppy on zoom (even empty, I think).
 - [ ] modify CP (scale, transform), zoom doesn't work.
 - [ ] need new draw tools: rect, circle, etc...
-- [ ] need new transform: reflect horiz/vert
 - [ ] file_ metadata made it into a frame. caused issues when saving
 
 high priority:
 
-- [x] rebuild boundary doesn't work when there are two separate crease patterns.
 - [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
 - [ ] simulator "reset", or better "reset zoom" should also reset it's camera
 - [ ] webgl perspective zoom broken.
@@ -59,6 +54,7 @@ low priority:
 
 unknown:
 
+- [ ] folded form (svg) is choppy on zoom (even empty, I think).
 - [ ] the tool-svg-layer is disappearing. turning simulator on, folding simulator, going back to cp... using the edge tool.
 - [ ] cmd+A in the text box, intended to select the text, instead gets run by Rust due to the menu shortcut.
 - [ ] svg text in graph indices drifts away when zooming in
@@ -67,6 +63,11 @@ unknown:
 
 done:
 
+- [x] reset style defaults
+- [x] need new transform: reflect horiz/vert
+- [x] rebuild boundary doesn't work when there are two separate crease patterns.
+- [x] need a new RecalculateModelMatrix which compensates for changes in ViewMatrix, removing jumping.
+- [x] scale-up a crease pattern, reset zoom no longer works (fixed to old size).
 - [x] move FF violations below edges
 - [x] 3D gap only on 3D
 - [x] snapping for large cps, 400x, snap to grid points overrides.

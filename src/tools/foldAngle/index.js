@@ -11,8 +11,10 @@ const foldAngle = {
 	name: "fold angle",
 	group: "attributes",
 	icon,
-	pointerEvent,
 	panel,
+	cp: {
+		pointerEvent,
+	},
 	subscribe,
 	unsubscribe,
 };

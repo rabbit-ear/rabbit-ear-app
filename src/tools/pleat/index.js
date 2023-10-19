@@ -7,8 +7,10 @@ const pleat = {
 	name: "pleat",
 	group: "many lines",
 	icon,
-	pointerEvent,
 	panel,
+	cp: {
+		pointerEvent,
+	},
 };
 
 export default pleat;

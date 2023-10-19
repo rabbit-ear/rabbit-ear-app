@@ -1,14 +1,13 @@
 <script>
 	import { VertexRadiusCP } from "../../stores/Style.js";
 	import {
-		Segment0,
-		Segment1,
-		MoveCoords,
-		DragCoords,
+		CPMoveCoords,
+		CPPressCoords,
+		CPDragCoords,
 	} from "./stores.js";
 
 	let points = [];
-	$: points = [$Segment0, $Segment1, $MoveCoords, $DragCoords]
+	$: points = [$CPMoveCoords, $CPPressCoords, $CPDragCoords]
 		.filter(a => a !== undefined);
 </script>
 
@@ -19,13 +18,12 @@
 		cy={point[1]} />
 {/each}
 
-{#if $Segment0 !== undefined && $DragCoords !== undefined}
+{#if $CPDragCoords !== undefined && $CPPressCoords !== undefined}
 	<line
-		x1={$Segment0[0]}
-		y1={$Segment0[1]}
-		x2={$DragCoords[0]}
-		y2={$DragCoords[1]}
-		stroke-width={$VertexRadiusCP * 1.5} />
+		x1={$CPPressCoords[0]}
+		y1={$CPPressCoords[1]}
+		x2={$CPDragCoords[0]}
+		y2={$CPDragCoords[1]} />
 {/if}
 
 <style>

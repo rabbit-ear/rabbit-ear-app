@@ -13,9 +13,11 @@ const symmetry = {
 	name: "symmetry",
 	group: "transform",
 	icon,
-	pointerEvent,
 	panel,
-	SVGLayer,
+	cp: {
+		pointerEvent,
+		SVGLayer,
+	},
 	reset,
 	subscribe,
 	unsubscribe,

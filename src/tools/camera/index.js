@@ -12,8 +12,9 @@ const camera = {
 	group: "general",
 	order: 3,
 	icon,
-	pointerEvent,
-	// panel,
+	cp: {
+		pointerEvent,
+	},
 	subscribe,
 	unsubscribe,
 };

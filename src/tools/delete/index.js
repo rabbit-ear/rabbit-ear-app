@@ -11,7 +11,9 @@ const deleteTool = {
 	group: "general",
 	order: 2,
 	icon,
-	pointerEvent,
+	cp: {
+		pointerEvent,
+	},
 	subscribe,
 	unsubscribe,
 };

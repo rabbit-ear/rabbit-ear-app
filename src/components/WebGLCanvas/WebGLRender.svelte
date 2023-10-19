@@ -22,8 +22,8 @@
 	} from "rabbit-ear/webgl/program.js";
 	import { vectorFromScreenLocation } from "./general.js";
 	import {
-		FrontColor,
-		BackColor,
+		FoldedFrontColor,
+		FoldedBackColor,
 		CPColor,
 		LayerGapScaled,
 	} from "../../stores/Style.js";
@@ -55,8 +55,8 @@
 		projectionMatrix,
 		modelViewMatrix,
 		canvas,
-		frontColor: $FrontColor,
-		backColor: $BackColor,
+		frontColor: $FoldedFrontColor,
+		backColor: $FoldedBackColor,
 		cpColor: $CPColor,
 		strokeWidth: inferredScale * 0.02,
 		opacity: 1, // $LayerOrderKnown ? 1 : 0.25,

@@ -19,7 +19,11 @@
 	--uiblue: #1177FF;
 	--uidarkblue: #1155D4;
 	--purple: #80f;
+	--highlight: var(--yellow);
+	--body-background: var(--background-0);
+}
 
+/*
 	--darkmode-darkblue: #113959;
 	--darkmode-blue-dark: #2D39C0;
 	--darkmode-blue: #414FF1;
@@ -34,11 +38,7 @@
 	--darkmode-green: #63D7C6;
 	--darkmode-yellow: #EDAB46;
 	--darkmode-red: #B00020;
-
-
-	--highlight: var(--yellow);
-	--body-background: var(--background-0);
-}
+*/
 
 /*:root {
 	color-scheme: light;

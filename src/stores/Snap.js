@@ -1,7 +1,16 @@
 import { writable, derived } from "svelte/store";
-import { ViewportCP } from "./ViewBox.js";
-import { RulerPoints } from "./Ruler.js";
-import { CreasePattern } from "./Model.js";
+import {
+	ViewportCP,
+	ViewportFolded,
+} from "./ViewBox.js";
+import {
+	RulerPointsCP,
+	RulerPointsFolded,
+} from "./Ruler.js";
+import {
+	CreasePattern,
+	FoldedFormPlanar,
+} from "./Model.js";
 /**
  * @description Establish the angle between snapping lines, and the
  * offset from 0deg for the initial line.
@@ -9,7 +18,7 @@ import { CreasePattern } from "./Model.js";
 export const RadialSnapDegrees = writable(22.5);
 export const RadialSnapOffset = writable(0);
 /**
- * @description SnapPointsCreasePattern contains a list of 2D points
+ * @description SnapPointsCP contains a list of 2D points
  * in the plane which the UI should be able to snap to.
  * This list notably does not contain a list of grid-points
  * (snap to grid) because that list is infinite and calculated
@@ -21,11 +30,19 @@ export const RadialSnapOffset = writable(0);
  * - intersections between ruler lines and ruler lines
  * - intersections between ruler lines and the background grid
  */
-export const SnapPointsCreasePattern = derived(
-	[CreasePattern, RulerPoints],
-	([$CreasePattern, $RulerPoints]) => [
+export const SnapPointsCP = derived(
+	[CreasePattern, RulerPointsCP],
+	([$CreasePattern, $RulerPointsCP]) => [
 		...($CreasePattern.vertices_coords || []),
-		...$RulerPoints,
+		...$RulerPointsCP,
+	],
+	[],
+);
+export const SnapPointsFolded = derived(
+	[FoldedFormPlanar, RulerPointsFolded],
+	([$FoldedFormPlanar, $RulerPointsFolded]) => [
+		...($FoldedFormPlanar.vertices_coords || []),
+		...$RulerPointsFolded,
 	],
 	[],
 );
@@ -38,10 +55,18 @@ const SnapRadiusFactor = 0.05;
  * @description This is the radius of the snapping range to the
  * nearest snappable point, it is dependent upon the current view zoom.
  */
-export const SnapRadiusCreasePattern = derived(
+export const SnapRadiusCP = derived(
 	ViewportCP,
 	$ViewportCP => (
 		Math.max($ViewportCP[2], $ViewportCP[3]) * SnapRadiusFactor
+	),
+	0.05,
+);
+
+export const SnapRadiusFolded = derived(
+	ViewportFolded,
+	$ViewportFolded => (
+		Math.max($ViewportFolded[2], $ViewportFolded[3]) * SnapRadiusFactor
 	),
 	0.05,
 );
