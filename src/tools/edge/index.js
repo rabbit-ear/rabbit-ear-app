@@ -2,6 +2,7 @@ import {
 	cpPointerEvent,
 	foldedPointerEvent,
 } from "./pointerEvent.js";
+import { keyboardEvent } from "./keyboardEvent.js";
 import panel from "./panel.svelte";
 import icon from "./icon.svelte";
 import cpSVGLayer from "./cpSVGLayer.svelte";
@@ -25,6 +26,7 @@ const edge = {
 		pointerEvent: foldedPointerEvent,
 		SVGLayer: foldedSVGLayer,
 	},
+	keyboardEvent,
 	panel,
 	subscribe,
 	unsubscribe,

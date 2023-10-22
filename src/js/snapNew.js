@@ -55,7 +55,10 @@ export const snapToPointNew = (point, points, snapRadius) => {
 	return { coords: [...point], snap: false };
 };
 /**
- *
+ * @param {number[]} point
+ * @param {number[][]} points
+ * @param { line: VecLine, clamp: function, domain: function } rulers
+ * @param {number} snapRadius
  */
 export const snapToRulerLineNew = (point, points, rulers, snapRadius) => {
 	if (!point) {
@@ -64,13 +67,6 @@ export const snapToRulerLineNew = (point, points, rulers, snapRadius) => {
 	if (!rulers || !rulers.length) {
 		return { coords: point, snap: false };
 	}
-	// each entry is an object:
-	// { line: VecLine, clamp: function, domain: function }
-	// const rulers = [
-	// 	rulerLines.map(line => ({ line, clamp: clampLine, domain: includeL })),
-	// 	rulerRays.map(line => ({ line, clamp: clampRay, domain: includeR })),
-	// 	rulerSegments.map(line => ({ line, clamp: clampSegment, domain: includeS })),
-	// ].flat();
 	// for each ruler, a point that is the nearest point on the line
 	const rulersPoint = rulers
 		.map(el => nearestPointOnLine(el.line, point, el.clamp));

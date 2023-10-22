@@ -1,13 +1,7 @@
 import {
-	get,
 	writable,
 	derived,
 } from "svelte/store";
-import {
-	snapToPoint,
-	snapToPointWithInfo,
-	snapToRulerLine,
-} from "../../js/snap.js";
 import {
 	snapToPointNew,
 	snapToRulerLineNew,
@@ -24,7 +18,10 @@ import {
 	SnapRadiusCP,
 	SnapRadiusFolded,
 } from "../../stores/Snap.js";
-import { RulersCP } from "../../stores/Ruler.js";
+import {
+	RulersCP,
+	RulersFolded,
+} from "../../stores/Ruler.js";
 import {
 	CreasePattern,
 	FoldedForm,
@@ -41,9 +38,13 @@ export const FoldedDrag = writable(undefined);
 export const FoldedPress = writable(undefined);
 export const FoldedRelease = writable(undefined);
 
+const ShiftLock = derived(Keyboard, $Keyboard => $Keyboard[16], false);
+
 const CPMoveSnap = derived(
-	CPMove,
-	$CPMove => snapToPointWithInfo($CPMove),
+	[CPMove, SnapPointsCP, SnapRadiusCP],
+	([$CPMove, $SnapPointsCP, $SnapRadiusCP]) => (
+		snapToPointNew($CPMove, $SnapPointsCP, $SnapRadiusCP)
+	),
 	{ coords: undefined, snap: false },
 );
 
@@ -54,30 +55,34 @@ export const CPMoveCoords = derived(
 );
 
 const CPDragSnap = derived(
-	CPDrag,
-	$CPDrag => snapToPointWithInfo($CPDrag),
+	[CPDrag, SnapPointsCP, SnapRadiusCP],
+	([$CPDrag, $SnapPointsCP, $SnapRadiusCP]) => (
+		snapToPointNew($CPDrag, $SnapPointsCP, $SnapRadiusCP)
+	),
 	{ coords: undefined, snap: false },
 );
 
 export const CPDragCoords = derived(
-	[Keyboard, CPDrag, SnapPointsCP, RulersCP, SnapRadiusCP],
-	([$Keyboard, $CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => $Keyboard[16] // shift key
+	[ShiftLock, CPDrag, SnapPointsCP, RulersCP, SnapRadiusCP],
+	([$ShiftLock, $CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => $ShiftLock
 		? snapToRulerLineNew($CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP).coords
-		: snapToPoint($CPDrag),
+		: snapToPointNew($CPDrag, $SnapPointsCP, $SnapRadiusCP).coords,
 	undefined,
 );
 
 export const CPPressCoords = derived(
-	CPPress,
-	($CPPress) => snapToPoint($CPPress),
+	[CPPress, SnapPointsCP, SnapRadiusCP],
+	([$CPPress, $SnapPointsCP, $SnapRadiusCP]) => (
+		snapToPointNew($CPPress, $SnapPointsCP, $SnapRadiusCP).coords
+	),
 	undefined,
 );
 
 export const CPReleaseCoords = derived(
-	[Keyboard, CPRelease],
-	([$Keyboard, $CPRelease]) => $Keyboard[16] // shift key
-		? snapToRulerLine($CPRelease).coords
-		: snapToPoint($CPRelease),
+	[ShiftLock, CPRelease, SnapPointsCP, RulersCP, SnapRadiusCP],
+	([$ShiftLock, $CPRelease, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => $ShiftLock
+		? snapToRulerLineNew($CPRelease, $SnapPointsCP, $RulersCP, $SnapRadiusCP).coords
+		: snapToPointNew($CPRelease, $SnapPointsCP, $SnapRadiusCP).coords,
 	undefined,
 );
 
@@ -106,9 +111,10 @@ const FoldedDragSnap = derived(
 );
 
 export const FoldedDragCoords = derived(
-	[Keyboard, FoldedDrag, FoldedDragSnap],
-	([$Keyboard, $FoldedDrag, $FoldedDragSnap]) => $Keyboard[16] // shift key
-		? snapToRulerLine($FoldedDrag).coords
+	[ShiftLock, FoldedDrag, FoldedDragSnap, SnapPointsFolded, RulersFolded, SnapRadiusFolded],
+	([$ShiftLock, $FoldedDrag, $FoldedDragSnap, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded]) => $ShiftLock
+		// ? snapToRulerLine($FoldedDrag).coords
+		? snapToRulerLineNew($FoldedDrag, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded).coords
 		: $FoldedDragSnap.coords,
 	undefined,
 );
@@ -122,26 +128,32 @@ export const FoldedPressCoords = derived(
 );
 
 export const FoldedReleaseCoords = derived(
-	[Keyboard, FoldedRelease, SnapPointsFolded, SnapRadiusFolded],
-	([$Keyboard, $FoldedRelease, $SnapPointsFolded, $SnapRadiusFolded]) => $Keyboard[16] // shift key
-		? snapToRulerLine($FoldedRelease).coords
+	[ShiftLock, FoldedRelease, SnapPointsFolded, RulersFolded, SnapRadiusFolded],
+	([$ShiftLock, $FoldedRelease, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded]) => $ShiftLock
+		? snapToRulerLineNew($FoldedRelease, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded).coords
 		: snapToPointNew($FoldedRelease, $SnapPointsFolded, $SnapRadiusFolded).coords,
 	undefined,
 );
 
-////////////////////////
+/**
+ * There is a circular relationship between:
+ * - setting Rulers, the location of which is based on CPPress
+ * - setting CPPress, the location of which is based on Rulers.
+ * RulerSetRequest is set by the Keyboard event handler,
+ * ensuring that ShiftRulers only fires once.
+ */
+export const RulerSetRequest = writable(false);
 
 export const ShiftRulers = derived(
-	[Keyboard, CPPressCoords, RadialSnapDegrees, RadialSnapOffset],
-	([$Keyboard, $CPPressCoords, $RadialSnapDegrees, $RadialSnapOffset]) => {
-		if ($Keyboard[16] && $CPPressCoords) {
+	[ShiftLock, CPPressCoords, RadialSnapDegrees, RadialSnapOffset, RulerSetRequest],
+	([$ShiftLock, $CPPressCoords, $RadialSnapDegrees, $RadialSnapOffset, $RulerSetRequest]) => {
+		if ($ShiftLock && $CPPressCoords && $RulerSetRequest) {
 			executeCommand("radialRulers",
 				$CPPressCoords,
 				$RadialSnapDegrees,
 				$RadialSnapOffset,
-			)
-		} else {
-			RulersCP.set([]);
+			);
+			RulerSetRequest.set(false);
 		}
 	},
 	undefined,
