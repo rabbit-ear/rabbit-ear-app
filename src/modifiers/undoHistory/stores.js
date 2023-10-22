@@ -39,7 +39,6 @@ export const UndoHistoryAvoidCommands = {
 	axiom7Rulers: true,
 	kawasakiRulerPreviews: true,
 	kawasakiRulers: true,
-	radialRulers: true,
 	foldedLinePreview: true,
 	pleatPreview: true,
 };

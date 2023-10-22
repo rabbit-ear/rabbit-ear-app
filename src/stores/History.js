@@ -44,7 +44,6 @@ const collapseMethods = {
 	setTool: true,
 	resetApp: true,
 	resetTool: true,
-	// resetRulers: true,
 	highlight: true,
 	pleatPreview: true,
 	foldedLinePreview: true,

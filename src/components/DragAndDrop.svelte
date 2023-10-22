@@ -1,6 +1,4 @@
 <script>
-	import { tryLoadFile } from "../js/file.js";
-
 	const loadFiles = (event) => {
 		// have to cache the filename here
 		// because it's not contained in the event object

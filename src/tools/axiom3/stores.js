@@ -91,7 +91,7 @@ export const AxiomRulers = derived(
 		if ($Step >= 2 && $Edge0 !== undefined && $Edge1 !== undefined) {
 			const args = [$Edge0, $Edge1].join(", ");
 			UILines.set([]);
-			execute(`setRulerLines(axiom3(${args}))`);
+			execute(`setRulersCP(axiom3(${args}))`);
 		}
 	},
 	undefined,

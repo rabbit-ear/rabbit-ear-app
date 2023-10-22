@@ -1,4 +1,3 @@
-import { get } from "svelte/store";
 import { boundingBox } from "rabbit-ear/graph/boundary.js";
 import {
 	identity2x3,

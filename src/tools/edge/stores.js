@@ -21,6 +21,7 @@ import {
 import {
 	RulersCP,
 	RulersFolded,
+	RadialRays,
 } from "../../stores/Ruler.js";
 import {
 	CreasePattern,
@@ -145,14 +146,21 @@ export const FoldedReleaseCoords = derived(
 export const RulerSetRequest = writable(false);
 
 export const ShiftRulers = derived(
-	[ShiftLock, CPPressCoords, RadialSnapDegrees, RadialSnapOffset, RulerSetRequest],
-	([$ShiftLock, $CPPressCoords, $RadialSnapDegrees, $RadialSnapOffset, $RulerSetRequest]) => {
-		if ($ShiftLock && $CPPressCoords && $RulerSetRequest) {
-			executeCommand("radialRulers",
+	[ShiftLock, RulerSetRequest, CPPressCoords, FoldedPressCoords, RadialSnapDegrees, RadialSnapOffset],
+	([$ShiftLock, $RulerSetRequest, $CPPressCoords, $FoldedPressCoords, $RadialSnapDegrees, $RadialSnapOffset]) => {
+		if (!$ShiftLock || !$RulerSetRequest) { return; }
+		if ($CPPressCoords) {
+			RulersCP.set(RadialRays(
 				$CPPressCoords,
 				$RadialSnapDegrees,
-				$RadialSnapOffset,
-			);
+				$RadialSnapOffset));
+			RulerSetRequest.set(false);
+		}
+		if ($FoldedPressCoords) {
+			RulersFolded.set(RadialRays(
+				$FoldedPressCoords,
+				$RadialSnapDegrees,
+				$RadialSnapOffset));
 			RulerSetRequest.set(false);
 		}
 	},

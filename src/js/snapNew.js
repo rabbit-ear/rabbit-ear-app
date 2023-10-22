@@ -1,15 +1,4 @@
-import { get } from "svelte/store";
 import { distance2 } from "rabbit-ear/math/vector.js";
-import {
-	includeL,
-	includeR,
-	includeS,
-} from "rabbit-ear/math/compare.js";
-import {
-	clampLine,
-	clampRay,
-	clampSegment,
-} from "rabbit-ear/math/line.js";
 import { nearestPointOnLine } from "rabbit-ear/math/nearest.js";
 import { overlapLinePoint } from "rabbit-ear/math/overlap.js";
 

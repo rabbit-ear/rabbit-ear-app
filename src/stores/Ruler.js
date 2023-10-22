@@ -1,11 +1,18 @@
 import { writable, derived } from "svelte/store";
-import {
-	intersectGraphLineFunc,
-} from "../js/intersect.js";
+import { clampRay } from "rabbit-ear/math/line.js";
+import { includeR } from "rabbit-ear/math/compare.js";
+import { intersectGraphLineFunc } from "../js/intersect.js";
 import {
 	CreasePattern,
 	FoldedFormPlanar,
 } from "./Model.js";
+
+export const RadialRays = (origin, degrees = 22.5, offset = 0) => Array
+	.from(Array(Math.ceil(360 / degrees)))
+	.map((_, i) => Math.PI * ((offset + i * degrees) / 180))
+	.map(a => [Math.cos(a), Math.sin(a)])
+	.map(vector => ({ vector, origin }))
+	.map(line => ({ line, clamp: clampRay, domain: includeR }));
 /**
  * @description Lines which are intended to be a step towards
  * adding new geometry to the graph; affects the list of UI snap points.

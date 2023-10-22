@@ -113,7 +113,7 @@ export const AxiomRulers = derived(
 			const point2 = $Coords1.join(", ");
 			const args = `[${point1}], [${point2}]`;
 			UILines.set([]);
-			execute(`setRulerLines(axiom2(${args}))`);
+			execute(`setRulersCP(axiom2(${args}))`);
 		}
 	},
 	undefined,

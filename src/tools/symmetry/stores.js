@@ -12,7 +12,11 @@ import {
 	RadialSnapDegrees,
 	RadialSnapOffset,
 } from "../../stores/Snap.js";
-import { RulersCP } from "../../stores/Ruler.js";
+import {
+	RulersCP,
+	RulersFolded,
+	RadialRays,
+} from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";
 
 export const ReflectionLines = writable([]);
@@ -88,11 +92,10 @@ const ShiftRulers = derived(
 	[Keyboard, PressCoords, RadialSnapDegrees, RadialSnapOffset],
 	([$Keyboard, $PressCoords, $RadialSnapDegrees, $RadialSnapOffset]) => {
 		if ($Keyboard[16] && $PressCoords) {
-			executeCommand("radialRulers",
+			RulersCP.set(RadialRays(
 				$PressCoords,
 				$RadialSnapDegrees,
-				$RadialSnapOffset,
-			)
+				$RadialSnapOffset));
 		} else {
 			RulersCP.set([]);
 		}
