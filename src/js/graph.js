@@ -166,6 +166,7 @@ export const graphIsCreasePattern = (graph) => {
 	// if graph has 3D vertices and if those Z components are outside
 	// of the XY plane, it's not a crease pattern. otherwise, yes.
 	return graph.vertices_coords
+		.filter(coords => coords !== undefined)
 		.map(coords => coords[2])
 		.filter(n => n !== undefined)
 		.filter(n => Math.abs(n) > 1e-2)

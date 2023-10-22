@@ -7,6 +7,7 @@ export const PlanarizeCommands = writable({
 	rect: true,
 	deleteComponents: true,
 	foldedLine: true,
+	foldedSegment: true,
 	mergeNearbyVertices: true,
 	mergeVertices: true,
 	mergeSelectedVertices: true,

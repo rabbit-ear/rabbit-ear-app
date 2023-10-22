@@ -1,7 +1,9 @@
 import {
+	get,
 	writable,
 	derived,
 } from "svelte/store";
+import { intersectGraphSegment } from "rabbit-ear/graph/intersect.js";
 import {
 	snapToPoint,
 	snapToPointWithInfo,
@@ -24,6 +26,11 @@ import {
 	RulerLines,
 	RulerRays,
 } from "../../stores/Ruler.js";
+import {
+	CreasePattern,
+	FoldedForm,
+	UpdateFrame,
+} from "../../stores/Model.js";
 import { executeCommand } from "../../kernel/execute.js";
 
 export const CPMove = writable(undefined);
@@ -155,10 +162,8 @@ const CPFinishTool = derived(
 const FoldedFinishTool = derived(
 	[FoldedPressCoords, FoldedReleaseCoords],
 	([$FoldedPressCoords, $FoldedReleaseCoords]) => {
-		console.log("FoldedFinishTool", $FoldedPressCoords, $FoldedReleaseCoords);
 		if (!$FoldedPressCoords || !$FoldedReleaseCoords) { return; }
-		console.log("foldedFinishTool");
-		// get rid of reset when we implement this
+		executeCommand("foldedSegment", $FoldedPressCoords, $FoldedReleaseCoords);
 		reset();
 	},
 	undefined,

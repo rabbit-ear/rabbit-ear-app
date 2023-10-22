@@ -38,7 +38,7 @@ const segmentBoxOverlap = (segment, box) => {
 	const boxLines = boxVectors
 		.map((vector, i) => ({ vector, origin: boxSegments[i][0] }))
 	const segmentIntersects = boxSegments
-		.map((seg, i) => intersectLineLine(line, boxLines[i], includeS, includeS));
+		.map((seg, i) => intersectLineLine(line, boxLines[i], includeS, includeS).point);
 	const anySegmentIntersects = segmentIntersects
 		.reduce((a, b) => a || b, false);
 	if (anySegmentIntersects) { return true; }

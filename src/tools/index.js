@@ -1,3 +1,4 @@
+// import arc from "./arc/index.js";
 import assignment from "./assignment/index.js";
 import axiom1 from "./axiom1/index.js";
 import axiom2 from "./axiom2/index.js";
@@ -26,6 +27,7 @@ import translate from "./translate/index.js";
 import vertex from "./vertex/index.js";
 
 export default {
+	// arc,
 	assignment,
 	axiom1,
 	axiom2,

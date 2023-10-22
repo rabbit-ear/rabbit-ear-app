@@ -17,7 +17,7 @@ const intersectGraphLineFunc = (graph, line, lineFn = includeL) => {
 	const edgesLine = edgesVector
 		.map((vector, i) => ({ vector, origin: edgesOrigin[i] }));
 	return edgesLine
-		.map(l => intersectLineLine(line, l, lineFn, excludeS))
+		.map(l => intersectLineLine(line, l, lineFn, excludeS).point)
 		.filter(a => a !== undefined);
 };
 
