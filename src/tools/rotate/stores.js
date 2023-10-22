@@ -24,10 +24,7 @@ import {
 	RadialSnapDegrees,
 	RadialSnapOffset,
 } from "../../stores/Snap.js";
-import {
-	RulerLines,
-	RulerRays,
-} from "../../stores/Ruler.js";
+import { RulersCP } from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";
 
 export const Move = writable(undefined);
@@ -109,8 +106,7 @@ export const ShiftRulers = derived(
 				$RadialSnapOffset,
 			)
 		} else {
-			RulerLines.set([]);
-			RulerRays.set([]);
+			RulersCP.set([]);
 		}
 	},
 	undefined,

@@ -20,10 +20,7 @@ import {
 	nearestFace as reNearestFace,
 } from "rabbit-ear/graph/nearest.js";
 import { CreasePattern } from "../stores/Model.js";
-import {
-	RulerLines,
-	RulerRays,
-} from "../stores/Ruler.js";
+import { RulersCP } from "../stores/Ruler.js";
 import {
 	SnapPointsCP,
 	SnapRadiusCP,
@@ -155,17 +152,18 @@ export const snapToRulerLine = (point) => {
 	if (!point) {
 		return { index: undefined, line: undefined, coords: undefined };
 	}
-	const rulerLines = get(RulerLines);
-	const rulerRays = get(RulerRays);
+	const rulers = get(RulersCP);
+	// const rulerLines = get(RulerLines);
+	// const rulerRays = get(RulerRays);
 	// lines and rays in the same array, with a "type" key.
-	const lineTypes = rulerLines
-		.map(geo => ({ type: "line", geo }))
-		.concat(rulerRays.map(geo => ({ type: "ray", geo })));
-	if (!lineTypes.length) {
+	// const lineTypes = rulerLines
+	// 	.map(geo => ({ type: "line", geo }))
+	// 	.concat(rulerRays.map(geo => ({ type: "ray", geo })));
+	if (!rulers.length) {
 		return { index: undefined, line: undefined, coords: snapToPoint(point, false) };
 	}
-	const rulerLinesNearPoints = lineTypes
-		.map(el => nearestPointOnLine(el.geo, point, el.type === "ray" ? clampRay : clampLine));
+	const rulerLinesNearPoints = rulers
+		.map(el => nearestPointOnLine(el.line, point, el.clamp));
 	const distances = rulerLinesNearPoints
 		.map(p => distance2(point, p));
 	let index = 0;
@@ -174,9 +172,9 @@ export const snapToRulerLine = (point) => {
 	}
 	const rulerPoint = rulerLinesNearPoints[index];
 	const snapPoint = snapToPoint(rulerPoint, false);
-	return overlapLinePoint(lineTypes[index].geo, snapPoint)
-		? { index, line: lineTypes[index].geo, coords: snapPoint }
-		: { index, line: lineTypes[index].geo, coords: rulerPoint };
+	return overlapLinePoint(rulers[index].line, snapPoint)
+		? { index, line: rulers[index].line, coords: snapPoint }
+		: { index, line: rulers[index].line, coords: rulerPoint };
 };
 
 // export const snapToPoint = (point, force = false) => {

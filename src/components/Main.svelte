@@ -20,11 +20,13 @@
 	const pressCP = (e) => $PointerEventCP("press", e.detail);
 	const moveCP = (e) => $PointerEventCP("move", e.detail);
 	const releaseCP = (e) => $PointerEventCP("release", e.detail);
+	const exitCP = (e) => $PointerEventCP("exit", e.detail);
 	const scrollCP = (e) => $ScrollEventCP(e.detail);
 
 	const pressFolded = (e) => $PointerEventFolded("press", e.detail);
 	const moveFolded = (e) => $PointerEventFolded("move", e.detail);
 	const releaseFolded = (e) => $PointerEventFolded("release", e.detail);
+	const exitFolded = (e) => $PointerEventFolded("exit", e.detail);
 	const scrollFolded = (e) => $ScrollEventFolded(e.detail);
 
 	const keydown = (e) => $KeyboardEvent("down", e);
@@ -59,10 +61,12 @@
 					{pressCP}
 					{moveCP}
 					{releaseCP}
+					{exitCP}
 					{scrollCP}
 					{pressFolded}
 					{moveFolded}
 					{releaseFolded}
+					{exitFolded}
 					{scrollFolded} />
 			</div>
 			<div class="frames">

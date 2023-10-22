@@ -21,11 +21,13 @@
 	export let pressCP;
 	export let moveCP;
 	export let releaseCP;
+	export let exitCP;
 	export let scrollCP;
 
 	export let pressFolded;
 	export let moveFolded;
 	export let releaseFolded;
+	export let exitFolded;
 	export let scrollFolded;
 
 	const errorMessage = "can't";
@@ -52,6 +54,7 @@
 					on:press={pressCP}
 					on:move={moveCP}
 					on:release={releaseCP}
+					on:exit={exitCP}
 					on:scroll={scrollCP}
 				/>
 			</div>
@@ -70,6 +73,7 @@
 							on:press={pressFolded}
 							on:move={moveFolded}
 							on:release={releaseFolded}
+							on:exit={exitFolded}
 							on:scroll={scrollFolded} />
 					{:else}
 						<ErrorCanvas message={errorMessage} />
@@ -88,6 +92,7 @@
 				on:press={pressCP}
 				on:move={moveCP}
 				on:release={releaseCP}
+				on:exit={exitCP}
 				on:scroll={scrollCP}
 			/>
 		</div>
@@ -106,6 +111,7 @@
 						on:press={pressFolded}
 						on:move={moveFolded}
 						on:release={releaseFolded}
+						on:exit={exitFolded}
 						on:scroll={scrollFolded} />
 				{:else}
 					<ErrorCanvas message={errorMessage} />

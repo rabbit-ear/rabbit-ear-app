@@ -1,16 +1,17 @@
 import { get } from "svelte/store";
 import { distance2 } from "rabbit-ear/math/vector.js";
 import {
+	includeL,
+	includeR,
+	includeS,
+} from "rabbit-ear/math/compare.js";
+import {
 	clampLine,
 	clampRay,
 	clampSegment,
 } from "rabbit-ear/math/line.js";
 import { nearestPointOnLine } from "rabbit-ear/math/nearest.js";
 import { overlapLinePoint } from "rabbit-ear/math/overlap.js";
-import {
-	RulerLines,
-	RulerRays,
-} from "../stores/Ruler.js";
 
 // todo: hex grid, check nearest hex grid point
 const nearestGridPoint = (point, snapRadius) => {
@@ -32,7 +33,7 @@ const nearestGridPoint = (point, snapRadius) => {
  * @returns {object} object with coords {number[]} and snap {boolean}
  */
 export const snapToPointNew = (point, points, snapRadius) => {
-	if (!point) { return { snap: false, coord: undefined }; }
+	if (!point) { return { coord: undefined, snap: false }; }
 	// these points take priority over grid points.
 	const pointsDistance = points.map(p => distance2(p, point));
 	const nearestPointIndex = pointsDistance
@@ -53,33 +54,45 @@ export const snapToPointNew = (point, points, snapRadius) => {
 	// fallback, return the input point.
 	return { coords: [...point], snap: false };
 };
-
-
-
-export const snapToRulerLine = (point) => {
+/**
+ *
+ */
+export const snapToRulerLineNew = (point, points, rulers, snapRadius) => {
 	if (!point) {
-		return { index: undefined, line: undefined, coords: undefined };
+		return { coords: undefined, snap: false };
 	}
-	const rulerLines = get(RulerLines);
-	const rulerRays = get(RulerRays);
-	// lines and rays in the same array, with a "type" key.
-	const lineTypes = rulerLines
-		.map(geo => ({ type: "line", geo }))
-		.concat(rulerRays.map(geo => ({ type: "ray", geo })));
-	if (!lineTypes.length) {
-		return { index: undefined, line: undefined, coords: snapToPoint(point, false) };
+	if (!rulers || !rulers.length) {
+		return { coords: point, snap: false };
 	}
-	const rulerLinesNearPoints = lineTypes
-		.map(el => nearestPointOnLine(el.geo, point, el.type === "ray" ? clampRay : clampLine));
-	const distances = rulerLinesNearPoints
-		.map(p => distance2(point, p));
+	// each entry is an object:
+	// { line: VecLine, clamp: function, domain: function }
+	// const rulers = [
+	// 	rulerLines.map(line => ({ line, clamp: clampLine, domain: includeL })),
+	// 	rulerRays.map(line => ({ line, clamp: clampRay, domain: includeR })),
+	// 	rulerSegments.map(line => ({ line, clamp: clampSegment, domain: includeS })),
+	// ].flat();
+	// for each ruler, a point that is the nearest point on the line
+	const rulersPoint = rulers
+		.map(el => nearestPointOnLine(el.line, point, el.clamp));
+	// for each ruler point, the distance to our input point
+	const distances = rulersPoint.map(p => distance2(point, p));
+	// find the nearest point
 	let index = 0;
 	for (let i = 1; i < distances.length; i += 1) {
 		if (distances[i] < distances[index]) { index = i; }
 	}
-	const rulerPoint = rulerLinesNearPoints[index];
-	const snapPoint = snapToPoint(rulerPoint, false);
-	return overlapLinePoint(lineTypes[index].geo, snapPoint)
-		? { index, line: lineTypes[index].geo, coords: snapPoint }
-		: { index, line: lineTypes[index].geo, coords: rulerPoint };
+	const ruler = rulers[index];
+	const rulerPoint = rulersPoint[index];
+	// even if our goal is simply to snap to a ruler line, there may be a
+	// snap point that lies along the nearest snapping ruler.
+	// it's a snap within a snap behavior which, once you see, UX-wise,
+	// it's a behavior that a user would expect to receive.
+	// Now that we have found the nearest snap line, this is a subset of
+	// snapPoints which overlap this snap line.
+	const collinearSnapPoints = points
+		.filter(p => overlapLinePoint(ruler.line, p, ruler.domain));
+	const snapPoint = snapToPointNew(rulerPoint, collinearSnapPoints, snapRadius);
+	return snapPoint.snap
+		? snapPoint
+		: { coords: rulerPoint, snap: true };
 };

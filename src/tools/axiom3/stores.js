@@ -10,9 +10,7 @@ import {
 	execute,
 	executeCommand,
 } from "../../kernel/execute.js";
-import {
-	RulerLines,
-} from "../../stores/Ruler.js";
+import { RulersCP } from "../../stores/Ruler.js";
 import {
 	SnapPoint,
 	UILines,
@@ -125,7 +123,7 @@ export const reset = () => {
 	Presses.set([]);
 	Releases.set([]);
 	UILines.set([]);
-	RulerLines.set([]);
+	RulersCP.set([]);
 };
 
 let unsub = [];

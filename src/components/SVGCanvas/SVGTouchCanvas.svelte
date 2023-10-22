@@ -30,6 +30,7 @@
 	const mousedown = (e) => dispatch("press", formatMouseEvent(e));
 	const mousemove = (e) => dispatch("move", formatMouseEvent(e));
 	const mouseup = (e) => dispatch("release", formatMouseEvent(e));
+	const mouseleave = (e) => dispatch("exit", formatMouseEvent(e));
 	const wheel = (e) => dispatch("scroll", formatWheelEvent(e));
 </script>
 
@@ -37,6 +38,7 @@
 	on:mousedown={mousedown}
 	on:mousemove={mousemove}
 	on:mouseup={mouseup}
+	on:mouseleave={mouseleave}
 	on:wheel={wheel}
 	{viewBox}
 	{strokeWidth}

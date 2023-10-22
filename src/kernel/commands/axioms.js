@@ -7,11 +7,13 @@ import {
 	axiom6 as coreAxiom6,
 	axiom7 as coreAxiom7,
 } from "rabbit-ear/axioms/axiomsVecLine.js";
+import { clampLine } from "rabbit-ear/math/line.js";
+import { includeL } from "rabbit-ear/math/compare.js";
 // } from "rabbit-ear/graph/axioms.js";
 import { pointsToLine } from "rabbit-ear/math/convert.js";
 import { get } from "svelte/store";
 import { CreasePattern } from "../../stores/Model.js";
-import { RulerLines } from "../../stores/Ruler.js";
+import { RulersCP } from "../../stores/Ruler.js";
 import { UILines } from "../../stores/UI.js";
 
 const edgeToLine = ({ vertices_coords, edges_vertices }, edge) => (
@@ -68,25 +70,39 @@ export const axiom7 = (...args) => (
 );
 
 export const axiom1Rulers = (...args) => (
-	RulerLines.set(axiom1(...args))
+	// RulerLines.set(axiom1(...args))
+	RulersCP.set(axiom1(...args)
+		.map(line => ({ line, clamp: clampLine, domain: includeL })))
 );
 export const axiom2Rulers = (...args) => (
-	RulerLines.set(axiom2(...args))
+	// RulerLines.set(axiom2(...args))
+	RulersCP.set(axiom2(...args)
+		.map(line => ({ line, clamp: clampLine, domain: includeL })))
 );
 export const axiom3Rulers = (...args) => (
-	RulerLines.set(axiom3(...args))
+	// RulerLines.set(axiom3(...args))
+	RulersCP.set(axiom3(...args)
+		.map(line => ({ line, clamp: clampLine, domain: includeL })))
 );
 export const axiom4Rulers = (...args) => (
-	RulerLines.set(axiom4(...args))
+	// RulerLines.set(axiom4(...args))
+	RulersCP.set(axiom4(...args)
+		.map(line => ({ line, clamp: clampLine, domain: includeL })))
 );
 export const axiom5Rulers = (...args) => (
-	RulerLines.set(axiom5(...args))
+	// RulerLines.set(axiom5(...args))
+	RulersCP.set(axiom5(...args)
+		.map(line => ({ line, clamp: clampLine, domain: includeL })))
 );
 export const axiom6Rulers = (...args) => (
-	RulerLines.set(axiom6(...args))
+	// RulerLines.set(axiom6(...args))
+	RulersCP.set(axiom6(...args)
+		.map(line => ({ line, clamp: clampLine, domain: includeL })))
 );
 export const axiom7Rulers = (...args) => (
-	RulerLines.set(axiom7(...args))
+	// RulerLines.set(axiom7(...args))
+	RulersCP.set(axiom7(...args)
+		.map(line => ({ line, clamp: clampLine, domain: includeL })))
 );
 
 export const axiom1Preview = (...args) => (

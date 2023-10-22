@@ -44,7 +44,7 @@ export default pointerEvent;
 // import { get } from "svelte/store";
 // import { executeCommand } from "../../kernel/execute.js";
 // import { Highlight } from "../../stores/Select.js";
-// import { RulerLines } from "../../stores/Ruler.js";
+// import { RulersCP } from "../../stores/Ruler.js";
 // import {
 // 	UIGraph,
 // 	UILines,
@@ -121,9 +121,9 @@ export default pointerEvent;
 // 			executeCommand("addVertex", pressCoords),
 // 			executeCommand("addVertex", snapToRulerLine(point).coords),
 // 		);
-// 		RulerLines.set([]);
+// 		RulersCP.set([]);
 // 		UIGraph.set({});
-// 		RulerLines.set([]);
+// 		RulersCP.set([]);
 // 		Presses.set([]);
 // 		Releases.set([]);
 // 		break;

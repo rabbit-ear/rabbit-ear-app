@@ -7,7 +7,7 @@ import {
 	snapToRulerLine,
 } from "../../js/snap.js";
 import { UIRays } from "../../stores/UI.js";
-import { RulerRays } from "../../stores/Ruler.js";
+import { RulersCP } from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";
 
 export const Move = writable(undefined);
@@ -52,7 +52,7 @@ export const KawasakiRulers = derived(
 	PressVertex,
 	($PressVertex) => $PressVertex !== undefined
 		? executeCommand("kawasakiRulers", $PressVertex)
-		: RulerRays.set([]),
+		: RulersCP.set([]),
 	undefined,
 );
 

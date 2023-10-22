@@ -4,12 +4,12 @@
 		parallel,
 	} from "rabbit-ear/math/vector.js";
 	import {
+		clipLineFuncInLargerViewport,
 		clipLineInLargerViewport,
 		clipRayInLargerViewport,
 	} from "../../js/intersect.js";
 	import {
-		RulerLines,
-		RulerRays,
+		RulersCP,
 	} from "../../stores/Ruler.js";
 	import {
 		UILines,
@@ -24,15 +24,20 @@
 		&& $Tool.name !== "edge"
 		&& $Tool.name !== "folded line"
 
-	$: rulerLineSegments = $RulerLines
-		.map(line => clipLineInLargerViewport(line, viewport))
+	$: rulerSegments = $RulersCP
+		.map(ruler => clipLineFuncInLargerViewport(ruler.line, ruler.domain, viewport))
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 
-	$: rulerRaySegments = $RulerRays
-		.map(ray => clipRayInLargerViewport(ray, viewport))
-		.filter(res => res !== undefined)
-		.filter(res => res.length > 1);
+	// $: rulerLineSegments = $RulerLines
+	// 	.map(line => clipLineInLargerViewport(line, viewport))
+	// 	.filter(res => res !== undefined)
+	// 	.filter(res => res.length > 1);
+
+	// $: rulerRaySegments = $RulerRays
+	// 	.map(ray => clipRayInLargerViewport(ray, viewport))
+	// 	.filter(res => res !== undefined)
+	// 	.filter(res => res.length > 1);
 
 	$: uiLineSegments = $UILines
 		.map(line => clipLineInLargerViewport(line, viewport))
@@ -44,8 +49,13 @@
 		.filter(res => res !== undefined)
 		.filter(res => res.length > 1);
 
-	$: segments = rulerLineSegments
-		.concat(rulerRaySegments)
+	// $: segments = rulerLineSegments
+	// 	.concat(rulerRaySegments)
+	// 	.concat(uiLineSegments)
+	// 	.concat(uiRaySegments)
+	// 	.filter(a => a !== undefined);
+
+	$: segments = rulerSegments
 		.concat(uiLineSegments)
 		.concat(uiRaySegments)
 		.filter(a => a !== undefined);

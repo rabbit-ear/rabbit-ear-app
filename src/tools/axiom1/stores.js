@@ -15,9 +15,7 @@ import {
 	SnapPoint,
 	UILines,
 } from "../../stores/UI.js";
-import {
-	RulerLines,
-} from "../../stores/Ruler.js";
+import { RulersCP } from "../../stores/Ruler.js";
 
 export const Move = writable(undefined);
 export const Drag = writable(undefined);
@@ -138,7 +136,7 @@ export const reset = () => {
 	Presses.set([]);
 	Releases.set([]);
 	UILines.set([]);
-	RulerLines.set([]);
+	RulersCP.set([]);
 };
 
 let unsub = [];

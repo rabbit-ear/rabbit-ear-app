@@ -10,7 +10,7 @@ import { intersectLineLine } from "rabbit-ear/math/intersect.js";
 import { makeEdgesVector } from "rabbit-ear/graph/make.js";
 import { clipLineConvexPolygon } from "rabbit-ear/math/clip.js";
 
-const intersectGraphLineFunc = (graph, line, lineFn = includeL) => {
+export const intersectGraphLineFunc = (graph, line, lineFn = includeL) => {
 	const edgesOrigin = graph.edges_vertices
 		.map(v => graph.vertices_coords[v[0]]);
 	const edgesVector = makeEdgesVector(graph);
@@ -43,7 +43,7 @@ export const intersectGraphSegment = (graph, segment) => (
 // 	return clipLineConvexPolygon(polygon, line, include, lineFn);
 // };
 
-const clipLineFuncInLargerViewport = (line, box, lineFn = includeL) => {
+export const clipLineFuncInLargerViewport = (line, lineFn = includeL, box) => {
 	const [x, y, w, h] = box;
 	const polygon = [
 		[x - (w * 10), y - (h * 10)],
@@ -55,9 +55,9 @@ const clipLineFuncInLargerViewport = (line, box, lineFn = includeL) => {
 };
 
 export const clipLineInLargerViewport = (line, box) => (
-	clipLineFuncInLargerViewport(line, box, includeL)
+	clipLineFuncInLargerViewport(line, includeL, box)
 );
 
 export const clipRayInLargerViewport = (line, box) => (
-	clipLineFuncInLargerViewport(line, box, includeR)
+	clipLineFuncInLargerViewport(line, includeR, box)
 );

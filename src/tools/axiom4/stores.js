@@ -16,7 +16,7 @@ import {
 	UILines,
 	Highlight,
 } from "../../stores/UI.js";
-import { RulerLines } from "../../stores/Ruler.js";
+import { RulersCP } from "../../stores/Ruler.js";
 
 export const Move = writable(undefined);
 export const Presses = writable([]);
@@ -80,7 +80,7 @@ export const reset = () => {
 	Move.set(undefined);
 	Presses.set([]);
 	Releases.set([]);
-	RulerLines.set([]);
+	RulersCP.set([]);
 };
 
 let unsub0;

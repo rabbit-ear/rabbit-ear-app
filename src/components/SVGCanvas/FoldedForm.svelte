@@ -47,6 +47,7 @@
 	on:press
 	on:move
 	on:release
+	on:exit
 	on:scroll>
 	{#if $ShowGrid}
 		<GridLayer {viewport} />

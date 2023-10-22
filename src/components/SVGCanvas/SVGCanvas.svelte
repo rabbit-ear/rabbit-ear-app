@@ -15,6 +15,7 @@
 	on:mousedown
 	on:mousemove
 	on:mouseup
+	on:mouseleave
 	on:wheel
 	on:focus={() => {}}
 	on:blur={() => {}}>

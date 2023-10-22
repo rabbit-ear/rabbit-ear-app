@@ -3,7 +3,6 @@ import {
 	writable,
 	derived,
 } from "svelte/store";
-import { intersectGraphSegment } from "rabbit-ear/graph/intersect.js";
 import {
 	snapToPoint,
 	snapToPointWithInfo,
@@ -11,6 +10,7 @@ import {
 } from "../../js/snap.js";
 import {
 	snapToPointNew,
+	snapToRulerLineNew,
 } from "../../js/snapNew.js";
 import {
 	Keyboard,
@@ -19,13 +19,12 @@ import {
 import {
 	RadialSnapDegrees,
 	RadialSnapOffset,
+	SnapPointsCP,
 	SnapPointsFolded,
+	SnapRadiusCP,
 	SnapRadiusFolded,
 } from "../../stores/Snap.js";
-import {
-	RulerLines,
-	RulerRays,
-} from "../../stores/Ruler.js";
+import { RulersCP } from "../../stores/Ruler.js";
 import {
 	CreasePattern,
 	FoldedForm,
@@ -61,9 +60,9 @@ const CPDragSnap = derived(
 );
 
 export const CPDragCoords = derived(
-	[Keyboard, CPDrag],
-	([$Keyboard, $CPDrag]) => $Keyboard[16] // shift key
-		? snapToRulerLine($CPDrag).coords
+	[Keyboard, CPDrag, SnapPointsCP, RulersCP, SnapRadiusCP],
+	([$Keyboard, $CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => $Keyboard[16] // shift key
+		? snapToRulerLineNew($CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP).coords
 		: snapToPoint($CPDrag),
 	undefined,
 );
@@ -142,8 +141,7 @@ export const ShiftRulers = derived(
 				$RadialSnapOffset,
 			)
 		} else {
-			RulerLines.set([]);
-			RulerRays.set([]);
+			RulersCP.set([]);
 		}
 	},
 	undefined,

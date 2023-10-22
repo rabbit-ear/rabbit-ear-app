@@ -1,9 +1,6 @@
 import { get, writable, derived } from "svelte/store";
 import { assignLists } from "../js/arrays.js";
-import {
-	RulerLines,
-	RulerRays,
-} from "./Ruler.js"
+import { RulersCP } from "./Ruler.js"
 import { ViewportCP } from "./ViewBox.js";
 /**
  * @description a UI touch event, coming from a pointer device, will have some
@@ -124,6 +121,5 @@ export const resetUI = () => {
 	UILines.set([]);
 	UIRays.set([]);
 	UISegment.set([]);
-	RulerLines.set([]);
-	RulerRays.set([]);
+	RulersCP.set([]);
 };

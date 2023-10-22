@@ -4,7 +4,7 @@ import {
 	snapToEdge,
 	snapToRulerLine,
 } from "../../js/snap.js";
-import { RulerLines } from "../../stores/Ruler.js";
+import { RulersCP } from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";
 import {
 	Presses,
@@ -37,7 +37,7 @@ const pointerEventPleat = (eventType, { point }) => {
 		// "press" selecting the first edge
 		// "move" preview the second edge
 		if (eventType === "press") {
-			RulerLines.set([]);
+			RulersCP.set([]);
 			pressEdge = edge;
 		}
 		if (edge !== undefined) { Highlight.addEdges([edge]); }
@@ -58,10 +58,10 @@ const pointerEventPleat = (eventType, { point }) => {
 		if (vertex !== undefined) { Highlight.addVertices([vertex]); }
 		const { index } = snapToRulerLine(point, false);
 		if (index !== undefined) {
-			// console.log("SEetting", get(RulerLines)[index]);
-			UILines.set([get(RulerLines)[index]]);
+			// console.log("SEetting", get(RulersCP)[index]);
+			UILines.set([get(RulersCP)[index]]);
 		}
-		Rulers.set([]);
+		RulersCP.set([]);
 	}
 		break;
 	case 3: {
@@ -69,18 +69,18 @@ const pointerEventPleat = (eventType, { point }) => {
 		if (index !== undefined) {
 			selectedRulerLines[index] = true;
 		}
-		const rulerLines = get(RulerLines);
+		const rulerLines = get(RulersCP);
 		UILines.set(Object.keys(selectedRulerLines)
 			.map(i => rulerLines[i]));
 	}
 		break;
 	case 4: {
-		const rulerLines = get(RulerLines);
+		const rulerLines = get(RulersCP);
 		const lines = Object.keys(selectedRulerLines).map(i => rulerLines[i]);
 		// todo "addLines" instead of one at a time.
 		lines.forEach(line => executeCommand("line", line));
 		// console.log("lines", lines);
-		RulerLines.set([]);
+		RulersCP.set([]);
 		UILines.set([]);
 		Presses.set([]);
 		Releases.set([]);
