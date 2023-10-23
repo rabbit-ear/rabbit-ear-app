@@ -263,3 +263,43 @@ export const finishImport = () => {
 	LoadFOLDFile(get(ImportedFileFOLDPreview), newName);
 	clearImport();
 };
+/**
+ *
+ */
+export const CurrentFrameToSVG = () => {
+	const options = { string: true };
+	return foldToSvg(get(IsolatedFrame), options);
+};
+/**
+ *
+ */
+export const CurrentFrameToPNG = () => {
+	return new Uint8Array([]);
+};
+/**
+ *
+ */
+export const CurrentFrameToJPG = () => {
+	return new Uint8Array([]);
+};
+/**
+ *
+ */
+export const FramesToSVGs = () => {
+	const options = { string: true };
+	return get(IsolatedFrames).map(fold => foldToSvg(fold, options));
+};
+/**
+ *
+ */
+export const FramesToPNGs = () => {
+	return get(IsolatedFrames)
+		.map(fold => new Uint8Array([]));
+};
+/**
+ *
+ */
+export const FramesToJPGs = () => {
+	return get(IsolatedFrames)
+		.map(fold => new Uint8Array([]));
+};

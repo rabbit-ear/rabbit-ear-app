@@ -8,11 +8,13 @@
 		FramesToSVGs,
 		FramesToPNGs,
 		FramesToJPGs,
-		WriteTextFile,
-		WriteTextFiles,
-		WriteBinaryFile,
-		WriteBinaryFiles,
-	} from "../../stores/Convert.js";
+	} from "../../stores/File.js";
+	import {
+		writeTextFile,
+		writeTextFiles,
+		writeBinaryFile,
+		writeBinaryFiles,
+	} from "../../js/file.js";
 
 	let format = "svg";
 	let allFrames = true;
@@ -21,16 +23,16 @@
 	const confirm = () => {
 		if (!allFrames) {
 			switch (format) {
-			case "svg": WriteTextFile(CurrentFrameToSVG(), "svg"); break;
-			case "png": WriteBinaryFile(CurrentFrameToPNG(), "png"); break;
-			case "jpg": WriteBinaryFile(CurrentFrameToJPG(), "jpg"); break;
+			case "svg": writeTextFile(CurrentFrameToSVG(), "svg"); break;
+			case "png": writeBinaryFile(CurrentFrameToPNG(), "png"); break;
+			case "jpg": writeBinaryFile(CurrentFrameToJPG(), "jpg"); break;
 			default: break;
 			}
 		} else {
 			switch (format) {
-			case "svg": WriteTextFiles(FramesToSVGs(), "svg"); break;
-			case "png": WriteBinaryFiles(FramesToPNGs(), "png"); break;
-			case "jpg": WriteBinaryFiles(FramesToJPGs(), "jpg"); break;
+			case "svg": writeTextFiles(FramesToSVGs(), "svg"); break;
+			case "png": writeBinaryFiles(FramesToPNGs(), "png"); break;
+			case "jpg": writeBinaryFiles(FramesToJPGs(), "jpg"); break;
 			default: break;
 			}
 		}

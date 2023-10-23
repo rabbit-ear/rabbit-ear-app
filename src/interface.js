@@ -1,20 +1,16 @@
 import { invoke } from "@tauri-apps/api/tauri";
-import { appWindow } from "@tauri-apps/api/window";
-import {
-	ask,
-	open,
-	save,
-} from "@tauri-apps/api/dialog";
-import {
-	readTextFile,
-	writeTextFile,
-	BaseDirectory,
-} from "@tauri-apps/api/fs";
+import { ask } from "@tauri-apps/api/dialog";
 import { get } from "svelte/store";
 import {
 	execute,
 	executeCommand,
 } from "./kernel/execute.js";
+import {
+	openFile,
+	save,
+	saveAs,
+	importFile,
+} from "./js/file.js";
 import {
 	VerticalUp,
 	ShowGrid,
@@ -33,10 +29,12 @@ import {
 import {
 	FilePath,
 	FileExists,
-	LoadFile,
-	LoadFOLDFile,
 	GetCurrentFOLDFile,
 } from "./stores/File.js";
+
+/**
+ * @description Communicate from Rust to Javascript.
+ */
 
 // bind kernel execution methods to the window,
 // this is how we call Javascript from Tauri/Rust.
@@ -45,10 +43,9 @@ window.executeCommand = executeCommand;
 window.dialog = {};
 window.store = {};
 window.fs = {};
-/**
- * @description Communicate from Rust to Javascript.
- * Rust would like to update a store variable and set it's value.
- */
+
+// Rust would like to update a store variable and set it's value.
+
 window.store.set = (name, value) => {
 	console.log("setting", name, value);
 	switch (name) {
@@ -56,11 +53,10 @@ window.store.set = (name, value) => {
 	default: break;
 	}
 }
-/**
- * @description Communicate from Rust to Javascript.
- * Rust would like to update a store variable, specifically, a boolean store,
- * specifically, toggle the boolean value.
- */
+
+// Rust would like to update a store variable, specifically, a boolean store,
+// specifically, toggle the boolean value.
+
 window.store.toggle = (name) => {
 	let store;
 	switch (name) {
@@ -82,10 +78,9 @@ window.store.toggle = (name) => {
 	invoke("store_boolean_update", { name, value });
 	return value;
 }
-/**
- * @description Communicate from Rust to Javascript.
- * A new file dialog request has been made, open in-app new file dialog.
- */
+
+// Dialogs for creating new files/frames, importing/exporting files
+
 window.dialog.newFile = async () => {
 	// const yes = await ask("Are you sure?", "Tauri");
 	const confirmNewFile = await ask("This will erase all current progress", {
@@ -99,108 +94,25 @@ window.dialog.newFile = async () => {
 		get(DialogNewFrame).showModal();
 	}
 };
-/**
- * @description Communicate from Rust to Javascript.
- * A new file dialog request has been made, open in-app new file dialog.
- */
+
 window.dialog.newFrame = async () => {
 	get(DialogNewFrame).showModal();
 };
-/**
- * @description Communicate from Rust to Javascript.
- * A file open dialog request has been made, open file picker.
- */
-window.fs.open = async () => {
-	// Open a selection dialog for image files
-	const selected = await open({
-		multiple: false,
-		filters: [{
-			name: "FOLD",
-			extensions: ["fold"]
-		}]
-	});
-	if (selected == null) { return; }
-	// todo: hardcoded ignoring more than 1 file
-	const filePath = Array.isArray(selected)
-		? selected[0]
-		: selected;
-	// console.log("filePath", filePath);
-	const contents = await readTextFile(filePath);
-	try {
-		LoadFOLDFile(JSON.parse(contents), filePath);
-	} catch (error) {
-		console.warn(error);
-	}
-};
-/**
- * @description Communicate from Rust to Javascript.
- * A file save dialog request has been made, open file picker to save file.
- */
-window.fs.save = async () => {
-	const filePath = get(FilePath);
-	// if file does not yet exist, trigger "SaveAs"
-	if (!get(FileExists)) {
-		return window.fs.saveAs();
-	}
-	await writeTextFile(filePath, JSON.stringify(GetCurrentFOLDFile()));
-};
-/**
- * @description Communicate from Rust to Javascript.
- * A file save dialog request has been made, open file picker to save file.
- */
-window.fs.saveAs = async () => {
-	const filePath = await save({
-		defaultPath: get(FilePath),
-		filters: [{
-			name: "FOLD",
-			extensions: ["fold"],
-		}]
-	});
-	if (filePath == null) { return; }
-	await writeTextFile(filePath, JSON.stringify(GetCurrentFOLDFile()));
-	FilePath.set(filePath);
-};
-/**
- * @description Communicate from Rust to Javascript.
- * A new file dialog request has been made, open in-app new file dialog.
- */
+
 window.dialog.exportAs = async () => {
 	get(DialogExportAs).showModal();
 };
-/**
- * @description Communicate from Rust to Javascript.
- * A new file dialog request has been made, open in-app new file dialog.
- */
-window.dialog.importFile = async () => {
-	// Open a selection dialog for image files
-	const selected = await open({
-		multiple: false,
-		filters: [{
-			name: "image",
-			extensions: ["svg", "obj", "opx", "cp"],
-		}]
-	});
-	if (selected == null) { return; }
-	// todo: hardcoded ignoring more than 1 file
-	const filePath = Array.isArray(selected)
-		? selected[0]
-		: selected;
-	const contents = await readTextFile(filePath);
-	LoadFile(contents, filePath);
-};
-/**
- * @description Drag and drop to load file. Works with FOLD and import-formats
- */
-appWindow.onFileDropEvent(async (event) => {
-	if (event.payload.type === "hover") {
 
-	} else if (event.payload.type === "drop") {
-		if (!event.payload.paths.length) { return; }
-		// todo: hardcoded ignoring more than 1 file
-		const filePath = event.payload.paths[0];
-		const contents = await readTextFile(filePath);
-		LoadFile(contents, filePath);
-	} else {
-		// File drop cancelled
-	}
-});
+window.dialog.importFile = importFile;
+
+// Various native file system behavior
+
+window.fs.open = openFile;
+
+window.fs.save = () => get(FileExists)
+	? save(JSON.stringify(GetCurrentFOLDFile()), get(FilePath))
+	: saveAs(JSON.stringify(GetCurrentFOLDFile()), get(FilePath));
+
+window.fs.saveAs = () => (
+	saveAs(JSON.stringify(GetCurrentFOLDFile()), get(FilePath))
+);
