@@ -29,6 +29,11 @@ import ear from "rabbit-ear";
 ear.graph.subgraph();
 ```
 
+# List of known issues / idiosyncrasies
+
+Race conditions with multiple derived stores often causing redundant updates to fire. Not noticible, but it's happening. Perhaps we can do with a better store design, perhaps once Svelte 5 comes out, runes/effects can solve this.
+
+
 # General Contribution Tips
 
 ### modularity

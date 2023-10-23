@@ -2,20 +2,11 @@ import {
 	writable,
 } from "svelte/store";
 
-// local storage list
-//
-// {boolean} ShowGrid
-// {boolean} ShowAxes
-// {boolean} ShowIndices
-// {boolean} ShowFlatFoldableIssues
-// {boolean} ShowCodeEditor
-// {boolean} ShowFrames
-// {string} NewEdgeAssignment
-
-// console.log("local storage show frames", localStorage.getItem("ShowFrames"));
-
+export const APP_NAME = "Rabbit Ear";
 /**
  * @description Build Target, either Tauri (false) or Browsers (true).
+ * Update: browser won't build any more it's basically hard-coded
+ * to only build in Tauri now. Someday, let's make web work again.
  */
 export const BuildTargetWeb = false;
 /**

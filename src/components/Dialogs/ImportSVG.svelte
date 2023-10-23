@@ -6,42 +6,45 @@
 	import EdgesLayer from "../SVGCanvas/EdgesLayer.svelte";
 	import SVGColorsList from "./SVGColorsList.svelte";
 	import {
-		ImportFilePreview,
-		ImportFileOptions,
+		ImportedFileFOLDPreview,
+		ImportedFileDefaultOptions,
+		ImportedFileOptions,
 	} from "../../stores/File.js";
 	import { niceNumber } from "../../js/epsilon.js";
 
 	let epsilonSlider = 10;
-	let assignments = {};
 	let boundary = true;
 
-	$: $ImportFileOptions.epsilon = Math.pow(2, epsilonSlider) / 10000;
-	$: previewViewBox = foldToViewBox($ImportFilePreview);
-	$: strokeWidth = $ImportFileOptions.boundingBox
-		&& $ImportFileOptions.boundingBox.span
-		? Math.max($ImportFileOptions.boundingBox.span[0],
-			$ImportFileOptions.boundingBox.span[0]) / 100
-		: 0.01;
-
 	let circles = [];
-	$: circles = ($ImportFilePreview && $ImportFilePreview.vertices_coords
-		? $ImportFilePreview.vertices_coords
-		: []).map(coord => ({ cx: coord[0], cy: coord[1], r: $ImportFileOptions.epsilon }));
+	$: circles = ($ImportedFileFOLDPreview && $ImportedFileFOLDPreview.vertices_coords
+		? $ImportedFileFOLDPreview.vertices_coords
+		: []).map(coord => ({ cx: coord[0], cy: coord[1], r: $ImportedFileOptions.epsilon }));
+	$: previewViewBox = foldToViewBox($ImportedFileFOLDPreview);
+	$: strokeWidth = $ImportedFileOptions.boundingBox
+		&& $ImportedFileOptions.boundingBox.span
+		? Math.max($ImportedFileOptions.boundingBox.span[0],
+			$ImportedFileOptions.boundingBox.span[0]) / 100
+		: 0.01;
+	$: colorCount = $ImportedFileOptions && $ImportedFileOptions.assignments
+		? Object.keys($ImportedFileOptions.assignments).length
+		: 0;
+	$: $ImportedFileOptions.epsilon = Math.pow(2, epsilonSlider) / 10000;
 
 	onMount(() => {
-		epsilonSlider = Math.log2(($ImportFileOptions.suggestedEpsilon) * 10000);
-		assignments = $ImportFileOptions.assignments;
+		epsilonSlider = Math.log2(($ImportedFileDefaultOptions.epsilon) * 10000);
 	});
+
+			// invertVertical={$ImportedFileOptions.invertVertical}
+
 </script>
 
 <h1>Import SVG File</h1>
 
-<div class="svg-preview">
+<div class="svg-preview crease-pattern">
 	<SVGCanvas
 		{strokeWidth}
-		viewBox={previewViewBox}
-		invertVertical={$ImportFileOptions.invertVertical}>
-		<EdgesLayer graph={$ImportFilePreview} {strokeWidth} />
+		viewBox={previewViewBox}>
+		<EdgesLayer graph={$ImportedFileFOLDPreview} {strokeWidth} />
 		<g class="vertices">
 			{#each circles as circle}<circle {...circle} />{/each}
 		</g>
@@ -55,14 +58,14 @@
 			<input
 				type="checkbox"
 				id="checkbox-y-flip"
-				bind:checked={$ImportFileOptions.invertVertical}>
+				bind:checked={$ImportedFileOptions.invertVertical}>
 			<label for="checkbox-y-flip">flip y-axis</label>
 		</div>
 	</div>
 
 	<div slot="1" class="flex-column gap">
-		<h3>{Object.keys(assignments).length} colors found</h3>
-		<SVGColorsList bind:assignments={assignments} />
+		<h3>{colorCount} colors found</h3>
+		<SVGColorsList bind:assignments={$ImportedFileOptions.assignments} />
 	</div>
 
 	<div slot="2" class="flex-column gap">
@@ -87,8 +90,8 @@
 			step="0.01"
 			id="epsilon-slider"
 			bind:value={epsilonSlider}>
-		<p>distance: <span class="number">{niceNumber($ImportFileOptions.epsilon)}</span></p>
-		<p>suggested: <span class="number">{niceNumber($ImportFileOptions.suggestedEpsilon || 0)}</span></p>
+		<p>distance: <span class="number">{niceNumber($ImportedFileOptions.epsilon)}</span></p>
+		<p>suggested: <span class="number">{niceNumber($ImportedFileDefaultOptions.epsilon || 0)}</span></p>
 	</div>
 </Pages>
 

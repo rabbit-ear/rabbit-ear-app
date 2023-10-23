@@ -1,5 +1,5 @@
 <script>
-	import { loadFileDialog } from "../../js/file.js";
+	import { loadFileDialog } from "../../js/browser.js";
 	import { InputFile } from "../../stores/App.js";
 	import template from "./template.js";
 	import MenuList from "./MenuList.svelte";

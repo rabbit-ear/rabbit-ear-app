@@ -5,20 +5,18 @@
 	import ImportOBJ from "./ImportOBJ.svelte";
 	import { DialogImportFile } from "../../stores/App.js";
 	import {
-		ImportFileMetadata,
+		ImportedFile,
 		finishImport,
+		clearImport,
 	} from "../../stores/File.js";
 
 	const cancel = () => $DialogImportFile.close();
 
-	const didClose = () => {
-		ImportFileMetadata.set({});
-	};
+	const didClose = () => clearImport();
 
 	const confirm = () => {
 		finishImport();
 		$DialogImportFile.close();
-		ImportFileMetadata.set({});
 	};
 </script>
 
@@ -26,11 +24,11 @@
 	on:close={didClose}
 	on:cancel={didClose}
 	bind:This={$DialogImportFile}>
-	{#if $ImportFileMetadata && $ImportFileMetadata.extension === "svg"}
+	{#if $ImportedFile && $ImportedFile.extension === "svg"}
 		<ImportSVG />
-	{:else if $ImportFileMetadata && $ImportFileMetadata.extension === "opx"}
+	{:else if $ImportedFile && $ImportedFile.extension === "opx"}
 		<ImportOPX />
-	{:else if $ImportFileMetadata && $ImportFileMetadata.extension === "obj"}
+	{:else if $ImportedFile && $ImportedFile.extension === "obj"}
 		<ImportOBJ />
 	{:else}
 		<p>unknown file type</p>

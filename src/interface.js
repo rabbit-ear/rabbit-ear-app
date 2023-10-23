@@ -31,7 +31,8 @@ import {
 	FoldedStaticOrSimulator,
 } from "./stores/Renderer.js";
 import {
-	FileName,
+	FilePath,
+	FileExists,
 	LoadFile,
 	LoadFOLDFile,
 	GetCurrentFOLDFile,
@@ -114,7 +115,7 @@ window.fs.open = async () => {
 	const selected = await open({
 		multiple: false,
 		filters: [{
-			name: "origami",
+			name: "FOLD",
 			extensions: ["fold"]
 		}]
 	});
@@ -136,9 +137,9 @@ window.fs.open = async () => {
  * A file save dialog request has been made, open file picker to save file.
  */
 window.fs.save = async () => {
-	const filePath = get(FileName);
-	if (filePath == null) {
-		// file does not yet exist. Trigger "SaveAs"
+	const filePath = get(FilePath);
+	// if file does not yet exist, trigger "SaveAs"
+	if (!get(FileExists)) {
 		return window.fs.saveAs();
 	}
 	await writeTextFile(filePath, JSON.stringify(GetCurrentFOLDFile()));
@@ -149,14 +150,15 @@ window.fs.save = async () => {
  */
 window.fs.saveAs = async () => {
 	const filePath = await save({
+		defaultPath: get(FilePath),
 		filters: [{
-			name: "origami",
+			name: "FOLD",
 			extensions: ["fold"],
 		}]
 	});
 	if (filePath == null) { return; }
 	await writeTextFile(filePath, JSON.stringify(GetCurrentFOLDFile()));
-	FileName.set(filePath);
+	FilePath.set(filePath);
 };
 /**
  * @description Communicate from Rust to Javascript.

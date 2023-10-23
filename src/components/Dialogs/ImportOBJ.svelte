@@ -4,8 +4,7 @@
 	import Pages from "./Pages.svelte";
 	import WebGLRender from "../WebGLCanvas/WebGLRender.svelte";
 	import {
-		ImportFilePreview,
-		ImportFileOptions,
+		ImportedFileFOLDPreview,
 	} from "../../stores/File.js";
 
 	$: viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
@@ -14,7 +13,7 @@
 <h1>Import OBJ File</h1>
 
 <div class="webgl-preview">
-	<WebGLRender graph={$ImportFilePreview} {viewMatrix} />
+	<WebGLRender graph={$ImportedFileFOLDPreview} {viewMatrix} />
 </div>
 
 <style>

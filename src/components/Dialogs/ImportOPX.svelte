@@ -5,30 +5,31 @@
 	import SVGCanvas from "../SVGCanvas/SVGCanvas.svelte";
 	import EdgesLayer from "../SVGCanvas/EdgesLayer.svelte";
 	import {
-		ImportFilePreview,
-		ImportFileOptions,
+		ImportedFileFOLDPreview,
+		ImportedFileDefaultOptions,
+		ImportedFileOptions,
 	} from "../../stores/File.js";
 	import { niceNumber } from "../../js/epsilon.js";
 
 	let epsilonSlider = 10;
 	let invertVertical = false;
 
-	$: $ImportFileOptions.epsilon = Math.pow(2, epsilonSlider) / 10000;
+	$: $ImportedFileOptions.epsilon = Math.pow(2, epsilonSlider) / 10000;
 
-	$: previewViewBox = foldToViewBox($ImportFilePreview);
-	$: strokeWidth = $ImportFileOptions.boundingBox
-		&& $ImportFileOptions.boundingBox.span
-		? Math.max($ImportFileOptions.boundingBox.span[0],
-			$ImportFileOptions.boundingBox.span[0]) / 100
+	$: previewViewBox = foldToViewBox($ImportedFileFOLDPreview);
+	$: strokeWidth = $ImportedFileOptions.boundingBox
+		&& $ImportedFileOptions.boundingBox.span
+		? Math.max($ImportedFileOptions.boundingBox.span[0],
+			$ImportedFileOptions.boundingBox.span[0]) / 100
 		: 0.01;
 
 	let circles = [];
-	$: circles = ($ImportFilePreview && $ImportFilePreview.vertices_coords
-		? $ImportFilePreview.vertices_coords
-		: []).map(coord => ({ cx: coord[0], cy: coord[1], r: $ImportFileOptions.epsilon }));
+	$: circles = ($ImportedFileFOLDPreview && $ImportedFileFOLDPreview.vertices_coords
+		? $ImportedFileFOLDPreview.vertices_coords
+		: []).map(coord => ({ cx: coord[0], cy: coord[1], r: $ImportedFileOptions.epsilon }));
 
 	onMount(() => {
-		epsilonSlider = Math.log2(($ImportFileOptions.suggestedEpsilon) * 10000);
+		epsilonSlider = Math.log2(($ImportedFileDefaultOptions.epsilon) * 10000);
 	});
 </script>
 
@@ -38,8 +39,8 @@
 	<SVGCanvas
 		{strokeWidth}
 		viewBox={previewViewBox}
-		invertVertical={$ImportFileOptions.invertVertical}>
-		<EdgesLayer graph={$ImportFilePreview} {strokeWidth} />
+		invertVertical={$ImportedFileOptions.invertVertical}>
+		<EdgesLayer graph={$ImportedFileFOLDPreview} {strokeWidth} />
 		<g class="vertices">
 			{#each circles as circle}<circle {...circle} />{/each}
 		</g>
@@ -49,7 +50,7 @@
 <Pages names={["canvas", "epsilon"]}>
 	<div slot="0" class="flex-column gap">
 		<h3>canvas</h3>
-		<!-- <p>{$ImportFileOptions.boundingBox.span
+		<!-- <p>{$ImportedFileOptions.boundingBox.span
 			.slice(0, 2)
 			.map(n => n.toFixed(3))
 			.join(" × ")}</p> -->
@@ -57,7 +58,7 @@
 			<input
 				type="checkbox"
 				id="checkbox-y-flip"
-				bind:checked={$ImportFileOptions.invertVertical}>
+				bind:checked={$ImportedFileOptions.invertVertical}>
 			<label for="checkbox-y-flip">flip y-axis</label>
 		</div>
 	</div>
@@ -72,8 +73,8 @@
 			step="0.01"
 			id="epsilon-slider"
 			bind:value={epsilonSlider}>
-		<p>distance: <span class="number">{niceNumber($ImportFileOptions.epsilon)}</span></p>
-		<p>suggested: <span class="number">{niceNumber($ImportFileOptions.suggestedEpsilon || 0)}</span></p>
+		<p>distance: <span class="number">{niceNumber($ImportedFileOptions.epsilon)}</span></p>
+		<p>suggested: <span class="number">{niceNumber($ImportedFileDefaultOptions.epsilon || 0)}</span></p>
 	</div>
 </Pages>
 

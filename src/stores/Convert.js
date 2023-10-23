@@ -14,6 +14,7 @@ import {
 } from "@tauri-apps/api/dialog";
 import {
 	getFilenameParts,
+	makeNumberedFilenames,
 } from "../js/file.js";
 import {
 	readTextFile,
@@ -21,12 +22,6 @@ import {
 	writeBinaryFile,
 	BaseDirectory,
 } from "@tauri-apps/api/fs";
-
-const makeNumberedFilenames = (count, noExtension, extension) => Array
-	.from(Array(count))
-	.map((_, i) => `0000${i}`)
-	.map(str => str.slice(str.length - 4, str.length))
-	.map(n => `${noExtension}-${n}.${extension}`);
 /**
  *
  */

@@ -16,7 +16,8 @@ new:
 
 - [ ] ability to adjust epsilon app-wide
 - [ ] modify CP (scale, transform), zoom doesn't work.
-- [ ] need new draw tools: rect, circle, etc...
+- [x] new tool: rect
+- [ ] new tool: circle arc
 - [ ] file_ metadata made it into a frame. caused issues when saving
 
 high priority:
