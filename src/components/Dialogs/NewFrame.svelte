@@ -4,11 +4,14 @@
 		rectangle,
 		polygon,
 		fish,
+		frog,
 		bird,
+		base1,
+		windmill,
 	} from "rabbit-ear/fold/bases.js";
-	import base1 from "../../assets/base1.fold?raw";
+	import populate from "rabbit-ear/graph/populate.js";
 	import base2 from "../../assets/base2.fold?raw";
-	import windmill from "../../assets/windmill.fold?raw";
+	// import windmill from "../../assets/windmill.fold?raw";
 	import Dialog from "./Dialog.svelte";
 	import SVGCanvas from "../SVGCanvas/SVGCanvas.svelte";
 	import FacesLayer from "../SVGCanvas/FacesLayer.svelte";
@@ -30,93 +33,78 @@
 	let rectangleHeight = 1;
 	let polygonSides = 6;
 
+	$: invertVertical = $VerticalUp;
+	$: canDuplicate = $Frames.length > 0;
+	$: graphSquare = square();
+	$: graphRectangle = rectangle(rectangleWidth, rectangleHeight);
+	$: graphPolygon = polygon(polygonSides);
+	$: graphCurrentFrame = $CreasePattern ? $CreasePattern : ({});
+	$: graphCurrentFrameViewport = getFOLDViewport(graphCurrentFrame, invertVertical);
+	$: graphCurrentFrameViewBox = graphCurrentFrameViewport.join(" ");
+	$: currentFrameStrokeWidth = graphCurrentFrameViewport
+		? 0.01 * Math.max(graphCurrentFrameViewport[2], graphCurrentFrameViewport[3])
+		: 0.01;
+
+	// todo: maybe we can include strokeWidth calculation in the
+	// crease pattern buttons. will be safer in the future.
+
 	const chooseFOLD = (FOLD) => {
 		executeCommand("appendFrame", FOLD);
 		panel = "";
 		$DialogNewFrame.close();
 	};
 
-	const newFrameDidPress = (shape) => {
-		switch (shape) {
-		case "empty":
-			executeCommand("appendFrame", {});
-			break;
-		case "duplicate":
-			executeCommand("duplicateActiveFrame");
-			break;
-		case "unit-square":
-			executeCommand("appendFrame", square());
-			break;
-		case "square":
-			executeCommand("appendFrame", square(squareSize));
-			break;
-		case "rectangle":
-			executeCommand("appendFrame", rectangle(rectangleWidth, rectangleHeight));
-			break;
-		case "regularPolygon":
-			executeCommand("appendFrame", polygon(polygonSides));
-			break;
-		}
+	const duplicate = () => {
+		executeCommand("duplicateActiveFrame");
 		panel = "";
 		$DialogNewFrame.close();
-	};
+	};			
 
-	const newEmpty = (e) => newFrameDidPress("empty");
-	const duplicate = (e) => newFrameDidPress("duplicate");
-	const newSquare = (e) => newFrameDidPress("unit-square");
-	const newNxNSquare = (e) => newFrameDidPress("square");
-	const newRectangle = (e) => newFrameDidPress("rectangle");
-	const newRegularPolygon = (e) => newFrameDidPress("regularPolygon");
+	let patternsRow1 = [];
+	$: patternsRow1 = [
+		[{}, "empty", () => chooseFOLD({})],
+		[graphSquare, "square", () => chooseFOLD(square())],
+		[graphSquare, "NxN square", () => panel = "nxnSquare"],
+		[graphRectangle, "rectangle", () => panel = "rectangle"],
+		[graphPolygon, "regular polygon", () => panel = "polygon"],
+	].map(([graph, name, onclick]) => ({ graph, name, onclick }));
+
+	const patternsRow2 = [
+		fish(),
+		bird(),
+		base1(),
+		frog(),
+		// JSON.parse(windmill),
+		windmill(),
+		populate(JSON.parse(base2)),
+	].map(graph => ({ graph, onclick: () => chooseFOLD(graph) }));
 
 	const subpanelConfirm = () => {
 		switch (panel) {
-			case "nxnSquare": return newFrameDidPress("square");
-			case "rectangle": return newFrameDidPress("rectangle");
-			case "polygon": return newFrameDidPress("regularPolygon");
-			default: return;
+			case "nxnSquare":
+				return chooseFOLD(square(squareSize));
+			case "rectangle":
+				return chooseFOLD(rectangle(rectangleWidth, rectangleHeight));
+			case "polygon":
+				return chooseFOLD(polygon(polygonSides));
+			default: break;
 		}
-	}
-
-	const bases = [
-		fish(),
-		bird(),
-		JSON.parse(base1),
-		JSON.parse(windmill),
-		JSON.parse(base2),
-	];
-
-	const patterns = bases.map(graph => ({
-		graph,
-		onclick: () => chooseFOLD(graph)
-	}));
-
-	$: invertVertical = $VerticalUp;
-
-	$: graphSquare = square();
-	$: graphSquareViewBox = getFOLDViewport(graphSquare, invertVertical).join(" ");
-
-	$: graphRectangle = rectangle(rectangleWidth, rectangleHeight);
-	$: graphRectangleViewBox = getFOLDViewport(graphRectangle, invertVertical).join(" ");
-
-	$: graphPolygon = polygon(polygonSides);
-	$: graphPolygonViewBox = getFOLDViewport(graphPolygon, invertVertical).join(" ");
-
-	$: canDuplicate = $Frames.length > 0;
-
-	$: graphCurrentFrame = $CreasePattern ? $CreasePattern : ({});
-	$: graphCurrentFrameViewBox = getFOLDViewport(graphCurrentFrame, invertVertical).join(" ");
+	};
 </script>
 
 <Dialog bind:This={$DialogNewFrame}>
 	<h1>New Frame</h1>
 	<div>
+
 		{#if canDuplicate}
 			<div class="flex-row gap">
 				<div class="flex-column">
 					<button class="svg-button crease-pattern" on:click={duplicate}>
 						<SVGCanvas viewBox={graphCurrentFrameViewBox} {invertVertical}>
 							<FacesLayer graph={graphCurrentFrame} />
-							<EdgesLayer graph={graphCurrentFrame} />
+							<EdgesLayer
+								graph={graphCurrentFrame}
+								strokeWidth={currentFrameStrokeWidth} />
 						</SVGCanvas>
 					</button>
 					<p>duplicate current frame</p>
@@ -125,54 +113,25 @@
 		{/if}
 
 		<div class="flex-row gap">
-			<div class="flex-column">
-				<button class="svg-button crease-pattern" on:click={newEmpty} />
-				<p>empty</p>
-			</div>
-
-			<div class="flex-column">
-				<button class="svg-button crease-pattern" on:click={newSquare}>
-					<SVGCanvas viewBox={graphSquareViewBox} {invertVertical}>
-						<FacesLayer graph={graphSquare} />
-						<EdgesLayer graph={graphSquare} />
-					</SVGCanvas>
-				</button>
-				<p>square</p>
-			</div>
-
-			<div class="flex-column">
-				<button class="svg-button crease-pattern" on:click={() => panel = "nxnSquare"}>
-					<SVGCanvas viewBox={graphSquareViewBox} {invertVertical}>
-						<FacesLayer graph={graphSquare} />
-						<EdgesLayer graph={graphSquare} />
-					</SVGCanvas>
-				</button>
-				<p>NxN square</p>
-			</div>
-
-			<div class="flex-column">
-				<button class="svg-button crease-pattern" on:click={() => panel = "rectangle"}>
-					<SVGCanvas viewBox={graphRectangleViewBox} {invertVertical}>
-						<FacesLayer graph={graphRectangle} />
-						<EdgesLayer graph={graphRectangle} />
-					</SVGCanvas>
-				</button>
-				<p>rectangle</p>
-			</div>
-
-			<div class="flex-column">
-				<button class="svg-button crease-pattern" on:click={() => panel = "polygon"}>
-					<SVGCanvas viewBox={graphPolygonViewBox} {invertVertical}>
-						<FacesLayer graph={graphPolygon} />
-						<EdgesLayer graph={graphPolygon} />
-					</SVGCanvas>
-				</button>
-				<p>regular polygon</p>
-			</div>
+			{#each patternsRow1 as pattern}
+				<div class="flex-column">
+					<button class="svg-button crease-pattern" on:click={pattern.onclick}>
+						<SVGCanvas
+							viewBox={getFOLDViewport(pattern.graph, invertVertical).join(" ")}
+							{invertVertical}>
+							<FacesLayer graph={pattern.graph} />
+							<EdgesLayer graph={pattern.graph} />
+						</SVGCanvas>
+					</button>
+					{#if pattern.name}
+						<p>{pattern.name}</p>
+					{/if}
+				</div>
+			{/each}
 		</div>
 
 		<div class="flex-row gap">
-			{#each patterns as pattern}
+			{#each patternsRow2 as pattern}
 				<div class="flex-column">
 					<button class="svg-button crease-pattern" on:click={pattern.onclick}>
 						<SVGCanvas
@@ -236,7 +195,6 @@
 			{#if panel !== ""}
 				<button class="text-button" on:click={subpanelConfirm}>Confirm</button>
 			{/if}
-
 		</div>
 
 	</div>

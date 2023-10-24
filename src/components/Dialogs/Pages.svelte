@@ -3,6 +3,11 @@
 	export let names = [];
 </script>
 
+<!--
+can't dynamically instantiate Svelte slots with dynamic names,
+so, if you need more pages, hope you remember to add them here!
+-->
+
 <div class="body">
 	{#if index === 0}
 		<slot name="0" />
@@ -58,6 +63,10 @@
 	}
 	button[highlighted=true] {
 		color: var(--text);
+	}
+	hr {
+		width: 100%;
+		margin: 1rem 0;
 	}
 	.tab-bar {
 		display: flex;

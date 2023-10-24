@@ -20,17 +20,6 @@ const minLineCount = 8;
  */
 const maxLineCount = 300;
 /**
- * currently not used
- */
-// export const silentMethods = {
-// 	setTool: true,
-// 	resetTool: true,
-// 	highlight: true,
-// 	pleatPreview: true,
-// 	foldedLinePreview: true,
-// 	kawasakiRulerPreviews: true,
-// };
-/**
  * @description When a history is appended to the command history,
  * in the case that the new history item is the exact same command
  * as the most recent history item, then the terminal history is capable
@@ -49,6 +38,9 @@ const collapseMethods = {
 	foldedLinePreview: true,
 	kawasakiRulerPreviews: true,
 };
+/**
+ *
+ */
 const filterCollapsible = (commands = []) => commands
 	.filter(name => collapseMethods[name]);
 /**

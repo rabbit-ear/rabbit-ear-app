@@ -22,6 +22,7 @@ new:
 
 high priority:
 
+- [ ] in progress tool leaving canvas, reset, causing issues with further ui input.
 - [ ] "There are too many active WebGL contexts on this page, the oldest context will be lost."
 - [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
 - [ ] "save as" after saving to a Desktop document, weird directory invalid error

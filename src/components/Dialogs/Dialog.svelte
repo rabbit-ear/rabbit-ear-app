@@ -11,7 +11,7 @@
 
 <style>
 	dialog {
-		padding: 0;
+		padding: 1rem;
 		background-color: #282222ee;
 		border: 1px solid var(--dim);
 		border-radius: 1rem;
@@ -19,8 +19,5 @@
 	}
 	dialog::backdrop {
 		background-color: #0004;
-	}
-	dialog > :global(*) {
-		margin: 1rem;
 	}
 </style>

@@ -1,3 +1,4 @@
+import { square } from "rabbit-ear/fold/bases.js";
 import objToFold from "rabbit-ear/convert/objToFold/index.js";
 import opxToFold from "rabbit-ear/convert/opxToFold/index.js";
 import svgToFold from "rabbit-ear/convert/svgToFold/index.js";
@@ -24,8 +25,9 @@ import {
 	APP_NAME,
 	DialogImportFile,
 } from "./App.js";
-
-// import { invoke } from "@tauri-apps/api/tauri";
+/**
+ * @description the default file name for a new file
+ */
 const UNTITLED_FILE = "untitled.fold";
 /**
  * @description The currently opened filename as a full path, including
@@ -33,6 +35,14 @@ const UNTITLED_FILE = "untitled.fold";
  * @value {string}
  */
 export const FilePath = writable(UNTITLED_FILE);
+
+export const OnBootFOLD = writable(
+	localStorage.getItem("OnBootFOLD") || JSON.stringify(square()),
+);
+
+// todo: top level subscribe has no unsubscribe call.
+OnBootFOLD.subscribe(value => localStorage.setItem("OnBootFOLD", value));
+
 /**
  * @description Does "FilePath" point to an existing file?
  * For example, if so, "save" will work, otherwise it defers to "save as".
@@ -124,7 +134,7 @@ export const ImportedFileDefaultOptions = derived(
 			case "fold": break;
 			case "obj": break;
 			case "opx":
-				opxFold = opxToFold($ImportedFile.contents);
+				const opxFold = opxToFold($ImportedFile.contents);
 				options = {
 					epsilon: shortestEdgeLength(opxFold) / 24,
 					boundingBox: boundingBox(opxFold),
@@ -143,7 +153,9 @@ export const ImportedFileDefaultOptions = derived(
 				break;
 			default: break;
 			}
-		} catch (error) {}
+		} catch (error) {
+			// todo: if the file causes an error, we need to report it.
+		}
 		ImportedFileOptions.set(structuredClone(options));
 		return options;
 	},
@@ -256,9 +268,9 @@ export const clearImport = () => {
  */
 export const finishImport = () => {
 	const { filename, name, extension } = get(ImportedFile);
-	console.log("filename", filename)
-	console.log("name", name)
-	console.log("extension", extension)
+	// console.log("filename", filename)
+	// console.log("name", name)
+	// console.log("extension", extension)
 	const newName = name && name !== "" ? `${name}.fold` : undefined
 	LoadFOLDFile(get(ImportedFileFOLDPreview), newName);
 	clearImport();

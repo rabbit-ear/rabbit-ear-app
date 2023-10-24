@@ -31,15 +31,17 @@
 	onMount(() => {
 		epsilonSlider = Math.log2(($ImportedFileDefaultOptions.epsilon) * 10000);
 	});
+
+			// invertVertical={$ImportedFileOptions.invertVertical}
+
 </script>
 
 <h1>Import OPX File</h1>
 
-<div class="svg-preview">
+<div class="svg-preview crease-pattern">
 	<SVGCanvas
 		{strokeWidth}
-		viewBox={previewViewBox}
-		invertVertical={$ImportedFileOptions.invertVertical}>
+		viewBox={previewViewBox}>
 		<EdgesLayer graph={$ImportedFileFOLDPreview} {strokeWidth} />
 		<g class="vertices">
 			{#each circles as circle}<circle {...circle} />{/each}

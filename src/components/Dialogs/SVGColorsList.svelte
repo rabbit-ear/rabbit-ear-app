@@ -31,7 +31,7 @@
 <style>
 	.container {
 		max-height: 10rem;
-		overflow-y: scroll;
+		overflow-y: auto;
 		margin: auto;
 	}
 	span {

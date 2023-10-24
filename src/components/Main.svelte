@@ -7,7 +7,6 @@
 	import Panels from "./Panels.svelte";
 	import Frames from "./Frames.svelte";
 	import Dialogs from "./Dialogs.svelte";
-	import FileManager from "./FileManager.svelte";
 	// import DragAndDrop from "./DragAndDrop.svelte";
 	import { ShowMenu } from "../stores/App.js";
 	import { KeyboardEvent } from "../stores/KeyboardEvents.js";
@@ -17,6 +16,10 @@
 		ScrollEventCP,
 		ScrollEventFolded,
 	} from "../stores/TouchEvents.js";
+	import {
+		OnBootFOLD,
+		LoadFOLDFile,
+	} from "../stores/File.js";
 
 	const pressCP = (e) => $PointerEventCP("press", e.detail);
 	const moveCP = (e) => $PointerEventCP("move", e.detail);
@@ -33,12 +36,18 @@
 	const keydown = (e) => $KeyboardEvent("down", e);
 	const keyup = (e) => $KeyboardEvent("up", e);
 
-	// 
+	// the toolbar's scrollbar will cover up the buttons, flexbox doesn't
+	// give space to account for the scrollbar, we have to create a listener
+	// and manually add the padding by setting a css variable.
 	let divToolbar;
 	let toolbarScrollbarWidth = 0;
 	$: document.documentElement.style.setProperty(
 		"--toolbar-scrollbar-width", `${toolbarScrollbarWidth}px`)
 	onMount(() => {
+		// on initial app load, load the default file
+		LoadFOLDFile($OnBootFOLD);
+
+		// toolbar scrollbar stuff
 		const resizeObserver = new ResizeObserver(entries => {
 			setTimeout(() => {
 				toolbarScrollbarWidth = divToolbar.offsetWidth - divToolbar.clientWidth;
@@ -55,7 +64,6 @@
 />
 
 <Dialogs />
-<FileManager />
 <!-- <DragAndDrop /> -->
 
 <main class="vertical">
