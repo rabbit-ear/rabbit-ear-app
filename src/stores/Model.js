@@ -34,6 +34,7 @@ import {
 } from "./ViewBox.js";
 import { VerticalUp } from "./App.js";
 import { Selection } from "./Select.js";
+import { CommandHistory } from "./History.js";
 
 // most of the data stores in this document are essentially the
 // deconstructed constituent parts of the FOLD file.
@@ -114,7 +115,7 @@ export const IsolatedFrames = derived(
  */
 export const IsolatedFrame = derived(
 	[IsolatedFrames, FrameIndex],
-	([$IsolatedFrames, $FrameIndex]) => $IsolatedFrames[$FrameIndex],
+	([$IsolatedFrames, $FrameIndex]) => $IsolatedFrames[$FrameIndex] || {},
 	{},
 );
 /**
@@ -175,10 +176,12 @@ VerticalUp.subscribe(($VerticalUp) => {
  */
 export const FrameEdgesAreFlat = derived(
 	IsolatedFrame,
-	// ($IsolatedFrame) => $IsolatedFrame ? edgesFoldAngleAreAllFlat($IsolatedFrame) : true,
 	($IsolatedFrame) => {
-		// console.log("Model: FrameEdgesAreFlat");
-		return $IsolatedFrame ? edgesFoldAngleAreAllFlat($IsolatedFrame) : true;
+		try {
+			return $IsolatedFrame
+				? edgesFoldAngleAreAllFlat($IsolatedFrame || {})
+				: true;
+		} catch (error) { console.warn("FrameEdgesAreFlat", error); }
 	},
 	true,
 );
@@ -278,6 +281,7 @@ export const ComputedFoldedCoords = derived(
 	([$CreasePattern, $FrameEdgesAreFlat, $FoldedRootFace]) => {
 		// if source frame is not a crease pattern, we can't fold its vertices.
 		try {
+			// console.log("Model: ComputedFoldedCoords");
 			// if all edges_foldAngle are flat, makeVerticesCoordsFlatFolded instead
 			if ($CreasePattern
 				&& $CreasePattern.vertices_coords
@@ -302,6 +306,7 @@ export const ComputedFoldedCoords = derived(
 export const FoldedForm = derived(
 	[FrameIsCreasePattern, IsolatedFrame, ComputedFoldedCoords, VerticalUp],
 	([$FrameIsCreasePattern, $IsolatedFrame, $ComputedFoldedCoords, $VerticalUp]) => {
+		// console.log("Model: FoldedForm");
 		// if the frame is a folded form, return the frame itself.
 		// otherwise, compute the folded form from the crease pattern.
 		const foldedForm = !$FrameIsCreasePattern
@@ -324,6 +329,7 @@ export const FoldedFormPlanar = derived(
 	[FoldedForm, FrameEdgesAreFlat],
 	([$FoldedForm, $FrameEdgesAreFlat]) => {
 		try {
+			// console.log("Model: FoldedFormPlanar");
 			return $FrameEdgesAreFlat ? planarize($FoldedForm) : {};
 		} catch (error) {}
 		return {};
@@ -346,6 +352,7 @@ export const LayerOrderKnown = derived(
 export const Faces2DDrawOrder = derived(
 	[FoldedForm, FoldedRootFace, FrameEdgesAreFlat],
 	([$FoldedForm, $FoldedRootFace, $FrameEdgesAreFlat]) => {
+		// console.log("Model: Faces2DDrawOrder");
 		if ($FoldedForm
 			&& $FoldedForm.vertices_coords
 			&& $FoldedForm.faces_vertices
@@ -479,6 +486,7 @@ export const SetNewModel = (FOLD) => {
 	FrameIndex.set(0);
 	FileMetadata.set(getFileMetadata(FOLD));
 	Frames.set(frames);
+	CommandHistory.set([]);
 	CameraMatrixCP.reset();
 	CameraMatrixFolded.reset();
 };

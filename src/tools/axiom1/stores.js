@@ -13,7 +13,7 @@ import {
 } from "../../kernel/execute.js";
 import {
 	SnapPoint,
-	UILines,
+	GuideLinesCP,
 } from "../../stores/UI.js";
 import { RulersCP } from "../../stores/Ruler.js";
 
@@ -99,7 +99,7 @@ export const AxiomPreview = derived(
 			const point1 = $Coords0.join(", ");
 			const point2 = $DragCoords.join(", ");
 			const args = `[${point1}], [${point2}]`;
-			execute(`setUILines(axiom1(${args}))`);
+			execute(`setGuideLinesCP(axiom1(${args}))`);
 		}
 	},
 	undefined,
@@ -112,7 +112,7 @@ export const AxiomRulers = derived(
 			const point1 = $Coords0.join(", ");
 			const point2 = $Coords1.join(", ");
 			const args = `[${point1}], [${point2}]`;
-			UILines.set([]);
+			GuideLinesCP.set([]);
 			execute(`setRulersCP(axiom1(${args}))`);
 		}
 	},
@@ -135,7 +135,7 @@ export const reset = () => {
 	Drag.set(undefined);
 	Presses.set([]);
 	Releases.set([]);
-	UILines.set([]);
+	GuideLinesCP.set([]);
 	RulersCP.set([]);
 };
 

@@ -22,12 +22,14 @@ new:
 
 high priority:
 
+- [ ] "There are too many active WebGL contexts on this page, the oldest context will be lost."
 - [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
+- [ ] "save as" after saving to a Desktop document, weird directory invalid error
 - [ ] simulator "reset", or better "reset zoom" should also reset it's camera
 - [ ] webgl perspective zoom broken.
+- [ ] !!! layer order solved - change assignment - layer order needs to be deleted
 - [ ] layer order - report number of face-pairs, auto solve if number is low
 - [ ] layer order - report multiple solutions, somehow allow them to toggle it.
-- [ ] layer order solved - change assignment - layer order needs to be deleted
 - [ ] right mouse click changes to camera to pan around.
 - [ ] foldedLine tool should re-assign existing creases that lay along the path.
 - [ ] rabbit ear tool. except make it the straight skeleton. convex only.
@@ -43,6 +45,7 @@ high priority:
 
 low priority:
 
+- [x] if mouse device, toolbar scrollbar covers up buttons
 - [ ] axioms 4-7 could be coded better
 - [ ] copy/paste in the app menu doesn't make UI sense
 - [ ] menu boolean, checkmark reflecting state (Show/Hide)
@@ -52,6 +55,7 @@ low priority:
 - [ ] when hovering over folded form, dim actions which cannot be used on it.
 - [ ] when Svelte 5 comes out, replace GraphUpdate with an effect.
 - [ ] snap to SQRT2 points
+- [ ] bug: many different sized frames, one empty, delete it, auto switches to hexagon frame but does not resize viewport, it does if you press the zoom but not automatically
 
 unknown:
 

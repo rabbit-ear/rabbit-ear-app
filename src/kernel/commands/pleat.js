@@ -4,7 +4,7 @@ import { RulersCP } from "../../stores/Ruler.js";
 import { pleat as fnPleat } from "rabbit-ear/graph/pleat.js";
 import { clampLine } from "rabbit-ear/math/line.js";
 import { includeL } from "rabbit-ear/math/compare.js";
-import { UILines } from "../../stores/UI.js";
+import { GuideLinesCP } from "../../stores/UI.js";
 
 export const doPleat = (graph, edgeA, edgeB, count) => {
 	if (edgeA === undefined || edgeB === undefined) { return []; }

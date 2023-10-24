@@ -1,5 +1,4 @@
 import * as addComponents from "./addComponents.js";
-import * as app from "./app.js";
 import * as assignment from "./assignment.js";
 import * as axioms from "./axioms.js";
 import * as boundary from "./boundary.js";
@@ -22,7 +21,6 @@ import * as vertices from "./vertices.js";
 
 export default {
 	...addComponents,
-	...app,
 	...assignment,
 	...axioms,
 	...boundary,

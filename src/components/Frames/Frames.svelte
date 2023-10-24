@@ -38,6 +38,7 @@
 	.frames {
 		width: 100%;
 		height: 100%;
+		overflow-y: hidden;
 		overflow-x: auto;
 		border-top: 2px solid var(--background-2);
 		background-color: var(--background-1);

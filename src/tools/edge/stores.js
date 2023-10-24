@@ -23,12 +23,12 @@ import {
 	RulersFolded,
 	RadialRays,
 } from "../../stores/Ruler.js";
-import {
-	CreasePattern,
-	FoldedForm,
-	UpdateFrame,
-} from "../../stores/Model.js";
 import { executeCommand } from "../../kernel/execute.js";
+
+// bug:
+// hold shift draw a segment don't release shift after finishing,
+// rulers are still originating from previous segment.
+// new segment rulers don't move to new origin
 
 export const CPMove = writable(undefined);
 export const CPDrag = writable(undefined);

@@ -22,7 +22,9 @@ const nearestGridPoint = (point, snapRadius) => {
  * @returns {object} object with coords {number[]} and snap {boolean}
  */
 export const snapToPointNew = (point, points, snapRadius) => {
+	// console.log("snapToPointNew", point, points, snapRadius);
 	if (!point) { return { coord: undefined, snap: false }; }
+	if (!points || !points.length) { return { coord: point, snap: false }; }
 	// these points take priority over grid points.
 	const pointsDistance = points.map(p => distance2(p, point));
 	const nearestPointIndex = pointsDistance
@@ -50,6 +52,7 @@ export const snapToPointNew = (point, points, snapRadius) => {
  * @param {number} snapRadius
  */
 export const snapToRulerLineNew = (point, points, rulers, snapRadius) => {
+	// console.log("snapToRulerLineNew", point, points, rulers, snapRadius);
 	if (!point) {
 		return { coords: undefined, snap: false };
 	}

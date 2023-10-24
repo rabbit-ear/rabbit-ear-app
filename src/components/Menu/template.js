@@ -13,7 +13,6 @@ import {
 	ShowFrames,
 	ShowIndices,
 	ShowFlatFoldableIssues,
-	DialogNewFile,
 	InputFile,
 } from "../../stores/App.js";
 /**
@@ -25,7 +24,7 @@ export default [
 		submenu: [
 			{
 				label: "new",
-				click: () => get(DialogNewFile).showModal(),
+				// click: () => get(DialogNewFile).showModal(),
 			},
 			{
 				label: "open",

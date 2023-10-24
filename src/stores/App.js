@@ -50,7 +50,6 @@ export const NewEdgeAssignment = writable(
 /**
  * @description DOM element references.
  */
-export const DialogNewFile = writable(undefined);
 export const DialogNewFrame = writable(undefined);
 export const DialogImportFile = writable(undefined);
 export const DialogExportAs = writable(undefined);

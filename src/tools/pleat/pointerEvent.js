@@ -13,12 +13,15 @@ import {
 	PleatCount,
 } from "./stores.js";
 import {
-	UILines,
+	GuideLinesCP,
 	Highlight,
 } from "../../stores/UI.js";
 
 let pressEdge;
 let selectedRulerLines = {};
+
+// note: GuideLinesCP this doesn't work anymore.
+// the setters don't work for what the variable is expecting
 
 const pointerEventPleat = (eventType, { point }) => {
 	switch (eventType) {
@@ -42,7 +45,7 @@ const pointerEventPleat = (eventType, { point }) => {
 		}
 		if (edge !== undefined) { Highlight.addEdges([edge]); }
 		if (pressEdge !== undefined) { Highlight.addEdges([pressEdge]); }
-		UILines.set([]);
+		GuideLinesCP.set([]);
 		executeCommand("pleatPreview", pressEdge, edge, get(PleatCount));
 		break;
 	case 2: {
@@ -51,7 +54,7 @@ const pointerEventPleat = (eventType, { point }) => {
 		// "hover" preview first edge point
 		// RulerPreviews.set([]);
 		if (eventType === "release") {
-			UILines.set([]);
+			GuideLinesCP.set([]);
 			executeCommand("pleat", pressEdge, edge, get(PleatCount));
 			pressEdge = undefined;
 		}
@@ -59,7 +62,7 @@ const pointerEventPleat = (eventType, { point }) => {
 		const { index } = snapToRulerLine(point, false);
 		if (index !== undefined) {
 			// console.log("SEetting", get(RulersCP)[index]);
-			UILines.set([get(RulersCP)[index]]);
+			GuideLinesCP.set([get(RulersCP)[index]]);
 		}
 		RulersCP.set([]);
 	}
@@ -70,7 +73,7 @@ const pointerEventPleat = (eventType, { point }) => {
 			selectedRulerLines[index] = true;
 		}
 		const rulerLines = get(RulersCP);
-		UILines.set(Object.keys(selectedRulerLines)
+		GuideLinesCP.set(Object.keys(selectedRulerLines)
 			.map(i => rulerLines[i]));
 	}
 		break;
@@ -81,7 +84,7 @@ const pointerEventPleat = (eventType, { point }) => {
 		lines.forEach(line => executeCommand("line", line));
 		// console.log("lines", lines);
 		RulersCP.set([]);
-		UILines.set([]);
+		GuideLinesCP.set([]);
 		Presses.set([]);
 		Releases.set([]);
 	}

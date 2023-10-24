@@ -8,7 +8,7 @@ import {
 } from "../../js/snap.js";
 import {
 	Keyboard,
-	UIGraph,
+	GhostGraphCP,
 } from "../../stores/UI.js";
 import {
 	RadialSnapDegrees,
@@ -66,7 +66,8 @@ export const FoldedLinePreviews = derived(
 		if ($PressCoords !== undefined && $DragCoords !== undefined) {
 			executeCommand("foldedLinePreview", $PressCoords, $DragCoords);
 		} else {
-			UIGraph.set({});
+			// todo: does this need to be here?
+			GhostGraphCP.set({});
 		}
 	},
 	undefined,

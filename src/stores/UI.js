@@ -42,17 +42,15 @@ export const SnapPoint = writable(undefined); // {number[]} point
  * @description This app has some built-in ways of visualizing
  * user interface information: lines, rays, and the most complex,
  * an entire graph. Lines and Rays are infinite objects, which when visualized,
- * become clipped in the viewbox, and the UIGraph is a FOLD object, which can
+ * become clipped in the viewbox, and the GhostGraphCP is a FOLD object, which can
  * contain vertices, edges, and faces, and will render as a highlighted object
  * on top of the actual graph model.
  */
-export const UIGraph = writable({});
-export const UILines = writable([]);
-export const UIRays = writable([]);
-export const UISegment = writable([]);
-UILines.add = (newRulers) => UILines.update((r) => [...r, ...newRulers]);
-UIRays.add = (newRulers) => UIRays.update((r) => [...r, ...newRulers]);
-UISegment.add = (newRulers) => UISegment.update((r) => [...r, ...newRulers]);
+export const GhostGraphCP = writable({});
+export const GhostGraphFolded = writable({});
+
+export const GuideLinesCP = writable([]);
+export const GuideLinesFolded = writable([]);
 /**
  * @description This is the currently selected UI tool, as seen on the
  * toolbar (left side of screen). Tool definitions can be found inside
@@ -117,9 +115,10 @@ export const resetUI = () => {
 	Pointer.set(undefined);
 	SnapPoint.set(undefined);
 	Highlight.reset();
-	UIGraph.set({});
-	UILines.set([]);
-	UIRays.set([]);
-	UISegment.set([]);
+	GhostGraphCP.set({});
+	GuideLinesCP.set([]);
+	// UILines.set([]);
+	// UIRays.set([]);
+	// UISegment.set([]);
 	RulersCP.set([]);
 };

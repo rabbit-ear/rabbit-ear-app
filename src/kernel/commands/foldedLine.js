@@ -13,7 +13,7 @@ import {
 import { overlapConvexPolygonPointNew } from "rabbit-ear/math/overlap.js";
 import { makeFacesPolygonQuick } from "rabbit-ear/graph/make.js";
 import { edgeAssignmentToFoldAngle } from "rabbit-ear/fold/spec.js";
-import { UIGraph } from "../../stores/UI.js";
+import { GhostGraphCP } from "../../stores/UI.js";
 import { intersectGraphSegment } from "rabbit-ear/graph/intersect.js";
 import { pointsToLine } from "rabbit-ear/math/convert.js";
 import { trilateration } from "rabbit-ear/math/triangle.js";
@@ -48,7 +48,7 @@ export const foldedLinePreview = (a, b) => {
 		// 	vertices_coords: result.flatMap(el => el.points),
 		// 	edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
 		// });
-		UIGraph.set({
+		GhostGraphCP.set({
 			vertices_coords: result.flatMap(el => el.points),
 			edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
 		});

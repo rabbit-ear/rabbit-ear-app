@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from "svelte";
 	import Menu from "./Menu/Menu.svelte";
 	import Terminal from "./Terminal.svelte";
 	import Toolbar from "./Toolbar.svelte";
@@ -31,6 +32,21 @@
 
 	const keydown = (e) => $KeyboardEvent("down", e);
 	const keyup = (e) => $KeyboardEvent("up", e);
+
+	// 
+	let divToolbar;
+	let toolbarScrollbarWidth = 0;
+	$: document.documentElement.style.setProperty(
+		"--toolbar-scrollbar-width", `${toolbarScrollbarWidth}px`)
+	onMount(() => {
+		const resizeObserver = new ResizeObserver(entries => {
+			setTimeout(() => {
+				toolbarScrollbarWidth = divToolbar.offsetWidth - divToolbar.clientWidth;
+			}, 5);
+		});
+		resizeObserver.observe(divToolbar);
+		return () => resizeObserver.unobserve(divToolbar);
+	});
 </script>
 
 <svelte:window
@@ -52,7 +68,7 @@
 		<Terminal />
 	</div>
 	<div class="gui horizontal">
-		<div class="toolbar" role="toolbar">
+		<div class="toolbar" role="toolbar" bind:this={divToolbar}>
 			<Toolbar />
 		</div>
 		<div class="renderings vertical">
@@ -117,6 +133,7 @@
 	/* .gui children */
 	.toolbar {
 		height: 100%;
+		width: calc(2rem * 2 + 0.15rem * 4 + var(--toolbar-scrollbar-width));
 		flex: 0 0 auto;
 		overflow-x: hidden;
 		overflow-y: auto;

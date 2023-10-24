@@ -1,15 +1,13 @@
 <script>
-	import {
-		CPFacesWinding,
-		FoldedFacesWinding,
-		LayerOrderKnown,
-		Faces2DDrawOrder,
-	} from "../../stores/Model.js";
 	import { joinSelectedHighlighted } from "./attributes.js";
 
 	export let graph = {};
 	export let selected = [];
 	export let highlighted = [];
+
+	export let frontBack = [];
+	export let winding = [];
+	export let drawOrder = [];
 
 	$: selectedHighlighted = joinSelectedHighlighted(selected, highlighted);
 
@@ -23,15 +21,16 @@
 
 	let facesClass = [];
 	$: facesClass = facesPoints.map((_, i) => [
-		$CPFacesWinding[i] ? "counter-clockwise" : "clockwise",
-		$FoldedFacesWinding[i] ? "front" : "back",
-		$LayerOrderKnown ? undefined : "transparent",
+		winding[i] === false ? "clockwise" : "counter-clockwise",
+		frontBack[i] ? "front" : "back",
+		drawOrder.length ? undefined : "transparent",
 		...(selectedHighlighted[i] || []),
 	].filter(a => a !== undefined).join(" "));
 
 	let polygons = [];
-	$: polygons = $Faces2DDrawOrder
-		.map(f => ({ points: facesPoints[f], class: facesClass[f] }));
+	$: polygons = drawOrder.length
+		? drawOrder.map(f => ({ points: facesPoints[f], class: facesClass[f] }))
+		: facesPoints.map((points, f) => ({ points, class: facesClass[f] }));
 </script>
 
 <g class="faces">

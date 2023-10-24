@@ -1,9 +1,6 @@
 import { get } from "svelte/store";
 import { isFrameElementSelected } from "../js/dom.js";
-import {
-	DialogNewFile,
-	TerminalTextarea,
-} from "./App.js";
+import { TerminalTextarea } from "./App.js";
 import { Tool } from "./UI.js";
 import {
 	execute,
@@ -47,7 +44,7 @@ const KeybindingsDown = {
 	// esc
 	// 27: {
 	// 	0: (event) => {
-	// 		executeCommand("resetApp");
+	// 		executeCommand("resetApp"); // close all dialogs. not available anymore
 	// 		executeCommand("resetTool");
 	// 		// executeCommand("resetRulers");
 	// 		document.activeElement.blur();

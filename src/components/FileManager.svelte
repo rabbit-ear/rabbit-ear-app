@@ -1,10 +1,5 @@
 <script>
-	import { executeCommand } from "../kernel/execute.js";
-	import {
-		base1,
-		square,
-	} from "rabbit-ear/fold/bases.js";
-
-	executeCommand("newFile", base1());
-	// executeCommand("newFile", square());
+	import { square } from "rabbit-ear/fold/bases.js";
+	import { LoadFOLDFile } from "../stores/File.js";
+	LoadFOLDFile(square());
 </script>

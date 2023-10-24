@@ -13,7 +13,7 @@ import {
 import { RulersCP } from "../../stores/Ruler.js";
 import {
 	SnapPoint,
-	UILines,
+	GuideLinesCP,
 	Highlight,
 } from "../../stores/UI.js";
 
@@ -79,7 +79,7 @@ export const AxiomPreview = derived(
 	([$Step, $Edge0, $Edge1]) => {
 		if ($Step < 2 && $Edge0 !== undefined && $Edge1 !== undefined) {
 			const args = [$Edge0, $Edge1].join(", ");
-			execute(`setUILines(axiom3(${args}))`);
+			execute(`setGuideLinesCP(axiom3(${args}))`);
 		}
 	},
 	undefined,
@@ -90,7 +90,7 @@ export const AxiomRulers = derived(
 	([$Step, $Edge0, $Edge1]) => {
 		if ($Step >= 2 && $Edge0 !== undefined && $Edge1 !== undefined) {
 			const args = [$Edge0, $Edge1].join(", ");
-			UILines.set([]);
+			GuideLinesCP.set([]);
 			execute(`setRulersCP(axiom3(${args}))`);
 		}
 	},
@@ -122,7 +122,7 @@ export const reset = () => {
 	Drag.set(undefined);
 	Presses.set([]);
 	Releases.set([]);
-	UILines.set([]);
+	GuideLinesCP.set([]);
 	RulersCP.set([]);
 };
 

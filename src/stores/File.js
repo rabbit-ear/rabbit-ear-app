@@ -201,8 +201,8 @@ export const ImportedFileDefaultFOLDPreview = derived(
  * @description Load a new file. Unbind any currently opened file, reset the
  * path, disable "Save" by setting FileExists to false.
  */
-export const NewFile = (FOLD) => {
-	SetNewModel(FOLD);
+export const NewFile = () => {
+	SetNewModel(); // ({})
 	FilePath.set(UNTITLED_FILE);
 };
 /**

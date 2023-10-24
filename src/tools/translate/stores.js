@@ -14,7 +14,7 @@ import {
 } from "../../js/snap.js";
 import {
 	Keyboard,
-	UIGraph,
+	GhostGraphCP,
 } from "../../stores/UI.js";
 import { Selection } from "../../stores/Select.js";
 import {
@@ -76,7 +76,7 @@ export const Subgraph = derived(
 	({}),
 );
 
-const UIGraphPreview = derived(
+const GhostGraphCPPreview = derived(
 	[Subgraph, DragVector],
 	([$Subgraph, $DragVector]) => {
 		const clone = structuredClone($Subgraph);
@@ -84,7 +84,7 @@ const UIGraphPreview = derived(
 			clone.vertices_coords = clone.vertices_coords
 				.map(coords => add2(coords, $DragVector));
 		}
-		UIGraph.set(clone);
+		GhostGraphCP.set(clone);
 	},
 	undefined,
 );
@@ -129,7 +129,7 @@ let unsub2;
 export const subscribe = () => {
 	unsub0 = ShiftRulers.subscribe(() => {});
 	unsub1 = DoTransform.subscribe(() => {});
-	unsub2 = UIGraphPreview.subscribe(() => {});
+	unsub2 = GhostGraphCPPreview.subscribe(() => {});
 };
 
 export const unsubscribe = () => {

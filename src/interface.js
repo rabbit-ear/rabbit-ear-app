@@ -19,7 +19,6 @@ import {
 	ShowFlatFoldableIssues,
 	ShowCodeEditor,
 	ShowFrames,
-	DialogNewFile,
 	DialogNewFrame,
 	DialogExportAs,
 } from "./stores/App.js";
@@ -27,6 +26,7 @@ import {
 	FoldedStaticOrSimulator,
 } from "./stores/Renderer.js";
 import {
+	NewFile,
 	FilePath,
 	FileExists,
 	GetCurrentFOLDFile,
@@ -90,7 +90,7 @@ window.dialog.newFile = async () => {
 		cancelLabel: "Cancel",
 	});
 	if (confirmNewFile) {
-		executeCommand("newFile");
+		NewFile()
 		get(DialogNewFrame).showModal();
 	}
 };

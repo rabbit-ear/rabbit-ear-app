@@ -1,18 +1,24 @@
 <script>
-	import Dialog from "./Dialog.svelte";
-	import { DialogNewFrame } from "../../stores/App.js";
 	import {
 		square,
 		rectangle,
 		polygon,
+		fish,
+		bird,
 	} from "rabbit-ear/fold/bases.js";
-	import NewShape from "./NewShape.svelte";
-	import { executeCommand } from "../../kernel/execute.js";
-	import { getFOLDViewport } from "../../js/matrix.js";
-	import { VerticalUp } from "../../stores/App.js";
+	import base1 from "../../assets/base1.fold?raw";
+	import base2 from "../../assets/base2.fold?raw";
+	import windmill from "../../assets/windmill.fold?raw";
+	import Dialog from "./Dialog.svelte";
 	import SVGCanvas from "../SVGCanvas/SVGCanvas.svelte";
 	import FacesLayer from "../SVGCanvas/FacesLayer.svelte";
 	import EdgesLayer from "../SVGCanvas/EdgesLayer.svelte";
+	import { executeCommand } from "../../kernel/execute.js";
+	import { getFOLDViewport } from "../../js/matrix.js";
+	import {
+		VerticalUp,
+		DialogNewFrame,
+	} from "../../stores/App.js";
 	import {
 		CreasePattern,
 		Frames,
@@ -23,6 +29,12 @@
 	let rectangleWidth = 2;
 	let rectangleHeight = 1;
 	let polygonSides = 6;
+
+	const chooseFOLD = (FOLD) => {
+		executeCommand("appendFrame", FOLD);
+		panel = "";
+		$DialogNewFrame.close();
+	};
 
 	const newFrameDidPress = (shape) => {
 		switch (shape) {
@@ -56,9 +68,31 @@
 	const newRectangle = (e) => newFrameDidPress("rectangle");
 	const newRegularPolygon = (e) => newFrameDidPress("regularPolygon");
 
+	const subpanelConfirm = () => {
+		switch (panel) {
+			case "nxnSquare": return newFrameDidPress("square");
+			case "rectangle": return newFrameDidPress("rectangle");
+			case "polygon": return newFrameDidPress("regularPolygon");
+			default: return;
+		}
+	}
+
+	const bases = [
+		fish(),
+		bird(),
+		JSON.parse(base1),
+		JSON.parse(windmill),
+		JSON.parse(base2),
+	];
+
+	const patterns = bases.map(graph => ({
+		graph,
+		onclick: () => chooseFOLD(graph)
+	}));
+
 	$: invertVertical = $VerticalUp;
 
-	$: graphSquare = square(squareSize);
+	$: graphSquare = square();
 	$: graphSquareViewBox = getFOLDViewport(graphSquare, invertVertical).join(" ");
 
 	$: graphRectangle = rectangle(rectangleWidth, rectangleHeight);
@@ -137,6 +171,24 @@
 			</div>
 		</div>
 
+		<div class="flex-row gap">
+			{#each patterns as pattern}
+				<div class="flex-column">
+					<button class="svg-button crease-pattern" on:click={pattern.onclick}>
+						<SVGCanvas
+							viewBox={getFOLDViewport(pattern.graph, invertVertical).join(" ")}
+							{invertVertical}>
+							<FacesLayer graph={pattern.graph} />
+							<EdgesLayer graph={pattern.graph} />
+						</SVGCanvas>
+					</button>
+					{#if pattern.name}
+						<p>{pattern.name}</p>
+					{/if}
+				</div>
+			{/each}
+		</div>
+
 		{#if panel !== ""}
 			<div class="panel">
 				<hr />
@@ -148,9 +200,6 @@
 							id="square-size"
 							bind:value={squareSize}>
 						<label for="square-size">side length</label>
-					</div>
-					<div class="confirm-row">
-						<button class="text-button" on:click={newNxNSquare}>Confirm</button>
 					</div>
 				{/if}
 				{#if panel === "rectangle"}
@@ -168,9 +217,6 @@
 						<label for="rect-width">width, </label>
 						<label for="rect-height">height</label>
 					</div>
-					<div class="confirm-row">
-						<button class="text-button" on:click={newRectangle}>Confirm</button>
-					</div>
 				{/if}
 				{#if panel === "polygon"}
 					<div class="flex-row">
@@ -181,15 +227,16 @@
 							bind:value={polygonSides}>
 						<label for="poly-sides">number of sides</label>
 					</div>
-					<div class="confirm-row">
-						<button class="text-button" on:click={newRegularPolygon}>Confirm</button>
-					</div>
 				{/if}
 			</div>
 		{/if}
 
-		<div class="flex-row">
+		<div class="flex-row gap margin-top">
 			<button class="text-button" on:click={() => $DialogNewFrame.close()}>Cancel</button>
+			{#if panel !== ""}
+				<button class="text-button" on:click={subpanelConfirm}>Confirm</button>
+			{/if}
+
 		</div>
 
 	</div>
@@ -214,6 +261,9 @@
 	}
 	.gap {
 		gap: 0.333rem;
+	}
+	.margin-top {
+		margin-top: 1rem;
 	}
 	button.svg-button {
 		padding: 0.5rem;
@@ -242,10 +292,6 @@
 	}
 	.panel {
 		margin: 1rem 0;
-	}
-	.confirm-row {
-		margin: 1rem 0;
-		text-align: right;
 	}
 	.svg-button :global(polygon) {
 		fill: var(--background-3);

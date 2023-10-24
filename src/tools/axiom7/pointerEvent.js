@@ -46,8 +46,8 @@ export default pointerEvent;
 // import { Highlight } from "../../stores/Select.js";
 // import { RulersCP } from "../../stores/Ruler.js";
 // import {
-// 	UIGraph,
-// 	UILines,
+// 	GhostGraphCP,
+// 	GuideLinesCP,
 // } from "../../stores/UI.js";
 // import {
 // 	snapToPoint,
@@ -73,13 +73,13 @@ export default pointerEvent;
 // 	switch (get(ToolStep)) {
 // 	case 0: {
 // 		const coords = snapToPoint(point, false);
-// 		if (coords !== undefined) { UIGraph.set({ vertices_coords: [coords] }); }
+// 		if (coords !== undefined) { GhostGraphCP.set({ vertices_coords: [coords] }); }
 // 	}
 // 		break;
 // 	case 1: {
 // 		const { edge } = snapToEdge(point, false);
 // 		if (eventType === "press") { pressCoords = snapToPoint(point, false); }
-// 		UIGraph.set({ vertices_coords: [pressCoords] });
+// 		GhostGraphCP.set({ vertices_coords: [pressCoords] });
 // 		if (edge !== undefined) { Highlight.addEdges([edge]); }
 // 	}
 // 		break;
@@ -89,7 +89,7 @@ export default pointerEvent;
 // 		if (eventType === "release") { releaseEdge = edge; }
 // 		if (releaseEdge !== undefined) { Highlight.addEdges([releaseEdge]); }
 // 		if (edge !== undefined) { Highlight.addEdges([edge]); }
-// 		UIGraph.set({ vertices_coords: [pressCoords] });
+// 		GhostGraphCP.set({ vertices_coords: [pressCoords] });
 // 		executeCommand("axiom7Preview", releaseEdge, edge, pressCoords);
 // 		// nearest point on line
 // 	}
@@ -98,18 +98,18 @@ export default pointerEvent;
 // 		const { edge } = snapToEdge(point, false);
 // 		if (releaseEdge !== undefined) { Highlight.addEdges([releaseEdge]); }
 // 		if (edge !== undefined) { Highlight.addEdges([edge]); }
-// 		UIGraph.set({});
-// 		UILines.set([]);
+// 		GhostGraphCP.set({});
+// 		GuideLinesCP.set([]);
 // 		executeCommand("axiom7Rulers", releaseEdge, edge, pressCoords);
 // 	}
 // 		break;
 // 	case 4:
-// 		UIGraph.set({ vertices_coords: [snapToRulerLine(point).coords] });
+// 		GhostGraphCP.set({ vertices_coords: [snapToRulerLine(point).coords] });
 // 		break;
 // 	case 5: {
 // 		const { coords } = snapToRulerLine(point);
 // 		if (eventType === "press") { pressCoords = coords; }
-// 		UIGraph.set({
+// 		GhostGraphCP.set({
 // 			vertices_coords: [pressCoords, coords],
 // 			edges_vertices: [[0, 1]],
 // 		});
@@ -122,7 +122,7 @@ export default pointerEvent;
 // 			executeCommand("addVertex", snapToRulerLine(point).coords),
 // 		);
 // 		RulersCP.set([]);
-// 		UIGraph.set({});
+// 		GhostGraphCP.set({});
 // 		RulersCP.set([]);
 // 		Presses.set([]);
 // 		Releases.set([]);

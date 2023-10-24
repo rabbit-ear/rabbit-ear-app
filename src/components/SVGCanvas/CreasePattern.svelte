@@ -10,7 +10,13 @@
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
 	import FoldableVertices from "./FoldableVertices.svelte";
-	import { CreasePattern } from "../../stores/Model.js";
+	import {
+		CreasePattern,
+		CPFacesWinding,
+		FoldedFacesWinding,
+		Faces2DDrawOrder,
+		LayerOrderKnown,
+	} from "../../stores/Model.js";
 	import { VerticalUp } from "../../stores/App.js";
 	import {
 		ShowGrid,
@@ -26,19 +32,22 @@
 	import {
 		StrokeWidthCreasePattern,
 		StrokeDashLengthCreasePattern,
+		VertexRadiusCP,
 	} from "../../stores/Style.js";
 	import { ViewportCP } from "../../stores/ViewBox.js";
+	import { RulersCP } from "../../stores/Ruler.js";
+	import { GuideLinesCP } from "../../stores/UI.js";
+
+	const padViewport = (view, pad) => {
+		const p = Math.max(view[2], view[3]) * pad;
+		return [view[0] - p, view[1] - p, view[2] + p * 2, view[3] + p * 2];
+	};
 
 	$: showVertices = $Tool
 		&& ($Tool.key === "select"
 		|| $Tool.key === "vertex"
 		|| $Tool.key === "translate"
 		|| $Tool.key === "scale");
-
-	const padViewport = (view, pad) => {
-		const p = Math.max(view[2], view[3]) * pad;
-		return [view[0] - p, view[1] - p, view[2] + p * 2, view[3] + p * 2];
-	};
 
 	$: viewport = padViewport($ViewportCP, 0.05);
 	// $: viewport = padViewport($ViewportCP, 0.05).map(n => n / ArtificialScale);
@@ -51,6 +60,13 @@
 	// 	vertices_coords: $CreasePattern.vertices_coords
 	// 		.map(coords => coords.map(n => n * 100))
 	// };
+
+	let showRulers = true;
+	$: showRulers = $Tool
+		&& $Tool.name !== "edge"
+		&& $Tool.name !== "folded line"
+
+	$: rulers = showRulers ? $RulersCP.concat($GuideLinesCP) : [];
 </script>
 
 <SVGTouchCanvas
@@ -69,6 +85,9 @@
 	<!-- <g class="origami-layer"> -->
 	<FacesLayer
 		graph={$CreasePattern}
+		winding={$CPFacesWinding}
+		frontBack={$FoldedFacesWinding}
+		drawOrder={$LayerOrderKnown ? $Faces2DDrawOrder : []}
 		selected={$Selection.faces}
 		highlighted={$Highlight.faces} />
 	{#if $ShowFlatFoldableIssues}
@@ -84,6 +103,7 @@
 	{#if showVertices}
 		<VerticesLayer
 			graph={$CreasePattern}
+			radius={$VertexRadiusCP}
 			selected={$Selection.vertices}
 			highlighted={$Highlight.vertices} />
 	{/if}
@@ -92,7 +112,7 @@
 		<AxesLayer {viewport} />
 	{/if}
 	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLengthCreasePattern};`}>
-		<RulerLayer {viewport} />
+		<RulerLayer {viewport} {rulers} />
 		<UILayer />
 		{#if $Tool && $Tool.cp && $Tool.cp.SVGLayer}
 			<svelte:component this={$Tool.cp.SVGLayer} />

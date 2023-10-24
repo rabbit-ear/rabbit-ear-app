@@ -28,15 +28,11 @@ const downloadFile = (contents, filename = "origami.fold") => {
 /**
  * @description load a FOLD object and replace the currently loaded file
  */
-export const newFile = (FOLD) => NewFile(FOLD);
+export const newFile = () => NewFile();
 /**
  * @description load a FOLD object and replace the currently loaded file
  */
-// export const load = (FOLD = {}, filename) => LoadFOLDFile(FOLD, filename);
-/**
- * @description load an empty FOLD object and replace the currently loaded file
- */
-// export const clear = () => NewFile(); // NewFile(makeEmptyGraph());
+export const load = (FOLD = {}) => LoadFOLDFile(FOLD);
 /**
  * @description Trigger an in-browser downloading of a file to the
  * browser's default download location. Not useful for native app build.

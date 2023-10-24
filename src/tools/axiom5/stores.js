@@ -13,7 +13,7 @@ import {
 	executeCommand,
 } from "../../kernel/execute.js";
 import {
-	UILines,
+	GuideLinesCP,
 	Highlight,
 } from "../../stores/UI.js";
 import { RulersCP } from "../../stores/Ruler.js";
@@ -80,8 +80,8 @@ export const AxiomPreview = derived(
 		($InputEdge !== undefined
 			&& $InputPoint0 !== undefined
 			&& $InputPoint1 !== undefined
-			? execute(`setUILines(axiom5(${$InputEdge}, ${JSON.stringify($InputPoint0)}, ${JSON.stringify($InputPoint1)}))`)
-			: UILines.set([]))),
+			? execute(`setGuideLinesCP(axiom5(${$InputEdge}, ${JSON.stringify($InputPoint0)}, ${JSON.stringify($InputPoint1)}))`)
+			: GuideLinesCP.set([]))),
 	undefined,
 );
 

@@ -5,8 +5,8 @@ import {
 	RulersFolded,
 } from "../../stores/Ruler.js";
 import {
-	UILines,
-	UIRays,
+	GuideLinesCP,
+	GuideLinesFolded,
 } from "../../stores/UI.js";
 
 export const setRulersCP = (lines = []) => RulersCP
@@ -35,11 +35,19 @@ export const setRulerSegmentsFolded = (lines = []) => RulersFolded
 		.map(line => ({ line, clamp: clampSegment, domain: includeS })));
 
 
-export const setUILines = (lines = []) => UILines
+export const setGuideLinesCP = (lines = []) => GuideLinesCP
 	.set(lines
 		.filter(a => a !== undefined)
 		.map(line => ({ line, clamp: clampLine, domain: includeL })));
-export const setUIRays = (rays = []) => UIRays
+export const setGhostRaysCP = (rays = []) => GuideLinesCP
+	.set(rays
+		.filter(a => a !== undefined)
+		.map(line => ({ line, clamp: clampRay, domain: includeR })));
+export const setGuideLinesFolded = (lines = []) => GuideLinesFolded
+	.set(lines
+		.filter(a => a !== undefined)
+		.map(line => ({ line, clamp: clampLine, domain: includeL })));
+export const setGhostRaysFolded = (rays = []) => GuideLinesFolded
 	.set(rays
 		.filter(a => a !== undefined)
 		.map(line => ({ line, clamp: clampRay, domain: includeR })));

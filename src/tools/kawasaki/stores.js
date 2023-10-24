@@ -6,7 +6,7 @@ import {
 	snapToVertex,
 	snapToRulerLine,
 } from "../../js/snap.js";
-import { UIRays } from "../../stores/UI.js";
+import { GuideLinesCP } from "../../stores/UI.js";
 import { RulersCP } from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";
 
@@ -60,7 +60,7 @@ export const KawasakiRulerPreviews = derived(
 	MoveVertex,
 	($MoveVertex) => $MoveVertex !== undefined
 		? executeCommand("kawasakiRulerPreviews", $MoveVertex)
-		: UIRays.set([]),
+		: GuideLinesCP.set([]),
 	undefined,
 );
 

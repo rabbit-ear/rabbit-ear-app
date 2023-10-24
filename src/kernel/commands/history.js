@@ -1,3 +1,4 @@
+import { CommandHistory } from "../../stores/History.js";
 /**
  * @description Perhaps the strangest commands of all.
  * the undoHistory is not a core part of the app, rather,
@@ -13,3 +14,5 @@
 export const undo = () => {};
 
 export const redo = () => {};
+
+export const clearHistory = () => CommandHistory.set([]);

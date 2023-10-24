@@ -22,15 +22,14 @@ const maxLineCount = 300;
 /**
  * currently not used
  */
-export const silentMethods = {
-	setTool: true,
-	resetApp: true,
-	resetTool: true,
-	highlight: true,
-	pleatPreview: true,
-	foldedLinePreview: true,
-	kawasakiRulerPreviews: true,
-};
+// export const silentMethods = {
+// 	setTool: true,
+// 	resetTool: true,
+// 	highlight: true,
+// 	pleatPreview: true,
+// 	foldedLinePreview: true,
+// 	kawasakiRulerPreviews: true,
+// };
 /**
  * @description When a history is appended to the command history,
  * in the case that the new history item is the exact same command
@@ -39,10 +38,11 @@ export const silentMethods = {
  * recent history item; if the method is one of the methods in this list.
  */
 const collapseMethods = {
-	setUILines: true,
-	setUIRays: true,
+	setGuideLinesCP: true,
+	setGhostRaysCP: true,
+	setGuideLinesFolded: true,
+	setGhostRaysFolded: true,
 	setTool: true,
-	resetApp: true,
 	resetTool: true,
 	highlight: true,
 	pleatPreview: true,

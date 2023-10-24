@@ -13,7 +13,7 @@ import {
 	snapToVertex,
 } from "../../js/snap.js";
 import { CreasePattern } from "../../stores/Model.js";
-import { UIGraph } from "../../stores/UI.js";
+import { GhostGraphCP } from "../../stores/UI.js";
 // import { Selection } from "../../stores/Select.js";
 
 export const Move = writable(undefined);
@@ -63,14 +63,14 @@ export const GraphPreview = derived(
 	[DragVector, PressVertex, CreasePattern],
 	([$DragVector, $PressVertex, $CreasePattern]) => {
 		if ($PressVertex === undefined) {
-			return UIGraph.set({});
+			return GhostGraphCP.set({});
 		}
 		const subgraph = subgraphWithVertices($CreasePattern, [$PressVertex]);
 		[$PressVertex].forEach(v => {
 			subgraph.vertices_coords[v] = add2(subgraph.vertices_coords[v], $DragVector);
 		});
 		normalize(subgraph);
-		UIGraph.set({ ...subgraph });
+		GhostGraphCP.set({ ...subgraph });
 	},
 	undefined,
 );
@@ -84,7 +84,7 @@ export const GraphPreview = derived(
 // 			subgraph.vertices_coords[v] = add2(subgraph.vertices_coords[v], $DragVector);
 // 		});
 // 		normalize(subgraph);
-// 		UIGraph.set({ ...subgraph });
+// 		GhostGraphCP.set({ ...subgraph });
 // 	},
 // 	undefined,
 // );
