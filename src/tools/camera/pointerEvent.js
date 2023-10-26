@@ -1,17 +1,26 @@
-import { executeCommand } from "../../kernel/execute.js";
 import {
-	Drag,
-	Press,
+	CPDrag,
+	CPPress,
+	FoldedDrag,
+	FoldedPress,
 } from "./stores.js";
 
-const pointerEvent = (eventType, { point, buttons }) => {
+export const cpPointerEvent = (eventType, { point, buttons }) => {
 	switch (eventType) {
-	case "press": Press.set(point); break;
-	case "release": Press.set(undefined); break;
+	case "press": CPPress.set(point); break;
+	case "release": CPPress.set(undefined); break;
 	default: break;
 	}
-	if (buttons) { Drag.set(point); }
-	else { Drag.set(undefined); }
+	if (buttons) { CPDrag.set(point); }
+	else { CPDrag.set(undefined); }
 };
 
-export default pointerEvent;
+export const foldedPointerEvent = (eventType, { point, buttons }) => {
+	switch (eventType) {
+	case "press": FoldedPress.set(point); break;
+	case "release": FoldedPress.set(undefined); break;
+	default: break;
+	}
+	if (buttons) { FoldedDrag.set(point); }
+	else { FoldedDrag.set(undefined); }
+};

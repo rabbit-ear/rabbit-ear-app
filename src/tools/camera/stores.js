@@ -12,56 +12,96 @@ import {
 	ModelMatrixCP,
 	ModelMatrixFolded,
 	CameraMatrixCP,
+	CameraMatrixFolded,
 } from "../../stores/ViewBox.js";
 import { VerticalUp } from "../../stores/App.js";
 
-export const Press = writable(undefined);
-export const Drag = writable(undefined);
+const rewrap = (point, invert) => [point[0], point[1] * (invert ? -1 : 1)];
 
-// const PressCoords = derived(Press, getScreenPoint, undefined);
-// const DragCoords = derived(Drag, getScreenPoint, undefined);
-const PressCoords = derived(
-	[Press, ModelMatrixCP],
-	([$Press, $ModelMatrixCP]) => getScreenPoint($Press, $ModelMatrixCP),
+export const CPPress = writable(undefined);
+export const CPDrag = writable(undefined);
+export const FoldedPress = writable(undefined);
+export const FoldedDrag = writable(undefined);
+
+const CPPressCoords = derived(
+	[CPPress, ModelMatrixCP],
+	([$CPPress, $ModelMatrixCP]) => getScreenPoint($CPPress, $ModelMatrixCP),
 	undefined,
 );
 
-const DragCoords = derived(
-	[Drag, ModelMatrixCP],
-	([$Drag, $ModelMatrixCP]) => getScreenPoint($Drag, $ModelMatrixCP),
+const CPDragCoords = derived(
+	[CPDrag, ModelMatrixCP],
+	([$CPDrag, $ModelMatrixCP]) => getScreenPoint($CPDrag, $ModelMatrixCP),
 	undefined,
 );
 
-export const DragVector = derived(
-	[DragCoords, PressCoords],
-	([$DragCoords, $PressCoords]) => (!$DragCoords || !$PressCoords)
+export const CPDragVector = derived(
+	[CPDragCoords, CPPressCoords],
+	([$CPDragCoords, $CPPressCoords]) => (!$CPDragCoords || !$CPPressCoords)
 		? [0, 0]
-		: subtract2($DragCoords, $PressCoords),
+		: subtract2($CPDragCoords, $CPPressCoords),
 	[0, 0],
 );
 
-const rewrap = (point, invert) => [point[0], point[1] * (invert ? -1 : 1)];
-
-export const MoveCamera = derived(
-	[DragVector, VerticalUp],
-	([$DragVector, $VerticalUp]) => CameraMatrixCP.update(camera => (
-		multiplyMatrices2(camera, makeMatrix2Translate(...rewrap($DragVector, $VerticalUp)))
+export const CPMoveCamera = derived(
+	[CPDragVector, VerticalUp],
+	([$CPDragVector, $VerticalUp]) => CameraMatrixCP.update(camera => (
+		multiplyMatrices2(camera, makeMatrix2Translate(...rewrap($CPDragVector, $VerticalUp)))
 	)),
 	undefined,
 );
 
+// ////////////////////
+
+
+const FoldedPressCoords = derived(
+	[FoldedPress, ModelMatrixFolded],
+	([$FoldedPress, $ModelMatrixFolded]) => getScreenPoint($FoldedPress, $ModelMatrixFolded),
+	undefined,
+);
+
+const FoldedDragCoords = derived(
+	[FoldedDrag, ModelMatrixFolded],
+	([$FoldedDrag, $ModelMatrixFolded]) => getScreenPoint($FoldedDrag, $ModelMatrixFolded),
+	undefined,
+);
+
+export const FoldedDragVector = derived(
+	[FoldedDragCoords, FoldedPressCoords],
+	([$FoldedDragCoords, $FoldedPressCoords]) => (!$FoldedDragCoords || !$FoldedPressCoords)
+		? [0, 0]
+		: subtract2($FoldedDragCoords, $FoldedPressCoords),
+	[0, 0],
+);
+
+export const FoldedMoveCamera = derived(
+	[FoldedDragVector, VerticalUp],
+	([$FoldedDragVector, $VerticalUp]) => CameraMatrixFolded.update(camera => (
+		multiplyMatrices2(camera, makeMatrix2Translate(...rewrap($FoldedDragVector, $VerticalUp)))
+	)),
+	undefined,
+);
+
+// /////////////////////////
+
 export const reset = () => {
-	Press.set(undefined);
-	Drag.set(undefined);
+	CPPress.set(undefined);
+	CPDrag.set(undefined);
+	FoldedPress.set(undefined);
+	FoldedDrag.set(undefined);
 };
 
-let unsub;
+let unsub = [];
 
 export const subscribe = () => {
-	unsub = MoveCamera.subscribe(() => {});
+	unsub = [
+		CPMoveCamera.subscribe(() => {}),
+		FoldedMoveCamera.subscribe(() => {}),
+	];
 };
 
 export const unsubscribe = () => {
-	if (unsub) { unsub(); }
+	unsub.forEach(fn => fn());
+	unsub = [];
 	reset();
 };

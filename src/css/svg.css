@@ -58,6 +58,10 @@
 	fill: var(--highlight);
 }
 
+.crease-pattern circle.vertex.highlighted {
+	fill: var(--text);
+}
+
 .crease-pattern line.selected {
 	stroke: var(--highlight);
 }

@@ -1,16 +1,18 @@
 import pointerEvent from "./pointerEvent.js";
+import panel from "./panel.svelte";
 import icon from "./icon.svelte";
 import {
 	subscribe,
 	unsubscribe,
 } from "./stores.js";
 
-const deleteTool = {
-	key: "deleteTool",
-	name: "delete",
+const inspect = {
+	key: "inspect",
+	name: "inspect",
 	group: "general",
-	order: 4,
+	order: 3,
 	icon,
+	panel,
 	cp: {
 		pointerEvent,
 	},
@@ -18,4 +20,4 @@ const deleteTool = {
 	unsubscribe,
 };
 
-export default deleteTool;
+export default inspect;

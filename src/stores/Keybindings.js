@@ -106,6 +106,10 @@ const KeybindingsDown = {
 	70: {
 		0: (event) => executeCommand("setToolAssignment", "F"),
 	},
+	// "i"
+	73: {
+		0: (event) => executeCommand("setTool", "inspect"),
+	},
 	// "k"
 	75: {
 		0: (event) => executeCommand("setTool", "kawasaki"),

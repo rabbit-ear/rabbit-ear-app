@@ -45,6 +45,7 @@
 
 	$: showVertices = $Tool
 		&& ($Tool.key === "select"
+		|| $Tool.key === "inspect"
 		|| $Tool.key === "vertex"
 		|| $Tool.key === "translate"
 		|| $Tool.key === "scale");
