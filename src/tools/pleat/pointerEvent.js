@@ -2,7 +2,7 @@ import { nearest } from "rabbit-ear/graph/nearest.js";
 import { get } from "svelte/store";
 import {
 	snapToEdge,
-	snapToRulerLine,
+	snapOldToRulerLine,
 } from "../../js/snap.js";
 import { RulersCP } from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";
@@ -59,7 +59,7 @@ const pointerEventPleat = (eventType, { point }) => {
 			pressEdge = undefined;
 		}
 		if (vertex !== undefined) { Highlight.addVertices([vertex]); }
-		const { index } = snapToRulerLine(point, false);
+		const { index } = snapOldToRulerLine(point, false);
 		if (index !== undefined) {
 			// console.log("SEetting", get(RulersCP)[index]);
 			GuideLinesCP.set([get(RulersCP)[index]]);
@@ -68,7 +68,7 @@ const pointerEventPleat = (eventType, { point }) => {
 	}
 		break;
 	case 3: {
-		const { index } = snapToRulerLine(point, false);
+		const { index } = snapOldToRulerLine(point, false);
 		if (index !== undefined) {
 			selectedRulerLines[index] = true;
 		}

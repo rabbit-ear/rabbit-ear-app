@@ -10,8 +10,8 @@ import {
 import { subgraph } from "rabbit-ear/graph/subgraph.js";
 import normalize from "rabbit-ear/graph/normalize.js";
 import {
-	snapToPoint,
-	snapToRulerLine,
+	snapOldToPoint,
+	snapOldToRulerLine,
 } from "../../js/snap.js";
 import {
 	Keyboard,
@@ -39,26 +39,26 @@ export const Release = writable(undefined);
 
 export const MoveCoords = derived(
 	Move,
-	($Move) => snapToPoint($Move),
+	($Move) => snapOldToPoint($Move),
 	undefined,
 );
 
 export const PressCoords = derived(
 	Press,
-	($Press) => snapToPoint($Press),
+	($Press) => snapOldToPoint($Press),
 	undefined,
 );
 
 export const ReleaseCoords = derived(
 	Release,
-	($Release) => snapToPoint($Release),
+	($Release) => snapOldToPoint($Release),
 );
 
 export const DragCoords = derived(
 	[Keyboard, Drag],
 	([$Keyboard, $Drag]) => $Keyboard[16] // shift key
-		? snapToRulerLine($Drag).coords
-		: snapToPoint($Drag),
+		? snapOldToRulerLine($Drag).coords
+		: snapOldToPoint($Drag),
 	undefined,
 );
 

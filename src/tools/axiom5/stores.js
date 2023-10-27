@@ -3,9 +3,9 @@ import {
 	derived,
 } from "svelte/store";
 import {
-	snapToPoint,
+	snapOldToPoint,
 	snapToEdge,
-	snapToRulerLine,
+	snapOldToRulerLine,
 } from "../../js/snap.js";
 import { zipArrays } from "../../js/arrays.js";
 import {
@@ -34,7 +34,7 @@ export const Step = derived(Touches, ($Touches) => $Touches.length, 0);
 
 export const InputPoint0 = derived(
 	Touches,
-	($Touches) => snapToPoint($Touches[0], false),
+	($Touches) => snapOldToPoint($Touches[0], false),
 	undefined,
 );
 
@@ -46,7 +46,7 @@ export const InputEdge = derived(
 
 export const InputPoint1 = derived(
 	Touches,
-	($Touches) => snapToPoint($Touches[2], false),
+	($Touches) => snapOldToPoint($Touches[2], false),
 	undefined,
 );
 
@@ -54,13 +54,13 @@ export const InputPoint1 = derived(
 
 export const Segment0 = derived(
 	Touches,
-	($Touches) => snapToRulerLine($Touches[4], false).coords,
+	($Touches) => snapOldToRulerLine($Touches[4], false).coords,
 	undefined,
 );
 
 export const Segment1 = derived(
 	Touches,
-	($Touches) => snapToRulerLine($Touches[5], false).coords,
+	($Touches) => snapOldToRulerLine($Touches[5], false).coords,
 	undefined,
 );
 

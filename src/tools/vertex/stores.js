@@ -9,7 +9,7 @@ import {
 import { subgraphWithVertices } from "rabbit-ear/graph/subgraph.js";
 import normalize from "rabbit-ear/graph/normalize.js";
 import {
-	snapToPoint,
+	snapOldToPoint,
 	snapToVertex,
 } from "../../js/snap.js";
 import { CreasePattern } from "../../stores/Model.js";
@@ -29,7 +29,7 @@ export const MoveCoords = derived(
 // todo when shift snap to ruler line
 export const DragCoords = derived(
 	Drag,
-	($Drag) => snapToPoint($Drag),
+	($Drag) => snapOldToPoint($Drag),
 	undefined,
 );
 

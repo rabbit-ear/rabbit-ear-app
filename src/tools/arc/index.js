@@ -1,7 +1,10 @@
-import pointerEvent from "./pointerEvent.js";
+import {
+	cpPointerEvent,
+	foldedPointerEvent,
+} from "./pointerEvent.js";
 import panel from "./panel.svelte";
 import icon from "./icon.svelte";
-import SVGLayer from "./SVGLayer.svelte";
+import CPSVGLayer from "./CPSVGLayer.svelte";
 import {
 	subscribe,
 	unsubscribe,
@@ -15,8 +18,12 @@ const arc = {
 	icon,
 	panel,
 	cp: {
-		pointerEvent,
-		SVGLayer,
+		pointerEvent: cpPointerEvent,
+		SVGLayer: CPSVGLayer,
+	},
+	folded: {
+		pointerEvent: foldedPointerEvent,
+		SVGLayer: CPSVGLayer,
 	},
 	subscribe,
 	unsubscribe,

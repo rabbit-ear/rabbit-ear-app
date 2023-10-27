@@ -3,8 +3,8 @@ import {
 	derived,
 } from "svelte/store";
 import {
-	snapToPoint,
-	snapToRulerLine,
+	snapOldToPoint,
+	snapOldToRulerLine,
 } from "../../js/snap.js";
 import {
 	Keyboard,
@@ -27,21 +27,21 @@ export const Drag = writable(undefined);
 
 export const MoveCoords = derived(
 	Move,
-	($Move) => snapToPoint($Move),
+	($Move) => snapOldToPoint($Move),
 	undefined,
 );
 
 export const PressCoords = derived(
 	Press,
-	($Press) => snapToPoint($Press),
+	($Press) => snapOldToPoint($Press),
 	undefined,
 );
 
 export const DragCoords = derived(
 	[Keyboard, Drag],
 	([$Keyboard, $Drag]) => $Keyboard[16] // shift key
-		? snapToRulerLine($Drag).coords
-		: snapToPoint($Drag),
+		? snapOldToRulerLine($Drag).coords
+		: snapOldToPoint($Drag),
 	undefined,
 );
 

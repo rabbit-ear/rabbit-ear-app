@@ -1,15 +1,20 @@
 <script>
 	import Panel from "../../components/Panels/Panel.svelte";
 	import Assignment from "../../components/PanelParts/Assignment.svelte";
-	import { Step } from "./stores.js";
+	import {
+		CPStep,
+		FoldedStep,
+	} from "./stores.js";
+
+	$: Step = Math.max($CPStep, $FoldedStep);
 
 	export let showPanel;
 
 	let classes;
 	$: classes = Array.from(Array(5))
 		.map(() => "todo")
-		.map((str, i) => i === ($Step - 1) ? "current" : str)
-		.map((str, i) => i < ($Step - 1) ? "done" : str);
+		.map((str, i) => i === Step ? "current" : str)
+		.map((str, i) => i < Step ? "done" : str);
 </script>
 
 <Panel {showPanel}>

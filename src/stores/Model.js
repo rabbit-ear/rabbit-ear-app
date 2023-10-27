@@ -63,28 +63,6 @@ export const FileMetadata = writable({});
  */
 // export const Frames = writable([makeEmptyGraph()]);
 export const Frames = writable([]);
-// const FramesUpdate = Frames.update;
-// const FramesSet = Frames.set;
-// Frames.update = (updateMethod) => {
-// 	console.log("Frames.update", updateMethod);
-// 	// trigger model-matrix to update
-// 	ResizeModelMatrix.set(true);
-// 	FramesUpdate(updateMethod);
-// 	// reset model-matrix to no longer update
-// 	ResizeModelMatrix.set(false);
-// 	// also reset camera
-// 	CameraMatrixCP.reset();
-// };
-// Frames.set = (newFrames) => {
-// 	console.log("Frames.set", newFrames);
-// 	// trigger model-matrix to update
-// 	ResizeModelMatrix.set(true);
-// 	FramesSet(newFrames);
-// 	// reset model-matrix to no longer update
-// 	ResizeModelMatrix.set(false);
-// 	// also reset camera
-// 	CameraMatrixCP.reset();
-// };
 /**
  * @description Which frame is currently visible in the main viewport?
  */
@@ -409,16 +387,6 @@ export const FoldedFacesWinding = derived(
 	},
 	[],
 );
-/**
- *
- */
-// export const FramesIsTessellation = derived(
-// 	Frames,
-// 	($Frames) => $Frames
-// 		.map(frame => frame.frame_classes
-// 			&& frame.frame_classes.includes("tessellation"))
-// 	[false],
-// );
 /**
  * @description When the graph requires an update but the change
  * results in an isomorphic graph as it relates to VEF, so, for example,

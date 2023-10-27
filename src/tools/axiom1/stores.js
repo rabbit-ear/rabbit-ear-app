@@ -4,50 +4,272 @@ import {
 } from "svelte/store";
 import {
 	snapToPoint,
-	snapToPointWithInfo,
 	snapToRulerLine,
-} from "../../js/snap.js";
+} from "../../js/snapNew.js";
 import {
 	execute,
 	executeCommand,
 } from "../../kernel/execute.js";
 import {
+	SnapPointsCP,
+	SnapPointsFolded,
+	SnapRadiusCP,
+	SnapRadiusFolded,
+} from "../../stores/Snap.js";
+import {
 	SnapPoint,
 	GuideLinesCP,
+	GuideLinesFolded,
 } from "../../stores/UI.js";
-import { RulersCP } from "../../stores/Ruler.js";
+import {
+	RulersCP,
+	RulersFolded,
+} from "../../stores/Ruler.js";
 
-export const Move = writable(undefined);
-export const Drag = writable(undefined);
-export const Presses = writable([]);
-export const Releases = writable([]);
+export const CPMove = writable(undefined);
+export const CPDrag = writable(undefined);
+export const CPPresses = writable([]);
+export const CPReleases = writable([]);
+export const FoldedMove = writable(undefined);
+export const FoldedDrag = writable(undefined);
+export const FoldedPresses = writable([]);
+export const FoldedReleases = writable([]);
 
-export const Step = derived(
-	[Presses, Releases],
-	([$Presses, $Releases]) => $Presses.length + $Releases.length,
+export const CPStep = derived(
+	[CPPresses, CPReleases],
+	([$CPPresses, $CPReleases]) => $CPPresses.length + $CPReleases.length,
 	0,
 );
 
-const MoveSnap = derived(
-	[Move, Step],
-	([$Move, $Step]) => $Step < 2
-		? snapToPointWithInfo($Move)
-		: snapToRulerLine($Move),
-	({}),
+const CPMoveSnap = derived(
+	[CPMove, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP],
+	([$CPMove, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => ($CPStep < 2
+		? snapToPoint($CPMove, $SnapPointsCP, $SnapRadiusCP)
+		: snapToRulerLine($CPMove, $SnapPointsCP, $RulersCP, $SnapRadiusCP)
+	),
+	{ coords: undefined, snap: false },
 );
 
-const DragSnap = derived(
-	[Drag, Step],
-	([$Drag, $Step]) => $Step < 2
-		? snapToPointWithInfo($Drag)
-		: snapToRulerLine($Drag),
-	({}),
+const CPDragSnap = derived(
+	[CPDrag, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP],
+	([$CPDrag, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => ($CPStep < 2
+		? snapToPoint($CPDrag, $SnapPointsCP, $SnapRadiusCP)
+		: snapToRulerLine($CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP)
+	),
+	{ coords: undefined, snap: false },
 );
 
-export const SetSnapPoint = derived(
-	[MoveSnap, DragSnap],
-	([$MoveSnap, $DragSnap]) => {
-		const point = [$MoveSnap, $DragSnap]
+export const CPMoveCoords = derived(
+	CPMoveSnap,
+	($CPMoveSnap) => $CPMoveSnap.coords,
+	undefined,
+);
+
+export const CPDragCoords = derived(
+	CPDragSnap,
+	($CPDragSnap) => $CPDragSnap.coords,
+	undefined,
+);
+
+export const CPPress0Coords = derived(
+	[CPPresses, SnapPointsCP, SnapRadiusCP],
+	([$CPPresses, $SnapPointsCP, $SnapRadiusCP]) => (
+		snapToPoint($CPPresses[0], $SnapPointsCP, $SnapRadiusCP).coords
+	),
+	undefined,
+);
+
+export const CPRelease0Coords = derived(
+	[CPReleases, SnapPointsCP, SnapRadiusCP],
+	([$CPReleases, $SnapPointsCP, $SnapRadiusCP]) => (
+		snapToPoint($CPReleases[0], $SnapPointsCP, $SnapRadiusCP).coords
+	),
+	undefined,
+);
+
+export const CPPress1Coords = derived(
+	[CPPresses, SnapPointsCP, RulersCP, SnapRadiusCP],
+	([$CPPresses, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => (
+		snapToRulerLine($CPPresses[1], $SnapPointsCP, $RulersCP, $SnapRadiusCP).coords
+	),
+	undefined,
+);
+
+export const CPRelease1Coords = derived(
+	[CPReleases, SnapPointsCP, RulersCP, SnapRadiusCP],
+	([$CPReleases, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => (
+		snapToRulerLine($CPReleases[1], $SnapPointsCP, $RulersCP, $SnapRadiusCP).coords
+	),
+	undefined,
+);
+
+
+// ////////////////////////////////
+
+
+export const FoldedStep = derived(
+	[FoldedPresses, FoldedReleases],
+	([$FoldedPresses, $FoldedReleases]) => (
+		$FoldedPresses.length + $FoldedReleases.length
+	),
+	0,
+);
+
+const FoldedMoveSnap = derived(
+	[FoldedMove, FoldedStep, SnapPointsFolded, RulersFolded, SnapRadiusFolded],
+	([$FoldedMove, $FoldedStep, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded]) => ($FoldedStep < 2
+		? snapToPoint($FoldedMove, $SnapPointsFolded, $SnapRadiusFolded)
+		: snapToRulerLine($FoldedMove, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded)
+	),
+	{ coords: undefined, snap: false },
+);
+
+const FoldedDragSnap = derived(
+	[FoldedDrag, FoldedStep, SnapPointsFolded, RulersFolded, SnapRadiusFolded],
+	([$FoldedDrag, $FoldedStep, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded]) => ($FoldedStep < 2
+		? snapToPoint($FoldedDrag, $SnapPointsFolded, $SnapRadiusFolded)
+		: snapToRulerLine($FoldedDrag, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded)
+	),
+	{ coords: undefined, snap: false },
+);
+
+export const FoldedMoveCoords = derived(
+	FoldedMoveSnap,
+	($FoldedMoveSnap) => $FoldedMoveSnap.coords,
+	undefined,
+);
+
+export const FoldedDragCoords = derived(
+	FoldedDragSnap,
+	($FoldedDragSnap) => $FoldedDragSnap.coords,
+	undefined,
+);
+
+export const FoldedPress0Coords = derived(
+	[FoldedPresses, SnapPointsFolded, SnapRadiusFolded],
+	([$FoldedPresses, $SnapPointsFolded, $SnapRadiusFolded]) => (
+		snapToPoint($FoldedPresses[0], $SnapPointsFolded, $SnapRadiusFolded).coords
+	),
+	undefined,
+);
+
+export const FoldedRelease0Coords = derived(
+	[FoldedReleases, SnapPointsFolded, SnapRadiusFolded],
+	([$FoldedReleases, $SnapPointsFolded, $SnapRadiusFolded]) => (
+		snapToPoint($FoldedReleases[0], $SnapPointsFolded, $SnapRadiusFolded).coords
+	),
+	undefined,
+);
+
+export const FoldedPress1Coords = derived(
+	[FoldedPresses, SnapPointsFolded, RulersFolded, SnapRadiusFolded],
+	([$FoldedPresses, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded]) => (
+		snapToRulerLine($FoldedPresses[1], $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded).coords
+	),
+	undefined,
+);
+
+export const FoldedRelease1Coords = derived(
+	[FoldedReleases, SnapPointsFolded, RulersFolded, SnapRadiusFolded],
+	([$FoldedReleases, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded]) => (
+		snapToRulerLine($FoldedReleases[1], $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded).coords
+	),
+	undefined,
+);
+
+
+// ////////////////////////////////
+
+export const RulerSetRequest = writable(false);
+
+export const CPAxiomPreview = derived(
+	[CPPress0Coords, CPRelease0Coords, CPDragCoords],
+	([$CPPress0Coords, $CPRelease0Coords, $CPDragCoords]) => {
+		// console.log("CPAxiomPreview");
+		if ($CPPress0Coords && !$CPRelease0Coords && $CPDragCoords) {
+			const point1 = $CPPress0Coords.join(", ");
+			const point2 = $CPDragCoords.join(", ");
+			const args = `[${point1}], [${point2}]`;
+			execute(`setGuideLinesCP(axiom1(${args}))`);
+		}
+	},
+	undefined,
+);
+
+export const CPAxiomRulers = derived(
+	[CPPress0Coords, CPRelease0Coords, RulerSetRequest],
+	([$CPPress0Coords, $CPRelease0Coords, $RulerSetRequest]) => {
+		if (!$RulerSetRequest) { return; }
+		if ($CPPress0Coords && $CPRelease0Coords) {
+			const point1 = $CPPress0Coords.join(", ");
+			const point2 = $CPRelease0Coords.join(", ");
+			const args = `[${point1}], [${point2}]`;
+			GuideLinesCP.set([]);
+			RulerSetRequest.set(false);
+			execute(`setRulersCP(axiom1(${args}))`);
+		}
+	},
+	undefined,
+);
+
+export const CPAddSegment = derived(
+	[CPPress1Coords, CPRelease1Coords],
+	([$CPPress1Coords, $CPRelease1Coords]) => {
+		if ($CPPress1Coords && $CPRelease1Coords) {
+			executeCommand("segment", $CPPress1Coords, $CPRelease1Coords);
+			reset();
+		}
+	},
+	undefined,
+);
+
+
+export const FoldedAxiomPreview = derived(
+	[FoldedPress0Coords, FoldedRelease0Coords, FoldedDragCoords],
+	([$FoldedPress0Coords, $FoldedRelease0Coords, $FoldedDragCoords]) => {
+		if ($FoldedPress0Coords && !$FoldedRelease0Coords && $FoldedDragCoords) {
+			const point1 = $FoldedPress0Coords.join(", ");
+			const point2 = $FoldedDragCoords.join(", ");
+			const args = `[${point1}], [${point2}]`;
+			execute(`setGuideLinesFolded(axiom1(${args}))`);
+		}
+	},
+	undefined,
+);
+
+export const FoldedAxiomRulers = derived(
+	[FoldedPress0Coords, FoldedRelease0Coords, RulerSetRequest],
+	([$FoldedPress0Coords, $FoldedRelease0Coords, $RulerSetRequest]) => {
+		if (!$RulerSetRequest) { return; }
+		if ($FoldedPress0Coords && $FoldedRelease0Coords) {
+			const point1 = $FoldedPress0Coords.join(", ");
+			const point2 = $FoldedRelease0Coords.join(", ");
+			const args = `[${point1}], [${point2}]`;
+			GuideLinesFolded.set([]);
+			RulerSetRequest.set(false);
+			execute(`setRulersFolded(axiom1(${args}))`);
+		}
+	},
+	undefined,
+);
+
+export const FoldedAddSegment = derived(
+	[FoldedPress1Coords, FoldedRelease1Coords],
+	([$FoldedPress1Coords, $FoldedRelease1Coords]) => {
+		if ($FoldedPress1Coords && $FoldedRelease1Coords) {
+			executeCommand("foldedSegment", $FoldedPress1Coords, $FoldedRelease1Coords);
+			reset();
+		}
+	},
+	undefined,
+);
+
+// ////////////////////////////////
+
+export const CPSetSnapPoint = derived(
+	[CPMoveSnap, CPDragSnap],
+	([$CPMoveSnap, $CPDragSnap]) => {
+		const point = [$CPMoveSnap, $CPDragSnap]
 			.filter(a => a !== undefined)
 			.filter(el => el.snap)
 			.shift();
@@ -56,101 +278,51 @@ export const SetSnapPoint = derived(
 	undefined,
 );
 
-export const MoveCoords = derived(
-	MoveSnap,
-	($MoveSnap) => $MoveSnap.coords,
-	undefined,
-);
-
-export const DragCoords = derived(
-	DragSnap,
-	($DragSnap) => $DragSnap.coords,
-	undefined,
-);
-
-export const Coords0 = derived(
-	Presses,
-	($Presses) => snapToPoint($Presses[0], false),
-	undefined,
-);
-
-export const Coords1 = derived(
-	Releases,
-	($Releases) => snapToPoint($Releases[0], false),
-	undefined,
-);
-
-export const Segment0 = derived(
-	Presses,
-	($Presses) => snapToRulerLine($Presses[1], false).coords,
-	undefined,
-);
-
-export const Segment1 = derived(
-	Releases,
-	($Releases) => snapToRulerLine($Releases[1], false).coords,
-	undefined,
-);
-
-export const AxiomPreview = derived(
-	[Coords0, Coords1, DragCoords],
-	([$Coords0, $Coords1, $DragCoords]) => {
-		if ($Coords0 && !$Coords1 && $DragCoords) {
-			const point1 = $Coords0.join(", ");
-			const point2 = $DragCoords.join(", ");
-			const args = `[${point1}], [${point2}]`;
-			execute(`setGuideLinesCP(axiom1(${args}))`);
-		}
+export const FoldedSetSnapPoint = derived(
+	[FoldedMoveSnap, FoldedDragSnap],
+	([$FoldedMoveSnap, $FoldedDragSnap]) => {
+		const point = [$FoldedMoveSnap, $FoldedDragSnap]
+			.filter(a => a !== undefined)
+			.filter(el => el.snap)
+			.shift();
+		SnapPoint.set(point && point.snap ? point.coords : undefined);
 	},
 	undefined,
 );
 
-export const AxiomRulers = derived(
-	[Coords0, Coords1],
-	([$Coords0, $Coords1]) => {
-		if ($Coords0 && $Coords1) {
-			const point1 = $Coords0.join(", ");
-			const point2 = $Coords1.join(", ");
-			const args = `[${point1}], [${point2}]`;
-			GuideLinesCP.set([]);
-			execute(`setRulersCP(axiom1(${args}))`);
-		}
-	},
-	undefined,
-);
-
-export const DoAxiom = derived(
-	[Segment0, Segment1],
-	([$Segment0, $Segment1]) => {
-		if ($Segment0 && $Segment1) {
-			executeCommand("segment", $Segment0, $Segment1);
-			reset();
-		}
-	},
-	undefined,
-);
 
 export const reset = () => {
-	Move.set(undefined);
-	Drag.set(undefined);
-	Presses.set([]);
-	Releases.set([]);
-	GuideLinesCP.set([]);
+	CPMove.set(undefined);
+	CPDrag.set(undefined);
+	CPPresses.set([]);
+	CPReleases.set([]);
+	FoldedMove.set(undefined);
+	FoldedDrag.set(undefined);
+	FoldedPresses.set([]);
+	FoldedReleases.set([]);
 	RulersCP.set([]);
+	RulersFolded.set([]);
+	GuideLinesCP.set([]);
+	GuideLinesFolded.set([]);
 };
 
 let unsub = [];
 
 export const subscribe = () => {
 	unsub = [
-		AxiomPreview.subscribe(() => {}),
-		AxiomRulers.subscribe(() => {}),
-		DoAxiom.subscribe(() => {}),
-		SetSnapPoint.subscribe(() => {}),
+		CPAxiomPreview.subscribe(() => {}),
+		CPAxiomRulers.subscribe(() => {}),
+		CPAddSegment.subscribe(() => {}),
+		CPSetSnapPoint.subscribe(() => {}),
+		FoldedAxiomPreview.subscribe(() => {}),
+		FoldedAxiomRulers.subscribe(() => {}),
+		FoldedAddSegment.subscribe(() => {}),
+		FoldedSetSnapPoint.subscribe(() => {}),
 	];
 };
 
 export const unsubscribe = () => {
 	unsub.forEach(u => u());
+	unsub = [];
 	reset();
 };

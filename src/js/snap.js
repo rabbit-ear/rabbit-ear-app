@@ -78,7 +78,7 @@ export const snapToEdge = (point, force = false) => {
  * the nearest graph vertex, but still, the graph vertex is within
  * the snapRadius, we want to snap to the graph vertex.
  */
-export const snapToPoint = (point, force = false) => {
+export const snapOldToPoint = (point, force = false) => {
 	if (!point) { return undefined; }
 	const snapRadius = get(SnapRadiusCP);
 	// these points take priority over grid points.
@@ -104,7 +104,7 @@ export const snapToPoint = (point, force = false) => {
 	return [...point];
 };
 
-export const snapToPointWithInfo = (point, force = false) => {
+export const snapOldToPointWithInfo = (point, force = false) => {
 	if (!point) { return { snap: false, coord: undefined }; }
 	const snapRadius = get(SnapRadiusCP);
 	// these points take priority over grid points.
@@ -148,7 +148,7 @@ export const snapToPointWithInfo = (point, force = false) => {
 // 	return false;
 // };
 
-export const snapToRulerLine = (point) => {
+export const snapOldToRulerLine = (point) => {
 	if (!point) {
 		return { index: undefined, line: undefined, coords: undefined };
 	}
@@ -160,7 +160,7 @@ export const snapToRulerLine = (point) => {
 	// 	.map(geo => ({ type: "line", geo }))
 	// 	.concat(rulerRays.map(geo => ({ type: "ray", geo })));
 	if (!rulers.length) {
-		return { index: undefined, line: undefined, coords: snapToPoint(point, false) };
+		return { index: undefined, line: undefined, coords: snapOldToPoint(point, false) };
 	}
 	const rulerLinesNearPoints = rulers
 		.map(el => nearestPointOnLine(el.line, point, el.clamp));
@@ -171,13 +171,13 @@ export const snapToRulerLine = (point) => {
 		if (distances[i] < distances[index]) { index = i; }
 	}
 	const rulerPoint = rulerLinesNearPoints[index];
-	const snapPoint = snapToPoint(rulerPoint, false);
+	const snapPoint = snapOldToPoint(rulerPoint, false);
 	return overlapLinePoint(rulers[index].line, snapPoint)
 		? { index, line: rulers[index].line, coords: snapPoint }
 		: { index, line: rulers[index].line, coords: rulerPoint };
 };
 
-// export const snapToPoint = (point, force = false) => {
+// export const snapOldToPoint = (point, force = false) => {
 // 	const snapRadius = get(SnapRadiusCP);
 // 	// all the snap points
 // 	const gridCoord = get(Snapping)

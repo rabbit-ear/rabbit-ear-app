@@ -3,18 +3,14 @@
 	import {
 		FoldedMoveCoords,
 		FoldedDragCoords,
-		FoldedPress0Coords,
-		FoldedRelease0Coords,
 		FoldedPress1Coords,
 		FoldedRelease1Coords,
 	} from "./stores.js";
 
 	$: points = [
-		$FoldedPress0Coords, 
-		$FoldedRelease0Coords, 
-		$FoldedPress1Coords, 
-		$FoldedRelease1Coords, 
-		$FoldedMoveCoords, 
+		$FoldedPress1Coords,
+		$FoldedRelease1Coords,
+		$FoldedMoveCoords,
 		$FoldedDragCoords
 	].filter(a => a !== undefined);
 </script>

@@ -4,7 +4,7 @@ import {
 } from "svelte/store";
 import {
 	snapToVertex,
-	snapToRulerLine,
+	snapOldToRulerLine,
 } from "../../js/snap.js";
 import { GuideLinesCP } from "../../stores/UI.js";
 import { RulersCP } from "../../stores/Ruler.js";
@@ -32,7 +32,7 @@ export const MoveVertex = derived(
 // todo when shift snap to ruler line
 export const DragCoords = derived(
 	Drag,
-	($Drag) => snapToRulerLine($Drag).coords,
+	($Drag) => snapOldToRulerLine($Drag).coords,
 	undefined,
 );
 

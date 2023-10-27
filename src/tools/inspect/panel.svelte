@@ -32,6 +32,9 @@
 	<span slot="body">
 		<div class="container">
 			<div class="flex-column gap">
+				{#if $TargetLocked}
+					<p class="strong highlight">Locked</p>
+				{/if}
 				<div class="flex-row">
 					<p>VEF:
 						<span class="strong">{vNear}</span> / 
@@ -39,15 +42,6 @@
 						<span class="strong">{fNear}</span>
 					</p>
 				</div>
-				<!-- <div class="flex-row">
-					<p>vertex: <span class="strong">{vNear}</span></p>
-				</div>
-				<div class="flex-row">
-					<p>edge: <span class="strong">{eNear}</span></p>
-				</div>
-				<div class="flex-row">
-					<p>face: <span class="strong">{fNear}</span></p>
-				</div> -->
 				<div class="flex-row">
 					<p>Size:
 						<span class="strong">{vefCount[0]}</span> / 
@@ -55,9 +49,6 @@
 						<span class="strong">{vefCount[2]}</span>
 					</p>
 				</div>
-				{#if $TargetLocked}
-					<p class="highlight">Locked</p>
-				{/if}
 				<PanelVertex />
 				<PanelEdge />
 				<PanelFace />

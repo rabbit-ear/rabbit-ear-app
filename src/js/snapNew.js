@@ -1,6 +1,18 @@
-import { distance2 } from "rabbit-ear/math/vector.js";
+import {
+	distance2,
+	subtract2,
+} from "rabbit-ear/math/vector.js";
+import {
+	clampSegment,
+} from "rabbit-ear/math/line.js";
 import { nearestPointOnLine } from "rabbit-ear/math/nearest.js";
 import { overlapLinePoint } from "rabbit-ear/math/overlap.js";
+import {
+	nearest,
+	nearestVertex,
+	nearestEdge,
+	nearestFace,
+} from "rabbit-ear/graph/nearest.js";
 
 // todo: hex grid, check nearest hex grid point
 const nearestGridPoint = (point, snapRadius) => {
@@ -21,8 +33,8 @@ const nearestGridPoint = (point, snapRadius) => {
  * this will be ignored.
  * @returns {object} object with coords {number[]} and snap {boolean}
  */
-export const snapToPointNew = (point, points, snapRadius) => {
-	// console.log("snapToPointNew", point, points, snapRadius);
+export const snapToPoint = (point, points, snapRadius) => {
+	// console.log("snapToPoint", point, points, snapRadius);
 	if (!point) { return { coord: undefined, snap: false }; }
 	if (!points || !points.length) { return { coord: point, snap: false }; }
 	// these points take priority over grid points.
@@ -51,8 +63,8 @@ export const snapToPointNew = (point, points, snapRadius) => {
  * @param { line: VecLine, clamp: function, domain: function } rulers
  * @param {number} snapRadius
  */
-export const snapToRulerLineNew = (point, points, rulers, snapRadius) => {
-	// console.log("snapToRulerLineNew", point, points, rulers, snapRadius);
+export const snapToRulerLine = (point, points, rulers, snapRadius) => {
+	// console.log("snapToRulerLine", point, points, rulers, snapRadius);
 	if (!point) {
 		return { coords: undefined, snap: false };
 	}
@@ -79,8 +91,32 @@ export const snapToRulerLineNew = (point, points, rulers, snapRadius) => {
 	// snapPoints which overlap this snap line.
 	const collinearSnapPoints = points
 		.filter(p => overlapLinePoint(ruler.line, p, ruler.domain));
-	const snapPoint = snapToPointNew(rulerPoint, collinearSnapPoints, snapRadius);
+	const snapPoint = snapToPoint(rulerPoint, collinearSnapPoints, snapRadius);
 	return snapPoint.snap
 		? snapPoint
 		: { coords: rulerPoint, snap: true };
+};
+/**
+ * @param {number[]} point
+ * @param {FOLD} graph a FOLD graph with vertices_coords, edges_vertices
+ * @param {number} snapRadius
+ */
+export const snapToEdge = (point, graph, snapRadius) => {
+	if (!point || !graph || !graph.vertices_coords || !graph.edges_vertices) {
+		return { snap: false, edge: undefined, coords: undefined };
+	}
+	const edge = nearestEdge(graph, point);
+	if (edge === undefined) {
+		return { snap: false, edge: undefined, coords: point};
+	}
+	const seg = graph.edges_vertices[edge].map(v => graph.vertices_coords[v]);
+	const nearestPoint = nearestPointOnLine(
+		{ vector: subtract2(seg[1], seg[0]), origin: seg[0] },
+		point,
+		clampSegment,
+	);
+	const distance = distance2(point, nearestPoint);
+	return distance < snapRadius
+		? { snap: true, edge, coords: nearestPoint }
+		: { snap: false, edge: undefined, coords: point };
 };

@@ -3,7 +3,7 @@ import {
 	derived,
 } from "svelte/store";
 import {
-	snapToPoint,
+	snapOldToPoint,
 } from "../../js/snap.js";
 import { executeCommand } from "../../kernel/execute.js";
 import { zipArrays } from "../../js/arrays.js";
@@ -20,13 +20,13 @@ export const Release = writable(undefined);
 
 // export const MoveCoords = derived(
 // 	Move,
-// 	($Move) => snapToPoint($Move),
+// 	($Move) => snapOldToPoint($Move),
 // 	undefined,
 // );
 
 // export const PressCoords = derived(
 // 	Press,
-// 	($Press) => snapToPoint($Press),
+// 	($Press) => snapOldToPoint($Press),
 // 	undefined,
 // );
 

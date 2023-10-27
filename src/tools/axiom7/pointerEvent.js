@@ -50,9 +50,9 @@ export default pointerEvent;
 // 	GuideLinesCP,
 // } from "../../stores/UI.js";
 // import {
-// 	snapToPoint,
+// 	snapOldToPoint,
 // 	snapToEdge,
-// 	snapToRulerLine,
+// 	snapOldToRulerLine,
 // } from "../../js/snap.js";
 // import {
 // 	Presses,
@@ -72,13 +72,13 @@ export default pointerEvent;
 // 	Highlight.reset();
 // 	switch (get(ToolStep)) {
 // 	case 0: {
-// 		const coords = snapToPoint(point, false);
+// 		const coords = snapOldToPoint(point, false);
 // 		if (coords !== undefined) { GhostGraphCP.set({ vertices_coords: [coords] }); }
 // 	}
 // 		break;
 // 	case 1: {
 // 		const { edge } = snapToEdge(point, false);
-// 		if (eventType === "press") { pressCoords = snapToPoint(point, false); }
+// 		if (eventType === "press") { pressCoords = snapOldToPoint(point, false); }
 // 		GhostGraphCP.set({ vertices_coords: [pressCoords] });
 // 		if (edge !== undefined) { Highlight.addEdges([edge]); }
 // 	}
@@ -104,10 +104,10 @@ export default pointerEvent;
 // 	}
 // 		break;
 // 	case 4:
-// 		GhostGraphCP.set({ vertices_coords: [snapToRulerLine(point).coords] });
+// 		GhostGraphCP.set({ vertices_coords: [snapOldToRulerLine(point).coords] });
 // 		break;
 // 	case 5: {
-// 		const { coords } = snapToRulerLine(point);
+// 		const { coords } = snapOldToRulerLine(point);
 // 		if (eventType === "press") { pressCoords = coords; }
 // 		GhostGraphCP.set({
 // 			vertices_coords: [pressCoords, coords],
@@ -119,7 +119,7 @@ export default pointerEvent;
 // 		// "release" drawing edge, reset all
 // 		executeCommand("segment",
 // 			executeCommand("addVertex", pressCoords),
-// 			executeCommand("addVertex", snapToRulerLine(point).coords),
+// 			executeCommand("addVertex", snapOldToRulerLine(point).coords),
 // 		);
 // 		RulersCP.set([]);
 // 		GhostGraphCP.set({});
