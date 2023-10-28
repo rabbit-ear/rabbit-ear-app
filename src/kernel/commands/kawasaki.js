@@ -2,7 +2,7 @@ import { get } from "svelte/store";
 import { clampRay } from "rabbit-ear/math/line.js";
 import { includeR } from "rabbit-ear/math/compare.js";
 import { kawasakiSolutions } from "rabbit-ear/singleVertex/kawasaki.js";
-import { CreasePattern } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 import { RulersCP } from "../../stores/Ruler.js";
 import { GuideLinesCP } from "../../stores/UI.js";
 

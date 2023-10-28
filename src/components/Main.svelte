@@ -43,6 +43,7 @@
 	let toolbarScrollbarWidth = 0;
 	$: document.documentElement.style.setProperty(
 		"--toolbar-scrollbar-width", `${toolbarScrollbarWidth}px`)
+
 	onMount(() => {
 		// on initial app load, load the default file
 		LoadFOLDFile($OnBootFOLD);

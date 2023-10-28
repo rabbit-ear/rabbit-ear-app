@@ -29,7 +29,7 @@
 	} from "../../stores/Style.js";
 	import {
 		LayerOrderKnown,
-	} from "../../stores/Model.js";
+	} from "../../stores/ModelFolded.js";
 
 	export let graph = {};
 	export let fov = 30.25;

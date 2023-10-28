@@ -5,7 +5,7 @@ import {
 import {
 	snapOldToPoint,
 	snapOldToRulerLine,
-} from "../../js/snap.js";
+} from "../../js/snapOld.js";
 import {
 	Keyboard,
 	GhostGraphCP,

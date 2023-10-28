@@ -9,7 +9,7 @@ import {
 	reset,
 	vefName,
 } from "./stores.js";
-import { CreasePattern } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 import {
 	Keyboard,
 	UIEpsilonCP,

@@ -1,5 +1,5 @@
 import { writable, derived } from "svelte/store";
-import { snapToEdge } from "../../js/snap.js";
+import { snapToEdge } from "../../js/snapOld.js";
 import { Highlight } from "../../stores/UI.js";
 
 export const Move = writable(undefined);

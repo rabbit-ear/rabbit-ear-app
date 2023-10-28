@@ -12,10 +12,8 @@ import { clampLine } from "rabbit-ear/math/line.js";
 import { includeL } from "rabbit-ear/math/compare.js";
 import { pointsToLine } from "rabbit-ear/math/convert.js";
 import { get } from "svelte/store";
-import {
-	CreasePattern,
-	FoldedForm,
-} from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
+import { FoldedForm } from "../../stores/ModelFolded.js";
 // import { RulersCP } from "../../stores/Ruler.js";
 // import { GuideLinesCP } from "../../stores/UI.js";
 

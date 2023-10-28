@@ -1,8 +1,8 @@
+import { flattenFrame } from "rabbit-ear/fold/frames.js";
+import { assignmentFlatFoldAngle } from "rabbit-ear/fold/spec.js";
 import { distance } from "rabbit-ear/math/vector.js";
 import planarize from "rabbit-ear/graph/planarize.js";
 import populate from "rabbit-ear/graph/populate.js";
-import { flattenFrame } from "rabbit-ear/fold/frames.js";
-import { assignmentFlatFoldAngle } from "rabbit-ear/fold/spec.js";
 /**
  * @description Create an empty FOLD graph.
  */
@@ -101,48 +101,11 @@ export const setEdgesFoldAngle = (g, edges, foldAngle) => {
  * an array under the key "file_frames". This method converts
  * a flat array of frames into a FOLD object with "file_frames".
  */
-const framesListToFOLDObject = (frames) => {
+export const reassembleFramesToFOLD = (frames) => {
 	const FOLD = { ...frames[0] };
 	const file_frames = frames.slice(1);
 	if (file_frames.length) { FOLD.file_frames = file_frames; }
 	return FOLD;
-};
-
-const renderTessellationFrame = (frames, frameNum = 0, repeats = 6) => {
-	// "ear:tiles": [{
-	// 	"frame": 0,
-	// 	"regularBasis_vectors": [
-	// 		[4, 0],
-	// 		[0, 4]
-	// 	],
-	// 	"regularBasis_origins": [
-	// 		[0, 0],
-	// 		[0, 0]
-	// 	]
-	// }]
-	const graph = {};
-	const tiles = frames[frameNum]["ear:tiles"];
-
-	// const basisVectors = 
-	return frames[frameNum];
-};
-
-const isTessellationFrame = (frame) => frame.frame_classes
-	&& frame.frame_classes.length
-	&& frame.frame_classes.includes("ear:tessellation");
-/**
- * @description todo
- */
-export const renderFrames = (frames, tessellationRepeats) => {
-	// because of the "flattenFrame" method, we need to reassemble the
-	// FOLD object back into its original form.
-	const FOLD = framesListToFOLDObject(frames);
-	// run flattenFrame on every frame.
-	return Array
-		.from(Array(frames.length))
-		.map((_, i) => isTessellationFrame(frames[i])
-			? renderTessellationFrame(frames, i, tessellationRepeats)
-			: flattenFrame(FOLD, i));
 };
 /**
  * @description Is a FOLD object a crease pattern or a folded form?
@@ -182,3 +145,22 @@ export const shortestEdgeLength = (graph) => {
 		.reduce((a, b) => Math.min(a, b), Infinity);
 	return minLen === Infinity ? undefined : minLen;
 };
+
+// const renderTessellationFrame = (frames, frameNum = 0, repeats = 6) => {
+// 	// "ear:tiles": [{
+// 	// 	"frame": 0,
+// 	// 	"regularBasis_vectors": [
+// 	// 		[4, 0],
+// 	// 		[0, 4]
+// 	// 	],
+// 	// 	"regularBasis_origins": [
+// 	// 		[0, 0],
+// 	// 		[0, 0]
+// 	// 	]
+// 	// }]
+// 	const graph = {};
+// 	const tiles = frames[frameNum]["ear:tiles"];
+
+// 	// const basisVectors = 
+// 	return frames[frameNum];
+// };

@@ -2,12 +2,10 @@
 	import Panel from "./Panel.svelte";
 	import FoldedFormLayers from "../PanelParts/FoldedFormLayers.svelte";
 	import {
-		IsolatedFrame,
-		FrameEdgesAreFlat,
-		FrameIsCreasePattern,
+		FoldAnglesAreFlat,
 		Is3DFoldable,
 		IsFlatFoldable,
-	} from "../../stores/Model.js";
+	} from "../../stores/ModelCP.js";
 
 	export let showPanel;
 </script>
@@ -18,7 +16,7 @@
 		<div class="flex-column gap">
 
 			<p>Edge angles are
-				{#if $FrameEdgesAreFlat}
+				{#if $FoldAnglesAreFlat}
 					<span class="strong">2D</span>
 				{:else}
 					<span class="strong">3D</span>
@@ -26,7 +24,7 @@
 			</p>
 				
 			<p>Vertices are
-				{#if $FrameEdgesAreFlat}
+				{#if $FoldAnglesAreFlat}
 					{#if $IsFlatFoldable}
 						<span class="good">flat-foldable</span>
 					{:else}

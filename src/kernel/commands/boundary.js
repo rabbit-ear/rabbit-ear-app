@@ -1,10 +1,8 @@
 import { edgeAssignmentToFoldAngle } from "rabbit-ear/fold/spec.js";
 import { planarBoundaries } from "rabbit-ear/graph/boundary.js";
 import { get } from "svelte/store";
-import {
-	CreasePattern,
-	UpdateFrame,
-} from "../../stores/Model.js";
+import { UpdateFrame } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 
 export const rebuildBoundary = () => {
 	const graph = get(CreasePattern);

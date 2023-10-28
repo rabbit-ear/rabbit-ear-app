@@ -1,9 +1,7 @@
 import { get } from "svelte/store";
 import splitEdge from "rabbit-ear/graph/splitEdge/index.js";
-import {
-	CreasePattern,
-	UpdateFrame,
-} from "../../stores/Model.js";
+import { UpdateFrame } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 /**
  *
  */

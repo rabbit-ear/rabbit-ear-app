@@ -1,10 +1,10 @@
 <script>
 	import {
-		FrameEdgesAreFlat,
+		FoldAnglesAreFlat,
 		InvalidKawasaki,
 		InvalidMaekawa,
 		InvalidVertices,
-	} from "../../stores/Model.js";
+	} from "../../stores/ModelCP.js";
 	import {
 		VertexRadiusCP,
 	} from "../../stores/Style.js";
@@ -43,7 +43,7 @@
 		: [];
 </script>
 
-{#if $FrameEdgesAreFlat}
+{#if $FoldAnglesAreFlat}
 	{#each kawasaki as attr}
 		<circle {...attr} />
 	{/each}

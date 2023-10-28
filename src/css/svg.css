@@ -85,6 +85,18 @@
 	opacity: 0.25;
 }
 
+/*
+.folded-form .boundary.highlighted { stroke: var(--boundary-color); }
+.folded-form .valley.highlighted { stroke: var(--valley-color); }
+.folded-form .mountain.highlighted { stroke: var(--mountain-color); }
+.folded-form .flat.highlighted { stroke: var(--flat-color); }
+.folded-form .join.highlighted { stroke: var(--join-color); }
+.folded-form .cut.highlighted { stroke: var(--cut-color); }
+.folded-form .unassigned.highlighted { stroke: var(--unassigned-color); }
+*/
+/*.folded-form line.selected { stroke: var(--highlight); }*/
+.folded-form line.highlighted { stroke: var(--highlight); }
+
 .vertices-indices circle {
 	stroke: var(--dim);
 }

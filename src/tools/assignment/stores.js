@@ -1,5 +1,5 @@
 import { writable, derived } from "svelte/store";
-import { snapToEdge } from "../../js/snap.js";
+import { snapToEdge } from "../../js/snapOld.js";
 import { executeCommand } from "../../kernel/execute.js";
 import { Highlight } from "../../stores/UI.js";
 

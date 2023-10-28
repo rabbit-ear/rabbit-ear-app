@@ -11,8 +11,8 @@ import normalize from "rabbit-ear/graph/normalize.js";
 import {
 	snapOldToPoint,
 	snapToVertex,
-} from "../../js/snap.js";
-import { CreasePattern } from "../../stores/Model.js";
+} from "../../js/snapOld.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 import { GhostGraphCP } from "../../stores/UI.js";
 // import { Selection } from "../../stores/Select.js";
 

@@ -1,4 +1,7 @@
-import { writable, derived } from "svelte/store";
+import {
+	writable,
+	derived,
+} from "svelte/store";
 import {
 	ViewportCP,
 	ViewportFolded,
@@ -7,10 +10,8 @@ import {
 	RulerPointsCP,
 	RulerPointsFolded,
 } from "./Ruler.js";
-import {
-	CreasePattern,
-	FoldedFormPlanar,
-} from "./Model.js";
+import { CreasePattern } from "./ModelCP.js";
+import { FoldedFormPlanar } from "./ModelFolded.js";
 /**
  * @description Establish the angle between snapping lines, and the
  * offset from 0deg for the initial line.

@@ -14,6 +14,7 @@ import foldAngle from "./foldAngle/index.js";
 import foldedLine from "./foldedLine/index.js";
 import inspect from "./inspect/index.js";
 import kawasaki from "./kawasaki/index.js";
+import marks from "./marks/index.js";
 import pleat from "./pleat/index.js";
 import rabbitEar from "./rabbitEar/index.js";
 import rect from "./rect/index.js";
@@ -44,6 +45,7 @@ export default {
 	foldedLine,
 	inspect,
 	kawasaki,
+	marks,
 	pleat,
 	rabbitEar,
 	rect,

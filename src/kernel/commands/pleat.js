@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { CreasePattern } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 import { RulersCP } from "../../stores/Ruler.js";
 import { pleat as fnPleat } from "rabbit-ear/graph/pleat.js";
 import { clampLine } from "rabbit-ear/math/line.js";

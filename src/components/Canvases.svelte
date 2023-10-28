@@ -1,8 +1,10 @@
 <script>
 	import {
 		FoldedForm,
+	} from "../stores/ModelFolded.js";
+	import {
 		IsFoldable,
-	} from "../stores/Model.js";
+	} from "../stores/ModelCP.js";
 	import {
 		ShowMenu,
 		ShowFrames,

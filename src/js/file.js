@@ -1,4 +1,6 @@
-import { appWindow } from "@tauri-apps/api/window";
+import {
+	appWindow,
+} from "@tauri-apps/api/window";
 import {
 	open,
 	save as tauriSave,

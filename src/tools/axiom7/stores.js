@@ -6,7 +6,7 @@ import {
 	snapOldToPoint,
 	snapToEdge,
 	snapOldToRulerLine,
-} from "../../js/snap.js";
+} from "../../js/snapOld.js";
 import { zipArrays } from "../../js/arrays.js";
 import {
 	execute,

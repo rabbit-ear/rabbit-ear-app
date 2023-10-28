@@ -1,10 +1,8 @@
 <script>
 	import { onMount } from "svelte";
 	import { LayerGap } from "../../stores/Style.js";
-	import {
-		IsolatedFrame,
-		LayerOrderKnown,
-	} from "../../stores/Model.js";
+	import { IsolatedFrame } from "../../stores/Model.js";
+	import { LayerOrderKnown } from "../../stores/ModelFolded.js";
 	import {
 		FoldedRenderer,
 	} from "../../stores/Renderer.js";

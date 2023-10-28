@@ -1,3 +1,10 @@
+import { appWindow } from "@tauri-apps/api/window";
+import { exists } from "@tauri-apps/api/fs";
+import {
+	get,
+	writable,
+	derived,
+} from "svelte/store";
 import { square } from "rabbit-ear/fold/bases.js";
 import objToFold from "rabbit-ear/convert/objToFold/index.js";
 import opxToFold from "rabbit-ear/convert/opxToFold/index.js";
@@ -7,13 +14,6 @@ import { rgbToAssignment } from "rabbit-ear/fold/colors.js";
 import { parseColorToRgb } from "rabbit-ear/svg/colors/parseColor.js";
 import { boundingBox } from "rabbit-ear/graph/boundary.js";
 import { xmlStringToElement } from "rabbit-ear/svg/general/dom.js";
-import { appWindow } from "@tauri-apps/api/window";
-import { exists } from "@tauri-apps/api/fs";
-import {
-	get,
-	writable,
-	derived,
-} from "svelte/store";
 import {
 	Frames,
 	FileMetadata,

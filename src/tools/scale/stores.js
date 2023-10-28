@@ -12,7 +12,7 @@ import normalize from "rabbit-ear/graph/normalize.js";
 import {
 	snapOldToPoint,
 	snapOldToRulerLine,
-} from "../../js/snap.js";
+} from "../../js/snapOld.js";
 import {
 	Keyboard,
 	GhostGraphCP,
@@ -20,7 +20,7 @@ import {
 import { Selection } from "../../stores/Select.js";
 import {
 	CreasePattern,
-} from "../../stores/Model.js";
+} from "../../stores/ModelCP.js";
 import {
 	RadialSnapDegrees,
 	RadialSnapOffset,

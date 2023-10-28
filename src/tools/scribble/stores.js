@@ -4,7 +4,7 @@ import {
 } from "svelte/store";
 import {
 	snapOldToPoint,
-} from "../../js/snap.js";
+} from "../../js/snapOld.js";
 import { executeCommand } from "../../kernel/execute.js";
 import { zipArrays } from "../../js/arrays.js";
 

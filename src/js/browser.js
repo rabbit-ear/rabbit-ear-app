@@ -1,5 +1,5 @@
 import { executeCommand } from "../kernel/execute.js";
-import { ExportModel } from "../stores/Simulator.js";
+// import { ExportModel } from "../stores/Simulator.js";
 /**
  * @description Bind this method to the <input type="file"> element.
  */

@@ -5,7 +5,7 @@ import {
 import {
 	Highlight,
 } from "../../stores/UI.js";
-import { CreasePattern } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 import { nearest } from "rabbit-ear/graph/nearest.js";
 
 export const Move = writable(undefined);

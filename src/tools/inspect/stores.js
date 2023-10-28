@@ -4,7 +4,7 @@ import {
 	derived,
 } from "svelte/store";
 import { nearest } from "rabbit-ear/graph/nearest.js";
-import { CreasePattern } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 import { Highlight } from "../../stores/UI.js";
 
 export const Press = writable(undefined);

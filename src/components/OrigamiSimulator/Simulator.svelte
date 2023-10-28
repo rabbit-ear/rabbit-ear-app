@@ -65,7 +65,7 @@
 		JoinColor,
 		UnassignedColor,
 	} from "../../stores/style.js";
-	import { CreasePattern } from "../../stores/Model.js";
+	import { CreasePattern } from "../../stores/ModelCP.js";
 
 	const lightVertices = [
 		[+1, +1, +1],

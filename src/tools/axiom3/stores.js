@@ -5,7 +5,7 @@ import {
 import {
 	snapToEdge,
 	snapToRulerLine,
-} from "../../js/snapNew.js";
+} from "../../js/snap.js";
 import {
 	execute,
 	executeCommand,
@@ -26,10 +26,8 @@ import {
 	RulersCP,
 	RulersFolded,
 } from "../../stores/Ruler.js";
-import {
-	CreasePattern,
-	FoldedForm,
-} from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
+import { FoldedForm } from "../../stores/ModelFolded.js";
 
 export const CPMove = writable(undefined);
 export const CPDrag = writable(undefined);

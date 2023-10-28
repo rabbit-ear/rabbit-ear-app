@@ -4,10 +4,8 @@ import addNonPlanarEdge from "rabbit-ear/graph/add/addNonPlanarEdge.js";
 import { boundingBox } from "rabbit-ear/math/polygon.js";
 import { get } from "svelte/store";
 import { NewEdgeAssignment } from "../../stores/App.js";
-import {
-	CreasePattern,
-	UpdateFrame,
-} from "../../stores/Model.js";
+import { UpdateFrame } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 import { setEdgesAssignment } from "../../js/graph.js";
 
 export const vertex = (coords) => {

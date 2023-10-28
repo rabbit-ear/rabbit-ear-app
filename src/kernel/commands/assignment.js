@@ -1,8 +1,6 @@
 import { get } from "svelte/store";
-import {
-	CreasePattern,
-	IsoUpdateFrame,
-} from "../../stores/Model.js";
+import { IsoUpdateFrame } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 import { assignmentCanBeFolded } from "rabbit-ear/fold/spec.js";
 import {
 	setEdgesAssignment,

@@ -7,10 +7,8 @@ import {
 	multiplyMatrix2Vector2,
 	makeMatrix2Rotate,
 } from "rabbit-ear/math/matrix2.js"
-import {
-	CreasePattern,
-	IsoUpdateFrame,
-} from "../../stores/Model.js";
+import { IsoUpdateFrame } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 import { Selection } from "../../stores/Select.js";
 import { getVerticesFromSelection } from "../../js/select.js";
 

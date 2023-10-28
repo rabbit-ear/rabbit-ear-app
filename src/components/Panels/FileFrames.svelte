@@ -23,10 +23,10 @@
 		min={0}
 		max={$Frames.length - 1}
 		bind:value={$FrameIndex}>
-	<hr />
+	<!-- <hr />
 	{#if frame && frame.frame_classes}
 		<p>{frame.frame_classes.join(", ")}</p>
-	{/if}
+	{/if} -->
 </div>
 
 <style>

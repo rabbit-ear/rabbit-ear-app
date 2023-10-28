@@ -2,10 +2,8 @@ import { writable, derived } from "svelte/store";
 import { clampRay } from "rabbit-ear/math/line.js";
 import { includeR } from "rabbit-ear/math/compare.js";
 import { intersectGraphLineFunc } from "../js/intersect.js";
-import {
-	CreasePattern,
-	FoldedFormPlanar,
-} from "./Model.js";
+import { CreasePattern } from "./ModelCP.js";
+import { FoldedFormPlanar } from "./ModelFolded.js";
 
 export const RadialRays = (origin, degrees = 22.5, offset = 0) => Array
 	.from(Array(Math.ceil(360 / degrees)))

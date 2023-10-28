@@ -1,8 +1,6 @@
 import { get } from "svelte/store";
-import {
-	CreasePattern,
-	UpdateFrame,
-} from "../../stores/Model.js";
+import { UpdateFrame } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 import Planarize from "rabbit-ear/graph/planarize.js";
 import populate from "rabbit-ear/graph/populate.js";
 

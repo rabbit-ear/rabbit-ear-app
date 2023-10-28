@@ -22,10 +22,8 @@
 		VerticalUp,
 		DialogNewFrame,
 	} from "../../stores/App.js";
-	import {
-		CreasePattern,
-		Frames,
-	} from "../../stores/Model.js";
+	import { Frames } from "../../stores/Model.js";
+	import { CreasePattern } from "../../stores/ModelCP.js";
 
 	let panel = "";
 	let squareSize = 16;

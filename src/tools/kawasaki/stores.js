@@ -5,7 +5,7 @@ import {
 import {
 	snapToVertex,
 	snapOldToRulerLine,
-} from "../../js/snap.js";
+} from "../../js/snapOld.js";
 import { GuideLinesCP } from "../../stores/UI.js";
 import { RulersCP } from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";

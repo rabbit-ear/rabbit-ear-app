@@ -1,17 +1,21 @@
-import { boundingBox } from "rabbit-ear/graph/boundary.js";
 import {
 	identity2x3,
 	invertMatrix2,
 	multiplyMatrix2Vector2,
 } from "rabbit-ear/math/matrix2.js";
-import { foldToViewBox as FOLDToViewBox } from "rabbit-ear/svg/general/viewBox.js";
+import {
+	boundingBox,
+} from "rabbit-ear/graph/boundary.js";
+import {
+	foldToViewBox,
+} from "rabbit-ear/svg/general/viewBox.js";
 /**
  *
  */
 export const getFOLDViewport = (graph, verticalUp = false) => {
 	if (!graph) { return [0, 0, 1, 1]; }
 	// move the origin up, if not inverted.
-	const viewBox = FOLDToViewBox(graph);
+	const viewBox = foldToViewBox(graph);
 	if (!viewBox) { return [0, 0, 1, 1]; }
 	const viewBoxValues = viewBox.split(" ").map(parseFloat)
 	return !verticalUp

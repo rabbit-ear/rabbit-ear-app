@@ -3,7 +3,7 @@ import { get } from "svelte/store";
 import {
 	snapToEdge,
 	snapOldToRulerLine,
-} from "../../js/snap.js";
+} from "../../js/snapOld.js";
 import { RulersCP } from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";
 import {

@@ -3,10 +3,8 @@ import {
 	derived,
 } from "svelte/store";
 import {
-	// IsFoldable,
-	// IsFlatFoldable,
-	FrameEdgesAreFlat,
-} from "./Model.js";
+	FoldAnglesAreFlat,
+} from "./ModelCP.js";
 
 // Would the user like to render the folded form using origami simulator?
 // false: static (svg/webgl), true: simulator
@@ -23,11 +21,11 @@ export const FoldedPrefer3D = writable(false);
  * @returns one of 3 strings: "svg", "webgl", "simulator"
  */
 export const FoldedRenderer = derived(
-	[FoldedPrefer3D, FoldedStaticOrSimulator, FrameEdgesAreFlat],
-	([$FoldedPrefer3D, $FoldedStaticOrSimulator, $FrameEdgesAreFlat]) => {
+	[FoldedPrefer3D, FoldedStaticOrSimulator, FoldAnglesAreFlat],
+	([$FoldedPrefer3D, $FoldedStaticOrSimulator, $FoldAnglesAreFlat]) => {
 		if ($FoldedStaticOrSimulator) { return "simulator"; }
 		if ($FoldedPrefer3D) { return "webgl"; }
-		if (!$FrameEdgesAreFlat) { return "webgl"; }
+		if (!$FoldAnglesAreFlat) { return "webgl"; }
 		return "svg";
 	},
 	"svg",

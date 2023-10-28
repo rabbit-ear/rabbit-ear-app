@@ -16,10 +16,12 @@
 <Panel {showPanel} >
 	<span slot="title">File</span>
 	<span slot="body">
-		<input type="text" placeholder="title" bind:value={$FileMetadata.file_title} >
-		<input type="text" placeholder="author" bind:value={$FileMetadata.file_author} >
-		<textarea placeholder="description" bind:value={$FileMetadata.file_description}></textarea>
+		<div class="flex-column gap">
+			<input type="text" placeholder="title" bind:value={$FileMetadata.file_title} >
+			<input type="text" placeholder="author" bind:value={$FileMetadata.file_author} >
+			<textarea placeholder="description" bind:value={$FileMetadata.file_description}></textarea>
 		<hr />
+		</div>
 		<FileFrames />
 	</span>
 </Panel>

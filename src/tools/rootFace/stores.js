@@ -5,8 +5,10 @@ import {
 import { facesContainingPoint } from "rabbit-ear/graph/nearest.js";
 import {
 	CreasePattern,
+} from "../../stores/ModelCP.js";
+import {
 	FoldedRootFace,
-} from "../../stores/Model.js";
+} from "../../stores/ModelFolded.js";
 import { Highlight } from "../../stores/UI.js";
 // import { executeCommand } from "../../kernel/execute.js";
 

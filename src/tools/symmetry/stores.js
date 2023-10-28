@@ -6,7 +6,7 @@ import { subtract2 } from "rabbit-ear/math/vector.js";
 import {
 	snapOldToPoint,
 	snapOldToRulerLine,
-} from "../../js/snap.js";
+} from "../../js/snapOld.js";
 import { Keyboard } from "../../stores/UI.js";
 import {
 	RadialSnapDegrees,

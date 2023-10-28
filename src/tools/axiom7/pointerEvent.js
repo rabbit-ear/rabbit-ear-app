@@ -53,7 +53,7 @@ export default pointerEvent;
 // 	snapOldToPoint,
 // 	snapToEdge,
 // 	snapOldToRulerLine,
-// } from "../../js/snap.js";
+// } from "../../js/snapOld.js";
 // import {
 // 	Presses,
 // 	Releases,

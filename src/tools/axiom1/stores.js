@@ -5,7 +5,7 @@ import {
 import {
 	snapToPoint,
 	snapToRulerLine,
-} from "../../js/snapNew.js";
+} from "../../js/snap.js";
 import {
 	execute,
 	executeCommand,

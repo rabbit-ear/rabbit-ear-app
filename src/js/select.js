@@ -1,7 +1,6 @@
+import { includeS } from "rabbit-ear/math/compare.js";
 import { intersectLineLine } from "rabbit-ear/math/intersect.js";
 import { nearest } from "rabbit-ear/graph/nearest.js";
-import { includeS } from "rabbit-ear/math/compare.js";
-// import { pointInBoundingBox } from "rabbit-ear/math/encloses.js";
 /**
  *
  */
@@ -35,7 +34,6 @@ const segmentBoxOverlap = (segment, box) => {
 	const anySegmentIntersects = segmentIntersects
 		.reduce((a, b) => a || b, false);
 	if (anySegmentIntersects) { return true; }
-	//const ptInside = pointInBoundingBox(segment[0], box);
 	const ptInside = pointInRect(segment[0], box);
 	return ptInside;
 };

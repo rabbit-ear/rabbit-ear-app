@@ -1,9 +1,9 @@
 <script>
-	import SelectIcon from "../../tools/select/icon.svelte";
-	import SelectSnapIcon from "./icon-pointer-snap.svelte";
-	import FoldedIcon from "./icon-folded.svelte";
-	import PerspectiveIcon from "./icon-perspective.svelte";
-	import ZoomIcon from "../../tools/camera/icon.svelte";
+	import IconPointer from "./icon-pointer.svelte";
+	import IconPointerSnap from "./icon-pointer-snap.svelte";
+	import IconFolded from "./icon-folded.svelte";
+	import IconPerspective from "./icon-perspective.svelte";
+	import IconZoom from "../../tools/camera/icon.svelte";
 	import Panel from "./Panel.svelte";
 	import {
 		ModelMatrixCP,
@@ -48,24 +48,24 @@
 	<span slot="body">
 		{#if $SnapPoint === undefined}
 			<div class="flex-row">
-				<span class="svg-icon"><SelectIcon /></span>
+				<span class="svg-icon"><IconPointer /></span>
 				<span class="number">{formatPoint($Pointer)}</span>
 			</div>
 		{:else}
 			<div class="flex-row">
-				<span class="svg-icon"><SelectSnapIcon /></span>
+				<span class="svg-icon"><IconPointerSnap /></span>
 				<span class="number">{formatPoint($SnapPoint)}</span>
 			</div>
 		{/if}
 		<div class="flex-row">
-			<span class="svg-icon"><ZoomIcon /></span>
+			<span class="svg-icon"><IconZoom /></span>
 			<span class="number">
 				<button class="text-button" on:click={resetZoom}>{zoomCP} / {zoomFolded}</button>
 			</span>
 		</div>
 		<hr />
 		<div class="flex-row gap">
-			<span class="svg-icon"><FoldedIcon /></span>
+			<span class="svg-icon"><IconFolded /></span>
 			<div class="flex-row toggle-row">
 				<button
 					highlighted={!$FoldedStaticOrSimulator}
@@ -77,16 +77,16 @@
 		</div>
 
 		<div class="flex-row gap">
-			<span class="svg-icon"><PerspectiveIcon /></span>
+			<span class="svg-icon"><IconPerspective /></span>
 			<div class="toggle-row center">
 				<button
 					disabled={$FoldedStaticOrSimulator}
 					highlighted={!$FoldedPrefer3D}
-					on:click={() => $FoldedPrefer3D = false}>2D</button>
+					on:click={() => $FoldedPrefer3D = false}>svg</button>
 				<button
 					disabled={$FoldedStaticOrSimulator}
 					highlighted={$FoldedPrefer3D}
-					on:click={() => $FoldedPrefer3D = true}>3D</button>
+					on:click={() => $FoldedPrefer3D = true}>web gl</button>
 			</div>
 		</div>
 	</span>

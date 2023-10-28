@@ -2,10 +2,8 @@ import { get } from "svelte/store";
 import replace from "rabbit-ear/graph/replace.js";
 import { cleanNumber } from "rabbit-ear/general/number.js";
 import { removeDuplicateVertices } from "rabbit-ear/graph/vertices/duplicate.js";
-import {
-	CreasePattern,
-	UpdateFrame,
-} from "../../stores/Model.js";
+import { UpdateFrame } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
 import { Selection } from "../../stores/Select.js";
 import { findEpsilon } from "../../js/epsilon.js";
 import { nearestTwoVertices } from "../../js/errors.js";

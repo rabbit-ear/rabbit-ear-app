@@ -1,9 +1,7 @@
 import { get } from "svelte/store";
-import {
-	CreasePattern,
-	FoldedForm,
-	UpdateFrame,
-} from "../../stores/Model.js";
+import { UpdateFrame } from "../../stores/Model.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
+import { FoldedForm } from "../../stores/ModelFolded.js";
 import repeatFold from "rabbit-ear/graph/flatFold/repeatFold.js";
 import {
 	add2,

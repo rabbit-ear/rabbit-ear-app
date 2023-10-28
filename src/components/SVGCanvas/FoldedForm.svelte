@@ -3,17 +3,18 @@
 	import GridLayer from "./GridLayer.svelte";
 	import UILayer from "./UILayer.svelte";
 	import FacesLayer from "./FacesLayer.svelte";
+	import EdgesLayer from "./EdgesLayer.svelte";
 	import RulerLayer from "./RulerLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
 	import { VerticalUp } from "../../stores/App.js";
+	import { CPFacesWinding } from "../../stores/ModelCP.js";
 	import {
 		FoldedForm,
-		CPFacesWinding,
 		FoldedFacesWinding,
 		Faces2DDrawOrder,
 		LayerOrderKnown,
-	} from "../../stores/Model.js";
+	} from "../../stores/ModelFolded.js"
 	import {
 		ShowGrid,
 		ShowAxes,
@@ -65,15 +66,22 @@
 	{#if $ShowGrid}
 		<GridLayer {viewport} />
 	{/if}
-	<g class="origami-layer">
-		<FacesLayer
-			graph={$FoldedForm}
-			winding={$CPFacesWinding}
-			frontBack={$FoldedFacesWinding}
-			drawOrder={$LayerOrderKnown ? $Faces2DDrawOrder : []}
-			selected={$Selection.faces}
-			highlighted={$Highlight.faces} />
-	</g>
+	<!-- <g class="origami-layer"> -->
+	<FacesLayer
+		graph={$FoldedForm}
+		winding={$CPFacesWinding}
+		frontBack={$FoldedFacesWinding}
+		drawOrder={$LayerOrderKnown ? $Faces2DDrawOrder : []}
+		selected={$Selection.faces}
+		highlighted={$Highlight.faces} />
+	<EdgesLayer
+		graph={$FoldedForm}
+		selected={$Selection.edges}
+		highlighted={$Highlight.edges}
+		strokeWidth={$StrokeWidthFoldedForm}
+		strokeDasharray={$StrokeDashLengthFoldedForm}
+		/>
+	<!-- </g> -->
 	{#if $ShowAxes}
 		<AxesLayer {viewport} />
 	{/if}

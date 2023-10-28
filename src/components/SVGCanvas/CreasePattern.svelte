@@ -13,10 +13,12 @@
 	import {
 		CreasePattern,
 		CPFacesWinding,
+	} from "../../stores/ModelCP.js";
+	import {
 		FoldedFacesWinding,
 		Faces2DDrawOrder,
 		LayerOrderKnown,
-	} from "../../stores/Model.js";
+	} from "../../stores/ModelFolded.js"
 	import { VerticalUp } from "../../stores/App.js";
 	import {
 		ShowGrid,
