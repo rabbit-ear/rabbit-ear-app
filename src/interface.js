@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { ask } from "@tauri-apps/api/dialog";
+import { exists } from "@tauri-apps/api/fs";
 import { get } from "svelte/store";
 import {
 	execute,
@@ -28,7 +29,7 @@ import {
 import {
 	NewFile,
 	FilePath,
-	FileExists,
+	// FileExists,
 	GetCurrentFOLDFile,
 } from "./stores/File.js";
 
@@ -109,9 +110,20 @@ window.dialog.importFile = importFile;
 
 window.fs.open = openFile;
 
-window.fs.save = () => get(FileExists)
-	? save(JSON.stringify(GetCurrentFOLDFile()), get(FilePath))
-	: saveAs(JSON.stringify(GetCurrentFOLDFile()), get(FilePath));
+// This doesn't work in the way I expected, Svelte derived stores with
+// async values. This one time get() will get the current value (previous),
+// before the call to the async, which, in theory would trigger a refresh
+// of the data, if we weren't using this one time subscribe get().
+// const exists = await get(FileExists);
+// window.fs.save = async () => await get(FileExists)
+// 	? save(JSON.stringify(GetCurrentFOLDFile()), get(FilePath))
+// 	: saveAs(JSON.stringify(GetCurrentFOLDFile()), get(FilePath));
+window.fs.save = async () => {
+	const filePath = get(FilePath)
+	return await exists(filePath)
+		? save(JSON.stringify(GetCurrentFOLDFile()), filePath)
+		: saveAs(JSON.stringify(GetCurrentFOLDFile()), filePath);
+};
 
 window.fs.saveAs = () => (
 	saveAs(JSON.stringify(GetCurrentFOLDFile()), get(FilePath))

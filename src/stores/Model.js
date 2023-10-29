@@ -12,10 +12,6 @@ import {
 } from "rabbit-ear/fold/frames.js";
 import populate from "rabbit-ear/graph/populate.js";
 import {
-	graphToMatrix2,
-} from "../js/matrix.js";
-import {
-	makeEmptyGraph,
 	reassembleFramesToFOLD,
 	graphIsCreasePattern,
 } from "../js/graph.js";
@@ -55,7 +51,6 @@ export const FileMetadata = writable({});
  * @description Contains an array of graphs, each being one frame
  * in the FOLD file, where the first item is the top level frame.
  */
-// export const Frames = writable([makeEmptyGraph()]);
 export const Frames = writable([]);
 /**
  * @description Which frame is currently visible in the main viewport?
@@ -157,18 +152,6 @@ export const UpdateFrame = (graph) => {
 	RecalculateModelMatrix();
 	return IsoUpdateFrame(graph);
 };
-/**
- * update: i just moved RecalculateModelMatrix into UpdateFrame,
- * which makes this next method kinda useless
- */
-// export const UpdateAndResizeFrame = (graph) => {
-// 	// trigger model-matrix to update
-// 	RecalculateModelMatrix();
-// 	UpdateFrame(graph);
-// };
-// export const UpdateModelMatrix = () => {
-// 	ModelMatrixCP.set(graphToMatrix2(get(CreasePattern)));
-// }
 /**
  * @description If "IsoUpdateFrame" is a small update, "UpdateFrame" is a
  * larger update, "SetFrame" is an even larger update, where the

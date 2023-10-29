@@ -9,6 +9,7 @@ import { square } from "rabbit-ear/fold/bases.js";
 import objToFold from "rabbit-ear/convert/objToFold/index.js";
 import opxToFold from "rabbit-ear/convert/opxToFold/index.js";
 import svgToFold from "rabbit-ear/convert/svgToFold/index.js";
+import foldToSvg from "rabbit-ear/convert/foldToSvg/index.js";
 import svgSegments from "rabbit-ear/convert/svgToFold/svgSegments.js";
 import { rgbToAssignment } from "rabbit-ear/fold/colors.js";
 import { parseColorToRgb } from "rabbit-ear/svg/colors/parseColor.js";
@@ -18,9 +19,15 @@ import {
 	Frames,
 	FileMetadata,
 	SetNewModel,
+	IsolatedFrames,
+	IsolatedFrame,
 } from "./Model.js";
-import { getFilenameParts } from "../js/file.js";
+import {
+	getFilenameParts,
+	homeDirectoryFile,
+} from "../js/file.js";
 import { shortestEdgeLength } from "../js/graph.js";
+import { dialogError } from "../js/dialog.js";
 import {
 	APP_NAME,
 	DialogImportFile,
@@ -34,7 +41,7 @@ const UNTITLED_FILE = "untitled.fold";
  * the directory prefix.
  * @value {string}
  */
-export const FilePath = writable(UNTITLED_FILE);
+export const FilePath = writable();
 
 export const OnBootFOLD = writable(
 	localStorage.getItem("OnBootFOLD") || JSON.stringify(square()),
@@ -43,23 +50,35 @@ export const OnBootFOLD = writable(
 // todo: top level subscribe has no unsubscribe call.
 OnBootFOLD.subscribe(value => localStorage.setItem("OnBootFOLD", value));
 
+
+// This doesn't work in the way I expected, Svelte derived stores with
+// async values. This one time get() will get the current value (previous),
+// before the call to the async, which, in theory would trigger a refresh
+// of the data, if we weren't using this one time subscribe get().
+// const exists = await get(FileExists);
+// solution 1: create a top-level subscription, which, might be bad practice.
+// solution 2: use Tauri native await exists($FilePath) instead, unless
+// we need this FileExists object in multiple places then re-introduce the
+// top level subscription thing.
 /**
  * @description Does "FilePath" point to an existing file?
  * For example, if so, "save" will work, otherwise it defers to "save as".
  * @value {boolean}
  */
-export const FileExists = derived(
-	FilePath,
-	async ($FilePath, set) => {
-		try {
-			await exists($FilePath).then(exists => set(exists));
-		} catch (error) {
-			// console.warn("FileExists", error);
-			set(false);
-		}
-	},
-	false,
-);
+// export const FileExists = derived(
+// 	FilePath,
+// 	async ($FilePath, set) => {
+// 		try {
+// 			const fileExists = await exists($FilePath);
+// 			// console.log("FileExists", $FilePath, fileExists);
+// 			return set(fileExists);
+// 		} catch (error) {
+// 			return set(false);
+// 		}
+// 	},
+// 	false,
+// );
+// FileExists.subscribe(() => {});
 /**
  * @description Watch "FilePath" for any changes, update the window title
  * to include the currently opened filename.
@@ -81,7 +100,6 @@ OnFileNameChange.subscribe(() => {});
  * and its metadata sits here during the intermediary step when the user
  * is able to adjust settings, before the final import.
  * @value {object} object with key/value:
- * - filename {string}
  * - name {string}
  * - extension {string}
  * - contents {string}
@@ -213,9 +231,13 @@ export const ImportedFileDefaultFOLDPreview = derived(
  * @description Load a new file. Unbind any currently opened file, reset the
  * path, disable "Save" by setting FileExists to false.
  */
-export const NewFile = () => {
-	SetNewModel(); // ({})
-	FilePath.set(UNTITLED_FILE);
+export const NewFile = async () => {
+	let filePath = UNTITLED_FILE;
+	try {
+		filePath = await homeDirectoryFile(UNTITLED_FILE);
+	} catch (error) {}
+	SetNewModel();
+	FilePath.set(filePath);
 };
 /**
  *
@@ -232,12 +254,15 @@ export const GetCurrentFOLDFile = () => {
  * @description The second-most default entry point to loading a file,
  * in the case when the file is already known to be a FOLD format.
  */
-export const LoadFOLDFile = (FOLD, filename = UNTITLED_FILE) => {
+export const LoadFOLDFile = async (FOLD, inputFilePath) => {
 	try {
+		const filePath = inputFilePath
+			? inputFilePath
+			: await homeDirectoryFile(UNTITLED_FILE);
 		SetNewModel(typeof FOLD === "string" ? JSON.parse(FOLD) : FOLD);
-		FilePath.set(filename);
+		FilePath.set(filePath);
 	} catch (error) {
-		// show warning to user. bad file.
+		dialogError(`${error}`, "Cannot load .FOLD file");
 	}
 };
 /**
@@ -246,12 +271,14 @@ export const LoadFOLDFile = (FOLD, filename = UNTITLED_FILE) => {
  * the InportFile data will be filled to prepare for the importing
  * and conversion of another file format into FOLD.
  */
-export const LoadFile = (contents, filePath) => {
-	const { filename, name, extension } = getFilenameParts(filePath);
+export const LoadFile = async (contents, filePath) => {
+	const { name, extension } = await getFilenameParts(filePath);
+	// todo: files without extension, or "" extension.
 	switch (extension.toLowerCase()) {
+	case "":
 	case "fold": return LoadFOLDFile(contents, filePath);
 	default:
-		ImportedFile.set({ filename, name, extension, contents });
+		ImportedFile.set({ name, extension, contents });
 		get(DialogImportFile).showModal();
 		break;
 	}
@@ -266,13 +293,13 @@ export const clearImport = () => {
  * @description Call this to process the conversion with the current
  * user settings and load the result into the app.
  */
-export const finishImport = () => {
-	const { filename, name, extension } = get(ImportedFile);
+export const finishImport = async () => {
+	const { name, extension } = get(ImportedFile);
 	// console.log("filename", filename)
 	// console.log("name", name)
 	// console.log("extension", extension)
-	const newName = name && name !== "" ? `${name}.fold` : undefined
-	LoadFOLDFile(get(ImportedFileFOLDPreview), newName);
+	const newName = name && name !== "" ? `${name}.fold` : undefined;
+	LoadFOLDFile(get(ImportedFileFOLDPreview), await homeDirectoryFile(newName));
 	clearImport();
 };
 /**

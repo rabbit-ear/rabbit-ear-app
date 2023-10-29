@@ -47,17 +47,17 @@
 	<span slot="title">Canvas</span>
 	<span slot="body">
 		{#if $SnapPoint === undefined}
-			<div class="flex-row">
+			<div class="flex-row gap">
 				<span class="svg-icon"><IconPointer /></span>
 				<span class="number">{formatPoint($Pointer)}</span>
 			</div>
 		{:else}
-			<div class="flex-row">
+			<div class="flex-row gap">
 				<span class="svg-icon"><IconPointerSnap /></span>
 				<span class="number">{formatPoint($SnapPoint)}</span>
 			</div>
 		{/if}
-		<div class="flex-row">
+		<div class="flex-row gap">
 			<span class="svg-icon"><IconZoom /></span>
 			<span class="number">
 				<button class="text-button" on:click={resetZoom}>{zoomCP} / {zoomFolded}</button>

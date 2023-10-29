@@ -35,3 +35,18 @@ export const niceNumber = (number, digits = 1) => {
 	}
 	return result;
 };
+/**
+ * @description just learned this:
+ * if edge endpoints are floating point values with 12-16 digits,
+ * the rendering is MUCH slower than if the same edges' endpoints
+ * are integers.
+ * cut double precision to float precision for rendering speed
+ */
+export const svgNumber = (number) => {
+	const rawString = number.toString();
+	if (rawString.length < 7) { return rawString; }
+	const cleaned = cleanNumber(number, 7).toString();
+	if (cleaned.length < 7) { return cleaned; }
+	return number.toFixed(4);
+	// return niceNumber(number, 4).toString();
+};

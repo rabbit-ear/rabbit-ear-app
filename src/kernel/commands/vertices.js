@@ -7,6 +7,10 @@ import { CreasePattern } from "../../stores/ModelCP.js";
 import { Selection } from "../../stores/Select.js";
 import { findEpsilon } from "../../js/epsilon.js";
 import { nearestTwoVertices } from "../../js/errors.js";
+import {
+	MakeSqrt2Lookup,
+	Sqrt2LookupToFloat,
+} from "../../js/sqrt2.js";
 
 export const mergeNearbyVertices = (epsilonFactor = 1e-4) => {
 	const graph = get(CreasePattern);
@@ -17,12 +21,23 @@ export const mergeNearbyVertices = (epsilonFactor = 1e-4) => {
 		: `removed no vertices`;
 };
 
-export const cleanVertices = () => {
+export const cleanVertices = (precision = 12) => {
 	const graph = get(CreasePattern);
+	// const sqrt2Lookup = MakeSqrt2Lookup();
 	const vertices_coords = graph.vertices_coords
-		.map(coord => coord.map(n => cleanNumber(n, 12)));
+		.map(coord => coord.map(n => cleanNumber(n, precision)));
+		// .map(coord => coord.map(n => {
+		// 	const str = n.toFixed(5);
+		// 	return sqrt2Lookup[str]
+		// 		? Sqrt2LookupToFloat(...sqrt2Lookup[str])
+		// 		: n;
+		// }));
+	const modified = graph.vertices_coords
+		.flatMap((coord, i) => coord
+			.map((n, j) => n === vertices_coords[i][j] ? 0 : 1))
+		.reduce((a, b) => a + b, 0);
 	UpdateFrame({ ...graph, vertices_coords });
-	return `cleaned ${vertices_coords.length} vertices`;
+	return `repaired ${modified}/${vertices_coords.length * 2} numbers (in ${vertices_coords.length} vertices`;
 };
 
 export const snapAllVertices = () => {

@@ -18,12 +18,15 @@ new:
 - [ ] modify CP (scale, transform), zoom doesn't work.
 - [x] new tool: rect
 - [ ] new tool: circle arc
+- [ ] new tool: compass straight edge style ruler marks
 - [ ] file_ metadata made it into a frame. caused issues when saving
 
 high priority:
 
+- [ ] getFilenameParts does not work with windows paths (backslash not forwardslash)
 - [ ] in progress tool leaving canvas, reset, causing issues with further ui input.
 - [ ] "There are too many active WebGL contexts on this page, the oldest context will be lost."
+- [ ] when layer solver cannot solve, show violations between faces.
 - [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
 - [ ] "save as" after saving to a Desktop document, weird directory invalid error
 - [ ] simulator "reset", or better "reset zoom" should also reset it's camera

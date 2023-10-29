@@ -3,6 +3,7 @@ import { assignmentFlatFoldAngle } from "rabbit-ear/fold/spec.js";
 import { distance } from "rabbit-ear/math/vector.js";
 import planarize from "rabbit-ear/graph/planarize.js";
 import populate from "rabbit-ear/graph/populate.js";
+import { svgNumber } from "./epsilon.js";
 /**
  * @description Create an empty FOLD graph.
  */
@@ -13,6 +14,21 @@ export const makeEmptyGraph = () => populate({
 	edges_foldAngle: [],
 	faces_vertices: [],
 });
+/**
+ *
+ */
+export const makeSVGEdgesCoords = (graph) => {
+	const edges_vertices = graph && graph.edges_vertices && graph.vertices_coords
+		? graph.edges_vertices
+		: []
+	return edges_vertices
+		.map(ev => ev.map(v => graph.vertices_coords[v]))
+		.map(seg => (seg && seg.length && seg[0] && seg[1]
+			? [seg[0][0], seg[0][1], seg[1][0], seg[1][1]]
+			: []))
+		.map(coords => coords.map(svgNumber))
+		.map(coords => ({ x1: coords[0], y1: coords[1], x2: coords[2], y2: coords[3] }));
+};
 /**
  * @description Given a FOLD graph, a list of edge indices, and
  * an assignment, and an optional fold angle, set the edges to be

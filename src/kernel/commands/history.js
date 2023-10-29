@@ -12,6 +12,7 @@ import { CommandHistory } from "../../stores/History.js";
  * way into the the core functionality (ie: not be called by execute()).
  */
 export const undo = () => {};
+// todo: print: "end of history"
 
 export const redo = () => {};
 

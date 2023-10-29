@@ -1,5 +1,6 @@
 <script>
 	import { joinSelectedHighlighted } from "./attributes.js";
+	import { svgNumber } from "../../js/epsilon.js";
 
 	export let graph = {};
 	export let selected = [];
@@ -16,7 +17,10 @@
 		? []
 		: graph.faces_vertices
 			.filter(fv => fv.reduce((prev, v) => prev && graph.vertices_coords[v], true))
-			.map(fv => fv.map(v => graph.vertices_coords[v].slice(0, 2).join(",")))
+			.map(fv => fv
+				.map(v => graph.vertices_coords[v].slice(0, 2))
+				.map(points => points.map(svgNumber))
+				.map(points => points.join(",")))
 			.map(points => points.join(" "));
 
 	let facesClass = [];
