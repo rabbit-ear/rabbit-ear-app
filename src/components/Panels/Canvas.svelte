@@ -10,7 +10,11 @@
 		CameraMatrixCP,
 		ModelMatrixFolded,
 		CameraMatrixFolded,
+		WebGLViewMatrix,
 	} from "../../stores/ViewBox.js";
+	import {
+		ResetView,
+	} from "../../stores/Simulator.js";
 	import {
 		Pointer,
 		SnapPoint,
@@ -40,6 +44,8 @@
 	const resetZoom = () => {
 		CameraMatrixCP.reset();
 		CameraMatrixFolded.reset();
+		WebGLViewMatrix.reset();
+		$ResetView();
 	};
 </script>
 

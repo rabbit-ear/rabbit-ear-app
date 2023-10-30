@@ -17,7 +17,6 @@
 		"general",
 		"simple",
 		"attributes",
-		"lines",
 		"many lines",
 		"single vertex",
 		"transform",

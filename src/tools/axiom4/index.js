@@ -15,7 +15,8 @@ import {
 const axiom4 = {
 	key: "axiom4",
 	name: "axiom 4",
-	group: "lines",
+	group: "simple",
+	order: 14,
 	icon,
 	panel,
 	cp: {

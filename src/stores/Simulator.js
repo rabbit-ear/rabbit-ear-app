@@ -37,3 +37,6 @@ export const Reset = writable(() => {});
 
 // ask origami simulator to export the current 3D state
 export const ExportModel = writable(() => {});
+
+//
+export const ResetView = writable(() => {});

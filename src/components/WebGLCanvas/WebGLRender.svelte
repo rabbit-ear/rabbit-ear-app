@@ -20,20 +20,20 @@
 		drawProgram,
 		deallocProgram,
 	} from "rabbit-ear/webgl/program.js";
-	import { vectorFromScreenLocation } from "./general.js";
+	import {
+		IsFoldedForm,
+		vectorFromScreenLocation,
+	} from "./general.js";
 	import {
 		FoldedFrontColor,
 		FoldedBackColor,
 		CPColor,
 		LayerGapScaled,
 	} from "../../stores/Style.js";
-	import {
-		LayerOrderKnown,
-	} from "../../stores/ModelFolded.js";
 
 	export let graph = {};
 	export let fov = 30.25;
-	export let perspective = "orthographic"; // "perspective";
+	export let perspective = "orthographic";
 	export let viewMatrix = identity4x4;
 
 	let gl;
@@ -46,10 +46,7 @@
 	$: modelViewMatrix = multiplyMatrices4(viewMatrix, modelMatrix);
 	$: projectionMatrix = makeProjectionMatrix(canvas, perspective, fov);
 	$: inferredScale = 1 / modelViewMatrix[0];
-	$: isFoldedForm = graph
-		&& graph.frame_classes
-		&& graph.frame_classes.length
-		&& graph.frame_classes.includes("foldedForm");
+	$: isFoldedForm = IsFoldedForm(graph);
 
 	$: uniformOptions = {
 		projectionMatrix,

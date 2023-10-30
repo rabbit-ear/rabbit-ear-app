@@ -72,19 +72,27 @@ const DragVector = derived(
 
 export const Subgraph = derived(
 	[CreasePattern, Selection],
-	([$CreasePattern, $Selection]) => subgraph($CreasePattern, $Selection),
+	([$CreasePattern, $Selection]) => {
+		try {
+			return subgraph($CreasePattern, $Selection);
+		} catch (error) {
+			return {};
+		}
+	},
 	({}),
 );
 
 const GhostGraphCPPreview = derived(
 	[Subgraph, DragVector],
 	([$Subgraph, $DragVector]) => {
-		const clone = structuredClone($Subgraph);
-		if ($DragVector !== undefined) {
-			clone.vertices_coords = clone.vertices_coords
-				.map(coords => add2(coords, $DragVector));
-		}
-		GhostGraphCP.set(clone);
+		try {
+			const clone = structuredClone($Subgraph);
+			if ($DragVector !== undefined) {
+				clone.vertices_coords = clone.vertices_coords
+					.map(coords => add2(coords, $DragVector));
+			}
+			GhostGraphCP.set(clone);
+		} catch (error) {}
 	},
 	undefined,
 );

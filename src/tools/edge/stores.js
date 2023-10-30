@@ -198,6 +198,16 @@ const SetSnapPoint = derived(
 	undefined,
 );
 
+const WatchForErrors = derived(
+	[CPPress, CPRelease],
+	([$CPPress, $CPRelease]) => {
+		if ($CPPress === undefined && $CPRelease !== undefined) {
+			reset();
+		}
+	},
+	undefined,
+);
+
 export const reset = () => {
 	CPMove.set(undefined);
 	CPPress.set(undefined);
@@ -217,6 +227,7 @@ export const subscribe = () => {
 		SetSnapPoint.subscribe(() => {}),
 		CPFinishTool.subscribe(() => {}),
 		FoldedFinishTool.subscribe(() => {}),
+		WatchForErrors.subscribe(() => {}),
 	];
 };
 

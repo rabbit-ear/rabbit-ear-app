@@ -34,6 +34,7 @@
 		VertexError,
 		Reset,
 		ExportModel,
+		ResetView,
 	} from "../../stores/simulator.js";
 	import {
 		Integration,
@@ -90,6 +91,8 @@
 	let raycasters;
 	// highlighted geometry indicating the selected vertex/face
 	let highlights = Highlights({ simulator });
+	// trackballView exposes its ".reset()" function, bound to this variable
+	let trackballViewReset = () => {};
 	// three.js
 	let scene;
 	let camera;
@@ -147,10 +150,9 @@
 		}
 	}
 
-	// on model change, update camera position
-	$: if (camera) {
-		// scale is due to the camera's FOV
-		const scale = 1.25;
+	const resetCamera = (camera, modelSize) => {
+		if (!camera) { return; }
+		const scale = 1.33;
 		// the distance the camera should be to nicely fit the object
 		const fitLength = camera.aspect > 1
 			? modelSize * scale
@@ -160,7 +162,21 @@
 		camera.lookAt(0, 0, 0);
 		camera.far = modelSize * 100;
 		camera.near = modelSize / 100;
-	}
+	};
+
+	// this Reset function is bound to a store held on by the app.
+	// this allows the user to be able to call this any time to reset the view.
+	$ResetView = () => {
+		// this will reset the trackball rotation and zoom level, however,
+		// the zoom level will be a fixed distance from the origin. we need to
+		// call resetCamera to adjust the zoom to be the appropriate distance
+		// away from the model, depending on the model's dimensions.
+		trackballViewReset();
+		resetCamera(camera, modelSize);
+	};
+
+	// on model change, update camera position
+	$: resetCamera(camera, modelSize);
 
 	// on model change, update the position of the lights
 	$: {
@@ -174,6 +190,7 @@
 			lights[i].shadow.camera.far = radius * 10; // 500 default
 		});
 	}
+
 	$: Reset.set(simulator.reset);
 
 	/**
@@ -239,4 +256,5 @@
 	zoomSpeed={16}
 	dynamicDampingFactor={1}
 	didMount={didMount}
+	bind:resetView={trackballViewReset}
 />

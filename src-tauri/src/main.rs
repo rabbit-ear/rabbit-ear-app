@@ -97,7 +97,7 @@ fn main() {
 		"Flip Vertically");
 	let item_clean_verts = CustomMenuItem::new(
 		"clean_verts".to_string(),
-		"Smart clean vertices");
+		"Clean vertices");
 	let item_merge_near_verts = CustomMenuItem::new(
 		"merge_near_verts".to_string(),
 		"Merge nearby vertices");

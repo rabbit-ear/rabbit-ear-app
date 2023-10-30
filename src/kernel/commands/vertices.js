@@ -37,7 +37,7 @@ export const cleanVertices = (precision = 12) => {
 			.map((n, j) => n === vertices_coords[i][j] ? 0 : 1))
 		.reduce((a, b) => a + b, 0);
 	UpdateFrame({ ...graph, vertices_coords });
-	return `repaired ${modified}/${vertices_coords.length * 2} numbers (in ${vertices_coords.length} vertices`;
+	return `repaired ${modified}/${vertices_coords.length * 2} numbers (in ${vertices_coords.length} vertices)`;
 };
 
 export const snapAllVertices = () => {

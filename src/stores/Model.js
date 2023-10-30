@@ -18,6 +18,7 @@ import {
 import {
 	CameraMatrixCP,
 	CameraMatrixFolded,
+	WebGLViewMatrix,
 } from "./ViewBox.js";
 import {
 	Selection,
@@ -63,6 +64,7 @@ FrameIndex.set = (n) => {
 	FrameIndexSet(n);
 	CameraMatrixCP.reset();
 	CameraMatrixFolded.reset();
+	WebGLViewMatrix.reset();
 };
 /**
  * @description Because FOLD frames can have parent-child inheritance,
@@ -161,6 +163,7 @@ export const SetFrame = (graph) => {
 	// ModelMatrixCP.set(graphToMatrix2(graph));
 	// CameraMatrixCP.reset();
 	CameraMatrixFolded.reset();
+	WebGLViewMatrix.reset();
 	return UpdateFrame(graph);
 };
 /**
@@ -186,4 +189,5 @@ export const SetNewModel = (FOLD) => {
 	CommandHistory.set([]);
 	CameraMatrixCP.reset();
 	CameraMatrixFolded.reset();
+	WebGLViewMatrix.reset();
 };

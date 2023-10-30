@@ -36,8 +36,12 @@
 	export let rotateSpeed = 4;
 	export let zoomSpeed = 16;
 	export let dynamicDampingFactor;
+
+	// export this method to the outside
+	export let resetView = () => {};
 	let trackball;
 
+	$: if (trackball) { resetView = trackball.reset; }
 	$: if (trackball) { trackball.enabled = enabled; }
 	$: if (trackball) { trackball.maxDistance = maxDistance; }
 	$: if (trackball) { trackball.minDistance = minDistance; }

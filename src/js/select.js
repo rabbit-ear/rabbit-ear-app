@@ -53,6 +53,11 @@ export const getComponentsNearPoint = (graph, point) => {
  */
 export const getComponentsInsideRect = (graph, rect) => {
 	if (!graph || !rect) { return { vertices: [], edges: [], faces: [] }; }
+	if (!graph.vertices_coords
+		|| !graph.edges_vertices
+		|| (!graph.faces_vertices && !graph.faces_edges)) {
+		return { vertices: [], edges: [], faces: [] };
+	}
 	const verticesLookup = graph.vertices_coords
 		.map(p => pointInRect(p, rect));
 	const vertices = verticesLookup

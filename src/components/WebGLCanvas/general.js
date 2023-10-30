@@ -16,7 +16,13 @@ import {
 	quaternionFromTwoVectors,
 	matrix4FromQuaternion,
 } from "rabbit-ear/math/quaternion.js";
-
+/**
+ *
+ */
+export const IsFoldedForm = (graph) => graph
+	&& graph.frame_classes
+	&& graph.frame_classes.length
+	&& graph.frame_classes.includes("foldedForm");
 /**
  * @description Convert a point on a canvas into a 2D vector in the
  * projection space that points from the center of the canvas
@@ -53,7 +59,14 @@ export const rotateViewMatrix = (perspective, viewMatrix, vector, prevVector) =>
 		];
 		const quaternion = quaternionFromTwoVectors(...vectors);
 		const matrix = matrix4FromQuaternion(quaternion);
-		return multiplyMatrices4(matrix, viewMatrix);
+		// return multiplyMatrices4(matrix, viewMatrix);
+		// move translation indices out of the matrix, rotate, then put it back in.
+		const transIndices = [12, 13, 14];
+		const currentTranslation = transIndices.map(i => viewMatrix[i]);
+		transIndices.forEach(i => { viewMatrix[i] = 0; });
+		const newViewMatrix = multiplyMatrices4(matrix, viewMatrix);
+		transIndices.forEach((i, j) => { newViewMatrix[i] = currentTranslation[j]; });
+		return newViewMatrix;
 	case "orthographic":
 		const translateVector = subtract2(vector, prevVector);
 		const translate = makeMatrix4Translate(...translateVector);

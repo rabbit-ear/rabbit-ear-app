@@ -7,12 +7,21 @@
 	import {
 		rotateViewMatrix,
 		zoomViewMatrix,
+		IsFoldedForm,
 	} from "./general.js";
+	import {
+		WebGLViewMatrix,
+	} from "../../stores/ViewBox.js";
 
 	export let graph = {};
 
-	let perspective = "perspective";
-	let viewMatrix = identity4x4;
+	// WebGLRender is always "orthographic" (until changed by the user).
+	// even for folded forms, it will show them as orthographic.
+	// WebGLRender is used throughout the app in many places.
+
+	// WebGLCanvas, however, is used in one place, and is tied to the current
+	// FoldedForm model, and its perspective will change depending.
+	$: perspective = IsFoldedForm(graph) ? "perspective" : "orthographic";
 
 	let prevVector;
 	const onPress = ({ detail }) => {
@@ -27,7 +36,7 @@
 		const { point, vector } = detail;
 		const buttons = prevVector ? 1 : 0;
 		if (buttons) {
-			viewMatrix = rotateViewMatrix(perspective, viewMatrix, vector, prevVector);
+			$WebGLViewMatrix = rotateViewMatrix(perspective, $WebGLViewMatrix, vector, prevVector);
 			prevVector = vector;
 		}
 		WebGLFoldedFormPointerEvent("move", { point, vector, buttons });
@@ -43,13 +52,14 @@
 		const scrollSensitivity = 1 / 100;
 		const delta = -detail.deltaY * scrollSensitivity;
 		if (Math.abs(delta) < 1e-3) { return; }
-		viewMatrix = zoomViewMatrix(perspective, viewMatrix, delta);
+		$WebGLViewMatrix = zoomViewMatrix(perspective, $WebGLViewMatrix, delta);
 	};
 </script>
 
 <WebGLRender
 	{graph}
-	{viewMatrix}
+	{perspective}
+	viewMatrix={$WebGLViewMatrix}
 	on:press={onPress}
 	on:move={onMove}
 	on:release={onRelease}

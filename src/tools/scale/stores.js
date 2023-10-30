@@ -79,19 +79,27 @@ const ScaleRatio = derived(
 
 export const Subgraph = derived(
 	[CreasePattern, Selection],
-	([$CreasePattern, $Selection]) => subgraph($CreasePattern, $Selection),
+	([$CreasePattern, $Selection]) => {
+		try {
+			return subgraph($CreasePattern, $Selection);
+		} catch (error) {
+			return {};
+		}
+	},
 	({}),
 );
 
 const GhostGraphCPPreview = derived(
 	[Subgraph, ScaleRatio],
 	([$Subgraph, $ScaleRatio]) => {
-		const clone = structuredClone($Subgraph);
-		if ($ScaleRatio !== undefined) {
-			clone.vertices_coords = clone.vertices_coords
-				.map(coords => coords.map(n => n * $ScaleRatio));
-		}
-		GhostGraphCP.set(clone);
+		try {
+			const clone = structuredClone($Subgraph);
+			if ($ScaleRatio !== undefined) {
+				clone.vertices_coords = clone.vertices_coords
+					.map(coords => coords.map(n => n * $ScaleRatio));
+			}
+			GhostGraphCP.set(clone);
+		} catch (error) {}
 	},
 	undefined,
 );

@@ -62,15 +62,15 @@ export const DragVector = derived(
 export const GraphPreview = derived(
 	[DragVector, PressVertex, CreasePattern],
 	([$DragVector, $PressVertex, $CreasePattern]) => {
-		if ($PressVertex === undefined) {
-			return GhostGraphCP.set({});
-		}
-		const subgraph = subgraphWithVertices($CreasePattern, [$PressVertex]);
-		[$PressVertex].forEach(v => {
-			subgraph.vertices_coords[v] = add2(subgraph.vertices_coords[v], $DragVector);
-		});
-		normalize(subgraph);
-		GhostGraphCP.set({ ...subgraph });
+		if ($PressVertex === undefined) { return GhostGraphCP.set({}); }
+		try {
+			const subgraph = subgraphWithVertices($CreasePattern, [$PressVertex]);
+			[$PressVertex].forEach(v => {
+				subgraph.vertices_coords[v] = add2(subgraph.vertices_coords[v], $DragVector);
+			});
+			normalize(subgraph);
+			GhostGraphCP.set({ ...subgraph });
+		} catch (error) { }
 	},
 	undefined,
 );

@@ -14,32 +14,25 @@ If this doesn't work, please let me know, it's likely there are additional setup
 
 new:
 
-- [ ] ability to adjust epsilon app-wide
-- [ ] modify CP (scale, transform), zoom doesn't work.
 - [x] new tool: rect
 - [ ] new tool: circle arc
 - [ ] new tool: compass straight edge style ruler marks
-- [ ] file_ metadata made it into a frame. caused issues when saving
+- [ ] new tool: rabbit ear. except make it the straight skeleton. convex only.
+- [ ] new tool: sink. can go in conjunction with straight skeleton.
 
 high priority:
 
-- [ ] getFilenameParts does not work with windows paths (backslash not forwardslash)
-- [ ] in progress tool leaving canvas, reset, causing issues with further ui input.
 - [ ] "There are too many active WebGL contexts on this page, the oldest context will be lost."
 - [ ] when layer solver cannot solve, show violations between faces.
 - [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
-- [ ] "save as" after saving to a Desktop document, weird directory invalid error
-- [ ] simulator "reset", or better "reset zoom" should also reset it's camera
-- [ ] webgl perspective zoom broken.
+- [ ] modify CP (scale, transform), zoom doesn't work.
 - [ ] !!! layer order solved - change assignment - layer order needs to be deleted
 - [ ] layer order - report number of face-pairs, auto solve if number is low
 - [ ] layer order - report multiple solutions, somehow allow them to toggle it.
 - [ ] right mouse click changes to camera to pan around.
 - [ ] foldedLine tool should re-assign existing creases that lay along the path.
-- [ ] rabbit ear tool. except make it the straight skeleton. convex only.
 - [ ] export multiple arrangements of crease patterns and folded forms
 - [ ] "toggleAssignment" to "toggleAssignments"
-- [ ] delete all frames and draw edges with no frame. also, make empty frame is buggy.
 - [ ] svg import bug, path parse error i think
 - [ ] better single vertex analysis.
 - [ ] frames can vertically scroll.
@@ -49,8 +42,8 @@ high priority:
 
 low priority:
 
-- [x] if mouse device, toolbar scrollbar covers up buttons
-- [ ] axioms 4-7 could be coded better
+- [ ] file_ metadata made it into a frame. caused issues when saving
+- [ ] axioms 5-7 could be coded better
 - [ ] copy/paste in the app menu doesn't make UI sense
 - [ ] menu boolean, checkmark reflecting state (Show/Hide)
 - [ ] somehow "import into frame", drag and drop into frames.
@@ -60,6 +53,7 @@ low priority:
 - [ ] when Svelte 5 comes out, replace GraphUpdate with an effect.
 - [ ] snap to SQRT2 points
 - [ ] bug: many different sized frames, one empty, delete it, auto switches to hexagon frame but does not resize viewport, it does if you press the zoom but not automatically
+- [ ] ability to adjust epsilon app-wide
 
 unknown:
 
@@ -72,6 +66,13 @@ unknown:
 
 done:
 
+- [x] simulator "reset", or better "reset zoom" should also reset it's camera
+- [x] webgl perspective zoom broken.
+- [x] if mouse device, toolbar scrollbar covers up buttons
+- [x] getFilenameParts does not work with windows paths (backslash not forwardslash)
+- [x] in progress tool leaving canvas, reset, causing issues with further ui input.
+- [x] "save as" after saving to a Desktop document, weird directory invalid error
+- [x] delete all frames and draw edges with no frame. also, make empty frame is buggy.
 - [x] reset style defaults
 - [x] need new transform: reflect horiz/vert
 - [x] rebuild boundary doesn't work when there are two separate crease patterns.

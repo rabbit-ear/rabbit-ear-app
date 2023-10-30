@@ -42,7 +42,9 @@ const pointerEvent = (eventType, { point, buttons }) => {
 		Release.set(point);
 		// if shift key is not pressed, clear selection.
 		if (!get(Keyboard)[16]) { executeCommand("deselectAll"); }
-		executeCommand("addToSelection", get(ElementSelect), getSelected());
+		try {
+			executeCommand("addToSelection", get(ElementSelect), getSelected());
+		} catch (error) {}
 		reset();
 		break;
 	}

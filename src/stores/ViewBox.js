@@ -83,6 +83,13 @@ CameraMatrixCP.reset = () => CameraMatrixCP.set([...identity2x3]);
 export const CameraMatrixFolded = writable([...identity2x3]);
 CameraMatrixFolded.reset = () => CameraMatrixFolded.set([...identity2x3]);
 
+// this "identity" matrix is for the ViewMatrix and positions the camera
+// in the negative z axis looking directly at the model.
+// This works for both perspective and orthographic.
+const GL_IDENTITY = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
+export const WebGLViewMatrix = writable([...GL_IDENTITY]);
+WebGLViewMatrix.reset = () => WebGLViewMatrix.set([...GL_IDENTITY]);
+
 /**
  * @description The inverse of the camera matrix,
  * used to build the SVG's ViewBox.
