@@ -3,18 +3,18 @@
 	export let highlight = false;
 </script>
 
-	<!-- important, keep this string encapsulated -->
-	<!-- it needs to be able to be matched elsewhere in the app -->
-	<button
-		class={"button-frame-item"}
-		data-frame-index={index}
-		on:click
-		on:mousedown
-		on:mousemove
-		on:mouseup
-		{highlight} >
-		<slot />
-	</button>
+<!-- important, keep this string encapsulated -->
+<!-- it needs to be able to be matched elsewhere in the app -->
+<button
+	class={"button-frame-item"}
+	data-frame-index={index}
+	on:click
+	on:mousedown
+	on:mousemove
+	on:mouseup
+	{highlight} >
+	<slot />
+</button>
 
 <style>
 	button {

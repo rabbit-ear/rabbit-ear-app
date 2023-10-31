@@ -7,19 +7,19 @@
 		: "transform: matrix(1, 0, 0, 1, 0, 0);"
 </script>
 
-	<button
-		on:click={() => ShowFrames.update(v => !v)}>
-		<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 9" stroke-width="1.5" stroke-linecap="round">
-			<g {style}>
-				<line x1="16" y1="2" x2="13" y2="7"/>
-				<line x1="20" y1="2" x2="23" y2="7"/>
-				<line x1="11" y1="2" x2="8" y2="7"/>
-				<line x1="25" y1="2" x2="28" y2="7"/>
-				<line x1="6" y1="2" x2="3" y2="7"/>
-				<line x1="30" y1="2" x2="33" y2="7"/>
-			</g>
-		</svg>
-	</button>
+<button
+	on:click={() => ShowFrames.update(v => !v)}>
+	<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 9" stroke-width="1.5" stroke-linecap="round">
+		<g {style}>
+			<line x1="16" y1="2" x2="13" y2="7"/>
+			<line x1="20" y1="2" x2="23" y2="7"/>
+			<line x1="11" y1="2" x2="8" y2="7"/>
+			<line x1="25" y1="2" x2="28" y2="7"/>
+			<line x1="6" y1="2" x2="3" y2="7"/>
+			<line x1="30" y1="2" x2="33" y2="7"/>
+		</g>
+	</svg>
+</button>
 
 <style>
 	button {

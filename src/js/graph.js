@@ -5,6 +5,14 @@ import planarize from "rabbit-ear/graph/planarize.js";
 import populate from "rabbit-ear/graph/populate.js";
 import { svgNumber } from "./epsilon.js";
 /**
+ * @description Is the graph a folded model or crease pattern?
+ * Depending on which, the renderer will style the model differently.
+ */
+export const IsFoldedForm = (graph) => graph
+	&& graph.frame_classes
+	&& graph.frame_classes.length
+	&& graph.frame_classes.includes("foldedForm");
+/**
  * @description Create an empty FOLD graph.
  */
 export const makeEmptyGraph = () => populate({

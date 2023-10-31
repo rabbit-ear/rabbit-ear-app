@@ -24,7 +24,7 @@ const setAssignment = (edge, assignType) => {
 	if (edge === undefined) { return; }
 	return lookup[assignType]
 		? executeCommand("setAssignment", [edge], lookup[assignType], 0)
-		: executeCommand("toggleAssignment", [edge]);
+		: executeCommand("toggleAssignments", [edge]);
 };
 
 const pointerEvent = (eventType, { point }) => {

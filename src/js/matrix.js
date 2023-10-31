@@ -9,6 +9,7 @@ import {
 import {
 	foldToViewBox,
 } from "rabbit-ear/svg/general/viewBox.js";
+
 /**
  *
  */
@@ -17,7 +18,9 @@ export const getFOLDViewport = (graph, verticalUp = false) => {
 	// move the origin up, if not inverted.
 	const viewBox = foldToViewBox(graph);
 	if (!viewBox) { return [0, 0, 1, 1]; }
-	const viewBoxValues = viewBox.split(" ").map(parseFloat)
+	const viewBoxValues = viewBox.split(" ")
+		.map(parseFloat)
+		.map(n => isNaN(n) || !isFinite(n) ? 0 : n);
 	return !verticalUp
 		? viewBoxValues
 		: [viewBoxValues[0], -(viewBoxValues[1] + viewBoxValues[3]), viewBoxValues[2], viewBoxValues[3]];

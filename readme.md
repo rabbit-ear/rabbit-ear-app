@@ -22,7 +22,8 @@ new:
 
 high priority:
 
-- [ ] "There are too many active WebGL contexts on this page, the oldest context will be lost."
+- [ ] 3D folded forms user can still select "svg" renderer, need to restructure that whole deal.
+- [ ] before quitting "Would you like to save before exiting?"
 - [ ] when layer solver cannot solve, show violations between faces.
 - [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
 - [ ] modify CP (scale, transform), zoom doesn't work.
@@ -32,9 +33,7 @@ high priority:
 - [ ] right mouse click changes to camera to pan around.
 - [ ] foldedLine tool should re-assign existing creases that lay along the path.
 - [ ] export multiple arrangements of crease patterns and folded forms
-- [ ] "toggleAssignment" to "toggleAssignments"
 - [ ] svg import bug, path parse error i think
-- [ ] better single vertex analysis.
 - [ ] frames can vertically scroll.
 - [ ] origami simulator doesn't work for large imported svgs.
 - [ ] Moosers train, make layers, clear, make again, somehow different
@@ -66,6 +65,9 @@ unknown:
 
 done:
 
+- [x] "There are too many active WebGL contexts on this page, the oldest context will be lost."
+- [x] "toggleAssignment" to "toggleAssignments"
+- [x] better single vertex analysis.
 - [x] simulator "reset", or better "reset zoom" should also reset it's camera
 - [x] webgl perspective zoom broken.
 - [x] if mouse device, toolbar scrollbar covers up buttons

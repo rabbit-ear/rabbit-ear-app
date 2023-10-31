@@ -193,13 +193,14 @@ export const save = async (contents, filePath) => {
  */
 export const saveAs = async (contents, targetFilePath) => {
 	const { directory: defaultPath } = await getFilenameParts(targetFilePath);
-	const filePath = await tauriSave({
-		defaultPath,
-		filters: [{
-			name: "FOLD",
-			extensions: ["fold"],
-		}]
-	});
+	const filters = [{
+		name: "FOLD",
+		extensions: ["fold"],
+	}];
+	const options = !targetFilePath || !defaultPath || defaultPath === ""
+		? { filters }
+		: { filters, defaultPath };
+	const filePath = await tauriSave(options);
 	if (filePath == null) { return; }
 	await tauriWriteTextFile(filePath, contents);
 	FilePath.set(filePath);

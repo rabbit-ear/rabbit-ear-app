@@ -7,8 +7,10 @@
 	import {
 		rotateViewMatrix,
 		zoomViewMatrix,
-		IsFoldedForm,
 	} from "./general.js";
+	import {
+		IsFoldedForm,
+	} from "../../js/graph.js";
 	import {
 		WebGLViewMatrix,
 	} from "../../stores/ViewBox.js";

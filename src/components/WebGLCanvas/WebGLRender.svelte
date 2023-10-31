@@ -21,9 +21,11 @@
 		deallocProgram,
 	} from "rabbit-ear/webgl/program.js";
 	import {
-		IsFoldedForm,
 		vectorFromScreenLocation,
 	} from "./general.js";
+	import {
+		IsFoldedForm,
+	} from "../../js/graph.js";
 	import {
 		FoldedFrontColor,
 		FoldedBackColor,
@@ -91,6 +93,8 @@
 	const dealloc = () => {
 		programs.forEach(program => deallocProgram(gl, program));
 		programs = [];
+		gl = undefined;
+		canvas = undefined;
 	};
 
 	const onResize = () => {

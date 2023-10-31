@@ -8,7 +8,10 @@
 	import Frames from "./Frames.svelte";
 	import Dialogs from "./Dialogs.svelte";
 	// import DragAndDrop from "./DragAndDrop.svelte";
-	import { ShowMenu } from "../stores/App.js";
+	import {
+		ShowMenu,
+		DialogNewFrame,
+	} from "../stores/App.js";
 	import { KeyboardEvent } from "../stores/KeyboardEvents.js";
 	import {
 		PointerEventCP,
@@ -46,7 +49,9 @@
 
 	onMount(() => {
 		// on initial app load, load the default file
-		LoadFOLDFile($OnBootFOLD);
+		// LoadFOLDFile($OnBootFOLD);
+		// on initial app load, open the "new frame" dialog, start empty otherwise
+		$DialogNewFrame.showModal();
 
 		// toolbar scrollbar stuff
 		const resizeObserver = new ResizeObserver(entries => {

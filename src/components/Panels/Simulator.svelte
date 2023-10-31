@@ -191,7 +191,7 @@
 			<div class="flex-row center">
 				<button
 					disabled={!$Active}
-					on:click={$Reset}>reset model</button>
+					on:click={$Reset}>reload model</button>
 			</div>
 		{/if}
 	</span>

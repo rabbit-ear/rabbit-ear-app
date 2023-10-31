@@ -17,12 +17,9 @@ import {
 	matrix4FromQuaternion,
 } from "rabbit-ear/math/quaternion.js";
 /**
- *
+ * @description sensitivity for pan rotation gesture
  */
-export const IsFoldedForm = (graph) => graph
-	&& graph.frame_classes
-	&& graph.frame_classes.length
-	&& graph.frame_classes.includes("foldedForm");
+const SENSITIVITY = 0.075;
 /**
  * @description Convert a point on a canvas into a 2D vector in the
  * projection space that points from the center of the canvas
@@ -54,8 +51,8 @@ export const rotateViewMatrix = (perspective, viewMatrix, vector, prevVector) =>
 	switch (perspective) {
 	case "perspective":
 		const vectors = [
-			[...prevVector, -0.2 * Math.atan(1 / magnitude2(prevVector))],
-			[...vector, -0.2 * Math.atan(1 / magnitude2(vector))]
+			[...prevVector, -SENSITIVITY * Math.atan(1 / magnitude2(prevVector))],
+			[...vector, -SENSITIVITY * Math.atan(1 / magnitude2(vector))]
 		];
 		const quaternion = quaternionFromTwoVectors(...vectors);
 		const matrix = matrix4FromQuaternion(quaternion);

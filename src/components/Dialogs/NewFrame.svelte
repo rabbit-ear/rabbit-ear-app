@@ -11,13 +11,9 @@
 	} from "rabbit-ear/fold/bases.js";
 	import populate from "rabbit-ear/graph/populate.js";
 	import base2 from "../../assets/base2.fold?raw";
-	// import windmill from "../../assets/windmill.fold?raw";
 	import Dialog from "./Dialog.svelte";
-	import SVGCanvas from "../SVGCanvas/SVGCanvas.svelte";
-	import FacesLayer from "../SVGCanvas/FacesLayer.svelte";
-	import EdgesLayer from "../SVGCanvas/EdgesLayer.svelte";
+	import SVGFOLDCanvas from "../SVGCanvas/SVGFOLDCanvas.svelte";
 	import { executeCommand } from "../../kernel/execute.js";
-	import { getFOLDViewport } from "../../js/matrix.js";
 	import {
 		VerticalUp,
 		DialogNewFrame,
@@ -33,18 +29,13 @@
 
 	$: invertVertical = $VerticalUp;
 	$: canDuplicate = $Frames.length > 0;
+
 	$: graphSquare = square();
-	$: graphRectangle = rectangle(rectangleWidth, rectangleHeight);
+	$: graphRectangle = rectangle(...[rectangleWidth, rectangleHeight]
+			.map(parseFloat)
+			.map(n => isNaN(n) || !isFinite(n) ? 0 : n));
 	$: graphPolygon = polygon(polygonSides);
 	$: graphCurrentFrame = $CreasePattern ? $CreasePattern : ({});
-	$: graphCurrentFrameViewport = getFOLDViewport(graphCurrentFrame, invertVertical);
-	$: graphCurrentFrameViewBox = graphCurrentFrameViewport.join(" ");
-	$: currentFrameStrokeWidth = graphCurrentFrameViewport
-		? 0.01 * Math.max(graphCurrentFrameViewport[2], graphCurrentFrameViewport[3])
-		: 0.01;
-
-	// todo: maybe we can include strokeWidth calculation in the
-	// crease pattern buttons. will be safer in the future.
 
 	const chooseFOLD = (FOLD) => {
 		executeCommand("appendFrame", FOLD);
@@ -72,7 +63,6 @@
 		bird(),
 		base1(),
 		frog(),
-		// JSON.parse(windmill),
 		windmill(),
 		populate(JSON.parse(base2)),
 	].map(graph => ({ graph, onclick: () => chooseFOLD(graph) }));
@@ -82,11 +72,18 @@
 			case "nxnSquare":
 				return chooseFOLD(square(squareSize));
 			case "rectangle":
-				return chooseFOLD(rectangle(rectangleWidth, rectangleHeight));
+				return chooseFOLD(rectangle(...[rectangleWidth, rectangleHeight]
+					.map(parseFloat)
+					.map(n => isNaN(n) ? 0 : n)));
 			case "polygon":
 				return chooseFOLD(polygon(polygonSides));
 			default: break;
 		}
+	};
+
+	const subpanelCancel = () => {
+		panel = "";
+		$DialogNewFrame.close();
 	};
 </script>
 
@@ -98,12 +95,7 @@
 			<div class="flex-row gap">
 				<div class="flex-column">
 					<button class="svg-button crease-pattern" on:click={duplicate}>
-						<SVGCanvas viewBox={graphCurrentFrameViewBox} {invertVertical}>
-							<FacesLayer graph={graphCurrentFrame} />
-							<EdgesLayer
-								graph={graphCurrentFrame}
-								strokeWidth={currentFrameStrokeWidth} />
-						</SVGCanvas>
+						<SVGFOLDCanvas graph={graphCurrentFrame} {invertVertical} />
 					</button>
 					<p>duplicate current frame</p>
 				</div>
@@ -114,12 +106,7 @@
 			{#each patternsRow1 as pattern}
 				<div class="flex-column">
 					<button class="svg-button crease-pattern" on:click={pattern.onclick}>
-						<SVGCanvas
-							viewBox={getFOLDViewport(pattern.graph, invertVertical).join(" ")}
-							{invertVertical}>
-							<FacesLayer graph={pattern.graph} />
-							<EdgesLayer graph={pattern.graph} />
-						</SVGCanvas>
+						<SVGFOLDCanvas graph={pattern.graph} {invertVertical} />
 					</button>
 					{#if pattern.name}
 						<p>{pattern.name}</p>
@@ -132,12 +119,7 @@
 			{#each patternsRow2 as pattern}
 				<div class="flex-column">
 					<button class="svg-button crease-pattern" on:click={pattern.onclick}>
-						<SVGCanvas
-							viewBox={getFOLDViewport(pattern.graph, invertVertical).join(" ")}
-							{invertVertical}>
-							<FacesLayer graph={pattern.graph} />
-							<EdgesLayer graph={pattern.graph} />
-						</SVGCanvas>
+						<SVGFOLDCanvas graph={pattern.graph} {invertVertical} />
 					</button>
 					{#if pattern.name}
 						<p>{pattern.name}</p>
@@ -162,12 +144,12 @@
 				{#if panel === "rectangle"}
 					<div class="flex-row">
 						<input
-							type="number"
+							type="text"
 							placeholder="width"
 							id="rect-width"
 							bind:value={rectangleWidth}>
 						<input
-							type="number"
+							type="text"
 							placeholder="height"
 							id="rect-height"
 							bind:value={rectangleHeight}>
@@ -189,7 +171,7 @@
 		{/if}
 
 		<div class="flex-row gap margin-top">
-			<button class="text-button" on:click={() => $DialogNewFrame.close()}>Cancel</button>
+			<button class="text-button" on:click={subpanelCancel}>Cancel</button>
 			{#if panel !== ""}
 				<button class="text-button" on:click={subpanelConfirm}>Confirm</button>
 			{/if}
@@ -240,7 +222,7 @@
 		border: 0;
 		border-radius: 0.5rem;
 	}
-	input[type=number] {
+	input[type=number], input[type=text] {
 		width: 5rem;
 	}
 	p {

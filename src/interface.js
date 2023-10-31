@@ -119,7 +119,10 @@ window.fs.open = openFile;
 // 	? save(JSON.stringify(GetCurrentFOLDFile()), get(FilePath))
 // 	: saveAs(JSON.stringify(GetCurrentFOLDFile()), get(FilePath));
 window.fs.save = async () => {
-	const filePath = get(FilePath)
+	const filePath = get(FilePath);
+	if (!filePath) {
+		return saveAs(JSON.stringify(GetCurrentFOLDFile()));
+	}
 	return await exists(filePath)
 		? save(JSON.stringify(GetCurrentFOLDFile()), filePath)
 		: saveAs(JSON.stringify(GetCurrentFOLDFile()), filePath);

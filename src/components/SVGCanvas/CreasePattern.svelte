@@ -56,8 +56,6 @@
 	// $: viewport = padViewport($ViewportCP, 0.05).map(n => n / ArtificialScale);
 	// $: console.log("viewport", viewport);
 
-	$: invertVertical = $VerticalUp;
-
 	// $: scaledGraph = {
 	// 	...$CreasePattern,
 	// 	vertices_coords: $CreasePattern.vertices_coords
@@ -75,7 +73,7 @@
 <SVGTouchCanvas
 	viewBox={viewport.join(" ")}
 	strokeWidth={$StrokeWidthCreasePattern}
-	{invertVertical}
+	invertVertical={$VerticalUp}
 	on:press
 	on:move
 	on:release
@@ -122,6 +120,8 @@
 		{/if}
 	</g>
 	{#if $ShowIndices}
-		<GraphIndices graph={$CreasePattern} {invertVertical} />
+		<GraphIndices
+			graph={$CreasePattern}
+			invertVertical={$VerticalUp} />
 	{/if}
 </SVGTouchCanvas>

@@ -8,7 +8,7 @@ import {
 	setEdgesFoldAngle,
 } from "../../js/graph.js";
 
-export const toggleAssignment = (edges) => {
+export const toggleAssignments = (edges) => {
 	const graph = get(CreasePattern);
 	toggleEdgesAssignment(graph, edges);
 	IsoUpdateFrame({ ...graph });
