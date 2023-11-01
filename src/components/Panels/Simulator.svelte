@@ -1,5 +1,6 @@
 <script>
 	import Panel from "./Panel.svelte";
+	import { executeCommand } from "../../kernel/execute.js";
 	import {
 		Active,
 		FoldAmount,
@@ -106,6 +107,13 @@
 					bind:value={$VertexError} />
 			</div>
 
+			<div class="flex-row center">
+				<button
+					on:click={() => executeCommand("saveSimulatorFoldAngles")}>
+					save fold angles
+				</button>
+			</div>
+
 			<div>
 				<p>integration</p>
 			</div>
@@ -193,6 +201,7 @@
 					disabled={!$Active}
 					on:click={$Reset}>reload model</button>
 			</div>
+
 		{/if}
 	</span>
 </Panel>

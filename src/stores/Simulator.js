@@ -40,3 +40,6 @@ export const ExportModel = writable(() => {});
 
 //
 export const ResetView = writable(() => {});
+
+// get the current FOLD file being rendered by Origami Simulator
+export const SimulatorFOLD = writable(() => ({}));

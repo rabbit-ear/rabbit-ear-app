@@ -24,8 +24,10 @@
 const exportFold = (model, foldUnmodified, foldTriangulated, { triangulated, angles } = {}) => {
 	const verticesMatch = foldUnmodified.length === model.positions.length / 3;
 	if (!verticesMatch) {
+		if (triangulated !== undefined) {
+			console.warn("vertex count mismatch. using triangulated model");
+		}
 		triangulated = true;
-		console.warn("vertex count mismatch. reverting to triangulated model");
 	}
 	// shallow copy is good enough for this purpose
 	const FOLD = triangulated ? { ...foldTriangulated } : { ...foldUnmodified };

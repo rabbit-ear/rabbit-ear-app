@@ -33,6 +33,18 @@ const assignmentFlatAngles = {
  */
 const makeEdgesFoldAngle = ({ edges_assignment }) => edges_assignment
 	.map(a => assignmentFlatAngles[a] || 0);
+
+
+const lookupTableEdgesVertices = ({ edges_vertices }) => {
+	const map = {};
+	if (!edges_vertices) { return map; }
+	edges_vertices.forEach((ev, e) => {
+		map[`${ev[0]} ${ev[1]}`] = e;
+		map[`${ev[1]} ${ev[0]}`] = e;
+	});
+	return map;
+};
+
 /**
  * @description prepare a FOLD object for the GPU, returning a copy.
  * (does not modify the input object)
@@ -90,6 +102,14 @@ const prepare = (inputFOLD, epsilon) => {
 	const cut_edge_indices = fold.edges_assignment
 		.map((assign, i) => (assign === "C" ? i : undefined))
 		.filter(a => a !== undefined);
+	// before we change edges_vertices (if we do change it, that is),
+	// create a lookup table to map vertex-pairs to edge indices.
+	// this will be used to generate a mapping of new to old edge indices.
+	const edges_lookup = cut_edge_indices.length === 0
+		? {}
+		: lookupTableEdgesVertices(fold);
+
+	// console.log("PRE fold.edges_assignment", structuredClone(fold.edges_assignment));
 
 	// if cut creases exist, convert them into boundaries
 	// this may change the number of vertices and edges, but not faces
@@ -104,6 +124,13 @@ const prepare = (inputFOLD, epsilon) => {
 		// remove vertices that split edge
 		fold = removeRedundantVertices(fold, epsilon);
 	}
+
+	// save edge info, how the indices relate to the graph before changes.
+	fold.edges_backmap = cut_edge_indices.length === 0
+		? fold.edges_vertices.map((_, e) => e)
+		: fold.edges_vertices.map(ev => edges_lookup[ev.join(" ")]);
+	// fold.edges_nextmap = invertMap(fold.edges_backmap);
+
 	delete fold.vertices_vertices;
 	delete fold.vertices_edges;
 	// this may change the number of edges and faces, but not vertices

@@ -186,6 +186,7 @@ const OrigamiSimulator = ({ scene, onCompute } = {}) => {
 	Object.defineProperty(app, "strain", { get: () => strain, set: setStrain });
 	Object.defineProperty(app, "shadows", { get: () => shadows, set: setShadows });
 	Object.defineProperty(app, "materials", { get: () => model.materials });
+	Object.defineProperty(app, "graph", { get: () => model.fold, set: load });
 	return app;
 };
 

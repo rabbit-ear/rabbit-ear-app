@@ -15,6 +15,7 @@ import * as planarize from "./planarize.js";
 import * as pleat from "./pleat.js";
 import * as rulers from "./rulers.js";
 import * as select from "./select.js";
+import * as simulator from "./simulator.js";
 import * as tools from "./tools.js";
 import * as transform from "./transform.js";
 import * as vertices from "./vertices.js";
@@ -37,6 +38,7 @@ export default {
 	...pleat,
 	...rulers,
 	...select,
+	...simulator,
 	...tools,
 	...transform,
 	...vertices,

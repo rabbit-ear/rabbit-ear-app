@@ -35,6 +35,7 @@
 		Reset,
 		ExportModel,
 		ResetView,
+		SimulatorFOLD,
 	} from "../../stores/simulator.js";
 	import {
 		Integration,
@@ -137,6 +138,7 @@
 		});
 		lights.forEach(light => scene.add(light));
 		ExportModel.set(simulator.export);
+		SimulatorFOLD.set(() => simulator ? simulator.graph : {});
 	};
 
 	// load a new origami model. thrown errors are because of a bad file format

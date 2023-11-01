@@ -4,68 +4,86 @@
 
 Prerequisites: npm, Rust
 
-1. Clone this repository
+1. Clone this repository. Clone Rabbit Ear nightly (see below)
 2. run `npm i`
 3. run `npm run tauri dev`
 
-If this doesn't work, please let me know, it's likely there are additional setup steps I'm missing.
+You need the nightly build of Rabbit Ear, which can be found on the `dev` branch. Clone the repository + branch and place it in the location indicated by this repository's `package.json`.
 
 # Dev log
 
-new:
+Tools
 
 - [x] new tool: rect
 - [ ] new tool: circle arc
 - [ ] new tool: compass straight edge style ruler marks
 - [ ] new tool: rabbit ear. except make it the straight skeleton. convex only.
 - [ ] new tool: sink. can go in conjunction with straight skeleton.
+- [ ] foldedLine tool should re-assign existing creases that lay along the path.
+- [ ] right mouse click changes to camera to pan around.
+- [ ] Snap Grid: ability to change grid: triangles, square, rectangle...
+- [ ] axioms 5-7 could be coded better
+- [ ] when hovering over folded form, dim actions which cannot be used on it.
 
-high priority:
+App Menu
 
-- [ ] 3D folded forms user can still select "svg" renderer, need to restructure that whole deal.
+- [ ] copy/paste in the app menu doesn't make UI sense
+- [ ] menu boolean, checkmark reflecting state (Show/Hide)
+- [ ] "Frames" menu. duplicate frame, delete frame. IMPORT FOLD AS FRAME.
+- [ ] somehow "import into frame", drag and drop into frames.
+- [ ] cmd+A in a text box is overwritten in Rust to select graph, not text.
+
+File System
+
 - [ ] before quitting "Would you like to save before exiting?"
-- [ ] when layer solver cannot solve, show violations between faces.
-- [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
+- [ ] svg import bug, path parse error i think
+- [ ] export multiple arrangements of crease patterns and folded forms
+
+Model
+
 - [ ] modify CP (scale, transform), zoom doesn't work.
+- [ ] "undo" with many frames resets the current frame to the last one.
+- [ ] duplicate frame, append it after this frame, don't add it to the end.
+- [ ] when Svelte 5 comes out, replace GraphUpdate with an effect.
+- [ ] slippery slope to maintain precision. need a creative solution
+- [ ] snap to SQRT2 points
+- [ ] ability to adjust epsilon app-wide
+- [ ] nearest snap point search tree, also with graph components
+- [ ] Solver for finding correct fold angles. Simulator feedback, and possible single-vertex matrix nudge solver thing.
+
+Layers
+
+- [ ] move calculation onto background web-worker thread.
+- [ ] when layer solver cannot solve, show violations between faces.
 - [ ] !!! layer order solved - change assignment - layer order needs to be deleted
 - [ ] layer order - report number of face-pairs, auto solve if number is low
 - [ ] layer order - report multiple solutions, somehow allow them to toggle it.
-- [ ] right mouse click changes to camera to pan around.
-- [ ] foldedLine tool should re-assign existing creases that lay along the path.
-- [ ] export multiple arrangements of crease patterns and folded forms
-- [ ] svg import bug, path parse error i think
-- [ ] frames can vertically scroll.
+
+Panels
+
+- [ ] 3D folded forms user can still select "svg" renderer, need to restructure that whole deal.
+
+SVG / WebGL / Simulator
+
 - [ ] origami simulator doesn't work for large imported svgs.
-- [ ] Moosers train, make layers, clear, make again, somehow different
-- [ ] ability to change snap grid to hexagons.
-
-low priority:
-
-- [ ] file_ metadata made it into a frame. caused issues when saving
-- [ ] axioms 5-7 could be coded better
-- [ ] copy/paste in the app menu doesn't make UI sense
-- [ ] menu boolean, checkmark reflecting state (Show/Hide)
-- [ ] somehow "import into frame", drag and drop into frames.
+- [ ] glitchy graphics near 1x1 scale. (500px works, scale-transform might not work)
 - [ ] hovering on folded form/simulator shows dots on crease pattern
-- [ ] ability to use line tools on folded form (edge, axioms).
-- [ ] when hovering over folded form, dim actions which cannot be used on it.
-- [ ] when Svelte 5 comes out, replace GraphUpdate with an effect.
-- [ ] snap to SQRT2 points
-- [ ] bug: many different sized frames, one empty, delete it, auto switches to hexagon frame but does not resize viewport, it does if you press the zoom but not automatically
-- [ ] ability to adjust epsilon app-wide
-
-unknown:
-
+- [ ] svg text in graph indices drifts away when zooming in
 - [ ] folded form (svg) is choppy on zoom (even empty, I think).
 - [ ] the tool-svg-layer is disappearing. turning simulator on, folding simulator, going back to cp... using the edge tool.
-- [ ] cmd+A in the text box, intended to select the text, instead gets run by Rust due to the menu shortcut.
-- [ ] svg text in graph indices drifts away when zooming in
-- [ ] pressing "delete" for some reason changes the tool to "translate".
-- [ ] "blintz-frames.fold" possible error when loading more than 17 WebGL contexts.
 
-done:
+Unsorted
 
+- [ ] file_ metadata made it into a frame. caused issues when saving
+- [ ] bug: many different sized frames, one empty, delete it, auto switches to hexagon frame but does not resize viewport, it does if you press the zoom but not automatically
+- [ ] Moosers train, make layers, clear, make again, somehow different
+
+Done
+
+- [x] ability to use line tools on folded form (edge, axioms).
+- [x] frames can vertically scroll.
 - [x] "There are too many active WebGL contexts on this page, the oldest context will be lost."
+- [x] "blintz-frames.fold" possible error when loading more than 17 WebGL contexts.
 - [x] "toggleAssignment" to "toggleAssignments"
 - [x] better single vertex analysis.
 - [x] simulator "reset", or better "reset zoom" should also reset it's camera
@@ -103,6 +121,14 @@ done:
 - [x] basic export
 - [x] grid lines are messed up when zooming. "viewBoxOrigin" is buggy.
 - [x] UI touch interaction on folded form / simulator
+
+
+## 2023-11-01
+
+Amazing accomplishments last month. Not only did I introduce the Folded Form 4 weeks ago (which had already been done in previous apps), but UI fold operations are possible to execute on the folded state, not just on the crease pattern. This is a huge step forward to creating a "diagram maker" application.
+
+Generally speaking, I'm extremelly happy how this app is turning out, it's honestly the tool that I've been dreaming of having and it's actually becoming a reality.
+
 
 ## 2023-10-05
 
