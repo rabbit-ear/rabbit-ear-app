@@ -11,6 +11,7 @@
 		ShowCodeEditor,
 	} from "../stores/App.js";
 	import {
+		FoldedStaticOrSimulator,
 		FoldedRenderer,
 	} from "../stores/Renderer.js";
 	import CreasePatternCanvas from "./SVGCanvas/CreasePattern.svelte";
@@ -32,7 +33,7 @@
 	export let exitFolded;
 	export let scrollFolded;
 
-	const errorMessage = "can't";
+	const errorMessage = "simulate";
 
 	let fullHeight = "100vh";
 	$: fullHeight = [
@@ -67,7 +68,9 @@
 					{#if $IsFoldable}
 						<WebGLCanvas graph={$FoldedForm} />
 					{:else}
-						<ErrorCanvas message={errorMessage} />
+						<ErrorCanvas
+							message={errorMessage}
+							on:click={() => $FoldedStaticOrSimulator = true} />
 					{/if}
 				{:else if $FoldedRenderer === "svg"}
 					{#if $IsFoldable}
@@ -78,7 +81,9 @@
 							on:exit={exitFolded}
 							on:scroll={scrollFolded} />
 					{:else}
-						<ErrorCanvas message={errorMessage} />
+						<ErrorCanvas
+							message={errorMessage}
+							on:click={() => $FoldedStaticOrSimulator = true} />
 					{/if}
 				{/if}
 			</div>
@@ -105,7 +110,9 @@
 				{#if $IsFoldable}
 					<WebGLCanvas graph={$FoldedForm} />
 				{:else}
-					<ErrorCanvas message={errorMessage} />
+					<ErrorCanvas
+						message={errorMessage}
+						on:click={() => $FoldedStaticOrSimulator = true} />
 				{/if}
 			{:else if $FoldedRenderer === "svg"}
 				{#if $IsFoldable}
@@ -116,7 +123,9 @@
 						on:exit={exitFolded}
 						on:scroll={scrollFolded} />
 				{:else}
-					<ErrorCanvas message={errorMessage} />
+					<ErrorCanvas
+						message={errorMessage}
+						on:click={() => $FoldedStaticOrSimulator = true} />
 				{/if}
 			{/if}
 		</div>

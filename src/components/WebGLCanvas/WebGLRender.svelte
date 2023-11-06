@@ -78,7 +78,7 @@
 
 	$: {
 		try {
-			dealloc();
+			deallocPrograms();
 			programs = isFoldedForm
 				? foldedForm(gl, version, graph, programOptions)
 				: creasePattern(gl, version, graph, programOptions);
@@ -90,11 +90,15 @@
 		programs.forEach((program, i) => drawProgram(gl, version, program, uniforms[i]));
 	};
 
+	const deallocPrograms = () => programs
+		.forEach(program => deallocProgram(gl, program));
+
 	const dealloc = () => {
-		programs.forEach(program => deallocProgram(gl, program));
-		programs = [];
+		deallocPrograms();
 		gl = undefined;
+		version = undefined;
 		canvas = undefined;
+		programs = [];
 	};
 
 	const onResize = () => {

@@ -5,17 +5,16 @@
  */
 
 const RANGE = 64;
-const precision = 5;
 
 export const Sqrt2LookupToFloat = (a, b, c) => (a / c) + ((b / c) * Math.SQRT2);
 
-export const MakeSqrt2Lookup = () => {
+export const MakeSqrt2Lookup = (precision = 7) => {
 	const results = [];
 	for (let a = -RANGE; a <= RANGE; a += 1) {
 		for (let b = -RANGE; b <= RANGE; b += 1) {
 			for (let c = -RANGE; c <= RANGE; c += 1) {
 				const result = Sqrt2LookupToFloat(a, b, c);
-				if (result <= 2 && result >= 0) {
+				if (result <= 1 && result >= -1) {
 					results.push({ a, b, c, result });
 				}
 			}

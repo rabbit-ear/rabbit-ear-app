@@ -47,7 +47,7 @@
 		executeCommand("duplicateActiveFrame");
 		panel = "";
 		$DialogNewFrame.close();
-	};			
+	};
 
 	let patternsRow1 = [];
 	$: patternsRow1 = [

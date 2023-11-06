@@ -122,7 +122,7 @@ const VerticesFoldable = derived(
 	([$CreasePattern, $FoldAnglesAreFlat]) => {
 		if ($FoldAnglesAreFlat) { return []; }
 		try {
-			return verticesFoldable($CreasePattern);
+			return verticesFoldable($CreasePattern, 1e-3);
 		} catch (error) { console.warn("VerticesFoldable", error); }
 		return [];
 	},

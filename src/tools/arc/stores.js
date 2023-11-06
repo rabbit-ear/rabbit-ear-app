@@ -136,7 +136,6 @@ export const CPSetSnapPoint = derived(
 );
 
 export const reset = () => {
-	// console.log("axiom2 reset");
 	CPMove.set(undefined);
 	CPDrag.set(undefined);
 	CPPresses.set([]);

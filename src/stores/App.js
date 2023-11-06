@@ -17,28 +17,46 @@ export const ShowMenu = false;
 /**
  * @description App settings, mutable.
  */
-export const VerticalUp = writable(true);
+export const EpsilonFactor = writable(1e-3);
+
+// export const VerticalUp = writable(true);
+export const VerticalUp = writable(
+	localStorage.getItem("VerticalUp") !== undefined
+		? localStorage.getItem("VerticalUp") === "true"
+		: true);
 /**
  * @description Show/Hide various things across the app.
  */
 export const ShowGrid = writable(
-	localStorage.getItem("ShowGrid") === "true" || true,
-);
+	localStorage.getItem("ShowGrid") !== undefined
+		? localStorage.getItem("ShowGrid") === "true"
+		: true);
+
 export const ShowAxes = writable(
-	localStorage.getItem("ShowAxes") === "true" || true,
-);
+	localStorage.getItem("ShowAxes") !== undefined
+		? localStorage.getItem("ShowAxes") === "true"
+		: true);
+
 export const ShowIndices = writable(
-	localStorage.getItem("ShowIndices") === "true" || false,
-);
+	localStorage.getItem("ShowIndices") !== undefined
+		? localStorage.getItem("ShowIndices") === "true"
+		: false);
+
 export const ShowFlatFoldableIssues = writable(
-	localStorage.getItem("ShowFlatFoldableIssues") === "true" || true,
-);
+	localStorage.getItem("ShowFlatFoldableIssues") !== undefined
+		? localStorage.getItem("ShowFlatFoldableIssues") === "true"
+		: true);
+
 export const ShowCodeEditor = writable(
-	localStorage.getItem("ShowCodeEditor") === "true" || false,
-);
+	localStorage.getItem("ShowCodeEditor") !== undefined
+		? localStorage.getItem("ShowCodeEditor") === "true"
+		: false);
+
 export const ShowFrames = writable(
-	localStorage.getItem("ShowFrames") === "true" || true,
-);
+	localStorage.getItem("ShowFrames") !== undefined
+		? localStorage.getItem("ShowFrames") === "true"
+		: true);
+
 /**
  * @description A few various commands have the effect of creating
  * new edges in the graph, by default, these new edges will
@@ -67,6 +85,8 @@ export const ShowPanelModifiersPanel = writable(false);
 export const ShowPanelModifiersSubPanel = writable(false);
 
 // todo: global-level subscribe. needs unsubscribe
+VerticalUp.subscribe(value => localStorage
+	.setItem("VerticalUp", String(value)));
 ShowGrid.subscribe(value => localStorage
 	.setItem("ShowGrid", String(value)));
 ShowAxes.subscribe(value => localStorage

@@ -11,7 +11,17 @@ import {
 export const FoldedStaticOrSimulator = writable(false);
 
 // flat foldable folded forms will render in SVG by default.
-export const FoldedPrefer3D = writable(false);
+export const FoldedSVGOrWebGL = writable(false);
+
+export const Folded2DIsPossible = derived(
+	FoldAnglesAreFlat,
+	$FoldAnglesAreFlat => $FoldAnglesAreFlat,
+	true,
+);
+
+Folded2DIsPossible.subscribe(possible => !possible
+	? FoldedSVGOrWebGL.set(true)
+	: undefined);
 /**
  * @description Which renderer should we use to render the folded form?
  * The result depends on some properties of the graph as well as requests
@@ -21,10 +31,10 @@ export const FoldedPrefer3D = writable(false);
  * @returns one of 3 strings: "svg", "webgl", "simulator"
  */
 export const FoldedRenderer = derived(
-	[FoldedPrefer3D, FoldedStaticOrSimulator, FoldAnglesAreFlat],
-	([$FoldedPrefer3D, $FoldedStaticOrSimulator, $FoldAnglesAreFlat]) => {
+	[FoldedSVGOrWebGL, FoldedStaticOrSimulator, FoldAnglesAreFlat],
+	([$FoldedSVGOrWebGL, $FoldedStaticOrSimulator, $FoldAnglesAreFlat]) => {
 		if ($FoldedStaticOrSimulator) { return "simulator"; }
-		if ($FoldedPrefer3D) { return "webgl"; }
+		if ($FoldedSVGOrWebGL) { return "webgl"; }
 		if (!$FoldAnglesAreFlat) { return "webgl"; }
 		return "svg";
 	},

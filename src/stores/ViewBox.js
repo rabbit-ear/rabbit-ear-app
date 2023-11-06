@@ -12,6 +12,15 @@ import {
 	makeMatrix2UniformScale,
 } from "rabbit-ear/math/matrix2.js";
 
+// const VerticalUpOnBoot = localStorage.getItem("VerticalUp") !== undefined
+// 	? localStorage.getItem("VerticalUp") === "true"
+// 	: true;
+// const Identity2x3 = VerticalUpOnBoot
+// 	? [1, 0, 0, 1, 0, -1]
+// 	: [1, 0, 0, 1, 0, 0];
+
+const Identity2x3 = identity2x3; // [1, 0, 0, 1, 0, -1];
+
 // This approach does not work under the current arrangement,
 // the ModelViewMatrix will update every single time the graph changes,
 // in most cases this doesn't matter, except when the graph changes size.
@@ -22,14 +31,14 @@ import {
 // export const ModelMatrix = derived(
 // 	CreasePattern,
 // 	($CreasePattern) => graphToMatrix2($CreasePattern),
-// 	[...identity2x3],
+// 	[...Identity2x3],
 // );
 /**
  * @description The model matrix is intended to describe a bounding box
  * around the graph model. This model matrix will always maintain
  * a 1:1 aspect ratio. Used to create the SVG's ViewBox.
  */
-export const ModelMatrixCP = writable([...identity2x3]);
+export const ModelMatrixCP = writable([...Identity2x3]);
 ModelMatrixCP.reset = () => ModelMatrixCP.set([...identity2x3]);
 const ModelMatrixCPSet = ModelMatrixCP.set;
 ModelMatrixCP.set = (matrix) => {
@@ -70,17 +79,17 @@ ModelMatrixCP.set = (matrix) => {
 	return ModelMatrixCPSet(matrix);
 };
 
-export const ModelMatrixFolded = writable([...identity2x3]);
+export const ModelMatrixFolded = writable([...Identity2x3]);
 ModelMatrixFolded.reset = () => ModelMatrixFolded.set([...identity2x3]);
 
 /**
  * @description The camera matrix is what the user modifies when they
  * pan around and scroll to zoom on the SVG canvas.
  */
-export const CameraMatrixCP = writable([...identity2x3]);
+export const CameraMatrixCP = writable([...Identity2x3]);
 CameraMatrixCP.reset = () => CameraMatrixCP.set([...identity2x3]);
 
-export const CameraMatrixFolded = writable([...identity2x3]);
+export const CameraMatrixFolded = writable([...Identity2x3]);
 CameraMatrixFolded.reset = () => CameraMatrixFolded.set([...identity2x3]);
 
 // this "identity" matrix is for the ViewMatrix and positions the camera
@@ -97,13 +106,13 @@ WebGLViewMatrix.reset = () => WebGLViewMatrix.set([...GL_IDENTITY]);
 export const ViewMatrixCP = derived(
 	CameraMatrixCP,
 	($CameraMatrixCP) => invertMatrix2($CameraMatrixCP),
-	[...identity2x3],
+	[...Identity2x3],
 );
 
 export const ViewMatrixFolded = derived(
 	CameraMatrixFolded,
 	($CameraMatrixFolded) => invertMatrix2($CameraMatrixFolded),
-	[...identity2x3],
+	[...Identity2x3],
 );
 /**
  * @description In a typical fashion, the model and view matrices are
@@ -114,7 +123,7 @@ export const ModelViewMatrixCP = derived(
 	([$ModelMatrixCP, $ViewMatrixCP]) => (
 		multiplyMatrices2($ModelMatrixCP, $ViewMatrixCP)
 	),
-	[...identity2x3],
+	[...Identity2x3],
 );
 
 export const ModelViewMatrixFolded = derived(
@@ -122,7 +131,7 @@ export const ModelViewMatrixFolded = derived(
 	([$ModelMatrixFolded, $ViewMatrixFolded]) => (
 		multiplyMatrices2($ModelMatrixFolded, $ViewMatrixFolded)
 	),
-	[...identity2x3],
+	[...Identity2x3],
 );
 /**
  * @description The SVG will set its "viewBox" property with this value,

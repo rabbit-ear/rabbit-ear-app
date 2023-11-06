@@ -20,7 +20,8 @@
 		SnapPoint,
 	} from "../../stores/UI.js";
 	import {
-		FoldedPrefer3D,
+		FoldedSVGOrWebGL,
+		Folded2DIsPossible,
 		FoldedStaticOrSimulator,
 	} from "../../stores/Renderer.js";
 
@@ -86,13 +87,13 @@
 			<span class="svg-icon"><IconPerspective /></span>
 			<div class="toggle-row center">
 				<button
-					disabled={$FoldedStaticOrSimulator}
-					highlighted={!$FoldedPrefer3D}
-					on:click={() => $FoldedPrefer3D = false}>svg</button>
+					disabled={$FoldedStaticOrSimulator || !$Folded2DIsPossible}
+					highlighted={!$FoldedSVGOrWebGL}
+					on:click={() => $FoldedSVGOrWebGL = false}>svg</button>
 				<button
 					disabled={$FoldedStaticOrSimulator}
-					highlighted={$FoldedPrefer3D}
-					on:click={() => $FoldedPrefer3D = true}>web gl</button>
+					highlighted={$FoldedSVGOrWebGL}
+					on:click={() => $FoldedSVGOrWebGL = true}>web gl</button>
 			</div>
 		</div>
 	</span>

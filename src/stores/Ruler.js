@@ -4,7 +4,9 @@ import { includeR } from "rabbit-ear/math/compare.js";
 import { intersectGraphLineFunc } from "../js/intersect.js";
 import { CreasePattern } from "./ModelCP.js";
 import { FoldedFormPlanar } from "./ModelFolded.js";
-
+/**
+ *
+ */
 export const RadialRays = (origin, degrees = 22.5, offset = 0) => Array
 	.from(Array(Math.ceil(360 / degrees)))
 	.map((_, i) => Math.PI * ((offset + i * degrees) / 180))
@@ -16,7 +18,9 @@ export const RadialRays = (origin, degrees = 22.5, offset = 0) => Array
  * adding new geometry to the graph; affects the list of UI snap points.
  */
 export const RulersCP = writable([]);
-
+/**
+ *
+ */
 export const RulersFolded = writable([]);
 /**
  * @description A list of points that are the intersection of all
@@ -37,7 +41,9 @@ export const RulerPointsCP = derived(
 	},
 	[],
 );
-
+/**
+ *
+ */
 export const RulerPointsFolded = derived(
 	[FoldedFormPlanar, RulersFolded],
 	([$FoldedFormPlanar, $RulersFolded]) => {
@@ -51,3 +57,11 @@ export const RulerPointsFolded = derived(
 	},
 	[],
 );
+/**
+ *
+ */
+export const CompassCirclesCP = writable([]);
+/**
+ *
+ */
+export const CompassLinesCP = writable([]);

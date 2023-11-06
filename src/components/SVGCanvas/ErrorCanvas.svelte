@@ -6,7 +6,15 @@
 	xmlns="http://www.w3.org/2000/svg"
 	role="presentation"
 	viewBox="0 0 100 100">
-	<text font-size="10" x="50" y="50">{message}</text>
+	<text
+		font-size="10"
+		x="50"
+		y="50"
+		role="button"
+		tabindex="-1"
+		on:keydown={() => {}}
+		on:keyup={() => {}}
+		on:click>{message}</text>
 </svg>
 
 <style>
@@ -21,10 +29,14 @@
 		text-anchor: middle;
 		dominant-baseline: middle;
 		text-align: center;
-		pointer-events: none;
+		cursor: pointer;
+		/*pointer-events: none;
 		-webkit-user-select: none;
 		-moz-user-select: none;
 		-ms-user-select: none;
-		user-select: none;
+		user-select: none;*/
+	}
+	text:hover {
+		fill: var(--highlight);
 	}
 </style>

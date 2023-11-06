@@ -19,22 +19,23 @@ Tools
 - [ ] new tool: compass straight edge style ruler marks
 - [ ] new tool: rabbit ear. except make it the straight skeleton. convex only.
 - [ ] new tool: sink. can go in conjunction with straight skeleton.
-- [ ] foldedLine tool should re-assign existing creases that lay along the path.
 - [ ] right mouse click changes to camera to pan around.
 - [ ] Snap Grid: ability to change grid: triangles, square, rectangle...
 - [ ] axioms 5-7 could be coded better
-- [ ] when hovering over folded form, dim actions which cannot be used on it.
+- [-] foldedLine tool should re-assign existing creases that lay along the path.
+- [-] when hovering over folded form, dim actions which cannot be used on it.
 
 App Menu
 
-- [ ] copy/paste in the app menu doesn't make UI sense
-- [ ] menu boolean, checkmark reflecting state (Show/Hide)
 - [ ] "Frames" menu. duplicate frame, delete frame. IMPORT FOLD AS FRAME.
 - [ ] somehow "import into frame", drag and drop into frames.
 - [ ] cmd+A in a text box is overwritten in Rust to select graph, not text.
+- [-] copy/paste in the app menu doesn't make UI sense
+- [-] menu boolean, checkmark reflecting state (Show/Hide) (MacOS only)
 
 File System
 
+- [x] new "empty" origami doesn't work. can't draw edges.
 - [ ] before quitting "Would you like to save before exiting?"
 - [ ] svg import bug, path parse error i think
 - [ ] export multiple arrangements of crease patterns and folded forms
@@ -61,7 +62,7 @@ Layers
 
 Panels
 
-- [ ] 3D folded forms user can still select "svg" renderer, need to restructure that whole deal.
+- [x] 3D folded forms user can still select "svg" renderer, need to restructure that whole deal.
 
 SVG / WebGL / Simulator
 

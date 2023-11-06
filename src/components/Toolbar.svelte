@@ -5,6 +5,7 @@
 	import { executeCommand } from "../kernel/execute.js";
 
 	const tempDisabled = {
+		"folded line": true,
 		"rabbit ear": true,
 		"pleat": true,
 		"scribble": true,
