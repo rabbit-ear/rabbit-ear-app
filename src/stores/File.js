@@ -43,6 +43,8 @@ const UNTITLED_FILE = "untitled.fold";
  */
 export const FilePath = writable();
 
+export const FileModified = writable(true);
+
 export const OnBootFOLD = writable(
 	localStorage.getItem("OnBootFOLD") || JSON.stringify(square()),
 );
@@ -84,10 +86,11 @@ OnBootFOLD.subscribe(value => localStorage.setItem("OnBootFOLD", value));
  * to include the currently opened filename.
  */
 const OnFileNameChange = derived(
-	FilePath,
-	async $FilePath => {
+	[FilePath, FileModified],
+	async ([$FilePath, $FileModified]) => {
 		const displayName = $FilePath === undefined ? UNTITLED_FILE : $FilePath;
-		await appWindow.setTitle(`${APP_NAME} - ${displayName}`);
+		const savedIndicator = $FileModified ? " *" : "";
+		await appWindow.setTitle(`${APP_NAME} - ${displayName}${savedIndicator}`);
 	},
 	undefined,
 );
@@ -238,6 +241,7 @@ export const NewFile = async () => {
 	} catch (error) {}
 	SetNewModel();
 	FilePath.set(filePath);
+	FileModified.set(true);
 };
 /**
  *
@@ -261,6 +265,7 @@ export const LoadFOLDFile = async (FOLD, inputFilePath) => {
 			: await homeDirectoryFile(UNTITLED_FILE);
 		SetNewModel(typeof FOLD === "string" ? JSON.parse(FOLD) : FOLD);
 		FilePath.set(filePath);
+		FileModified.set(false);
 	} catch (error) {
 		dialogError(`${error}`, "Cannot load .FOLD file");
 	}

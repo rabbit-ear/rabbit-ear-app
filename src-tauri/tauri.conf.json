@@ -37,6 +37,9 @@
 			"path": {
 				"all": true
 			},
+			"process": {
+				"all": true
+			},
 			"window": {
 				"all": true,
 				"setTitle": true

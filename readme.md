@@ -36,7 +36,8 @@ App Menu
 File System
 
 - [x] new "empty" origami doesn't work. can't draw edges.
-- [ ] before quitting "Would you like to save before exiting?"
+- [x] Show `*` when file is modified
+- [x] before quitting "Would you like to save before exiting?"
 - [ ] svg import bug, path parse error i think
 - [ ] export multiple arrangements of crease patterns and folded forms
 

@@ -33,6 +33,11 @@
 		LayerGapScaled,
 	} from "../../stores/Style.js";
 
+	//
+	import {
+		LayerOrderKnown,
+	} from "../../stores/ModelFolded.js";
+
 	export let graph = {};
 	export let fov = 30.25;
 	export let perspective = "orthographic";
@@ -54,11 +59,12 @@
 		projectionMatrix,
 		modelViewMatrix,
 		canvas,
-		frontColor: $FoldedFrontColor,
-		backColor: $FoldedBackColor,
+		frontColor: $LayerOrderKnown ? $FoldedFrontColor : "#9e9b9b",
+		backColor: $LayerOrderKnown ? $FoldedBackColor : "#9e9b9b",
 		cpColor: $CPColor,
 		strokeWidth: inferredScale * 0.02,
-		opacity: 1, // $LayerOrderKnown ? 1 : 0.25,
+		opacity: $LayerOrderKnown ? 1 : 0.25,
+		// opacity: 1,
 	};
 
 	$: programOptions = {

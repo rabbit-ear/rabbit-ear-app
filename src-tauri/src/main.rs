@@ -36,6 +36,10 @@ fn main() {
 	// app menu items
 	let mut about_metadata = AboutMetadata::new();
 	about_metadata.version = Some("0.9".to_string());
+	let item_quit = CustomMenuItem::new(
+		"quit".to_string(),
+		"Quit Rabbit Ear")
+		.accelerator("cmdOrControl+Q");
 
 	// file menu items
 	let item_new = CustomMenuItem::new(
@@ -182,7 +186,8 @@ fn main() {
 		.add_native_item(MenuItem::HideOthers)
 		.add_native_item(MenuItem::ShowAll)
 		.add_native_item(MenuItem::Separator)
-		.add_native_item(MenuItem::Quit));
+		.add_item(item_quit));
+		// .add_native_item(MenuItem::Quit));
 	let menu_file = Submenu::new("File", Menu::new()
 		.add_item(item_new)
 		.add_item(item_new_frame)
@@ -274,6 +279,10 @@ fn main() {
 				// "open" => {
 				// 	std::process::exit(0);
 				// }
+				"quit" => {
+					let _ = event.window().eval("window.dialog.quit()");
+					// std::process::exit(0);
+				}
 				"new" => {
 					let _ = event.window().eval("window.dialog.newFile()");
 				}
@@ -294,9 +303,6 @@ fn main() {
 				}
 				"export_as" => {
 					let _ = event.window().eval("window.dialog.exportAs()");
-				}
-				"quit" => {
-					std::process::exit(0);
 				}
 				// "close" => {
 				// 	event.window().close().unwrap();

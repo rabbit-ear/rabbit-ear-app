@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { ask } from "@tauri-apps/api/dialog";
 import { exists } from "@tauri-apps/api/fs";
+import { exit } from "@tauri-apps/api/process";
 import { get } from "svelte/store";
 import {
 	execute,
@@ -30,6 +31,7 @@ import {
 	NewFile,
 	FilePath,
 	// FileExists,
+	FileModified,
 	GetCurrentFOLDFile,
 } from "./stores/File.js";
 
@@ -81,6 +83,22 @@ window.store.toggle = (name) => {
 }
 
 // Dialogs for creating new files/frames, importing/exporting files
+
+window.dialog.quit = async () => {
+	if (get(FileModified)) {
+		const yesQuit = await ask("Quit without saving?", {
+			title: "Rabbit Ear",
+			type: "warning",
+			okLabel: "Quit",
+			cancelLabel: "Cancel",
+		});
+		if (yesQuit) {
+			await exit(0);
+		}
+	} else {
+		await exit(0);
+	}
+}
 
 window.dialog.newFile = async () => {
 	// const yes = await ask("Are you sure?", "Tauri");

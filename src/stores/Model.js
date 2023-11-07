@@ -16,6 +16,9 @@ import {
 	graphIsCreasePattern,
 } from "../js/graph.js";
 import {
+	FileModified,
+} from "./File.js";
+import {
 	CameraMatrixCP,
 	CameraMatrixFolded,
 	WebGLViewMatrix,
@@ -138,6 +141,7 @@ export const FrameIsCreasePattern = derived(
  * the indices of selected components don't need to be reset.
  */
 export const IsoUpdateFrame = (graph) => {
+	FileModified.set(true);
 	return Frames.update(frames => {
 		frames[get(FrameIndex)] = graph;
 		return [...frames];
@@ -159,6 +163,9 @@ export const UpdateFrame = (graph) => {
  * larger update, "SetFrame" is an even larger update, where the
  * viewport is also reset. This is used when loading a new frame.
  */
+
+// todo: this is not being used anywhere in the app. maybe it can solve
+// the issue we are experiencing where the viewport doesn't get resized.
 export const SetFrame = (graph) => {
 	// ModelMatrixCP.set(graphToMatrix2(graph));
 	// CameraMatrixCP.reset();

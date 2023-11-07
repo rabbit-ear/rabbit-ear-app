@@ -14,6 +14,7 @@ import {
 	FilePath,
 	LoadFile,
 	LoadFOLDFile,
+	FileModified,
 } from "../stores/File.js";
 import {
 	basename,
@@ -187,6 +188,7 @@ export const save = async (contents, filePath) => {
 	// this does not check if the file exists.
 	// if file does not yet exist, you should call "SaveAs"
 	await tauriWriteTextFile(filePath, contents);
+	FileModified.set(false);
 };
 /**
  *
@@ -204,6 +206,7 @@ export const saveAs = async (contents, targetFilePath) => {
 	if (filePath == null) { return; }
 	await tauriWriteTextFile(filePath, contents);
 	FilePath.set(filePath);
+	FileModified.set(false);
 };
 /**
  *
