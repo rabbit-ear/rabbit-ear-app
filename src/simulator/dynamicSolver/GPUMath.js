@@ -31,7 +31,7 @@ function initGPUMath() {
 	canvas.setAttribute("class", "gpuMathCanvas");
 	window.document.body.appendChild(canvas);
 	const { gl, version } = initialize(canvas);
-	console.log(`initializing webgl version ${version}`);
+	// console.log(`initializing webgl version ${version}`);
 	if (version === 1) {
 		if (!gl.getExtension("OES_texture_float")) { notSupported(); }
 	}

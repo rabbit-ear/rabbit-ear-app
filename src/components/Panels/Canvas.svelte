@@ -89,11 +89,11 @@
 				<button
 					disabled={$FoldedStaticOrSimulator || !$Folded2DIsPossible}
 					highlighted={!$FoldedSVGOrWebGL}
-					on:click={() => $FoldedSVGOrWebGL = false}>svg</button>
+					on:click={() => $FoldedSVGOrWebGL = false}>2D</button>
 				<button
 					disabled={$FoldedStaticOrSimulator}
 					highlighted={$FoldedSVGOrWebGL}
-					on:click={() => $FoldedSVGOrWebGL = true}>web gl</button>
+					on:click={() => $FoldedSVGOrWebGL = true}>3D</button>
 			</div>
 		</div>
 	</span>

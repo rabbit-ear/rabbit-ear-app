@@ -165,15 +165,22 @@ fn main() {
 	// let item_show_code_editor = CustomMenuItem::new(
 	// 	"show_code_editor".to_string(),
 	// 	"Show/Hide Code Editor");
-	let item_show_grid = CustomMenuItem::new(
-		"show_grid".to_string(),
-		"Show/Hide Grid");
 	let item_show_axes = CustomMenuItem::new(
 		"show_axes".to_string(),
 		"Show/Hide Axes");
 	let item_invert_vertical_axis = CustomMenuItem::new(
 		"invert_vertical_axis".to_string(),
 		"Invert Vertical Axis");
+
+	let item_show_grid = CustomMenuItem::new(
+		"show_grid".to_string(),
+		"Show/Hide Grid");
+	let item_set_grid_type_hex = CustomMenuItem::new(
+		"grid_type_hex".to_string(),
+		"Hex Grid");
+	let item_set_grid_type_square = CustomMenuItem::new(
+		"grid_type_square".to_string(),
+		"Square Grid");
 
 	// menus
 	#[cfg(target_os = "macos")]
@@ -235,8 +242,12 @@ fn main() {
 		.add_item(item_show_frames)
 		// .add_item(item_show_code_editor)
 		.add_item(item_show_axes)
+		.add_item(item_invert_vertical_axis)
+		.add_native_item(MenuItem::Separator)
 		.add_item(item_show_grid)
-		.add_item(item_invert_vertical_axis));
+		.add_item(item_set_grid_type_hex)
+		.add_item(item_set_grid_type_square));
+
 		// .add_item(ITEM_SHOW_FRAMES.lock().unwrap()));
 
 	// the menu
@@ -442,6 +453,12 @@ fn main() {
 				}
 				"show_grid" => {
 					let _ = event.window().eval("window.store.toggle('ShowGrid')");
+				}
+				"grid_type_hex" => {
+					let _ = event.window().eval("window.store.set('GridType','hex')");
+				}
+				"grid_type_square" => {
+					let _ = event.window().eval("window.store.set('GridType','square')");
 				}
 				"show_axes" => {
 					let _ = event.window().eval("window.store.toggle('ShowAxes')");

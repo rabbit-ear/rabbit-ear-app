@@ -61,6 +61,7 @@
 		canvas,
 		frontColor: $LayerOrderKnown ? $FoldedFrontColor : "#9e9b9b",
 		backColor: $LayerOrderKnown ? $FoldedBackColor : "#9e9b9b",
+		outlineColor: $LayerOrderKnown ? "black" : "white",
 		cpColor: $CPColor,
 		strokeWidth: inferredScale * 0.02,
 		opacity: $LayerOrderKnown ? 1 : 0.25,

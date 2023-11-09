@@ -20,7 +20,7 @@ Tools
 - [ ] new tool: rabbit ear. except make it the straight skeleton. convex only.
 - [ ] new tool: sink. can go in conjunction with straight skeleton.
 - [ ] right mouse click changes to camera to pan around.
-- [ ] Snap Grid: ability to change grid: triangles, square, rectangle...
+- [x] Snap Grid: ability to change grid: triangles, square, rectangle...
 - [ ] axioms 5-7 could be coded better
 - [-] foldedLine tool should re-assign existing creases that lay along the path.
 - [-] when hovering over folded form, dim actions which cannot be used on it.
@@ -43,7 +43,7 @@ File System
 
 Model
 
-- [ ] modify CP (scale, transform), zoom doesn't work.
+- [x] modify CP (scale, transform), zoom doesn't work.
 - [ ] "undo" with many frames resets the current frame to the last one.
 - [ ] duplicate frame, append it after this frame, don't add it to the end.
 - [ ] when Svelte 5 comes out, replace GraphUpdate with an effect.

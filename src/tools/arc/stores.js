@@ -22,6 +22,7 @@ import {
 	SnapRadiusFolded,
 	RadialSnapDegrees,
 	RadialSnapOffset,
+	GridSnapFunction,
 } from "../../stores/Snap.js";
 import { RulersCP } from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";
@@ -42,18 +43,18 @@ export const CPStep = derived(
 );
 
 const CPMoveSnap = derived(
-	[CPMove, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP],
-	([$CPMove, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => ($CPStep < 2
-		? snapToPoint($CPMove, $SnapPointsCP, $SnapRadiusCP)
+	[CPMove, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP, GridSnapFunction],
+	([$CPMove, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP, $GridSnapFunction]) => ($CPStep < 2
+		? snapToPoint($CPMove, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction)
 		: snapToRulerLine($CPMove, $SnapPointsCP, $RulersCP, $SnapRadiusCP)
 	),
 	{ coords: undefined, snap: false },
 );
 
 const CPDragSnap = derived(
-	[CPDrag, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP],
-	([$CPDrag, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => ($CPStep < 2
-		? snapToPoint($CPDrag, $SnapPointsCP, $SnapRadiusCP)
+	[CPDrag, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP, GridSnapFunction],
+	([$CPDrag, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP, $GridSnapFunction]) => ($CPStep < 2
+		? snapToPoint($CPDrag, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction)
 		: snapToRulerLine($CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP)
 	),
 	{ coords: undefined, snap: false },
@@ -72,17 +73,17 @@ export const CPDragCoords = derived(
 );
 
 export const CPCircleCenter = derived(
-	[CPPresses, SnapPointsCP, SnapRadiusCP],
-	([$CPPresses, $SnapPointsCP, $SnapRadiusCP]) => (
-		snapToPoint($CPPresses[0], $SnapPointsCP, $SnapRadiusCP).coords
+	[CPPresses, SnapPointsCP, SnapRadiusCP, GridSnapFunction],
+	([$CPPresses, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction]) => (
+		snapToPoint($CPPresses[0], $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction).coords
 	),
 	undefined,
 );
 
 export const CPRelease0Coords = derived(
-	[CPReleases, SnapPointsCP, SnapRadiusCP],
-	([$CPReleases, $SnapPointsCP, $SnapRadiusCP]) => (
-		snapToPoint($CPReleases[0], $SnapPointsCP, $SnapRadiusCP).coords
+	[CPReleases, SnapPointsCP, SnapRadiusCP, GridSnapFunction],
+	([$CPReleases, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction]) => (
+		snapToPoint($CPReleases[0], $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction).coords
 	),
 	undefined,
 );

@@ -18,8 +18,23 @@ import {
 	nearestFace,
 } from "rabbit-ear/graph/nearest.js";
 
-// todo: hex grid, check nearest hex grid point
-const nearestGridPoint = (point, snapRadius) => {
+const _0_866 = Math.sqrt(3) / 2;
+
+export const hexGridSnapFunction = (point, snapRadius) => {
+	if (!point) { return undefined; }
+	const yCoordCount = Math.round(point[1] / _0_866);
+	const yCoord = yCoordCount * _0_866;
+	const yRemainder = Math.abs(point[1] - yCoord);
+	const xOffset = yCoordCount % 2 === 0 ? 0 : 0.5;
+	const xCoord = Math.round(point[0] + xOffset) - xOffset;
+	const xRemainder = Math.abs(point[0] - xCoord);
+	return xRemainder < snapRadius && yRemainder < snapRadius
+		? [xCoord, yCoord]
+		: undefined;
+};
+
+export const squareGridSnapFunction = (point, snapRadius) => {
+	if (!point) { return undefined; }
 	const coords = point.map(n => Math.round(n));
 	const isNear = point
 		.map((n, i) => Math.abs(coords[i] - n))
@@ -37,11 +52,15 @@ const nearestGridPoint = (point, snapRadius) => {
  * this will be ignored.
  * @returns {object} object with coords {number[]} and snap {boolean}
  */
-export const snapToPoint = (point, points, snapRadius) => {
+export const snapToPoint = (
+	point,
+	points,
+	snapRadius,
+	gridSnapFunction = squareGridSnapFunction) => {
 	// console.log("snapToPoint", point, points, snapRadius);
 	if (!point) { return { coords: undefined, snap: false }; }
 	if (!points || !points.length) {
-		const grid = nearestGridPoint(point, snapRadius);
+		const grid = gridSnapFunction(point, snapRadius);
 		return grid !== undefined
 			? { coords: grid, snap: true }
 			: { coords: point, snap: false };
@@ -59,7 +78,7 @@ export const snapToPoint = (point, points, snapRadius) => {
 	}
 	// fallback, use a grid point if it exists.
 	// we only need the nearest of the grid coordinates.
-	const grid = nearestGridPoint(point, snapRadius);
+	const grid = gridSnapFunction(point, snapRadius);
 	if (grid !== undefined) {
 		return { coords: grid, snap: true };
 	}

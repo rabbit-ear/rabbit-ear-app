@@ -17,6 +17,7 @@ import {
 	SnapPointsFolded,
 	SnapRadiusCP,
 	SnapRadiusFolded,
+	GridSnapFunction,
 } from "../../stores/Snap.js";
 import {
 	RulersCP,
@@ -42,9 +43,9 @@ export const FoldedRelease = writable(undefined);
 const ShiftLock = derived(Keyboard, $Keyboard => $Keyboard[16], false);
 
 const CPMoveSnap = derived(
-	[CPMove, SnapPointsCP, SnapRadiusCP],
-	([$CPMove, $SnapPointsCP, $SnapRadiusCP]) => (
-		snapToPoint($CPMove, $SnapPointsCP, $SnapRadiusCP)
+	[CPMove, SnapPointsCP, SnapRadiusCP, GridSnapFunction],
+	([$CPMove, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction]) => (
+		snapToPoint($CPMove, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction)
 	),
 	{ coords: undefined, snap: false },
 );
@@ -56,43 +57,43 @@ export const CPMoveCoords = derived(
 );
 
 const CPDragSnap = derived(
-	[CPDrag, SnapPointsCP, SnapRadiusCP],
-	([$CPDrag, $SnapPointsCP, $SnapRadiusCP]) => (
-		snapToPoint($CPDrag, $SnapPointsCP, $SnapRadiusCP)
+	[CPDrag, SnapPointsCP, SnapRadiusCP, GridSnapFunction],
+	([$CPDrag, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction]) => (
+		snapToPoint($CPDrag, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction)
 	),
 	{ coords: undefined, snap: false },
 );
 
 export const CPDragCoords = derived(
-	[ShiftLock, CPDrag, SnapPointsCP, RulersCP, SnapRadiusCP],
-	([$ShiftLock, $CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => $ShiftLock
+	[ShiftLock, CPDrag, SnapPointsCP, RulersCP, SnapRadiusCP, GridSnapFunction],
+	([$ShiftLock, $CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP, $GridSnapFunction]) => $ShiftLock
 		? snapToRulerLine($CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP).coords
-		: snapToPoint($CPDrag, $SnapPointsCP, $SnapRadiusCP).coords,
+		: snapToPoint($CPDrag, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction).coords,
 	undefined,
 );
 
 export const CPPressCoords = derived(
-	[CPPress, SnapPointsCP, SnapRadiusCP],
-	([$CPPress, $SnapPointsCP, $SnapRadiusCP]) => (
-		snapToPoint($CPPress, $SnapPointsCP, $SnapRadiusCP).coords
+	[CPPress, SnapPointsCP, SnapRadiusCP, GridSnapFunction],
+	([$CPPress, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction]) => (
+		snapToPoint($CPPress, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction).coords
 	),
 	undefined,
 );
 
 export const CPReleaseCoords = derived(
-	[ShiftLock, CPRelease, SnapPointsCP, RulersCP, SnapRadiusCP],
-	([$ShiftLock, $CPRelease, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => $ShiftLock
+	[ShiftLock, CPRelease, SnapPointsCP, RulersCP, SnapRadiusCP, GridSnapFunction],
+	([$ShiftLock, $CPRelease, $SnapPointsCP, $RulersCP, $SnapRadiusCP, $GridSnapFunction]) => $ShiftLock
 		? snapToRulerLine($CPRelease, $SnapPointsCP, $RulersCP, $SnapRadiusCP).coords
-		: snapToPoint($CPRelease, $SnapPointsCP, $SnapRadiusCP).coords,
+		: snapToPoint($CPRelease, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction).coords,
 	undefined,
 );
 
 ///////////////////////////////
 
 const FoldedMoveSnap = derived(
-	[FoldedMove, SnapPointsFolded, SnapRadiusFolded],
-	([$FoldedMove, $SnapPointsFolded, $SnapRadiusFolded]) => (
-		snapToPoint($FoldedMove, $SnapPointsFolded, $SnapRadiusFolded)
+	[FoldedMove, SnapPointsFolded, SnapRadiusFolded, GridSnapFunction],
+	([$FoldedMove, $SnapPointsFolded, $SnapRadiusFolded, $GridSnapFunction]) => (
+		snapToPoint($FoldedMove, $SnapPointsFolded, $SnapRadiusFolded, $GridSnapFunction)
 	),
 	{ coords: undefined, snap: false },
 );
@@ -104,9 +105,9 @@ export const FoldedMoveCoords = derived(
 );
 
 const FoldedDragSnap = derived(
-	[FoldedDrag, SnapPointsFolded, SnapRadiusFolded],
-	([$FoldedDrag, $SnapPointsFolded, $SnapRadiusFolded]) => (
-		snapToPoint($FoldedDrag, $SnapPointsFolded, $SnapRadiusFolded)
+	[FoldedDrag, SnapPointsFolded, SnapRadiusFolded, GridSnapFunction],
+	([$FoldedDrag, $SnapPointsFolded, $SnapRadiusFolded, $GridSnapFunction]) => (
+		snapToPoint($FoldedDrag, $SnapPointsFolded, $SnapRadiusFolded, $GridSnapFunction)
 	),
 	{ coords: undefined, snap: false },
 );
@@ -121,18 +122,18 @@ export const FoldedDragCoords = derived(
 );
 
 export const FoldedPressCoords = derived(
-	[FoldedPress, SnapPointsFolded, SnapRadiusFolded],
-	([$FoldedPress, $SnapPointsFolded, $SnapRadiusFolded]) => (
-		snapToPoint($FoldedPress, $SnapPointsFolded, $SnapRadiusFolded).coords
+	[FoldedPress, SnapPointsFolded, SnapRadiusFolded, GridSnapFunction],
+	([$FoldedPress, $SnapPointsFolded, $SnapRadiusFolded, $GridSnapFunction]) => (
+		snapToPoint($FoldedPress, $SnapPointsFolded, $SnapRadiusFolded, $GridSnapFunction).coords
 	),
 	undefined,
 );
 
 export const FoldedReleaseCoords = derived(
-	[ShiftLock, FoldedRelease, SnapPointsFolded, RulersFolded, SnapRadiusFolded],
-	([$ShiftLock, $FoldedRelease, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded]) => $ShiftLock
+	[ShiftLock, FoldedRelease, SnapPointsFolded, RulersFolded, SnapRadiusFolded, GridSnapFunction],
+	([$ShiftLock, $FoldedRelease, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded, $GridSnapFunction]) => $ShiftLock
 		? snapToRulerLine($FoldedRelease, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded).coords
-		: snapToPoint($FoldedRelease, $SnapPointsFolded, $SnapRadiusFolded).coords,
+		: snapToPoint($FoldedRelease, $SnapPointsFolded, $SnapRadiusFolded, $GridSnapFunction).coords,
 	undefined,
 );
 

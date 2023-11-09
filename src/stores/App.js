@@ -63,8 +63,11 @@ export const ShowFrames = writable(
  * take on this assignment.
  */
 export const NewEdgeAssignment = writable(
-	localStorage.getItem("NewEdgeAssignment") || "F",
-);
+	localStorage.getItem("NewEdgeAssignment") || "F");
+
+export const GridType = writable(
+	localStorage.getItem("GridType") || "square");
+
 /**
  * @description DOM element references.
  */
@@ -101,3 +104,5 @@ ShowFrames.subscribe(value => localStorage
 	.setItem("ShowFrames", String(value)));
 NewEdgeAssignment.subscribe(value => localStorage
 	.setItem("NewEdgeAssignment", value));
+GridType.subscribe(value => localStorage
+	.setItem("GridType", value));

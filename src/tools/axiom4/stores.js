@@ -19,6 +19,7 @@ import {
 	SnapPointsFolded,
 	SnapRadiusCP,
 	SnapRadiusFolded,
+	GridSnapFunction,
 } from "../../stores/Snap.js";
 import {
 	SnapPoint,
@@ -49,11 +50,11 @@ export const CPStep = derived(
 );
 
 const CPMoveSnap = derived(
-	[CPMove, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP],
-	([$CPMove, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => {
+	[CPMove, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP, GridSnapFunction],
+	([$CPMove, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP, $GridSnapFunction]) => {
 		switch ($CPStep) {
 		case 0: return {};
-		case 1: return snapToPoint($CPMove, $SnapPointsCP, $SnapRadiusCP);
+		case 1: return snapToPoint($CPMove, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction);
 		default: return snapToRulerLine($CPMove, $SnapPointsCP, $RulersCP, $SnapRadiusCP);
 		}
 	},
@@ -61,11 +62,11 @@ const CPMoveSnap = derived(
 );
 
 const CPDragSnap = derived(
-	[CPDrag, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP],
-	([$CPDrag, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP]) => {
+	[CPDrag, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP, GridSnapFunction],
+	([$CPDrag, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP, $GridSnapFunction]) => {
 		switch ($CPStep) {
 		case 0: return {};
-		case 1: return snapToPoint($CPDrag, $SnapPointsCP, $SnapRadiusCP);
+		case 1: return snapToPoint($CPDrag, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction);
 		default: return snapToRulerLine($CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP);
 		}
 	},
@@ -95,9 +96,9 @@ export const CPEdge0 = derived(
 );
 
 export const CPRelease0Coords = derived(
-	[CPReleases, SnapPointsCP, SnapRadiusCP],
-	([$CPReleases, $SnapPointsCP, $SnapRadiusCP]) => (
-		snapToPoint($CPReleases[0], $SnapPointsCP, $SnapRadiusCP).coords
+	[CPReleases, SnapPointsCP, SnapRadiusCP, GridSnapFunction],
+	([$CPReleases, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction]) => (
+		snapToPoint($CPReleases[0], $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction).coords
 	),
 	undefined,
 );
@@ -135,11 +136,11 @@ export const FoldedStep = derived(
 );
 
 const FoldedMoveSnap = derived(
-	[FoldedMove, FoldedStep, SnapPointsFolded, RulersFolded, SnapRadiusFolded],
-	([$FoldedMove, $FoldedStep, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded]) => {
+	[FoldedMove, FoldedStep, SnapPointsFolded, RulersFolded, SnapRadiusFolded, GridSnapFunction],
+	([$FoldedMove, $FoldedStep, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded, $GridSnapFunction]) => {
 		switch ($FoldedStep) {
 		case 0: return {};
-		case 1: return snapToPoint($FoldedMove, $SnapPointsFolded, $SnapRadiusFolded);
+		case 1: return snapToPoint($FoldedMove, $SnapPointsFolded, $SnapRadiusFolded, $GridSnapFunction);
 		default: return snapToRulerLine($FoldedMove, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded);
 		}
 	},
@@ -147,11 +148,11 @@ const FoldedMoveSnap = derived(
 );
 
 const FoldedDragSnap = derived(
-	[FoldedDrag, FoldedStep, SnapPointsFolded, RulersFolded, SnapRadiusFolded],
-	([$FoldedDrag, $FoldedStep, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded]) => {
+	[FoldedDrag, FoldedStep, SnapPointsFolded, RulersFolded, SnapRadiusFolded, GridSnapFunction],
+	([$FoldedDrag, $FoldedStep, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded, $GridSnapFunction]) => {
 		switch ($FoldedStep) {
 		case 0: return {};
-		case 1: return snapToPoint($FoldedDrag, $SnapPointsFolded, $SnapRadiusFolded);
+		case 1: return snapToPoint($FoldedDrag, $SnapPointsFolded, $SnapRadiusFolded, $GridSnapFunction);
 		default: return snapToRulerLine($FoldedDrag, $SnapPointsFolded, $RulersFolded, $SnapRadiusFolded);
 		}
 	},
@@ -181,9 +182,9 @@ export const FoldedEdge0 = derived(
 );
 
 export const FoldedRelease0Coords = derived(
-	[FoldedReleases, SnapPointsFolded, SnapRadiusFolded],
-	([$FoldedReleases, $SnapPointsFolded, $SnapRadiusFolded]) => (
-		snapToPoint($FoldedReleases[0], $SnapPointsFolded, $SnapRadiusFolded).coords
+	[FoldedReleases, SnapPointsFolded, SnapRadiusFolded, GridSnapFunction],
+	([$FoldedReleases, $SnapPointsFolded, $SnapRadiusFolded, $GridSnapFunction]) => (
+		snapToPoint($FoldedReleases[0], $SnapPointsFolded, $SnapRadiusFolded, $GridSnapFunction).coords
 	),
 	undefined,
 );

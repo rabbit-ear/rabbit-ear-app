@@ -38,14 +38,14 @@ export const translate = (vector) => Selection.isEmpty()
 		getVerticesFromSelection(get(CreasePattern), get(Selection)),
 	);
 
-const scaleAll = (factors = [1, 1, 1]) => {
+export const scaleAll = (factors = [1, 1, 1]) => {
 	const graph = get(CreasePattern);
 	const vertices_coords = (graph.vertices_coords || [])
 		.map(coords => coords.map((n, i) => n * factors[i]));
 	IsoUpdateFrame({ ...graph, vertices_coords });
 };
 
-const scaleVertices = (factors = [1, 1, 1], vertices) => {
+export const scaleVertices = (factors = [1, 1, 1], vertices) => {
 	if (!vertices.length) { return "no vertices selected"; }
 	const graph = get(CreasePattern);
 	const vertices_coords = graph.vertices_coords || [];
@@ -76,7 +76,7 @@ export const scale = (x = 1, y = 1, z = 1) => Selection.isEmpty()
 // 		[x, y, z],
 // 	);
 
-const rotateAll = (radians) => {
+export const rotateAll = (radians) => {
 	const mat = makeMatrix2Rotate(radians);
 	const graph = get(CreasePattern);
 	const vertices_coords = (graph.vertices_coords || [])
@@ -84,7 +84,7 @@ const rotateAll = (radians) => {
 	IsoUpdateFrame({ ...graph, vertices_coords });
 };
 
-const rotateVertices = (radians, vertices) => {
+export const rotateVertices = (radians, vertices) => {
 	if (!vertices.length) { return "no vertices selected"; }
 	const mat = makeMatrix2Rotate(radians);
 	const graph = get(CreasePattern);

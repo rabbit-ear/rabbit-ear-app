@@ -7,11 +7,18 @@ import {
 	ViewportFolded,
 } from "./ViewBox.js";
 import {
+	GridType,
+} from "./App.js";
+import {
 	RulerPointsCP,
 	RulerPointsFolded,
 } from "./Ruler.js";
 import { CreasePattern } from "./ModelCP.js";
 import { FoldedFormPlanar } from "./ModelFolded.js";
+import {
+	hexGridSnapFunction,
+	squareGridSnapFunction,
+} from "../js/snap.js";
 /**
  * @description Establish the angle between snapping lines, and the
  * offset from 0deg for the initial line.
@@ -70,4 +77,14 @@ export const SnapRadiusFolded = derived(
 		Math.max($ViewportFolded[2], $ViewportFolded[3]) * SnapRadiusFactor
 	),
 	0.05,
+);
+/**
+ *
+ */
+export const GridSnapFunction = derived(
+	GridType,
+	$GridType => $GridType === "hex"
+		? hexGridSnapFunction
+		: squareGridSnapFunction,
+	squareGridSnapFunction,
 );

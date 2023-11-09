@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
-import { ask } from "@tauri-apps/api/dialog";
+import { appWindow } from "@tauri-apps/api/window";
+import { ask, confirm } from "@tauri-apps/api/dialog";
 import { exists } from "@tauri-apps/api/fs";
 import { exit } from "@tauri-apps/api/process";
 import { get } from "svelte/store";
@@ -15,6 +16,7 @@ import {
 } from "./js/file.js";
 import {
 	VerticalUp,
+	GridType,
 	ShowGrid,
 	ShowAxes,
 	ShowIndices,
@@ -53,9 +55,10 @@ window.store.set = (name, value) => {
 	console.log("setting", name, value);
 	switch (name) {
 	case "NewEdgeAssignment": NewEdgeAssignment.set(value); break;
+	case "GridType": GridType.set(value); break;
 	default: break;
 	}
-}
+};
 
 // Rust would like to update a store variable, specifically, a boolean store,
 // specifically, toggle the boolean value.
@@ -80,13 +83,29 @@ window.store.toggle = (name) => {
 	store.set(value);
 	invoke("store_boolean_update", { name, value });
 	return value;
-}
+};
 
-// Dialogs for creating new files/frames, importing/exporting files
+// prevent closing before saving the file, 2 ways: "Quit menu" or red/X button
+
+const unlisten = appWindow.onCloseRequested(async (event) => {
+	if (!get(FileModified)) { return; }
+	const yesQuit = await confirm("Quit without saving?", {
+		title: "Rabbit Ear",
+		type: "warning",
+		okLabel: "Quit",
+		cancelLabel: "Cancel",
+	});
+	if (!yesQuit) {
+		event.preventDefault();
+	}
+});
+
+// todo: call unlisten if multiple windows are created / component is unmounted
+// unlisten();
 
 window.dialog.quit = async () => {
 	if (get(FileModified)) {
-		const yesQuit = await ask("Quit without saving?", {
+		const yesQuit = await confirm("Quit without saving?", {
 			title: "Rabbit Ear",
 			type: "warning",
 			okLabel: "Quit",
@@ -99,6 +118,8 @@ window.dialog.quit = async () => {
 		await exit(0);
 	}
 }
+
+// Dialogs for creating new files/frames, importing/exporting files
 
 window.dialog.newFile = async () => {
 	// const yes = await ask("Are you sure?", "Tauri");
