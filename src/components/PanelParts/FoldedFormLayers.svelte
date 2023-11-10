@@ -6,6 +6,10 @@
 	import {
 		FoldedRenderer,
 	} from "../../stores/Renderer.js";
+	import {
+		AutoSolveLayers,
+		SolveLayersOnBackground,
+	} from "../../stores/App.js";
 	import { executeCommand } from "../../kernel/execute.js";
 
 	$: faceOrders = $IsolatedFrame && $IsolatedFrame.faceOrders
@@ -40,6 +44,20 @@
 {/if}
 <div class="flex-row">
 	<p>relationships: <span class="strong">{faceOrders.length}</span></p>
+</div>
+<div class="flex-row gap">
+	<input
+		type="checkbox"
+		id="auto-solve-layers"
+		bind:checked={$AutoSolveLayers}>
+	<label for="auto-solve-layers">solve layers automatically</label>
+</div>
+<div class="flex-row gap">
+	<input
+		type="checkbox"
+		id="background-thread"
+		bind:checked={$SolveLayersOnBackground}>
+	<label for="background-thread">use background thread</label>
 </div>
 <div class="flex-row gap center">
 	{#if $LayerOrderKnown}

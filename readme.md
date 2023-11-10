@@ -55,7 +55,7 @@ Model
 
 Layers
 
-- [ ] move calculation onto background web-worker thread.
+- [x] move calculation onto background web-worker thread.
 - [ ] when layer solver cannot solve, show violations between faces.
 - [ ] !!! layer order solved - change assignment - layer order needs to be deleted
 - [ ] layer order - report number of face-pairs, auto solve if number is low
@@ -73,6 +73,10 @@ SVG / WebGL / Simulator
 - [ ] svg text in graph indices drifts away when zooming in
 - [ ] folded form (svg) is choppy on zoom (even empty, I think).
 - [ ] the tool-svg-layer is disappearing. turning simulator on, folding simulator, going back to cp... using the edge tool.
+
+Frames
+
+- [ ] Tall rectangle CPs don't render fully in frame preview.
 
 Unsorted
 

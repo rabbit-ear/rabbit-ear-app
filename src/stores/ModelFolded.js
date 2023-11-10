@@ -17,10 +17,16 @@ import {
 	graphToMatrix2,
 } from "../js/matrix.js";
 import {
+	solveFaceLayers,
+	solveFaceLayersWorker,
+} from "../js/orders.js";
+import {
 	ModelMatrixFolded,
 } from "./ViewBox.js";
 import {
 	VerticalUp,
+	AutoSolveLayers,
+	SolveLayersOnBackground,
 } from "./App.js";
 import {
 	IsolatedFrame,
@@ -62,6 +68,87 @@ const ComputedFoldedCoords = derived(
 	},
 	[],
 );
+
+// async derived Svelte store example
+// export default function (stores, callback, initial_value) {
+// 	let guardOrder
+// 	return derived(stores, ($stores, set) => {
+// 		const innerGuard = guardOrder = {}
+// 		set(initial_value)
+// 		Promise.resolve(callback($stores)).then(value => {
+// 			if (guardOrder === innerGuard) {
+// 				set(value)
+// 			}
+// 		})
+// 	}, initial_value)
+// }
+
+let guardOrder;
+
+export const FaceOrdersSolution = derived(
+	[IsolatedFrame, ComputedFoldedCoords, FrameIsCreasePattern, AutoSolveLayers, SolveLayersOnBackground],
+	([$IsolatedFrame, $ComputedFoldedCoords, $FrameIsCreasePattern, $AutoSolveLayers, $SolveLayersOnBackground], set) => {
+		const innerGuard = guardOrder = {};
+		set({});
+		if (!$AutoSolveLayers) { return {}; }
+		const foldedForm = !$FrameIsCreasePattern
+			? $IsolatedFrame
+			: {
+				...$IsolatedFrame,
+				vertices_coords: $ComputedFoldedCoords,
+				frame_classes: ["foldedForm"],
+			};
+		const Solve = $SolveLayersOnBackground ? solveFaceLayersWorker : solveFaceLayers;
+		Promise.resolve(Solve(foldedForm)).then((value) => {
+			if (guardOrder === innerGuard) {
+				set(value);
+			} else {
+				console.warn("FaceOrdersSolution, guardOrder !== innerGuard")
+			}
+		}, (error) => {
+			console.warn("FaceOrdersSolution", error);
+			set({});
+		});
+	},
+	({}),
+);
+
+// export const FaceOrdersSolution = derived(
+// 	[IsolatedFrame, ComputedFoldedCoords, FrameIsCreasePattern, AutoSolveLayers],
+// 	([$IsolatedFrame, $ComputedFoldedCoords, $FrameIsCreasePattern, $AutoSolveLayers]) => {
+// 		if (!$AutoSolveLayers) { return {}; }
+// 		try {
+// 			const foldedForm = !$FrameIsCreasePattern
+// 				? $IsolatedFrame
+// 				: {
+// 					...$IsolatedFrame,
+// 					vertices_coords: $ComputedFoldedCoords,
+// 					frame_classes: ["foldedForm"],
+// 				};
+// 			return solveFaceLayers(foldedForm);
+// 		} catch (error) {
+// 			console.warn("FaceOrdersSolution", error);
+// 		}
+// 	}
+// );
+
+export const FaceOrdersOptions = writable([]);
+
+export const FaceOrders = derived(
+	[FaceOrdersSolution, FaceOrdersOptions],
+	([$FaceOrdersSolution, $FaceOrdersOptions]) => {
+		if (!$FaceOrdersSolution || !$FaceOrdersSolution.faceOrders) {
+			return [];
+		}
+		try {
+			// $FaceOrdersOptions
+			return $FaceOrdersSolution.faceOrders();
+		} catch (error) {
+			console.warn("FaceOrders", error);
+		}
+	}
+);
+
 /**
  * @description The FoldedForm will be one of two things:
  * - the current frame in the FOLD file untouched, if that frame is "foldedForm"
@@ -69,8 +156,8 @@ const ComputedFoldedCoords = derived(
  *   use the folded vertices to assemble a folded representation of the CP.
  */
 export const FoldedForm = derived(
-	[FrameIsCreasePattern, IsolatedFrame, ComputedFoldedCoords, VerticalUp],
-	([$FrameIsCreasePattern, $IsolatedFrame, $ComputedFoldedCoords, $VerticalUp]) => {
+	[FrameIsCreasePattern, IsolatedFrame, ComputedFoldedCoords, FaceOrders, VerticalUp],
+	([$FrameIsCreasePattern, $IsolatedFrame, $ComputedFoldedCoords, $FaceOrders, $VerticalUp]) => {
 		// console.log("Model: FoldedForm");
 		// if the frame is a folded form, return the frame itself.
 		// otherwise, compute the folded form from the crease pattern.
@@ -80,8 +167,10 @@ export const FoldedForm = derived(
 				...$IsolatedFrame,
 				// ...structuredClone($IsolatedFrame),
 				vertices_coords: $ComputedFoldedCoords,
+				// todo: if faceOrders does not already exist, use this. otherwise not.
+				faceOrders: $FaceOrders,
 				frame_classes: ["foldedForm"],
-			}
+			};
 		ModelMatrixFolded.set(graphToMatrix2(foldedForm, $VerticalUp));
 		return foldedForm;
 	},

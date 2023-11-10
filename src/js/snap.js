@@ -20,7 +20,7 @@ import {
 
 const _0_866 = Math.sqrt(3) / 2;
 
-export const hexGridSnapFunction = (point, snapRadius) => {
+export const triangleGridSnapFunction = (point, snapRadius) => {
 	if (!point) { return undefined; }
 	const yCoordCount = Math.round(point[1] / _0_866);
 	const yCoord = yCoordCount * _0_866;

@@ -68,6 +68,13 @@ export const NewEdgeAssignment = writable(
 export const GridType = writable(
 	localStorage.getItem("GridType") || "square");
 
+export const AutoSolveLayers = writable(
+	localStorage.getItem("AutoSolveLayers") !== undefined
+		? localStorage.getItem("AutoSolveLayers") === "true"
+		: true);
+
+export const SolveLayersOnBackground = writable(false);
+
 /**
  * @description DOM element references.
  */
@@ -106,3 +113,5 @@ NewEdgeAssignment.subscribe(value => localStorage
 	.setItem("NewEdgeAssignment", value));
 GridType.subscribe(value => localStorage
 	.setItem("GridType", value));
+AutoSolveLayers.subscribe(value => localStorage
+	.setItem("AutoSolveLayers", value));

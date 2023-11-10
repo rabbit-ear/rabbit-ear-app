@@ -16,7 +16,7 @@ import {
 import { CreasePattern } from "./ModelCP.js";
 import { FoldedFormPlanar } from "./ModelFolded.js";
 import {
-	hexGridSnapFunction,
+	triangleGridSnapFunction,
 	squareGridSnapFunction,
 } from "../js/snap.js";
 /**
@@ -83,8 +83,8 @@ export const SnapRadiusFolded = derived(
  */
 export const GridSnapFunction = derived(
 	GridType,
-	$GridType => $GridType === "hex"
-		? hexGridSnapFunction
+	$GridType => $GridType === "triangle"
+		? triangleGridSnapFunction
 		: squareGridSnapFunction,
 	squareGridSnapFunction,
 );

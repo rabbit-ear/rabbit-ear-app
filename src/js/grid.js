@@ -51,7 +51,7 @@ export const makeSquareGrid = (viewport) => [
 			y2: y,
 		}))].flat();
 
-export const makeHexGrid = (viewport) => {
+export const makeTriangleGrid = (viewport) => {
 	// the result of this method are 3 sets of parallel lines,
 	// one horizontal set and two diagonal sets.
 	//    a   /     \   b

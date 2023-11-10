@@ -6,7 +6,7 @@
 	import { viewBoxOrigin } from "../../js/matrix.js";
 	import {
 		makeSquareGrid,
-		makeHexGrid,
+		makeTriangleGrid,
 	} from "../../js/grid.js";
 
 	export let viewport = [0, 0, 1, 1];
@@ -19,8 +19,8 @@
 		viewport[3],
 	];
 	$: strokeWidth = Math.max(viewport[2], viewport[3]) / 400;
-	$: lines = $GridType === "hex"
-		? makeHexGrid(actualViewport)
+	$: lines = $GridType === "triangle"
+		? makeTriangleGrid(actualViewport)
 		: makeSquareGrid(actualViewport);
 </script>
 
@@ -41,5 +41,4 @@
 
 <style>
 	line { stroke: var(--background-3); }
-/*	line { stroke: var(--dim); }*/
 </style>

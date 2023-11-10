@@ -2,23 +2,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{Manager, CustomMenuItem, Menu, MenuItem, Submenu, AboutMetadata};
-// use lazy_static::lazy_static;
-// use std::sync::Mutex;
-
-// lazy_static! {
-// 	static ref ARRAY: Mutex<Vec<u8>> = Mutex::new(vec![]);
-// }
-// fn do_a_call() {
-// 	ARRAY.lock().unwrap().push(1);
-// }
-
-
-// lazy_static! {
-// 	static ref ITEM_SHOW_FRAMES: Mutex<CustomMenuItem> = Mutex::new(CustomMenuItem::new(
-// 		"show_frames".to_string(),
-// 		"Show Frames"));
-// }
-
 
 fn main() {
 	// let authors_list = vec!["Kraft".to_string()];
@@ -175,9 +158,9 @@ fn main() {
 	let item_show_grid = CustomMenuItem::new(
 		"show_grid".to_string(),
 		"Show/Hide Grid");
-	let item_set_grid_type_hex = CustomMenuItem::new(
-		"grid_type_hex".to_string(),
-		"Hex Grid");
+	let item_set_grid_type_triangle = CustomMenuItem::new(
+		"grid_type_triangle".to_string(),
+		"Triangle Grid");
 	let item_set_grid_type_square = CustomMenuItem::new(
 		"grid_type_square".to_string(),
 		"Square Grid");
@@ -245,10 +228,8 @@ fn main() {
 		.add_item(item_invert_vertical_axis)
 		.add_native_item(MenuItem::Separator)
 		.add_item(item_show_grid)
-		.add_item(item_set_grid_type_hex)
+		.add_item(item_set_grid_type_triangle)
 		.add_item(item_set_grid_type_square));
-
-		// .add_item(ITEM_SHOW_FRAMES.lock().unwrap()));
 
 	// the menu
 	let menu = Menu::new()
@@ -454,8 +435,8 @@ fn main() {
 				"show_grid" => {
 					let _ = event.window().eval("window.store.toggle('ShowGrid')");
 				}
-				"grid_type_hex" => {
-					let _ = event.window().eval("window.store.set('GridType','hex')");
+				"grid_type_triangle" => {
+					let _ = event.window().eval("window.store.set('GridType','triangle')");
 				}
 				"grid_type_square" => {
 					let _ = event.window().eval("window.store.set('GridType','square')");
@@ -471,16 +452,6 @@ fn main() {
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");
 }
-
-// #[tauri::command]
-// fn save(fold:String) {
-// 	println!("{}", fold);
-// }
-
-// #[tauri::command]
-// fn save_as(fold:String) {
-// 	println!("{}", fold);
-// }
 
 #[tauri::command]
 fn store_boolean_update(name:String, value:bool) {
