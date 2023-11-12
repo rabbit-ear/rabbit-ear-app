@@ -32,29 +32,35 @@ import { layer3d } from "rabbit-ear/layer/solver3d/index.js";
 const Test1 = ({ faces_vertices }) => faces_vertices.length;
 const Test2 = ({ faces_vertices }) => "hi"
 
-addEventListener("message", (event) => {
-	if (!event) {
-		postMessage({ error: "no event" });
-		return;
-	}
-	const { data } = event;
+let cachedHash = "";
+
+addEventListener("error", ({ error }) => (
+	postMessage({ error, hash: cachedHash })
+));
+
+addEventListener("messageerror", ({ error }) => (
+	postMessage({ error, hash: cachedHash })
+));
+
+addEventListener("message", ({ data }) => {
 	if (!data) {
-		postMessage({ error: "no data" });
+		postMessage({ error: "BIG ERROR: addEventListener. no data" });
 		return;
 	}
-	const { graph, epsilon } = data;
+	const { graph, epsilon, hash } = data;
+	cachedHash = hash;
 	if (!graph) {
-		postMessage({ error: "no graph" });
+		postMessage({ hash, error: "no graph" });
 		return;
 	}
 	try {
 		if (!graph.vertices_coords || !graph.edges_vertices || !graph.faces_vertices) {
-			postMessage({ error: "empty graph" });
+			postMessage({ hash, error: "empty graph" });
 			return;
 		}
-		postMessage({ solution: layer3d(graph, epsilon) });
+		postMessage({ hash, solution: layer3d(graph, epsilon) });
 		// postMessage({ error: "no error" });
 	} catch (error) {
-		postMessage({ error });
+		postMessage({ hash, error });
 	}
 });
