@@ -3,7 +3,9 @@
 </script>
 
 <div class="container">
-	<button class="title" on:click={() => showPanel = !showPanel}>
+	<button
+		class={showPanel ? "title expanded" : "title collapsed"}
+		on:click={() => showPanel = !showPanel}>
 		<slot name="title">
 			<span class="missing">Panel</span>
 		</slot>
@@ -32,12 +34,19 @@
 	}
 	.title {
 		padding: 0.25rem 0.5rem;
-		color: white;
-		background-color: var(--uiblue);
+		/* background-color: var(--uiblue); */
+		background-color: var(--background-3);
 		font-weight: bold;
 	}
+	.title.expanded {
+		color: var(--bright);
+	}
+	.title.collapsed {
+		color: var(--dim);
+	}
 	.title:hover {
-		background-color: var(--uidarkblue);
+		/* background-color: var(--uidarkblue); */
+		background-color: var(--background-4);
 	}
 	.body {
 		padding: 0.25rem 0.5rem;

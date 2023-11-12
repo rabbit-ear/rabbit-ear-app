@@ -73,7 +73,10 @@ export const AutoSolveLayers = writable(
 		? localStorage.getItem("AutoSolveLayers") === "true"
 		: true);
 
-export const SolveLayersOnBackground = writable(false);
+export const SolveLayersOnBackground = writable(
+	localStorage.getItem("SolveLayersOnBackground") !== undefined
+		? localStorage.getItem("SolveLayersOnBackground") === "true"
+		: true);
 
 /**
  * @description DOM element references.
@@ -115,3 +118,5 @@ GridType.subscribe(value => localStorage
 	.setItem("GridType", value));
 AutoSolveLayers.subscribe(value => localStorage
 	.setItem("AutoSolveLayers", value));
+SolveLayersOnBackground.subscribe(value => localStorage
+	.setItem("SolveLayersOnBackground", value));

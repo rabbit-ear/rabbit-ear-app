@@ -100,11 +100,11 @@ export const FaceOrdersSolution = derived(
 			};
 		const Solve = $SolveLayersOnBackground ? solveFaceLayersWorker : solveFaceLayers;
 		Promise.resolve(Solve(foldedForm)).then((value) => {
-			// if (guardOrder === innerGuard) {
+			if (guardOrder === innerGuard) {
 				set(value);
-			// } else {
-			// 	console.warn("FaceOrdersSolution, guardOrder !== innerGuard")
-			// }
+			} else {
+				// console.log("FaceOrdersSolution, guardOrder !== innerGuard")
+			}
 		}, (error) => {
 			console.warn("FaceOrdersSolution", error);
 			set({});
