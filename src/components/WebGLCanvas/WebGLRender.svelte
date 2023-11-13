@@ -33,11 +33,6 @@
 		LayerGapScaled,
 	} from "../../stores/Style.js";
 
-	//
-	import {
-		LayerOrderKnown,
-	} from "../../stores/ModelFolded.js";
-
 	export let graph = {};
 	export let fov = 30.25;
 	export let perspective = "orthographic";
@@ -55,17 +50,18 @@
 	$: inferredScale = 1 / modelViewMatrix[0];
 	$: isFoldedForm = IsFoldedForm(graph);
 
+	$: hasFaceOrders = graph && graph.faceOrders;
+
 	$: uniformOptions = {
 		projectionMatrix,
 		modelViewMatrix,
 		canvas,
-		frontColor: $LayerOrderKnown ? $FoldedFrontColor : "#9e9b9b",
-		backColor: $LayerOrderKnown ? $FoldedBackColor : "#9e9b9b",
-		outlineColor: $LayerOrderKnown ? "black" : "white",
+		frontColor: hasFaceOrders ? $FoldedFrontColor : "#9e9b9b",
+		backColor: hasFaceOrders ? $FoldedBackColor : "#9e9b9b",
+		outlineColor: hasFaceOrders ? "black" : "white",
 		cpColor: $CPColor,
 		strokeWidth: inferredScale * 0.02,
-		opacity: $LayerOrderKnown ? 1 : 0.25,
-		// opacity: 1,
+		opacity: hasFaceOrders ? 1 : 0.25,
 	};
 
 	$: programOptions = {

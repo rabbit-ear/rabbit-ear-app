@@ -55,10 +55,9 @@ Model
 
 Layers
 
+- [x] layer order - workflow has been completely refactored
 - [x] move calculation onto background web-worker thread.
 - [ ] when layer solver cannot solve, show violations between faces.
-- [ ] !!! layer order solved - change assignment - layer order needs to be deleted
-- [ ] layer order - report number of face-pairs, auto solve if number is low
 - [ ] layer order - report multiple solutions, somehow allow them to toggle it.
 
 Panels

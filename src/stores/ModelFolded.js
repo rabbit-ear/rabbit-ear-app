@@ -39,6 +39,14 @@ import {
 /**
  *
  */
+export const FrameHasFaceOrders = derived(
+	IsolatedFrame,
+	($IsolatedFrame) => $IsolatedFrame && $IsolatedFrame.faceOrders,
+	false,
+);
+/**
+ *
+ */
 export const FoldedRootFace = writable(0);
 /**
  *
@@ -86,8 +94,18 @@ const ComputedFoldedCoords = derived(
 let guardOrder;
 
 export const FaceOrdersSolution = derived(
-	[IsolatedFrame, ComputedFoldedCoords, FrameIsCreasePattern, AutoSolveLayers, SolveLayersOnBackground],
-	([$IsolatedFrame, $ComputedFoldedCoords, $FrameIsCreasePattern, $AutoSolveLayers, $SolveLayersOnBackground], set) => {
+	[IsolatedFrame,
+		ComputedFoldedCoords,
+		FrameIsCreasePattern,
+		AutoSolveLayers,
+		SolveLayersOnBackground],
+	([$IsolatedFrame,
+		$ComputedFoldedCoords,
+		$FrameIsCreasePattern,
+		$AutoSolveLayers,
+		$SolveLayersOnBackground], set) => {
+		// don't re-compute the solution if "faceOrders" already exists
+		if ($IsolatedFrame && $IsolatedFrame.faceOrders) { return {}; }
 		const innerGuard = guardOrder = {};
 		set({});
 		if (!$AutoSolveLayers) { return {}; }
@@ -135,17 +153,26 @@ export const FaceOrdersSolution = derived(
 export const FaceOrdersOptions = writable([]);
 
 export const FaceOrders = derived(
-	[FaceOrdersSolution, FaceOrdersOptions],
-	([$FaceOrdersSolution, $FaceOrdersOptions]) => {
+	[IsolatedFrame, FaceOrdersSolution, FaceOrdersOptions],
+	([$IsolatedFrame, $FaceOrdersSolution, $FaceOrdersOptions]) => {
+		if ($IsolatedFrame && $IsolatedFrame.faceOrders) {
+			// console.log("FaceOrders $IsolatedFrame.faceOrders");
+			return $IsolatedFrame.faceOrders;
+		}
 		if (!$FaceOrdersSolution || !$FaceOrdersSolution.faceOrders) {
-			return [];
+			// console.log("FaceOrders []");
+			return undefined;
 		}
 		try {
 			// $FaceOrdersOptions
 			return $FaceOrdersSolution.faceOrders();
+			// const computed = $FaceOrdersSolution.faceOrders();
+			// console.log("FaceOrders computed", computed);
+			// return computed;
 		} catch (error) {
 			console.warn("FaceOrders", error);
 		}
+		return undefined;
 	}
 );
 
@@ -164,13 +191,14 @@ export const FoldedForm = derived(
 		const foldedForm = !$FrameIsCreasePattern
 			? $IsolatedFrame
 			: {
-				...$IsolatedFrame,
-				// ...structuredClone($IsolatedFrame),
+				...$IsolatedFrame, // ...structuredClone($IsolatedFrame),
 				vertices_coords: $ComputedFoldedCoords,
-				// todo: if faceOrders does not already exist, use this. otherwise not.
 				faceOrders: $FaceOrders,
 				frame_classes: ["foldedForm"],
 			};
+		if (foldedForm.faceOrders === undefined) {
+			delete foldedForm.faceOrders;
+		}
 		ModelMatrixFolded.set(graphToMatrix2(foldedForm, $VerticalUp));
 		return foldedForm;
 	},
@@ -193,22 +221,12 @@ export const FoldedFormPlanar = derived(
 /**
  *
  */
-export const LayerOrderKnown = derived(
-	FoldedForm,
-	($FoldedForm) => $FoldedForm
-		&& $FoldedForm.faceOrders
-		&& $FoldedForm.faceOrders.length,
-	true,
-);
-/**
- *
- */
 export const Faces2DDrawOrder = derived(
 	[FoldedForm, FoldedRootFace, FoldAnglesAreFlat],
 	([$FoldedForm, $FoldedRootFace, $FoldAnglesAreFlat]) => {
-		// console.log("Model: Faces2DDrawOrder");
-		if ($FoldedForm
-			&& $FoldedForm.vertices_coords
+		// if no faceOrders exist, return empty array.
+		if (!$FoldedForm || !$FoldedForm.faceOrders) { return []; }
+		if ($FoldedForm.vertices_coords
 			&& $FoldedForm.faces_vertices
 			&& $FoldAnglesAreFlat) {
 			try {
@@ -217,9 +235,10 @@ export const Faces2DDrawOrder = derived(
 				console.warn("Faces2DDrawOrder", error);
 			}
 		}
-		return $FoldedForm && $FoldedForm.faces_vertices
-			? $FoldedForm.faces_vertices.map((_, i) => i)
-			: []
+		// return $FoldedForm && $FoldedForm.faces_vertices
+		// 	? $FoldedForm.faces_vertices.map((_, i) => i)
+		// 	: []
+		return [];
 	},
 	[],
 );

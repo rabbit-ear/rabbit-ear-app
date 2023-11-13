@@ -13,7 +13,6 @@
 		FoldedForm,
 		FoldedFacesWinding,
 		Faces2DDrawOrder,
-		LayerOrderKnown,
 	} from "../../stores/ModelFolded.js"
 	import {
 		ShowGrid,
@@ -71,7 +70,7 @@
 		graph={$FoldedForm}
 		winding={$CPFacesWinding}
 		frontBack={$FoldedFacesWinding}
-		drawOrder={$LayerOrderKnown ? $Faces2DDrawOrder : []}
+		drawOrder={$Faces2DDrawOrder}
 		selected={$Selection.faces}
 		highlighted={$Highlight.faces} />
 	<EdgesLayer

@@ -10,16 +10,19 @@ const Callbacks = {};
 
 const onCallback = (e) => {
 	if (!e || !e.data || !e.data.hash) { return; }
+	if (e.data.msgType) { console.log("UAWEFASDFALSKJFL"); }
 	Callbacks[e.data.hash](e);
 	delete Callbacks[e.data.hash];
 };
 
 const worker = new Worker(
 	new URL("../workers/orders.worker", import.meta.url),
-	{type: "module"},
+	{ type: "module", name: "layer-solver-manager" },
 );
-worker.onerror = onCallback;
-worker.onmessage = onCallback;
+worker.addEventListener("message", onCallback);
+worker.addEventListener("error", onCallback);
+
+// export const terminateWorker = worker.terminate;
 
 /**
  * @description Asynchronous solver, runs in a web worker.
@@ -30,6 +33,7 @@ export const solveFaceLayersWorker = (graph, epsilon) => (
 		Callbacks[hash] = ({ data }) => data && data.solution
 			? resolve(Object.assign(Object.create(LayerPrototype), data.solution))
 			: reject(data ? data.error : undefined);
+		// worker.terminate();
 		worker.postMessage({ graph, epsilon, hash });
 	}));
 

@@ -27,7 +27,7 @@
 	$: facesClass = facesPoints.map((_, i) => [
 		winding[i] === false ? "clockwise" : "counter-clockwise",
 		frontBack[i] ? "front" : "back",
-		drawOrder.length ? undefined : "transparent",
+		drawOrder.length > 0 ? undefined : "transparent",
 		...(selectedHighlighted[i] || []),
 	].filter(a => a !== undefined).join(" "));
 

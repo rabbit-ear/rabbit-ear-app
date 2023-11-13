@@ -17,7 +17,6 @@
 	import {
 		FoldedFacesWinding,
 		Faces2DDrawOrder,
-		LayerOrderKnown,
 	} from "../../stores/ModelFolded.js"
 	import { VerticalUp } from "../../stores/App.js";
 	import {
@@ -88,7 +87,7 @@
 		graph={$CreasePattern}
 		winding={$CPFacesWinding}
 		frontBack={$FoldedFacesWinding}
-		drawOrder={$LayerOrderKnown ? $Faces2DDrawOrder : []}
+		drawOrder={$Faces2DDrawOrder}
 		selected={$Selection.faces}
 		highlighted={$Highlight.faces} />
 	{#if $ShowFlatFoldableIssues}
