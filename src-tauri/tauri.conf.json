@@ -12,9 +12,9 @@
 	},
 	"tauri": {
 		"allowlist": {
-			"shell": {
-				"open": true
-			},
+      "clipboard": {
+        "all": true
+      },
 			"dialog": {
 				"ask": true,
 				"confirm": true,
@@ -39,6 +39,9 @@
 			},
 			"process": {
 				"all": true
+			},
+			"shell": {
+				"open": true
 			},
 			"window": {
 				"all": true,

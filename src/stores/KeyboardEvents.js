@@ -49,6 +49,7 @@ const ToolKeyboardEvent = derived(
 const FormKeyboardEvent = derived(
 	[TerminalTextarea, TerminalValue],
 	([$TerminalTextarea, $TerminalValue]) => (eventType, event) => {
+		// console.log("FormKeyboardEvent");
 		if (eventType === "down" && document.activeElement === $TerminalTextarea) {
 			switch (event.keyCode) {
 			case 13: // return key
@@ -69,6 +70,20 @@ const FormKeyboardEvent = derived(
 			default: break;
 			}
 		}
+		// else {
+		// 	switch (event.keyCode) {
+		// 	case 67:
+		// 		if (event.metaKey || event.ctrlKey) {
+		// 			console.log("FormKeyboardEvent CMD + C");
+		// 		}
+		// 		break;
+		// 	case 86:
+		// 		if (event.metaKey || event.ctrlKey) {
+		// 			console.log("FormKeyboardEvent CMD + V");
+		// 		}
+		// 		break;
+		// 	}
+		// }
 		return false;
 	},
 	() => {},

@@ -4,6 +4,7 @@ import * as axioms from "./axioms.js";
 import * as boundary from "./boundary.js";
 import * as deleteComponents from "./deleteComponents.js";
 import * as duplicate from "./duplicate.js";
+import * as edit from "./edit.js";
 import * as file from "./file.js";
 import * as foldedLine from "./foldedLine.js";
 import * as frames from "./frames.js";
@@ -27,6 +28,7 @@ export default {
 	...boundary,
 	...deleteComponents,
 	...duplicate,
+	...edit,
 	...file,
 	...foldedLine,
 	...frames,

@@ -48,6 +48,7 @@ window.executeCommand = executeCommand;
 window.dialog = {};
 window.store = {};
 window.fs = {};
+window.edit = {};
 
 // Rust would like to update a store variable and set it's value.
 
@@ -170,3 +171,11 @@ window.fs.save = async () => {
 window.fs.saveAs = () => (
 	saveAs(JSON.stringify(GetCurrentFOLDFile()), get(FilePath))
 );
+
+window.edit.copy = () => {
+	console.log("window.edit.copy");
+};
+
+window.edit.paste = () => {
+	console.log("window.edit.paste");
+};

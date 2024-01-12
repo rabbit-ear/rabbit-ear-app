@@ -16,6 +16,7 @@ import {
 	LoadFOLDFile,
 	FileModified,
 } from "../stores/File.js";
+import { dialogError } from "./dialog.js";
 import {
 	basename,
 	dirname,
@@ -236,10 +237,16 @@ appWindow.onFileDropEvent(async (event) => {
 
 	} else if (event.payload.type === "drop") {
 		if (!event.payload.paths.length) { return; }
-		// todo: hardcoded ignoring more than 1 file
 		const filePath = event.payload.paths[0];
-		const contents = await readTextFile(filePath);
-		LoadFile(contents, filePath);
+		try {
+			// todo: hardcoded ignoring more than 1 file
+			const contents = await readTextFile(filePath);
+			LoadFile(contents, filePath);
+		} catch(error) {
+			const { name, extension } = await getFilenameParts(filePath);
+			// alert();
+			dialogError(`Can't load ${extension} files`);
+		}
 	} else {
 		// File drop cancelled
 	}

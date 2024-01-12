@@ -70,7 +70,7 @@
 				<button class="text-button" on:click={resetZoom}>{zoomCP} / {zoomFolded}</button>
 			</span>
 		</div>
-		<hr />
+		<!-- <hr />
 		<div class="flex-row gap">
 			<span class="svg-icon"><IconFolded /></span>
 			<div class="flex-row toggle-row">
@@ -95,7 +95,7 @@
 					highlighted={$FoldedSVGOrWebGL}
 					on:click={() => $FoldedSVGOrWebGL = true}>3D</button>
 			</div>
-		</div>
+		</div> -->
 	</span>
 </Panel>
 

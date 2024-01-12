@@ -4,17 +4,16 @@ import { CreasePattern } from "../../stores/ModelCP.js";
 import { FoldedForm } from "../../stores/ModelFolded.js";
 import repeatFold from "rabbit-ear/graph/flatFold/repeatFold.js";
 import {
-	add2,
-	scale2,
-	distance2,
+	subtract2,
 } from "rabbit-ear/math/vector.js";
-import { overlapConvexPolygonPointNew } from "rabbit-ear/math/overlap.js";
-import { makeFacesPolygonQuick } from "rabbit-ear/graph/make.js";
 import { edgeAssignmentToFoldAngle } from "rabbit-ear/fold/spec.js";
 import { GhostGraphCP } from "../../stores/UI.js";
-import { intersectGraphSegment } from "rabbit-ear/graph/intersect.js";
-import { pointsToLine } from "rabbit-ear/math/convert.js";
-import { trilateration } from "rabbit-ear/math/triangle.js";
+import { splitSegmentWithGraph } from "rabbit-ear/graph/split.js";
+import { mergeArraysWithHoles } from "rabbit-ear/general/array.js";
+import {
+	transferPointBetweenGraphs,
+	transferPointOnEdgeBetweenGraphs,
+} from "rabbit-ear/graph/transfer.js";
 
 export const foldedLine = (a, b) => {
 	const line = { vector: subtract2(b, a), origin: a };
@@ -54,65 +53,58 @@ export const foldedLinePreview = (a, b) => {
 		console.error(error);
 	}
 };
-/**
- *
- */
-const transferPointBetweenGraphs = (from, to, face, point) => {
-	const faceVertices = from.faces_vertices[face];
-	const fromPoly = faceVertices.map(v => from.vertices_coords[v]);
-	const toPoly = faceVertices.map(v => to.vertices_coords[v]);
-	const distances = fromPoly.map(p => distance2(p, point));
-	return trilateration(toPoly, distances);
-}
+
 /**
  *
  */
 export const foldedSegment = (pointA, pointB) => {
+	// todo need to expose these options to the user
+	const newAssignment = "F";
+	const newFoldAngle = 0;
+
 	const segment = [pointA, pointB];
 	const folded = get(FoldedForm);
 	const cp = get(CreasePattern);
-	// information about the intersection between a segment and the folded form.
-	const intersections = intersectGraphSegment(folded, segment);
-	// console.log("intersections", intersections);
-	// if there are any points that lie inside of faces, convert
-	// them into their position in the crease pattern
-	intersections.faces.forEach((faceInfo, f) => faceInfo.points.forEach(el => {
-		el.cpPoint = transferPointBetweenGraphs(folded, cp, f, el.point);
-	}));
-	// add new vertices to the graph: middle of edge intersections,
-	// and points that lie somewhere inside of a face.
-	let vCount = folded.vertices_coords.length;
-	const newEdgesNewVertex = intersections.edges.map(() => vCount++);
-	intersections.faces.forEach((el, f) => el.points.forEach((_, i) => {
-		intersections.faces[f].points[i].newIndex = vCount++;
-	}));
-	// append these vertices_coords to our crease pattern
-	const vertices_coords = intersections.edges.map((el, e) => {
-		const edgeSegment = cp.edges_vertices[e].map(v => cp.vertices_coords[v]);
-		const edgeLine = pointsToLine(...edgeSegment);
-		return add2(edgeLine.origin, scale2(edgeLine.vector, el.a));
-	}).filter(a => a !== undefined);
-	intersections.faces
-		.forEach(info => info.points
-			.forEach(el => { vertices_coords.push(el.cpPoint); }));
-	// append these edges_vertices to our crease pattern
-	const edges_vertices = intersections.faces
-		.map(({ edges, vertices, points }) => {
-			const newVerticesEdgesMap = edges.map(e => newEdgesNewVertex[e]);
-			const newVerticesPointsMap = points.map(el => el.newIndex);
-			// guaranteed to be length 2.
-			// console.log("length 2", newVerticesEdgesMap.concat(newVerticesPointsMap).concat(vertices));
-			return newVerticesEdgesMap.concat(newVerticesPointsMap).concat(vertices);
-		}).filter(a => a !== undefined);
+	const {
+		vertices_coords,
+		vertices_overlapInfo,
+		edges_vertices,
+		collinear_edges,
+	} = splitSegmentWithGraph(folded, segment);
+	const edges_assignment = edges_vertices.map(() => newAssignment);
+	const edges_foldAngle = edges_vertices.map(() => newFoldAngle);
 
-	const assignments = edges_vertices.map(() => "F");
-	const foldAngles = edges_vertices.map(() => 0);
-	cp.vertices_coords.push(...vertices_coords);
-	cp.edges_vertices.push(...edges_vertices);
-	cp.edges_assignment.push(...assignments);
-	cp.edges_foldAngle.push(...foldAngles);
-	intersections.edges_collinear.forEach(e => cp.edges_assignment[e] = "F");
-	intersections.edges_collinear.forEach(e => cp.edges_foldAngle[e] = 0);
-	// console.log("cp", structuredClone(cp));
+	// splitSegmentWithGraph created new points in the foldedForm coordinate
+	// space. we need to transfer these to their respective position in the
+	// crease pattern space. 2 different methods depending on how the point was made
+	vertices_overlapInfo.forEach((overlapInfo, v) => {
+		if (overlapInfo.face !== undefined) {
+			vertices_coords[v] = transferPointBetweenGraphs(
+				folded,
+				cp,
+				overlapInfo.face,
+				overlapInfo.point,
+			);
+		}
+		if (overlapInfo.edge !== undefined) {
+			vertices_coords[v] = transferPointOnEdgeBetweenGraphs(
+				folded,
+				cp,
+				overlapInfo.edge,
+				overlapInfo.a,
+			);
+		}
+	});
+
+	cp.vertices_coords = mergeArraysWithHoles(cp.vertices_coords, vertices_coords);
+	cp.edges_vertices = mergeArraysWithHoles(cp.edges_vertices, edges_vertices);
+	cp.edges_assignment = mergeArraysWithHoles(cp.edges_assignment, edges_assignment);
+	cp.edges_foldAngle = mergeArraysWithHoles(cp.edges_foldAngle, edges_foldAngle);
+
+	// this should be a bit smarter. if the user is creasing M/Vs, we need to
+	// set M/V if the existing assignment is "F" or "U".
+	// if we are creasing "F", this should be commented out.
+	// collinear_edges.forEach(e => cp.edges_assignment[e] = newAssignment);
+	// collinear_edges.forEach(e => cp.edges_foldAngle[e] = newFoldAngle);
 	UpdateFrame({ ...cp });
 };

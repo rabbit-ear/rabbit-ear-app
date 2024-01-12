@@ -1,8 +1,4 @@
 <script>
-	// import {
-	// 	subtract2,
-	// 	parallel,
-	// } from "rabbit-ear/math/vector.js";
 	import {
 		clipLineFuncInLargerViewport,
 		clipLineInLargerViewport,

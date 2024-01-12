@@ -29,9 +29,9 @@ export const intersectGraphRay = (graph, ray) => (
 	intersectGraphLineFunc(graph, ray, includeR)
 );
 
-export const intersectGraphSegment = (graph, segment) => (
-	intersectGraphLineFunc(graph, pointsToLine(...segment), includeS)
-);
+// export const intersectGraphSegment = (graph, segment) => (
+// 	intersectGraphLineFunc(graph, pointsToLine(...segment), includeS)
+// );
 
 // const clipLineInViewport = (line, box, lineFn = includeL) => {
 // 	const polygon = [

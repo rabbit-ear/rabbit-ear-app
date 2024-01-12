@@ -34,6 +34,7 @@
 
 	export let showPanel;
 
+	let showStyle = false;
 	let showAdvanced = false;
 </script>
 
@@ -41,8 +42,13 @@
 	<span slot="title">Simulator</span>
 	<span slot="body">
 		<div class="flex-row">
-			<input id="checkbox-active" type="checkbox" bind:checked={$Active} />
-			<label for="checkbox-active">active</label>
+			<div>
+				<input id="checkbox-active" type="checkbox" bind:checked={$Active} />
+				<label for="checkbox-active">active</label>
+			</div>
+			<button
+				disabled={!$Active}
+				on:click={$Reset}>reset</button>
 		</div>
 
 		<input
@@ -54,45 +60,51 @@
 			disabled={!$Active}
 			bind:value={$FoldAmount} />
 
-		<div>
-			<input
-				id="checkbox-strain"
-				type="checkbox"
-				disabled={!$Active}
-				bind:checked={$Strain} />
-			<label for="checkbox-strain">show strain</label>
+		<div class="flex-row center">
+			<button on:click={() => showStyle = !showStyle}>style</button>
 		</div>
 
-		<div>
-			<input
-				id="checkbox-show-touches"
-				type="checkbox"
-				bind:checked={$ShowTouches} />
-			<label for="checkbox-show-touches">show touches</label>
-		</div>
+		{#if showStyle}
+			<div>
+				<input
+					id="checkbox-strain"
+					type="checkbox"
+					disabled={!$Active}
+					bind:checked={$Strain} />
+				<label for="checkbox-strain">show strain</label>
+			</div>
 
-		<div>
-			<input
-				id="checkbox-show-shadows"
-				type="checkbox"
-				disabled={$Strain}
-				bind:checked={$ShowShadows} />
-			<label for="checkbox-show-shadows">show shadows</label>
-		</div>
+			<div>
+				<input
+					id="checkbox-show-touches"
+					type="checkbox"
+					bind:checked={$ShowTouches} />
+				<label for="checkbox-show-touches">show touches</label>
+			</div>
 
-		<div>
-			<label for="line-opacity">lines</label>
-			<input
-				id="line-opacity"
-				type="range"
-				min="0"
-				max="1"
-				step="0.02"
-				bind:value={$LineOpacity} />
-		</div>
+			<div>
+				<input
+					id="checkbox-show-shadows"
+					type="checkbox"
+					disabled={$Strain}
+					bind:checked={$ShowShadows} />
+				<label for="checkbox-show-shadows">show shadows</label>
+			</div>
+
+			<div>
+				<label for="line-opacity">lines</label>
+				<input
+					id="line-opacity"
+					type="range"
+					min="0"
+					max="1"
+					step="0.02"
+					bind:value={$LineOpacity} />
+			</div>
+		{/if}
 
 		<div class="flex-row center">
-			<button on:click={() => showAdvanced = !showAdvanced}>more</button>
+			<button on:click={() => showAdvanced = !showAdvanced}>advanced</button>
 		</div>
 
 		{#if showAdvanced}
@@ -195,14 +207,8 @@
 				max="0.5"
 				step="0.01"
 				bind:value={$DampingRatio} />
-
-			<div class="flex-row center">
-				<button
-					disabled={!$Active}
-					on:click={$Reset}>reload model</button>
-			</div>
-
 		{/if}
+
 	</span>
 </Panel>
 
@@ -228,6 +234,10 @@
 		flex: 0 1 auto;
 	}
 	.flex-row {
+		justify-content: space-between;
+	}
+	.center {
+		justify-content: space-evenly;
 		align-items: center;
 	}
 </style>

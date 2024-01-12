@@ -1,7 +1,6 @@
 <script>
 	import SVGTouchCanvas from "./SVGTouchCanvas.svelte";
 	import GridLayer from "./GridLayer.svelte";
-	import UILayer from "./UILayer.svelte";
 	import FacesLayer from "./FacesLayer.svelte";
 	import EdgesLayer from "./EdgesLayer.svelte";
 	import RulerLayer from "./RulerLayer.svelte";

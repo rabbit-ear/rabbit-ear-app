@@ -12,7 +12,7 @@ import {
 	makeMatrix2UniformScale,
 } from "rabbit-ear/math/matrix2.js";
 
-// const VerticalUpOnBoot = localStorage.getItem("VerticalUp") !== undefined
+// const VerticalUpOnBoot = localStorage.getItem("VerticalUp") !== null
 // 	? localStorage.getItem("VerticalUp") === "true"
 // 	: true;
 // const Identity2x3 = VerticalUpOnBoot

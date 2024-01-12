@@ -5,9 +5,11 @@
 	import { executeCommand } from "../kernel/execute.js";
 
 	const tempDisabled = {
-		"folded line": true,
-		"rabbit ear": true,
+		// "folded line": true,
+		"arc": true,
+		"marks": true,
 		"pleat": true,
+		"rabbit ear": true,
 		"scribble": true,
 	};
 
@@ -25,7 +27,8 @@
 	];
 	const filterAndSort = (tools, category) => {
 		const categoryTools = tools
-			.filter(el => el.group === category);
+			.filter(el => el.group === category)
+			.filter(el => !tempDisabled[el.name]); // or, turn off entirely
 		const unorderedTools = categoryTools
 			.filter(el => el.order === undefined);
 		const orderedTools = categoryTools

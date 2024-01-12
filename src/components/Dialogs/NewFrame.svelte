@@ -6,7 +6,7 @@
 		fish,
 		frog,
 		bird,
-		base1,
+		squareFish,
 		windmill,
 	} from "rabbit-ear/fold/bases.js";
 	import populate from "rabbit-ear/graph/populate.js";
@@ -61,7 +61,7 @@
 	const patternsRow2 = [
 		fish(),
 		bird(),
-		base1(),
+		squareFish(),
 		frog(),
 		windmill(),
 		populate(JSON.parse(base2)),

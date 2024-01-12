@@ -19,41 +19,45 @@ export const ShowMenu = false;
  */
 export const EpsilonFactor = writable(1e-3);
 
+// for all of these boolean types, .getItem() will return "null"
+// if the item doesn't exist (first load), in which case, use
+// the ternary operator to get the desired default value.
+
 // export const VerticalUp = writable(true);
 export const VerticalUp = writable(
-	localStorage.getItem("VerticalUp") !== undefined
+	localStorage.getItem("VerticalUp") !== null
 		? localStorage.getItem("VerticalUp") === "true"
 		: true);
 /**
  * @description Show/Hide various things across the app.
  */
 export const ShowGrid = writable(
-	localStorage.getItem("ShowGrid") !== undefined
+	localStorage.getItem("ShowGrid") !== null
 		? localStorage.getItem("ShowGrid") === "true"
 		: true);
 
 export const ShowAxes = writable(
-	localStorage.getItem("ShowAxes") !== undefined
+	localStorage.getItem("ShowAxes") !== null
 		? localStorage.getItem("ShowAxes") === "true"
 		: true);
 
 export const ShowIndices = writable(
-	localStorage.getItem("ShowIndices") !== undefined
+	localStorage.getItem("ShowIndices") !== null
 		? localStorage.getItem("ShowIndices") === "true"
 		: false);
 
 export const ShowFlatFoldableIssues = writable(
-	localStorage.getItem("ShowFlatFoldableIssues") !== undefined
+	localStorage.getItem("ShowFlatFoldableIssues") !== null
 		? localStorage.getItem("ShowFlatFoldableIssues") === "true"
 		: true);
 
 export const ShowCodeEditor = writable(
-	localStorage.getItem("ShowCodeEditor") !== undefined
+	localStorage.getItem("ShowCodeEditor") !== null
 		? localStorage.getItem("ShowCodeEditor") === "true"
 		: false);
 
 export const ShowFrames = writable(
-	localStorage.getItem("ShowFrames") !== undefined
+	localStorage.getItem("ShowFrames") !== null
 		? localStorage.getItem("ShowFrames") === "true"
 		: true);
 
@@ -69,12 +73,12 @@ export const GridType = writable(
 	localStorage.getItem("GridType") || "square");
 
 export const AutoSolveLayers = writable(
-	localStorage.getItem("AutoSolveLayers") !== undefined
+	localStorage.getItem("AutoSolveLayers") !== null
 		? localStorage.getItem("AutoSolveLayers") === "true"
 		: true);
 
 export const SolveLayersOnBackground = writable(
-	localStorage.getItem("SolveLayersOnBackground") !== undefined
+	localStorage.getItem("SolveLayersOnBackground") !== null
 		? localStorage.getItem("SolveLayersOnBackground") === "true"
 		: true);
 

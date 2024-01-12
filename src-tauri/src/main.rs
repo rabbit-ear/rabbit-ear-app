@@ -6,19 +6,26 @@ use tauri::{Manager, CustomMenuItem, Menu, MenuItem, Submenu, AboutMetadata};
 fn main() {
 	// let authors_list = vec!["Kraft".to_string()];
 	// AboutMetadata {
-	// 			version: Some("0.9".to_string()),
-	// 			// authors: Option<Vec<String, Global>>,
-	// 			authors: Some(authors_list),
-	// 			comments: Some("comments".to_string()),
-	// 			copyright: Some("2023".to_string()),
-	// 			license: Some("OSC".to_string()),
-	// 			website: Some("rabbitear.org".to_string()),
-	// 			website_label: Some("Rabbit Ear".to_string()),
-	// 		}
+	// 	version: Some("0.9".to_string()),
+	// 	authors: Some(vec!["Kraft".to_string()]),
+	// 	comments: Some("comments".to_string()),
+	// 	copyright: Some("(c) 2023".to_string()),
+	// 	license: Some("OSC".to_string()),
+	// 	website: Some("https://rabbitear.org".to_string()),
+	// 	website_label: Some("Rabbit Ear".to_string())
+	// }
 
-	// app menu items
+	// MacOS app menu items
 	let mut about_metadata = AboutMetadata::new();
 	about_metadata.version = Some("0.9".to_string());
+	about_metadata.authors = Some(vec!["Kraft".to_string()]);
+	// about_metadata.comments = Some("comments".to_string());
+	about_metadata.copyright = Some("(c) 2023".to_string());
+	about_metadata.license = Some("OSC".to_string());
+	about_metadata.website = Some("https://rabbitear.org".to_string());
+	about_metadata.website_label = Some("Rabbit Ear".to_string());
+
+	#[cfg(target_os = "macos")]
 	let item_quit = CustomMenuItem::new(
 		"quit".to_string(),
 		"Quit Rabbit Ear")
@@ -62,6 +69,14 @@ fn main() {
 		"redo".to_string(),
 		"Redo")
 		.accelerator("cmdOrControl+Shift+Z");
+	let item_copy = CustomMenuItem::new(
+		"copy".to_string(),
+		"Copy")
+		.accelerator("cmdOrControl+C");
+	let item_paste = CustomMenuItem::new(
+		"paste".to_string(),
+		"Paste")
+		.accelerator("cmdOrControl+V");
 	let item_duplicate = CustomMenuItem::new(
 		"duplicate".to_string(),
 		"Duplicate")
@@ -193,6 +208,8 @@ fn main() {
 		.add_item(item_undo)
 		.add_item(item_redo)
 		.add_native_item(MenuItem::Separator)
+		// .add_item(item_copy)
+		// .add_item(item_paste)
 		.add_native_item(MenuItem::Copy)
 		.add_native_item(MenuItem::Paste)
 		.add_native_item(MenuItem::Separator)
@@ -232,8 +249,18 @@ fn main() {
 		.add_item(item_set_grid_type_square));
 
 	// the menu
+	#[cfg(target_os = "macos")]
 	let menu = Menu::new()
 		.add_submenu(menu_app)
+		.add_submenu(menu_file)
+		.add_submenu(menu_edit)
+		.add_submenu(menu_graph)
+		.add_submenu(menu_select)
+		.add_submenu(menu_assign)
+		.add_submenu(menu_analysis)
+		.add_submenu(menu_window);
+	#[cfg(not(target_os = "macos"))]
+	let menu = Menu::new()
 		.add_submenu(menu_file)
 		.add_submenu(menu_edit)
 		.add_submenu(menu_graph)
@@ -307,6 +334,14 @@ fn main() {
 				"redo" => {
 					let _ = event.window().eval("window.executeCommand('redo')");
 				}
+				"copy" => {
+					let _ = event.window().eval("window.executeCommand('keyboardCopy')");
+					// let _ = event.window().eval("window.edit.copy()");
+				}
+				"paste" => {
+					let _ = event.window().eval("window.executeCommand('keyboardPaste')");
+					// let _ = event.window().eval("window.edit.paste()");
+				}
 				"duplicate" => {
 					let _ = event.window().eval("window.executeCommand('duplicate')");
 					let _ = event.window().eval("window.executeCommand('setTool', 'translate')");
@@ -342,10 +377,10 @@ fn main() {
 				// assignment
 				// todo: reassign fold angle: 45, 90, 135, 180
 				"rebuild_boundary" => {
-					let _ = event.window().eval("window['executeCommand']('rebuildBoundary')");
+					let _ = event.window().eval("window.executeCommand('rebuildBoundary')");
 				}
 				"invert_assignments" => {
-					let _ = event.window().eval("window['executeCommand']('invertAssignments')");
+					let _ = event.window().eval("window.executeCommand('invertAssignments')");
 				}
 				"reassign_boundary" => {
 					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"B\")')");
@@ -372,31 +407,31 @@ fn main() {
 				// selection
 				// todo: select non-flat-folded fold angles
 				"select_all" => {
-					let _ = event.window().eval("window['executeCommand']('selectAll')");
+					let _ = event.window().eval("window.executeCommand('selectAll')");
 				}
 				"deselect_all" => {
-					let _ = event.window().eval("window['executeCommand']('deselectAll')");
+					let _ = event.window().eval("window.executeCommand('deselectAll')");
 				}
 				"select_boundary" => {
-					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'B')");
+					let _ = event.window().eval("window.executeCommand('selectEdgesWithAssignment', 'B')");
 				}
 				"select_valley" => {
-					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'V')");
+					let _ = event.window().eval("window.executeCommand('selectEdgesWithAssignment', 'V')");
 				}
 				"select_mountain" => {
-					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'M')");
+					let _ = event.window().eval("window.executeCommand('selectEdgesWithAssignment', 'M')");
 				}
 				"select_flat" => {
-					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'F')");
+					let _ = event.window().eval("window.executeCommand('selectEdgesWithAssignment', 'F')");
 				}
 				"select_cut" => {
-					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'C')");
+					let _ = event.window().eval("window.executeCommand('selectEdgesWithAssignment', 'C')");
 				}
 				"select_join" => {
-					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'J')");
+					let _ = event.window().eval("window.executeCommand('selectEdgesWithAssignment', 'J')");
 				}
 				"select_unassigned" => {
-					let _ = event.window().eval("window['executeCommand']('selectEdgesWithAssignment', 'U')");
+					let _ = event.window().eval("window.executeCommand('selectEdgesWithAssignment', 'U')");
 				}
 
 				// analysis

@@ -4,8 +4,6 @@
 	import EdgesLayer from "./EdgesLayer.svelte";
 	import FacesLayer from "./FacesLayer.svelte";
 	import GridLayer from "./GridLayer.svelte";
-	import UILayer from "./UILayer.svelte";
-	import GraphLayer from "./GraphLayer.svelte";
 	import RulerLayer from "./RulerLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
@@ -37,7 +35,10 @@
 	} from "../../stores/Style.js";
 	import { ViewportCP } from "../../stores/ViewBox.js";
 	import { RulersCP } from "../../stores/Ruler.js";
-	import { GuideLinesCP } from "../../stores/UI.js";
+	import {
+		GhostGraphCP,
+		GuideLinesCP,
+	} from "../../stores/UI.js";
 
 	const padViewport = (view, pad) => {
 		const p = Math.max(view[2], view[3]) * pad;
@@ -113,7 +114,18 @@
 	{/if}
 	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLengthCreasePattern};`}>
 		<RulerLayer {viewport} {rulers} />
-		<UILayer />
+		<g class="graph-preview-layer">
+			<FacesLayer graph={$GhostGraphCP} />
+			<EdgesLayer
+				graph={$GhostGraphCP}
+				strokeWidth={$StrokeWidthCreasePattern}
+				strokeDasharray={$StrokeDashLengthCreasePattern}
+			/>
+			<VerticesLayer
+				graph={$GhostGraphCP}
+				radius={$VertexRadiusCP}
+			/>
+		</g>
 		{#if $Tool && $Tool.cp && $Tool.cp.SVGLayer}
 			<svelte:component this={$Tool.cp.SVGLayer} />
 		{/if}

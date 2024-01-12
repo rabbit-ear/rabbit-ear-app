@@ -106,7 +106,7 @@ export const LayerGap = writable(0.001);
 export const LayerGapScaled = derived(
 	[LayerGap, ModelViewMatrixFolded],
 	([$LayerGap, $ModelViewMatrixFolded]) => {
-		const inferredScale = 1 / $ModelViewMatrixFolded[0];
+		const inferredScale = $ModelViewMatrixFolded[0];
 		const value = inferredScale * $LayerGap;
 		return !isNaN(value) && isFinite(value) ? value : 0.001;
 	},
@@ -114,8 +114,8 @@ export const LayerGapScaled = derived(
 );
 
 const Defaults = {
-	FoldedFrontColor: "#bbbbbb",
-	FoldedBackColor: "#1177FF",
+	FoldedBackColor: "#bbbbbb",
+	FoldedFrontColor: "#1177FF",
 	CPColor: "#272222",
 	SimulatorFrontColor: "#272222",
 	SimulatorBackColor: "#1177FF",

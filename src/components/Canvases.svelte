@@ -20,6 +20,7 @@
 	import Simulator from "./OrigamiSimulator/Simulator.svelte";
 	import CodeEditor from "./CodeEditor/CodeEditor.svelte";
 	import ErrorCanvas from "./SVGCanvas/ErrorCanvas.svelte";
+	import ViewSelect from "./SVGCanvas/ViewSelect.svelte";
 
 	export let pressCP;
 	export let moveCP;
@@ -86,6 +87,7 @@
 							on:click={() => $FoldedStaticOrSimulator = true} />
 					{/if}
 				{/if}
+				<ViewSelect />
 			</div>
 		</div>
 		<div class="canvas code-canvas">
@@ -128,6 +130,7 @@
 						on:click={() => $FoldedStaticOrSimulator = true} />
 				{/if}
 			{/if}
+			<ViewSelect />
 		</div>
 	{/if}
 
@@ -155,6 +158,7 @@
 		height: 100%;
 		flex: 1 1 auto;
 		background-color: var(--background-0);
+		position: relative;
 	}
 	.code-canvas {
 		flex: 1 1 auto;

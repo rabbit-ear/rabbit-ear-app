@@ -84,6 +84,9 @@ const KeybindingsDown = {
 	// "c"
 	67: {
 		0: (event) => executeCommand("setToolAssignment", "C"),
+		// 2: (event) => executeCommand("keyboardCopy"),
+		// 2: (event) => document.execCommand("copy"),
+		2: (event) => console.log("keybindings CMD + C", event),
 	},
 	// "d"
 	68: {
@@ -138,6 +141,9 @@ const KeybindingsDown = {
 	// "v"
 	86: {
 		0: (event) => executeCommand("setToolAssignment", "V"),
+		// 2: (event) => executeCommand("keyboardPaste"),
+		// 2: (event) => document.execCommand("paste"),
+		2: (event) => console.log("keybindings CMD + V", event),
 	},
 	// "z"
 	// 90: {

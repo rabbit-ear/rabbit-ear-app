@@ -19,7 +19,6 @@ export const convertToViewBox = function (svg, [x, y]) {
 	const pt = svg.createSVGPoint();
 	// transform: matrix(1, 0, 0, -1, 0, 1);
 	pt.x = x;
-	// pt.y = y;
 	pt.y = y;
 	// todo: i thought this threw an error once. something about getScreenCTM.
 	const svgPoint = pt.matrixTransform(svg.getScreenCTM().inverse());
@@ -42,30 +41,31 @@ export const isFormElementActive = () => {
 	case "textarea": return true;
 	case "input":
 		switch (type) {
-		case "date": 
-		case "datetime-local": 
-		case "month": 
-		case "number": 
-		case "password": 
-		case "tel": 
-		case "time": 
-		case "email": 
+		case "date":
+		case "datetime-local":
+		case "month":
+		case "number":
+		case "password":
+		case "tel":
+		case "time":
+		case "email":
 		case "text": return true;
-		case "button": 
-		case "checkbox": 
-		case "color": 
-		case "file": 
-		case "hidden": 
-		case "image": 
-		case "radio": 
-		case "range": 
-		case "reset": 
-		case "search": 
-		case "submit": 
-		case "url": 
+		case "button":
+		case "checkbox":
+		case "color":
+		case "file":
+		case "hidden":
+		case "image":
+		case "radio":
+		case "range":
+		case "reset":
+		case "search":
+		case "submit":
+		case "url":
 		case "week":
 		default: return false;
 		}
+	default: return false;
 	}
 	// an alternative approach would be to store a reference
 	// to every known form element (which requires generating

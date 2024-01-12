@@ -1,8 +1,10 @@
-# Blender-style graph maker
+# Rabbit Ear, origami editor app
 
 ## How to build this app
 
-Prerequisites: npm, Rust
+### MacOS, Linux, Windows
+
+Prerequisites: install [Rust](https://www.rust-lang.org/), [Node](https://nodejs.org/en/)
 
 1. Clone this repository. Clone Rabbit Ear nightly (see below)
 2. run `npm i`

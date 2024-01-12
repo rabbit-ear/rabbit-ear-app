@@ -15,8 +15,14 @@ const onCallback = (e) => {
 	delete Callbacks[e.data.hash];
 };
 
+// const worker = new Worker(
+// 	new URL("../workers/orders.worker", import.meta.url),
+// 	{ type: "module", name: "layer-solver-manager" },
+// );
+// worker.addEventListener("message", onCallback);
+// worker.addEventListener("error", onCallback);
 const worker = new Worker(
-	new URL("../workers/orders.worker", import.meta.url),
+	new URL("../workers/dispatch.worker.js", import.meta.url),
 	{ type: "module", name: "layer-solver-manager" },
 );
 worker.addEventListener("message", onCallback);
