@@ -11,6 +11,8 @@ export const PlanarizeCommands = writable({
 	mergeNearbyVertices: true,
 	mergeVertices: true,
 	mergeSelectedVertices: true,
+	pleat: true,
+	pleatCP: true,
 	translateAll: true,
 	translateVertices: true,
 	translate: true,

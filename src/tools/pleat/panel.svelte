@@ -3,6 +3,8 @@
 	import { PleatCount } from "./stores.js";
 
 	export let showPanel;
+
+	let pleatPattern = "MV"
 </script>
 
 <Panel {showPanel}>
@@ -12,6 +14,11 @@
 			<input
 				type="text"
 				bind:value={$PleatCount} >
+		</div>
+		<div>
+			<input
+				type="text"
+				bind:value={pleatPattern}>
 		</div>
 	</span>
 </Panel>

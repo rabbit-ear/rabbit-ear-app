@@ -8,10 +8,7 @@ import {
 	snapOldToRulerLine,
 } from "../../js/snapOld.js";
 import { zipArrays } from "../../js/arrays.js";
-import {
-	execute,
-	executeCommand,
-} from "../../kernel/execute.js";
+import { execute } from "../../kernel/execute.js";
 import {
 	GuideLinesCP,
 	Highlight,

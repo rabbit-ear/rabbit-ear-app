@@ -1,6 +1,5 @@
 import { writable, derived } from "svelte/store";
 import { snapToEdge } from "../../js/snapOld.js";
-import { executeCommand } from "../../kernel/execute.js";
 import { Highlight } from "../../stores/UI.js";
 
 export const FoldAngleValue = writable(90);

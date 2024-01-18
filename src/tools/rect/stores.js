@@ -16,7 +16,6 @@ import {
 	RadialSnapDegrees,
 	RadialSnapOffset,
 } from "../../stores/Snap.js";
-import { executeCommand } from "../../kernel/execute.js";
 
 export const Move = writable(undefined);
 export const Press = writable(undefined);

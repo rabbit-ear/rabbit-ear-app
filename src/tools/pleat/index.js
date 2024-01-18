@@ -1,6 +1,14 @@
-import pointerEvent from "./pointerEvent.js";
+import {
+	cpPointerEvent,
+	foldedPointerEvent,
+} from "./pointerEvent.js";
 import panel from "./panel.svelte";
 import icon from "./icon.svelte";
+import {
+	reset,
+	subscribe,
+	unsubscribe,
+} from "./stores.js";
 
 const pleat = {
 	key: "pleat",
@@ -9,8 +17,14 @@ const pleat = {
 	icon,
 	panel,
 	cp: {
-		pointerEvent,
+		pointerEvent: cpPointerEvent,
 	},
+	folded: {
+		pointerEvent: foldedPointerEvent,
+	},
+	reset,
+	subscribe,
+	unsubscribe,
 };
 
 export default pleat;

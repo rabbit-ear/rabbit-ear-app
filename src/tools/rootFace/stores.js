@@ -10,7 +10,6 @@ import {
 	FoldedRootFace,
 } from "../../stores/ModelFolded.js";
 import { Highlight } from "../../stores/UI.js";
-// import { executeCommand } from "../../kernel/execute.js";
 
 export const Press = writable(undefined);
 

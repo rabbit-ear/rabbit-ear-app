@@ -8,12 +8,18 @@ import {
 	setEdgesFoldAngle,
 } from "../../js/graph.js";
 
+/**
+ *
+ */
 export const toggleAssignments = (edges) => {
 	const graph = get(CreasePattern);
 	toggleEdgesAssignment(graph, edges);
 	IsoUpdateFrame({ ...graph });
 };
 
+/**
+ *
+ */
 export const invertAssignments = () => {
 	const graph = get(CreasePattern);
 	const edges_assignment = graph.edges_assignment || [];
@@ -24,14 +30,20 @@ export const invertAssignments = () => {
 	IsoUpdateFrame({ ...graph });
 };
 
-export const setAssignment = (edges, assignment, foldAngle) => {
+/**
+ *
+ */
+export const assignment = (edges, assign, angle) => {
 	const graph = get(CreasePattern);
-	setEdgesAssignment(graph, edges, assignment, foldAngle);
+	setEdgesAssignment(graph, edges, assign, angle);
 	IsoUpdateFrame({ ...graph });
 };
 
-export const setFoldAngle = (edges, foldAngle) => {
+/**
+ *
+ */
+export const foldAngle = (edges, angle) => {
 	const graph = get(CreasePattern);
-	setEdgesFoldAngle(graph, edges, foldAngle);
+	setEdgesFoldAngle(graph, edges, angle);
 	IsoUpdateFrame({ ...graph });
 };

@@ -84,21 +84,24 @@ export const getComponentsInsideRect = (graph, rect) => {
 	return { vertices, edges, faces };
 };
 /**
- *
+ * @description Given a selection object, which contains selected vertices
+ * and/or edges and/or faces, return a list of all selected vertices, meaning,
+ * in the case of edges and faces, include all the vertices that are
+ * a member of these components.
  */
-export const getVerticesFromSelection = (graph, selection = {}) => {
+export const getInclusiveVertices = ({ edges_vertices, faces_vertices }, selection = {}) => {
 	const vertexHash = {};
 	if (selection.vertices) {
 		selection.vertices.forEach(v => { vertexHash[v] = true; });
 	}
-	if (selection.edges && graph.edges_vertices) {
+	if (selection.edges && edges_vertices) {
 		selection.edges
-			.forEach(e => graph.edges_vertices[e]
+			.forEach(e => edges_vertices[e]
 				.forEach(v => { vertexHash[v] = true; }));
 	}
-	if (selection.faces && graph.faces_vertices) {
+	if (selection.faces && faces_vertices) {
 		selection.faces
-			.forEach(e => graph.faces_vertices[e]
+			.forEach(e => faces_vertices[e]
 				.forEach(v => { vertexHash[v] = true; }));
 	}
 	return Object.keys(vertexHash).map(n => parseInt(n, 10));

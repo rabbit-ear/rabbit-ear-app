@@ -18,7 +18,7 @@ const pointerEvent = (eventType, { point, buttons }) => {
 		const start = get(PressCoords);
 		const end = get(DragCoords);
 		if (start !== undefined && end !== undefined) {
-			executeCommand("segment", start, end);
+			executeCommand("segment", [start, end]);
 		}
 		reset();
 		break;

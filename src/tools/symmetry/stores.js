@@ -17,7 +17,6 @@ import {
 	RulersFolded,
 	RadialRays,
 } from "../../stores/Ruler.js";
-import { executeCommand } from "../../kernel/execute.js";
 
 export const ReflectionLines = writable([]);
 

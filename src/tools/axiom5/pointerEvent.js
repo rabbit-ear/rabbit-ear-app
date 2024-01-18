@@ -32,7 +32,7 @@ const pointerEvent = (eventType, { point }) => {
 			);
 			break;
 		case 6:
-			executeCommand("segment", get(Segment0), get(Segment1));
+			executeCommand("segment", [get(Segment0), get(Segment1)]);
 			reset();
 			break;
 		}

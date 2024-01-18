@@ -172,7 +172,7 @@ const CPFinishTool = derived(
 	[CPPressCoords, CPReleaseCoords],
 	([$CPPressCoords, $CPReleaseCoords]) => {
 		if (!$CPPressCoords || !$CPReleaseCoords) { return; }
-		executeCommand("segment", $CPPressCoords, $CPReleaseCoords);
+		executeCommand("segment", [$CPPressCoords, $CPReleaseCoords]);
 		reset();
 	},
 	undefined,

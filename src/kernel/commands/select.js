@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 import { CreasePattern } from "../../stores/ModelCP.js";
 import { Selection } from "../../stores/Select.js";
 import { Highlight } from "../../stores/UI.js";
+
 /**
  *
  */
@@ -15,10 +16,12 @@ export const selectAll = () => {
 	Selection.addEdges(edges);
 	Selection.addFaces(faces);
 };
+
 /**
  *
  */
 export const deselectAll = () => Selection.reset();
+
 /**
  *
  */
@@ -29,6 +32,7 @@ export const addToSelection = (component = "vertices", components = []) => {
 	case "faces": return Selection.addFaces(components);
 	}
 };
+
 /**
  *
  */
@@ -39,16 +43,12 @@ export const highlight = (components) => {
 	if (components.edges) { Highlight.addEdges(components.edges); }
 	if (components.faces) { Highlight.addEdges(components.faces); }
 };
+
 /**
  *
  */
-export const getSelectedVertices = () => get(Selection).vertices;
-export const getSelectedEdges = () => get(Selection).edges;
-export const getSelectedFaces = () => get(Selection).faces;
-/**
- *
- */
-export const getSelected = () => get(Selection);
+export const selected = () => get(Selection);
+
 /**
  *
  */

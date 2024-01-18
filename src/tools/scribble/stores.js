@@ -5,7 +5,6 @@ import {
 import {
 	snapOldToPoint,
 } from "../../js/snapOld.js";
-import { executeCommand } from "../../kernel/execute.js";
 import { zipArrays } from "../../js/arrays.js";
 
 export const ScribbleSmooth = writable(true);

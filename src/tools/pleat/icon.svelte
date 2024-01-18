@@ -4,5 +4,5 @@
 		stroke-width="1.5"
 		stroke-linejoin="miter"
 		stroke-miterlimit="100"
-		points="2,5 4,15 6,5 8,15 10,5 12,15 14,5 16,15 18,5"/>
+		points="2,7 4,13 6,7 8,13 10,7 12,13 14,7 16,13 18,7"/>
 </svg>

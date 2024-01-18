@@ -28,15 +28,16 @@ const maxLineCount = 300;
  */
 const collapseMethods = {
 	setGuideLinesCP: true,
-	setGhostRaysCP: true,
+	setGuideRaysCP: true,
+	setGuideSegmentsCP: true,
 	setGuideLinesFolded: true,
-	setGhostRaysFolded: true,
+	setGuideRaysFolded: true,
+	setGuideSegmentsFolded: true,
 	setTool: true,
 	resetTool: true,
 	highlight: true,
 	pleatPreview: true,
 	foldedLinePreview: true,
-	kawasakiRulerPreviews: true,
 };
 /**
  *

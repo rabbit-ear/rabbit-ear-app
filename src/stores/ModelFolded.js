@@ -13,6 +13,7 @@ import {
 	makeFacesWinding,
 } from "rabbit-ear/graph/faces/winding.js";
 import planarize from "rabbit-ear/graph/planarize.js";
+// import { validate } from "rabbit-ear/graph/validate.js";
 import {
 	graphToMatrix2,
 } from "../js/matrix.js";
@@ -204,6 +205,22 @@ export const FoldedForm = derived(
 	},
 	({}),
 );
+
+
+
+// const ValidateTest = derived(
+// 	FoldedForm,
+// 	($FoldedForm) => {
+// 		const errors = validate($FoldedForm);
+// 		if (errors.length) { console.log(structuredClone($FoldedForm)); }
+// 		console.log("validator", errors);
+// 	},
+// 	undefined
+// );
+
+// ValidateTest.subscribe(() => {});
+
+
 /**
  *
  */

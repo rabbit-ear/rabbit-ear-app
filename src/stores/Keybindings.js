@@ -28,7 +28,7 @@ const KeybindingsDown = {
 	8: {
 		0: (event) => isFrameElementSelected()
 			? executeCommand("deleteActiveFrame")
-			: execute("deleteComponents(getSelected())"),
+			: execute("deleteComponents(selected())"),
 		// : executeCommand("deleteComponents", get(Selection)),
 	},
 	// shift

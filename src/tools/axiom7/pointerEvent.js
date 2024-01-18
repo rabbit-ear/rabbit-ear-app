@@ -32,7 +32,7 @@ const pointerEvent = (eventType, { point }) => {
 			);
 			break;
 		case 6:
-			executeCommand("segment", get(Segment0), get(Segment1));
+			executeCommand("segment", [get(Segment0), get(Segment1)]);
 			reset();
 			break;
 		}
@@ -117,10 +117,10 @@ export default pointerEvent;
 // 		break;
 // 	default:
 // 		// "release" drawing edge, reset all
-// 		executeCommand("segment",
-// 			executeCommand("addVertex", pressCoords),
-// 			executeCommand("addVertex", snapOldToRulerLine(point).coords),
-// 		);
+// 		executeCommand("segment", [
+// 			executeCommand("vertex", pressCoords),
+// 			executeCommand("vertex", snapOldToRulerLine(point).coords),
+// 		]);
 // 		RulersCP.set([]);
 // 		GhostGraphCP.set({});
 // 		RulersCP.set([]);

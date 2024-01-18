@@ -119,31 +119,31 @@ export default [
 				submenu: [
 					{
 						label: "boundary",
-						click: () => execute(`setAssignment(getSelectedEdges(), "B")`),
+						click: () => execute(`assignment(selected().edges, "B")`),
 					},
 					{
 						label: "mountain",
-						click: () => execute(`setAssignment(getSelectedEdges(), "M")`),
+						click: () => execute(`assignment(selected().edges, "M")`),
 					},
 					{
 						label: "valley",
-						click: () => execute(`setAssignment(getSelectedEdges(), "V")`),
+						click: () => execute(`assignment(selected().edges, "V")`),
 					},
 					{
 						label: "flat",
-						click: () => execute(`setAssignment(getSelectedEdges(), "F")`),
+						click: () => execute(`assignment(selected().edges, "F")`),
 					},
 					{
 						label: "cut",
-						click: () => execute(`setAssignment(getSelectedEdges(), "C")`),
+						click: () => execute(`assignment(selected().edges, "C")`),
 					},
 					{
 						label: "join",
-						click: () => execute(`setAssignment(getSelectedEdges(), "J")`),
+						click: () => execute(`assignment(selected().edges, "J")`),
 					},
 					{
 						label: "unassigned",
-						click: () => execute(`setAssignment(getSelectedEdges(), "U")`),
+						click: () => execute(`assignment(selected().edges, "U")`),
 					},
 				],
 			},

@@ -23,7 +23,7 @@ const lookup = {
 const setAssignment = (edge, assignType) => {
 	if (edge === undefined) { return; }
 	return lookup[assignType]
-		? executeCommand("setAssignment", [edge], lookup[assignType], 0)
+		? executeCommand("assignment", [edge], lookup[assignType], 0)
 		: executeCommand("toggleAssignments", [edge]);
 };
 

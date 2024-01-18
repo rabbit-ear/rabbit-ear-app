@@ -114,8 +114,8 @@ export const LayerGapScaled = derived(
 );
 
 const Defaults = {
-	FoldedBackColor: "#bbbbbb",
-	FoldedFrontColor: "#1177FF",
+	FoldedBackColor: "#1177FF",
+	FoldedFrontColor: "#4b4b4b",
 	CPColor: "#272222",
 	SimulatorFrontColor: "#272222",
 	SimulatorBackColor: "#1177FF",

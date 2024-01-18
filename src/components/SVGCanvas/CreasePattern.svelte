@@ -27,6 +27,8 @@
 	import {
 		Tool,
 		Highlight,
+		GhostGraphCP,
+		GuideLinesCP,
 	} from "../../stores/UI.js";
 	import {
 		StrokeWidthCreasePattern,
@@ -35,10 +37,6 @@
 	} from "../../stores/Style.js";
 	import { ViewportCP } from "../../stores/ViewBox.js";
 	import { RulersCP } from "../../stores/Ruler.js";
-	import {
-		GhostGraphCP,
-		GuideLinesCP,
-	} from "../../stores/UI.js";
 
 	const padViewport = (view, pad) => {
 		const p = Math.max(view[2], view[3]) * pad;

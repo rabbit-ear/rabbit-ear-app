@@ -10,7 +10,6 @@ import {
 import { IsoUpdateFrame } from "../../stores/Model.js";
 import { CreasePattern } from "../../stores/ModelCP.js";
 import { Selection } from "../../stores/Select.js";
-import { getVerticesFromSelection } from "../../js/select.js";
 
 export const translateAll = (vector) => {
 	const graph = get(CreasePattern);
@@ -35,7 +34,8 @@ export const translate = (vector) => Selection.isEmpty()
 	? translateAll(vector)
 	: translateVertices(
 		vector,
-		getVerticesFromSelection(get(CreasePattern), get(Selection)),
+		Selection.getInclusiveVertices(),
+		// getVerticesFromSelection(get(CreasePattern), get(Selection)),
 	);
 
 export const scaleAll = (factors = [1, 1, 1]) => {
@@ -59,13 +59,15 @@ export const scaleUniform = (factor = 1) => Selection.isEmpty()
 	? scaleAll([factor, factor, factor])
 	: scaleVertices(
 		[factor, factor, factor],
-		getVerticesFromSelection(get(CreasePattern), get(Selection)),
+		Selection.getInclusiveVertices(),
+		// getVerticesFromSelection(get(CreasePattern), get(Selection)),
 	);
 
 export const scale = (x = 1, y = 1, z = 1) => Selection.isEmpty()
 	? scaleAll([x, y, z])
 	: scaleVertices(
-		getVerticesFromSelection(get(CreasePattern), get(Selection)),
+		Selection.getInclusiveVertices(),
+		// getVerticesFromSelection(get(CreasePattern), get(Selection)),
 		[x, y, z],
 	);
 
@@ -99,5 +101,6 @@ export const rotateZ = (radians) => Selection.isEmpty()
 	? rotateAll(radians)
 	: rotateVertices(
 		radians,
-		getVerticesFromSelection(get(CreasePattern), get(Selection)),
+		Selection.getInclusiveVertices(),
+		// getVerticesFromSelection(get(CreasePattern), get(Selection)),
 	);

@@ -8,7 +8,6 @@
 		// "folded line": true,
 		"arc": true,
 		"marks": true,
-		"pleat": true,
 		"rabbit ear": true,
 		"scribble": true,
 	};

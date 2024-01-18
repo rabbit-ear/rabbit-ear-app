@@ -347,7 +347,7 @@ fn main() {
 					let _ = event.window().eval("window.executeCommand('setTool', 'translate')");
 				}
 				"delete" => {
-					let _ = event.window().eval("window.execute('deleteComponents(getSelected())')");
+					let _ = event.window().eval("window.execute('deleteComponents(selected())')");
 					let _ = event.window().eval("window.executeCommand('setTool', 'translate')");
 				}
 
@@ -383,25 +383,25 @@ fn main() {
 					let _ = event.window().eval("window.executeCommand('invertAssignments')");
 				}
 				"reassign_boundary" => {
-					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"B\")')");
+					let _ = event.window().eval("window.execute('assignment(selected().edges, \"B\")')");
 				}
 				"reassign_valley" => {
-					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"V\")')");
+					let _ = event.window().eval("window.execute('assignment(selected().edges, \"V\")')");
 				}
 				"reassign_mountain" => {
-					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"M\")')");
+					let _ = event.window().eval("window.execute('assignment(selected().edges, \"M\")')");
 				}
 				"reassign_flat" => {
-					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"F\")')");
+					let _ = event.window().eval("window.execute('assignment(selected().edges, \"F\")')");
 				}
 				"reassign_cut" => {
-					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"C\")')");
+					let _ = event.window().eval("window.execute('assignment(selected().edges, \"C\")')");
 				}
 				"reassign_join" => {
-					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"J\")')");
+					let _ = event.window().eval("window.execute('assignment(selected().edges, \"J\")')");
 				}
 				"reassign_unassigned" => {
-					let _ = event.window().eval("window.execute('setAssignment(getSelectedEdges(), \"U\")')");
+					let _ = event.window().eval("window.execute('assignment(selected().edges, \"U\")')");
 				}
 
 				// selection

@@ -217,13 +217,12 @@ export const CPAddSegment = derived(
 	[CPPress1Coords, CPRelease1Coords],
 	([$CPPress1Coords, $CPRelease1Coords]) => {
 		if ($CPPress1Coords && $CPRelease1Coords) {
-			executeCommand("segment", $CPPress1Coords, $CPRelease1Coords);
+			executeCommand("segment", [$CPPress1Coords, $CPRelease1Coords]);
 			reset();
 		}
 	},
 	undefined,
 );
-
 
 export const FoldedAxiomPreview = derived(
 	[FoldedPress0Coords, FoldedRelease0Coords, FoldedDragCoords],

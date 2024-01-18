@@ -8,7 +8,7 @@ import {
 } from "../../js/snapOld.js";
 import { GuideLinesCP } from "../../stores/UI.js";
 import { RulersCP } from "../../stores/Ruler.js";
-import { executeCommand } from "../../kernel/execute.js";
+import { execute } from "../../kernel/execute.js";
 
 export const Move = writable(undefined);
 export const Drag = writable(undefined);
@@ -48,19 +48,19 @@ export const PressCoords = derived(
 	undefined,
 );
 
-export const KawasakiRulers = derived(
-	PressVertex,
-	($PressVertex) => $PressVertex !== undefined
-		? executeCommand("kawasakiRulers", $PressVertex)
-		: RulersCP.set([]),
+export const KawasakiRulerPreviews = derived(
+	[MoveVertex, PressVertex],
+	([$MoveVertex, $PressVertex]) => $MoveVertex !== undefined && $PressVertex === undefined
+		? execute(`setGuideRaysCP(kawasaki(${$MoveVertex}))`)
+		: GuideLinesCP.set([]),
 	undefined,
 );
 
-export const KawasakiRulerPreviews = derived(
-	MoveVertex,
-	($MoveVertex) => $MoveVertex !== undefined
-		? executeCommand("kawasakiRulerPreviews", $MoveVertex)
-		: GuideLinesCP.set([]),
+export const KawasakiRulers = derived(
+	PressVertex,
+	($PressVertex) => $PressVertex !== undefined
+		? execute(`setRulerRaysCP(kawasaki(${$PressVertex}))`)
+		: RulersCP.set([]),
 	undefined,
 );
 

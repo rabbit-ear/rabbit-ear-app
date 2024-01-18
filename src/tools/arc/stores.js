@@ -25,7 +25,6 @@ import {
 	GridSnapFunction,
 } from "../../stores/Snap.js";
 import { RulersCP } from "../../stores/Ruler.js";
-import { executeCommand } from "../../kernel/execute.js";
 
 export const CPMove = writable(undefined);
 export const CPDrag = writable(undefined);
