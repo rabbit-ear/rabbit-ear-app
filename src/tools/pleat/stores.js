@@ -2,6 +2,7 @@ import {
 	writable,
 	derived,
 } from "svelte/store";
+import { edgesAssignmentValues } from "rabbit-ear/fold/spec.js";
 import {
 	snapToEdge,
 	snapToRulerLine,
@@ -19,6 +20,8 @@ import {
 import {
 	Keyboard,
 	SnapPoint,
+	GhostGraphCP,
+	GhostGraphFolded,
 	GuideLinesCP,
 	GuideLinesFolded,
 	Highlight,
@@ -30,8 +33,30 @@ import {
 import { CreasePattern } from "../../stores/ModelCP.js";
 import { FoldedForm } from "../../stores/ModelFolded.js";
 
+const validAssignments = {};
+edgesAssignmentValues.forEach(a => { validAssignments[a] = true; });
+
 export const PleatCount = writable(4);
-export const PleatAssignment = writable(["M", "V"]);
+
+export const PleatPattern = writable("MV");
+
+export const PleatAssignment = derived(
+	PleatPattern,
+	$PleatPattern => {
+		const split = $PleatPattern
+			.split(/[ ,]+/)
+			.map(str => str.toUpperCase());
+		const noWhitespace = split.join("");
+		const result = Array
+			.from(noWhitespace)
+			.filter(a => validAssignments[a]);
+		// console.log("result", result);
+		return result.length
+			? result
+			: ["F"]
+	},
+	["M", "V"]
+);
 
 const ShiftPressed = derived(Keyboard, $Keyboard => $Keyboard[16], false);
 
@@ -105,7 +130,8 @@ export const CPDoPleat = derived(
 	[ShiftPressed, CPRelease, CPEdge0, CPEdge1, PleatCount, PleatAssignment],
 	([$ShiftPressed, $CPRelease, $CPEdge0, $CPEdge1, $PleatCount, $PleatAssignment]) => {
 		if ($CPRelease !== undefined && $CPEdge0 !== undefined && $CPEdge1 !== undefined) {
-			GuideLinesCP.set([]);
+			// GuideLinesCP.set([]);
+			GhostGraphCP.set({});
 			const args = [$CPEdge0, $CPEdge1, $PleatCount, $PleatAssignment, $ShiftPressed]
 				.map(a => JSON.stringify(a))
 				.join(", ");
@@ -167,7 +193,6 @@ export const FoldedHighlights = derived(
 	undefined,
 );
 
-
 export const reset = () => {
 	CPMove.set(undefined);
 	CPDrag.set(undefined);
@@ -179,14 +204,17 @@ export const reset = () => {
 	FoldedRelease.set(undefined);
 	RulersCP.set([]);
 	RulersFolded.set([]);
-	GuideLinesCP.set([]);
-	GuideLinesFolded.set([]);
+	// GuideLinesCP.set([]);
+	// GuideLinesFolded.set([]);
+	GhostGraphCP.set({});
+	GhostGraphFolded.set({});
 };
 
 let unsub = [];
 
 export const subscribe = () => {
 	unsub = [
+		PleatAssignment.subscribe(() => {}),
 		CPPleatPreview.subscribe(() => {}),
 		CPDoPleat.subscribe(() => {}),
 		CPHighlights.subscribe(() => {}),
