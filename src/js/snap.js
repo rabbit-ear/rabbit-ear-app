@@ -133,7 +133,12 @@ export const snapToEdge = (point, graph, snapRadius) => {
 	if (!point || !graph || !graph.vertices_coords || !graph.edges_vertices) {
 		return { snap: false, edge: undefined, coords: undefined };
 	}
-	const edge = nearestEdge(graph, point);
+	let edge;
+	try {
+		edge = nearestEdge(graph, point);
+	} catch (error) {
+		edge = undefined;
+	}
 	if (edge === undefined) {
 		return { snap: false, edge: undefined, coords: point};
 	}

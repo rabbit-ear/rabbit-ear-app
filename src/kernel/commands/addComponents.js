@@ -3,13 +3,22 @@ import AddVertices from "rabbit-ear/graph/add/addVertices.js";
 import addPlanarLine from "rabbit-ear/graph/add/addPlanarLine.js";
 import addNonPlanarEdge from "rabbit-ear/graph/add/addNonPlanarEdge.js";
 import populate from "rabbit-ear/graph/populate.js";
+import Planarize from "rabbit-ear/graph/planarize.js";
+import { makeEdgesCoords } from "rabbit-ear/graph/make.js";
 import { join as Join } from "rabbit-ear/graph/join.js";
 import { boundingBox } from "rabbit-ear/math/polygon.js";
 import { get } from "svelte/store";
 import { NewEdgeAssignment } from "../../stores/App.js";
 import { UpdateFrame } from "../../stores/Model.js";
 import { CreasePattern } from "../../stores/ModelCP.js";
+import { FoldedForm } from "../../stores/ModelFolded.js";
 import { setEdgesAssignment } from "../../js/graph.js";
+import { splitSegmentWithGraph } from "rabbit-ear/graph/split.js";
+import {
+	transferPointBetweenGraphs,
+	transferPointOnEdgeBetweenGraphs,
+} from "rabbit-ear/graph/transfer.js";
+import { mergeArraysWithHoles } from "rabbit-ear/general/array.js";
 
 /**
  *
@@ -106,10 +115,114 @@ export const rect = (pointA, pointB) => {
 	]);
 };
 
-export const join = (graph) => {
+export const joinCP = (graph) => {
 	const cp = get(CreasePattern);
-	// const cp = structuredClone(get(CreasePattern));
 	Join(cp, graph);
 	populate(cp);
 	UpdateFrame({ ...cp });
+};
+
+export const joinFolded = (graph) => {
+	const cp = get(CreasePattern);
+	Join(cp, graph);
+	populate(cp);
+	UpdateFrame({ ...cp });
+};
+
+export const graphSegments = (graph) => [
+	makeEdgesCoords(graph),
+	graph.edges_assignment ? graph.edges_assignment : [],
+	graph.edges_foldAngle ? graph.edges_foldAngle : [],
+];
+
+/**
+ *
+ */
+export const segmentsFolded = (segments, assignments, foldAngles) => {
+	// todo need to expose these options to the user
+	const newAssignment = "F";
+	const newFoldAngle = 0;
+
+	const folded = get(FoldedForm);
+	const cp = get(CreasePattern);
+
+	const allNewSegments = segments.flatMap(segment => {
+		const {
+			vertices_coords,
+			vertices_overlapInfo,
+			edges_vertices,
+			collinear_edges,
+		} = splitSegmentWithGraph(folded, segment);
+
+		// const edges_assignment = edges_vertices.map(() => newAssignment);
+		// const edges_foldAngle = edges_vertices.map(() => newFoldAngle);
+
+		// splitSegmentWithGraph created new points in the foldedForm coordinate
+		// space. we need to transfer these to their respective position in the
+		// crease pattern space. 2 different methods depending on how the point was made
+		vertices_overlapInfo.forEach((overlapInfo, v) => {
+			if (overlapInfo.face !== undefined) {
+				vertices_coords[v] = transferPointBetweenGraphs(
+					folded,
+					cp,
+					overlapInfo.face,
+					overlapInfo.point,
+				);
+			}
+			if (overlapInfo.edge !== undefined) {
+				vertices_coords[v] = transferPointOnEdgeBetweenGraphs(
+					folded,
+					cp,
+					overlapInfo.edge,
+					overlapInfo.a,
+				);
+			}
+		});
+
+		const newGraph = {
+			vertices_coords: mergeArraysWithHoles(cp.vertices_coords, vertices_coords),
+			edges_vertices,
+			// edges_vertices: mergeArraysWithHoles(cp.edges_vertices, edges_vertices),
+			// edges_assignment: mergeArraysWithHoles(cp.edges_assignment, edges_assignment),
+			// edges_foldAngle: mergeArraysWithHoles(cp.edges_foldAngle, edges_foldAngle),
+		};
+		// console.log("new graph", newGraph);
+		return makeEdgesCoords(newGraph).filter(a => a);
+	});
+
+	// console.log("allNewSegments", allNewSegments);
+
+	const newGraph = {};
+	const edges = allNewSegments.forEach(segment => {
+		// console.log("HERE", segment[0], segment[1])
+		const vertex0 = AddVertex(newGraph, segment[0]);
+		const vertex1 = AddVertex(newGraph, segment[1]);
+		const edge = addNonPlanarEdge(newGraph, [vertex0, vertex1]);
+		setEdgesAssignment(newGraph, [edge], newAssignment);
+	});
+
+	// console.log("newGraph", newGraph);
+	Join(cp, newGraph)
+	// const result = Planarize(cp);
+	// populate(result);
+	// console.log("HERE", structuredClone(result));
+	// UpdateFrame({ ...result });
+
+	// const result = populate(Planarize(cp));
+	UpdateFrame({ ...cp });
+
+
+	// console.log("FOLDED RESULT",
+	// 	vertices_coords,
+	// 	vertices_overlapInfo,
+	// 	edges_vertices,
+	// 	collinear_edges);
+
+
+	// // this should be a bit smarter. if the user is creasing M/Vs, we need to
+	// // set M/V if the existing assignment is "F" or "U".
+	// // if we are creasing "F", this should be commented out.
+	// // collinear_edges.forEach(e => cp.edges_assignment[e] = newAssignment);
+	// // collinear_edges.forEach(e => cp.edges_foldAngle[e] = newFoldAngle);
+	// UpdateFrame({ ...cp });
 };

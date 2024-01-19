@@ -137,7 +137,7 @@ export const CPDoPleat = derived(
 				.join(", ");
 			// executeCommand("pleat", $CPEdge0, $CPEdge1, $PleatCount, $PleatAssignment, $ShiftPressed);
 			// executeCommand("pleatCP", $CPEdge0, $CPEdge1, $PleatCount, $PleatAssignment, $ShiftPressed);
-			execute(`join(pleatCP(${args}))`);
+			execute(`joinCP(pleatCP(${args}))`);
 			// execute(`setRulersCP(axiom3(${args}))`);
 			reset();
 		}
@@ -157,28 +157,32 @@ export const CPHighlights = derived(
 // //////////////////////////////////////////
 
 export const FoldedPleatPreview = derived(
-	[FoldedEdge0, FoldedEdge1, PleatCount, PleatAssignment],
-	([$FoldedEdge0, $FoldedEdge1, $PleatCount, $PleatAssignment]) => {
+	[ShiftPressed, FoldedEdge0, FoldedEdge1, PleatCount, PleatAssignment],
+	([$ShiftPressed, $FoldedEdge0, $FoldedEdge1, $PleatCount, $PleatAssignment]) => {
 		if ($FoldedEdge0 !== undefined && $FoldedEdge1 !== undefined) {
-			const args = [$FoldedEdge0, $FoldedEdge1, $PleatCount, $PleatAssignment]
+			const args = [$FoldedEdge0, $FoldedEdge1, $PleatCount, $PleatAssignment, $ShiftPressed]
 				.map(a => JSON.stringify(a))
 				.join(", ");
-			console.log(`setGuideSegmentsFolded(pleatPreview(${args}))`);
-			execute(`setGuideSegmentsFolded(pleatPreview(${args}))`);
-			// const args = [$FoldedEdge0, $FoldedEdge1].join(", ");
-			// execute(`setGuideSegmentsFolded(foldedAxiom3(${args}))`);
+			// console.log("args", args);
+			execute(`setGhostGraphFolded(pleatFolded(${args}))`);
 		}
 	},
 	undefined,
 );
 
 export const FoldedDoPleat = derived(
-	[FoldedEdge0, FoldedEdge1, PleatCount, PleatAssignment],
-	([$FoldedEdge0, $FoldedEdge1, $PleatCount, $PleatAssignment]) => {
-		if ($FoldedEdge0 !== undefined && $FoldedEdge1 !== undefined) {
-			const args = [$FoldedEdge0, $FoldedEdge1].join(", ");
-			GuideLinesFolded.set([]);
-			execute(`setRulersFolded(foldedAxiom3(${args}))`);
+	[ShiftPressed, FoldedRelease, FoldedEdge0, FoldedEdge1, PleatCount, PleatAssignment],
+	([$ShiftPressed, $FoldedRelease, $FoldedEdge0, $FoldedEdge1, $PleatCount, $PleatAssignment]) => {
+		if ($FoldedRelease !== undefined && $FoldedEdge0 !== undefined && $FoldedEdge1 !== undefined) {
+			const args = [$FoldedEdge0, $FoldedEdge1, $PleatCount, $PleatAssignment, $ShiftPressed]
+				.map(a => JSON.stringify(a))
+				.join(", ");
+			// GuideLinesFolded.set([]);
+			GhostGraphFolded.set({});
+			// execute(`setRulersFolded(foldedAxiom3(${args}))`);
+			// execute(`graphSegments(pleatFolded(${args}))`);
+			execute(`segmentsFolded(...graphSegments(pleatFolded(${args})))`);
+			reset();
 		}
 	},
 	undefined,

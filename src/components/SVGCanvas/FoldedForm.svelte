@@ -1,8 +1,9 @@
 <script>
 	import SVGTouchCanvas from "./SVGTouchCanvas.svelte";
 	import GridLayer from "./GridLayer.svelte";
-	import FacesLayer from "./FacesLayer.svelte";
+	import VerticesLayer from "./VerticesLayer.svelte";
 	import EdgesLayer from "./EdgesLayer.svelte";
+	import FacesLayer from "./FacesLayer.svelte";
 	import RulerLayer from "./RulerLayer.svelte";
 	import AxesLayer from "./AxesLayer.svelte";
 	import GraphIndices from "./GraphIndices.svelte";
@@ -22,14 +23,16 @@
 	import {
 		Tool,
 		Highlight,
+		GhostGraphFolded,
+		GuideLinesFolded,
 	} from "../../stores/UI.js";
 	import {
 		StrokeWidthFoldedForm,
 		StrokeDashLengthFoldedForm,
+		VertexRadiusFolded,
 	} from "../../stores/Style.js";
 	import { ViewportFolded } from "../../stores/ViewBox.js";
 	import { RulersFolded } from "../../stores/Ruler.js";
-	import { GuideLinesFolded } from "../../stores/UI.js";
 
 	const padViewport = (view, pad) => {
 		const p = Math.max(view[2], view[3]) * pad;
@@ -72,19 +75,33 @@
 		drawOrder={$Faces2DDrawOrder}
 		selected={$Selection.faces}
 		highlighted={$Highlight.faces} />
-	<EdgesLayer
-		graph={$FoldedForm}
-		selected={$Selection.edges}
-		highlighted={$Highlight.edges}
-		strokeWidth={$StrokeWidthFoldedForm}
-		strokeDasharray={$StrokeDashLengthFoldedForm}
-		/>
+	<g class="hide-edges">
+		<EdgesLayer
+			graph={$FoldedForm}
+			selected={$Selection.edges}
+			highlighted={$Highlight.edges}
+			strokeWidth={$StrokeWidthFoldedForm}
+			strokeDasharray={$StrokeDashLengthFoldedForm}
+			/>
+	</g>
 	<!-- </g> -->
 	{#if $ShowAxes}
 		<AxesLayer {viewport} />
 	{/if}
 	<g class="layer-tools" style={`--stroke-dash-length: ${$StrokeDashLengthFoldedForm};`}>
 		<RulerLayer {viewport} {rulers} />
+		<g class="graph-preview-layer">
+			<FacesLayer graph={$GhostGraphFolded} />
+			<EdgesLayer
+				graph={$GhostGraphFolded}
+				strokeWidth={$StrokeWidthFoldedForm * 3}
+				strokeDasharray={$StrokeDashLengthFoldedForm}
+			/>
+			<VerticesLayer
+				graph={$GhostGraphFolded}
+				radius={$VertexRadiusFolded}
+			/>
+		</g>
 		{#if $Tool && $Tool.folded && $Tool.folded.SVGLayer}
 			<svelte:component this={$Tool.folded.SVGLayer} />
 		{/if}

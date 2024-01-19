@@ -15,13 +15,13 @@
 	--vertex-color: #888888;
 }
 
-.crease-pattern .boundary { stroke: var(--boundary-color); }
-.crease-pattern .valley { stroke: var(--valley-color); }
-.crease-pattern .mountain { stroke: var(--mountain-color); }
-.crease-pattern .flat { stroke: var(--flat-color); }
-.crease-pattern .join { stroke: var(--join-color); }
-.crease-pattern .cut { stroke: var(--cut-color); }
-.crease-pattern .unassigned { stroke: var(--unassigned-color); }
+.boundary { stroke: var(--boundary-color); }
+.valley { stroke: var(--valley-color); }
+.mountain { stroke: var(--mountain-color); }
+.flat { stroke: var(--flat-color); }
+.join { stroke: var(--join-color); }
+.cut { stroke: var(--cut-color); }
+.unassigned { stroke: var(--unassigned-color); }
 
 .crease-pattern .graph-preview line {
 	stroke: var(--highlight);
@@ -86,14 +86,17 @@
 }
 
 /*
-.folded-form .boundary.highlighted { stroke: var(--boundary-color); }
-.folded-form .valley.highlighted { stroke: var(--valley-color); }
-.folded-form .mountain.highlighted { stroke: var(--mountain-color); }
-.folded-form .flat.highlighted { stroke: var(--flat-color); }
-.folded-form .join.highlighted { stroke: var(--join-color); }
-.folded-form .cut.highlighted { stroke: var(--cut-color); }
-.folded-form .unassigned.highlighted { stroke: var(--unassigned-color); }
-*/
+ * we want to hide all the creases on the folded form, unless
+ * they become highlighted. so, we still need to draw them with no stroke
+ */
+.hide-edges .boundary,
+.hide-edges .valley,
+.hide-edges .mountain,
+.hide-edges .flat,
+.hide-edges .join,
+.hide-edges .cut,
+.hide-edges .unassigned { stroke: none; }
+
 /*.folded-form line.selected { stroke: var(--highlight); }*/
 .folded-form line.highlighted { stroke: var(--highlight); }
 
