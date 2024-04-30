@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import { UpdateFrame } from "../../stores/Model.js";
 import { CreasePattern } from "../../stores/ModelCP.js";
-import removeGeometry from "rabbit-ear/graph/remove.js";
+import { remove as removeGeometry } from "rabbit-ear/graph/remove.js";
 
 const deleteComponentsFromGraph = (graph, remove) => {
 	// add each vertex's adjacent edges to the delete list

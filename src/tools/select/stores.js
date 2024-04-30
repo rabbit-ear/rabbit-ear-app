@@ -7,7 +7,6 @@ import { Selection } from "../../stores/Select.js";
 // import { Highlight } from "../../stores/UI.js";
 import { CreasePattern } from "../../stores/ModelCP.js";
 import { zipArrays } from "../../js/arrays.js";
-import { nearest } from "rabbit-ear/graph/nearest.js";
 
 export const SELECT_VERTEX = "vertices";
 export const SELECT_EDGE = "edges";

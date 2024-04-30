@@ -5,12 +5,11 @@ import {
 	writable,
 	derived,
 } from "svelte/store";
-import { square } from "rabbit-ear/fold/bases.js";
-import objToFold from "rabbit-ear/convert/objToFold/index.js";
-import opxToFold from "rabbit-ear/convert/opxToFold/index.js";
-import svgToFold from "rabbit-ear/convert/svgToFold/index.js";
-import foldToSvg from "rabbit-ear/convert/foldToSvg/index.js";
-import svgSegments from "rabbit-ear/convert/svgToFold/svgSegments.js";
+import { square } from "rabbit-ear/fold/primitives.js";
+import { objToFold } from "rabbit-ear/convert/objToFold.js";
+import { opxToFold } from "rabbit-ear/convert/opxToFold.js";
+import { svgToFold, svgSegments } from "rabbit-ear/convert/svgToFold.js";
+import { foldToSvg } from "rabbit-ear/convert/foldToSvg.js";
 import { rgbToAssignment } from "rabbit-ear/fold/colors.js";
 import { parseColorToRgb } from "rabbit-ear/svg/colors/parseColor.js";
 import { boundingBox } from "rabbit-ear/graph/boundary.js";

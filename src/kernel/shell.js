@@ -51,6 +51,7 @@ export const run = (jsBlob) => {
 		result = scopedEval(jsBlob, context);
 	}
 	catch (error) {
+		console.error(error);
 		return [
 			terminalOutputJavascript(jsBlob),
 			terminalOutputError(error),

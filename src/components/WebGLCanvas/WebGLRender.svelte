@@ -8,18 +8,24 @@
 		onDestroy,
 		createEventDispatcher,
 	} from "svelte";
-	import initialize from "rabbit-ear/webgl/general/initialize.js";
+	import {
+		initializeWebGL,
+	} from "rabbit-ear/webgl/general/webgl.js";
 	import {
 		rebuildViewport,
 		makeProjectionMatrix,
 		makeModelMatrix,
 	} from "rabbit-ear/webgl/general/view.js";
-	import creasePattern from "rabbit-ear/webgl/creasePattern/index.js";
-	import foldedForm from "rabbit-ear/webgl/foldedForm/index.js";
 	import {
-		drawProgram,
-		deallocProgram,
-	} from "rabbit-ear/webgl/program.js";
+		creasePattern,
+	} from "rabbit-ear/webgl/creasePattern/models.js";
+	import {
+		foldedForm,
+	} from "rabbit-ear/webgl/foldedForm/models.js";
+	import {
+		drawModel,
+		deallocModel,
+	} from "rabbit-ear/webgl/general/model.js";
 	import {
 		vectorFromScreenLocation,
 	} from "./general.js";
@@ -36,7 +42,7 @@
 	export let graph = {};
 	export let fov = 30.25;
 	export let perspective = "orthographic";
-	export let viewMatrix = identity4x4;
+	export let viewMatrix = [...identity4x4];
 
 	let gl;
 	let version;
@@ -90,11 +96,11 @@
 
 	$: if (gl) {
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		programs.forEach((program, i) => drawProgram(gl, version, program, uniforms[i]));
+		programs.forEach((program, i) => drawModel(gl, version, program, uniforms[i]));
 	};
 
 	const deallocPrograms = () => programs
-		.forEach(program => deallocProgram(gl, program));
+		.forEach(program => deallocModel(gl, program));
 
 	const dealloc = () => {
 		deallocPrograms();
@@ -111,7 +117,7 @@
 	};
 
 	onMount(() => {
-		const init = initialize(canvas); // initialize(canvas, 1); // WebGL 1
+		const init = initializeWebGL(canvas); // initializeWebGL(canvas, 1); // WebGL 1
 		gl = init.gl;
 		version = init.version;
 		if (!gl) {

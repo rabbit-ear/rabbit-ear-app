@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { subgraph } from "rabbit-ear/graph/subgraph.js";
-import normalize from "rabbit-ear/graph/normalize.js";
+import { normalize } from "rabbit-ear/graph/normalize.js";
 import { join } from "rabbit-ear/graph/join.js";
 import { UpdateFrame } from "../../stores/Model.js";
 import { CreasePattern } from "../../stores/ModelCP.js";

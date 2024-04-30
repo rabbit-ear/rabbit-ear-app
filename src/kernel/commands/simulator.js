@@ -1,8 +1,10 @@
 import { get } from "svelte/store";
 import {
 	makeEdgesAssignmentSimple,
+} from "rabbit-ear/graph/make/edgesAssignment.js";
+import {
 	makeEdgesFoldAngleFromFaces
-} from "rabbit-ear/graph/make.js";
+} from "rabbit-ear/graph/make/edgesFoldAngle.js";
 import {
 	ExportModel,
 	SimulatorFOLD,

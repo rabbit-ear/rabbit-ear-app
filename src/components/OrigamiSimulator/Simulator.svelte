@@ -1,9 +1,9 @@
-<!-- 
+<!--
 	Origami Simulator for Svelte (c) Kraft
 	MIT license
  -->
 
-<!-- 
+<!--
 	@component
 	Svelte component and interface for Origami Simulator by Amanda Ghassaei.
 	@props
@@ -36,7 +36,7 @@
 		ExportModel,
 		ResetView,
 		SimulatorFOLD,
-	} from "../../stores/simulator.js";
+	} from "../../stores/Simulator.js";
 	import {
 		Integration,
 		AxialStiffness,
@@ -44,7 +44,7 @@
 		JoinStiffness,
 		CreaseStiffness,
 		DampingRatio,
-	} from "../../stores/solver.js";
+	} from "../../stores/Solver.js";
 	import {
 		ShowTouches,
 		ShowShadows,
@@ -66,7 +66,7 @@
 		FlatColor,
 		JoinColor,
 		UnassignedColor,
-	} from "../../stores/style.js";
+	} from "../../stores/Style.js";
 	import { CreasePattern } from "../../stores/ModelCP.js";
 
 	const lightVertices = [

@@ -6,8 +6,7 @@ import {
 	axiom5 as coreAxiom5,
 	axiom6 as coreAxiom6,
 	axiom7 as coreAxiom7,
-} from "rabbit-ear/axioms/axiomsVecLine.js";
-// } from "rabbit-ear/graph/axioms.js";
+} from "rabbit-ear/axioms/axioms.js";
 import { clampLine } from "rabbit-ear/math/line.js";
 import { includeL } from "rabbit-ear/math/compare.js";
 import { pointsToLine } from "rabbit-ear/math/convert.js";

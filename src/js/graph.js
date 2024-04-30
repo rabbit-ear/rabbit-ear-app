@@ -1,8 +1,8 @@
 import { flattenFrame } from "rabbit-ear/fold/frames.js";
 import { assignmentFlatFoldAngle } from "rabbit-ear/fold/spec.js";
 import { distance } from "rabbit-ear/math/vector.js";
-import planarize from "rabbit-ear/graph/planarize.js";
-import populate from "rabbit-ear/graph/populate.js";
+import { planarize } from "rabbit-ear/graph/planarize.js";
+import { populate } from "rabbit-ear/graph/populate.js";
 import { svgNumber } from "./epsilon.js";
 /**
  * @description Is the graph a folded model or crease pattern?
@@ -185,6 +185,6 @@ export const shortestEdgeLength = (graph) => {
 // 	const graph = {};
 // 	const tiles = frames[frameNum]["ear:tiles"];
 
-// 	// const basisVectors = 
+// 	// const basisVectors =
 // 	return frames[frameNum];
 // };

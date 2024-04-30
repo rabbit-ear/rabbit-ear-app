@@ -1,7 +1,6 @@
 import { get } from "svelte/store";
 import { CreasePattern } from "../../stores/ModelCP.js";
 import {
-	nearest,
 	nearestVertex,
 	nearestEdge,
 	nearestFace,

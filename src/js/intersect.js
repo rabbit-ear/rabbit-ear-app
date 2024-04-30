@@ -8,7 +8,7 @@ import {
 import { pointsToLine } from "rabbit-ear/math/convert.js";
 import { intersectLineLine } from "rabbit-ear/math/intersect.js";
 import { clipLineConvexPolygon } from "rabbit-ear/math/clip.js";
-import { makeEdgesVector } from "rabbit-ear/graph/make.js";
+import { makeEdgesVector } from "rabbit-ear/graph/make/edges.js";
 
 export const intersectGraphLineFunc = (graph, line, lineFn = includeL) => {
 	const edgesOrigin = graph.edges_vertices

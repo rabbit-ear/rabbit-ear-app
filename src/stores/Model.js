@@ -8,9 +8,11 @@ import {
 } from "rabbit-ear/fold/spec.js";
 import {
 	flattenFrame,
-	getFramesAsFlatArray,
+	getFileFramesAsArray,
 } from "rabbit-ear/fold/frames.js";
-import populate from "rabbit-ear/graph/populate.js";
+import {
+	populate,
+} from "rabbit-ear/graph/populate.js";
 import {
 	reassembleFramesToFOLD,
 	graphIsCreasePattern,
@@ -133,6 +135,7 @@ export const FrameIsCreasePattern = derived(
 	([$FramesAreCreasePattern, $FrameIndex]) => $FramesAreCreasePattern[$FrameIndex],
 	true,
 );
+
 /**
  * @description When the graph requires an update but the change
  * results in an isomorphic graph as it relates to VEF, so, for example,
@@ -147,6 +150,7 @@ export const IsoUpdateFrame = (graph) => {
 		return [...frames];
 	});
 };
+
 /**
  * @description When the graph requires an update and the result
  * is not isomorphic, components will shift around and indices
@@ -183,7 +187,7 @@ export const SetFrame = (graph) => {
 export const SetNewModel = (FOLD) => {
 	let frames = [];
 	try {
-		frames = getFramesAsFlatArray(FOLD).map(graph => populate(graph));
+		frames = getFileFramesAsArray(FOLD).map(graph => populate(graph, { faces: true }));
 	} catch (error) {
 		console.warn("SetNewModel", error);
 		return;

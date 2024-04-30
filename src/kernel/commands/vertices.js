@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import replace from "rabbit-ear/graph/replace.js";
+import { replace } from "rabbit-ear/graph/replace.js";
 import { removeDuplicateVertices } from "rabbit-ear/graph/vertices/duplicate.js";
 import { UpdateFrame } from "../../stores/Model.js";
 import { CreasePattern } from "../../stores/ModelCP.js";

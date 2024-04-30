@@ -33,6 +33,8 @@ const collapseMethods = {
 	setGuideLinesFolded: true,
 	setGuideRaysFolded: true,
 	setGuideSegmentsFolded: true,
+	setGhostGraphCP: true,
+	setGhostGraphFolded: true,
 	setTool: true,
 	resetTool: true,
 	highlight: true,

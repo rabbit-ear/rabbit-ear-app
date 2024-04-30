@@ -8,7 +8,7 @@
 		VertexError,
 		Reset,
 		ExportModel,
-	} from "../../stores/simulator.js";
+	} from "../../stores/Simulator.js";
 	import {
 		Integration,
 		AxialStiffness,
@@ -171,7 +171,7 @@
 				max="5"
 				step="0.02"
 				bind:value={$FaceStiffness} />
-			
+
 			<div>
 				<p>join stiffness</p>
 				<input type="text" bind:value={$JoinStiffness} />
@@ -183,7 +183,7 @@
 				max="3"
 				step="0.01"
 				bind:value={$JoinStiffness} />
-			
+
 			<div>
 				<p>crease stiffness</p>
 				<input type="text" bind:value={$CreaseStiffness} />
@@ -195,7 +195,7 @@
 				max="3"
 				step="0.01"
 				bind:value={$CreaseStiffness} />
-			
+
 			<div>
 				<p>damping ratio</p>
 				<input type="text" bind:value={$DampingRatio} />

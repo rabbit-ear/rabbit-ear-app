@@ -12,7 +12,6 @@ import {
 	overlapLinePoint,
 } from "rabbit-ear/math/overlap.js";
 import {
-	nearest,
 	nearestVertex,
 	nearestEdge,
 	nearestFace,

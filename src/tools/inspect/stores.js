@@ -3,13 +3,23 @@ import {
 	writable,
 	derived,
 } from "svelte/store";
-import { nearest } from "rabbit-ear/graph/nearest.js";
+import {
+	nearestVertex,
+	nearestEdge,
+	nearestFace,
+} from "rabbit-ear/graph/nearest.js";
 import { CreasePattern } from "../../stores/ModelCP.js";
 import { Highlight } from "../../stores/UI.js";
 
 export const Press = writable(undefined);
 export const TargetLocked = derived(Press, $Press => $Press !== undefined, false);
 export const Nearest = writable(undefined);
+
+const nearest = (graph, point) => ({
+	vertex: nearestVertex(graph, point),
+	edge: nearestEdge(graph, point),
+	face: nearestFace(graph, point),
+});
 
 export const UpdateTarget = (point) => {
 	if (!point) { return; }

@@ -1,6 +1,10 @@
 import { includeS } from "rabbit-ear/math/compare.js";
 import { intersectLineLine } from "rabbit-ear/math/intersect.js";
-import { nearest } from "rabbit-ear/graph/nearest.js";
+import {
+	nearestVertex,
+	nearestEdge,
+	nearestFace,
+} from "rabbit-ear/graph/nearest.js";
 /**
  *
  */
@@ -37,17 +41,16 @@ const segmentBoxOverlap = (segment, box) => {
 	const ptInside = pointInRect(segment[0], box);
 	return ptInside;
 };
+
 /**
  *
  */
-export const getComponentsNearPoint = (graph, point) => {
-	const near = nearest(graph, point);
-	return {
-		vertices: [near.vertex],
-		edges: [near.edge],
-		faces: [near.face],
-	};
-};
+export const getComponentsNearPoint = (graph, point) => ({
+		vertices: [nearestVertex(graph, point)],
+		edges: [nearestEdge(graph, point)],
+		faces: [nearestFace(graph, point)],
+});
+
 /**
  *
  */

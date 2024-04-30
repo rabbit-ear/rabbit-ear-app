@@ -1,15 +1,17 @@
 <script>
 	import {
-		square,
-		rectangle,
-		polygon,
 		fish,
 		frog,
 		bird,
 		squareFish,
 		windmill,
 	} from "rabbit-ear/fold/bases.js";
-	import populate from "rabbit-ear/graph/populate.js";
+	import {
+		square,
+		rectangle,
+		polygon,
+	} from "rabbit-ear/fold/primitives.js";
+	import { populate } from "rabbit-ear/graph/populate.js";
 	import base2 from "../../assets/base2.fold?raw";
 	import Dialog from "./Dialog.svelte";
 	import SVGFOLDCanvas from "../SVGCanvas/SVGFOLDCanvas.svelte";

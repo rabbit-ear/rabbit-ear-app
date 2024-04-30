@@ -1,5 +1,17 @@
 # Rabbit Ear, origami editor app
 
+## dev ideas
+
+we need a good way to "unfold". imagine wanting to unfold the second-previous step. if we had more of a visual history, we could say "unfold___" and click "this one" and it reassigns all crease that were assigned during that step.
+
+"click to restart Rabbit Ear" - automatically downloads updates.
+
+creating a new edge can look like:
+
+```js
+edge(4, 12, App.edgeAssignment, App.edgeFoldAngle)
+```
+
 ## How to build this app
 
 ### MacOS, Linux, Windows
@@ -14,6 +26,10 @@ You need the nightly build of Rabbit Ear, which can be found on the `dev` branch
 
 # Dev log
 
+FOLD format challenges:
+
+- [ ] foldAngles and assignment invalid cases, for example, "F" with a fold angle.
+
 Tools
 
 - [x] new tool: rect
@@ -26,6 +42,9 @@ Tools
 - [ ] axioms 5-7 could be coded better
 - [-] foldedLine tool should re-assign existing creases that lay along the path.
 - [-] when hovering over folded form, dim actions which cannot be used on it.
+- [ ] on "select" tool, only show vertices if "vertices" is selected. maybe? idk.
+- [ ] can't place an edge with a non-flat foldAngle
+- [ ] it's possible to place a valley crease with 0 fold angle. (should change to F)
 
 App Menu
 
@@ -61,6 +80,7 @@ Layers
 - [x] move calculation onto background web-worker thread.
 - [ ] when layer solver cannot solve, show violations between faces.
 - [ ] layer order - report multiple solutions, somehow allow them to toggle it.
+- [ ] detect when faces are not simple and convex. show a warning that layer order might be buggy.
 
 Panels
 
@@ -128,6 +148,22 @@ Done
 - [x] basic export
 - [x] grid lines are messed up when zooming. "viewBoxOrigin" is buggy.
 - [x] UI touch interaction on folded form / simulator
+
+
+## 2024-01-20
+
+couple month break. fresh perspective, especially with the command syntax. pleat has been recoded and re-introduced, in turn, commands reworked and simplified. There are two classes of commands, those which return useful data (FOLD graphs), and those which return human readable data, like a string summary. The pleat command has 3 layers of nested command calls, these methods being the kind that returns geometry data. The result is very nice and elegant. The plan is to continue to redesign the command syntax and hopefully reach a cleaner, simpler, more versatile, more molecular system.
+
+One thing that is still quite hard-coded is the modification of the document model itself. I wonder if it's possible to expose this at least in a get() context. It's likely that the setting of the model will be a bit hidden.
+
+document.model()
+document.model().highlighted()
+
+We need to revisit the way that selections work. It would be nice to be able to select a handfull of faces, perform a pleat, and only those selected faces get pleat lines placed inside.
+
+duplicate a portion of the graph:
+- keep it selected, do not planarize
+- allow transforms, keep it selected, do not planarize
 
 
 ## 2023-11-01
@@ -200,7 +236,7 @@ Advanced feature list:
 
 new features:
 
-**ray-repeat**: be able to make a crease and have it propagate throughout the crease pattern by way of 
+**ray-repeat**: be able to make a crease and have it propagate throughout the crease pattern by way of
 
 but in terms of the folded state. already in rabbit-ear as `flatFold()`, but with a "F" as the assignment.
 
@@ -299,7 +335,7 @@ the selected parts of the graph (vertices, edges, faces)
 
 camera
 
-- re-center needs to include the size of the graph. when there are no vertices or degenerate, size is 1x1. 
+- re-center needs to include the size of the graph. when there are no vertices or degenerate, size is 1x1.
 
 select
 

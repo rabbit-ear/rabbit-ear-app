@@ -12,7 +12,9 @@ import {
 import {
 	makeFacesWinding,
 } from "rabbit-ear/graph/faces/winding.js";
-import planarize from "rabbit-ear/graph/planarize.js";
+import {
+	planarize,
+} from "rabbit-ear/graph/planarize.js";
 // import { validate } from "rabbit-ear/graph/validate.js";
 import {
 	graphToMatrix2,
@@ -66,8 +68,8 @@ const ComputedFoldedCoords = derived(
 				&& $CreasePattern.faces_vertices) {
 				// console.log("Model: ComputedFoldedCoords");
 				return $FoldAnglesAreFlat
-					? makeVerticesCoordsFlatFolded($CreasePattern, $FoldedRootFace)
-					: makeVerticesCoordsFolded($CreasePattern, $FoldedRootFace);
+					? makeVerticesCoordsFlatFolded($CreasePattern, [$FoldedRootFace])
+					: makeVerticesCoordsFolded($CreasePattern, [$FoldedRootFace]);
 			}
 			return [];
 		} catch (error) {

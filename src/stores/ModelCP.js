@@ -12,9 +12,9 @@ import {
 	verticesFoldable,
 } from "rabbit-ear/singleVertex/foldable.js";
 import {
-	validateKawasaki,
-	validateMaekawa,
-} from "rabbit-ear/singleVertex/validate.js";
+	verticesFlatFoldableKawasaki,
+	verticesFlatFoldableMaekawa,
+} from "rabbit-ear/singleVertex/flatFoldable.js";
 import {
 	graphToMatrix2,
 } from "../js/matrix.js";
@@ -56,7 +56,9 @@ export const InvalidKawasaki = derived(
 	($CreasePattern) => {
 		if (!$CreasePattern || !$CreasePattern.edges_vertices) { return []; }
 		try {
-			return validateKawasaki($CreasePattern, 1e-3);
+			return verticesFlatFoldableKawasaki($CreasePattern, 1e-3)
+				.map((valid, i) => (!valid ? i : undefined))
+				.filter(a => a !== undefined);
 		} catch (error) {
 			console.warn("InvalidKawasaki", error);
 		}
@@ -72,7 +74,9 @@ export const InvalidMaekawa = derived(
 	($CreasePattern) => {
 		if (!$CreasePattern || !$CreasePattern.edges_vertices) { return []; }
 		try {
-			return validateMaekawa($CreasePattern);
+			return verticesFlatFoldableMaekawa($CreasePattern)
+				.map((valid, i) => (!valid ? i : undefined))
+				.filter(a => a !== undefined);
 		} catch (error) {
 			console.warn("InvalidMaekawa", error);
 		}
@@ -122,7 +126,9 @@ const VerticesFoldable = derived(
 	([$CreasePattern, $FoldAnglesAreFlat]) => {
 		if ($FoldAnglesAreFlat) { return []; }
 		try {
-			return verticesFoldable($CreasePattern, 1e-3);
+			return verticesFoldable($CreasePattern, 1e-3)
+				.map((valid, i) => (!valid ? i : undefined))
+				.filter(a => a !== undefined);
 		} catch (error) { console.warn("VerticesFoldable", error); }
 		return [];
 	},

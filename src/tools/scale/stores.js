@@ -8,7 +8,7 @@ import {
 	magnitude2,
 } from "rabbit-ear/math/vector.js";
 import { subgraph } from "rabbit-ear/graph/subgraph.js";
-import normalize from "rabbit-ear/graph/normalize.js";
+import { normalize } from "rabbit-ear/graph/normalize.js";
 import {
 	snapOldToPoint,
 	snapOldToRulerLine,

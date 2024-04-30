@@ -8,11 +8,11 @@ import {
 
 const execute = (commands = []) => {
 	const avoid = UndoHistoryAvoidCommands;
-	const matches = parseListToMethodNames(commands)
-		.filter(name => !avoid[name]);
-	if (!matches.length) { return; }
-	if (matches.includes("undo")) { return undo(); }
-	if (matches.includes("redo")) { return redo(); }
+	const methodNames = parseListToMethodNames(commands);
+	const matches = methodNames.filter(name => avoid[name]);
+	if (matches.length) { return; }
+	if (methodNames.includes("undo")) { return undo(); }
+	if (methodNames.includes("redo")) { return redo(); }
 	cache();
 };
 

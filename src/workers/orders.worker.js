@@ -4,7 +4,7 @@
 // where in the "message" data event, the user can supply a hash string,
 // which will be returned in the postMessage upon success or error.
 // The user can match the hash from the return event to the event they started.
-import { layer3d } from "rabbit-ear/layer/solver3d/index.js";
+import { layer3D } from "rabbit-ear/layer/layer.js";
 
 // Not needed anymore, now that everything is encapsulated in "message" handler.
 // Used in the event of an error.
@@ -26,7 +26,7 @@ addEventListener("message", ({ data }) => {
 			postMessage({ hash, error: "empty graph" });
 			return;
 		}
-		postMessage({ hash, solution: layer3d(graph, epsilon) });
+		postMessage({ hash, solution: layer3D(graph, epsilon) });
 	} catch (error) {
 		// fail 2: this fires when the layer solver fails.
 		// console.warn("+++ solver fail +++", hash);

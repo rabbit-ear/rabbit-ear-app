@@ -1,10 +1,14 @@
-import AddVertex from "rabbit-ear/graph/add/addVertex.js";
-import AddVertices from "rabbit-ear/graph/add/addVertices.js";
-import addPlanarLine from "rabbit-ear/graph/add/addPlanarLine.js";
-import addNonPlanarEdge from "rabbit-ear/graph/add/addNonPlanarEdge.js";
-import populate from "rabbit-ear/graph/populate.js";
-import Planarize from "rabbit-ear/graph/planarize.js";
-import { makeEdgesCoords } from "rabbit-ear/graph/make.js";
+import {
+	addVertex as AddVertex,
+	addVertices as AddVertices,
+} from "rabbit-ear/graph/add/vertex.js";
+// import addPlanarLine from "rabbit-ear/graph/add/addPlanarLine.js";
+import {
+	addEdge,
+} from "rabbit-ear/graph/add/edge.js";
+import { populate } from "rabbit-ear/graph/populate.js";
+import { planarize as Planarize } from "rabbit-ear/graph/planarize.js";
+import { makeEdgesCoords } from "rabbit-ear/graph/make/edges.js";
 import { join as Join } from "rabbit-ear/graph/join.js";
 import { boundingBox } from "rabbit-ear/math/polygon.js";
 import { get } from "svelte/store";
@@ -13,10 +17,10 @@ import { UpdateFrame } from "../../stores/Model.js";
 import { CreasePattern } from "../../stores/ModelCP.js";
 import { FoldedForm } from "../../stores/ModelFolded.js";
 import { setEdgesAssignment } from "../../js/graph.js";
-import { splitSegmentWithGraph } from "rabbit-ear/graph/split.js";
+import { splitLineIntoEdges } from "rabbit-ear/graph/split/splitLine.js";
 import {
-	transferPointBetweenGraphs,
-	transferPointOnEdgeBetweenGraphs,
+	transferPointInFaceBetweenGraphs,
+	// transferPointOnEdgeBetweenGraphs,
 } from "rabbit-ear/graph/transfer.js";
 import { mergeArraysWithHoles } from "rabbit-ear/general/array.js";
 
@@ -31,13 +35,13 @@ export const vertex = (coords) => {
 };
 
 /**
- * @param {number[][]} segment two points, each point being an array of numbers.
+ * @param {[number, number][]} segment two points, each point being an array of numbers.
  */
 export const segment = ([pointA, pointB]) => {
 	const graph = get(CreasePattern);
 	const vertex0 = AddVertex(graph, pointA);
 	const vertex1 = AddVertex(graph, pointB);
-	const edge = addNonPlanarEdge(graph, [vertex0, vertex1]);
+	const edge = addEdge(graph, [vertex0, vertex1]);
 	setEdgesAssignment(graph, [edge], get(NewEdgeAssignment));
 	UpdateFrame({ ...graph });
 	return edge;
@@ -52,7 +56,7 @@ export const segments = (segs, assignments, foldAngles) => {
 
 	const vertex0 = AddVertex(graph, coords0);
 	const vertex1 = AddVertex(graph, coords1);
-	const edge = addNonPlanarEdge(graph, [vertex0, vertex1]);
+	const edge = addEdge(graph, [vertex0, vertex1]);
 	setEdgesAssignment(graph, [edge], get(NewEdgeAssignment));
 	UpdateFrame({ ...graph });
 	return edge;
@@ -63,7 +67,7 @@ export const segments = (segs, assignments, foldAngles) => {
  */
 export const edge = (vertexA, vertexB) => {
 	const g = get(CreasePattern);
-	const e = addNonPlanarEdge(g, [vertexA, vertexB]);
+	const e = addEdge(g, [vertexA, vertexB]);
 	setEdgesAssignment(g, [e], get(NewEdgeAssignment));
 	UpdateFrame({ ...g });
 	return e;
@@ -73,10 +77,11 @@ export const edge = (vertexA, vertexB) => {
  *
  */
 export const line = (l) => {
-	const graph = get(CreasePattern);
-	const result = addPlanarLine(graph, l);
-	UpdateFrame({ ...graph });
-	return result;
+	// const graph = get(CreasePattern);
+	// const result = addPlanarLine(graph, l);
+	// UpdateFrame({ ...graph });
+	// return result;
+	return [];
 };
 
 /**
@@ -87,7 +92,7 @@ export const polyline = (poly) => {
 	const vertices = poly.map(point => AddVertex(graph, point));
 	const edges = Array.from(Array(vertices.length - 1))
 		.map((_, i) => i)
-		.map(i => addNonPlanarEdge(graph, [vertices[i], vertices[i + 1]]));
+		.map(i => addEdge(graph, [vertices[i], vertices[i + 1]]));
 	setEdgesAssignment(graph, edges, get(NewEdgeAssignment));
 	UpdateFrame({ ...graph });
 	return edges;
@@ -118,14 +123,14 @@ export const rect = (pointA, pointB) => {
 export const joinCP = (graph) => {
 	const cp = get(CreasePattern);
 	Join(cp, graph);
-	populate(cp);
+	populate(cp, { faces: true });
 	UpdateFrame({ ...cp });
 };
 
 export const joinFolded = (graph) => {
 	const cp = get(CreasePattern);
 	Join(cp, graph);
-	populate(cp);
+	populate(cp, { faces: true });
 	UpdateFrame({ ...cp });
 };
 
@@ -147,12 +152,24 @@ export const segmentsFolded = (segments, assignments, foldAngles) => {
 	const cp = get(CreasePattern);
 
 	const allNewSegments = segments.flatMap(segment => {
+		// const {
+		// 	vertices,
+		// 	edges_vertices,
+		// 	collinear_edges,
+		// } = splitSegmentWithGraph(folded, segment);
 		const {
-			vertices_coords,
-			vertices_overlapInfo,
+			vertices,
 			edges_vertices,
-			collinear_edges,
-		} = splitSegmentWithGraph(folded, segment);
+			edges_collinear,
+			edges_face,
+		} = splitLineIntoEdges(
+			folded,
+			pointsToLine(...segment),
+			includeS,
+			segment,
+		);
+
+		const vertices_coords = vertices.map(el => el.point);
 
 		// const edges_assignment = edges_vertices.map(() => newAssignment);
 		// const edges_foldAngle = edges_vertices.map(() => newFoldAngle);
@@ -160,9 +177,9 @@ export const segmentsFolded = (segments, assignments, foldAngles) => {
 		// splitSegmentWithGraph created new points in the foldedForm coordinate
 		// space. we need to transfer these to their respective position in the
 		// crease pattern space. 2 different methods depending on how the point was made
-		vertices_overlapInfo.forEach((overlapInfo, v) => {
+		vertices.forEach((overlapInfo, v) => {
 			if (overlapInfo.face !== undefined) {
-				vertices_coords[v] = transferPointBetweenGraphs(
+				vertices_coords[v] = transferPointInFaceBetweenGraphs(
 					folded,
 					cp,
 					overlapInfo.face,
@@ -171,7 +188,6 @@ export const segmentsFolded = (segments, assignments, foldAngles) => {
 			}
 			if (overlapInfo.edge !== undefined) {
 				vertices_coords[v] = transferPointOnEdgeBetweenGraphs(
-					folded,
 					cp,
 					overlapInfo.edge,
 					overlapInfo.a,
@@ -197,24 +213,24 @@ export const segmentsFolded = (segments, assignments, foldAngles) => {
 		// console.log("HERE", segment[0], segment[1])
 		const vertex0 = AddVertex(newGraph, segment[0]);
 		const vertex1 = AddVertex(newGraph, segment[1]);
-		const edge = addNonPlanarEdge(newGraph, [vertex0, vertex1]);
+		const edge = addEdge(newGraph, [vertex0, vertex1]);
 		setEdgesAssignment(newGraph, [edge], newAssignment);
 	});
 
 	// console.log("newGraph", newGraph);
 	Join(cp, newGraph)
 	// const result = Planarize(cp);
-	// populate(result);
+	// populate(result, { faces: true });
 	// console.log("HERE", structuredClone(result));
 	// UpdateFrame({ ...result });
 
-	// const result = populate(Planarize(cp));
+	// const result = populate(Planarize(cp), { faces: true });
 	UpdateFrame({ ...cp });
 
 
 	// console.log("FOLDED RESULT",
 	// 	vertices_coords,
-	// 	vertices_overlapInfo,
+	// 	vertices,
 	// 	edges_vertices,
 	// 	collinear_edges);
 

@@ -7,10 +7,7 @@ import {
 	snapToEdge,
 	snapToRulerLine,
 } from "../../js/snap.js";
-import {
-	execute,
-	executeCommand,
-} from "../../kernel/execute.js";
+import { execute } from "../../kernel/execute.js";
 import {
 	SnapPointsCP,
 	SnapPointsFolded,
@@ -22,8 +19,6 @@ import {
 	SnapPoint,
 	GhostGraphCP,
 	GhostGraphFolded,
-	GuideLinesCP,
-	GuideLinesFolded,
 	Highlight,
 } from "../../stores/UI.js";
 import {
@@ -58,7 +53,7 @@ export const PleatAssignment = derived(
 	["M", "V"]
 );
 
-const ShiftPressed = derived(Keyboard, $Keyboard => $Keyboard[16], false);
+const ShiftPressed = derived(Keyboard, $Keyboard => !!($Keyboard[16]), false);
 
 export const CPMove = writable(undefined);
 export const CPDrag = writable(undefined);
@@ -118,8 +113,6 @@ export const CPPleatPreview = derived(
 			const args = [$CPEdge0, $CPEdge1, $PleatCount, $PleatAssignment, $ShiftPressed]
 				.map(a => JSON.stringify(a))
 				.join(", ");
-			// console.log(`setGuideSegmentsCP(pleatPreview(${args}))`);
-			// execute(`setGuideSegmentsCP(pleatPreview(${args}))`);
 			execute(`setGhostGraphCP(pleatCP(${args}))`);
 		}
 	},
@@ -130,15 +123,10 @@ export const CPDoPleat = derived(
 	[ShiftPressed, CPRelease, CPEdge0, CPEdge1, PleatCount, PleatAssignment],
 	([$ShiftPressed, $CPRelease, $CPEdge0, $CPEdge1, $PleatCount, $PleatAssignment]) => {
 		if ($CPRelease !== undefined && $CPEdge0 !== undefined && $CPEdge1 !== undefined) {
-			// GuideLinesCP.set([]);
-			GhostGraphCP.set({});
 			const args = [$CPEdge0, $CPEdge1, $PleatCount, $PleatAssignment, $ShiftPressed]
 				.map(a => JSON.stringify(a))
 				.join(", ");
-			// executeCommand("pleat", $CPEdge0, $CPEdge1, $PleatCount, $PleatAssignment, $ShiftPressed);
-			// executeCommand("pleatCP", $CPEdge0, $CPEdge1, $PleatCount, $PleatAssignment, $ShiftPressed);
 			execute(`joinCP(pleatCP(${args}))`);
-			// execute(`setRulersCP(axiom3(${args}))`);
 			reset();
 		}
 	},
@@ -163,7 +151,6 @@ export const FoldedPleatPreview = derived(
 			const args = [$FoldedEdge0, $FoldedEdge1, $PleatCount, $PleatAssignment, $ShiftPressed]
 				.map(a => JSON.stringify(a))
 				.join(", ");
-			// console.log("args", args);
 			execute(`setGhostGraphFolded(pleatFolded(${args}))`);
 		}
 	},
@@ -177,10 +164,6 @@ export const FoldedDoPleat = derived(
 			const args = [$FoldedEdge0, $FoldedEdge1, $PleatCount, $PleatAssignment, $ShiftPressed]
 				.map(a => JSON.stringify(a))
 				.join(", ");
-			// GuideLinesFolded.set([]);
-			GhostGraphFolded.set({});
-			// execute(`setRulersFolded(foldedAxiom3(${args}))`);
-			// execute(`graphSegments(pleatFolded(${args}))`);
 			execute(`segmentsFolded(...graphSegments(pleatFolded(${args})))`);
 			reset();
 		}
@@ -208,8 +191,6 @@ export const reset = () => {
 	FoldedRelease.set(undefined);
 	RulersCP.set([]);
 	RulersFolded.set([]);
-	// GuideLinesCP.set([]);
-	// GuideLinesFolded.set([]);
 	GhostGraphCP.set({});
 	GhostGraphFolded.set({});
 };

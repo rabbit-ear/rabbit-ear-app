@@ -1,6 +1,8 @@
-import { layer3d } from "rabbit-ear/layer/solver3d/index.js";
+// import { layer3d } from "rabbit-ear/layer/solver3d/index.js";
 // import { layer } from "rabbit-ear/layer/solver2d/index.js";
-import LayerPrototype from "rabbit-ear/layer/solver2d/prototype.js";
+import {
+	LayerPrototype,
+} from "rabbit-ear/layer/prototype.js";
 
 const makeHash = () => (
 	(Math.random() + 1).toString(36).substring(7)
@@ -49,7 +51,8 @@ export const solveFaceLayersWorker = (graph, epsilon) => (
 export const solveFaceLayers = (graph, epsilon) => (
 	new Promise((resolve, reject) => {
 		try {
-			resolve(layer3d(graph, epsilon));
+			resolve({});
+			// resolve(layer3d(graph, epsilon));
 		} catch (error) {
 			reject(error);
 		}

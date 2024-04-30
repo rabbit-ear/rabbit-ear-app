@@ -2,7 +2,9 @@ import {
 	writable,
 	derived,
 } from "svelte/store";
-import { facesContainingPoint } from "rabbit-ear/graph/nearest.js";
+import {
+	facesContainingPoint,
+} from "rabbit-ear/graph/faces/facePoint.js";
 import {
 	CreasePattern,
 } from "../../stores/ModelCP.js";
@@ -18,7 +20,12 @@ const PressFace = derived(
 	([$Press, $CreasePattern]) => {
 		try {
 			if (!$Press) { return; }
-			const face = facesContainingPoint($CreasePattern, $Press, n => n > -1e-3).shift();
+			const face = facesContainingPoint(
+				$CreasePattern,
+				$Press,
+				// undefined,
+				n => n > -1e-3,
+			).shift();
 			FoldedRootFace.set(face);
 		} catch (error) { console.warn(error); }
 	},
