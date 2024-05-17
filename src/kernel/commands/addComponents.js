@@ -7,7 +7,7 @@ import {
 	addEdge,
 } from "rabbit-ear/graph/add/edge.js";
 import { populate } from "rabbit-ear/graph/populate.js";
-import { planarize as Planarize } from "rabbit-ear/graph/planarize.js";
+import { planarizeAllFaces } from "rabbit-ear/graph/planarize/planarize.js";
 import { makeEdgesCoords } from "rabbit-ear/graph/make/edges.js";
 import { join as Join } from "rabbit-ear/graph/join.js";
 import { boundingBox } from "rabbit-ear/math/polygon.js";
@@ -219,12 +219,12 @@ export const segmentsFolded = (segments, assignments, foldAngles) => {
 
 	// console.log("newGraph", newGraph);
 	Join(cp, newGraph)
-	// const result = Planarize(cp);
+	// const result = planarizeAllFaces(cp);
 	// populate(result, { faces: true });
 	// console.log("HERE", structuredClone(result));
 	// UpdateFrame({ ...result });
 
-	// const result = populate(Planarize(cp), { faces: true });
+	// const result = populate(planarizeAllFaces(cp), { faces: true });
 	UpdateFrame({ ...cp });
 
 

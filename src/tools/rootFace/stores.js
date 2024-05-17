@@ -3,8 +3,8 @@ import {
 	derived,
 } from "svelte/store";
 import {
-	facesContainingPoint,
-} from "rabbit-ear/graph/faces/facePoint.js";
+	getFacesUnderPoint,
+} from "rabbit-ear/graph/overlap.js";
 import {
 	CreasePattern,
 } from "../../stores/ModelCP.js";
@@ -20,7 +20,7 @@ const PressFace = derived(
 	([$Press, $CreasePattern]) => {
 		try {
 			if (!$Press) { return; }
-			const face = facesContainingPoint(
+			const face = getFacesUnderPoint(
 				$CreasePattern,
 				$Press,
 				// undefined,

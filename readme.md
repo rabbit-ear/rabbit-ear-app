@@ -2,6 +2,16 @@
 
 ## dev ideas
 
+`<dialog>` is currently the newest feature in use, we need a test like this to ensure that their browser is up to date:
+
+```js
+if (typeof HTMLDialogElement === 'function') {
+  /** yep */
+} else {
+  /** nope */
+}
+```
+
 we need a good way to "unfold". imagine wanting to unfold the second-previous step. if we had more of a visual history, we could say "unfold___" and click "this one" and it reassigns all crease that were assigned during that step.
 
 "click to restart Rabbit Ear" - automatically downloads updates.

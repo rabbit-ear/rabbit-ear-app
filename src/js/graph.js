@@ -1,7 +1,6 @@
 import { flattenFrame } from "rabbit-ear/fold/frames.js";
 import { assignmentFlatFoldAngle } from "rabbit-ear/fold/spec.js";
 import { distance } from "rabbit-ear/math/vector.js";
-import { planarize } from "rabbit-ear/graph/planarize.js";
 import { populate } from "rabbit-ear/graph/populate.js";
 import { svgNumber } from "./epsilon.js";
 /**

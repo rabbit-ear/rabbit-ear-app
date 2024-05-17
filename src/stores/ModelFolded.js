@@ -13,8 +13,8 @@ import {
 	makeFacesWinding,
 } from "rabbit-ear/graph/faces/winding.js";
 import {
-	planarize,
-} from "rabbit-ear/graph/planarize.js";
+	planarizeAllFaces,
+} from "rabbit-ear/graph/planarize/planarize.js";
 // import { validate } from "rabbit-ear/graph/validate.js";
 import {
 	graphToMatrix2,
@@ -231,7 +231,7 @@ export const FoldedFormPlanar = derived(
 	([$FoldedForm, $FoldAnglesAreFlat]) => {
 		try {
 			// console.log("Model: FoldedFormPlanar");
-			return $FoldAnglesAreFlat ? planarize($FoldedForm) : {};
+			return $FoldAnglesAreFlat ? planarizeAllFaces($FoldedForm) : {};
 		} catch (error) {}
 		return {};
 	},

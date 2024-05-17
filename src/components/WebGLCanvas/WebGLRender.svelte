@@ -52,7 +52,11 @@
 	$: canvasSize = canvas ? [canvas.clientWidth, canvas.clientHeight] : [1, 1];
 	$: modelMatrix = makeModelMatrix(graph);
 	$: modelViewMatrix = multiplyMatrices4(viewMatrix, modelMatrix);
-	$: projectionMatrix = makeProjectionMatrix(canvas, perspective, fov);
+	$: projectionMatrix = makeProjectionMatrix(
+		[canvasSize[0], canvasSize[1]],
+		perspective,
+		fov,
+	);
 	$: inferredScale = 1 / modelViewMatrix[0];
 	$: isFoldedForm = IsFoldedForm(graph);
 
@@ -83,7 +87,7 @@
 
 	$: uniforms = programs
 		.map((prog, i) => prog
-			.makeUniforms(gl, uniformOptions));
+			.makeUniforms(uniformOptions));
 
 	$: {
 		try {

@@ -17,7 +17,7 @@
   "dependencies": {
     "@tauri-apps/api": "^1.4.0",
     "earcut": "^2.2.4",
-    "rabbit-ear": "file:../../Origami/",
+    "rabbit-ear": "file:../../rabbit-ear/",
     "three": "^0.153.0"
   },
   "devDependencies": {

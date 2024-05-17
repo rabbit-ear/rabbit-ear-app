@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { planarize as Planarize } from "rabbit-ear/graph/planarize.js";
+import { planarizeAllFaces } from "rabbit-ear/graph/planarize/planarize.js";
 import { populate } from "rabbit-ear/graph/populate.js";
 import { getEdgesLine } from "rabbit-ear/graph/edges/lines.js";
 import { UpdateFrame } from "../../stores/Model.js";
@@ -25,7 +25,7 @@ export const planarize = () => {
 		// 	el.vector = el.vector.map(n => cleanNumber(n, precision, lookup));
 		// 	el.origin = el.origin.map(n => cleanNumber(n, precision, lookup));
 		// });
-		UpdateFrame(populate(Planarize(graph), { faces: true }));
+		UpdateFrame(populate(planarizeAllFaces(graph), { faces: true }));
 	} catch (error) {
 
 	}
