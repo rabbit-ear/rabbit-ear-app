@@ -28,11 +28,28 @@ edge(4, 12, App.edgeAssignment, App.edgeFoldAngle)
 
 Prerequisites: install [Rust](https://www.rust-lang.org/), [Node](https://nodejs.org/en/)
 
-1. Clone this repository. Clone Rabbit Ear nightly (see below)
-2. run `npm i`
-3. run `npm run tauri dev`
+1. Clone this repository.
+2. Link rabbit-ear nightly (see below)
+3. Run `npm i`
+4. Run `npm run tauri dev`
 
-You need the nightly build of Rabbit Ear, which can be found on the `dev` branch. Clone the repository + branch and place it in the location indicated by this repository's `package.json`.
+### Linking rabbit-ear nightly
+
+1. Clone and build the dev branch of the [rabbit-ear](https://github.com/rabbit-ear/rabbit-ear/tree/dev) repo:
+
+```sh
+# Clone the rabbit-ear repo
+git clone https://github.com/rabbit-ear/rabbit-ear.git
+cd rabbit-ear
+# Checkout the dev branch
+git checkout dev
+# Build the package
+npm run build
+# Register the package so it can be linked
+npm link
+```
+
+2. Run `npm link rabbit-ear` inside of the `rabbit-ear-app` folder to link the package
 
 # Dev log
 
