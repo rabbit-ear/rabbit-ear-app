@@ -26,18 +26,23 @@
 		<div class="flex-column gap">
 			<div class="toggle-row">
 				<button
+					title="Valley / Mountain"
 					highlighted={$AssignType === ASSIGN_SWAP}
 					on:click={() => $AssignType = ASSIGN_SWAP }>V / M</button>
 				<button
+					title="Flat"
 					highlighted={$AssignType === ASSIGN_FLAT}
 					on:click={() => $AssignType = ASSIGN_FLAT }>F</button>
 				<button
+					title="Boundary"
 					highlighted={$AssignType === ASSIGN_BOUNDARY}
 					on:click={() => $AssignType = ASSIGN_BOUNDARY }>B</button>
 				<button
+					title="Cut"
 					highlighted={$AssignType === ASSIGN_CUT}
 					on:click={() => $AssignType = ASSIGN_CUT }>C</button>
 				<button
+					title="Unassigned"
 					highlighted={$AssignType === ASSIGN_UNASSIGNED}
 					on:click={() => $AssignType = ASSIGN_UNASSIGNED }>U</button>
 			</div>
