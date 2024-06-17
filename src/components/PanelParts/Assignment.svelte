@@ -10,6 +10,7 @@
 	<div class="toggle-row">
 		{#each options as assign}
 			<button
+				title={edgesAssignmentNames[assign]}
 				class={$NewEdgeAssignment === assign ? "highlighted" : ""}
 				on:click={() => $NewEdgeAssignment = assign }>{assign}</button>
 		{/each}
