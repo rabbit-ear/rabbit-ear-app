@@ -1,5 +1,9 @@
 # Rabbit Ear, origami editor app
 
+## plan for round 2:
+
+- need to be able to select faces. see "square-with-hole.fold" in rabbit ear examples. we need to be able to create this, select the middle face, delete it.
+
 ## dev ideas
 
 `<dialog>` is currently the newest feature in use, we need a test like this to ensure that their browser is up to date:

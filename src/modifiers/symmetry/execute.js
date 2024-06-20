@@ -55,15 +55,16 @@ const copyMethod = (commandName, tokens) => {
 		const reflections = get(ReflectionLines);
 		const transforms = reflections
 			.map(({ vector, origin }) => makeMatrix2Reflect(vector, origin));
-		const point0 = params[0];
-		const point1 = params[1];
+		const points = params[0];
+		const point0 = points[0];
+		const point1 = points[1];
 		const newSegments = transforms
-			.map(matrix => params.map(p => multiplyMatrix2Vector2(matrix, p)));
+			.map(matrix => points.map(p => multiplyMatrix2Vector2(matrix, p)));
 		return newSegments
 			.map(segment => segment
 				.map(point => `[${point.join(",")}]`)
 				.join(", "))
-			.map(coords => `segment(${coords})`);
+			.map(coords => `segment([${coords}])`);
 	}
 	// const tokens = parseToTokens(command);
 	// console.log(tokens);

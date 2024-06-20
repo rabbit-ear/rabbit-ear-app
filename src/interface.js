@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { appWindow } from "@tauri-apps/api/window";
-import { ask, confirm } from "@tauri-apps/api/dialog";
+import { ask, confirm, message } from "@tauri-apps/api/dialog";
 import { exists } from "@tauri-apps/api/fs";
 import { exit } from "@tauri-apps/api/process";
 import { get } from "svelte/store";
@@ -36,6 +36,41 @@ import {
 	FileModified,
 	GetCurrentFOLDFile,
 } from "./stores/File.js";
+
+/**
+ * @description This will force the app to close if the system clock
+ * is later than this timestamp date.
+ * During development (especially this alpha period),
+ * I think it would be nice to force-expire the app to ensure that no
+ * copies exist out there which might cause people to file bug reports
+ * or other various issues.
+ * We must ensure that there is always a version available to download,
+ * it should never be the case that this app expires and there is no
+ * replacement.
+ * Once the app is ready for 1.0, this feature will be removed.
+ */
+const timeLimitApp = async () => {
+	// const date2024_05 = 1714521600; // expires May 1
+	// const date2024_06 = 1717200000; // expires June 1
+	// const date2024_07 = 1719792000; // expires July 1
+	// const date2024_08 = 1722470400; // expires Aug 1
+	const date2024_09 = 1725148800; // expires Sept 1
+
+	// convert ms timestamp into seconds timestamp
+	const nowDate = Date.now() / 1000;
+	// expire june 1, 2024
+	if (nowDate > date2024_09) {
+		setTimeout(exit, 60000);
+		await message("download the latest version at:\n\nhttps://github.com/rabbit-ear/rabbit-ear/releases/\n\nDon't worry, it's still 100% free.", {
+			title: "App Expired September 1st 2024",
+			type: "warning",
+			okLabel: "Quit",
+		});
+		exit();
+	}
+};
+
+timeLimitApp();
 
 /**
  * @description Communicate from Rust to Javascript.

@@ -110,7 +110,7 @@ export const foldedSegment = (pointA, pointB) => { //, assignment = "F", foldAng
 	const assignment = get(NewEdgeAssignment);
 	// const foldAngle = get(NewEdgeFoldAngle);
 	const vertices_coordsFolded = folded.vertices_coords;
-	const result = foldSegment(cp, segment, assignment, undefined, vertices_coordsFolded);
+	const result = foldSegment(cp, segment, { assignment, vertices_coordsFolded });
 	// console.log("result", result);
 	// console.log("cp", JSON.stringify(structuredClone(cp)));
 	// console.log("folded", structuredClone(folded));
