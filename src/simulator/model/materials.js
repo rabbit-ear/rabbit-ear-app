@@ -9,7 +9,7 @@ const front = new THREE.MeshPhongMaterial({
 	polygonOffset: true,
 	polygonOffsetFactor,
 	polygonOffsetUnits: 1,
-	color: 0xFFFFFF,
+	color: 0xffffff,
 	emissive: 0x000000,
 	specular: 0x111111,
 	shininess: 20,
@@ -23,7 +23,7 @@ const back = new THREE.MeshPhongMaterial({
 	polygonOffset: true,
 	polygonOffsetFactor,
 	polygonOffsetUnits: 1,
-	color: 0xEC008B,
+	color: 0xec008b,
 	emissive: 0x000000,
 	specular: 0x111111,
 	shininess: 20,
@@ -45,9 +45,4 @@ const strain = new THREE.MeshBasicMaterial({
 	polygonOffsetUnits: 1,
 });
 
-export {
-	front,
-	back,
-	line,
-	strain,
-};
+export { front, back, line, strain };

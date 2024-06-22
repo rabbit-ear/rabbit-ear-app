@@ -1,7 +1,4 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
+import { writable, derived } from "svelte/store";
 import {
 	snapOldToPoint,
 	snapToEdge,
@@ -9,10 +6,7 @@ import {
 } from "../../js/snapOld.js";
 import { zipArrays } from "../../js/arrays.js";
 import { execute } from "../../kernel/execute.js";
-import {
-	GuideLinesCP,
-	Highlight,
-} from "../../stores/UI.js";
+import { GuideLinesCP, Highlight } from "../../stores/UI.js";
 import { RulersCP } from "../../stores/Ruler.js";
 
 export const Move = writable(undefined);
@@ -21,9 +15,10 @@ export const Releases = writable([]);
 
 export const Touches = derived(
 	[Move, Presses, Releases],
-	([$Move, $Presses, $Releases]) => zipArrays($Presses, $Releases)
-		.concat([$Move])
-		.filter(a => a !== undefined),
+	([$Move, $Presses, $Releases]) =>
+		zipArrays($Presses, $Releases)
+			.concat([$Move])
+			.filter((a) => a !== undefined),
 	[],
 );
 
@@ -65,7 +60,7 @@ export const Highlights = derived(
 	[InputEdge],
 	([$InputEdge]) => {
 		Highlight.reset();
-		const edges = [$InputEdge].filter(a => a !== undefined);
+		const edges = [$InputEdge].filter((a) => a !== undefined);
 		Highlight.addEdges(edges);
 	},
 	undefined,
@@ -73,12 +68,14 @@ export const Highlights = derived(
 
 export const AxiomPreview = derived(
 	[InputEdge, InputPoint0, InputPoint1],
-	([$InputEdge, $InputPoint0, $InputPoint1]) => (
-		($InputEdge !== undefined
-			&& $InputPoint0 !== undefined
-			&& $InputPoint1 !== undefined
-			? execute(`setGuideLinesCP(axiom5(${$InputEdge}, ${JSON.stringify($InputPoint0)}, ${JSON.stringify($InputPoint1)}))`)
-			: GuideLinesCP.set([]))),
+	([$InputEdge, $InputPoint0, $InputPoint1]) =>
+		$InputEdge !== undefined &&
+		$InputPoint0 !== undefined &&
+		$InputPoint1 !== undefined
+			? execute(
+					`setGuideLinesCP(axiom5(${$InputEdge}, ${JSON.stringify($InputPoint0)}, ${JSON.stringify($InputPoint1)}))`,
+				)
+			: GuideLinesCP.set([]),
 	undefined,
 );
 
@@ -99,6 +96,10 @@ export const subscribe = () => {
 
 export const unsubscribe = () => {
 	reset();
-	if (unsub0) { unsub0(); }
-	if (unsub1) { unsub1(); }
+	if (unsub0) {
+		unsub0();
+	}
+	if (unsub1) {
+		unsub1();
+	}
 };

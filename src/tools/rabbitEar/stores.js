@@ -1,10 +1,5 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
-import {
-	Highlight,
-} from "../../stores/UI.js";
+import { writable, derived } from "svelte/store";
+import { Highlight } from "../../stores/UI.js";
 import { CreasePattern } from "../../stores/ModelCP.js";
 import { nearestFace } from "rabbit-ear/graph/nearest.js";
 
@@ -39,6 +34,8 @@ export const subscribe = () => {
 };
 
 export const unsubscribe = () => {
-	if (unsub) { unsub(); }
+	if (unsub) {
+		unsub();
+	}
 	reset();
 };

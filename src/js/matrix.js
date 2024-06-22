@@ -3,33 +3,38 @@ import {
 	invertMatrix2,
 	multiplyMatrix2Vector2,
 } from "rabbit-ear/math/matrix2.js";
-import {
-	boundingBox,
-} from "rabbit-ear/graph/boundary.js";
-import {
-	foldToViewBox,
-} from "rabbit-ear/svg/general/viewBox.js";
+import { boundingBox } from "rabbit-ear/graph/boundary.js";
+import { foldToViewBox } from "rabbit-ear/svg/general/viewBox.js";
 /**
  *
  */
 export const getFOLDViewport = (graph, verticalUp = false) => {
-	if (!graph) { return [0, 0, 1, 1]; }
+	if (!graph) {
+		return [0, 0, 1, 1];
+	}
 	// move the origin up, if not inverted.
 	const viewBox = foldToViewBox(graph);
-	if (!viewBox) { return [0, 0, 1, 1]; }
-	const viewBoxValues = viewBox.split(" ")
+	if (!viewBox) {
+		return [0, 0, 1, 1];
+	}
+	const viewBoxValues = viewBox
+		.split(" ")
 		.map(parseFloat)
-		.map(n => isNaN(n) || !isFinite(n) ? 0 : n);
+		.map((n) => (isNaN(n) || !isFinite(n) ? 0 : n));
 	return !verticalUp
 		? viewBoxValues
-		: [viewBoxValues[0], -(viewBoxValues[1] + viewBoxValues[3]), viewBoxValues[2], viewBoxValues[3]];
+		: [
+				viewBoxValues[0],
+				-(viewBoxValues[1] + viewBoxValues[3]),
+				viewBoxValues[2],
+				viewBoxValues[3],
+			];
 };
 /**
  *
  */
-export const viewBoxOrigin = (box, verticalUp = false) => !verticalUp
-	? [box[0], box[1]]
-	: [box[0], -box[1] - box[3]];
+export const viewBoxOrigin = (box, verticalUp = false) =>
+	!verticalUp ? [box[0], box[1]] : [box[0], -box[1] - box[3]];
 /**
  *
  */
@@ -42,13 +47,20 @@ export const graphToMatrix2 = (graph = {}, verticalUp = false) => {
 	}
 	// degenerate vertices
 	const vmax = Math.max(box.span[0], box.span[1]);
-	const padding = box.span.map(s => (s - vmax) / 2);
-	if (vmax < 1e-6 || !isFinite(box.min[0]) || !isFinite(box.min[1])
-		|| !isFinite(box.span[0]) || !isFinite(box.span[1])) {
+	const padding = box.span.map((s) => (s - vmax) / 2);
+	if (
+		vmax < 1e-6 ||
+		!isFinite(box.min[0]) ||
+		!isFinite(box.min[1]) ||
+		!isFinite(box.span[0]) ||
+		!isFinite(box.span[1])
+	) {
 		return verticalUp ? [1, 0, 0, 1, 0, -1] : [...identity2x3];
 	}
-	const translation = [0, 1].map(i => box.min[i] + padding[i]);
-	if (verticalUp) { translation[1] = -box.max[1] + padding[1]; }
+	const translation = [0, 1].map((i) => box.min[i] + padding[i]);
+	if (verticalUp) {
+		translation[1] = -box.max[1] + padding[1];
+	}
 	return [vmax, 0, 0, vmax, translation[0], translation[1]];
 };
 /**
@@ -59,7 +71,9 @@ export const graphToMatrix2 = (graph = {}, verticalUp = false) => {
  * out of this point (multiply by the inverse of ModelMatrix).
  */
 export const getScreenPoint = (point, modelMatrix) => {
-	if (point === undefined) { return undefined; }
+	if (point === undefined) {
+		return undefined;
+	}
 	const inverseModelMatrix = invertMatrix2(modelMatrix);
 	return inverseModelMatrix === undefined
 		? point

@@ -66,13 +66,26 @@ import { UpdateFrame } from "../../stores/Model.js";
 // 	// }));
 // };
 
-const pleat = (inputGraph, edgeA, edgeB, count, assignments = ["F"], alt = false) => {
+const pleat = (
+	inputGraph,
+	edgeA,
+	edgeB,
+	count,
+	assignments = ["F"],
+	alt = false,
+) => {
 	const graph = {};
-	if (edgeA === undefined || edgeB === undefined) { return graph; }
+	if (edgeA === undefined || edgeB === undefined) {
+		return graph;
+	}
 	const result = Pleat(inputGraph, edgeA, edgeB, count);
 	let group = alt ? 1 : 0;
-	if (group === 0 && !result[0].length && result[1].length) { group = 1; }
-	if (group === 1 && result[0].length && !result[1].length) { group = 0; }
+	if (group === 0 && !result[0].length && result[1].length) {
+		group = 1;
+	}
+	if (group === 1 && result[0].length && !result[1].length) {
+		group = 0;
+	}
 	// if (result[0].length && !result[1].length) { group = 0; }
 	// if (!result[0].length && result[1].length) { group = 1; }
 	result[group].forEach(([coords0, coords1], i) => {

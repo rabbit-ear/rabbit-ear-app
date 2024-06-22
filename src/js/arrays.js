@@ -7,8 +7,10 @@
  */
 export const assignLists = (a, b) => {
 	const hash = {};
-	a.forEach(value => { hash[value] = true; });
-	b.filter(value => !hash[value]).forEach(value => a.push(value));
+	a.forEach((value) => {
+		hash[value] = true;
+	});
+	b.filter((value) => !hash[value]).forEach((value) => a.push(value));
 	return a;
 };
 /**
@@ -26,5 +28,5 @@ export const zipArrays = (a, b) => {
 /**
  *
  */
-export const arrayIntersection = (a = [], b = []) => a
-	.filter(value => b.includes(value));
+export const arrayIntersection = (a = [], b = []) =>
+	a.filter((value) => b.includes(value));

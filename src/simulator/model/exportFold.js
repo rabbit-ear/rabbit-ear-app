@@ -21,7 +21,12 @@
  * @param {object} fold a FOLD object, the original one loaded into the app.
  * @param {object} model the OrigamiSimulator Model object
  */
-const exportFold = (model, foldUnmodified, foldTriangulated, { triangulated, angles } = {}) => {
+const exportFold = (
+	model,
+	foldUnmodified,
+	foldTriangulated,
+	{ triangulated, angles } = {},
+) => {
 	const verticesMatch = foldUnmodified.length === model.positions.length / 3;
 	if (!verticesMatch) {
 		if (triangulated !== undefined) {
@@ -31,7 +36,8 @@ const exportFold = (model, foldUnmodified, foldTriangulated, { triangulated, ang
 	}
 	// shallow copy is good enough for this purpose
 	const FOLD = triangulated ? { ...foldTriangulated } : { ...foldUnmodified };
-	FOLD.file_creator = "Origami Simulator: http://git.amandaghassaei.com/OrigamiSimulator/";
+	FOLD.file_creator =
+		"Origami Simulator: http://git.amandaghassaei.com/OrigamiSimulator/";
 	FOLD.file_classes = ["singleModel"];
 	FOLD.frame_classes = ["foldedForm"];
 	FOLD.frame_attributes = ["3D"];

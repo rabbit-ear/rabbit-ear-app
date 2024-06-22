@@ -19,10 +19,12 @@ addEventListener("message", ({ data }) => {
 	try {
 		// fail 1: this fires when an empty graph is supplied,
 		// as happens on boot before a frame has been initialized.
-		if (!graph
-			|| !graph.vertices_coords
-			|| !graph.edges_vertices
-			|| !graph.faces_vertices) {
+		if (
+			!graph ||
+			!graph.vertices_coords ||
+			!graph.edges_vertices ||
+			!graph.faces_vertices
+		) {
 			postMessage({ hash, error: "empty graph" });
 			return;
 		}
@@ -49,16 +51,16 @@ addEventListener("message", ({ data }) => {
 // addEventListener("error", ({ error }) => (
 // 	postMessage({ error, hash: cachedHash })
 // ));
-addEventListener("error", ({ error }) => (
-	console.warn("orders.worker.js, unhandled error")
-));
+addEventListener("error", ({ error }) =>
+	console.warn("orders.worker.js, unhandled error"),
+);
 
 // haven't seen this one yet. event object is type MessageEvent,
 // https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent
 // but, not sure if the event object has an "error".
-addEventListener("messageerror", () => (
-	console.warn("orders.worker.js, unhandled messageerror")
-));
+addEventListener("messageerror", () =>
+	console.warn("orders.worker.js, unhandled messageerror"),
+);
 
 // ////////////////////////////////////////
 // things I learned:
@@ -68,4 +70,4 @@ addEventListener("messageerror", () => (
 // Test2: no error.
 //
 const Test1 = ({ faces_vertices }) => faces_vertices.length;
-const Test2 = ({ faces_vertices }) => "hi"
+const Test2 = ({ faces_vertices }) => "hi";

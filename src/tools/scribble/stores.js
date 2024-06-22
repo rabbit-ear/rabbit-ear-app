@@ -1,10 +1,5 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
-import {
-	snapOldToPoint,
-} from "../../js/snapOld.js";
+import { writable, derived } from "svelte/store";
+import { snapOldToPoint } from "../../js/snapOld.js";
 import { zipArrays } from "../../js/arrays.js";
 
 export const ScribbleSmooth = writable(true);
@@ -31,10 +26,11 @@ export const Release = writable(undefined);
 
 export const Polyline = derived(
 	[Press, Drags, Release],
-	([$Press, $Drags, $Release]) => [$Press]
-		.concat($Drags)
-		.concat([$Release])
-		.filter(a => a !== undefined),
+	([$Press, $Drags, $Release]) =>
+		[$Press]
+			.concat($Drags)
+			.concat([$Release])
+			.filter((a) => a !== undefined),
 	[],
 );
 
@@ -60,6 +56,8 @@ export const subscribe = () => {
 };
 
 export const unsubscribe = () => {
-	if (unsub) { unsub(); }
+	if (unsub) {
+		unsub();
+	}
 	reset();
 };

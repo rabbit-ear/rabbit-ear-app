@@ -57,9 +57,8 @@ const createProgram = (gl, vertexShader, fragmentShader) => {
  *     script tag.
  * @return {!WebGLShader} A shader.
  */
-const createShaderFromSource = (gl, shaderSource, shaderType) => (
-	compileShader(gl, shaderSource, shaderType)
-);
+const createShaderFromSource = (gl, shaderSource, shaderType) =>
+	compileShader(gl, shaderSource, shaderType);
 /**
  * Creates a program from 2 script tags.
  *
@@ -68,15 +67,31 @@ const createShaderFromSource = (gl, shaderSource, shaderType) => (
  * @param {string} fragmentShaderId The id of the fragment shader script tag.
  * @return {!WebGLProgram} A program
  */
-export const createProgramFromSource = (gl, vertexShaderSrc, fragmentShaderSrc) => {
-	const vertexShader = createShaderFromSource(gl, vertexShaderSrc, gl.VERTEX_SHADER);
-	const fragmentShader = createShaderFromSource(gl, fragmentShaderSrc, gl.FRAGMENT_SHADER);
+export const createProgramFromSource = (
+	gl,
+	vertexShaderSrc,
+	fragmentShaderSrc,
+) => {
+	const vertexShader = createShaderFromSource(
+		gl,
+		vertexShaderSrc,
+		gl.VERTEX_SHADER,
+	);
+	const fragmentShader = createShaderFromSource(
+		gl,
+		fragmentShaderSrc,
+		gl.FRAGMENT_SHADER,
+	);
 	return createProgram(gl, vertexShader, fragmentShader);
 };
 
 export const loadVertexData = (gl, program) => {
 	gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+	gl.bufferData(
+		gl.ARRAY_BUFFER,
+		new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+		gl.STATIC_DRAW,
+	);
 	// look up where the vertex data needs to go.
 	const positionLocation = gl.getAttribLocation(program, "a_position");
 	gl.enableVertexAttribArray(positionLocation);
@@ -91,6 +106,16 @@ export const makeTexture = (gl, width, height, type, data) => {
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, type, data);
+	gl.texImage2D(
+		gl.TEXTURE_2D,
+		0,
+		gl.RGBA,
+		width,
+		height,
+		0,
+		gl.RGBA,
+		type,
+		data,
+	);
 	return texture;
 };

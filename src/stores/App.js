@@ -1,6 +1,4 @@
-import {
-	writable,
-} from "svelte/store";
+import { writable } from "svelte/store";
 
 export const APP_NAME = "Rabbit Ear";
 /**
@@ -27,39 +25,46 @@ export const EpsilonFactor = writable(1e-3);
 export const VerticalUp = writable(
 	localStorage.getItem("VerticalUp") !== null
 		? localStorage.getItem("VerticalUp") === "true"
-		: true);
+		: true,
+);
 /**
  * @description Show/Hide various things across the app.
  */
 export const ShowGrid = writable(
 	localStorage.getItem("ShowGrid") !== null
 		? localStorage.getItem("ShowGrid") === "true"
-		: true);
+		: true,
+);
 
 export const ShowAxes = writable(
 	localStorage.getItem("ShowAxes") !== null
 		? localStorage.getItem("ShowAxes") === "true"
-		: true);
+		: true,
+);
 
 export const ShowIndices = writable(
 	localStorage.getItem("ShowIndices") !== null
 		? localStorage.getItem("ShowIndices") === "true"
-		: false);
+		: false,
+);
 
 export const ShowFlatFoldableIssues = writable(
 	localStorage.getItem("ShowFlatFoldableIssues") !== null
 		? localStorage.getItem("ShowFlatFoldableIssues") === "true"
-		: true);
+		: true,
+);
 
 export const ShowCodeEditor = writable(
 	localStorage.getItem("ShowCodeEditor") !== null
 		? localStorage.getItem("ShowCodeEditor") === "true"
-		: false);
+		: false,
+);
 
 export const ShowFrames = writable(
 	localStorage.getItem("ShowFrames") !== null
 		? localStorage.getItem("ShowFrames") === "true"
-		: true);
+		: true,
+);
 
 /**
  * @description A few various commands have the effect of creating
@@ -67,20 +72,22 @@ export const ShowFrames = writable(
  * take on this assignment.
  */
 export const NewEdgeAssignment = writable(
-	localStorage.getItem("NewEdgeAssignment") || "F");
+	localStorage.getItem("NewEdgeAssignment") || "F",
+);
 
-export const GridType = writable(
-	localStorage.getItem("GridType") || "square");
+export const GridType = writable(localStorage.getItem("GridType") || "square");
 
 export const AutoSolveLayers = writable(
 	localStorage.getItem("AutoSolveLayers") !== null
 		? localStorage.getItem("AutoSolveLayers") === "true"
-		: true);
+		: true,
+);
 
 export const SolveLayersOnBackground = writable(
 	localStorage.getItem("SolveLayersOnBackground") !== null
 		? localStorage.getItem("SolveLayersOnBackground") === "true"
-		: true);
+		: true,
+);
 
 /**
  * @description DOM element references.
@@ -102,25 +109,30 @@ export const ShowPanelModifiersPanel = writable(false);
 export const ShowPanelModifiersSubPanel = writable(false);
 
 // todo: global-level subscribe. needs unsubscribe
-VerticalUp.subscribe(value => localStorage
-	.setItem("VerticalUp", String(value)));
-ShowGrid.subscribe(value => localStorage
-	.setItem("ShowGrid", String(value)));
-ShowAxes.subscribe(value => localStorage
-	.setItem("ShowAxes", String(value)));
-ShowIndices.subscribe(value => localStorage
-	.setItem("ShowIndices", String(value)));
-ShowFlatFoldableIssues.subscribe(value => localStorage
-	.setItem("ShowFlatFoldableIssues", String(value)));
-ShowCodeEditor.subscribe(value => localStorage
-	.setItem("ShowCodeEditor", String(value)));
-ShowFrames.subscribe(value => localStorage
-	.setItem("ShowFrames", String(value)));
-NewEdgeAssignment.subscribe(value => localStorage
-	.setItem("NewEdgeAssignment", value));
-GridType.subscribe(value => localStorage
-	.setItem("GridType", value));
-AutoSolveLayers.subscribe(value => localStorage
-	.setItem("AutoSolveLayers", value));
-SolveLayersOnBackground.subscribe(value => localStorage
-	.setItem("SolveLayersOnBackground", value));
+VerticalUp.subscribe((value) =>
+	localStorage.setItem("VerticalUp", String(value)),
+);
+ShowGrid.subscribe((value) => localStorage.setItem("ShowGrid", String(value)));
+ShowAxes.subscribe((value) => localStorage.setItem("ShowAxes", String(value)));
+ShowIndices.subscribe((value) =>
+	localStorage.setItem("ShowIndices", String(value)),
+);
+ShowFlatFoldableIssues.subscribe((value) =>
+	localStorage.setItem("ShowFlatFoldableIssues", String(value)),
+);
+ShowCodeEditor.subscribe((value) =>
+	localStorage.setItem("ShowCodeEditor", String(value)),
+);
+ShowFrames.subscribe((value) =>
+	localStorage.setItem("ShowFrames", String(value)),
+);
+NewEdgeAssignment.subscribe((value) =>
+	localStorage.setItem("NewEdgeAssignment", value),
+);
+GridType.subscribe((value) => localStorage.setItem("GridType", value));
+AutoSolveLayers.subscribe((value) =>
+	localStorage.setItem("AutoSolveLayers", value),
+);
+SolveLayersOnBackground.subscribe((value) =>
+	localStorage.setItem("SolveLayersOnBackground", value),
+);

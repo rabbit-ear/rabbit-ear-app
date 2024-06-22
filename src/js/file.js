@@ -1,10 +1,5 @@
-import {
-	appWindow,
-} from "@tauri-apps/api/window";
-import {
-	open,
-	save as tauriSave,
-} from "@tauri-apps/api/dialog";
+import { appWindow } from "@tauri-apps/api/window";
+import { open, save as tauriSave } from "@tauri-apps/api/dialog";
 import {
 	readTextFile,
 	writeTextFile as tauriWriteTextFile,
@@ -31,9 +26,8 @@ import {
  * directory, prefix the OS User's document directory to the file
  * and return the full path.
  */
-export const homeDirectoryFile = async (name) => (
-	await join(await homeDir(), name)
-);
+export const homeDirectoryFile = async (name) =>
+	await join(await homeDir(), name);
 /**
  * @description Pick apart a file path into useful parts
  * @returns {object} object with all string values:
@@ -54,27 +48,27 @@ export const getFilenameParts = async (filePath) => {
 	try {
 		filePath = await resolve(filePath);
 		// filePath = await normalize(filePath);
-	} catch (e) { }
+	} catch (e) {}
 	// get the directory containing the file
 	try {
 		directory = await dirname(filePath);
-	} catch (e) { }
+	} catch (e) {}
 	// get the basename of the file (name + extension), and for now,
 	// set the "name" entry to be this, in the case that the file has no
 	// extension, the following calls might not work.
 	try {
 		base = await basename(filePath);
 		name = base;
-	} catch (e) { }
+	} catch (e) {}
 	// get the extension of the file, the portion after the final "."
 	try {
 		extension = await extname(filePath);
-	} catch (e) { }
+	} catch (e) {}
 	// parse the base and get the name of the file excluding the . and extension
 	try {
 		const basematch = base.match(/(.*)\.[^.]+$/);
 		name = basematch[1];
-	} catch (e) { }
+	} catch (e) {}
 	return { directory, base, name, extension };
 };
 /**
@@ -86,23 +80,26 @@ export const getFilenameParts = async (filePath) => {
 const makeNumberedFilenames = (count, name, extension) => {
 	const places = count.toString().length;
 	const zeros = Array(places).fill(0).join("");
-	return Array
-		.from(Array(count))
+	return Array.from(Array(count))
 		.map((_, i) => `${zeros}${i}`)
-		.map(str => str.slice(str.length - places, str.length))
-		.map(num => `${name}-${num}.${extension}`);
+		.map((str) => str.slice(str.length - places, str.length))
+		.map((num) => `${name}-${num}.${extension}`);
 };
 /**
  *
  */
 export const writeTextFile = async (string, ext = "svg") => {
 	const filePath = await tauriSave({
-		filters: [{
-			name: "image",
-			extensions: [ext],
-		}]
+		filters: [
+			{
+				name: "image",
+				extensions: [ext],
+			},
+		],
 	});
-	if (filePath == null) { return; }
+	if (filePath == null) {
+		return;
+	}
 	const { directory, name } = await getFilenameParts(filePath);
 	const joined = await join(directory, `${name}.${ext}`);
 	tauriWriteTextFile(joined, string);
@@ -112,12 +109,16 @@ export const writeTextFile = async (string, ext = "svg") => {
  */
 export const writeBinaryFile = async (binaryFile, ext = "png") => {
 	const filePath = await tauriSave({
-		filters: [{
-			name: "image",
-			extensions: [ext],
-		}]
+		filters: [
+			{
+				name: "image",
+				extensions: [ext],
+			},
+		],
 	});
-	if (filePath == null) { return; }
+	if (filePath == null) {
+		return;
+	}
 	const { directory, name } = await getFilenameParts(filePath);
 	const joined = await join(directory, `${name}.${ext}`);
 	tauriWriteBinaryFile(joined, binaryFile);
@@ -127,36 +128,46 @@ export const writeBinaryFile = async (binaryFile, ext = "png") => {
  */
 export const writeTextFiles = async (textStrings = [], ext = "svg") => {
 	const filePath = await tauriSave({
-		filters: [{
-			name: "image",
-			extensions: [ext],
-		}]
+		filters: [
+			{
+				name: "image",
+				extensions: [ext],
+			},
+		],
 	});
-	if (filePath == null) { return; }
+	if (filePath == null) {
+		return;
+	}
 	const { directory, name, extension } = await getFilenameParts(filePath);
-	makeNumberedFilenames(textStrings.length, name, extension)
-		.map(async (numberedName, i) => {
+	makeNumberedFilenames(textStrings.length, name, extension).map(
+		async (numberedName, i) => {
 			const outPath = await join(directory, numberedName);
 			tauriWriteTextFile(outPath, textStrings[i]);
-		});
+		},
+	);
 };
 /**
  *
  */
 export const writeBinaryFiles = async (binaryFiles = [], ext = "png") => {
 	const filePath = await tauriSave({
-		filters: [{
-			name: "image",
-			extensions: [ext],
-		}]
+		filters: [
+			{
+				name: "image",
+				extensions: [ext],
+			},
+		],
 	});
-	if (filePath == null) { return; }
+	if (filePath == null) {
+		return;
+	}
 	const { directory, name, extension } = await getFilenameParts(filePath);
-	makeNumberedFilenames(binaryFiles.length, name, extension)
-		.map(async (numberedName, i) => {
+	makeNumberedFilenames(binaryFiles.length, name, extension).map(
+		async (numberedName, i) => {
 			const outPath = await join(directory, numberedName);
 			tauriWriteBinaryFile(outPath, binaryFiles[i]);
-		});
+		},
+	);
 };
 /**
  *
@@ -164,16 +175,18 @@ export const writeBinaryFiles = async (binaryFiles = [], ext = "png") => {
 export const openFile = async () => {
 	const selected = await open({
 		multiple: false,
-		filters: [{
-			name: "FOLD",
-			extensions: ["fold"]
-		}]
+		filters: [
+			{
+				name: "FOLD",
+				extensions: ["fold"],
+			},
+		],
 	});
-	if (selected == null) { return; }
+	if (selected == null) {
+		return;
+	}
 	// todo: hardcoded ignoring more than 1 file
-	const filePath = Array.isArray(selected)
-		? selected[0]
-		: selected;
+	const filePath = Array.isArray(selected) ? selected[0] : selected;
 	// console.log("filePath", filePath);
 	const contents = await readTextFile(filePath);
 	try {
@@ -196,15 +209,20 @@ export const save = async (contents, filePath) => {
  */
 export const saveAs = async (contents, targetFilePath) => {
 	const { directory: defaultPath } = await getFilenameParts(targetFilePath);
-	const filters = [{
-		name: "FOLD",
-		extensions: ["fold"],
-	}];
-	const options = !targetFilePath || !defaultPath || defaultPath === ""
-		? { filters }
-		: { filters, defaultPath };
+	const filters = [
+		{
+			name: "FOLD",
+			extensions: ["fold"],
+		},
+	];
+	const options =
+		!targetFilePath || !defaultPath || defaultPath === ""
+			? { filters }
+			: { filters, defaultPath };
 	const filePath = await tauriSave(options);
-	if (filePath == null) { return; }
+	if (filePath == null) {
+		return;
+	}
 	await tauriWriteTextFile(filePath, contents);
 	FilePath.set(filePath);
 	FileModified.set(false);
@@ -216,16 +234,18 @@ export const importFile = async () => {
 	// Open a selection dialog for image files
 	const selected = await open({
 		multiple: false,
-		filters: [{
-			name: "image",
-			extensions: ["svg", "obj", "opx", "cp"],
-		}]
+		filters: [
+			{
+				name: "image",
+				extensions: ["svg", "obj", "opx", "cp"],
+			},
+		],
 	});
-	if (selected == null) { return; }
+	if (selected == null) {
+		return;
+	}
 	// todo: hardcoded ignoring more than 1 file
-	const filePath = Array.isArray(selected)
-		? selected[0]
-		: selected;
+	const filePath = Array.isArray(selected) ? selected[0] : selected;
 	const contents = await readTextFile(filePath);
 	LoadFile(contents, filePath);
 };
@@ -234,15 +254,16 @@ export const importFile = async () => {
  */
 appWindow.onFileDropEvent(async (event) => {
 	if (event.payload.type === "hover") {
-
 	} else if (event.payload.type === "drop") {
-		if (!event.payload.paths.length) { return; }
+		if (!event.payload.paths.length) {
+			return;
+		}
 		const filePath = event.payload.paths[0];
 		try {
 			// todo: hardcoded ignoring more than 1 file
 			const contents = await readTextFile(filePath);
 			LoadFile(contents, filePath);
-		} catch(error) {
+		} catch (error) {
 			const { name, extension } = await getFilenameParts(filePath);
 			// alert();
 			dialogError(`Can't load ${extension} files`);

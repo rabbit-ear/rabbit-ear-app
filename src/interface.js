@@ -4,16 +4,8 @@ import { ask, confirm, message } from "@tauri-apps/api/dialog";
 import { exists } from "@tauri-apps/api/fs";
 import { exit } from "@tauri-apps/api/process";
 import { get } from "svelte/store";
-import {
-	execute,
-	executeCommand,
-} from "./kernel/execute.js";
-import {
-	openFile,
-	save,
-	saveAs,
-	importFile,
-} from "./js/file.js";
+import { execute, executeCommand } from "./kernel/execute.js";
+import { openFile, save, saveAs, importFile } from "./js/file.js";
 import {
 	VerticalUp,
 	GridType,
@@ -26,9 +18,7 @@ import {
 	DialogNewFrame,
 	DialogExportAs,
 } from "./stores/App.js";
-import {
-	FoldedStaticOrSimulator,
-} from "./stores/Renderer.js";
+import { FoldedStaticOrSimulator } from "./stores/Renderer.js";
 import {
 	NewFile,
 	FilePath,
@@ -61,11 +51,14 @@ const timeLimitApp = async () => {
 	// expire june 1, 2024
 	if (nowDate > date2024_09) {
 		setTimeout(exit, 60000);
-		await message("download the latest version at:\n\nhttps://github.com/rabbit-ear/rabbit-ear/releases/\n\nDon't worry, it's still 100% free.", {
-			title: "App Expired September 1st 2024",
-			type: "warning",
-			okLabel: "Quit",
-		});
+		await message(
+			"download the latest version at:\n\nhttps://github.com/rabbit-ear/rabbit-ear/releases/\n\nDon't worry, it's still 100% free.",
+			{
+				title: "App Expired September 1st 2024",
+				type: "warning",
+				okLabel: "Quit",
+			},
+		);
 		exit();
 	}
 };
@@ -90,9 +83,14 @@ window.edit = {};
 window.store.set = (name, value) => {
 	console.log("setting", name, value);
 	switch (name) {
-	case "NewEdgeAssignment": NewEdgeAssignment.set(value); break;
-	case "GridType": GridType.set(value); break;
-	default: break;
+		case "NewEdgeAssignment":
+			NewEdgeAssignment.set(value);
+			break;
+		case "GridType":
+			GridType.set(value);
+			break;
+		default:
+			break;
 	}
 };
 
@@ -102,17 +100,39 @@ window.store.set = (name, value) => {
 window.store.toggle = (name) => {
 	let store;
 	switch (name) {
-	case "ShowFrames": store = ShowFrames; break;
-	case "ShowIndices": store = ShowIndices; break;
-	case "VerticalUp": store = VerticalUp; break;
-	case "ShowGrid": store = ShowGrid; break;
-	case "ShowAxes": store = ShowAxes; break;
-	case "ShowIndices": store = ShowIndices; break;
-	case "ShowFlatFoldableIssues": store = ShowFlatFoldableIssues; break;
-	case "ShowCodeEditor": store = ShowCodeEditor; break;
-	case "ShowFrames": store = ShowFrames; break;
-	case "FoldedStaticOrSimulator": store = FoldedStaticOrSimulator; break;
-	default: console.log("store not found"); return false;
+		case "ShowFrames":
+			store = ShowFrames;
+			break;
+		case "ShowIndices":
+			store = ShowIndices;
+			break;
+		case "VerticalUp":
+			store = VerticalUp;
+			break;
+		case "ShowGrid":
+			store = ShowGrid;
+			break;
+		case "ShowAxes":
+			store = ShowAxes;
+			break;
+		case "ShowIndices":
+			store = ShowIndices;
+			break;
+		case "ShowFlatFoldableIssues":
+			store = ShowFlatFoldableIssues;
+			break;
+		case "ShowCodeEditor":
+			store = ShowCodeEditor;
+			break;
+		case "ShowFrames":
+			store = ShowFrames;
+			break;
+		case "FoldedStaticOrSimulator":
+			store = FoldedStaticOrSimulator;
+			break;
+		default:
+			console.log("store not found");
+			return false;
 	}
 	// console.log("toggle", name, store);
 	const value = !get(store);
@@ -124,7 +144,9 @@ window.store.toggle = (name) => {
 // prevent closing before saving the file, 2 ways: "Quit menu" or red/X button
 
 const unlisten = appWindow.onCloseRequested(async (event) => {
-	if (!get(FileModified)) { return; }
+	if (!get(FileModified)) {
+		return;
+	}
 	const yesQuit = await confirm("Quit without saving?", {
 		title: "Rabbit Ear",
 		type: "warning",
@@ -153,7 +175,7 @@ window.dialog.quit = async () => {
 	} else {
 		await exit(0);
 	}
-}
+};
 
 // Dialogs for creating new files/frames, importing/exporting files
 
@@ -166,7 +188,7 @@ window.dialog.newFile = async () => {
 		cancelLabel: "Cancel",
 	});
 	if (confirmNewFile) {
-		NewFile()
+		NewFile();
 		get(DialogNewFrame).showModal();
 	}
 };
@@ -198,14 +220,13 @@ window.fs.save = async () => {
 	if (!filePath) {
 		return saveAs(JSON.stringify(GetCurrentFOLDFile()));
 	}
-	return await exists(filePath)
+	return (await exists(filePath))
 		? save(JSON.stringify(GetCurrentFOLDFile()), filePath)
 		: saveAs(JSON.stringify(GetCurrentFOLDFile()), filePath);
 };
 
-window.fs.saveAs = () => (
-	saveAs(JSON.stringify(GetCurrentFOLDFile()), get(FilePath))
-);
+window.fs.saveAs = () =>
+	saveAs(JSON.stringify(GetCurrentFOLDFile()), get(FilePath));
 
 window.edit.copy = () => {
 	console.log("window.edit.copy");

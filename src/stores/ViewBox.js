@@ -1,8 +1,4 @@
-import {
-	get,
-	writable,
-	derived,
-} from "svelte/store";
+import { get, writable, derived } from "svelte/store";
 import {
 	identity2x3,
 	invertMatrix2,
@@ -120,17 +116,15 @@ export const ViewMatrixFolded = derived(
  */
 export const ModelViewMatrixCP = derived(
 	[ModelMatrixCP, ViewMatrixCP],
-	([$ModelMatrixCP, $ViewMatrixCP]) => (
-		multiplyMatrices2($ModelMatrixCP, $ViewMatrixCP)
-	),
+	([$ModelMatrixCP, $ViewMatrixCP]) =>
+		multiplyMatrices2($ModelMatrixCP, $ViewMatrixCP),
 	[...Identity2x3],
 );
 
 export const ModelViewMatrixFolded = derived(
 	[ModelMatrixFolded, ViewMatrixFolded],
-	([$ModelMatrixFolded, $ViewMatrixFolded]) => (
-		multiplyMatrices2($ModelMatrixFolded, $ViewMatrixFolded)
-	),
+	([$ModelMatrixFolded, $ViewMatrixFolded]) =>
+		multiplyMatrices2($ModelMatrixFolded, $ViewMatrixFolded),
 	[...Identity2x3],
 );
 /**

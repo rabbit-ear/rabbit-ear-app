@@ -6,6 +6,6 @@ export const kawasaki = (vertex) => {
 	const graph = get(CreasePattern);
 	const origin = graph.vertices_coords[vertex];
 	return kawasakiSolutions(graph, vertex)
-		.filter(a => a !== undefined)
-		.map(vector => ({ origin, vector }));
+		.filter((a) => a !== undefined)
+		.map((vector) => ({ origin, vector }));
 };

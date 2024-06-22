@@ -1,10 +1,6 @@
 import { appWindow } from "@tauri-apps/api/window";
 import { exists } from "@tauri-apps/api/fs";
-import {
-	get,
-	writable,
-	derived,
-} from "svelte/store";
+import { get, writable, derived } from "svelte/store";
 import { square } from "rabbit-ear/fold/primitives.js";
 import { objToFold } from "rabbit-ear/convert/objToFold.js";
 import { opxToFold } from "rabbit-ear/convert/opxToFold.js";
@@ -21,16 +17,10 @@ import {
 	IsolatedFrames,
 	IsolatedFrame,
 } from "./Model.js";
-import {
-	getFilenameParts,
-	homeDirectoryFile,
-} from "../js/file.js";
+import { getFilenameParts, homeDirectoryFile } from "../js/file.js";
 import { shortestEdgeLength } from "../js/graph.js";
 import { dialogError } from "../js/dialog.js";
-import {
-	APP_NAME,
-	DialogImportFile,
-} from "./App.js";
+import { APP_NAME, DialogImportFile } from "./App.js";
 /**
  * @description the default file name for a new file
  */
@@ -49,8 +39,7 @@ export const OnBootFOLD = writable(
 );
 
 // todo: top level subscribe has no unsubscribe call.
-OnBootFOLD.subscribe(value => localStorage.setItem("OnBootFOLD", value));
-
+OnBootFOLD.subscribe((value) => localStorage.setItem("OnBootFOLD", value));
 
 // This doesn't work in the way I expected, Svelte derived stores with
 // async values. This one time get() will get the current value (previous),
@@ -109,12 +98,13 @@ OnFileNameChange.subscribe(() => {});
 export const ImportedFile = writable({});
 
 const makeAssignments = (segments) => {
-	const edgesStroke = segments.map(el => el.stroke);
-	const strokes = Array.from(new Set(edgesStroke))
-		.filter(el => typeof el === "string");
+	const edgesStroke = segments.map((el) => el.stroke);
+	const strokes = Array.from(new Set(edgesStroke)).filter(
+		(el) => typeof el === "string",
+	);
 	const assignments = {};
-	strokes.forEach(stroke => {
-		assignments[stroke] = rgbToAssignment(...parseColorToRgb(stroke))
+	strokes.forEach((stroke) => {
+		assignments[stroke] = rgbToAssignment(...parseColorToRgb(stroke));
 	});
 	return assignments;
 };
@@ -151,27 +141,33 @@ export const ImportedFileDefaultOptions = derived(
 		let options = DEFAULT_OPTIONS();
 		try {
 			switch ($ImportedFile.extension.toLowerCase()) {
-			case "fold": break;
-			case "obj": break;
-			case "opx":
-				const opxFold = opxToFold($ImportedFile.contents);
-				options = {
-					epsilon: shortestEdgeLength(opxFold) / 24,
-					boundingBox: boundingBox(opxFold),
-					invertVertical: false,
-				};
-				break;
-			case "svg":
-				const svgFold = svgToFold($ImportedFile.contents);
-				const svg = xmlStringToElement($ImportedFile.contents, "image/svg+xml");
-				options = {
-					epsilon: shortestEdgeLength(svgFold) / 24,
-					boundingBox: boundingBox(svgFold),
-					assignments: makeAssignments(svgSegments(svg)),
-					invertVertical: false,
-				};
-				break;
-			default: break;
+				case "fold":
+					break;
+				case "obj":
+					break;
+				case "opx":
+					const opxFold = opxToFold($ImportedFile.contents);
+					options = {
+						epsilon: shortestEdgeLength(opxFold) / 24,
+						boundingBox: boundingBox(opxFold),
+						invertVertical: false,
+					};
+					break;
+				case "svg":
+					const svgFold = svgToFold($ImportedFile.contents);
+					const svg = xmlStringToElement(
+						$ImportedFile.contents,
+						"image/svg+xml",
+					);
+					options = {
+						epsilon: shortestEdgeLength(svgFold) / 24,
+						boundingBox: boundingBox(svgFold),
+						assignments: makeAssignments(svgSegments(svg)),
+						invertVertical: false,
+					};
+					break;
+				default:
+					break;
 			}
 		} catch (error) {
 			// todo: if the file causes an error, we need to report it.
@@ -194,18 +190,24 @@ export const ImportedFileFOLDPreview = derived(
 	[ImportedFile, ImportedFileOptions, ImportedFileShowPreview],
 	([$File, $Options, $ImportedFileShowPreview]) => {
 		// console.log("ImportedFileFOLDPreview");
-		if (!$ImportedFileShowPreview) { return {}; }
+		if (!$ImportedFileShowPreview) {
+			return {};
+		}
 		try {
 			switch ($File.extension.toLowerCase()) {
-			case "opx": return opxToFold($File.contents, $Options);
-			case "obj": return objToFold($File.contents, $Options);
-			case "svg": return svgToFold($File.contents, $Options);
-			default: return {};
+				case "opx":
+					return opxToFold($File.contents, $Options);
+				case "obj":
+					return objToFold($File.contents, $Options);
+				case "svg":
+					return svgToFold($File.contents, $Options);
+				default:
+					return {};
 			}
 		} catch (error) {}
 		return {};
 	},
-	({}),
+	{},
 );
 /**
  * @description This is a preview (FOLD object) using the default
@@ -215,19 +217,25 @@ export const ImportedFileFOLDPreview = derived(
 export const ImportedFileDefaultFOLDPreview = derived(
 	[ImportedFile, ImportedFileDefaultOptions, ImportedFileShowPreview],
 	([$File, $Options, $ImportedFileShowPreview]) => {
-		if (!$ImportedFileShowPreview) { return {}; }
+		if (!$ImportedFileShowPreview) {
+			return {};
+		}
 		// console.log("ImportedFileDefaultFOLDPreview");
 		try {
 			switch ($File.extension.toLowerCase()) {
-			case "opx": return opxToFold($File.contents, $Options);
-			case "obj": return objToFold($File.contents, $Options);
-			case "svg": return svgToFold($File.contents, $Options);
-			default: return {};
+				case "opx":
+					return opxToFold($File.contents, $Options);
+				case "obj":
+					return objToFold($File.contents, $Options);
+				case "svg":
+					return svgToFold($File.contents, $Options);
+				default:
+					return {};
 			}
 		} catch (error) {}
 		return {};
 	},
-	({}),
+	{},
 );
 /**
  * @description Load a new file. Unbind any currently opened file, reset the
@@ -279,12 +287,13 @@ export const LoadFile = async (contents, filePath) => {
 	const { name, extension } = await getFilenameParts(filePath);
 	// todo: files without extension, or "" extension.
 	switch (extension.toLowerCase()) {
-	case "":
-	case "fold": return LoadFOLDFile(contents, filePath);
-	default:
-		ImportedFile.set({ name, extension, contents });
-		get(DialogImportFile).showModal();
-		break;
+		case "":
+		case "fold":
+			return LoadFOLDFile(contents, filePath);
+		default:
+			ImportedFile.set({ name, extension, contents });
+			get(DialogImportFile).showModal();
+			break;
 	}
 };
 /**
@@ -330,19 +339,17 @@ export const CurrentFrameToJPG = () => {
  */
 export const FramesToSVGs = () => {
 	const options = { string: true };
-	return get(IsolatedFrames).map(fold => foldToSvg(fold, options));
+	return get(IsolatedFrames).map((fold) => foldToSvg(fold, options));
 };
 /**
  *
  */
 export const FramesToPNGs = () => {
-	return get(IsolatedFrames)
-		.map(fold => new Uint8Array([]));
+	return get(IsolatedFrames).map((fold) => new Uint8Array([]));
 };
 /**
  *
  */
 export const FramesToJPGs = () => {
-	return get(IsolatedFrames)
-		.map(fold => new Uint8Array([]));
+	return get(IsolatedFrames).map((fold) => new Uint8Array([]));
 };

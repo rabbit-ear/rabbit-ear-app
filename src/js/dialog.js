@@ -6,21 +6,33 @@ import { message } from "@tauri-apps/api/dialog";
 
 export const dialogMessage = async (text, title, okLabel) => {
 	const options = { type: "info" };
-	if (title) { options.title = title; }
-	if (okLabel) { options.okLabel = okLabel; }
+	if (title) {
+		options.title = title;
+	}
+	if (okLabel) {
+		options.okLabel = okLabel;
+	}
 	await message(text, options);
 };
 
 export const dialogWarning = async (text, title, okLabel) => {
 	const options = { type: "warning" };
-	if (title) { options.title = title; }
-	if (okLabel) { options.okLabel = okLabel; }
+	if (title) {
+		options.title = title;
+	}
+	if (okLabel) {
+		options.okLabel = okLabel;
+	}
 	await message(text, options);
 };
 
 export const dialogError = async (text, title, okLabel) => {
 	const options = { type: "error" };
-	if (title) { options.title = title; }
-	if (okLabel) { options.okLabel = okLabel; }
+	if (title) {
+		options.title = title;
+	}
+	if (okLabel) {
+		options.okLabel = okLabel;
+	}
 	await message(text, options);
 };

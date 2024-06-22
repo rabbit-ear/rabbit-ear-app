@@ -1,15 +1,9 @@
-import {
-	cpPointerEvent,
-	foldedPointerEvent,
-} from "./pointerEvent.js";
+import { cpPointerEvent, foldedPointerEvent } from "./pointerEvent.js";
 import panel from "./panel.svelte";
 import icon from "./icon.svelte";
 import CPSVGLayer from "./CPSVGLayer.svelte";
 import FoldedSVGLayer from "./FoldedSVGLayer.svelte";
-import {
-	subscribe,
-	unsubscribe,
-} from "./stores.js";
+import { subscribe, unsubscribe } from "./stores.js";
 
 const marks = {
 	key: "marks",

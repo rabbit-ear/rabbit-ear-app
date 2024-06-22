@@ -9,8 +9,8 @@ export const loadFileDialog = (event) => {
 	event.preventDefault();
 	// file reader and its callbacks
 	const reader = new FileReader();
-	reader.onerror = error => console.warn("FileReader error", error);
-	reader.onabort = abort => console.warn("FileReader abort", abort);
+	reader.onerror = (error) => console.warn("FileReader error", error);
+	reader.onabort = (abort) => console.warn("FileReader abort", abort);
 	reader.onload = (e) => {
 		try {
 			// todo: does "filename" contain the path as well? it should.

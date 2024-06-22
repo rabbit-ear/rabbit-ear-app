@@ -7,7 +7,7 @@ import { parseToTokens } from "../general.js";
 import { ReflectionLines } from "../../tools/symmetry/stores.js";
 
 const repeatableMethods = {
-	"segment": true,
+	segment: true,
 };
 
 // const inject = (js) => {
@@ -32,39 +32,42 @@ const repeatableMethods = {
 
 // segment([0.3478008508682251,0.2496945858001709], [0.6468234658241272,0.4983201324939728])
 
-const applicableMethod = (tokens) => tokens
-	.filter(el => el.type === "IdentifierName")
-	.map(el => el.value)
-	.filter(value => repeatableMethods[value])
-	.shift();
+const applicableMethod = (tokens) =>
+	tokens
+		.filter((el) => el.type === "IdentifierName")
+		.map((el) => el.value)
+		.filter((value) => repeatableMethods[value])
+		.shift();
 
 const copyMethod = (commandName, tokens) => {
 	const paramTokens = tokens
-		.filter(el => el.type !== "IdentifierName")
-		.filter(el => el.type !== "WhiteSpace");
+		.filter((el) => el.type !== "IdentifierName")
+		.filter((el) => el.type !== "WhiteSpace");
 	// we removed the function name, now remove the () parenthesis.
 	paramTokens.shift();
 	paramTokens.pop();
-	const paramsString = `[${paramTokens.map(el => el.value).join("")}]`;
+	const paramsString = `[${paramTokens.map((el) => el.value).join("")}]`;
 	const params = JSON.parse(paramsString);
 	// console.log("paramTokens", paramTokens);
 	// console.log("paramsString", paramsString);
 	// console.log("params", params);
 	switch (commandName) {
-	case "segment":
-		const reflections = get(ReflectionLines);
-		const transforms = reflections
-			.map(({ vector, origin }) => makeMatrix2Reflect(vector, origin));
-		const points = params[0];
-		const point0 = points[0];
-		const point1 = points[1];
-		const newSegments = transforms
-			.map(matrix => points.map(p => multiplyMatrix2Vector2(matrix, p)));
-		return newSegments
-			.map(segment => segment
-				.map(point => `[${point.join(",")}]`)
-				.join(", "))
-			.map(coords => `segment([${coords}])`);
+		case "segment":
+			const reflections = get(ReflectionLines);
+			const transforms = reflections.map(({ vector, origin }) =>
+				makeMatrix2Reflect(vector, origin),
+			);
+			const points = params[0];
+			const point0 = points[0];
+			const point1 = points[1];
+			const newSegments = transforms.map((matrix) =>
+				points.map((p) => multiplyMatrix2Vector2(matrix, p)),
+			);
+			return newSegments
+				.map((segment) =>
+					segment.map((point) => `[${point.join(",")}]`).join(", "),
+				)
+				.map((coords) => `segment([${coords}])`);
 	}
 	// const tokens = parseToTokens(command);
 	// console.log(tokens);
@@ -75,7 +78,9 @@ const execute = (commands = []) => {
 	const commandsTokens = commands.map(parseToTokens);
 	for (let i = commands.length - 1; i >= 0; i -= 1) {
 		const match = applicableMethod(commandsTokens[i]);
-		if (match === undefined) { continue; }
+		if (match === undefined) {
+			continue;
+		}
 		const clones = copyMethod(match, commandsTokens[i]);
 		commands.splice(i, 0, ...clones);
 	}

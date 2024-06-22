@@ -18,7 +18,10 @@ import { makeEmptyGraph } from "../../js/graph.js";
  */
 const downloadFile = (contents, filename = "origami.fold") => {
 	const element = document.createElement("a");
-	element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(contents));
+	element.setAttribute(
+		"href",
+		"data:text/plain;charset=utf-8," + encodeURIComponent(contents),
+	);
 	element.setAttribute("download", filename);
 	element.style.display = "none";
 	document.body.appendChild(element);
@@ -37,19 +40,18 @@ export const load = (FOLD = {}) => LoadFOLDFile(FOLD);
  * @description Trigger an in-browser downloading of a file to the
  * browser's default download location. Not useful for native app build.
  */
-export const download = (filename) => (
-	downloadFile(JSON.stringify(GetCurrentFOLDFile()), filename)
-);
+export const download = (filename) =>
+	downloadFile(JSON.stringify(GetCurrentFOLDFile()), filename);
 /**
  * @description
  */
 export const exportImage = (format = "svg") => {
 	switch (format) {
-	case "svg":
-		break;
-	case "png":
-		break;
-	default:
-		break;
+		case "svg":
+			break;
+		case "png":
+			break;
+		default:
+			break;
 	}
 };

@@ -44,7 +44,7 @@ Node.prototype.addExternalForce = function (force) {
 };
 
 Node.prototype.getExternalForce = function () {
-	return (!this.externalForce)
+	return !this.externalForce
 		? new THREE.Vector3(0, 0, 0)
 		: this.externalForce.getForce();
 };
@@ -54,7 +54,9 @@ Node.prototype.addCrease = function (crease) {
 };
 
 Node.prototype.removeCrease = function (crease) {
-	if (this.creases === null) { return; }
+	if (this.creases === null) {
+		return;
+	}
 	const index = this.creases.indexOf(crease);
 	if (index >= 0) this.creases.splice(index, 1);
 };
@@ -64,7 +66,9 @@ Node.prototype.addInvCrease = function (crease) {
 };
 
 Node.prototype.removeInvCrease = function (crease) {
-	if (this.invCreases === null) { return; }
+	if (this.invCreases === null) {
+		return;
+	}
 	const index = this.invCreases.indexOf(crease);
 	if (index >= 0) this.invCreases.splice(index, 1);
 };
@@ -74,7 +78,9 @@ Node.prototype.addBeam = function (beam) {
 };
 
 Node.prototype.removeBeam = function (beam) {
-	if (this.beams === null) { return; }
+	if (this.beams === null) {
+		return;
+	}
 	const index = this.beams.indexOf(beam);
 	if (index >= 0) this.beams.splice(index, 1);
 };
@@ -98,7 +104,8 @@ Node.prototype.numCreases = function () {
 	return this.creases.length;
 };
 
-Node.prototype.getIndex = function () { // in nodes array
+Node.prototype.getIndex = function () {
+	// in nodes array
 	return this.index;
 };
 

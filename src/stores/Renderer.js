@@ -1,10 +1,5 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
-import {
-	FoldAnglesAreFlat,
-} from "./ModelCP.js";
+import { writable, derived } from "svelte/store";
+import { FoldAnglesAreFlat } from "./ModelCP.js";
 
 // Would the user like to render the folded form using origami simulator?
 // false: static (svg/webgl), true: simulator
@@ -15,13 +10,13 @@ export const FoldedSVGOrWebGL = writable(false);
 
 export const Folded2DIsPossible = derived(
 	FoldAnglesAreFlat,
-	$FoldAnglesAreFlat => $FoldAnglesAreFlat,
+	($FoldAnglesAreFlat) => $FoldAnglesAreFlat,
 	true,
 );
 
-Folded2DIsPossible.subscribe(possible => !possible
-	? FoldedSVGOrWebGL.set(true)
-	: undefined);
+Folded2DIsPossible.subscribe((possible) =>
+	!possible ? FoldedSVGOrWebGL.set(true) : undefined,
+);
 /**
  * @description Which renderer should we use to render the folded form?
  * The result depends on some properties of the graph as well as requests
@@ -33,9 +28,15 @@ Folded2DIsPossible.subscribe(possible => !possible
 export const FoldedRenderer = derived(
 	[FoldedSVGOrWebGL, FoldedStaticOrSimulator, FoldAnglesAreFlat],
 	([$FoldedSVGOrWebGL, $FoldedStaticOrSimulator, $FoldAnglesAreFlat]) => {
-		if ($FoldedStaticOrSimulator) { return "simulator"; }
-		if ($FoldedSVGOrWebGL) { return "webgl"; }
-		if (!$FoldAnglesAreFlat) { return "webgl"; }
+		if ($FoldedStaticOrSimulator) {
+			return "simulator";
+		}
+		if ($FoldedSVGOrWebGL) {
+			return "webgl";
+		}
+		if (!$FoldAnglesAreFlat) {
+			return "webgl";
+		}
 		return "svg";
 	},
 	"svg",

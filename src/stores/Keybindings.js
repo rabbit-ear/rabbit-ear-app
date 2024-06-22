@@ -2,10 +2,7 @@ import { get } from "svelte/store";
 import { isFrameElementSelected } from "../js/dom.js";
 import { TerminalTextarea } from "./App.js";
 import { Tool } from "./UI.js";
-import {
-	execute,
-	executeCommand,
-} from "../kernel/execute.js";
+import { execute, executeCommand } from "../kernel/execute.js";
 /**
  * @description holding "alt" temporarily turns the pointer device
  * into a camera, allowing the user to pan. Store in here which tool
@@ -26,9 +23,10 @@ let altCameraToolSwap;
 const KeybindingsDown = {
 	// delete
 	8: {
-		0: (event) => isFrameElementSelected()
-			? executeCommand("deleteActiveFrame")
-			: execute("deleteComponents(selected())"),
+		0: (event) =>
+			isFrameElementSelected()
+				? executeCommand("deleteActiveFrame")
+				: execute("deleteComponents(selected())"),
 		// : executeCommand("deleteComponents", get(Selection)),
 	},
 	// shift

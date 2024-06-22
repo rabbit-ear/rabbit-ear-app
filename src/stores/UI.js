@@ -1,6 +1,6 @@
 import { get, writable, derived } from "svelte/store";
 import { assignLists } from "../js/arrays.js";
-import { RulersCP } from "./Ruler.js"
+import { RulersCP } from "./Ruler.js";
 import { ViewportCP } from "./ViewBox.js";
 
 /**
@@ -19,9 +19,7 @@ const UIEpsilonFactor = 0.01;
  */
 export const UIEpsilonCP = derived(
 	ViewportCP,
-	($ViewportCP) => (
-		Math.max($ViewportCP[2], $ViewportCP[3]) * UIEpsilonFactor
-	),
+	($ViewportCP) => Math.max($ViewportCP[2], $ViewportCP[3]) * UIEpsilonFactor,
 	0.05,
 );
 
@@ -68,16 +66,23 @@ export const Tool = writable(undefined);
  * intended to cleanup or initialize Svelte stores which are specific
  * to each tool.
  */
-Tool.set = (newTool) => Tool.update(oldTool => {
-	if (oldTool && oldTool.unsubscribe) { oldTool.unsubscribe(); }
-	resetUI();
-	if (newTool && newTool.subscribe) { newTool.subscribe(); }
-	return newTool;
-});
+Tool.set = (newTool) =>
+	Tool.update((oldTool) => {
+		if (oldTool && oldTool.unsubscribe) {
+			oldTool.unsubscribe();
+		}
+		resetUI();
+		if (newTool && newTool.subscribe) {
+			newTool.subscribe();
+		}
+		return newTool;
+	});
 
-export const emptyComponentObject = () => (
-	{ vertices: [], edges: [], faces: [] }
-);
+export const emptyComponentObject = () => ({
+	vertices: [],
+	edges: [],
+	faces: [],
+});
 
 /**
  * @description Similar to "Select" but different both visually
@@ -91,34 +96,45 @@ export const emptyComponentObject = () => (
  */
 export const Highlight = writable(emptyComponentObject());
 
-Highlight.reset = () => Highlight.set(emptyComponentObject()),
+(Highlight.reset = () => Highlight.set(emptyComponentObject())),
+	(Highlight.addVertices = (verts) =>
+		Highlight.update((obj) => {
+			assignLists(obj.vertices, verts);
+			return obj;
+		}));
 
-Highlight.addVertices = (verts) => Highlight.update(obj => {
-	assignLists(obj.vertices, verts);
-	return obj;
-});
+Highlight.addEdges = (edges) =>
+	Highlight.update((obj) => {
+		assignLists(obj.edges, edges);
+		return obj;
+	});
 
-Highlight.addEdges = (edges) => Highlight.update(obj => {
-	assignLists(obj.edges, edges);
-	return obj;
-});
+Highlight.addFaces = (faces) =>
+	Highlight.update((obj) => {
+		assignLists(obj.faces, faces);
+		return obj;
+	});
 
-Highlight.addFaces = (faces) => Highlight.update(obj => {
-	assignLists(obj.faces, faces);
-	return obj;
-});
+Highlight.setVertices = (vertices) =>
+	Highlight.update((_) => ({
+		vertices,
+		edges: [],
+		faces: [],
+	}));
 
-Highlight.setVertices = (vertices) => Highlight.update(_ => ({
-	vertices, edges: [], faces: [],
-}));
+Highlight.setEdges = (edges) =>
+	Highlight.update((_) => ({
+		vertices: [],
+		edges,
+		faces: [],
+	}));
 
-Highlight.setEdges = (edges) => Highlight.update(_ => ({
-	vertices: [], edges, faces: [],
-}));
-
-Highlight.setFaces = (faces) => Highlight.update(_ => ({
-	vertices: [], edges: [], faces,
-}));
+Highlight.setFaces = (faces) =>
+	Highlight.update((_) => ({
+		vertices: [],
+		edges: [],
+		faces,
+	}));
 
 /**
  * @description This will reset all visual feedback coming from the UI,

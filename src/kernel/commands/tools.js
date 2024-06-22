@@ -14,12 +14,16 @@ import {
 
 export const resetTool = () => {
 	const tool = get(Tool);
-	if (tool && tool.reset) { tool.reset(); }
+	if (tool && tool.reset) {
+		tool.reset();
+	}
 };
 
 export const setTool = (toolName) => {
 	const newTool = Tools[toolName];
-	if (!newTool) { return; }
+	if (!newTool) {
+		return;
+	}
 	Tool.set(newTool);
 };
 
@@ -42,12 +46,14 @@ const AssignAssignLookup = {
 
 export const setToolAssignment = (assignment) => {
 	const tool = get(Tool);
-	if (!tool) { return; }
+	if (!tool) {
+		return;
+	}
 	if (tool.name === "assignment") {
 		if (AssignAssignLookup[assignment]) {
 			AssignType.set(AssignAssignLookup[assignment]);
 		}
 	} else {
-		NewEdgeAssignment.set(assignment.toUpperCase())
+		NewEdgeAssignment.set(assignment.toUpperCase());
 	}
 };

@@ -6,11 +6,8 @@ import earcut from "earcut";
  * @description distance squared between two points, 2D or 3D
  */
 const distSq = (a, b) => {
-	const vector = [
-		b[0] - a[0],
-		b[1] - a[1],
-		(b[2] || 0) - (a[2] || 0)];
-	return (vector[0] ** 2) + (vector[1] ** 2) + (vector[2] ** 2);
+	const vector = [b[0] - a[0], b[1] - a[1], (b[2] || 0) - (a[2] || 0)];
+	return vector[0] ** 2 + vector[1] ** 2 + vector[2] ** 2;
 };
 /**
  * @description Triangulate faces inside a FOLD graph. This will
@@ -42,13 +39,21 @@ const triangulatedFOLD = (fold, is2d = true) => {
 
 		// face is a quad, manually triangulate.
 		if (face.length === 4) {
-			const pts = face.map(f => fold.vertices_coords[f]);
+			const pts = face.map((f) => fold.vertices_coords[f]);
 			// which diagonal is shorter? true: 0-2, false: 1-3
 			const shorter = distSq(pts[0], pts[2]) < distSq(pts[1], pts[3]);
 			const e_v = shorter ? [0, 2] : [1, 3];
-			const f_v = shorter ? [[0, 1, 2], [0, 2, 3]] : [[0, 1, 3], [1, 2, 3]];
-			fold.edges_vertices.push(e_v.map(j => face[j]));
-			triangulated_vertices.push(...f_v.map(f => f.map(j => face[j])));
+			const f_v = shorter
+				? [
+						[0, 1, 2],
+						[0, 2, 3],
+					]
+				: [
+						[0, 1, 3],
+						[1, 2, 3],
+					];
+			fold.edges_vertices.push(e_v.map((j) => face[j]));
+			triangulated_vertices.push(...f_v.map((f) => f.map((j) => face[j])));
 			fold.edges_foldAngle.push(0);
 			fold.edges_assignment.push("J");
 			faces_backmap.push(i, i);
@@ -64,8 +69,9 @@ const triangulatedFOLD = (fold, is2d = true) => {
 		}
 		// create a flat array of all the vertices in this face
 		const dim = is2d ? [0, 1] : [0, 1, 2];
-		const faceVert = fold.faces_vertices[i]
-			.flatMap(v => dim.map(d => fold.vertices_coords[v][d]));
+		const faceVert = fold.faces_vertices[i].flatMap((v) =>
+			dim.map((d) => fold.vertices_coords[v][d]),
+		);
 		// triangulate
 		const triangles = earcut(faceVert, null, is2d ? 2 : 3);
 

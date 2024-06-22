@@ -1,8 +1,4 @@
-import {
-	get,
-	derived,
-	readable,
-} from "svelte/store";
+import { get, derived, readable } from "svelte/store";
 import {
 	makeMatrix2UniformScale,
 	multiplyMatrices2,
@@ -15,10 +11,7 @@ import {
 	ModelMatrixCP,
 	ModelMatrixFolded,
 } from "./ViewBox.js";
-import {
-	Tool,
-	Pointer,
-} from "./UI.js";
+import { Tool, Pointer } from "./UI.js";
 import {
 	SVGFoldedFormPointerEvent,
 	WebGLFoldedFormPointerEvent,
@@ -48,16 +41,18 @@ const AppPointerEvent = readable((eventType, event) => {
  */
 const ToolPointerEventCP = derived(
 	Tool,
-	($Tool) => $Tool && $Tool.cp && $Tool.cp.pointerEvent
-		? $Tool.cp.pointerEvent
-		: () => {},
+	($Tool) =>
+		$Tool && $Tool.cp && $Tool.cp.pointerEvent
+			? $Tool.cp.pointerEvent
+			: () => {},
 	() => {},
 );
 const ToolPointerEventFolded = derived(
 	Tool,
-	($Tool) => $Tool && $Tool.folded && $Tool.folded.pointerEvent
-		? $Tool.folded.pointerEvent
-		: () => {},
+	($Tool) =>
+		$Tool && $Tool.folded && $Tool.folded.pointerEvent
+			? $Tool.folded.pointerEvent
+			: () => {},
 	() => {},
 );
 /**
@@ -67,26 +62,32 @@ const ToolPointerEventFolded = derived(
  */
 export const PointerEventCP = derived(
 	[AppPointerEvent, ToolPointerEventCP],
-	([$AppPointerEvent, $ToolPointerEventCP]) => (eventType, event) => {
-		if ($AppPointerEvent(eventType, event)) { return; }
-		$ToolPointerEventCP(eventType, event);
-	},
+	([$AppPointerEvent, $ToolPointerEventCP]) =>
+		(eventType, event) => {
+			if ($AppPointerEvent(eventType, event)) {
+				return;
+			}
+			$ToolPointerEventCP(eventType, event);
+		},
 	() => {},
 );
 export const PointerEventFolded = derived(
 	[AppPointerEvent, ToolPointerEventFolded],
-	([$AppPointerEvent, $ToolPointerEventFolded]) => (eventType, event) => {
-		if ($AppPointerEvent(eventType, event)) { return; }
-		$ToolPointerEventFolded(eventType, event);
-		SVGFoldedFormPointerEvent(eventType, event);
-	},
+	([$AppPointerEvent, $ToolPointerEventFolded]) =>
+		(eventType, event) => {
+			if ($AppPointerEvent(eventType, event)) {
+				return;
+			}
+			$ToolPointerEventFolded(eventType, event);
+			SVGFoldedFormPointerEvent(eventType, event);
+		},
 	() => {},
 );
 /**
  * @description SVG canvas scrolling event gets bound to this.
  */
 export const ScrollEventCP = readable(({ point, wheelDelta }) => {
-	const scaleOffset = (wheelDelta / 666);
+	const scaleOffset = wheelDelta / 666;
 	const scale = 1 + scaleOffset;
 	// the input point is in ModelViewMatrix space,
 	// which includes ModelMatrix. But, in the upcoming line we are only
@@ -97,17 +98,21 @@ export const ScrollEventCP = readable(({ point, wheelDelta }) => {
 		scale,
 		getScreenPoint(point, get(ModelMatrixCP)),
 	);
-	CameraMatrixCP.update(cam => {
+	CameraMatrixCP.update((cam) => {
 		// safety check.
 		// if the determininat is too small, return unchanged matrix
 		// the reason is because the viewMatrix is built from the
 		// inverse of this matrix, a bad det makes an invalid inverse.
 		const newMatrix = multiplyMatrices2(cam, matrix);
-		const det = determinant2(newMatrix)
+		const det = determinant2(newMatrix);
 		const tooSmall = Math.abs(det) < 1e-11;
-		const tooLarge = Math.abs(det) > 1e+11;
-		if (tooSmall) { return [1e-5, 0, 0, 1e-5, cam[4], cam[5]]; }
-		if (tooLarge) { return [1e+5, 0, 0, 1e+5, 0, 0]; }
+		const tooLarge = Math.abs(det) > 1e11;
+		if (tooSmall) {
+			return [1e-5, 0, 0, 1e-5, cam[4], cam[5]];
+		}
+		if (tooLarge) {
+			return [1e5, 0, 0, 1e5, 0, 0];
+		}
 		return newMatrix;
 	});
 });
@@ -115,7 +120,7 @@ export const ScrollEventCP = readable(({ point, wheelDelta }) => {
  * @description
  */
 export const ScrollEventFolded = readable(({ point, wheelDelta }) => {
-	const scaleOffset = (wheelDelta / 666);
+	const scaleOffset = wheelDelta / 666;
 	const scale = 1 + scaleOffset;
 	// the input point is in ModelViewMatrix space,
 	// which includes ModelMatrix. But, in the upcoming line we are only
@@ -126,17 +131,21 @@ export const ScrollEventFolded = readable(({ point, wheelDelta }) => {
 		scale,
 		getScreenPoint(point, get(ModelMatrixFolded)),
 	);
-	CameraMatrixFolded.update(cam => {
+	CameraMatrixFolded.update((cam) => {
 		// safety check.
 		// if the determininat is too small, return unchanged matrix
 		// the reason is because the viewMatrix is built from the
 		// inverse of this matrix, a bad det makes an invalid inverse.
 		const newMatrix = multiplyMatrices2(cam, matrix);
-		const det = determinant2(newMatrix)
+		const det = determinant2(newMatrix);
 		const tooSmall = Math.abs(det) < 1e-11;
-		const tooLarge = Math.abs(det) > 1e+11;
-		if (tooSmall) { return [1e-5, 0, 0, 1e-5, cam[4], cam[5]]; }
-		if (tooLarge) { return [1e+5, 0, 0, 1e+5, 0, 0]; }
+		const tooLarge = Math.abs(det) > 1e11;
+		if (tooSmall) {
+			return [1e-5, 0, 0, 1e-5, cam[4], cam[5]];
+		}
+		if (tooLarge) {
+			return [1e5, 0, 0, 1e5, 0, 0];
+		}
 		return newMatrix;
 	});
 });

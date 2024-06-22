@@ -1,9 +1,6 @@
 import pointerEvent from "./pointerEvent.js";
 import icon from "./icon.svelte";
-import {
-	subscribe,
-	unsubscribe,
-} from "./stores.js";
+import { subscribe, unsubscribe } from "./stores.js";
 
 const deleteTool = {
 	key: "deleteTool",

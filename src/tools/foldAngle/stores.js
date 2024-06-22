@@ -6,17 +6,12 @@ export const FoldAngleValue = writable(90);
 
 export const Move = writable(undefined);
 
-export const Edge = derived(
-	Move,
-	($Move) => snapToEdge($Move).edge,
-	undefined,
-);
+export const Edge = derived(Move, ($Move) => snapToEdge($Move).edge, undefined);
 
 export const Highlights = derived(
 	Edge,
-	($Edge) => ($Edge !== undefined
-		? Highlight.setEdges([$Edge])
-		: Highlight.reset()),
+	($Edge) =>
+		$Edge !== undefined ? Highlight.setEdges([$Edge]) : Highlight.reset(),
 	undefined,
 );
 
@@ -27,5 +22,7 @@ export const subscribe = () => {
 };
 
 export const unsubscribe = () => {
-	if (unsub) { unsub(); }
+	if (unsub) {
+		unsub();
+	}
 };

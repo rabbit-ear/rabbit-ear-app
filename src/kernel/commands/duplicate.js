@@ -13,9 +13,11 @@ export const duplicateSelection = () => {
 	const graph = get(CreasePattern);
 	const sub = subgraph(graph, selection);
 	const norm = normalize(sub);
-	if ((!norm.vertices_coords || !norm.vertices_coords.length)
-		&& (!norm.edges_vertices || !norm.edges_vertices.length)
-		&& (!norm.faces_vertices || !norm.faces_vertices.length)) {
+	if (
+		(!norm.vertices_coords || !norm.vertices_coords.length) &&
+		(!norm.edges_vertices || !norm.edges_vertices.length) &&
+		(!norm.faces_vertices || !norm.faces_vertices.length)
+	) {
 		return "nothing selected";
 	}
 	const result = join(graph, norm);
@@ -39,6 +41,5 @@ export const duplicateAll = () => {
 /**
  *
  */
-export const duplicate = () => Selection.isEmpty()
-	? duplicateAll()
-	: duplicateSelection();
+export const duplicate = () =>
+	Selection.isEmpty() ? duplicateAll() : duplicateSelection();

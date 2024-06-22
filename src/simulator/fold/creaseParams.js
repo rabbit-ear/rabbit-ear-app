@@ -21,10 +21,12 @@ const getFacesAndVerticesForEdges = (fold) => {
 	const faces = fold.faces_vertices;
 	for (let i = 0; i < fold.edges_vertices.length; i += 1) {
 		const assignment = fold.edges_assignment[i];
-		if (assignment !== "M"
-			&& assignment !== "V"
-			&& assignment !== "F"
-			&& assignment !== "J") {
+		if (
+			assignment !== "M" &&
+			assignment !== "V" &&
+			assignment !== "F" &&
+			assignment !== "J"
+		) {
 			continue;
 		}
 		const edge = fold.edges_vertices[i];
@@ -50,7 +52,12 @@ const getFacesAndVerticesForEdges = (fold) => {
 					creaseParams.push(faceVerts[0]);
 					if (creaseParams.length === 4) {
 						if (v2Index - v1Index === 1 || v2Index - v1Index === -2) {
-							creaseParams = [creaseParams[2], creaseParams[3], creaseParams[0], creaseParams[1]];
+							creaseParams = [
+								creaseParams[2],
+								creaseParams[3],
+								creaseParams[0],
+								creaseParams[1],
+							];
 						}
 						creaseParams.push(i);
 						const angle = fold.edges_foldAngle[i];

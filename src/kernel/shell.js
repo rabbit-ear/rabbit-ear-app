@@ -12,7 +12,7 @@ const context = Object.assign({ ...ear }, Commands);
 // transfer all methods/constants from inside the "this."
 // and into the top level of the scope.
 const hoist = Object.keys(context)
-	.map(name => `var ${name} = this.${name};`)
+	.map((name) => `var ${name} = this.${name};`)
 	.join("\n");
 /**
  * @description run a Javascript blob in a context.
@@ -49,13 +49,9 @@ export const run = (jsBlob) => {
 	try {
 		// files.forEach(f => { context[f.name] = f.contents; });
 		result = scopedEval(jsBlob, context);
-	}
-	catch (error) {
+	} catch (error) {
 		console.error(error);
-		return [
-			terminalOutputJavascript(jsBlob),
-			terminalOutputError(error),
-		];
+		return [terminalOutputJavascript(jsBlob), terminalOutputError(error)];
 	}
 	// if the scoped eval returns undefined, the resulting html string
 	// will be an empty string, if this is the case, don't include empty
@@ -63,5 +59,5 @@ export const run = (jsBlob) => {
 	return [
 		terminalOutputJavascript(jsBlob),
 		terminalOutputCommandResult(result),
-	].filter(a => a.html !== undefined);
+	].filter((a) => a.html !== undefined);
 };

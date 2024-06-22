@@ -4,10 +4,7 @@ import { populate } from "rabbit-ear/graph/populate.js";
 import { getEdgesLine } from "rabbit-ear/graph/edges/lines.js";
 import { UpdateFrame } from "../../stores/Model.js";
 import { CreasePattern } from "../../stores/ModelCP.js";
-import {
-	Precision,
-	Sqrt2Lookup,
-} from "../../stores/Sqrt2.js";
+import { Precision, Sqrt2Lookup } from "../../stores/Sqrt2.js";
 import { cleanNumber } from "../../js/epsilon.js";
 /**
  *
@@ -26,7 +23,5 @@ export const planarize = () => {
 		// 	el.origin = el.origin.map(n => cleanNumber(n, precision, lookup));
 		// });
 		UpdateFrame(populate(planarizeAllFaces(graph), { faces: true }));
-	} catch (error) {
-
-	}
+	} catch (error) {}
 };

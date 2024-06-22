@@ -5,14 +5,21 @@
  * (positive=inclusive boundary, negative=exclusive boundary)
  */
 const boundingBox = ({ vertices_coords }, padding = 0) => {
-	if (!vertices_coords || !vertices_coords.length) { return undefined; }
+	if (!vertices_coords || !vertices_coords.length) {
+		return undefined;
+	}
 	const min = Array(vertices_coords[0].length).fill(Infinity);
 	const max = Array(vertices_coords[0].length).fill(-Infinity);
-	vertices_coords.forEach(point => point
-		.forEach((c, i) => {
-			if (c < min[i]) { min[i] = c - padding; }
-			if (c > max[i]) { max[i] = c + padding; }
-		}));
+	vertices_coords.forEach((point) =>
+		point.forEach((c, i) => {
+			if (c < min[i]) {
+				min[i] = c - padding;
+			}
+			if (c > max[i]) {
+				max[i] = c + padding;
+			}
+		}),
+	);
 	const span = max.map((m, i) => m - min[i]);
 	return { min, max, span };
 };

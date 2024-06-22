@@ -1,11 +1,5 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
-import {
-	snapToVertex,
-	snapOldToRulerLine,
-} from "../../js/snapOld.js";
+import { writable, derived } from "svelte/store";
+import { snapToVertex, snapOldToRulerLine } from "../../js/snapOld.js";
 import { GuideLinesCP } from "../../stores/UI.js";
 import { RulersCP } from "../../stores/Ruler.js";
 import { execute } from "../../kernel/execute.js";
@@ -50,17 +44,19 @@ export const PressCoords = derived(
 
 export const KawasakiRulerPreviews = derived(
 	[MoveVertex, PressVertex],
-	([$MoveVertex, $PressVertex]) => $MoveVertex !== undefined && $PressVertex === undefined
-		? execute(`setGuideRaysCP(kawasaki(${$MoveVertex}))`)
-		: GuideLinesCP.set([]),
+	([$MoveVertex, $PressVertex]) =>
+		$MoveVertex !== undefined && $PressVertex === undefined
+			? execute(`setGuideRaysCP(kawasaki(${$MoveVertex}))`)
+			: GuideLinesCP.set([]),
 	undefined,
 );
 
 export const KawasakiRulers = derived(
 	PressVertex,
-	($PressVertex) => $PressVertex !== undefined
-		? execute(`setRulerRaysCP(kawasaki(${$PressVertex}))`)
-		: RulersCP.set([]),
+	($PressVertex) =>
+		$PressVertex !== undefined
+			? execute(`setRulerRaysCP(kawasaki(${$PressVertex}))`)
+			: RulersCP.set([]),
 	undefined,
 );
 
@@ -79,7 +75,11 @@ export const subscribe = () => {
 };
 
 export const unsubscribe = () => {
-	if (unsub) { unsub(); }
-	if (unsub2) { unsub2(); }
+	if (unsub) {
+		unsub();
+	}
+	if (unsub2) {
+		unsub2();
+	}
 	reset();
 };

@@ -10,7 +10,10 @@ import * as Materials from "./materials.js";
  */
 const Highlights = ({ scene, simulator }) => {
 	// setup highlighted point. does not adhere to depthTest
-	const raycasterPointPositionAttr = new THREE.BufferAttribute(new Float32Array([0, 0, 0]), 3);
+	const raycasterPointPositionAttr = new THREE.BufferAttribute(
+		new Float32Array([0, 0, 0]),
+		3,
+	);
 	raycasterPointPositionAttr.setUsage(THREE.DynamicDrawUsage);
 	const raycasterPointBuffer = new THREE.BufferGeometry();
 	raycasterPointBuffer.setAttribute("position", raycasterPointPositionAttr);
@@ -18,7 +21,10 @@ const Highlights = ({ scene, simulator }) => {
 	point.renderOrder = 1000;
 
 	// setup highlighted vertex. does not adhere to depthTest
-	const raycasterVertexPositionAttr = new THREE.BufferAttribute(new Float32Array([0, 0, 0]), 3);
+	const raycasterVertexPositionAttr = new THREE.BufferAttribute(
+		new Float32Array([0, 0, 0]),
+		3,
+	);
 	raycasterVertexPositionAttr.setUsage(THREE.DynamicDrawUsage);
 	const raycasterVertexBuffer = new THREE.BufferGeometry();
 	raycasterVertexBuffer.setAttribute("position", raycasterVertexPositionAttr);
@@ -26,21 +32,28 @@ const Highlights = ({ scene, simulator }) => {
 	vertex.renderOrder = 1001;
 
 	// setup highlighted face. two triangle faces, three vertices with x, y, z
-	const raycasterFacePositionBuffer = new Float32Array(Array(2 * 3 * 3).fill(0.0));
-	const raycasterFacePositionAttr = new THREE.BufferAttribute(raycasterFacePositionBuffer, 3);
+	const raycasterFacePositionBuffer = new Float32Array(
+		Array(2 * 3 * 3).fill(0.0),
+	);
+	const raycasterFacePositionAttr = new THREE.BufferAttribute(
+		raycasterFacePositionBuffer,
+		3,
+	);
 	raycasterFacePositionAttr.setUsage(THREE.DynamicDrawUsage);
 	const raycasterFaceBuffer = new THREE.BufferGeometry();
 	raycasterFaceBuffer.setAttribute("position", raycasterFacePositionAttr);
-	const face = new THREE.Mesh(
-		raycasterFaceBuffer,
-		[Materials.frontFace, Materials.backFace],
-	);
+	const face = new THREE.Mesh(raycasterFaceBuffer, [
+		Materials.frontFace,
+		Materials.backFace,
+	]);
 	/**
 	 *
 	 */
 	const highlightPoint = (touch) => {
 		point.visible = touch.point != null;
-		if (!point.visible) { return; }
+		if (!point.visible) {
+			return;
+		}
 		point.geometry.attributes.position.array[0] = touch.point.x;
 		point.geometry.attributes.position.array[1] = touch.point.y;
 		point.geometry.attributes.position.array[2] = touch.point.z;
@@ -51,9 +64,12 @@ const Highlights = ({ scene, simulator }) => {
 	 */
 	const highlightVertex = (touch) => {
 		vertex.visible = touch.vertex != null;
-		if (!vertex.visible) { return; }
-		const vertex_coords = [0, 1, 2]
-			.map(i => simulator.model.positions[touch.vertex * 3 + i]);
+		if (!vertex.visible) {
+			return;
+		}
+		const vertex_coords = [0, 1, 2].map(
+			(i) => simulator.model.positions[touch.vertex * 3 + i],
+		);
 		vertex.geometry.attributes.position.array[0] = vertex_coords[0];
 		vertex.geometry.attributes.position.array[1] = vertex_coords[1];
 		vertex.geometry.attributes.position.array[2] = vertex_coords[2];
@@ -66,33 +82,39 @@ const Highlights = ({ scene, simulator }) => {
 	 */
 	const makeTrianglesVertexArray = (triangles) => {
 		const faces = triangles
-			.map(f => simulator.model.fold.faces_vertices[f])
-			.map(tri => tri
-				.map(v => [0, 1, 2].map(i => simulator.model.positions[v * 3 + i])))
-			.map(tri => tri.map(p => ({ x: p[0], y: p[1], z: p[2] })));
+			.map((f) => simulator.model.fold.faces_vertices[f])
+			.map((tri) =>
+				tri.map((v) =>
+					[0, 1, 2].map((i) => simulator.model.positions[v * 3 + i]),
+				),
+			)
+			.map((tri) => tri.map((p) => ({ x: p[0], y: p[1], z: p[2] })));
 		// make a copy of the faces, reverse the winding. these are for the back
-		return faces
-			.concat(faces.map(f => f.slice().reverse()))
-			.flat();
+		return faces.concat(faces.map((f) => f.slice().reverse())).flat();
 	};
 	/**
 	 *
 	 */
 	const highlightFace = (touch) => {
 		face.visible = touch.face != null;
-		if (!face.visible) { return; }
+		if (!face.visible) {
+			return;
+		}
 		const points = makeTrianglesVertexArray(touch.triangles);
 		// rebuild the triangle vertices buffer size
 		const arraySize = 2 * touch.triangles.length * 3 * 3;
-		const positionBuffer = new Float32Array(Array(arraySize)
-			.fill(0.0));
+		const positionBuffer = new Float32Array(Array(arraySize).fill(0.0));
 		const positionAttribute = new THREE.BufferAttribute(positionBuffer, 3);
 		positionAttribute.setUsage(THREE.DynamicDrawUsage);
 		face.geometry.setAttribute("position", positionAttribute);
 		// this will tell which face gets what material
 		face.geometry.clearGroups();
 		face.geometry.addGroup(0, touch.triangles.length * 3, 0);
-		face.geometry.addGroup(touch.triangles.length * 3, touch.triangles.length * 3, 1);
+		face.geometry.addGroup(
+			touch.triangles.length * 3,
+			touch.triangles.length * 3,
+			1,
+		);
 		face.geometry.setFromPoints(points);
 		face.geometry.attributes.position.needsUpdate = true;
 	};
@@ -108,9 +130,15 @@ const Highlights = ({ scene, simulator }) => {
 	 *
 	 */
 	const dealloc = () => {
-		if (point.geometry) { point.geometry.dispose(); }
-		if (vertex.geometry) { vertex.geometry.dispose(); }
-		if (face.geometry) { face.geometry.dispose(); }
+		if (point.geometry) {
+			point.geometry.dispose();
+		}
+		if (vertex.geometry) {
+			vertex.geometry.dispose();
+		}
+		if (face.geometry) {
+			face.geometry.dispose();
+		}
 	};
 	/**
 	 * @description The main interface for this class. Call this method
@@ -120,7 +148,9 @@ const Highlights = ({ scene, simulator }) => {
 	 */
 	const highlightTouch = (touch) => {
 		clear();
-		if (touch === undefined) { return; }
+		if (touch === undefined) {
+			return;
+		}
 		highlightPoint(touch);
 		highlightVertex(touch);
 		highlightFace(touch);

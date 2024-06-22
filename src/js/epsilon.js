@@ -26,7 +26,9 @@ export const findEpsilon = ({ vertices_coords }, epsilonFactor = 1e-4) => {
  */
 export const cleanNumber = (number, precision = 7, lookup = {}) => {
 	const n = CleanNumber(number, precision);
-	if (!lookup) { return n; }
+	if (!lookup) {
+		return n;
+	}
 	const str = n.toFixed(precision);
 	return lookup[str] ? Sqrt2LookupToFloat(...lookup[str]) : n;
 };
@@ -39,11 +41,17 @@ export const cleanNumber = (number, precision = 7, lookup = {}) => {
  * So for example, 0.0002458236492835 becomes 0.0002.
  */
 export const niceNumber = (number, digits = 1) => {
-	if (number > 10) { return String(parseInt(number)); }
-	if (number > 1) { return number.toFixed(digits); }
+	if (number > 10) {
+		return String(parseInt(number));
+	}
+	if (number > 1) {
+		return number.toFixed(digits);
+	}
 	let i = 1;
 	for (i = 1; i < 16; i += 1) {
-		if (Math.floor(number * Math.pow(10, i)) / Math.pow(10, i) !== 0) { break; }
+		if (Math.floor(number * Math.pow(10, i)) / Math.pow(10, i) !== 0) {
+			break;
+		}
 		// if (parseFloat(number.toFixed(i)) !== 0) { break; }
 	}
 	// final check to remove trailing zeros
@@ -62,9 +70,13 @@ export const niceNumber = (number, digits = 1) => {
  */
 export const svgNumber = (number) => {
 	const rawString = number.toString();
-	if (rawString.length < 7) { return rawString; }
+	if (rawString.length < 7) {
+		return rawString;
+	}
 	const cleaned = CleanNumber(number, 7).toString();
-	if (cleaned.length < 7) { return cleaned; }
+	if (cleaned.length < 7) {
+		return cleaned;
+	}
 	return number.toFixed(4);
 	// return niceNumber(number, 4).toString();
 };

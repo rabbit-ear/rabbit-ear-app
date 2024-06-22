@@ -1,34 +1,13 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
-import {
-	add2,
-	subtract2,
-} from "rabbit-ear/math/vector.js";
+import { writable, derived } from "svelte/store";
+import { add2, subtract2 } from "rabbit-ear/math/vector.js";
 import { subgraph } from "rabbit-ear/graph/subgraph.js";
 import { normalize } from "rabbit-ear/graph/normalize.js";
-import {
-	snapOldToPoint,
-	snapOldToRulerLine,
-} from "../../js/snapOld.js";
-import {
-	Keyboard,
-	GhostGraphCP,
-} from "../../stores/UI.js";
+import { snapOldToPoint, snapOldToRulerLine } from "../../js/snapOld.js";
+import { Keyboard, GhostGraphCP } from "../../stores/UI.js";
 import { Selection } from "../../stores/Select.js";
-import {
-	CreasePattern,
-} from "../../stores/ModelCP.js";
-import {
-	RadialSnapDegrees,
-	RadialSnapOffset,
-} from "../../stores/Snap.js";
-import {
-	RulersCP,
-	RulersFolded,
-	RadialRays,
-} from "../../stores/Ruler.js";
+import { CreasePattern } from "../../stores/ModelCP.js";
+import { RadialSnapDegrees, RadialSnapOffset } from "../../stores/Snap.js";
+import { RulersCP, RulersFolded, RadialRays } from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";
 
 export const Move = writable(undefined);
@@ -48,25 +27,25 @@ export const PressCoords = derived(
 	undefined,
 );
 
-export const ReleaseCoords = derived(
-	Release,
-	($Release) => snapOldToPoint($Release),
+export const ReleaseCoords = derived(Release, ($Release) =>
+	snapOldToPoint($Release),
 );
 
 export const DragCoords = derived(
 	[Keyboard, Drag],
-	([$Keyboard, $Drag]) => $Keyboard[16] // shift key
-		? snapOldToRulerLine($Drag).coords
-		: snapOldToPoint($Drag),
+	([$Keyboard, $Drag]) =>
+		$Keyboard[16] // shift key
+			? snapOldToRulerLine($Drag).coords
+			: snapOldToPoint($Drag),
 	undefined,
 );
 
 const DragVector = derived(
 	[PressCoords, DragCoords],
-	([$PressCoords, $DragCoords]) => (
+	([$PressCoords, $DragCoords]) =>
 		$PressCoords !== undefined && $DragCoords !== undefined
 			? subtract2($DragCoords, $PressCoords)
-			: undefined),
+			: undefined,
 	undefined,
 );
 
@@ -79,7 +58,7 @@ export const Subgraph = derived(
 			return {};
 		}
 	},
-	({}),
+	{},
 );
 
 const GhostGraphCPPreview = derived(
@@ -88,8 +67,9 @@ const GhostGraphCPPreview = derived(
 		try {
 			const clone = structuredClone($Subgraph);
 			if ($DragVector !== undefined) {
-				clone.vertices_coords = clone.vertices_coords
-					.map(coords => add2(coords, $DragVector));
+				clone.vertices_coords = clone.vertices_coords.map((coords) =>
+					add2(coords, $DragVector),
+				);
 			}
 			GhostGraphCP.set(clone);
 		} catch (error) {}
@@ -112,10 +92,9 @@ export const ShiftRulers = derived(
 	[Keyboard, PressCoords, RadialSnapDegrees, RadialSnapOffset],
 	([$Keyboard, $PressCoords, $RadialSnapDegrees, $RadialSnapOffset]) => {
 		if ($Keyboard[16] && $PressCoords) {
-			RulersCP.set(RadialRays(
-				$PressCoords,
-				$RadialSnapDegrees,
-				$RadialSnapOffset));
+			RulersCP.set(
+				RadialRays($PressCoords, $RadialSnapDegrees, $RadialSnapOffset),
+			);
 		} else {
 			RulersCP.set([]);
 		}
@@ -141,8 +120,14 @@ export const subscribe = () => {
 };
 
 export const unsubscribe = () => {
-	if (unsub0) { unsub0(); }
-	if (unsub1) { unsub1(); }
-	if (unsub2) { unsub2(); }
+	if (unsub0) {
+		unsub0();
+	}
+	if (unsub1) {
+		unsub1();
+	}
+	if (unsub2) {
+		unsub2();
+	}
 	reset();
 };

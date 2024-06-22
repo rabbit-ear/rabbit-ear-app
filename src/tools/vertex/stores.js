@@ -1,17 +1,8 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
-import {
-	add2,
-	subtract2,
-} from "rabbit-ear/math/vector.js";
+import { writable, derived } from "svelte/store";
+import { add2, subtract2 } from "rabbit-ear/math/vector.js";
 import { subgraphWithVertices } from "rabbit-ear/graph/subgraph.js";
 import { normalize } from "rabbit-ear/graph/normalize.js";
-import {
-	snapOldToPoint,
-	snapToVertex,
-} from "../../js/snapOld.js";
+import { snapOldToPoint, snapToVertex } from "../../js/snapOld.js";
 import { CreasePattern } from "../../stores/ModelCP.js";
 import { GhostGraphCP } from "../../stores/UI.js";
 // import { Selection } from "../../stores/Select.js";
@@ -33,11 +24,7 @@ export const DragCoords = derived(
 	undefined,
 );
 
-const PressSnap = derived(
-	Press,
-	($Press) => snapToVertex($Press),
-	{},
-);
+const PressSnap = derived(Press, ($Press) => snapToVertex($Press), {});
 
 export const PressVertex = derived(
 	PressSnap,
@@ -53,24 +40,30 @@ export const PressCoords = derived(
 
 export const DragVector = derived(
 	[DragCoords, PressCoords],
-	([$DragCoords, $PressCoords]) => (!$DragCoords || !$PressCoords)
-		? [0, 0]
-		: subtract2($DragCoords, $PressCoords),
+	([$DragCoords, $PressCoords]) =>
+		!$DragCoords || !$PressCoords
+			? [0, 0]
+			: subtract2($DragCoords, $PressCoords),
 	[0, 0],
 );
 
 export const GraphPreview = derived(
 	[DragVector, PressVertex, CreasePattern],
 	([$DragVector, $PressVertex, $CreasePattern]) => {
-		if ($PressVertex === undefined) { return GhostGraphCP.set({}); }
+		if ($PressVertex === undefined) {
+			return GhostGraphCP.set({});
+		}
 		try {
 			const subgraph = subgraphWithVertices($CreasePattern, [$PressVertex]);
-			[$PressVertex].forEach(v => {
-				subgraph.vertices_coords[v] = add2(subgraph.vertices_coords[v], $DragVector);
+			[$PressVertex].forEach((v) => {
+				subgraph.vertices_coords[v] = add2(
+					subgraph.vertices_coords[v],
+					$DragVector,
+				);
 			});
 			normalize(subgraph);
 			GhostGraphCP.set({ ...subgraph });
-		} catch (error) { }
+		} catch (error) {}
 	},
 	undefined,
 );
@@ -102,6 +95,8 @@ export const subscribe = () => {
 };
 
 export const unsubscribe = () => {
-	if (unsub) { unsub(); }
+	if (unsub) {
+		unsub();
+	}
 	reset();
 };

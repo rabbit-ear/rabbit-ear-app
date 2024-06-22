@@ -1,44 +1,18 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
-import {
-	linearize2DFaces,
-} from "rabbit-ear/graph/orders.js";
+import { writable, derived } from "svelte/store";
+import { linearize2DFaces } from "rabbit-ear/graph/orders.js";
 import {
 	makeVerticesCoordsFolded,
 	makeVerticesCoordsFlatFolded,
 } from "rabbit-ear/graph/vertices/folded.js";
-import {
-	makeFacesWinding,
-} from "rabbit-ear/graph/faces/winding.js";
-import {
-	planarizeAllFaces,
-} from "rabbit-ear/graph/planarize/planarize.js";
+import { makeFacesWinding } from "rabbit-ear/graph/faces/winding.js";
+import { planarizeAllFaces } from "rabbit-ear/graph/planarize/planarize.js";
 // import { validate } from "rabbit-ear/graph/validate.js";
-import {
-	graphToMatrix2,
-} from "../js/matrix.js";
-import {
-	solveFaceLayers,
-	solveFaceLayersWorker,
-} from "../js/orders.js";
-import {
-	ModelMatrixFolded,
-} from "./ViewBox.js";
-import {
-	VerticalUp,
-	AutoSolveLayers,
-	SolveLayersOnBackground,
-} from "./App.js";
-import {
-	IsolatedFrame,
-	FrameIsCreasePattern,
-} from "./Model.js";
-import {
-	CreasePattern,
-	FoldAnglesAreFlat,
-} from "./ModelCP.js";
+import { graphToMatrix2 } from "../js/matrix.js";
+import { solveFaceLayers, solveFaceLayersWorker } from "../js/orders.js";
+import { ModelMatrixFolded } from "./ViewBox.js";
+import { VerticalUp, AutoSolveLayers, SolveLayersOnBackground } from "./App.js";
+import { IsolatedFrame, FrameIsCreasePattern } from "./Model.js";
+import { CreasePattern, FoldAnglesAreFlat } from "./ModelCP.js";
 /**
  *
  */
@@ -62,10 +36,12 @@ const ComputedFoldedCoords = derived(
 		try {
 			// console.log("Model: ComputedFoldedCoords");
 			// if all edges_foldAngle are flat, makeVerticesCoordsFlatFolded instead
-			if ($CreasePattern
-				&& $CreasePattern.vertices_coords
-				&& $CreasePattern.edges_vertices
-				&& $CreasePattern.faces_vertices) {
+			if (
+				$CreasePattern &&
+				$CreasePattern.vertices_coords &&
+				$CreasePattern.edges_vertices &&
+				$CreasePattern.faces_vertices
+			) {
 				// console.log("Model: ComputedFoldedCoords");
 				return $FoldAnglesAreFlat
 					? makeVerticesCoordsFlatFolded($CreasePattern, [$FoldedRootFace])
@@ -73,7 +49,7 @@ const ComputedFoldedCoords = derived(
 			}
 			return [];
 		} catch (error) {
-			console.warn("ComputedFoldedCoords", error)
+			console.warn("ComputedFoldedCoords", error);
 			return [];
 		}
 	},
@@ -97,41 +73,57 @@ const ComputedFoldedCoords = derived(
 let guardOrder;
 
 export const FaceOrdersSolution = derived(
-	[IsolatedFrame,
+	[
+		IsolatedFrame,
 		ComputedFoldedCoords,
 		FrameIsCreasePattern,
 		AutoSolveLayers,
-		SolveLayersOnBackground],
-	([$IsolatedFrame,
-		$ComputedFoldedCoords,
-		$FrameIsCreasePattern,
-		$AutoSolveLayers,
-		$SolveLayersOnBackground], set) => {
+		SolveLayersOnBackground,
+	],
+	(
+		[
+			$IsolatedFrame,
+			$ComputedFoldedCoords,
+			$FrameIsCreasePattern,
+			$AutoSolveLayers,
+			$SolveLayersOnBackground,
+		],
+		set,
+	) => {
 		// don't re-compute the solution if "faceOrders" already exists
-		if ($IsolatedFrame && $IsolatedFrame.faceOrders) { return {}; }
-		const innerGuard = guardOrder = {};
+		if ($IsolatedFrame && $IsolatedFrame.faceOrders) {
+			return {};
+		}
+		const innerGuard = (guardOrder = {});
 		set({});
-		if (!$AutoSolveLayers) { return {}; }
+		if (!$AutoSolveLayers) {
+			return {};
+		}
 		const foldedForm = !$FrameIsCreasePattern
 			? $IsolatedFrame
 			: {
-				...$IsolatedFrame,
-				vertices_coords: $ComputedFoldedCoords,
-				frame_classes: ["foldedForm"],
-			};
-		const Solve = $SolveLayersOnBackground ? solveFaceLayersWorker : solveFaceLayers;
-		Promise.resolve(Solve(foldedForm)).then((value) => {
-			if (guardOrder === innerGuard) {
-				set(value);
-			} else {
-				// console.log("FaceOrdersSolution, guardOrder !== innerGuard")
-			}
-		}, (error) => {
-			console.warn("FaceOrdersSolution", error);
-			set({});
-		});
+					...$IsolatedFrame,
+					vertices_coords: $ComputedFoldedCoords,
+					frame_classes: ["foldedForm"],
+				};
+		const Solve = $SolveLayersOnBackground
+			? solveFaceLayersWorker
+			: solveFaceLayers;
+		Promise.resolve(Solve(foldedForm)).then(
+			(value) => {
+				if (guardOrder === innerGuard) {
+					set(value);
+				} else {
+					// console.log("FaceOrdersSolution, guardOrder !== innerGuard")
+				}
+			},
+			(error) => {
+				console.warn("FaceOrdersSolution", error);
+				set({});
+			},
+		);
 	},
-	({}),
+	{},
 );
 
 // export const FaceOrdersSolution = derived(
@@ -176,7 +168,7 @@ export const FaceOrders = derived(
 			console.warn("FaceOrders", error);
 		}
 		return undefined;
-	}
+	},
 );
 
 /**
@@ -186,29 +178,39 @@ export const FaceOrders = derived(
  *   use the folded vertices to assemble a folded representation of the CP.
  */
 export const FoldedForm = derived(
-	[FrameIsCreasePattern, IsolatedFrame, ComputedFoldedCoords, FaceOrders, VerticalUp],
-	([$FrameIsCreasePattern, $IsolatedFrame, $ComputedFoldedCoords, $FaceOrders, $VerticalUp]) => {
+	[
+		FrameIsCreasePattern,
+		IsolatedFrame,
+		ComputedFoldedCoords,
+		FaceOrders,
+		VerticalUp,
+	],
+	([
+		$FrameIsCreasePattern,
+		$IsolatedFrame,
+		$ComputedFoldedCoords,
+		$FaceOrders,
+		$VerticalUp,
+	]) => {
 		// console.log("Model: FoldedForm");
 		// if the frame is a folded form, return the frame itself.
 		// otherwise, compute the folded form from the crease pattern.
 		const foldedForm = !$FrameIsCreasePattern
 			? $IsolatedFrame
 			: {
-				...$IsolatedFrame, // ...structuredClone($IsolatedFrame),
-				vertices_coords: $ComputedFoldedCoords,
-				faceOrders: $FaceOrders,
-				frame_classes: ["foldedForm"],
-			};
+					...$IsolatedFrame, // ...structuredClone($IsolatedFrame),
+					vertices_coords: $ComputedFoldedCoords,
+					faceOrders: $FaceOrders,
+					frame_classes: ["foldedForm"],
+				};
 		if (foldedForm.faceOrders === undefined) {
 			delete foldedForm.faceOrders;
 		}
 		ModelMatrixFolded.set(graphToMatrix2(foldedForm, $VerticalUp));
 		return foldedForm;
 	},
-	({}),
+	{},
 );
-
-
 
 // const ValidateTest = derived(
 // 	FoldedForm,
@@ -222,7 +224,6 @@ export const FoldedForm = derived(
 
 // ValidateTest.subscribe(() => {});
 
-
 /**
  *
  */
@@ -235,7 +236,7 @@ export const FoldedFormPlanar = derived(
 		} catch (error) {}
 		return {};
 	},
-	({}),
+	{},
 );
 /**
  *
@@ -244,10 +245,14 @@ export const Faces2DDrawOrder = derived(
 	[FoldedForm, FoldedRootFace, FoldAnglesAreFlat],
 	([$FoldedForm, $FoldedRootFace, $FoldAnglesAreFlat]) => {
 		// if no faceOrders exist, return empty array.
-		if (!$FoldedForm || !$FoldedForm.faceOrders) { return []; }
-		if ($FoldedForm.vertices_coords
-			&& $FoldedForm.faces_vertices
-			&& $FoldAnglesAreFlat) {
+		if (!$FoldedForm || !$FoldedForm.faceOrders) {
+			return [];
+		}
+		if (
+			$FoldedForm.vertices_coords &&
+			$FoldedForm.faces_vertices &&
+			$FoldAnglesAreFlat
+		) {
 			try {
 				return linearize2DFaces($FoldedForm, $FoldedRootFace);
 			} catch (error) {
@@ -269,13 +274,15 @@ export const FoldedFacesWinding = derived(
 	($FoldedForm) => {
 		try {
 			// console.log("Model: FoldedFacesWinding");
-			return $FoldedForm
-				&& $FoldedForm.faces_vertices && $FoldedForm.faces_vertices.length
-				&& $FoldedForm.vertices_coords && $FoldedForm.vertices_coords.length
+			return $FoldedForm &&
+				$FoldedForm.faces_vertices &&
+				$FoldedForm.faces_vertices.length &&
+				$FoldedForm.vertices_coords &&
+				$FoldedForm.vertices_coords.length
 				? makeFacesWinding($FoldedForm)
 				: [];
 		} catch (error) {
-			console.warn("FoldedFacesWinding", error)
+			console.warn("FoldedFacesWinding", error);
 			return [];
 		}
 	},

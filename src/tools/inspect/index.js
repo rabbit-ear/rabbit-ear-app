@@ -1,10 +1,7 @@
 import pointerEvent from "./pointerEvent.js";
 import panel from "./panel.svelte";
 import icon from "./icon.svelte";
-import {
-	subscribe,
-	unsubscribe,
-} from "./stores.js";
+import { subscribe, unsubscribe } from "./stores.js";
 
 const inspect = {
 	key: "inspect",

@@ -32,40 +32,46 @@ export const convertToViewBox = function (svg, [x, y]) {
  */
 export const isFormElementActive = () => {
 	const node = document.activeElement;
-	if (!node) { return false; }
+	if (!node) {
+		return false;
+	}
 	const name = (node.nodeName || "").toLowerCase();
 	const type = (node.type || "").toLowerCase();
 	// if these node types are currently active,
 	// touches will not be intercepted.
 	switch (name) {
-	case "textarea": return true;
-	case "input":
-		switch (type) {
-		case "date":
-		case "datetime-local":
-		case "month":
-		case "number":
-		case "password":
-		case "tel":
-		case "time":
-		case "email":
-		case "text": return true;
-		case "button":
-		case "checkbox":
-		case "color":
-		case "file":
-		case "hidden":
-		case "image":
-		case "radio":
-		case "range":
-		case "reset":
-		case "search":
-		case "submit":
-		case "url":
-		case "week":
-		default: return false;
-		}
-	default: return false;
+		case "textarea":
+			return true;
+		case "input":
+			switch (type) {
+				case "date":
+				case "datetime-local":
+				case "month":
+				case "number":
+				case "password":
+				case "tel":
+				case "time":
+				case "email":
+				case "text":
+					return true;
+				case "button":
+				case "checkbox":
+				case "color":
+				case "file":
+				case "hidden":
+				case "image":
+				case "radio":
+				case "range":
+				case "reset":
+				case "search":
+				case "submit":
+				case "url":
+				case "week":
+				default:
+					return false;
+			}
+		default:
+			return false;
 	}
 	// an alternative approach would be to store a reference
 	// to every known form element (which requires generating
@@ -77,8 +83,8 @@ export const isFormElementActive = () => {
  * is selected. This is useful to add keyboard features to the frames,
  * like the ability to delete or duplicate frames.
  */
-export const isFrameElementSelected = () => document.activeElement
-	&& document.activeElement.classList
-	&& (document.activeElement.classList.contains("button-frame-item")
-		|| document.activeElement.classList.contains("frames"));
-	
+export const isFrameElementSelected = () =>
+	document.activeElement &&
+	document.activeElement.classList &&
+	(document.activeElement.classList.contains("button-frame-item") ||
+		document.activeElement.classList.contains("frames"));

@@ -1,7 +1,4 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
+import { writable, derived } from "svelte/store";
 import { Tool } from "./UI.js";
 
 //
@@ -21,7 +18,7 @@ export const Strain = writable(false);
 // to respond to a user interface: rotate model or pull a vertex
 export const SimulatorTool = derived(
 	Tool,
-	($Tool) => $Tool && $Tool.name === "vertex" ? "pull" : "trackball",
+	($Tool) => ($Tool && $Tool.name === "vertex" ? "pull" : "trackball"),
 	"trackball",
 );
 

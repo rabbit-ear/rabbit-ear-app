@@ -1,9 +1,4 @@
-import {
-	normalize2,
-	scale2,
-	dot2,
-	add2,
-} from "rabbit-ear/math/vector.js";
+import { normalize2, scale2, dot2, add2 } from "rabbit-ear/math/vector.js";
 
 const _0_866 = Math.sqrt(3) / 2;
 
@@ -14,11 +9,12 @@ const _0_866 = Math.sqrt(3) / 2;
  * @param {number} the viewbox size (width or height)
  */
 export const makeIntervals = (start, size, spacing = 1) => {
-	while ((size / spacing) > 64) { spacing *= 2; }
+	while (size / spacing > 64) {
+		spacing *= 2;
+	}
 	const count = parseInt(size / spacing);
 	const offset = Math.ceil(start / spacing) * spacing;
-	return Array.from(Array(count + 1))
-		.map((_, i) => offset + spacing * i);
+	return Array.from(Array(count + 1)).map((_, i) => offset + spacing * i);
 };
 
 // note: for both makeSquareGrid and makeHexGrid
@@ -35,27 +31,27 @@ export const makeIntervals = (start, size, spacing = 1) => {
 // of the container div housing the SVG or the SVG itself, and relay this
 // to the viewport to resize it in these equations only.
 
-export const makeSquareGrid = (viewport) => [
-	makeIntervals(viewport[0] - viewport[2]*1, viewport[2] * 3)
-		.map(x => ({
+export const makeSquareGrid = (viewport) =>
+	[
+		makeIntervals(viewport[0] - viewport[2] * 1, viewport[2] * 3).map((x) => ({
 			x1: x,
 			y1: viewport[1] - viewport[3],
 			x2: x,
 			y2: viewport[1] + viewport[3] * 3,
 		})),
-	makeIntervals(viewport[1] - viewport[3]*1, viewport[3] * 4)
-		.map(y => ({
+		makeIntervals(viewport[1] - viewport[3] * 1, viewport[3] * 4).map((y) => ({
 			x1: viewport[0] - viewport[2],
 			y1: y,
 			x2: viewport[0] + viewport[2] * 2,
 			y2: y,
-		}))].flat();
+		})),
+	].flat();
 
 export const makeTriangleGrid = (viewport) => {
 	// the result of this method are 3 sets of parallel lines,
 	// one horizontal set and two diagonal sets.
 	//    a   /     \   b
-	//      /         \ 
+	//      /         \
 	//    /             \
 	// a vector and b vector are not the vectors of the visible lines,
 	// these are perpendicular to the visible lines
@@ -77,45 +73,63 @@ export const makeTriangleGrid = (viewport) => {
 	// sort them so the smaller is first, this will normalize any y-axis inversion.
 	// do this with both the diagonal line vectors, and their normals.
 	// this gives us the drawing space on screen that needs to be covered.
-	const aVecProject = corners.map(p => dot2(p, aVector)).sort((a, b) => a - b);
-	const bVecProject = corners.map(p => dot2(p, bVector)).sort((a, b) => a - b);
-	const aNormProject = corners.map(p => dot2(p, aNormal)).sort((a, b) => a - b);
-	const bNormProject = corners.map(p => dot2(p, bNormal)).sort((a, b) => a - b);
+	const aVecProject = corners
+		.map((p) => dot2(p, aVector))
+		.sort((a, b) => a - b);
+	const bVecProject = corners
+		.map((p) => dot2(p, bVector))
+		.sort((a, b) => a - b);
+	const aNormProject = corners
+		.map((p) => dot2(p, aNormal))
+		.sort((a, b) => a - b);
+	const bNormProject = corners
+		.map((p) => dot2(p, bNormal))
+		.sort((a, b) => a - b);
 	const aVecLength = aVecProject[aVecProject.length - 1] - aVecProject[0];
 	const bVecLength = bVecProject[bVecProject.length - 1] - bVecProject[0];
 	// create three interval arrays, one for each axis, each number is the
 	// location along that vector's axis which to draw a perpendicular line.
-	const horizontalIntervals = makeIntervals(viewport[1] - viewport[3]*1, viewport[3] * 4, _0_866);
+	const horizontalIntervals = makeIntervals(
+		viewport[1] - viewport[3] * 1,
+		viewport[3] * 4,
+		_0_866,
+	);
 	const aIntervals = makeIntervals(aVecProject[0], aVecLength, _0_866);
 	const bIntervals = makeIntervals(bVecProject[0], bVecLength, _0_866);
 	// the horizontal centers can be read from the viewport.
 	// the diagonal centers are a point along the line through the origin
 	// that travels along the line perpendicular to the drawn lines.
-	const aCenters = aIntervals.map(n => scale2(aVector, n));
-	const bCenters = bIntervals.map(n => scale2(bVector, n));
+	const aCenters = aIntervals.map((n) => scale2(aVector, n));
+	const bCenters = bIntervals.map((n) => scale2(bVector, n));
 	// the normal projections are the locations along the normal line that fit
 	// inside the screen; scale the normal by these values and add them to the
 	// center point and this gives us the segment of the line visible on screen
-	const aSegments = aCenters.map(center => [
+	const aSegments = aCenters.map((center) => [
 		add2(center, scale2(aNormal, aNormProject[0])),
 		add2(center, scale2(aNormal, aNormProject[aNormProject.length - 1])),
 	]);
-	const bSegments = bCenters.map(center => [
+	const bSegments = bCenters.map((center) => [
 		add2(center, scale2(bNormal, bNormProject[0])),
 		add2(center, scale2(bNormal, bNormProject[bNormProject.length - 1])),
 	]);
 	// convert all segments into svg <line> attribute form.
-	const aDiagonals = aSegments
-		.map(s => ({ x1: s[0][0], y1: s[0][1], x2: s[1][0], y2: s[1][1] }));
-	const bDiagonals = bSegments
-		.map(s => ({ x1: s[0][0], y1: s[0][1], x2: s[1][0], y2: s[1][1] }));
-	const horizontals = horizontalIntervals
-		.map(y => ({
-			x1: viewport[0] - viewport[2],
-			y1: y,
-			x2: viewport[0] + viewport[2] * 2,
-			y2: y,
-		}));
+	const aDiagonals = aSegments.map((s) => ({
+		x1: s[0][0],
+		y1: s[0][1],
+		x2: s[1][0],
+		y2: s[1][1],
+	}));
+	const bDiagonals = bSegments.map((s) => ({
+		x1: s[0][0],
+		y1: s[0][1],
+		x2: s[1][0],
+		y2: s[1][1],
+	}));
+	const horizontals = horizontalIntervals.map((y) => ({
+		x1: viewport[0] - viewport[2],
+		y1: y,
+		x2: viewport[0] + viewport[2] * 2,
+		y2: y,
+	}));
 	return horizontals.concat(aDiagonals).concat(bDiagonals);
 };
-

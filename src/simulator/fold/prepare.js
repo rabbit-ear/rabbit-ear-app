@@ -5,18 +5,19 @@ import triangulateFold from "./triangulateFold.js";
 import splitCuts from "./splitCuts.js";
 import removeRedundantVertices from "./removeRedundantVertices.js";
 import boundingBox from "./boundingBox.js";
-import {
-	makeVerticesEdges,
-	makeVerticesVertices,
-} from "./adjacentVertices.js";
+import { makeVerticesEdges, makeVerticesVertices } from "./adjacentVertices.js";
 /**
  * @description convert the indices to values and values to indices,
  * grouping multiple results into an array
  */
 const invertMap = (map) => {
 	const invert = [];
-	map.forEach(value => { invert[value] = []; });
-	map.forEach((value, i) => { invert[value].push(i); });
+	map.forEach((value) => {
+		invert[value] = [];
+	});
+	map.forEach((value, i) => {
+		invert[value].push(i);
+	});
 	return invert;
 };
 /**
@@ -24,20 +25,24 @@ const invertMap = (map) => {
  * all assignments that have a fold angle that is not 0.
  */
 const assignmentFlatAngles = {
-	M: -180, m: -180, V: 180, v: 180,
+	M: -180,
+	m: -180,
+	V: 180,
+	v: 180,
 };
 /**
  * @description make an edges_foldAngle array from a FOLD object
  * by referencing the edges_assignment. This results will assume
  * the mountain and valleys are flat-folded 180 degrees.
  */
-const makeEdgesFoldAngle = ({ edges_assignment }) => edges_assignment
-	.map(a => assignmentFlatAngles[a] || 0);
-
+const makeEdgesFoldAngle = ({ edges_assignment }) =>
+	edges_assignment.map((a) => assignmentFlatAngles[a] || 0);
 
 const lookupTableEdgesVertices = ({ edges_vertices }) => {
 	const map = {};
-	if (!edges_vertices) { return map; }
+	if (!edges_vertices) {
+		return map;
+	}
 	edges_vertices.forEach((ev, e) => {
 		map[`${ev[0]} ${ev[1]}`] = e;
 		map[`${ev[1]} ${ev[0]}`] = e;
@@ -67,7 +72,9 @@ const prepare = (inputFOLD, epsilon) => {
 	let fold = JSON.parse(JSON.stringify(inputFOLD));
 
 	// ensure fields exist
-	if (!fold.faces_vertices) { fold.faces_vertices = []; }
+	if (!fold.faces_vertices) {
+		fold.faces_vertices = [];
+	}
 
 	// one of these two fields is absolutely necessary.
 	// if neither exist, set all creases to unassigned "U".
@@ -82,7 +89,7 @@ const prepare = (inputFOLD, epsilon) => {
 	}
 
 	// make all edges_assignments uppercase
-	fold.edges_assignment = fold.edges_assignment.map(a => a.toUpperCase());
+	fold.edges_assignment = fold.edges_assignment.map((a) => a.toUpperCase());
 
 	// find a nice epsilon for vertex merging, unless the user specified one.
 	if (epsilon === undefined) {
@@ -101,13 +108,12 @@ const prepare = (inputFOLD, epsilon) => {
 	// get the indices of every cut "C" edge.
 	const cut_edge_indices = fold.edges_assignment
 		.map((assign, i) => (assign === "C" ? i : undefined))
-		.filter(a => a !== undefined);
+		.filter((a) => a !== undefined);
 	// before we change edges_vertices (if we do change it, that is),
 	// create a lookup table to map vertex-pairs to edge indices.
 	// this will be used to generate a mapping of new to old edge indices.
-	const edges_lookup = cut_edge_indices.length === 0
-		? {}
-		: lookupTableEdgesVertices(fold);
+	const edges_lookup =
+		cut_edge_indices.length === 0 ? {} : lookupTableEdgesVertices(fold);
 
 	// console.log("PRE fold.edges_assignment", structuredClone(fold.edges_assignment));
 
@@ -126,9 +132,10 @@ const prepare = (inputFOLD, epsilon) => {
 	}
 
 	// save edge info, how the indices relate to the graph before changes.
-	fold.edges_backmap = cut_edge_indices.length === 0
-		? fold.edges_vertices.map((_, e) => e)
-		: fold.edges_vertices.map(ev => edges_lookup[ev.join(" ")]);
+	fold.edges_backmap =
+		cut_edge_indices.length === 0
+			? fold.edges_vertices.map((_, e) => e)
+			: fold.edges_vertices.map((ev) => edges_lookup[ev.join(" ")]);
 	// fold.edges_nextmap = invertMap(fold.edges_backmap);
 
 	delete fold.vertices_vertices;

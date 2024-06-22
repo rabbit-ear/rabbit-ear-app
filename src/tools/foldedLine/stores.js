@@ -1,24 +1,8 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
-import {
-	snapOldToPoint,
-	snapOldToRulerLine,
-} from "../../js/snapOld.js";
-import {
-	Keyboard,
-	GhostGraphCP,
-} from "../../stores/UI.js";
-import {
-	RadialSnapDegrees,
-	RadialSnapOffset,
-} from "../../stores/Snap.js";
-import {
-	RulersCP,
-	RulersFolded,
-	RadialRays,
-} from "../../stores/Ruler.js";
+import { writable, derived } from "svelte/store";
+import { snapOldToPoint, snapOldToRulerLine } from "../../js/snapOld.js";
+import { Keyboard, GhostGraphCP } from "../../stores/UI.js";
+import { RadialSnapDegrees, RadialSnapOffset } from "../../stores/Snap.js";
+import { RulersCP, RulersFolded, RadialRays } from "../../stores/Ruler.js";
 import { executeCommand } from "../../kernel/execute.js";
 
 export const Move = writable(undefined);
@@ -39,9 +23,10 @@ export const PressCoords = derived(
 
 export const DragCoords = derived(
 	[Keyboard, Drag],
-	([$Keyboard, $Drag]) => $Keyboard[16] // shift key
-		? snapOldToRulerLine($Drag).coords
-		: snapOldToPoint($Drag),
+	([$Keyboard, $Drag]) =>
+		$Keyboard[16] // shift key
+			? snapOldToRulerLine($Drag).coords
+			: snapOldToPoint($Drag),
 	undefined,
 );
 
@@ -49,10 +34,9 @@ export const ShiftRulers = derived(
 	[Keyboard, PressCoords, RadialSnapDegrees, RadialSnapOffset],
 	([$Keyboard, $PressCoords, $RadialSnapDegrees, $RadialSnapOffset]) => {
 		if ($Keyboard[16] && $PressCoords) {
-			RulersCP.set(RadialRays(
-				$PressCoords,
-				$RadialSnapDegrees,
-				$RadialSnapOffset));
+			RulersCP.set(
+				RadialRays($PressCoords, $RadialSnapDegrees, $RadialSnapOffset),
+			);
 		} else {
 			RulersCP.set([]);
 		}
@@ -88,7 +72,11 @@ export const subscribe = () => {
 };
 
 export const unsubscribe = () => {
-	if (unsub0) { unsub0(); }
-	if (unsub1) { unsub1(); }
+	if (unsub0) {
+		unsub0();
+	}
+	if (unsub1) {
+		unsub1();
+	}
 	reset();
 };

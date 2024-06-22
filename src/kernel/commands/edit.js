@@ -1,7 +1,4 @@
-import {
-	isFormElementActive,
-	isFrameElementSelected,
-} from "../../js/dom.js";
+import { isFormElementActive, isFrameElementSelected } from "../../js/dom.js";
 
 export const keyboardCopy = () => {
 	console.log("keyboardCopy", isFormElementActive(), isFrameElementSelected());
