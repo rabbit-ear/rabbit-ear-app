@@ -26,9 +26,9 @@ creating a new edge can look like:
 edge(4, 12, App.edgeAssignment, App.edgeFoldAngle)
 ```
 
-## How to build this app
+## Local Development
 
-### MacOS, Linux, Windows
+### Running on MacOS, Linux, Windows
 
 Prerequisites: install [Rust](https://www.rust-lang.org/), [Node](https://nodejs.org/en/)
 
@@ -45,6 +45,7 @@ Prerequisites: install [Rust](https://www.rust-lang.org/), [Node](https://nodejs
 # Clone the rabbit-ear repo
 git clone https://github.com/rabbit-ear/rabbit-ear.git
 cd rabbit-ear
+
 # Checkout the dev branch
 git checkout dev
 # Build the package
@@ -54,6 +55,10 @@ npm link
 ```
 
 2. Run `npm link rabbit-ear` inside of the `rabbit-ear-app` folder to link the package
+
+### Formatting
+
+We use prettier to format all our code - you can set up your editor (e.g. vscode) to format on save, or run `npm run prettier` to format all your files.
 
 # Dev log
 
