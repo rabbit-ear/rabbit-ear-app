@@ -58,7 +58,7 @@ npm link
 
 ### Formatting
 
-We use prettier to format all our code - you can set up your editor (e.g. vscode) to format on save, or run `npm run prettier` to format all your files.
+We use prettier to format all our code - you can set up your editor (e.g. vscode) to format on save, or run `npm run format` to format all your files.
 
 # Dev log
 
