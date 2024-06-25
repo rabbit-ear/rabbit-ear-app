@@ -10,27 +10,35 @@ import {
 /**
  * @description todo
  */
-const fillArrays = (gpuMath, model, {
-	textureDim,
-	textureDimEdges,
-	textureDimCreases,
-	meta,
-	meta2,
-	faceVertexIndices,
-	nodeFaceMeta,
-	nominalTriangles,
-	nodeCreaseMeta,
-	creaseMeta2,
-	lastTheta,
-}) => {
+const fillArrays = (
+	gpuMath,
+	model,
+	{
+		textureDim,
+		textureDimEdges,
+		textureDimCreases,
+		meta,
+		meta2,
+		faceVertexIndices,
+		nodeFaceMeta,
+		nominalTriangles,
+		nodeCreaseMeta,
+		creaseMeta2,
+		lastTheta,
+	},
+) => {
 	const numCreases = model.creases.length;
 	const nodeFaces = verticesFaces(model);
 	const originalPosition = new Float32Array(textureDim * textureDim * 4);
 	const externalForces = new Float32Array(textureDim * textureDim * 4);
 	const mass = new Float32Array(textureDim * textureDim * 4);
 	const beamMeta = new Float32Array(textureDimEdges * textureDimEdges * 4);
-	const creaseVectors = new Float32Array(textureDimCreases * textureDimCreases * 4);
-	const creaseMeta = new Float32Array(textureDimCreases * textureDimCreases * 4);
+	const creaseVectors = new Float32Array(
+		textureDimCreases * textureDimCreases * 4,
+	);
+	const creaseMeta = new Float32Array(
+		textureDimCreases * textureDimCreases * 4,
+	);
 
 	for (let i = 0; i < model.faces_vertices.length; i += 1) {
 		const face = model.faces_vertices[i];
@@ -40,16 +48,20 @@ const fillArrays = (gpuMath, model, {
 		const a = model.nodes[face[0]].getOriginalPosition();
 		const b = model.nodes[face[1]].getOriginalPosition();
 		const c = model.nodes[face[2]].getOriginalPosition();
-		const ab = (b.clone().sub(a)).normalize();
-		const ac = (c.clone().sub(a)).normalize();
-		const bc = (c.clone().sub(b)).normalize();
+		const ab = b.clone().sub(a).normalize();
+		const ac = c.clone().sub(a).normalize();
+		const bc = c.clone().sub(b).normalize();
 		nominalTriangles[4 * i + 0] = Math.acos(ab.dot(ac));
 		nominalTriangles[4 * i + 1] = Math.acos(-1 * ab.dot(bc));
 		nominalTriangles[4 * i + 2] = Math.acos(ac.dot(bc));
-		if (Math.abs(nominalTriangles[4 * i]
-			+ nominalTriangles[4 * i + 1]
-			+ nominalTriangles[4 * i + 2]
-			- Math.PI) > 0.1) {
+		if (
+			Math.abs(
+				nominalTriangles[4 * i] +
+					nominalTriangles[4 * i + 1] +
+					nominalTriangles[4 * i + 2] -
+					Math.PI,
+			) > 0.1
+		) {
 			console.warn("bad angles");
 		}
 	}
@@ -91,13 +103,17 @@ const fillArrays = (gpuMath, model, {
 		for (let j = 0; j < nodeCreases.length; j += 1) {
 			nodeCreaseMeta[index * 4] = nodeCreases[j].getIndex();
 			// type 1, 2, 3, 4
-			nodeCreaseMeta[index * 4 + 1] = nodeCreases[j].getNodeIndex(model.nodes[i]);
+			nodeCreaseMeta[index * 4 + 1] = nodeCreases[j].getNodeIndex(
+				model.nodes[i],
+			);
 			index += 1;
 		}
 		for (let j = 0; j < nodeInvCreases.length; j += 1) {
 			nodeCreaseMeta[index * 4] = nodeInvCreases[j].getIndex();
 			// type 1, 2, 3, 4
-			nodeCreaseMeta[index * 4 + 1] = nodeInvCreases[j].getNodeIndex(model.nodes[i]);
+			nodeCreaseMeta[index * 4 + 1] = nodeInvCreases[j].getNodeIndex(
+				model.nodes[i],
+			);
 			index += 1;
 		}
 	}

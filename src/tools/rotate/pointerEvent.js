@@ -1,9 +1,4 @@
-import {
-	Move,
-	Press,
-	Drag,
-	Release,
-} from "./stores.js";
+import { Move, Press, Drag, Release } from "./stores.js";
 
 const pointerEvent = (eventType, { point, buttons }) => {
 	// switch (eventType) {

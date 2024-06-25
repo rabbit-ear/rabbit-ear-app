@@ -11,9 +11,9 @@ import { run } from "./shell.js";
  */
 export const execute = (js) => {
 	const commands = [js];
-	get(Modifiers).forEach(modifier => modifier.execute(commands));
+	get(Modifiers).forEach((modifier) => modifier.execute(commands));
 	// add to the undo stack. clear the redo stack
-	const output = commands.flatMap(command => run(command));
+	const output = commands.flatMap((command) => run(command));
 	CommandHistory.add(...output);
 };
 // const stringifyArgs = (...args) => {
@@ -26,6 +26,5 @@ export const execute = (js) => {
  * This allows the user to simply type the method name instead of
  * constructing a valid Javascript blob.
  */
-export const executeCommand = (name, ...args) => (
-	execute(`${name}(${args.map(v => JSON.stringify(v)).join(", ")})`)
-);
+export const executeCommand = (name, ...args) =>
+	execute(`${name}(${args.map((v) => JSON.stringify(v)).join(", ")})`);

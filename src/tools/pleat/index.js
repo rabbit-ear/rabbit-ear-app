@@ -1,14 +1,7 @@
-import {
-	cpPointerEvent,
-	foldedPointerEvent,
-} from "./pointerEvent.js";
+import { cpPointerEvent, foldedPointerEvent } from "./pointerEvent.js";
 import panel from "./panel.svelte";
 import icon from "./icon.svelte";
-import {
-	reset,
-	subscribe,
-	unsubscribe,
-} from "./stores.js";
+import { reset, subscribe, unsubscribe } from "./stores.js";
 
 const pleat = {
 	key: "pleat",

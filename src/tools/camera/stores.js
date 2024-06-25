@@ -1,7 +1,4 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
+import { writable, derived } from "svelte/store";
 import { subtract2 } from "rabbit-ear/math/vector.js";
 import {
 	makeMatrix2Translate,
@@ -37,48 +34,59 @@ const CPDragCoords = derived(
 
 export const CPDragVector = derived(
 	[CPDragCoords, CPPressCoords],
-	([$CPDragCoords, $CPPressCoords]) => (!$CPDragCoords || !$CPPressCoords)
-		? [0, 0]
-		: subtract2($CPDragCoords, $CPPressCoords),
+	([$CPDragCoords, $CPPressCoords]) =>
+		!$CPDragCoords || !$CPPressCoords
+			? [0, 0]
+			: subtract2($CPDragCoords, $CPPressCoords),
 	[0, 0],
 );
 
 export const CPMoveCamera = derived(
 	[CPDragVector, VerticalUp],
-	([$CPDragVector, $VerticalUp]) => CameraMatrixCP.update(camera => (
-		multiplyMatrices2(camera, makeMatrix2Translate(...rewrap($CPDragVector, $VerticalUp)))
-	)),
+	([$CPDragVector, $VerticalUp]) =>
+		CameraMatrixCP.update((camera) =>
+			multiplyMatrices2(
+				camera,
+				makeMatrix2Translate(...rewrap($CPDragVector, $VerticalUp)),
+			),
+		),
 	undefined,
 );
 
 // ////////////////////
 
-
 const FoldedPressCoords = derived(
 	[FoldedPress, ModelMatrixFolded],
-	([$FoldedPress, $ModelMatrixFolded]) => getScreenPoint($FoldedPress, $ModelMatrixFolded),
+	([$FoldedPress, $ModelMatrixFolded]) =>
+		getScreenPoint($FoldedPress, $ModelMatrixFolded),
 	undefined,
 );
 
 const FoldedDragCoords = derived(
 	[FoldedDrag, ModelMatrixFolded],
-	([$FoldedDrag, $ModelMatrixFolded]) => getScreenPoint($FoldedDrag, $ModelMatrixFolded),
+	([$FoldedDrag, $ModelMatrixFolded]) =>
+		getScreenPoint($FoldedDrag, $ModelMatrixFolded),
 	undefined,
 );
 
 export const FoldedDragVector = derived(
 	[FoldedDragCoords, FoldedPressCoords],
-	([$FoldedDragCoords, $FoldedPressCoords]) => (!$FoldedDragCoords || !$FoldedPressCoords)
-		? [0, 0]
-		: subtract2($FoldedDragCoords, $FoldedPressCoords),
+	([$FoldedDragCoords, $FoldedPressCoords]) =>
+		!$FoldedDragCoords || !$FoldedPressCoords
+			? [0, 0]
+			: subtract2($FoldedDragCoords, $FoldedPressCoords),
 	[0, 0],
 );
 
 export const FoldedMoveCamera = derived(
 	[FoldedDragVector, VerticalUp],
-	([$FoldedDragVector, $VerticalUp]) => CameraMatrixFolded.update(camera => (
-		multiplyMatrices2(camera, makeMatrix2Translate(...rewrap($FoldedDragVector, $VerticalUp)))
-	)),
+	([$FoldedDragVector, $VerticalUp]) =>
+		CameraMatrixFolded.update((camera) =>
+			multiplyMatrices2(
+				camera,
+				makeMatrix2Translate(...rewrap($FoldedDragVector, $VerticalUp)),
+			),
+		),
 	undefined,
 );
 
@@ -101,7 +109,7 @@ export const subscribe = () => {
 };
 
 export const unsubscribe = () => {
-	unsub.forEach(fn => fn());
+	unsub.forEach((fn) => fn());
 	unsub = [];
 	reset();
 };

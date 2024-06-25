@@ -17,27 +17,28 @@ import {
 const pointerEvent = (eventType, { point }) => {
 	Move.set(eventType === "move" ? point : undefined);
 	switch (eventType) {
-	case "move": break;
-	case "press":
-		Presses.update(p => [...p, point]);
-		break;
-	case "release":
-		Releases.update(p => [...p, point]);
-		switch (get(Step)) {
-		case 4:
-			executeCommand(
-				"axiom6Rulers",
-				get(InputEdge0),
-				get(InputEdge1),
-				get(InputPoint0),
-				get(InputPoint1),
-			);
+		case "move":
 			break;
-		case 6:
-			executeCommand("segment", [get(Segment0), get(Segment1)]);
-			reset();
+		case "press":
+			Presses.update((p) => [...p, point]);
 			break;
-		}
+		case "release":
+			Releases.update((p) => [...p, point]);
+			switch (get(Step)) {
+				case 4:
+					executeCommand(
+						"axiom6Rulers",
+						get(InputEdge0),
+						get(InputEdge1),
+						get(InputPoint0),
+						get(InputPoint1),
+					);
+					break;
+				case 6:
+					executeCommand("segment", [get(Segment0), get(Segment1)]);
+					reset();
+					break;
+			}
 	}
 };
 

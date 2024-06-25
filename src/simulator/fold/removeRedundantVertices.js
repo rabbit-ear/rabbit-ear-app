@@ -3,7 +3,8 @@
  */
 import remapField from "./remapField.js";
 
-function mergeEdge(fold, v1, v2, v3) { // v2 is center vertex
+function mergeEdge(fold, v1, v2, v3) {
+	// v2 is center vertex
 	let angleAvg = 0;
 	let avgSum = 0;
 	const angles = [];
@@ -11,7 +12,10 @@ function mergeEdge(fold, v1, v2, v3) { // v2 is center vertex
 	const edgeIndices = [];
 	for (let i = fold.edges_vertices.length - 1; i >= 0; i -= 1) {
 		const edge = fold.edges_vertices[i];
-		if (edge.indexOf(v2) >= 0 && (edge.indexOf(v1) >= 0 || edge.indexOf(v3) >= 0)) {
+		if (
+			edge.indexOf(v2) >= 0 &&
+			(edge.indexOf(v1) >= 0 || edge.indexOf(v3) >= 0)
+		) {
 			if (edgeAssignment === null) edgeAssignment = fold.edges_assignment[i];
 			else if (edgeAssignment !== fold.edges_assignment[i]) {
 				console.warn("different edge assignments");
@@ -63,8 +67,14 @@ function removeRedundantVertices(fold, epsilon = 1e-4) {
 		const neighbor0 = fold.vertices_coords[vertex_vertices[0]];
 		const neighbor1 = fold.vertices_coords[vertex_vertices[1]];
 		const threeD = vertex_coord.length === 3;
-		const vec0 = [neighbor0[0] - vertex_coord[0], neighbor0[1] - vertex_coord[1]];
-		const vec1 = [neighbor1[0] - vertex_coord[0], neighbor1[1] - vertex_coord[1]];
+		const vec0 = [
+			neighbor0[0] - vertex_coord[0],
+			neighbor0[1] - vertex_coord[1],
+		];
+		const vec1 = [
+			neighbor1[0] - vertex_coord[0],
+			neighbor1[1] - vertex_coord[1],
+		];
 		let magSqVec0 = vec0[0] * vec0[0] + vec0[1] * vec0[1];
 		let magSqVec1 = vec1[0] * vec1[0] + vec1[1] * vec1[1];
 		let dot = vec0[0] * vec1[0] + vec0[1] * vec1[1];
@@ -87,7 +97,9 @@ function removeRedundantVertices(fold, epsilon = 1e-4) {
 			}
 		} else old2new.push(newIndex++);
 	}
-	if (numRedundant === 0) { return fold; }
+	if (numRedundant === 0) {
+		return fold;
+	}
 	console.warn(`${numRedundant} redundant vertices found`);
 	fold = remapField(fold, "vertices", old2new);
 	if (fold.faces_vertices) {

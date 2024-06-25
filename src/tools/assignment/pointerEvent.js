@@ -21,7 +21,9 @@ const lookup = {
 };
 
 const setAssignment = (edge, assignType) => {
-	if (edge === undefined) { return; }
+	if (edge === undefined) {
+		return;
+	}
 	return lookup[assignType]
 		? executeCommand("assignment", [edge], lookup[assignType], 0)
 		: executeCommand("toggleAssignments", [edge]);

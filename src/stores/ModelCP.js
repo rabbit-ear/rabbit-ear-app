@@ -1,41 +1,24 @@
-import {
-	get,
-	derived,
-} from "svelte/store";
-import {
-	makeFacesWinding,
-} from "rabbit-ear/graph/faces/winding.js";
-import {
-	edgesFoldAngleAreAllFlat,
-} from "rabbit-ear/fold/spec.js";
-import {
-	verticesFoldable,
-} from "rabbit-ear/singleVertex/foldable.js";
+import { get, derived } from "svelte/store";
+import { makeFacesWinding } from "rabbit-ear/graph/faces/winding.js";
+import { edgesFoldAngleAreAllFlat } from "rabbit-ear/fold/spec.js";
+import { verticesFoldable } from "rabbit-ear/singleVertex/foldable.js";
 import {
 	verticesFlatFoldableKawasaki,
 	verticesFlatFoldableMaekawa,
 } from "rabbit-ear/singleVertex/flatFoldable.js";
-import {
-	graphToMatrix2,
-} from "../js/matrix.js";
-import {
-	ModelMatrixCP,
-} from "./ViewBox.js";
-import {
-	VerticalUp,
-} from "./App.js";
-import {
-	IsolatedFrame,
-	FrameIsCreasePattern,
-	AsyncManager,
-} from "./Model.js";
+import { graphToMatrix2 } from "../js/matrix.js";
+import { ModelMatrixCP } from "./ViewBox.js";
+import { VerticalUp } from "./App.js";
+import { IsolatedFrame, FrameIsCreasePattern, AsyncManager } from "./Model.js";
 /**
  * @description The currently selected (and currently being edited) frame.
  */
 export const CreasePattern = derived(
 	[IsolatedFrame, FrameIsCreasePattern, VerticalUp],
 	([$IsolatedFrame, $FrameIsCreasePattern, $VerticalUp]) => {
-		if (!$FrameIsCreasePattern) { return {}; }
+		if (!$FrameIsCreasePattern) {
+			return {};
+		}
 		if (AsyncManager.recalcModelMatrix) {
 			ModelMatrixCP.set(graphToMatrix2($IsolatedFrame, $VerticalUp));
 		}
@@ -46,7 +29,7 @@ export const CreasePattern = derived(
 // here. if VerticalUp ever changes, call this to update the matrix
 // ModelMatrixCP.set(graphToMatrix2($IsolatedFrame, $VerticalUp));
 VerticalUp.subscribe(($VerticalUp) => {
-	ModelMatrixCP.set(graphToMatrix2(get(IsolatedFrame), $VerticalUp))
+	ModelMatrixCP.set(graphToMatrix2(get(IsolatedFrame), $VerticalUp));
 });
 /**
  *
@@ -54,11 +37,13 @@ VerticalUp.subscribe(($VerticalUp) => {
 export const InvalidKawasaki = derived(
 	CreasePattern,
 	($CreasePattern) => {
-		if (!$CreasePattern || !$CreasePattern.edges_vertices) { return []; }
+		if (!$CreasePattern || !$CreasePattern.edges_vertices) {
+			return [];
+		}
 		try {
 			return verticesFlatFoldableKawasaki($CreasePattern, 1e-3)
 				.map((valid, i) => (!valid ? i : undefined))
-				.filter(a => a !== undefined);
+				.filter((a) => a !== undefined);
 		} catch (error) {
 			console.warn("InvalidKawasaki", error);
 		}
@@ -72,11 +57,13 @@ export const InvalidKawasaki = derived(
 export const InvalidMaekawa = derived(
 	CreasePattern,
 	($CreasePattern) => {
-		if (!$CreasePattern || !$CreasePattern.edges_vertices) { return []; }
+		if (!$CreasePattern || !$CreasePattern.edges_vertices) {
+			return [];
+		}
 		try {
 			return verticesFlatFoldableMaekawa($CreasePattern)
 				.map((valid, i) => (!valid ? i : undefined))
-				.filter(a => a !== undefined);
+				.filter((a) => a !== undefined);
 		} catch (error) {
 			console.warn("InvalidMaekawa", error);
 		}
@@ -92,13 +79,15 @@ export const CPFacesWinding = derived(
 	($CreasePattern) => {
 		try {
 			// console.log("Model: CPFacesWinding");
-			return $CreasePattern
-				&& $CreasePattern.faces_vertices && $CreasePattern.faces_vertices.length
-				&& $CreasePattern.vertices_coords && $CreasePattern.vertices_coords.length
+			return $CreasePattern &&
+				$CreasePattern.faces_vertices &&
+				$CreasePattern.faces_vertices.length &&
+				$CreasePattern.vertices_coords &&
+				$CreasePattern.vertices_coords.length
 				? makeFacesWinding($CreasePattern)
 				: [];
 		} catch (error) {
-			console.warn("CPFacesWinding", error)
+			console.warn("CPFacesWinding", error);
 			return [];
 		}
 	},
@@ -114,7 +103,9 @@ export const FoldAnglesAreFlat = derived(
 			return $CreasePattern
 				? edgesFoldAngleAreAllFlat($CreasePattern || {})
 				: true;
-		} catch (error) { console.warn("FoldAnglesAreFlat", error); }
+		} catch (error) {
+			console.warn("FoldAnglesAreFlat", error);
+		}
 	},
 	true,
 );
@@ -124,12 +115,16 @@ export const FoldAnglesAreFlat = derived(
 const VerticesFoldable = derived(
 	[CreasePattern, FoldAnglesAreFlat],
 	([$CreasePattern, $FoldAnglesAreFlat]) => {
-		if ($FoldAnglesAreFlat) { return []; }
+		if ($FoldAnglesAreFlat) {
+			return [];
+		}
 		try {
 			return verticesFoldable($CreasePattern, 1e-3)
 				.map((valid, i) => (!valid ? i : undefined))
-				.filter(a => a !== undefined);
-		} catch (error) { console.warn("VerticesFoldable", error); }
+				.filter((a) => a !== undefined);
+		} catch (error) {
+			console.warn("VerticesFoldable", error);
+		}
 		return [];
 	},
 	[],
@@ -139,9 +134,10 @@ const VerticesFoldable = derived(
  */
 export const InvalidVertices = derived(
 	VerticesFoldable,
-	($VerticesFoldable) => $VerticesFoldable
-		.map((valid, v) => !valid ? v : undefined)
-		.filter(a => a !== undefined),
+	($VerticesFoldable) =>
+		$VerticesFoldable
+			.map((valid, v) => (!valid ? v : undefined))
+			.filter((a) => a !== undefined),
 	[],
 );
 /**
@@ -149,9 +145,8 @@ export const InvalidVertices = derived(
  */
 export const IsFlatFoldable = derived(
 	[FoldAnglesAreFlat, InvalidKawasaki, InvalidMaekawa],
-	([$FoldAnglesAreFlat, $InvalidKawasaki, $InvalidMaekawa]) => (
-		$FoldAnglesAreFlat && !$InvalidKawasaki.length && !$InvalidMaekawa.length
-	),
+	([$FoldAnglesAreFlat, $InvalidKawasaki, $InvalidMaekawa]) =>
+		$FoldAnglesAreFlat && !$InvalidKawasaki.length && !$InvalidMaekawa.length,
 	true,
 );
 /**
@@ -167,8 +162,7 @@ export const Is3DFoldable = derived(
  */
 export const IsFoldable = derived(
 	[FoldAnglesAreFlat, IsFlatFoldable, Is3DFoldable],
-	([$FoldAnglesAreFlat, $IsFlatFoldable, $Is3DFoldable]) => (
-		$FoldAnglesAreFlat ? $IsFlatFoldable : $Is3DFoldable
-	),
+	([$FoldAnglesAreFlat, $IsFlatFoldable, $Is3DFoldable]) =>
+		$FoldAnglesAreFlat ? $IsFlatFoldable : $Is3DFoldable,
 	true,
 );

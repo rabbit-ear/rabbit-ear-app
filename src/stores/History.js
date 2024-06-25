@@ -1,7 +1,4 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
+import { writable, derived } from "svelte/store";
 import { arrayIntersection } from "../js/arrays.js";
 import { TerminalValue } from "./App.js";
 /**
@@ -44,8 +41,8 @@ const collapseMethods = {
 /**
  *
  */
-const filterCollapsible = (commands = []) => commands
-	.filter(name => collapseMethods[name]);
+const filterCollapsible = (commands = []) =>
+	commands.filter((name) => collapseMethods[name]);
 /**
  * @description The history of commands and their arguments. This will
  * appear in the terminal output.
@@ -56,19 +53,22 @@ export const CommandHistory = writable([]);
  * This method will ensure the array length is maintained, and this method
  * will filter any collapsible methods.
  */
-CommandHistory.add = (...args) => CommandHistory.update(history => {
-	const previousEntry = history[history.length - 1] || ({});
-	const curr = filterCollapsible(args.flatMap(el => el.commands || []));
-	const prev = filterCollapsible(previousEntry.commands);
-	if (arrayIntersection(curr, prev).length) { history.pop(); }
-	const result = [...history, ...args];
-	if (result.length > maxLineCount) {
-		result.splice(0, result.length - maxLineCount);
-	}
-	TerminalValue.set("");
-	ReplayCommandIndex.set(0);
-	return result;
-});
+CommandHistory.add = (...args) =>
+	CommandHistory.update((history) => {
+		const previousEntry = history[history.length - 1] || {};
+		const curr = filterCollapsible(args.flatMap((el) => el.commands || []));
+		const prev = filterCollapsible(previousEntry.commands);
+		if (arrayIntersection(curr, prev).length) {
+			history.pop();
+		}
+		const result = [...history, ...args];
+		if (result.length > maxLineCount) {
+			result.splice(0, result.length - maxLineCount);
+		}
+		TerminalValue.set("");
+		ReplayCommandIndex.set(0);
+		return result;
+	});
 /**
  *
  */
@@ -82,8 +82,12 @@ export const ReplayCommand = derived(
 	[CommandHistory, ReplayCommandIndex],
 	([$CommandHistory, $ReplayCommandIndex]) => {
 		let absIndex = $ReplayCommandIndex;
-		while (absIndex < 0) { absIndex += $CommandHistory.length; }
-		while (absIndex >= $CommandHistory.length) { absIndex -= $CommandHistory.length; }
+		while (absIndex < 0) {
+			absIndex += $CommandHistory.length;
+		}
+		while (absIndex >= $CommandHistory.length) {
+			absIndex -= $CommandHistory.length;
+		}
 		return $CommandHistory[absIndex];
 	},
 	"",
@@ -94,10 +98,11 @@ export const ReplayCommand = derived(
  */
 export const TerminalHistory = derived(
 	CommandHistory,
-	($CommandHistory) => $CommandHistory.length >= minLineCount
-		? $CommandHistory
-		: Array(minLineCount - $CommandHistory.length)
-			.fill({ html: "<span></span>" })
-			.concat($CommandHistory),
+	($CommandHistory) =>
+		$CommandHistory.length >= minLineCount
+			? $CommandHistory
+			: Array(minLineCount - $CommandHistory.length)
+					.fill({ html: "<span></span>" })
+					.concat($CommandHistory),
 	[],
 );

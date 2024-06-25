@@ -23,37 +23,77 @@ export const updateMaterials = (
 			index += 1;
 		}
 	}
-	gpuMath.initTextureFromData("u_beamMeta", textureDimEdges, textureDimEdges, float_type, beamMeta, true);
+	gpuMath.initTextureFromData(
+		"u_beamMeta",
+		textureDimEdges,
+		textureDimEdges,
+		float_type,
+		beamMeta,
+		true,
+	);
 };
 
-export const updateExternalForces = (gpuMath, model, { externalForces, textureDim }) => {
+export const updateExternalForces = (
+	gpuMath,
+	model,
+	{ externalForces, textureDim },
+) => {
 	for (let i = 0; i < model.nodes.length; i += 1) {
 		const externalForce = model.nodes[i].getExternalForce();
 		externalForces[4 * i] = externalForce.x;
 		externalForces[4 * i + 1] = externalForce.y;
 		externalForces[4 * i + 2] = externalForce.z;
 	}
-	gpuMath.initTextureFromData("u_externalForces", textureDim, textureDim, float_type, externalForces, true);
+	gpuMath.initTextureFromData(
+		"u_externalForces",
+		textureDim,
+		textureDim,
+		float_type,
+		externalForces,
+		true,
+	);
 };
 
 export const updateFixed = (gpuMath, model, { mass, textureDim }) => {
 	for (let i = 0; i < model.nodes.length; i += 1) {
-		mass[4 * i + 1] = (model.nodes[i].isFixed() ? 1 : 0);
+		mass[4 * i + 1] = model.nodes[i].isFixed() ? 1 : 0;
 	}
-	gpuMath.initTextureFromData("u_mass", textureDim, textureDim, float_type, mass, true);
+	gpuMath.initTextureFromData(
+		"u_mass",
+		textureDim,
+		textureDim,
+		float_type,
+		mass,
+		true,
+	);
 };
 
-export const updateOriginalPosition = (gpuMath, model, { originalPosition, textureDim }) => {
+export const updateOriginalPosition = (
+	gpuMath,
+	model,
+	{ originalPosition, textureDim },
+) => {
 	for (let i = 0; i < model.nodes.length; i += 1) {
 		const origPosition = model.nodes[i].getOriginalPosition();
 		originalPosition[4 * i] = origPosition.x;
 		originalPosition[4 * i + 1] = origPosition.y;
 		originalPosition[4 * i + 2] = origPosition.z;
 	}
-	gpuMath.initTextureFromData("u_originalPosition", textureDim, textureDim, float_type, originalPosition, true);
+	gpuMath.initTextureFromData(
+		"u_originalPosition",
+		textureDim,
+		textureDim,
+		float_type,
+		originalPosition,
+		true,
+	);
 };
 
-export const updateCreaseVectors = (gpuMath, model, { creaseVectors, textureDimCreases }) => {
+export const updateCreaseVectors = (
+	gpuMath,
+	model,
+	{ creaseVectors, textureDimCreases },
+) => {
 	for (let i = 0; i < model.creases.length; i += 1) {
 		const rgbaIndex = i * 4;
 		const nodes = model.creases[i].edge.nodes;
@@ -61,7 +101,14 @@ export const updateCreaseVectors = (gpuMath, model, { creaseVectors, textureDimC
 		creaseVectors[rgbaIndex] = nodes[0].getIndex();
 		creaseVectors[rgbaIndex + 1] = nodes[1].getIndex();
 	}
-	gpuMath.initTextureFromData("u_creaseVectors", textureDimCreases, textureDimCreases, float_type, creaseVectors, true);
+	gpuMath.initTextureFromData(
+		"u_creaseVectors",
+		textureDimCreases,
+		textureDimCreases,
+		float_type,
+		creaseVectors,
+		true,
+	);
 };
 
 export const updateCreasesMeta = (
@@ -81,16 +128,34 @@ export const updateCreasesMeta = (
 			creaseMeta[i * 4 + 2] = crease.getTargetTheta();
 		}
 	}
-	gpuMath.initTextureFromData("u_creaseMeta", textureDimCreases, textureDimCreases, float_type, creaseMeta, true);
+	gpuMath.initTextureFromData(
+		"u_creaseMeta",
+		textureDimCreases,
+		textureDimCreases,
+		float_type,
+		creaseMeta,
+		true,
+	);
 };
 
-export const updateLastPosition = (gpuMath, model, { lastPosition, textureDim }) => {
+export const updateLastPosition = (
+	gpuMath,
+	model,
+	{ lastPosition, textureDim },
+) => {
 	for (let i = 0; i < model.nodes.length; i += 1) {
 		const _position = model.nodes[i].getRelativePosition();
 		lastPosition[4 * i] = _position.x;
 		lastPosition[4 * i + 1] = _position.y;
 		lastPosition[4 * i + 2] = _position.z;
 	}
-	gpuMath.initTextureFromData("u_lastPosition", textureDim, textureDim, float_type, lastPosition, true);
+	gpuMath.initTextureFromData(
+		"u_lastPosition",
+		textureDim,
+		textureDim,
+		float_type,
+		lastPosition,
+		true,
+	);
 	gpuMath.initFrameBufferForTexture("u_lastPosition", true);
 };

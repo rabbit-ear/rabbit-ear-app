@@ -15,13 +15,27 @@
 	--vertex-color: #888888;
 }
 
-.boundary { stroke: var(--boundary-color); }
-.valley { stroke: var(--valley-color); }
-.mountain { stroke: var(--mountain-color); }
-.flat { stroke: var(--flat-color); }
-.join { stroke: var(--join-color); }
-.cut { stroke: var(--cut-color); }
-.unassigned { stroke: var(--unassigned-color); }
+.boundary {
+	stroke: var(--boundary-color);
+}
+.valley {
+	stroke: var(--valley-color);
+}
+.mountain {
+	stroke: var(--mountain-color);
+}
+.flat {
+	stroke: var(--flat-color);
+}
+.join {
+	stroke: var(--join-color);
+}
+.cut {
+	stroke: var(--cut-color);
+}
+.unassigned {
+	stroke: var(--unassigned-color);
+}
 
 .crease-pattern .graph-preview line {
 	stroke: var(--highlight);
@@ -50,7 +64,7 @@
 }
 
 .crease-pattern circle.vertex {
-	stroke: none;	
+	stroke: none;
 	fill: var(--vertex-color);
 }
 
@@ -95,10 +109,14 @@
 .hide-edges .flat,
 .hide-edges .join,
 .hide-edges .cut,
-.hide-edges .unassigned { stroke: none; }
+.hide-edges .unassigned {
+	stroke: none;
+}
 
 /*.folded-form line.selected { stroke: var(--highlight); }*/
-.folded-form line.highlighted { stroke: var(--highlight); }
+.folded-form line.highlighted {
+	stroke: var(--highlight);
+}
 
 .vertices-indices circle {
 	stroke: var(--dim);

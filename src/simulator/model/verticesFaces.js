@@ -9,7 +9,9 @@ const verticesFaces = (model) => {
 		// in the case that one face visits the same vertex multiple times,
 		// this hash acts like a set and only allow one of each vertex index.
 		const hash = [];
-		face.forEach((vertex) => { hash[vertex] = f; });
+		face.forEach((vertex) => {
+			hash[vertex] = f;
+		});
 		hash.forEach((fa, v) => vertices_faces[v].push(fa));
 	});
 	return vertices_faces;

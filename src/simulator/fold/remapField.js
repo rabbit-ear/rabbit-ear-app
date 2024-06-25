@@ -1,8 +1,8 @@
-const keysStartingWith = (fold, prefix) => Object.keys(fold)
-	.filter(key => key.slice(0, prefix.length) === prefix);
+const keysStartingWith = (fold, prefix) =>
+	Object.keys(fold).filter((key) => key.slice(0, prefix.length) === prefix);
 
-const keysEndingWith = (fold, suffix) => Object.keys(fold)
-	.filter(key => key.slice(-suffix.length) === suffix);
+const keysEndingWith = (fold, suffix) =>
+	Object.keys(fold).filter((key) => key.slice(-suffix.length) === suffix);
 
 const remapField = (fold, field, old2new) => {
 	const new2old = [];
@@ -16,11 +16,13 @@ const remapField = (fold, field, old2new) => {
 	}
 	const prefixes = keysStartingWith(fold, `${field}_`);
 	for (let i = 0; i < prefixes.length; i += 1) {
-		fold[prefixes[i]] = new2old.map(val => fold[prefixes[i]][val]);
+		fold[prefixes[i]] = new2old.map((val) => fold[prefixes[i]][val]);
 	}
 	const suffixes = keysEndingWith(fold, `_${field}`);
 	for (let i = 0; i < suffixes.length; i += 1) {
-		fold[suffixes[i]] = fold[suffixes[i]].map(arr => arr.map(val => old2new[val]));
+		fold[suffixes[i]] = fold[suffixes[i]].map((arr) =>
+			arr.map((val) => old2new[val]),
+		);
 	}
 	return fold;
 };

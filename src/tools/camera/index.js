@@ -1,12 +1,6 @@
-import {
-	cpPointerEvent,
-	foldedPointerEvent,
-} from "./pointerEvent.js";
+import { cpPointerEvent, foldedPointerEvent } from "./pointerEvent.js";
 import icon from "./icon.svelte";
-import {
-	subscribe,
-	unsubscribe,
-} from "./stores.js";
+import { subscribe, unsubscribe } from "./stores.js";
 
 const camera = {
 	key: "camera",

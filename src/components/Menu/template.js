@@ -1,12 +1,6 @@
 import { get } from "svelte/store";
-import {
-	open,
-	save,
-} from "@tauri-apps/api/dialog";
-import {
-	execute,
-	executeCommand,
-} from "../../kernel/execute.js";
+import { open, save } from "@tauri-apps/api/dialog";
+import { execute, executeCommand } from "../../kernel/execute.js";
 import {
 	// Snapping,
 	ShowCodeEditor,
@@ -73,7 +67,8 @@ export default [
 			{
 				label: "planarize",
 				click: () => executeCommand("planarize"),
-				toolTip: "make the graph planar, split overlapping edges, rebuild faces",
+				toolTip:
+					"make the graph planar, split overlapping edges, rebuild faces",
 			},
 			{
 				type: "separator",

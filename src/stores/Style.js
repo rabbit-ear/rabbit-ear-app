@@ -1,7 +1,4 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
+import { writable, derived } from "svelte/store";
 import {
 	ViewportCP,
 	ViewportFolded,
@@ -20,7 +17,7 @@ export const ArtificialScale = 1;
  * @description Stroke-width will use this value and multiply it against
  * the viewport to get the absolute stroke-width value.
  */
-const StrokeWidthFactor = (1 / 300);
+const StrokeWidthFactor = 1 / 300;
 
 /**
  * @description On Safari only, no matter the viewBox size,
@@ -41,23 +38,21 @@ const StrokeWidthMin = 0.001;
  */
 export const StrokeWidthCreasePattern = derived(
 	ViewportCP,
-	($ViewportCP) => (
+	($ViewportCP) =>
 		Math.max(
 			StrokeWidthMin,
 			Math.max($ViewportCP[2], $ViewportCP[3]) * StrokeWidthFactor,
-		)
-	),
+		),
 	StrokeWidthFactor,
 );
 
 export const StrokeWidthFoldedForm = derived(
 	ViewportFolded,
-	($ViewportFolded) => (
+	($ViewportFolded) =>
 		Math.max(
 			StrokeWidthMin,
 			Math.max($ViewportFolded[2], $ViewportFolded[3]) * StrokeWidthFactor,
-		)
-	),
+		),
 	StrokeWidthFactor,
 );
 
@@ -72,13 +67,13 @@ export const StrokeWidthFoldedForm = derived(
  */
 export const StrokeDashLengthCreasePattern = derived(
 	StrokeWidthCreasePattern,
-	($StrokeWidthCreasePattern) => ($StrokeWidthCreasePattern * 3),
+	($StrokeWidthCreasePattern) => $StrokeWidthCreasePattern * 3,
 	StrokeWidthFactor * 3,
 );
 
 export const StrokeDashLengthFoldedForm = derived(
 	StrokeWidthFoldedForm,
-	($StrokeWidthFoldedForm) => ($StrokeWidthFoldedForm * 3),
+	($StrokeWidthFoldedForm) => $StrokeWidthFoldedForm * 3,
 	StrokeWidthFactor * 3,
 );
 
@@ -93,17 +88,15 @@ export const VertexRadiusFactor = writable(0.00666);
  */
 export const VertexRadiusCP = derived(
 	[ViewportCP, VertexRadiusFactor],
-	([$ViewportCP, $VertexRadiusFactor]) => (
-		Math.max($ViewportCP[2], $ViewportCP[3]) * $VertexRadiusFactor
-	),
+	([$ViewportCP, $VertexRadiusFactor]) =>
+		Math.max($ViewportCP[2], $ViewportCP[3]) * $VertexRadiusFactor,
 	0.00666,
 );
 
 export const VertexRadiusFolded = derived(
 	[ViewportFolded, VertexRadiusFactor],
-	([$ViewportFolded, $VertexRadiusFactor]) => (
-		Math.max($ViewportFolded[2], $ViewportFolded[3]) * $VertexRadiusFactor
-	),
+	([$ViewportFolded, $VertexRadiusFactor]) =>
+		Math.max($ViewportFolded[2], $ViewportFolded[3]) * $VertexRadiusFactor,
 	0.00666,
 );
 
@@ -150,82 +143,105 @@ export const LineOpacity = writable(1);
 
 // front and back are the mesh faces
 export const FoldedFrontColor = writable(
-	localStorage.getItem("FoldedFrontColor") || Defaults.FoldedFrontColor);
+	localStorage.getItem("FoldedFrontColor") || Defaults.FoldedFrontColor,
+);
 export const FoldedBackColor = writable(
-	localStorage.getItem("FoldedBackColor") || Defaults.FoldedBackColor);
+	localStorage.getItem("FoldedBackColor") || Defaults.FoldedBackColor,
+);
 export const CPColor = writable(
-	localStorage.getItem("CPColor") || Defaults.CPColor);
+	localStorage.getItem("CPColor") || Defaults.CPColor,
+);
 export const SimulatorFrontColor = writable(
-	localStorage.getItem("SimulatorFrontColor") || Defaults.SimulatorFrontColor);
+	localStorage.getItem("SimulatorFrontColor") || Defaults.SimulatorFrontColor,
+);
 export const SimulatorBackColor = writable(
-	localStorage.getItem("SimulatorBackColor") || Defaults.SimulatorBackColor);
+	localStorage.getItem("SimulatorBackColor") || Defaults.SimulatorBackColor,
+);
 
 // line color by assignment
 export const BoundaryColor = writable(
-	localStorage.getItem("BoundaryColor") || Defaults.BoundaryColor);
+	localStorage.getItem("BoundaryColor") || Defaults.BoundaryColor,
+);
 export const ValleyColor = writable(
-	localStorage.getItem("ValleyColor") || Defaults.ValleyColor);
+	localStorage.getItem("ValleyColor") || Defaults.ValleyColor,
+);
 export const MountainColor = writable(
-	localStorage.getItem("MountainColor") || Defaults.MountainColor);
+	localStorage.getItem("MountainColor") || Defaults.MountainColor,
+);
 export const FlatColor = writable(
-	localStorage.getItem("FlatColor") || Defaults.FlatColor);
+	localStorage.getItem("FlatColor") || Defaults.FlatColor,
+);
 export const JoinColor = writable(
-	localStorage.getItem("JoinColor") || Defaults.JoinColor);
+	localStorage.getItem("JoinColor") || Defaults.JoinColor,
+);
 export const CutColor = writable(
-	localStorage.getItem("CutColor") || Defaults.CutColor);
+	localStorage.getItem("CutColor") || Defaults.CutColor,
+);
 export const UnassignedColor = writable(
-	localStorage.getItem("UnassignedColor") || Defaults.UnassignedColor);
+	localStorage.getItem("UnassignedColor") || Defaults.UnassignedColor,
+);
 
-FoldedFrontColor.subscribe(value => localStorage
-	.setItem("FoldedFrontColor", value));
-FoldedBackColor.subscribe(value => localStorage
-	.setItem("FoldedBackColor", value));
-CPColor.subscribe(value => localStorage
-	.setItem("CPColor", value));
-SimulatorFrontColor.subscribe(value => localStorage
-	.setItem("SimulatorFrontColor", value));
-SimulatorBackColor.subscribe(value => localStorage
-	.setItem("SimulatorBackColor", value));
+FoldedFrontColor.subscribe((value) =>
+	localStorage.setItem("FoldedFrontColor", value),
+);
+FoldedBackColor.subscribe((value) =>
+	localStorage.setItem("FoldedBackColor", value),
+);
+CPColor.subscribe((value) => localStorage.setItem("CPColor", value));
+SimulatorFrontColor.subscribe((value) =>
+	localStorage.setItem("SimulatorFrontColor", value),
+);
+SimulatorBackColor.subscribe((value) =>
+	localStorage.setItem("SimulatorBackColor", value),
+);
 
-BoundaryColor.subscribe(value => localStorage
-	.setItem("BoundaryColor", value));
-ValleyColor.subscribe(value => localStorage
-	.setItem("ValleyColor", value));
-MountainColor.subscribe(value => localStorage
-	.setItem("MountainColor", value));
-FlatColor.subscribe(value => localStorage
-	.setItem("FlatColor", value));
-JoinColor.subscribe(value => localStorage
-	.setItem("JoinColor", value));
-CutColor.subscribe(value => localStorage
-	.setItem("CutColor", value));
-UnassignedColor.subscribe(value => localStorage
-	.setItem("UnassignedColor", value));
+BoundaryColor.subscribe((value) =>
+	localStorage.setItem("BoundaryColor", value),
+);
+ValleyColor.subscribe((value) => localStorage.setItem("ValleyColor", value));
+MountainColor.subscribe((value) =>
+	localStorage.setItem("MountainColor", value),
+);
+FlatColor.subscribe((value) => localStorage.setItem("FlatColor", value));
+JoinColor.subscribe((value) => localStorage.setItem("JoinColor", value));
+CutColor.subscribe((value) => localStorage.setItem("CutColor", value));
+UnassignedColor.subscribe((value) =>
+	localStorage.setItem("UnassignedColor", value),
+);
 
 //
 
-FoldedFrontColor.subscribe(color => document.documentElement.style
-	.setProperty("--front-color", color));
-FoldedBackColor.subscribe(color => document.documentElement.style
-	.setProperty("--back-color", color));
-CPColor.subscribe(color => document.documentElement.style
-	.setProperty("--cp-color", color));
+FoldedFrontColor.subscribe((color) =>
+	document.documentElement.style.setProperty("--front-color", color),
+);
+FoldedBackColor.subscribe((color) =>
+	document.documentElement.style.setProperty("--back-color", color),
+);
+CPColor.subscribe((color) =>
+	document.documentElement.style.setProperty("--cp-color", color),
+);
 
-BoundaryColor.subscribe(color => document.documentElement.style
-	.setProperty("--boundary-color", color));
-ValleyColor.subscribe(color => document.documentElement.style
-	.setProperty("--valley-color", color));
-MountainColor.subscribe(color => document.documentElement.style
-	.setProperty("--mountain-color", color));
-FlatColor.subscribe(color => document.documentElement.style
-	.setProperty("--flat-color", color));
-JoinColor.subscribe(color => document.documentElement.style
-	.setProperty("--join-color", color));
-CutColor.subscribe(color => document.documentElement.style
-	.setProperty("--cut-color", color));
-UnassignedColor.subscribe(color => document.documentElement.style
-	.setProperty("--unassigned-color", color));
-
+BoundaryColor.subscribe((color) =>
+	document.documentElement.style.setProperty("--boundary-color", color),
+);
+ValleyColor.subscribe((color) =>
+	document.documentElement.style.setProperty("--valley-color", color),
+);
+MountainColor.subscribe((color) =>
+	document.documentElement.style.setProperty("--mountain-color", color),
+);
+FlatColor.subscribe((color) =>
+	document.documentElement.style.setProperty("--flat-color", color),
+);
+JoinColor.subscribe((color) =>
+	document.documentElement.style.setProperty("--join-color", color),
+);
+CutColor.subscribe((color) =>
+	document.documentElement.style.setProperty("--cut-color", color),
+);
+UnassignedColor.subscribe((color) =>
+	document.documentElement.style.setProperty("--unassigned-color", color),
+);
 
 //
 // show/hide things

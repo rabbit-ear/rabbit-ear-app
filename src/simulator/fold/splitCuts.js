@@ -42,7 +42,9 @@ function sortVerticesEdges(fold) {
 					break;
 				}
 			}
-			if (index < 0) { console.warn("origami simulator, no matching edge found"); }
+			if (index < 0) {
+				console.warn("origami simulator, no matching edge found");
+			}
 			sortedVerticesEdges.push(index);
 		}
 		fold.vertices_edges[i] = sortedVerticesEdges;
@@ -87,11 +89,22 @@ const splitCuts = (fold) => {
 						// check if this edge shares a face with the next
 						const edge = fold.edges_vertices[edgeIndex];
 						let otherVertex = edge[0];
-						if (otherVertex === i) { otherVertex = edge[1]; }
+						if (otherVertex === i) {
+							otherVertex = edge[1];
+						}
 						const nextEdge = fold.edges_vertices[nextEdgeIndex];
 						let nextVertex = nextEdge[0];
-						if (nextVertex === i) { nextVertex = nextEdge[1]; }
-						if (connectedByFace(fold, fold.vertices_faces[i], otherVertex, nextVertex)) {
+						if (nextVertex === i) {
+							nextVertex = nextEdge[1];
+						}
+						if (
+							connectedByFace(
+								fold,
+								fold.vertices_faces[i],
+								otherVertex,
+								nextVertex,
+							)
+						) {
 						} else {
 							groups.push([]);
 							groupIndex += 1;
@@ -103,18 +116,22 @@ const splitCuts = (fold) => {
 				}
 			}
 		}
-		if (groups.length <= 1) { continue; }
+		if (groups.length <= 1) {
+			continue;
+		}
 		for (let k = groups[groupIndex].length - 1; k >= 0; k -= 1) {
 			// put remainder of last group in first group
 			groups[0].unshift(groups[groupIndex][k]);
 		}
 		groups.pop();
-		for (let j = 1; j < groups.length; j += 1) { // for each extra group, assign new vertex
+		for (let j = 1; j < groups.length; j += 1) {
+			// for each extra group, assign new vertex
 			const currentVertex = fold.vertices_coords[i];
 			const vertIndex = fold.vertices_coords.length;
 			fold.vertices_coords.push(currentVertex.slice()); // make a copy
 			const connectingIndices = [];
-			for (let k = 0; k < groups[j].length; k += 1) { // update edges_vertices
+			for (let k = 0; k < groups[j].length; k += 1) {
+				// update edges_vertices
 				const edgeIndex = groups[j][k];
 				const edge = fold.edges_vertices[edgeIndex];
 				let otherIndex = edge[0];
@@ -127,7 +144,8 @@ const splitCuts = (fold) => {
 			if (connectingIndices.length < 2) {
 				console.warn("origami simulator, splitCuts problem");
 			} else {
-				for (let k = 1; k < connectingIndices.length; k += 1) { // update faces_vertices
+				for (let k = 1; k < connectingIndices.length; k += 1) {
+					// update faces_vertices
 					// i, k-1, k
 					const thisConnectingVertIndex = connectingIndices[k];
 					const previousConnectingVertIndex = connectingIndices[k - 1];
@@ -137,11 +155,15 @@ const splitCuts = (fold) => {
 						const index1 = face.indexOf(thisConnectingVertIndex);
 						const index2 = face.indexOf(previousConnectingVertIndex);
 						const index3 = face.indexOf(i);
-						if (index1 >= 0 && index2 >= 0 && index3 >= 0
-							&& (Math.abs(index1 - index3) === 1
-								|| Math.abs(index1 - index3) === face.length - 1)
-							&& (Math.abs(index2 - index3) === 1
-								|| Math.abs(index2 - index3) === face.length - 1)) {
+						if (
+							index1 >= 0 &&
+							index2 >= 0 &&
+							index3 >= 0 &&
+							(Math.abs(index1 - index3) === 1 ||
+								Math.abs(index1 - index3) === face.length - 1) &&
+							(Math.abs(index2 - index3) === 1 ||
+								Math.abs(index2 - index3) === face.length - 1)
+						) {
 							found = true;
 							face[index3] = vertIndex;
 							break;

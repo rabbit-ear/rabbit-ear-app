@@ -3,8 +3,8 @@ import verticesFaces from "../../model/verticesFaces.js";
 const calcTextureSize = (numNodes) => {
 	if (numNodes === 1) return 2;
 	for (let i = 0; i < numNodes; i += 1) {
-		if ((2 ** (2 * i)) >= numNodes) {
-			return (2 ** i);
+		if (2 ** (2 * i) >= numNodes) {
+			return 2 ** i;
 		}
 	}
 	if (numNodes !== 0) {
@@ -14,17 +14,16 @@ const calcTextureSize = (numNodes) => {
 };
 
 const initArrays = (gpuMath, model) => {
-	const numNodeFaces = verticesFaces(model)
-		.reduce((a, b) => a + b.length, 0);
+	const numNodeFaces = verticesFaces(model).reduce((a, b) => a + b.length, 0);
 	const numEdges = model.nodes
-		.map(n => n.numBeams())
+		.map((n) => n.numBeams())
 		.reduce((a, b) => a + b, 0);
 	const numFaces = model.faces_vertices.length;
 	const numCreases = model.creases.length;
 	// numNodeCreases + reactions
-	const numNodeCreases = (numCreases * 2) + model.nodes
-		.map(n => n.numCreases())
-		.reduce((a, b) => a + b, 0);
+	const numNodeCreases =
+		numCreases * 2 +
+		model.nodes.map((n) => n.numCreases()).reduce((a, b) => a + b, 0);
 	const textureDim = calcTextureSize(model.nodes.length);
 	const textureDimNodeFaces = calcTextureSize(numNodeFaces);
 	const textureDimEdges = calcTextureSize(numEdges);
@@ -39,11 +38,21 @@ const initArrays = (gpuMath, model) => {
 	const meta = new Float32Array(textureDim * textureDim * 4);
 	const meta2 = new Float32Array(textureDim * textureDim * 4);
 	const normals = new Float32Array(textureDimFaces * textureDimFaces * 4);
-	const faceVertexIndices = new Float32Array(textureDimFaces * textureDimFaces * 4);
-	const nodeFaceMeta = new Float32Array(textureDimNodeFaces * textureDimNodeFaces * 4);
-	const nominalTriangles = new Float32Array(textureDimFaces * textureDimFaces * 4);
-	const nodeCreaseMeta = new Float32Array(textureDimNodeCreases * textureDimNodeCreases * 4);
-	const creaseMeta2 = new Float32Array(textureDimCreases * textureDimCreases * 4);
+	const faceVertexIndices = new Float32Array(
+		textureDimFaces * textureDimFaces * 4,
+	);
+	const nodeFaceMeta = new Float32Array(
+		textureDimNodeFaces * textureDimNodeFaces * 4,
+	);
+	const nominalTriangles = new Float32Array(
+		textureDimFaces * textureDimFaces * 4,
+	);
+	const nodeCreaseMeta = new Float32Array(
+		textureDimNodeCreases * textureDimNodeCreases * 4,
+	);
+	const creaseMeta2 = new Float32Array(
+		textureDimCreases * textureDimCreases * 4,
+	);
 	const creaseGeo = new Float32Array(textureDimCreases * textureDimCreases * 4);
 	const theta = new Float32Array(textureDimCreases * textureDimCreases * 4);
 	const lastTheta = new Float32Array(textureDimCreases * textureDimCreases * 4);

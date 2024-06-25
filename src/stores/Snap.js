@@ -1,18 +1,7 @@
-import {
-	writable,
-	derived,
-} from "svelte/store";
-import {
-	ViewportCP,
-	ViewportFolded,
-} from "./ViewBox.js";
-import {
-	GridType,
-} from "./App.js";
-import {
-	RulerPointsCP,
-	RulerPointsFolded,
-} from "./Ruler.js";
+import { writable, derived } from "svelte/store";
+import { ViewportCP, ViewportFolded } from "./ViewBox.js";
+import { GridType } from "./App.js";
+import { RulerPointsCP, RulerPointsFolded } from "./Ruler.js";
 import { CreasePattern } from "./ModelCP.js";
 import { FoldedFormPlanar } from "./ModelFolded.js";
 import {
@@ -65,17 +54,14 @@ const SnapRadiusFactor = 0.05;
  */
 export const SnapRadiusCP = derived(
 	ViewportCP,
-	$ViewportCP => (
-		Math.max($ViewportCP[2], $ViewportCP[3]) * SnapRadiusFactor
-	),
+	($ViewportCP) => Math.max($ViewportCP[2], $ViewportCP[3]) * SnapRadiusFactor,
 	0.05,
 );
 
 export const SnapRadiusFolded = derived(
 	ViewportFolded,
-	$ViewportFolded => (
-		Math.max($ViewportFolded[2], $ViewportFolded[3]) * SnapRadiusFactor
-	),
+	($ViewportFolded) =>
+		Math.max($ViewportFolded[2], $ViewportFolded[3]) * SnapRadiusFactor,
 	0.05,
 );
 /**
@@ -83,8 +69,9 @@ export const SnapRadiusFolded = derived(
  */
 export const GridSnapFunction = derived(
 	GridType,
-	$GridType => $GridType === "triangle"
-		? triangleGridSnapFunction
-		: squareGridSnapFunction,
+	($GridType) =>
+		$GridType === "triangle"
+			? triangleGridSnapFunction
+			: squareGridSnapFunction,
 	squareGridSnapFunction,
 );

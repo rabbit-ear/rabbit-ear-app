@@ -13,7 +13,9 @@ const initialize = (canvas) => {
 	// const gl2 = canvas.getContext("webgl2", { antialias: false });
 	// if (gl2) { return { gl: gl2, version: 2 }; }
 	const gl1 = canvas.getContext("webgl", { antialias: false });
-	if (gl1) { return { gl: gl1, version: 1 }; }
+	if (gl1) {
+		return { gl: gl1, version: 1 };
+	}
 	return { gl: undefined, version: undefined };
 	// const gl = canvas.getContext("webgl", { antialias: false })
 	// 	|| canvas.getContext("experimental-webgl", { antialias: false });
@@ -33,7 +35,9 @@ function initGPUMath() {
 	const { gl, version } = initialize(canvas);
 	// console.log(`initializing webgl version ${version}`);
 	if (version === 1) {
-		if (!gl.getExtension("OES_texture_float")) { notSupported(); }
+		if (!gl.getExtension("OES_texture_float")) {
+			notSupported();
+		}
 	}
 
 	gl.disable(gl.DEPTH_TEST);
@@ -48,7 +52,11 @@ function initGPUMath() {
 		this.index = 0;
 	}
 
-	GPUMath.prototype.createProgram = function (programName, vertexShader, fragmentShader) {
+	GPUMath.prototype.createProgram = function (
+		programName,
+		vertexShader,
+		fragmentShader,
+	) {
 		const programs = this.programs;
 		let program = programs[programName];
 		if (program) {
@@ -86,7 +94,10 @@ function initGPUMath() {
 		this.textures[name] = texture;
 	};
 
-	GPUMath.prototype.initFrameBufferForTexture = function (textureName, shouldReplace) {
+	GPUMath.prototype.initFrameBufferForTexture = function (
+		textureName,
+		shouldReplace,
+	) {
 		let framebuffer = this.frameBuffers[textureName];
 		if (framebuffer) {
 			if (!shouldReplace) {
@@ -103,7 +114,13 @@ function initGPUMath() {
 
 		framebuffer = gl.createFramebuffer();
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+		gl.framebufferTexture2D(
+			gl.FRAMEBUFFER,
+			gl.COLOR_ATTACHMENT0,
+			gl.TEXTURE_2D,
+			texture,
+			0,
+		);
 
 		// not sure what to do with this line, but it suppresses a
 		// warning having to do with checkFramebufferStatus
@@ -116,7 +133,12 @@ function initGPUMath() {
 		this.frameBuffers[textureName] = framebuffer;
 	};
 
-	GPUMath.prototype.setUniformForProgram = function (programName, name, val, type) {
+	GPUMath.prototype.setUniformForProgram = function (
+		programName,
+		name,
+		val,
+		type,
+	) {
 		if (!this.programs[programName]) {
 			console.log(programName, this.programs, this.programs[programName]);
 			console.warn(`no program with name ${programName}`);
@@ -125,7 +147,10 @@ function initGPUMath() {
 		const uniforms = this.programs[programName].uniforms;
 		let location = uniforms[name];
 		if (!location) {
-			location = gl.getUniformLocation(this.programs[programName].program, name);
+			location = gl.getUniformLocation(
+				this.programs[programName].program,
+				name,
+			);
 			uniforms[name] = location;
 		}
 		if (type === "1f") gl.uniform1f(location, val);
@@ -148,7 +173,12 @@ function initGPUMath() {
 		if (program) gl.useProgram(program.program);
 	};
 
-	GPUMath.prototype.step = function (programName, inputTextures, outputTexture, time) {
+	GPUMath.prototype.step = function (
+		programName,
+		inputTextures,
+		outputTexture,
+		time,
+	) {
 		gl.useProgram(this.programs[programName].program);
 		if (time) this.setUniformForProgram(programName, "u_time", time, "1f");
 		gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffers[outputTexture]);
@@ -168,7 +198,11 @@ function initGPUMath() {
 		this.frameBuffers[texture2Name] = temp;
 	};
 
-	GPUMath.prototype.swap3Textures = function (texture1Name, texture2Name, texture3Name) {
+	GPUMath.prototype.swap3Textures = function (
+		texture1Name,
+		texture2Name,
+		texture3Name,
+	) {
 		let temp = this.textures[texture3Name];
 		this.textures[texture3Name] = this.textures[texture2Name];
 		this.textures[texture2Name] = this.textures[texture1Name];
@@ -180,7 +214,9 @@ function initGPUMath() {
 	};
 
 	GPUMath.prototype.readyToRead = function () {
-		return gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
+		return (
+			gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE
+		);
 	};
 
 	GPUMath.prototype.readPixels = function (xMin, yMin, width, height, array) {
@@ -188,9 +224,15 @@ function initGPUMath() {
 	};
 
 	GPUMath.prototype.dealloc = function () {
-		Object.values(this.programs).map(el => el.program).forEach(prog => gl.deleteProgram(prog));
-		Object.values(this.frameBuffers).forEach(buf => gl.deleteFramebuffer(buf));
-		Object.values(this.textures).forEach(texture => gl.deleteTexture(texture));
+		Object.values(this.programs)
+			.map((el) => el.program)
+			.forEach((prog) => gl.deleteProgram(prog));
+		Object.values(this.frameBuffers).forEach((buf) =>
+			gl.deleteFramebuffer(buf),
+		);
+		Object.values(this.textures).forEach((texture) =>
+			gl.deleteTexture(texture),
+		);
 		this.programs = {};
 		this.frameBuffers = {};
 		this.textures = {};

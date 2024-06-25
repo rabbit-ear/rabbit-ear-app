@@ -1,20 +1,8 @@
 import { boundingBox } from "rabbit-ear/math/polygon.js";
-import {
-	subtract2,
-	distance2,
-} from "rabbit-ear/math/vector.js";
-import {
-	writable,
-	derived,
-} from "svelte/store";
-import {
-	snapToPoint,
-	snapToRulerLine,
-} from "../../js/snap.js";
-import {
-	Keyboard,
-	SnapPoint,
-} from "../../stores/UI.js";
+import { subtract2, distance2 } from "rabbit-ear/math/vector.js";
+import { writable, derived } from "svelte/store";
+import { snapToPoint, snapToRulerLine } from "../../js/snap.js";
+import { Keyboard, SnapPoint } from "../../stores/UI.js";
 import {
 	SnapPointsCP,
 	SnapPointsFolded,
@@ -43,19 +31,33 @@ export const CPStep = derived(
 
 const CPMoveSnap = derived(
 	[CPMove, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP, GridSnapFunction],
-	([$CPMove, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP, $GridSnapFunction]) => ($CPStep < 2
-		? snapToPoint($CPMove, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction)
-		: snapToRulerLine($CPMove, $SnapPointsCP, $RulersCP, $SnapRadiusCP)
-	),
+	([
+		$CPMove,
+		$CPStep,
+		$SnapPointsCP,
+		$RulersCP,
+		$SnapRadiusCP,
+		$GridSnapFunction,
+	]) =>
+		$CPStep < 2
+			? snapToPoint($CPMove, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction)
+			: snapToRulerLine($CPMove, $SnapPointsCP, $RulersCP, $SnapRadiusCP),
 	{ coords: undefined, snap: false },
 );
 
 const CPDragSnap = derived(
 	[CPDrag, CPStep, SnapPointsCP, RulersCP, SnapRadiusCP, GridSnapFunction],
-	([$CPDrag, $CPStep, $SnapPointsCP, $RulersCP, $SnapRadiusCP, $GridSnapFunction]) => ($CPStep < 2
-		? snapToPoint($CPDrag, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction)
-		: snapToRulerLine($CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP)
-	),
+	([
+		$CPDrag,
+		$CPStep,
+		$SnapPointsCP,
+		$RulersCP,
+		$SnapRadiusCP,
+		$GridSnapFunction,
+	]) =>
+		$CPStep < 2
+			? snapToPoint($CPDrag, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction)
+			: snapToRulerLine($CPDrag, $SnapPointsCP, $RulersCP, $SnapRadiusCP),
 	{ coords: undefined, snap: false },
 );
 
@@ -73,17 +75,17 @@ export const CPDragCoords = derived(
 
 export const CPCircleCenter = derived(
 	[CPPresses, SnapPointsCP, SnapRadiusCP, GridSnapFunction],
-	([$CPPresses, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction]) => (
-		snapToPoint($CPPresses[0], $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction).coords
-	),
+	([$CPPresses, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction]) =>
+		snapToPoint($CPPresses[0], $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction)
+			.coords,
 	undefined,
 );
 
 export const CPRelease0Coords = derived(
 	[CPReleases, SnapPointsCP, SnapRadiusCP, GridSnapFunction],
-	([$CPReleases, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction]) => (
-		snapToPoint($CPReleases[0], $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction).coords
-	),
+	([$CPReleases, $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction]) =>
+		snapToPoint($CPReleases[0], $SnapPointsCP, $SnapRadiusCP, $GridSnapFunction)
+			.coords,
 	undefined,
 );
 
@@ -115,20 +117,19 @@ export const CPCircleRadius = derived(
 
 export const CPCircle = derived(
 	[CPCircleCenter, CPCircleRadius],
-	([$CPCircleCenter, $CPCircleRadius]) => $CPCircleCenter
-		? { center: $CPCircleCenter, radius: $CPCircleRadius }
-		: undefined,
+	([$CPCircleCenter, $CPCircleRadius]) =>
+		$CPCircleCenter
+			? { center: $CPCircleCenter, radius: $CPCircleRadius }
+			: undefined,
 	undefined,
 );
-
-
 
 export const CPSetSnapPoint = derived(
 	[CPMoveSnap, CPDragSnap],
 	([$CPMoveSnap, $CPDragSnap]) => {
 		const point = [$CPMoveSnap, $CPDragSnap]
-			.filter(a => a !== undefined)
-			.filter(el => el.snap)
+			.filter((a) => a !== undefined)
+			.filter((el) => el.snap)
 			.shift();
 		SnapPoint.set(point && point.snap ? point.coords : undefined);
 	},
@@ -150,6 +151,8 @@ export const subscribe = () => {
 };
 
 export const unsubscribe = () => {
-	if (unsub1) { unsub1(); }
+	if (unsub1) {
+		unsub1();
+	}
 	reset();
 };

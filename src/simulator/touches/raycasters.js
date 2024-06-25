@@ -5,9 +5,7 @@ import makeTouches from "./makeTouches.js";
  * handlers which in turn calculate ray casting intersections with
  * the origami model.
  */
-const Raycasters = ({
-	renderer, camera, simulator, setTouches,
-}) => {
+const Raycasters = ({ renderer, camera, simulator, setTouches }) => {
 	// for the pull-vertex tool. "raycasterPullVertex" is the currently moving vertex
 	let raycaster;
 	let raycasterPlane;
@@ -16,7 +14,9 @@ const Raycasters = ({
 	// orient the raycaster plane towards the camera and move it to the selected FOLD vertex.
 	const raycasterPressHandler = () => {
 		const firstTouch = makeTouches(simulator.model, raycaster)[0];
-		if (!firstTouch || firstTouch.vertex === undefined) { return; }
+		if (!firstTouch || firstTouch.vertex === undefined) {
+			return;
+		}
 		raycasterPullVertex = firstTouch.vertex;
 		const position = new THREE.Vector3(
 			simulator.model.positions[firstTouch.vertex * 3 + 0],
@@ -37,7 +37,9 @@ const Raycasters = ({
 		);
 		raycaster.setFromCamera(mouse, camera);
 		const touches = makeTouches(simulator.model, raycaster);
-		if (setTouches) { setTouches(touches); }
+		if (setTouches) {
+			setTouches(touches);
+		}
 	};
 
 	// for the pull-vertex tool. disable the pull motion when mouseup
@@ -49,7 +51,9 @@ const Raycasters = ({
 	 */
 	const pullVertex = () => {
 		const node = simulator.model.nodes[raycasterPullVertex];
-		if (!node) { return; }
+		if (!node) {
+			return;
+		}
 		const intersection = new THREE.Vector3();
 		raycaster.ray.intersectPlane(raycasterPlane, intersection);
 		node.moveManually(intersection);
@@ -63,12 +67,17 @@ const Raycasters = ({
 	// To fix this, during the animation loop, if the simulator is on,
 	// calculate the touches under the cursor.
 	const animate = (pullEnabled = false) => {
-		if (!simulator.active) { return; }
+		if (!simulator.active) {
+			return;
+		}
 		// console.log("pullEnabled, raycasterPullVertex", pullEnabled, raycasterPullVertex);
-		const touches = pullEnabled && raycasterPullVertex !== undefined
-			? []
-			: makeTouches(simulator.model, raycaster);
-		if (setTouches) { setTouches(touches); }
+		const touches =
+			pullEnabled && raycasterPullVertex !== undefined
+				? []
+				: makeTouches(simulator.model, raycaster);
+		if (setTouches) {
+			setTouches(touches);
+		}
 		// if the user is pulling on a node, manually move the node to the raycaster's
 		// new intersection with the raycaster plane.
 		if (pullEnabled && raycasterPullVertex !== undefined) {
@@ -77,9 +86,21 @@ const Raycasters = ({
 	};
 
 	const dealloc = () => {
-		renderer.domElement.removeEventListener("mousedown", raycasterPressHandler, false);
-		renderer.domElement.removeEventListener("mouseup", raycasterReleaseHandler, false);
-		renderer.domElement.removeEventListener("mousemove", raycasterMoveHandler, false);
+		renderer.domElement.removeEventListener(
+			"mousedown",
+			raycasterPressHandler,
+			false,
+		);
+		renderer.domElement.removeEventListener(
+			"mouseup",
+			raycasterReleaseHandler,
+			false,
+		);
+		renderer.domElement.removeEventListener(
+			"mousemove",
+			raycasterMoveHandler,
+			false,
+		);
 	};
 
 	// setup raycaster and plane (both will be dynamically updated)
@@ -87,9 +108,21 @@ const Raycasters = ({
 	raycasterPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1));
 	raycaster.setFromCamera({ x: Infinity, y: 0 }, camera);
 
-	renderer.domElement.addEventListener("mousedown", raycasterPressHandler, false);
-	renderer.domElement.addEventListener("mouseup", raycasterReleaseHandler, false);
-	renderer.domElement.addEventListener("mousemove", raycasterMoveHandler, false);
+	renderer.domElement.addEventListener(
+		"mousedown",
+		raycasterPressHandler,
+		false,
+	);
+	renderer.domElement.addEventListener(
+		"mouseup",
+		raycasterReleaseHandler,
+		false,
+	);
+	renderer.domElement.addEventListener(
+		"mousemove",
+		raycasterMoveHandler,
+		false,
+	);
 
 	return {
 		animate,

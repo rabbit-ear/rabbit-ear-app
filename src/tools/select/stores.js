@@ -1,8 +1,5 @@
 import { boundingBox } from "rabbit-ear/math/polygon.js";
-import {
-	writable,
-	derived,
-} from "svelte/store";
+import { writable, derived } from "svelte/store";
 import { Selection } from "../../stores/Select.js";
 // import { Highlight } from "../../stores/UI.js";
 import { CreasePattern } from "../../stores/ModelCP.js";
@@ -35,8 +32,8 @@ export const Release = writable(undefined);
 
 export const SelectionRect = derived(
 	[Press, Drag, Release],
-	([$Press, $Drag, $Release]) => boundingBox([$Press, $Drag, $Release]
-		.filter(a => a !== undefined)),
+	([$Press, $Drag, $Release]) =>
+		boundingBox([$Press, $Drag, $Release].filter((a) => a !== undefined)),
 	undefined,
 );
 

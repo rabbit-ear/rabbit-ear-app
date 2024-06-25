@@ -15,26 +15,32 @@ const getNearestToPoint = (graph, point) => {
 
 export const pointerEventSplitEdge = (eventType, { point }) => {
 	switch (eventType) {
-	case "press": {
-		const edge = nearest(get(CreasePattern), point).edge;
-		if (edge === undefined) { break; }
-		const edges = [];
-		edges[edge] = true;
-		// selected.set({ ...get(selected), edges });
-		executeCommand("splitEdges", [edge]);
-	}
-		break;
-	case "hover": {
-		const edge = nearest(get(CreasePattern), point).edge;
-		if (edge === undefined) { break; }
-		const edges = [];
-		edges[edge] = true;
-		// selected.set({ ...get(selected), edges });
-	}
-		break;
-	case "move":
-		break;
-	case "release":
-		break;
+		case "press":
+			{
+				const edge = nearest(get(CreasePattern), point).edge;
+				if (edge === undefined) {
+					break;
+				}
+				const edges = [];
+				edges[edge] = true;
+				// selected.set({ ...get(selected), edges });
+				executeCommand("splitEdges", [edge]);
+			}
+			break;
+		case "hover":
+			{
+				const edge = nearest(get(CreasePattern), point).edge;
+				if (edge === undefined) {
+					break;
+				}
+				const edges = [];
+				edges[edge] = true;
+				// selected.set({ ...get(selected), edges });
+			}
+			break;
+		case "move":
+			break;
+		case "release":
+			break;
 	}
 };

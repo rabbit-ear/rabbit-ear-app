@@ -1,8 +1,4 @@
-import {
-	get,
-	writable,
-	derived,
-} from "svelte/store";
+import { get, writable, derived } from "svelte/store";
 import {
 	nearestVertex,
 	nearestEdge,
@@ -12,7 +8,11 @@ import { CreasePattern } from "../../stores/ModelCP.js";
 import { Highlight } from "../../stores/UI.js";
 
 export const Press = writable(undefined);
-export const TargetLocked = derived(Press, $Press => $Press !== undefined, false);
+export const TargetLocked = derived(
+	Press,
+	($Press) => $Press !== undefined,
+	false,
+);
 export const Nearest = writable(undefined);
 
 const nearest = (graph, point) => ({
@@ -22,7 +22,9 @@ const nearest = (graph, point) => ({
 });
 
 export const UpdateTarget = (point) => {
-	if (!point) { return; }
+	if (!point) {
+		return;
+	}
 	Nearest.set(structuredClone(nearest(get(CreasePattern), point)));
 };
 
@@ -30,11 +32,13 @@ const UpdateHighlight = derived(
 	[Nearest],
 	([$Nearest]) => {
 		Highlight.reset();
-		if (!$Nearest) { return; }
+		if (!$Nearest) {
+			return;
+		}
 		Highlight.set({
-			vertices: [$Nearest.vertex].filter(a => a !== undefined),
-			edges: [$Nearest.edge].filter(a => a !== undefined),
-			faces: [$Nearest.face].filter(a => a !== undefined),
+			vertices: [$Nearest.vertex].filter((a) => a !== undefined),
+			edges: [$Nearest.edge].filter((a) => a !== undefined),
+			faces: [$Nearest.face].filter((a) => a !== undefined),
 		});
 	},
 	undefined,
@@ -47,13 +51,11 @@ export const reset = () => {
 let unsub = [];
 
 export const subscribe = () => {
-	unsub = [
-		UpdateHighlight.subscribe(() => {}),
-	];
+	unsub = [UpdateHighlight.subscribe(() => {})];
 };
 
 export const unsubscribe = () => {
-	unsub.forEach(fn => fn());
+	unsub.forEach((fn) => fn());
 	unsub = [];
 	reset();
 };

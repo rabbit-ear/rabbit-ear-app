@@ -3,12 +3,14 @@ let worker;
 addEventListener("message", ({ data }) => {
 	// const { graph, epsilon, hash } = data;
 
-	if (worker) { worker.terminate(); }
+	if (worker) {
+		worker.terminate();
+	}
 
-	worker = new Worker(
-		new URL("./orders.worker.js", import.meta.url),
-		{ type: "module", name: "layer-solver-process" },
-	);
+	worker = new Worker(new URL("./orders.worker.js", import.meta.url), {
+		type: "module",
+		name: "layer-solver-process",
+	});
 
 	const onCallback = ({ data }) => {
 		postMessage(data);
@@ -20,10 +22,10 @@ addEventListener("message", ({ data }) => {
 	worker.postMessage(data);
 });
 
-addEventListener("error", ({ error }) => (
-	console.warn("dispatch.worker.js, unhandled error")
-));
+addEventListener("error", ({ error }) =>
+	console.warn("dispatch.worker.js, unhandled error"),
+);
 
-addEventListener("messageerror", () => (
-	console.warn("dispatch.worker.js, unhandled messageerror")
-));
+addEventListener("messageerror", () =>
+	console.warn("dispatch.worker.js, unhandled messageerror"),
+);

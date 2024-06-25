@@ -5,34 +5,18 @@ import {
 	FoldedForm,
 	// ComputedFoldedCoords,
 } from "../../stores/ModelFolded.js";
-import {
-	foldSegment,
-} from "rabbit-ear/graph/fold/foldGraph.js";
-import {
-	foldGraphIntoSegments,
-} from "rabbit-ear/graph/fold/foldGraphIntoSegments.js";
-import {
-	subtract2,
-} from "rabbit-ear/math/vector.js";
-import {
-	pointsToLine,
-} from "rabbit-ear/math/convert.js";
-import {
-	edgeAssignmentToFoldAngle,
-} from "rabbit-ear/fold/spec.js";
-import {
-	GhostGraphCP,
-} from "../../stores/UI.js";
+import { foldSegment } from "rabbit-ear/graph/fold/foldGraph.js";
+import { foldGraphIntoSegments } from "rabbit-ear/graph/fold/foldGraphIntoSegments.js";
+import { subtract2 } from "rabbit-ear/math/vector.js";
+import { pointsToLine } from "rabbit-ear/math/convert.js";
+import { edgeAssignmentToFoldAngle } from "rabbit-ear/fold/spec.js";
+import { GhostGraphCP } from "../../stores/UI.js";
 import {
 	NewEdgeAssignment,
 	// NewEdgeFoldAngle,
 } from "../../stores/App.js";
-import {
-	validate,
-} from "rabbit-ear/graph/validate/validate.js";
-import {
-	mergeArraysWithHoles,
-} from "rabbit-ear/general/array.js";
+import { validate } from "rabbit-ear/graph/validate/validate.js";
+import { mergeArraysWithHoles } from "rabbit-ear/general/array.js";
 import {
 	transferPointInFaceBetweenGraphs,
 	// transferPointOnEdgeBetweenGraphs,
@@ -42,16 +26,20 @@ export const foldedLine = (a, b) => {
 	const line = { vector: subtract2(b, a), origin: a };
 	try {
 		const graph = get(CreasePattern);
-		const result = foldGraphIntoSegments(graph, line, "V")
-			.filter(a => a !== undefined);
+		const result = foldGraphIntoSegments(graph, line, "V").filter(
+			(a) => a !== undefined,
+		);
 		const vertCount = graph.vertices_coords.length;
-		graph.vertices_coords.push(...result.flatMap(el => el.points));
-		graph.edges_vertices.push(...result
-			.map((_, i) => [vertCount + i * 2, vertCount + i * 2 + 1]));
-		graph.edges_assignment.push(...result.map(el => el.assignment));
-		graph.edges_foldAngle.push(...result
-			.map(el => el.assignment)
-			.map(a => edgeAssignmentToFoldAngle(a)));
+		graph.vertices_coords.push(...result.flatMap((el) => el.points));
+		graph.edges_vertices.push(
+			...result.map((_, i) => [vertCount + i * 2, vertCount + i * 2 + 1]),
+		);
+		graph.edges_assignment.push(...result.map((el) => el.assignment));
+		graph.edges_foldAngle.push(
+			...result
+				.map((el) => el.assignment)
+				.map((a) => edgeAssignmentToFoldAngle(a)),
+		);
 		UpdateFrame({ ...graph });
 	} catch (error) {
 		console.error(error);
@@ -86,14 +74,15 @@ export const foldedLinePreview = (a, b) => {
 	const line = { vector: subtract2(b, a), origin: a };
 	// return foldCreasePattern(get(CreasePattern), line, "V");
 	try {
-		const result = foldGraphIntoSegments(get(CreasePattern), line, "V")
-			.filter(a => a !== undefined);
+		const result = foldGraphIntoSegments(get(CreasePattern), line, "V").filter(
+			(a) => a !== undefined,
+		);
 		// console.log("graph", {
 		// 	vertices_coords: result.flatMap(el => el.points),
 		// 	edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
 		// });
 		GhostGraphCP.set({
-			vertices_coords: result.flatMap(el => el.points),
+			vertices_coords: result.flatMap((el) => el.points),
 			edges_vertices: result.map((_, i) => [i * 2, i * 2 + 1]),
 			edges_assignment: result.map(() => "F"),
 		});
@@ -102,7 +91,8 @@ export const foldedLinePreview = (a, b) => {
 	}
 };
 
-export const foldedSegment = (pointA, pointB) => { //, assignment = "F", foldAngle = 0) => {
+export const foldedSegment = (pointA, pointB) => {
+	//, assignment = "F", foldAngle = 0) => {
 	const segment = [pointA, pointB];
 	const folded = get(FoldedForm);
 	// const cp = structuredClone(get(CreasePattern));
@@ -110,7 +100,10 @@ export const foldedSegment = (pointA, pointB) => { //, assignment = "F", foldAng
 	const assignment = get(NewEdgeAssignment);
 	// const foldAngle = get(NewEdgeFoldAngle);
 	const vertices_coordsFolded = folded.vertices_coords;
-	const result = foldSegment(cp, segment, { assignment, vertices_coordsFolded });
+	const result = foldSegment(cp, segment, {
+		assignment,
+		vertices_coordsFolded,
+	});
 	// console.log("result", result);
 	// console.log("cp", JSON.stringify(structuredClone(cp)));
 	// console.log("folded", structuredClone(folded));
@@ -118,7 +111,9 @@ export const foldedSegment = (pointA, pointB) => { //, assignment = "F", foldAng
 	// temp
 	try {
 		const v = validate(cp);
-		if (v.length) { console.log("validate", v); }
+		if (v.length) {
+			console.log("validate", v);
+		}
 	} catch (error) {
 		console.log(cp);
 		console.error("validate FAILED", error);

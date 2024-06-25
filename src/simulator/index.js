@@ -71,7 +71,9 @@ const OrigamiSimulator = ({ scene, onCompute } = {}) => {
 	const computeLoop = () => {
 		computeLoopID = window.requestAnimationFrame(computeLoop);
 		compute();
-		if (onCompute) { onCompute({ error }); }
+		if (onCompute) {
+			onCompute({ error });
+		}
 	};
 	/**
 	 * @description Activate origami simulator's compute loop.
@@ -84,7 +86,9 @@ const OrigamiSimulator = ({ scene, onCompute } = {}) => {
 			computeLoopID = undefined;
 		}
 		active = isActive;
-		if (active) { computeLoop(); }
+		if (active) {
+			computeLoop();
+		}
 	};
 	/**
 	 * @description this load method can throw an error. wrap it in a try catch
@@ -142,7 +146,9 @@ const OrigamiSimulator = ({ scene, onCompute } = {}) => {
 		model,
 		reset,
 		setScene: (newScene) => model.setScene(newScene),
-		setOnCompute: (handler) => { onCompute = handler; },
+		setOnCompute: (handler) => {
+			onCompute = handler;
+		},
 		dealloc,
 		nodeDidMove,
 		// solver settings
@@ -176,15 +182,20 @@ const OrigamiSimulator = ({ scene, onCompute } = {}) => {
 		setMaterialFront: (material) => model.setMaterialFront(material),
 		setMaterialBack: (material) => model.setMaterialBack(material),
 		setMaterialStrain: (material) => model.setMaterialStrain(material),
-		setMaterialLine: (material, assignments) => (
-			model.setMaterialLine(material, assignments)
-		),
+		setMaterialLine: (material, assignments) =>
+			model.setMaterialLine(material, assignments),
 	};
 	// getters and setters
 	Object.defineProperty(app, "active", { get: () => active, set: setActive });
-	Object.defineProperty(app, "foldAmount", { get: () => foldAmount, set: setFoldAmount });
+	Object.defineProperty(app, "foldAmount", {
+		get: () => foldAmount,
+		set: setFoldAmount,
+	});
 	Object.defineProperty(app, "strain", { get: () => strain, set: setStrain });
-	Object.defineProperty(app, "shadows", { get: () => shadows, set: setShadows });
+	Object.defineProperty(app, "shadows", {
+		get: () => shadows,
+		set: setShadows,
+	});
 	Object.defineProperty(app, "materials", { get: () => model.materials });
 	Object.defineProperty(app, "graph", { get: () => model.fold, set: load });
 	return app;

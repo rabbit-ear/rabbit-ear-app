@@ -14,19 +14,16 @@ export const AssignType = writable(ASSIGN_SWAP);
 
 export const Move = writable(undefined);
 
-export const Edge = derived(
-	Move,
-	($Move) => snapToEdge($Move).edge,
-	undefined,
-);
+export const Edge = derived(Move, ($Move) => snapToEdge($Move).edge, undefined);
 
 export const Highlights = derived(
 	Edge,
-	($Edge) => ($Edge !== undefined
-		// ? executeCommand("highlight", { edges: [$Edge] })
-		// : executeCommand("highlight", {})),
-		? Highlight.setEdges([$Edge])
-		: Highlight.reset()),
+	($Edge) =>
+		$Edge !== undefined
+			? // ? executeCommand("highlight", { edges: [$Edge] })
+				// : executeCommand("highlight", {})),
+				Highlight.setEdges([$Edge])
+			: Highlight.reset(),
 	undefined,
 );
 
@@ -37,5 +34,7 @@ export const subscribe = () => {
 };
 
 export const unsubscribe = () => {
-	if (unsub) { unsub(); }
+	if (unsub) {
+		unsub();
+	}
 };

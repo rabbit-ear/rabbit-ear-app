@@ -25,7 +25,7 @@ export const invertAssignments = () => {
 	const edges_assignment = graph.edges_assignment || [];
 	const edges = (graph.edges_vertices || [])
 		.map((_, i) => i)
-		.filter(e => assignmentCanBeFolded[graph.edges_assignment[e]])
+		.filter((e) => assignmentCanBeFolded[graph.edges_assignment[e]]);
 	toggleEdgesAssignment(graph, edges);
 	IsoUpdateFrame({ ...graph });
 };

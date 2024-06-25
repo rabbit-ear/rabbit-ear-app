@@ -1,36 +1,16 @@
-import {
-	get,
-	writable,
-	derived,
-} from "svelte/store";
-import {
-	getFileMetadata,
-} from "rabbit-ear/fold/spec.js";
-import {
-	flattenFrame,
-	getFileFramesAsArray,
-} from "rabbit-ear/fold/frames.js";
-import {
-	populate,
-} from "rabbit-ear/graph/populate.js";
-import {
-	reassembleFramesToFOLD,
-	graphIsCreasePattern,
-} from "../js/graph.js";
-import {
-	FileModified,
-} from "./File.js";
+import { get, writable, derived } from "svelte/store";
+import { getFileMetadata } from "rabbit-ear/fold/spec.js";
+import { flattenFrame, getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
+import { populate } from "rabbit-ear/graph/populate.js";
+import { reassembleFramesToFOLD, graphIsCreasePattern } from "../js/graph.js";
+import { FileModified } from "./File.js";
 import {
 	CameraMatrixCP,
 	CameraMatrixFolded,
 	WebGLViewMatrix,
 } from "./ViewBox.js";
-import {
-	Selection,
-} from "./Select.js";
-import {
-	CommandHistory,
-} from "./History.js";
+import { Selection } from "./Select.js";
+import { CommandHistory } from "./History.js";
 
 // most of the data stores in this document are essentially the
 // deconstructed constituent parts of the FOLD file.
@@ -107,7 +87,7 @@ export const IsolatedFrame = derived(
  */
 export const FramesInherit = derived(
 	Frames,
-	($Frames) => $Frames.map(frame => frame && frame.frame_inherit === true),
+	($Frames) => $Frames.map((frame) => frame && frame.frame_inherit === true),
 	[false],
 );
 /**
@@ -132,7 +112,8 @@ export const FramesAreCreasePattern = derived(
  */
 export const FrameIsCreasePattern = derived(
 	[FramesAreCreasePattern, FrameIndex],
-	([$FramesAreCreasePattern, $FrameIndex]) => $FramesAreCreasePattern[$FrameIndex],
+	([$FramesAreCreasePattern, $FrameIndex]) =>
+		$FramesAreCreasePattern[$FrameIndex],
 	true,
 );
 
@@ -145,7 +126,7 @@ export const FrameIsCreasePattern = derived(
  */
 export const IsoUpdateFrame = (graph) => {
 	FileModified.set(true);
-	return Frames.update(frames => {
+	return Frames.update((frames) => {
 		frames[get(FrameIndex)] = graph;
 		return [...frames];
 	});
@@ -187,7 +168,9 @@ export const SetFrame = (graph) => {
 export const SetNewModel = (FOLD) => {
 	let frames = [];
 	try {
-		frames = getFileFramesAsArray(FOLD).map(graph => populate(graph, { faces: true }));
+		frames = getFileFramesAsArray(FOLD).map((graph) =>
+			populate(graph, { faces: true }),
+		);
 	} catch (error) {
 		console.warn("SetNewModel", error);
 		return;

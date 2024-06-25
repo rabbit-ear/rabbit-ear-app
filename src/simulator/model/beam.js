@@ -43,7 +43,8 @@ Beam.prototype.getNaturalFrequency = function () {
 };
 Beam.prototype.getMinMass = function () {
 	let minMass = this.nodes[0].getSimMass();
-	if (this.nodes[1].getSimMass() < minMass) minMass = this.nodes[1].getSimMass();
+	if (this.nodes[1].getSimMass() < minMass)
+		minMass = this.nodes[1].getSimMass();
 	return minMass;
 };
 Beam.prototype.getOtherNode = function (node) {
@@ -54,7 +55,7 @@ Beam.prototype.getOtherNode = function (node) {
 // deallocate
 Beam.prototype.destroy = function () {
 	const self = this;
-	this.nodes.forEach(node => node.removeBeam(self));
+	this.nodes.forEach((node) => node.removeBeam(self));
 	this.vertices = null;
 	this.nodes = null;
 };

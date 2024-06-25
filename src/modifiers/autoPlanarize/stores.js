@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-// todo: need to review all the methods 
+// todo: need to review all the methods
 export const PlanarizeCommands = writable({
 	snapAllVertices: true,
 	segment: true,

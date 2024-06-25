@@ -7,34 +7,44 @@ import { svgNumber } from "./epsilon.js";
  * @description Is the graph a folded model or crease pattern?
  * Depending on which, the renderer will style the model differently.
  */
-export const IsFoldedForm = (graph) => graph
-	&& graph.frame_classes
-	&& graph.frame_classes.length
-	&& graph.frame_classes.includes("foldedForm");
+export const IsFoldedForm = (graph) =>
+	graph &&
+	graph.frame_classes &&
+	graph.frame_classes.length &&
+	graph.frame_classes.includes("foldedForm");
 /**
  * @description Create an empty FOLD graph.
  */
-export const makeEmptyGraph = () => populate({
-	vertices_coords: [],
-	edges_vertices: [],
-	edges_assignment: [],
-	edges_foldAngle: [],
-	faces_vertices: [],
-});
+export const makeEmptyGraph = () =>
+	populate({
+		vertices_coords: [],
+		edges_vertices: [],
+		edges_assignment: [],
+		edges_foldAngle: [],
+		faces_vertices: [],
+	});
 /**
  *
  */
 export const makeSVGEdgesCoords = (graph) => {
-	const edges_vertices = graph && graph.edges_vertices && graph.vertices_coords
-		? graph.edges_vertices
-		: []
+	const edges_vertices =
+		graph && graph.edges_vertices && graph.vertices_coords
+			? graph.edges_vertices
+			: [];
 	return edges_vertices
-		.map(ev => ev.map(v => graph.vertices_coords[v]))
-		.map(seg => (seg && seg.length && seg[0] && seg[1]
-			? [seg[0][0], seg[0][1], seg[1][0], seg[1][1]]
-			: []))
-		.map(coords => coords.map(svgNumber))
-		.map(coords => ({ x1: coords[0], y1: coords[1], x2: coords[2], y2: coords[3] }));
+		.map((ev) => ev.map((v) => graph.vertices_coords[v]))
+		.map((seg) =>
+			seg && seg.length && seg[0] && seg[1]
+				? [seg[0][0], seg[0][1], seg[1][0], seg[1][1]]
+				: [],
+		)
+		.map((coords) => coords.map(svgNumber))
+		.map((coords) => ({
+			x1: coords[0],
+			y1: coords[1],
+			x2: coords[2],
+			y2: coords[3],
+		}));
 };
 /**
  * @description Given a FOLD graph, a list of edge indices, and
@@ -44,7 +54,9 @@ export const makeSVGEdgesCoords = (graph) => {
  */
 export const setEdgesAssignment = (graph, edges, assignment, foldAngle) => {
 	// ensure edges_assignment and edges_foldAngle exist
-	if (!graph.edges_vertices) { return; }
+	if (!graph.edges_vertices) {
+		return;
+	}
 	if (!graph.edges_assignment) {
 		graph.edges_assignment = graph.edges_vertices.map(() => "U");
 	}
@@ -52,11 +64,15 @@ export const setEdgesAssignment = (graph, edges, assignment, foldAngle) => {
 		graph.edges_foldAngle = graph.edges_vertices.map(() => 0);
 	}
 	// set data
-	edges.forEach(e => { graph.edges_assignment[e] = assignment; });
+	edges.forEach((e) => {
+		graph.edges_assignment[e] = assignment;
+	});
 	if (foldAngle === undefined) {
 		foldAngle = assignmentFlatFoldAngle[assignment] || 0;
 	}
-	edges.forEach(e => { graph.edges_foldAngle[e] = foldAngle; });
+	edges.forEach((e) => {
+		graph.edges_foldAngle[e] = foldAngle;
+	});
 };
 
 const swap = { M: "V", m: "V", V: "M", v: "M" };
@@ -66,24 +82,26 @@ const swap = { M: "V", m: "V", V: "M", v: "M" };
  * become mountains, and their fold angle will update as well.
  */
 export const toggleEdgesAssignment = (graph, edges) => {
-	edges.forEach(edge => {
+	edges.forEach((edge) => {
 		// if (g.edges_assignment[edge] === "B"
 		// 	|| g.edges_assignment[edge] === "b") {
 		// 	return;
 		// }
 		graph.edges_assignment[edge] = swap[graph.edges_assignment[edge]] || "V";
-		if (graph.edges_foldAngle[edge] == null
-			|| graph.edges_foldAngle[edge] === 0) {
-			graph.edges_foldAngle[edge] = graph.edges_assignment[edge] === "M"
-				? -180
-				: 180;
+		if (
+			graph.edges_foldAngle[edge] == null ||
+			graph.edges_foldAngle[edge] === 0
+		) {
+			graph.edges_foldAngle[edge] =
+				graph.edges_assignment[edge] === "M" ? -180 : 180;
 		} else {
-			graph.edges_foldAngle[edge] = graph.edges_assignment[edge] === "M"
-				? -Math.abs(graph.edges_foldAngle[edge])
-				: Math.abs(graph.edges_foldAngle[edge]);
+			graph.edges_foldAngle[edge] =
+				graph.edges_assignment[edge] === "M"
+					? -Math.abs(graph.edges_foldAngle[edge])
+					: Math.abs(graph.edges_foldAngle[edge]);
 		}
 	});
-}
+};
 
 const signedAssignments = { M: -1, m: -1, V: 1, v: 1 };
 /**
@@ -96,25 +114,31 @@ const signedAssignments = { M: -1, m: -1, V: 1, v: 1 };
  */
 export const setEdgesFoldAngle = (g, edges, foldAngle) => {
 	// ensure edges_foldAngle exist
-	if (!g.edges_vertices) { return; }
+	if (!g.edges_vertices) {
+		return;
+	}
 	if (!g.edges_foldAngle) {
 		g.edges_foldAngle = g.edges_vertices.map(() => 0);
 	}
 	// if edges_assignment exists, use it to ensure sign is correct
 	// (M is - and V is +, anything else don't touch).
 	if (g.edges_assignment) {
-		edges.forEach(e => {
+		edges.forEach((e) => {
 			// if the assignment is M or V, and
 			// the foldAngle sign doesn't match, flip it
-			if (g.edges_assignment[e] in signedAssignments
-				&& Math.sign(foldAngle) !== signedAssignments[g.edges_assignment[e]]) {
+			if (
+				g.edges_assignment[e] in signedAssignments &&
+				Math.sign(foldAngle) !== signedAssignments[g.edges_assignment[e]]
+			) {
 				g.edges_foldAngle[e] = -foldAngle;
 			} else {
 				g.edges_foldAngle[e] = foldAngle;
 			}
 		});
 	} else {
-		edges.forEach(e => { g.edges_foldAngle[e] = foldAngle; });
+		edges.forEach((e) => {
+			g.edges_foldAngle[e] = foldAngle;
+		});
 	}
 	return g;
 };
@@ -127,7 +151,9 @@ export const setEdgesFoldAngle = (g, edges, foldAngle) => {
 export const reassembleFramesToFOLD = (frames) => {
 	const FOLD = { ...frames[0] };
 	const file_frames = frames.slice(1);
-	if (file_frames.length) { FOLD.file_frames = file_frames; }
+	if (file_frames.length) {
+		FOLD.file_frames = file_frames;
+	}
 	return FOLD;
 };
 /**
@@ -141,31 +167,41 @@ export const reassembleFramesToFOLD = (frames) => {
  */
 export const graphIsCreasePattern = (graph) => {
 	// if graph is empty, it is a crease pattern
-	if (!graph) { return true; }
+	if (!graph) {
+		return true;
+	}
 	// if graph has "creasePattern" metadata, it is a crease pattern
 	if (graph.frame_classes) {
-		if (graph.frame_classes.includes("creasePattern")) { return true; }
-		if (graph.frame_classes.includes("foldedForm")) { return false; }
+		if (graph.frame_classes.includes("creasePattern")) {
+			return true;
+		}
+		if (graph.frame_classes.includes("foldedForm")) {
+			return false;
+		}
 	}
 	// if no metadata exists, check the vertices.
-	if (!graph.vertices_coords) { return true; }
+	if (!graph.vertices_coords) {
+		return true;
+	}
 	// if graph has 3D vertices and if those Z components are outside
 	// of the XY plane, it's not a crease pattern. otherwise, yes.
-	return graph.vertices_coords
-		.filter(coords => coords !== undefined)
-		.map(coords => coords[2])
-		.filter(n => n !== undefined)
-		.filter(n => Math.abs(n) > 1e-2)
-		.length === 0;
+	return (
+		graph.vertices_coords
+			.filter((coords) => coords !== undefined)
+			.map((coords) => coords[2])
+			.filter((n) => n !== undefined)
+			.filter((n) => Math.abs(n) > 1e-2).length === 0
+	);
 };
 
 export const shortestEdgeLength = (graph) => {
-	if (!graph || !graph.vertices_coords || !graph.edges_vertices) { return 0; }
+	if (!graph || !graph.vertices_coords || !graph.edges_vertices) {
+		return 0;
+	}
 	const lengths = graph.edges_vertices
-		.map(ev => ev.map(v => graph.vertices_coords[v]))
-		.map(segment => distance(...segment));
-	const minLen = lengths
-		.reduce((a, b) => Math.min(a, b), Infinity);
+		.map((ev) => ev.map((v) => graph.vertices_coords[v]))
+		.map((segment) => distance(...segment));
+	const minLen = lengths.reduce((a, b) => Math.min(a, b), Infinity);
 	return minLen === Infinity ? undefined : minLen;
 };
 

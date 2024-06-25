@@ -5,10 +5,13 @@ import { CreasePattern } from "../../stores/ModelCP.js";
 /**
  *
  */
-export const test = (...args) => console.log(["test():"]
-	.concat(args.map((arg, i) => `${i}:${typeof arg}:${JSON.stringify(arg)}`))
-	.map(s => `${s}\n`)
-	.join(""));
+export const test = (...args) =>
+	console.log(
+		["test():"]
+			.concat(args.map((arg, i) => `${i}:${typeof arg}:${JSON.stringify(arg)}`))
+			.map((s) => `${s}\n`)
+			.join(""),
+	);
 /**
  *
  */
@@ -18,6 +21,6 @@ export const splitEdges = (edges) => {
 	const result = edges
 		.slice()
 		.sort((a, b) => b - a)
-		.map(edge => splitEdge(graph, edge));
+		.map((edge) => splitEdge(graph, edge));
 	UpdateFrame({ ...graph });
 };

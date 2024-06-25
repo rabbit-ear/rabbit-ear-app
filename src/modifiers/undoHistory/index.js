@@ -6,4 +6,4 @@ export default {
 	name: "undo history",
 	execute,
 	panel,
-}
+};
