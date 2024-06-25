@@ -1,0 +1,44 @@
+// Folder-specific settings
+//
+// For a full list of overridable settings, and general information on folder-specific settings,
+// see the documentation: https://zed.dev/docs/configuring-zed#folder-specific-settings
+{
+	"languages": {
+		"TypeScript": {
+			"format_on_save": "on",
+			"formatter": {
+				"external": {
+					"command": "node_modules/.bin/prettier",
+					"arguments": [
+						"--stdin-filepath",
+						"{buffer_path}"
+					]
+				}
+			}
+		},
+		"JavaScript": {
+			"format_on_save": "on",
+			"formatter": {
+				"external": {
+					"command": "node_modules/.bin/prettier",
+					"arguments": [
+						"--stdin-filepath",
+						"{buffer_path}"
+					]
+				}
+			}
+		},
+		"CSS": {
+			"format_on_save": "on",
+			"formatter": {
+				"external": {
+					"command": "node_modules/.bin/prettier",
+					"arguments": [
+						"--stdin-filepath",
+						"{buffer_path}"
+					]
+				}
+			}
+		}
+	}
+}

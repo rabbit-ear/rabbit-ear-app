@@ -225,8 +225,7 @@ window.fs.save = async () => {
 		: saveAs(JSON.stringify(GetCurrentFOLDFile()), filePath);
 };
 
-window.fs.saveAs = () =>
-	saveAs(JSON.stringify(GetCurrentFOLDFile()), get(FilePath));
+window.fs.saveAs = () => saveAs(JSON.stringify(GetCurrentFOLDFile()), get(FilePath));
 
 window.edit.copy = () => {
 	console.log("window.edit.copy");
