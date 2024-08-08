@@ -40,21 +40,19 @@ import {
  * Once the app is ready for 1.0, this feature will be removed.
  */
 const timeLimitApp = async () => {
-	// const date2024_05 = 1714521600; // expires May 1
 	// const date2024_06 = 1717200000; // expires June 1
-	// const date2024_07 = 1719792000; // expires July 1
-	// const date2024_08 = 1722470400; // expires Aug 1
-	const date2024_09 = 1725148800; // expires Sept 1
+	// const date2024_09 = 1725148800; // expires Sept 1
+	const date2025_01_01 = 1735689600; // expires January 1, 2025
 
 	// convert ms timestamp into seconds timestamp
 	const nowDate = Date.now() / 1000;
 	// expire june 1, 2024
-	if (nowDate > date2024_09) {
+	if (nowDate > date2025_01_01) {
 		setTimeout(exit, 60000);
 		await message(
 			"download the latest version at:\n\nhttps://github.com/rabbit-ear/rabbit-ear/releases/\n\nDon't worry, it's still 100% free.",
 			{
-				title: "App Expired September 1st 2024",
+				title: "App Expired in 2025",
 				type: "warning",
 				okLabel: "Quit",
 			},

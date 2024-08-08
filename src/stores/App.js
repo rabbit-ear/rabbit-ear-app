@@ -109,30 +109,22 @@ export const ShowPanelModifiersPanel = writable(false);
 export const ShowPanelModifiersSubPanel = writable(false);
 
 // todo: global-level subscribe. needs unsubscribe
-VerticalUp.subscribe((value) =>
-	localStorage.setItem("VerticalUp", String(value)),
-);
+VerticalUp.subscribe((value) => localStorage.setItem("VerticalUp", String(value)));
 ShowGrid.subscribe((value) => localStorage.setItem("ShowGrid", String(value)));
 ShowAxes.subscribe((value) => localStorage.setItem("ShowAxes", String(value)));
-ShowIndices.subscribe((value) =>
-	localStorage.setItem("ShowIndices", String(value)),
-);
+ShowIndices.subscribe((value) => localStorage.setItem("ShowIndices", String(value)));
 ShowFlatFoldableIssues.subscribe((value) =>
 	localStorage.setItem("ShowFlatFoldableIssues", String(value)),
 );
 ShowCodeEditor.subscribe((value) =>
 	localStorage.setItem("ShowCodeEditor", String(value)),
 );
-ShowFrames.subscribe((value) =>
-	localStorage.setItem("ShowFrames", String(value)),
-);
-NewEdgeAssignment.subscribe((value) =>
-	localStorage.setItem("NewEdgeAssignment", value),
-);
+ShowFrames.subscribe((value) => localStorage.setItem("ShowFrames", String(value)));
+NewEdgeAssignment.subscribe((value) => localStorage.setItem("NewEdgeAssignment", value));
 GridType.subscribe((value) => localStorage.setItem("GridType", value));
 AutoSolveLayers.subscribe((value) =>
-	localStorage.setItem("AutoSolveLayers", value),
+	localStorage.setItem("AutoSolveLayers", String(value)),
 );
 SolveLayersOnBackground.subscribe((value) =>
-	localStorage.setItem("SolveLayersOnBackground", value),
+	localStorage.setItem("SolveLayersOnBackground", String(value)),
 );

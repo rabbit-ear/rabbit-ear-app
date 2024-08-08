@@ -1,30 +1,6 @@
 # Rabbit Ear, origami editor app
 
-## plan for round 2:
-
-- need to be able to select faces. see "square-with-hole.fold" in rabbit ear examples. we need to be able to create this, select the middle face, delete it.
-
-## dev ideas
-
-`<dialog>` is currently the newest feature in use, we need a test like this to ensure that their browser is up to date:
-
-```js
-if (typeof HTMLDialogElement === 'function') {
-  /** yep */
-} else {
-  /** nope */
-}
-```
-
-we need a good way to "unfold". imagine wanting to unfold the second-previous step. if we had more of a visual history, we could say "unfold___" and click "this one" and it reassigns all crease that were assigned during that step.
-
-"click to restart Rabbit Ear" - automatically downloads updates.
-
-creating a new edge can look like:
-
-```js
-edge(4, 12, App.edgeAssignment, App.edgeFoldAngle)
-```
+> This is the first iteration of the app, now depricated. You probably want the app that's on the main branch.
 
 ## Local Development
 
@@ -39,7 +15,9 @@ Prerequisites: install [Rust](https://www.rust-lang.org/), [Node](https://nodejs
 
 ### Linking rabbit-ear nightly
 
-1. Clone and build the dev branch of the [rabbit-ear](https://github.com/rabbit-ear/rabbit-ear/tree/dev) repo:
+> This build aligns with commit [#6f6c7c1](https://github.com/rabbit-ear/rabbit-ear/tree/6f6c7c1748510e544d69127cd9cae2d9b624b0ac)
+
+1. Clone and build the dev branch of the [rabbit-ear](https://github.com/rabbit-ear/rabbit-ear/tree/dev) repo.
 
 ```sh
 # Clone the rabbit-ear repo
@@ -60,7 +38,45 @@ npm link
 
 We use prettier to format all our code - you can set up your editor (e.g. vscode) to format on save, or run `npm run format` to format all your files.
 
+### building
+
+to build a MacOS Universal (Silicon and Intel) build:
+
+```
+npm run tauri build -- --target universal-apple-darwin
+```
+
 # Dev log
+
+## plan for round 2:
+
+- need to be able to select faces. see "square-with-hole.fold" in rabbit ear examples. we need to be able to create this, select the middle face, delete it.
+
+thoughts on "symmetry": the default is a "reflect()" operation, think about rotation operations, the tool can be fully customizable to the point where user can manually enter a list of transformations, each one reaching into the API, reflect rotate translate scale. So, we should consider this when we are designing the API.
+
+we can start with a simple bindings layer between the app's API and Rabbit Ear methods, binding is a lookup table. we might need to extend the behavior though. a binding is a binding but with some extra functionality, side effects, etc.
+
+## dev ideas
+
+`<dialog>` is currently the newest feature in use, we need a test like this to ensure that their browser is up to date: [here is a polyfill](https://github.com/GoogleChrome/dialog-polyfill)
+
+```js
+if (typeof HTMLDialogElement === 'function') {
+  /** yep */
+} else {
+  /** nope */
+}
+```
+
+we need a good way to "unfold". imagine wanting to unfold the second-previous step. if we had more of a visual history, we could say "unfold___" and click "this one" and it reassigns all crease that were assigned during that step.
+
+"click to restart Rabbit Ear" - automatically downloads updates.
+
+creating a new edge can look like:
+
+```js
+edge(4, 12, App.edgeAssignment, App.edgeFoldAngle)
+```
 
 FOLD format challenges:
 

@@ -5,7 +5,7 @@ import {
 	FoldedForm,
 	// ComputedFoldedCoords,
 } from "../../stores/ModelFolded.js";
-import { foldSegment } from "rabbit-ear/graph/fold/foldGraph.js";
+import { simpleFoldSegment } from "rabbit-ear/graph/fold/simpleFold.js";
 import { foldGraphIntoSegments } from "rabbit-ear/graph/fold/foldGraphIntoSegments.js";
 import { subtract2 } from "rabbit-ear/math/vector.js";
 import { pointsToLine } from "rabbit-ear/math/convert.js";
@@ -26,9 +26,7 @@ export const foldedLine = (a, b) => {
 	const line = { vector: subtract2(b, a), origin: a };
 	try {
 		const graph = get(CreasePattern);
-		const result = foldGraphIntoSegments(graph, line, "V").filter(
-			(a) => a !== undefined,
-		);
+		const result = foldGraphIntoSegments(graph, line, "V").filter((a) => a !== undefined);
 		const vertCount = graph.vertices_coords.length;
 		graph.vertices_coords.push(...result.flatMap((el) => el.points));
 		graph.edges_vertices.push(
@@ -36,9 +34,7 @@ export const foldedLine = (a, b) => {
 		);
 		graph.edges_assignment.push(...result.map((el) => el.assignment));
 		graph.edges_foldAngle.push(
-			...result
-				.map((el) => el.assignment)
-				.map((a) => edgeAssignmentToFoldAngle(a)),
+			...result.map((el) => el.assignment).map((a) => edgeAssignmentToFoldAngle(a)),
 		);
 		UpdateFrame({ ...graph });
 	} catch (error) {
