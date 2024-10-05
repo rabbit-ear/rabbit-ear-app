@@ -1,11 +1,10 @@
 {
-  "name": "Rabbit Ear",
+  "name": "rabbit-ear-app",
   "version": "0.1.0",
+  "description": "Origami design app",
   "main": "./out/main/index.js",
   "author": "Kraft",
   "license": "GPLv3",
-  "description": "Origami Design",
-  "homepage": "https://rabbit-ear.org",
   "scripts": {
     "format": "prettier --plugin prettier-plugin-svelte --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
@@ -24,26 +23,26 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
-    "electron-updater": "^6.1.7",
-    "rabbit-ear": "^0.9.4"
+    "electron-updater": "^6.1.7"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
-    "@sveltejs/vite-plugin-svelte": "^3.1.1",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0-next.7",
     "@types/node": "^20.14.8",
+    "@typescript-eslint/eslint-plugin": "^8.8.0",
     "electron": "^31.0.2",
     "electron-builder": "^24.13.3",
     "electron-vite": "^2.3.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-svelte": "^2.41.0",
-    "prettier": "^3.3.2",
-    "prettier-plugin-svelte": "^3.2.5",
-    "svelte": "^5.0.0-next.260",
-    "svelte-check": "^3.8.2",
-    "tslib": "^2.6.3",
-    "typescript": "^5.5.2",
-    "vite": "^5.3.1"
+    "eslint": "^9.12.0",
+    "eslint-plugin-svelte": "^2.44.1",
+    "prettier": "^3.3.3",
+    "prettier-plugin-svelte": "^3.2.7",
+    "svelte": "^5.0.0-next.262",
+    "svelte-check": "^4.0.4",
+    "tslib": "^2.7.0",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.8"
   }
 }

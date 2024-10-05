@@ -2,8 +2,8 @@ import { app, shell, ipcMain, Menu, BrowserWindow } from "electron";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import { join } from "node:path";
 import icon from "../../resources/icon.png?asset";
-import { makeTemplate } from "./menu.ts";
-import { setAppTitle } from "./oneWayEvents.ts";
+import { makeTemplate } from "./menu/template.ts";
+import { setAppTitle } from "./onEvents.ts";
 import {
   openFile,
   saveFile,
@@ -11,9 +11,7 @@ import {
   pathJoin,
   makeFilePathInfo,
   unsavedChangesDialog,
-} from "./twoWayEvents.ts";
-
-// ipcMain sends signal from main to the renderer
+} from "./invokeEvents.ts";
 
 const createWindow = (): BrowserWindow => {
   // Create the browser window.
@@ -47,7 +45,6 @@ const createWindow = (): BrowserWindow => {
   }
 
   //mainWindow.webContents.openDevTools();
-
   return mainWindow;
 };
 
@@ -78,31 +75,38 @@ app.whenReady().then(() => {
   ipcMain.handle("makeFilePathInfo", makeFilePathInfo);
 
   const mainWindow = createWindow();
+
   const menu = Menu.buildFromTemplate(makeTemplate(mainWindow));
   Menu.setApplicationMenu(menu);
 
-  // currently we are making MacOS run like a Windows app, when the window closes,
-  // the app closes. Here is the code for the typical mac behavior:
-  //app.on("activate", function() {
-  //  // On macOS it's common to re-create a window in the app when the
-  //  // dock icon is clicked and there are no other windows open.
-  //  if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  //});
-
-  // regarding quitting the app, in order of event fire
-  // this happens first, but only if the window was closed (X or red circle).
-  app.on("window-all-closed", () => {
-    // if (process.platform !== "darwin") {
-    // 	app.quit();
-    // }
-    app.quit();
-  });
-
-  // // 1st to fire upon quit
-  // app.on("before-quit", (event) => {});
-  // // 2nd to fire upon quit
-  // app.on("will-quit", (event) => {});
-  // // 3rd to fire upon quit
-  // app.on("quit", (event) => {});
+  // uncomment 1: for MacOS close-and-reopen window behavior
+  // app.on("activate", () => {
+  //   // On macOS it's common to re-create a window in the app when the
+  //   // dock icon is clicked and there are no other windows open.
+  //   if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  // });
 });
 
+// uncomment 2: for MacOS close-and-reopen window behavior
+// Quit when all windows are closed, except on macOS. There, it's common
+// for applications and their menu bar to stay active until the user quits
+// explicitly with Cmd + Q.
+// app.on("window-all-closed", () => {
+//   if (process.platform !== "darwin") {
+//     app.quit();
+//   }
+// });
+
+app.on("window-all-closed", () => {
+  app.quit();
+});
+
+// In this file you can include the rest of your app"s specific main process
+// code. You can also put them in separate files and require them here.
+
+// // 1st to fire upon quit
+// app.on("before-quit", (event) => {});
+// // 2nd to fire upon quit
+// app.on("will-quit", (event) => {});
+// // 3rd to fire upon quit
+// app.on("quit", (event) => {});

@@ -7,7 +7,10 @@ export type WindowAPI = {
   setAppTitle: (title: string) => void;
 
   // two way, from renderer to main and back
-  unsavedChangesDialog: (yesString?: string, noString?: string) => Promise<{ response: number }>;
+  unsavedChangesDialog: (
+    yesString?: string,
+    noString?: string,
+  ) => Promise<{ response: number }>;
   pathJoin: () => Promise<string>;
   openFile: () => Promise<{ data?: string; fileInfo?: FilePathInfo }>;
   saveFile: (fileInfo: FilePathInfo, data: string) => Promise<boolean>;
@@ -51,4 +54,3 @@ export const api: WindowAPI = {
   bindIpcRendererOn: (key: string, func: () => void) => ipcRenderer.on(key, func),
   bindIpcRendererInvoke: <T>(key: string, func: () => T) => ipcRenderer.invoke(key, func),
 };
-

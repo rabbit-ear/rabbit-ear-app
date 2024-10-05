@@ -66,4 +66,3 @@ export const getFilePathInfo = async (filePath: string): Promise<FilePathInfo> =
   }
   return { fullpath, directory, file, root, extension };
 };
-

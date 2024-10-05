@@ -1,7 +1,7 @@
 import { app, dialog } from "electron";
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { DOCUMENT_EXTENSION, DOCUMENT_TYPE_NAME } from "../../global/constants.ts";
+import { EXTENSION, FILE_TYPE_NAME } from "./filetype.ts";
 import { type FilePathInfo, getFilePathInfo } from "./path.ts";
 import { validateFileType } from "./validate.ts";
 
@@ -33,11 +33,12 @@ export const saveFileAs = async (data: string): Promise<FilePathInfo | undefined
   const defaultPath = app.getPath("home");
   const filters = [
     {
-      name: DOCUMENT_TYPE_NAME,
-      extensions: [DOCUMENT_EXTENSION],
+      name: FILE_TYPE_NAME,
+      extensions: [EXTENSION],
     },
   ];
-  const options = !defaultPath || defaultPath === "" ? { filters } : { filters, defaultPath };
+  const options =
+    !defaultPath || defaultPath === "" ? { filters } : { filters, defaultPath };
   const { canceled, filePath } = await dialog.showSaveDialog(options);
   if (canceled) {
     return undefined;
@@ -54,7 +55,10 @@ export const saveFileAs = async (data: string): Promise<FilePathInfo | undefined
  * returns false if the write was unsuccessful, it might be customary to
  * run the "saveAs" method.
  */
-export const saveFile = async (fileInfo: FilePathInfo, data: string): Promise<boolean> => {
+export const saveFile = async (
+  fileInfo: FilePathInfo,
+  data: string,
+): Promise<boolean> => {
   // a couple checks to REALLY make sure that the file already exists
   if (!fileInfo || !fileInfo.fullpath) {
     return false;
@@ -75,7 +79,11 @@ export const saveFile = async (fileInfo: FilePathInfo, data: string): Promise<bo
  * that counts up from 0 to "count" - 1, and 000N will have the minimum
  * number of preceding zeros to pad all numbers to be the same length.
  */
-const makeNumberedFilenames = (count: number, name: string, extension: string): string[] => {
+const makeNumberedFilenames = (
+  count: number,
+  name: string,
+  extension: string,
+): string[] => {
   const places = count.toString().length;
   const zeros = Array(places).fill(0).join("");
   return Array.from(Array(count))
@@ -84,7 +92,10 @@ const makeNumberedFilenames = (count: number, name: string, extension: string): 
     .map((num) => `${name}-${num}${extension}`);
 };
 
-const makeFileFilter = (name: string, ...extensions: string[]) => ({
+const makeFileFilter = (
+  name: string,
+  ...extensions: string[]
+): { name: string; extensions: string[] } => ({
   name,
   extensions,
 });
@@ -92,7 +103,11 @@ const makeFileFilter = (name: string, ...extensions: string[]) => ({
 /**
  *
  */
-export const exportTextFile = async (data: string, ext = "svg", typename = "image") => {
+export const exportTextFile = async (
+  data: string,
+  ext = "svg",
+  typename = "image",
+): Promise<void> => {
   const { canceled, filePath } = await dialog.showSaveDialog({
     filters: [makeFileFilter(typename, ext)],
   });
@@ -107,7 +122,11 @@ export const exportTextFile = async (data: string, ext = "svg", typename = "imag
 /**
  *
  */
-export const exportBinaryFile = async (data: DataView, ext = "png", typename = "image") => {
+export const exportBinaryFile = async (
+  data: DataView,
+  ext = "png",
+  typename = "image",
+): Promise<void> => {
   const { canceled, filePath } = await dialog.showSaveDialog({
     filters: [makeFileFilter(typename, ext)],
   });
@@ -122,7 +141,11 @@ export const exportBinaryFile = async (data: DataView, ext = "png", typename = "
 /**
  * @param {string[]} data multiple file contents as strings
  */
-export const exportTextFiles = async (data: string[] = [], ext = "svg", typename = "image") => {
+export const exportTextFiles = async (
+  data: string[] = [],
+  ext = "svg",
+  typename = "image",
+): Promise<void> => {
   const { canceled, filePath } = await dialog.showSaveDialog({
     filters: [makeFileFilter(typename, ext)],
   });
@@ -143,7 +166,7 @@ export const exportBinaryFiles = async (
   binaryFiles: Buffer[] = [],
   ext = "png",
   typename = "image",
-) => {
+): Promise<void> => {
   const { canceled, filePath } = await dialog.showSaveDialog({
     filters: [makeFileFilter(typename, ext)],
   });
@@ -151,9 +174,10 @@ export const exportBinaryFiles = async (
     return;
   }
   const { directory, root, extension } = await getFilePathInfo(filePath);
-  makeNumberedFilenames(binaryFiles.length, root, extension).map(async (numberedName, i) => {
-    const outPath = path.join(directory, numberedName);
-    fs.writeFile(outPath, binaryFiles[i]);
-  });
+  makeNumberedFilenames(binaryFiles.length, root, extension).map(
+    async (numberedName, i) => {
+      const outPath = path.join(directory, numberedName);
+      fs.writeFile(outPath, binaryFiles[i]);
+    },
+  );
 };
-

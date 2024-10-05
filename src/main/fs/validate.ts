@@ -21,4 +21,3 @@ export const validateFileType = async (fileInfo: FilePathInfo): Promise<boolean>
       return false;
   }
 };
-
