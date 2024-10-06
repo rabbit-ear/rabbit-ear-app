@@ -1,5 +1,5 @@
-import { model } from "../state/model.svelte.ts";
-import file from "../state/file.svelte.ts";
+import app from "../app/App.svelte.ts";
+import file from "../model/file.svelte.ts";
 
 /**
  * @description ask the app to save the currently opened file.
@@ -9,7 +9,10 @@ export const saveFile = async (): Promise<void> => {
   // fileInfo.value is an object and a Proxy (due to Svelte 5), this method
   // will attempt to clone it, can't clone a proxy, so we shallow copy.
   // const success = await window.api.saveFile({ ...fileInfo.value }, model.value);
-  const success = await window.api.saveFile($state.snapshot(file.info), model.value);
+  const success = await window.api.saveFile(
+    $state.snapshot(file.info),
+    app.model.valueAsString(),
+  );
   if (success) {
     file.modified = false;
   } else {
@@ -22,7 +25,7 @@ export const saveFile = async (): Promise<void> => {
  * this can be called from the front-end or the back-end.
  */
 export const saveFileAs = async (): Promise<void> => {
-  const info = await window.api.saveFileAs(model.value);
+  const info = await window.api.saveFileAs(app.model.valueAsString());
   if (info) {
     file.info = info;
     file.modified = false;

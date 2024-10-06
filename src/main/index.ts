@@ -3,15 +3,8 @@ import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import { join } from "node:path";
 import icon from "../../resources/icon.png?asset";
 import { makeTemplate } from "./menu/template.ts";
-import { setAppTitle } from "./onEvents.ts";
-import {
-  openFile,
-  saveFile,
-  saveFileAs,
-  pathJoin,
-  makeFilePathInfo,
-  unsavedChangesDialog,
-} from "./invokeEvents.ts";
+import * as OnEvents from "./onEvents.ts";
+import * as InvokeEvents from "./invokeEvents.ts";
 
 const createWindow = (): BrowserWindow => {
   // Create the browser window.
@@ -62,20 +55,18 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
+  // function bindings
+  // this area should match the definition inside of src/preload/api.ts.
+  // forEach loop will bind all functions like this: ipcMain.handle("funcName", funcName);
+
   // IPC one-way events
-  ipcMain.on("setAppTitle", setAppTitle);
+  Object.keys(OnEvents).forEach((key) => ipcMain.on(key, OnEvents[key]));
+  // IPC two-way events
+  Object.keys(InvokeEvents).forEach((key) => ipcMain.handle(key, InvokeEvents[key]));
+  // additional one-way
   ipcMain.on("quitApp", () => app.quit());
 
-  // IPC two-way events
-  ipcMain.handle("unsavedChangesDialog", unsavedChangesDialog);
-  ipcMain.handle("pathJoin", pathJoin);
-  ipcMain.handle("openFile", openFile);
-  ipcMain.handle("saveFile", saveFile);
-  ipcMain.handle("saveFileAs", saveFileAs);
-  ipcMain.handle("makeFilePathInfo", makeFilePathInfo);
-
   const mainWindow = createWindow();
-
   const menu = Menu.buildFromTemplate(makeTemplate(mainWindow));
   Menu.setApplicationMenu(menu);
 

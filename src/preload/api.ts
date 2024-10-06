@@ -1,6 +1,9 @@
 import { ipcRenderer } from "electron";
 import type { FilePathInfo } from "../main/fs/path.ts";
 
+// this list should reflect the binding that occurs inside src/main/index.ts,
+// with invokeEvents and onEvents function bindings.
+
 export type WindowAPI = {
   // one way, from renderer to main
   quitApp: () => void;

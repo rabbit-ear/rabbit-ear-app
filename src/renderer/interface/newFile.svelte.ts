@@ -1,6 +1,4 @@
-import { model } from "../state/model.svelte.ts";
-import file from "../state/file.svelte.ts";
-import { EXTENSION, UNTITLED_FILENAME } from "../state/app.svelte.ts";
+import file, { setNewEmptyFile } from "../model/file.svelte.ts";
 
 /**
  * @description ask the app to create a new file.
@@ -15,13 +13,5 @@ export const newFile = async (): Promise<void> => {
       return;
     }
   }
-  model.value = "";
-  file.info = {
-    fullpath: "",
-    directory: "",
-    file: UNTITLED_FILENAME,
-    root: "untitled",
-    extension: `.${EXTENSION}`,
-  };
-  file.modified = false;
+  setNewEmptyFile();
 };

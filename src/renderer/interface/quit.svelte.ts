@@ -1,4 +1,4 @@
-import file from "../state/file.svelte.ts";
+import file from "../model/file.svelte.ts";
 
 /**
  * @description methods available to both the front and back ends.

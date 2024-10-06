@@ -1,8 +1,9 @@
 import { mount } from "svelte";
-import "./css/reset.css";
-import "./css/app.css";
+import "./ui/css/app.css";
+import "./ui/css/colors.css";
+import "./ui/css/svg.css";
 import "./interface/index.ts";
-import App from "./components/App.svelte";
+import App from "./ui/components/App.svelte";
 
 const app = mount(App, { target: document.getElementById("app")! });
 
