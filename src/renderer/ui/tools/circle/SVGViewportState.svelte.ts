@@ -21,7 +21,7 @@ export class SVGViewportState implements Deallocable {
   globalState: GlobalState;
   touches: SVGTouches;
   events: SVGViewportEvents;
-  unsub: Function[] = [];
+  unsub: (() => void)[] = [];
 
   circle: { cx: number; cy: number; r: number } | undefined = $derived.by(() => {
     if (this.touches.snapPresses.length && this.touches.snapReleases.length) {
@@ -47,19 +47,19 @@ export class SVGViewportState implements Deallocable {
     this.viewport.layer = SVGLayer;
     const that = this;
     this.viewport.props = {
-      get circle() {
+      get circle(): { cx: number; cy: number; r: number } | undefined {
         return that.circle;
       },
     };
   }
 
-  dealloc() {
+  dealloc(): void {
     this.unsub.forEach((u) => u());
     this.unsub = [];
     this.touches.reset();
   }
 
-  preventBadInput() {
+  preventBadInput(): () => void {
     return $effect.root(() => {
       $effect(() => {
         const moreReleases = this.touches.releases.length > this.touches.presses.length;
@@ -69,22 +69,26 @@ export class SVGViewportState implements Deallocable {
           this.touches.reset();
         }
       });
-      return () => { };
+      return () => {};
     });
   }
 
-  makeCircle() {
+  makeCircle(): () => void {
     return $effect.root(() => {
       $effect(() => {
         // console.log("circle (press, release)", this.presses.length, this.releases.length);
-        if (!this.touches.snapPresses.length || !this.touches.snapReleases.length || !this.circle) {
+        if (
+          !this.touches.snapPresses.length ||
+          !this.touches.snapReleases.length ||
+          !this.circle
+        ) {
           return;
         }
         app.model.addCircle(this.circle.cx, this.circle.cy, this.circle.r);
         this.touches.reset();
         // setTimeout(this.reset, 10);
       });
-      return () => { };
+      return () => {};
     });
   }
 }

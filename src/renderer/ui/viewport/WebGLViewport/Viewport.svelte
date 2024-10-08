@@ -6,7 +6,7 @@
 
   type PropsType = {
     viewport: WebGLViewport;
-    rest?: any[];
+    rest?: unknown[];
   };
 
   let { viewport, ...rest }: PropsType = $props();
@@ -23,11 +23,11 @@
 </script>
 
 <WebGLTouchCanvas
-  onmousemove={(...args) => viewport.onmousemove?.(...args)}
-  onmousedown={(...args) => viewport.onmousedown?.(...args)}
-  onmouseup={(...args) => viewport.onmouseup?.(...args)}
-  onmouseleave={(...args) => viewport.onmouseleave?.(...args)}
-  onwheel={(...args) => viewport.onwheel?.(...args)}
+  onmousemove={(...args): void => viewport.onmousemove?.(...args)}
+  onmousedown={(...args): void => viewport.onmousedown?.(...args)}
+  onmouseup={(...args): void => viewport.onmouseup?.(...args)}
+  onmouseleave={(...args): void => viewport.onmouseleave?.(...args)}
+  onwheel={(...args): void => viewport.onwheel?.(...args)}
   bind:redraw={viewport.redraw}
   graph={app.model.fold}
   perspective={viewport.view.perspective}

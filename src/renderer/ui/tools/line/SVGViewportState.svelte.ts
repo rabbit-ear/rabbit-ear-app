@@ -13,7 +13,7 @@ export class SVGViewportState implements Deallocable {
   globalState: GlobalState;
   touches: SVGTouches;
   events: SVGViewportEvents;
-  unsub: Function[] = [];
+  unsub: (() => void)[] = [];
 
   constructor(viewport: SVGViewport, globalState: GlobalState) {
     this.viewport = viewport;
@@ -28,13 +28,13 @@ export class SVGViewportState implements Deallocable {
     this.viewport.layer = SVGLayer;
     const that = this;
     this.viewport.props = {
-      get line() {
+      get line(): VecLine2 | undefined {
         return that.line;
       },
-      get segment() {
+      get segment(): [number, number][] | undefined {
         return that.segment;
       },
-      get segmentPoints() {
+      get segmentPoints(): [number, number][] | undefined {
         return that.segmentPoints;
       },
     };
@@ -64,16 +64,16 @@ export class SVGViewportState implements Deallocable {
     if (!this.touches.snapPresses.length || !this.touches.snapReleases.length) {
       return undefined;
     }
-    const snapLines = [{ line: this.line, clamp: (a: any) => a, domain: () => true }];
+    const snapLines = [
+      { line: this.line, clamp: (a: number): number => a, domain: (): boolean => true },
+    ];
     const point1 =
       this.touches.snapPresses.length >= 2
-        ? this.viewport.snap.snapToLine(this.touches.presses[1], snapLines)
-          .coords
+        ? this.viewport.snap.snapToLine(this.touches.presses[1], snapLines).coords
         : this.viewport.snap.snapToLine(this.touches.move, snapLines).coords;
     const point2 =
       this.touches.snapReleases.length >= 2
-        ? this.viewport.snap.snapToLine(this.touches.releases[1], snapLines)
-          .coords
+        ? this.viewport.snap.snapToLine(this.touches.releases[1], snapLines).coords
         : this.viewport.snap.snapToLine(this.touches.drag, snapLines).coords;
     const result = [];
     if (point1) {
@@ -89,7 +89,7 @@ export class SVGViewportState implements Deallocable {
     this.segmentPoints && this.segmentPoints.length < 2 ? undefined : this.segmentPoints,
   );
 
-  preventBadInput() {
+  preventBadInput(): () => void {
     return $effect.root(() => {
       $effect(() => {
         const moreReleases = this.touches.releases.length > this.touches.presses.length;
@@ -99,11 +99,11 @@ export class SVGViewportState implements Deallocable {
           this.touches.reset();
         }
       });
-      return () => { };
+      return () => {};
     });
   }
 
-  makeLine() {
+  makeLine(): () => void {
     return $effect.root(() => {
       $effect(() => {
         if (
@@ -116,7 +116,7 @@ export class SVGViewportState implements Deallocable {
           this.touches.reset();
         }
       });
-      return () => { };
+      return () => {};
     });
   }
 }

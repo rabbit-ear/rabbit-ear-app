@@ -11,18 +11,18 @@ export class SVGViewportEvents implements ViewportEvents {
   touches: SVGTouches;
   viewport: SVGViewport;
 
-  onmousemove = ({ point, buttons }: ViewportMouseEvent) => {
+  onmousemove = ({ point, buttons }: ViewportMouseEvent): void => {
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
   };
 
-  onmousedown = ({ point, buttons }: ViewportMouseEvent) => {
+  onmousedown = ({ point, buttons }: ViewportMouseEvent): void => {
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.addPress(point);
   };
 
-  onmouseup = ({ point, buttons }: ViewportMouseEvent) => {
+  onmouseup = ({ point, buttons }: ViewportMouseEvent): void => {
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.addRelease(point);
@@ -33,7 +33,7 @@ export class SVGViewportEvents implements ViewportEvents {
   // there is no longer an app-wide fallthrough that executes that method
   // if no tool wheel event exists. the tool must specify the behavior explicitly.
 
-  onwheel = ({ point, deltaX, deltaY }: ViewportWheelEvent) => {
+  onwheel = ({ point, deltaY }: ViewportWheelEvent): void => {
     wheelEventZoomMatrix(this.viewport, { point, deltaY });
   };
 
@@ -47,4 +47,3 @@ export class SVGViewportEvents implements ViewportEvents {
     this.viewport.onwheel = this.onwheel;
   }
 }
-

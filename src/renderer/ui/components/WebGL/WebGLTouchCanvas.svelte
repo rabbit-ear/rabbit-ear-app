@@ -13,7 +13,6 @@
     graph: FOLD;
     perspective: string;
     renderStyle: string;
-    // projectionMatrix: number[],
     viewMatrix: number[];
     layerNudge?: number;
     fov?: number;
@@ -36,14 +35,13 @@
     ontouchstart?: (e: ViewportTouchEvent) => void;
     ontouchend?: (e: ViewportTouchEvent) => void;
     ontouchcancel?: (e: ViewportTouchEvent) => void;
-    redraw?: Function;
+    redraw?: () => void;
   };
 
   let {
     graph = {},
     perspective = "orthographic",
     renderStyle = "creasePattern",
-    // projectionMatrix = [...identity4x4],
     viewMatrix = [...identity4x4],
     layerNudge = 0.01,
     fov = 30.25,
@@ -97,15 +95,15 @@
       ),
     });
 
-  const onmousedown = (e: MouseEvent) => mousedown?.(formatMouseEvent(e));
-  const onmousemove = (e: MouseEvent) => mousemove?.(formatMouseEvent(e));
-  const onmouseup = (e: MouseEvent) => mouseup?.(formatMouseEvent(e));
-  const onmouseleave = (e: MouseEvent) => mouseleave?.(formatMouseEvent(e));
-  const onwheel = (e: WheelEvent) => wheel?.(formatWheelEvent(e));
-  const ontouchmove = (e: TouchEvent) => touchmove?.(formatTouchEvent(e));
-  const ontouchstart = (e: TouchEvent) => touchstart?.(formatTouchEvent(e));
-  const ontouchend = (e: TouchEvent) => touchend?.(formatTouchEvent(e));
-  const ontouchcancel = (e: TouchEvent) => touchcancel?.(formatTouchEvent(e));
+  const onmousedown = (e: MouseEvent): void => mousedown?.(formatMouseEvent(e));
+  const onmousemove = (e: MouseEvent): void => mousemove?.(formatMouseEvent(e));
+  const onmouseup = (e: MouseEvent): void => mouseup?.(formatMouseEvent(e));
+  const onmouseleave = (e: MouseEvent): void => mouseleave?.(formatMouseEvent(e));
+  const onwheel = (e: WheelEvent): void => wheel?.(formatWheelEvent(e));
+  const ontouchmove = (e: TouchEvent): void => touchmove?.(formatTouchEvent(e));
+  const ontouchstart = (e: TouchEvent): void => touchstart?.(formatTouchEvent(e));
+  const ontouchend = (e: TouchEvent): void => touchend?.(formatTouchEvent(e));
+  const ontouchcancel = (e: TouchEvent): void => touchcancel?.(formatTouchEvent(e));
 
   // <!-- viewMatrix={Renderer.ViewMatrix} -->
 </script>

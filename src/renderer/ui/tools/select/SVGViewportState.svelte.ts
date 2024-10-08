@@ -13,10 +13,12 @@ export class SVGViewportState implements Deallocable {
   globalState: GlobalState;
   touches: SVGTouches;
   events: SVGViewportEvents;
-  unsub: Function[] = [];
+  unsub: (() => void)[] = [];
 
   box: Box | undefined = $derived.by(() => {
-    if (!this.touches.press || !this.touches.drag) { return undefined; }
+    if (!this.touches.press || !this.touches.drag) {
+      return undefined;
+    }
     const points = [
       $state.snapshot(this.touches.press),
       $state.snapshot(this.touches.drag),
@@ -24,13 +26,16 @@ export class SVGViewportState implements Deallocable {
     return boundingBox(points);
   });
 
-  rect: any = $derived(this.box && this.box.span
-    ? {
-      x: this.box.min[0],
-      y: this.box.min[1],
-      width: this.box.span[0],
-      height: this.box.span[1],
-    } : undefined);
+  rect: { x: number; y: number; width: number; height: number } | undefined = $derived(
+    this.box && this.box.span
+      ? {
+          x: this.box.min[0],
+          y: this.box.min[1],
+          width: this.box.span[0],
+          height: this.box.span[1],
+        }
+      : undefined,
+  );
 
   constructor(viewport: SVGViewport, globalState: GlobalState) {
     this.viewport = viewport;
@@ -45,31 +50,34 @@ export class SVGViewportState implements Deallocable {
     this.viewport.layer = SVGLayer;
     const that = this;
     this.viewport.props = {
-      get rect() {
+      get rect(): { x: number; y: number; width: number; height: number } | undefined {
         return that.rect;
       },
     };
   }
 
-  dealloc() {
+  dealloc(): void {
     this.unsub.forEach((u) => u());
     this.unsub = [];
     this.touches.reset();
   }
 
-  doSelection() {
+  doSelection(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        if (!this.touches.press || !this.touches.release) { return; }
+        if (!this.touches.press || !this.touches.release) {
+          return;
+        }
         const points = [
           $state.snapshot(this.touches.press),
           $state.snapshot(this.touches.release),
         ];
-        app.model.selectedInsideRect(this.box);
+        //app.model.selectedInsideRect(this.box);
+        app.model.selectedInsideRect();
         console.log("make selection", ...points);
         this.touches.reset();
       });
-      return () => { };
+      return () => {};
     });
   }
 }

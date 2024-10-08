@@ -21,13 +21,13 @@ export class ToolState {
     this.viewport = viewport;
   }
 
-  reset() {
+  reset(): void {
     this.move = undefined;
     this.drag = undefined;
     this.press = undefined;
   }
 
-  doPan() {
+  doPan(): () => void {
     return $effect.root(() => {
       $effect(() => {
         if (!this.dragVector) {
@@ -44,7 +44,7 @@ export class ToolState {
           );
         });
       });
-      return () => { };
+      return () => {};
     });
   }
 }
@@ -53,7 +53,7 @@ export class SVGViewportState implements Deallocable {
   viewport: SVGViewport;
   tool: ToolState;
   events: SVGViewportEvents;
-  unsub: Function[] = [];
+  unsub: (() => void)[] = [];
 
   constructor(viewport: SVGViewport) {
     this.viewport = viewport;
@@ -62,7 +62,7 @@ export class SVGViewportState implements Deallocable {
     this.unsub.push(this.tool.doPan());
   }
 
-  dealloc() {
+  dealloc(): void {
     this.unsub.forEach((u) => u());
     this.unsub = [];
     this.tool.reset();
@@ -78,10 +78,13 @@ export class GLViewportState implements Deallocable {
     this.events = new WebGLViewportEvents(this.viewport);
   }
 
-  dealloc() { }
+  dealloc(): void {
+    // empty
+  }
 }
 
 export class GlobalState implements Deallocable {
-  constructor() { }
-  dealloc() { }
+  dealloc(): void {
+    // empty
+  }
 }

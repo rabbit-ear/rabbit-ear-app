@@ -5,16 +5,16 @@ import { SVGViewportEvents } from "./events.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
-import app from "../../../app/App.svelte.ts";
+//import app from "../../../app/App.svelte.ts";
 
-export class FixedPoint {
+export class SVGFixedPoint {
   touches: SVGTouches;
   viewport: SVGViewport;
 
   origin: [number, number] = $state([0, 0]);
   selected: boolean = $state(false);
 
-  equivalent = (point1: [number, number], point2: [number, number]) =>
+  equivalent = (point1: [number, number], point2: [number, number]): boolean =>
     distance2(point1, point2) < this.viewport.uiEpsilon;
 
   highlighted: boolean = $derived.by(() => {
@@ -27,14 +27,14 @@ export class FixedPoint {
     return false;
   });
 
-  reset() {
+  reset(): void {
     this.selected = false;
   }
 
   // set this object's "selected" state.
   // - false: if presses is empty, or, the press was far from the fixed point
   // - true: if presses is not empty and the press was near to the fixed point
-  updateSelected() {
+  updateSelected(): () => void {
     return $effect.root(() => {
       $effect(() => {
         if (this.selected) {
@@ -48,13 +48,13 @@ export class FixedPoint {
           }
         }
       });
-      return () => { };
+      return () => {};
     });
   }
 
   // set this object's "origin" position, only if:
   // "selected" is true and releases or drag is not undefined
-  update() {
+  update(): () => void {
     return $effect.root(() => {
       $effect(() => {
         if (!this.selected) {
@@ -71,7 +71,7 @@ export class FixedPoint {
           return;
         }
       });
-      return () => { };
+      return () => {};
     });
   }
 
@@ -85,9 +85,9 @@ export class SVGViewportState implements Deallocable {
   viewport: SVGViewport;
   globalState: GlobalState;
   touches: SVGTouches;
-  fixedPoint: FixedPoint;
+  fixedPoint: SVGFixedPoint;
   events: SVGViewportEvents;
-  unsub: Function[] = [];
+  unsub: (() => void)[] = [];
 
   startVector: [number, number] | undefined = $derived.by(() => {
     return this.touches && this.touches.snapPress
@@ -116,7 +116,7 @@ export class SVGViewportState implements Deallocable {
     this.globalState = globalState;
 
     this.touches = new SVGTouches(this.viewport);
-    this.fixedPoint = new FixedPoint(this.viewport, this.touches);
+    this.fixedPoint = new SVGFixedPoint(this.viewport, this.touches);
     this.events = new SVGViewportEvents(this.viewport, this.touches);
     this.unsub.push(this.fixedPoint.update());
     this.unsub.push(this.fixedPoint.updateSelected());
@@ -127,20 +127,20 @@ export class SVGViewportState implements Deallocable {
     this.viewport.layer = SVGLayer;
     const that = this;
     this.viewport.props = {
-      get fixedPoint() {
+      get fixedPoint(): SVGFixedPoint {
         return that.fixedPoint;
       },
     };
   }
 
-  dealloc() {
+  dealloc(): void {
     this.unsub.forEach((u) => u());
     this.unsub = [];
     this.fixedPoint.reset();
     this.touches.reset();
   }
 
-  update() {
+  update(): () => void {
     return $effect.root(() => {
       $effect(() => {
         // console.log("tool.update()", this.touches.snapPress, this.touches.snapRelease);
@@ -157,8 +157,7 @@ export class SVGViewportState implements Deallocable {
         this.fixedPoint.reset();
         this.touches.reset();
       });
-      return () => { };
+      return () => {};
     });
   }
 }
-

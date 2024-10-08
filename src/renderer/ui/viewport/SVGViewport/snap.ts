@@ -10,7 +10,7 @@ export type SnapResult = {
 
 export type LineType = {
   line: VecLine2;
-  clamp: Function;
+  clamp: (a: number) => number;
   domain: (_: number, __?: number) => boolean;
 };
 

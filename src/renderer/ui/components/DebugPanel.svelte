@@ -3,20 +3,20 @@
   import { SVGViewport } from "../viewport/SVGViewport/SVGViewport.svelte.ts";
   import { WebGLViewport } from "../viewport/WebGLViewport/WebGLViewport.svelte.ts";
 
-  const logModel = () => {
+  const logModel = (): void => {
     console.log($state.snapshot(app.model.shapes));
   };
-  const newSVG = () => {
+  const newSVG = (): void => {
     app.ui?.viewports.push(new SVGViewport());
   };
-  const newWebGL = () => {
+  const newWebGL = (): void => {
     app.ui?.viewports.push(new WebGLViewport());
   };
-  const removeView = () => {
+  const removeView = (): void => {
     app.ui?.viewports.pop();
   };
 
-  const toggleSVGHandedness = () => {
+  const toggleSVGHandedness = (): void => {
     SVGViewport.settings.rightHanded = !SVGViewport.settings.rightHanded;
   };
   //<input type="checkbox" id="verticalUp" checked={renderer.view.verticalUp}/>

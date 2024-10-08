@@ -14,7 +14,7 @@ export const zoomCameraMatrix = (
   camera: number[],
   scale: number,
   origin: [number, number],
-) => {
+): number[] => {
   // the input point is in ModelViewMatrix space,
   // which includes ModelMatrix. But, in the upcoming line we are only
   // applying a change to the CameraMatrix. So, before we modify the
@@ -40,7 +40,10 @@ export const zoomCameraMatrix = (
 /**
  *
  */
-export const panCameraMatrix = (camera: number[], translate: [number, number]) => {
+export const panCameraMatrix = (
+  camera: number[],
+  translate: [number, number],
+): number[] => {
   const matrix = makeMatrix2Translate(translate[0], translate[1]);
   return multiplyMatrices2(camera, matrix);
 };
@@ -51,12 +54,12 @@ export const panCameraMatrix = (camera: number[], translate: [number, number]) =
 export const wheelEventZoomMatrix = (
   viewport: SVGViewport,
   { point, deltaY }: { point: [number, number]; deltaY: number },
-) => {
+): void => {
   const scaleOffset = deltaY / 333;
   const scale = 1 - scaleOffset;
   const screenPoint = getScreenPoint(point, viewport.view.model);
   const origin: [number, number] = screenPoint ? screenPoint : [0, 0];
-  origin[1] *= (viewport.view.rightHanded ? -1 : 1);
+  origin[1] *= viewport.view.rightHanded ? -1 : 1;
   viewport.view.camera = zoomCameraMatrix(viewport.view.camera, scale, origin);
 };
 
@@ -66,8 +69,8 @@ export const wheelEventZoomMatrix = (
 export const wheelPanMatrix = (
   viewport: SVGViewport,
   { deltaX, deltaY }: { deltaX: number; deltaY: number },
-) => {
-  const invertedY = viewport.view.rightHanded;
+): void => {
+  //const invertedY = viewport.view.rightHanded;
   const touchScale = -1 / 300;
   const impliedScale = viewport.view.modelView[0];
   const translate: [number, number] = [

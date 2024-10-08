@@ -28,10 +28,10 @@ export interface Viewport extends ViewportEvents, Deallocable {
   onmouseup?: ((e: ViewportMouseEvent) => void) | undefined;
   onmouseleave?: ((e: ViewportMouseEvent) => void) | undefined;
   onwheel?: ((e: ViewportWheelEvent) => void) | undefined;
-  touchstart?: ((e: ViewportTouchEvent) => void) | undefined;
-  touchend?: ((e: ViewportTouchEvent) => void) | undefined;
-  touchmove?: ((e: ViewportTouchEvent) => void) | undefined;
-  touchcancel?: ((e: ViewportTouchEvent) => void) | undefined;
+  ontouchstart?: ((e: ViewportTouchEvent) => void) | undefined;
+  ontouchend?: ((e: ViewportTouchEvent) => void) | undefined;
+  ontouchmove?: ((e: ViewportTouchEvent) => void) | undefined;
+  ontouchcancel?: ((e: ViewportTouchEvent) => void) | undefined;
   onkeydown?: ((event: KeyboardEvent) => void) | undefined;
   onkeyup?: ((event: KeyboardEvent) => void) | undefined;
 
@@ -51,10 +51,10 @@ export const unsetViewportEvents = (viewport: Viewport): void => {
   viewport.onmouseup = undefined;
   viewport.onmouseleave = undefined;
   viewport.onwheel = undefined;
-  viewport.touchstart = undefined;
-  viewport.touchend = undefined;
-  viewport.touchmove = undefined;
-  viewport.touchcancel = undefined;
+  viewport.ontouchstart = undefined;
+  viewport.ontouchend = undefined;
+  viewport.ontouchmove = undefined;
+  viewport.ontouchcancel = undefined;
   viewport.onkeydown = undefined;
   viewport.onkeyup = undefined;
 };

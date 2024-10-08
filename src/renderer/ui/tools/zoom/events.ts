@@ -13,7 +13,7 @@ export class WebGLViewportEvents implements ViewportEvents {
   viewport: WebGLViewport;
   previousPoint: [number, number] | undefined;
 
-  onmousemove = (event: ViewportMouseEvent) => {
+  onmousemove = (event: ViewportMouseEvent): void => {
     // console.log("onmousemove", this, this.viewport);
     event.preventDefault();
     const { point } = event;
@@ -29,17 +29,17 @@ export class WebGLViewportEvents implements ViewportEvents {
     }
   };
 
-  onmousedown = (event: ViewportMouseEvent) => {
+  onmousedown = (event: ViewportMouseEvent): void => {
     event.preventDefault();
     const { point } = event;
     this.previousPoint = point;
   };
 
-  onmouseup = ({ point }: ViewportMouseEvent) => {
+  onmouseup = (_: ViewportMouseEvent): void => {
     this.previousPoint = undefined;
   };
 
-  onwheel = (event: ViewportWheelEvent) => {
+  onwheel = (event: ViewportWheelEvent): void => {
     const { deltaY } = event;
     if (deltaY !== undefined) {
       const scrollSensitivity = 1 / 100;
@@ -71,18 +71,18 @@ export class SVGViewportEvents implements ViewportEvents {
   tool: ToolState;
   viewport: SVGViewport;
 
-  onmousemove = ({ point, buttons }: ViewportMouseEvent) => {
+  onmousemove = ({ point, buttons }: ViewportMouseEvent): void => {
     this.tool.move = buttons ? undefined : point;
     this.tool.drag = buttons ? point : undefined;
   };
 
-  onmousedown = ({ point, buttons }: ViewportMouseEvent) => {
+  onmousedown = ({ point, buttons }: ViewportMouseEvent): void => {
     this.tool.move = buttons ? undefined : point;
     this.tool.drag = buttons ? point : undefined;
     this.tool.press = point;
   };
 
-  onmouseup = ({ point, buttons }: ViewportMouseEvent) => {
+  onmouseup = ({ point, buttons }: ViewportMouseEvent): void => {
     this.tool.move = buttons ? undefined : point;
     this.tool.drag = buttons ? point : undefined;
     // this.tool.release = point;
@@ -98,7 +98,7 @@ export class SVGViewportEvents implements ViewportEvents {
   // there is no longer an app-wide fallthrough that executes that method
   // if no tool wheel event exists. the tool must specify the behavior explicitly.
 
-  onwheel = ({ point, deltaX, deltaY }: ViewportWheelEvent) => {
+  onwheel = ({ point, deltaX, deltaY }: ViewportWheelEvent): void => {
     const type: string = "svg"; // this.viewport.type;
     switch (type) {
       case "svg":

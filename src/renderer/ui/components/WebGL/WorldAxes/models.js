@@ -7,11 +7,6 @@ const makeAxesLinesVertexData = () => {
   return new Float32Array([1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1]);
 };
 
-/**
- * @param {WebGLRenderingContext|WebGL2RenderingContext} gl WebGL context
- * @param {object} program
- * @returns {WebGLVertexArray[]}
- */
 const makeVertexArrays = (gl, program) => [
   {
     location: gl.getAttribLocation(program, "v_position"),
@@ -22,10 +17,6 @@ const makeVertexArrays = (gl, program) => [
   },
 ];
 
-/**
- * @param {WebGLRenderingContext|WebGL2RenderingContext} gl WebGL context
- * @returns {WebGLElementArray[]}
- */
 const makeElementArrays = (gl) => [
   {
     mode: gl.LINES,
@@ -34,10 +25,6 @@ const makeElementArrays = (gl) => [
   },
 ];
 
-/**
- * @param {WebGLRenderingContext|WebGL2RenderingContext} gl The WebGL Context.
- * @returns {WebGLModel}
- */
 export const worldAxesV1 = (gl) => {
   const program = createProgram(gl, simple_100_vert, simple_100_frag);
   return {
@@ -49,11 +36,6 @@ export const worldAxesV1 = (gl) => {
   };
 };
 
-/**
- * @param {WebGLRenderingContext|WebGL2RenderingContext} gl The WebGL Context.
- * @param {number} version the version of the WebGL
- * @returns {WebGLModel[]}
- */
 export const worldAxes = (gl, version = 1) => {
   switch (version) {
     case 1:

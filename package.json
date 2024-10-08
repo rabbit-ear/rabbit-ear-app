@@ -5,6 +5,7 @@
   "main": "./out/main/index.js",
   "author": "Kraft",
   "license": "GPLv3",
+  "type": "commonjs",
   "scripts": {
     "format": "prettier --plugin prettier-plugin-svelte --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",

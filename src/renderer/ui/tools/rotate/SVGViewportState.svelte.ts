@@ -1,4 +1,4 @@
-import { distance2, magnitude2, subtract2 } from "rabbit-ear/math/vector.js";
+import { subtract2 } from "rabbit-ear/math/vector.js";
 import { clockwiseAngle2 } from "rabbit-ear/math/radial.js";
 import type { Deallocable } from "../../viewport/viewport.ts";
 import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
@@ -7,8 +7,8 @@ import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
 import { SVGFixedPoint } from "./SVGFixedPoint.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
-import app from "../../../app/App.svelte.ts";
-import { FixedPoint } from "../scale/SVGViewportState.svelte.ts";
+//import app from "../../../app/App.svelte.ts";
+//import { FixedPoint } from "../scale/SVGViewportState.svelte.ts";
 
 export class SVGViewportState implements Deallocable {
   viewport: SVGViewport;
@@ -16,7 +16,7 @@ export class SVGViewportState implements Deallocable {
   fixedPoint: SVGFixedPoint;
   touches: SVGTouches;
   events: SVGViewportEvents;
-  unsub: Function[] = [];
+  unsub: (() => void)[] = [];
 
   // startVector: [number, number] | undefined = $derived.by(() =>
   // 	this.touches.snapPress && !this.fixedPoint.selected
@@ -68,25 +68,25 @@ export class SVGViewportState implements Deallocable {
     this.viewport.layer = SVGLayer;
     const that = this;
     this.viewport.props = {
-      get fixedPoint() {
+      get fixedPoint(): SVGFixedPoint {
         return that.fixedPoint;
       },
-      get startVector() {
+      get startVector(): [number, number] | undefined {
         return that.startVector;
       },
-      get endVector() {
+      get endVector(): [number, number] | undefined {
         return that.endVector;
       },
-      get origin() {
+      get origin(): [number, number] | undefined {
         return that.fixedPoint.origin;
       },
-      get showRotation() {
+      get showRotation(): boolean {
         return that.showRotation;
       },
     };
   }
 
-  dealloc() {
+  dealloc(): void {
     this.unsub.forEach((u) => u());
     this.unsub = [];
     this.touches.reset();
@@ -107,7 +107,7 @@ export class SVGViewportState implements Deallocable {
   //  }
   //}
 
-  update() {
+  update(): () => void {
     return $effect.root(() => {
       $effect(() => {
         // console.log("tool.update()", this.touches.snapPress, this.touches.snapRelease);
@@ -129,14 +129,14 @@ export class SVGViewportState implements Deallocable {
           this.touches.reset();
         }
       });
-      return () => { };
+      return () => {};
     });
   }
 
-  make() {
+  make(): () => void {
     return $effect.root(() => {
-      $effect(() => { });
-      return () => { };
+      $effect(() => {});
+      return () => {};
     });
   }
 }

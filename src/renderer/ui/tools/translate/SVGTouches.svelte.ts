@@ -13,16 +13,16 @@ export class SVGTouches {
   snapPress: [number, number] | undefined = $state();
   snapRelease: [number, number] | undefined = $state();
 
-  get move() {
+  get move(): [number, number] | undefined {
     return this.#move;
   }
-  get drag() {
+  get drag(): [number, number] | undefined {
     return this.#drag;
   }
-  get press() {
+  get press(): [number, number] | undefined {
     return this.#press;
   }
-  get release() {
+  get release(): [number, number] | undefined {
     return this.#release;
   }
 
@@ -58,7 +58,7 @@ export class SVGTouches {
     this.viewport = viewport;
   }
 
-  reset() {
+  reset(): void {
     this.move = undefined;
     this.drag = undefined;
     this.press = undefined;
@@ -69,4 +69,3 @@ export class SVGTouches {
     this.snapRelease = undefined;
   }
 }
-

@@ -28,7 +28,7 @@ export class SVGViewportState implements Deallocable {
   globalState: GlobalState;
   touches: SVGTouches;
   events: SVGViewportEvents;
-  unsub: Function[] = [];
+  unsub: (() => void)[] = [];
 
   rect: Rect | undefined = $derived.by(() => {
     if (this.touches.snapPresses.length && this.touches.snapReleases.length) {
@@ -54,19 +54,19 @@ export class SVGViewportState implements Deallocable {
     this.viewport.layer = SVGLayer;
     const that = this;
     this.viewport.props = {
-      get rect() {
+      get rect(): Rect | undefined {
         return that.rect;
       },
     };
   }
 
-  dealloc() {
+  dealloc(): void {
     this.unsub.forEach((u) => u());
     this.unsub = [];
     this.touches.reset();
   }
 
-  preventBadInput() {
+  preventBadInput(): () => void {
     return $effect.root(() => {
       $effect(() => {
         const moreReleases = this.touches.releases.length > this.touches.presses.length;
@@ -76,21 +76,25 @@ export class SVGViewportState implements Deallocable {
           this.touches.reset();
         }
       });
-      return () => { };
+      return () => {};
     });
   }
 
-  makeRect() {
+  makeRect(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        if (!this.touches.snapPresses.length || !this.touches.snapReleases.length || !this.rect) {
+        if (
+          !this.touches.snapPresses.length ||
+          !this.touches.snapReleases.length ||
+          !this.rect
+        ) {
           return;
         }
         app.model.addRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
         this.touches.reset();
         // setTimeout(this.reset, 0);
       });
-      return () => { };
+      return () => {};
     });
   }
 }

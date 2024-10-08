@@ -13,41 +13,49 @@ export class SVGTouches {
   snapPress: [number, number] | undefined = $state();
   snapRelease: [number, number] | undefined = $state();
 
-  get move() {
+  get move(): [number, number] | undefined {
     return this.#move;
   }
-  get drag() {
+  get drag(): [number, number] | undefined {
     return this.#drag;
   }
-  get press() {
+  get press(): [number, number] | undefined {
     return this.#press;
   }
-  get release() {
+  get release(): [number, number] | undefined {
     return this.#release;
   }
 
   set move(v: [number, number] | undefined) {
     this.#move = v;
-    this.snapMove = this.#move ? this.viewport.snap.snapToPoint(this.#move).coords : undefined;
+    this.snapMove = this.#move
+      ? this.viewport.snap.snapToPoint(this.#move).coords
+      : undefined;
   }
   set drag(v: [number, number] | undefined) {
     this.#drag = v;
-    this.snapDrag = this.#drag ? this.viewport.snap.snapToPoint(this.#drag).coords : undefined;
+    this.snapDrag = this.#drag
+      ? this.viewport.snap.snapToPoint(this.#drag).coords
+      : undefined;
   }
   set press(v: [number, number] | undefined) {
     this.#press = v;
-    this.snapPress = this.#press ? this.viewport.snap.snapToPoint(this.#press).coords : undefined;
+    this.snapPress = this.#press
+      ? this.viewport.snap.snapToPoint(this.#press).coords
+      : undefined;
   }
   set release(v: [number, number] | undefined) {
     this.#release = v;
-    this.snapRelease = this.#release ? this.viewport.snap.snapToPoint(this.#release).coords : undefined;
+    this.snapRelease = this.#release
+      ? this.viewport.snap.snapToPoint(this.#release).coords
+      : undefined;
   }
 
   constructor(viewport: SVGViewport) {
     this.viewport = viewport;
   }
 
-  reset() {
+  reset(): void {
     this.move = undefined;
     this.drag = undefined;
     this.press = undefined;

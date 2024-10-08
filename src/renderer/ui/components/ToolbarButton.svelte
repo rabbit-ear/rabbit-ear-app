@@ -11,13 +11,11 @@
   const className = $derived(
     [name, highlighted].filter((a) => a !== undefined).join(" "),
   );
+
+  const onclick = (): void => app.ui?.setToolName(name);
 </script>
 
-<button
-  title={name}
-  class={className}
-  disabled={false}
-  onclick={() => app.ui?.setToolName(name)}>
+<button title={name} class={className} disabled={false} {onclick}>
   {#if Icon}
     <Icon></Icon>
   {/if}

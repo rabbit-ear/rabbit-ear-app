@@ -1,6 +1,6 @@
 import app from "../../../app/App.svelte";
 
-export default (vector: [number, number]) => {
+export default (vector: [number, number]): void => {
   app.model.shapes.forEach((shape) => {
     if (shape.name === "circle") {
       shape.params.cx += vector[0];

@@ -32,22 +32,22 @@ export class WebGLViewport implements Viewport, ViewportEvents {
   view: WebGLViewportView;
   style: WebGLViewportStyle;
 
-  redraw?: Function;
+  redraw?: () => void;
 
   onmousemove?: (event: ViewportMouseEvent) => void;
   onmousedown?: (event: ViewportMouseEvent) => void;
   onmouseup?: (event: ViewportMouseEvent) => void;
   onmouseleave?: (event: ViewportMouseEvent) => void;
   onwheel?: (event: ViewportWheelEvent) => void;
-  touchstart?: (event: ViewportTouchEvent) => void;
-  touchend?: (event: ViewportTouchEvent) => void;
-  touchmove?: (event: ViewportTouchEvent) => void;
-  touchcancel?: (event: ViewportTouchEvent) => void;
+  ontouchstart?: (event: ViewportTouchEvent) => void;
+  ontouchend?: (event: ViewportTouchEvent) => void;
+  ontouchmove?: (event: ViewportTouchEvent) => void;
+  ontouchcancel?: (event: ViewportTouchEvent) => void;
   onkeydown?: (event: KeyboardEvent) => void;
   onkeyup?: (event: KeyboardEvent) => void;
 
-  // layer?: any = $state();
-  // props?: any = $state();
+  // layer?: unknown = $state();
+  // props?: unknown = $state();
 
   constructor() {
     this.component = ViewportComponent;
@@ -55,7 +55,7 @@ export class WebGLViewport implements Viewport, ViewportEvents {
     this.style = new WebGLViewportStyle(this.view);
   }
 
-  dealloc() {
+  dealloc(): void {
     unsetViewportEvents(this);
     // todo
   }

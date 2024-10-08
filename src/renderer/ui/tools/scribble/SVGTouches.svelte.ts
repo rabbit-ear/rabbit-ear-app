@@ -12,7 +12,7 @@ export class SVGTouches {
     this.viewport = viewport;
   }
 
-  reset() {
+  reset(): void {
     this.move = undefined;
     while (this.drags.length) {
       this.drags.pop();

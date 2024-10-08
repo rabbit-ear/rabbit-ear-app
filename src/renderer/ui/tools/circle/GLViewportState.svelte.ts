@@ -6,5 +6,7 @@ export class GLViewportState implements Deallocable {
   constructor(viewport: WebGLViewport) {
     this.viewport = viewport;
   }
-  dealloc() { }
+  dealloc(): void {
+    // empty
+  }
 }

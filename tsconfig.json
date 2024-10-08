@@ -14,11 +14,13 @@
     "checkJs": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
+    "moduleResolution": "bundler",
     "lib": [
       "ESNext",
       "DOM",
       "DOM.Iterable"
-    ]
+    ],
+    "noUnusedLocals": false
   },
   "references": [{
     "path": "./tsconfig.node.json"

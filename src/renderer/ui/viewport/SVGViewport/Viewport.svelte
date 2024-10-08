@@ -1,5 +1,10 @@
 <script lang="ts">
   import type { SVGViewport } from "./SVGViewport.svelte.ts";
+  import type {
+    ViewportMouseEvent,
+    ViewportWheelEvent,
+    ViewportTouchEvent,
+  } from "../../viewport/events.ts";
   import GridLayer from "./GridLayer.svelte";
   import SVGTouchCanvas from "../../components/SVG/SVGTouchCanvas.svelte";
   import SVGElements from "../../components/SVG/SVGElements.svelte";
@@ -8,10 +13,10 @@
 
   type PropsType = {
     viewport: SVGViewport;
-    rest?: any[];
+    props?: unknown[];
   };
 
-  let { viewport, ...rest }: PropsType = $props();
+  let { viewport, ...props }: PropsType = $props();
 
   // https://www.youtube.com/live/nMs4X8-L_yo?feature=shared&t=1667
   const SVGToolLayer = $derived(viewport.layer);
@@ -21,16 +26,18 @@
     settings.rightHanded ? [1, 0, 0, -1, 0, 0].join(", ") : undefined,
   );
 
-  const transformArgs = (args: any[]): any[] => {
+  type HasPoint = {
+    point: [number, number];
+  };
+
+  const prep = <T extends HasPoint>(event: T): T => {
     if (!matrix) {
-      return args;
+      return event;
     }
-    args
-      .filter((arg) => arg.point)
-      .forEach((arg) => {
-        arg.point[1] *= -1;
-      });
-    return args;
+    if (event.point) {
+      event.point[1] *= -1;
+    }
+    return event;
   };
 
   let svg: SVGSVGElement | undefined = $state();
@@ -64,16 +71,24 @@
 
 <SVGTouchCanvas
   bind:svg
-  onmousemove={(...args) => viewport.onmousemove?.(...transformArgs(args))}
-  onmousedown={(...args) => viewport.onmousedown?.(...transformArgs(args))}
-  onmouseup={(...args) => viewport.onmouseup?.(...transformArgs(args))}
-  onmouseleave={(...args) => viewport.onmouseleave?.(...transformArgs(args))}
-  onwheel={(...args) => viewport.onwheel?.(...transformArgs(args))}
+  onmousemove={(e: ViewportMouseEvent): void =>
+    viewport.onmousemove?.(prep<ViewportMouseEvent>(e))}
+  onmousedown={(e: ViewportMouseEvent): void =>
+    viewport.onmousedown?.(prep<ViewportMouseEvent>(e))}
+  onmouseup={(e: ViewportMouseEvent): void =>
+    viewport.onmouseup?.(prep<ViewportMouseEvent>(e))}
+  onmouseleave={(e: ViewportMouseEvent): void =>
+    viewport.onmouseleave?.(prep<ViewportMouseEvent>(e))}
+  onwheel={(e): void => viewport.onwheel?.(prep<ViewportWheelEvent>(e))}
+  ontouchmove={(e): void => viewport.ontouchmove?.(prep<ViewportTouchEvent>(e))}
+  ontouchstart={(e): void => viewport.ontouchstart?.(prep<ViewportTouchEvent>(e))}
+  ontouchend={(e): void => viewport.ontouchend?.(prep<ViewportTouchEvent>(e))}
+  ontouchcancel={(e): void => viewport.ontouchcancel?.(prep<ViewportTouchEvent>(e))}
   viewBox={viewport.view.viewBoxString}
   fill="none"
   stroke="white"
   stroke-width={viewport.style.strokeWidth}
-  {...rest}>
+  {...props}>
   {#if matrix}
     <g class="wrapper" style="transform: matrix({matrix})">
       {@render contents()}

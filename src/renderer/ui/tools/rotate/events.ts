@@ -11,25 +11,25 @@ export class SVGViewportEvents implements ViewportEvents {
   touches: SVGTouches;
   viewport: SVGViewport;
 
-  onmousemove = ({ point, buttons }: ViewportMouseEvent) => {
+  onmousemove = ({ point, buttons }: ViewportMouseEvent): void => {
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
   };
 
-  onmousedown = ({ point, buttons }: ViewportMouseEvent) => {
+  onmousedown = ({ point, buttons }: ViewportMouseEvent): void => {
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.press = point;
     this.touches.release = undefined;
   };
 
-  onmouseup = ({ point, buttons }: ViewportMouseEvent) => {
+  onmouseup = ({ point, buttons }: ViewportMouseEvent): void => {
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.release = point;
   };
 
-  onwheel = ({ point, deltaX, deltaY }: ViewportWheelEvent) => {
+  onwheel = ({ point, deltaY }: ViewportWheelEvent): void => {
     wheelEventZoomMatrix(this.viewport, { point, deltaY });
   };
 

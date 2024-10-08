@@ -8,13 +8,20 @@ import app from "../../../app/App.svelte.ts";
 
 const makePathD = (points: [number, number][]): string => {
   const start = points[0];
-  if (!start) { return ""; }
+  if (!start) {
+    return "";
+  }
   const startString = `M${start[0].toFixed(4)} ${start[1].toFixed(4)}`;
-  if (points.length < 2) { return startString; }
-  return startString + Array.from(Array(points.length - 1))
-    .map((_, i) => i + 1)
-    .map(i => `L${points[i][0].toFixed(4)} ${points[i][1].toFixed(4)}`)
-    .join("");
+  if (points.length < 2) {
+    return startString;
+  }
+  return (
+    startString +
+    Array.from(Array(points.length - 1))
+      .map((_, i) => i + 1)
+      .map((i) => `L${points[i][0].toFixed(4)} ${points[i][1].toFixed(4)}`)
+      .join("")
+  );
 };
 
 export class SVGViewportState implements Deallocable {
@@ -22,10 +29,11 @@ export class SVGViewportState implements Deallocable {
   globalState: GlobalState;
   touches: SVGTouches;
   events: SVGViewportEvents;
-  unsub: Function[] = [];
+  unsub: (() => void)[] = [];
 
   pathD: string = $derived.by(() => {
-    const points: [number, number][] = $state.snapshot(this.touches.drags)
+    const points: [number, number][] = $state
+      .snapshot(this.touches.drags)
       .map(([p0, p1]) => [p0, p1]);
     return makePathD(points);
   });
@@ -43,13 +51,13 @@ export class SVGViewportState implements Deallocable {
     this.viewport.layer = SVGLayer;
     const that = this;
     this.viewport.props = {
-      get path() {
+      get path(): string {
         return that.pathD;
       },
     };
   }
 
-  dealloc() {
+  dealloc(): void {
     this.unsub.forEach((u) => u());
     this.unsub = [];
     this.touches.reset();
@@ -69,8 +77,9 @@ export class SVGViewportState implements Deallocable {
   //  });
   //}
 
-  addToModel() {
-    const points: [number, number][] = $state.snapshot(this.touches.drags)
+  addToModel(): void {
+    const points: [number, number][] = $state
+      .snapshot(this.touches.drags)
       .map(([p0, p1]) => [p0, p1]);
     // console.log("adding path to model", makePathD(points));
     app.model.addPath({ d: makePathD(points) });

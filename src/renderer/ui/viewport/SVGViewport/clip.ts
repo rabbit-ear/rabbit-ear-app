@@ -8,7 +8,10 @@ import {
 } from "rabbit-ear/math/compare.js";
 import { clipLineConvexPolygon } from "rabbit-ear/math/clip.js";
 
-export const clipLineInPolygon = (line: VecLine2, polygon: [number, number][]) => {
+export const clipLineInPolygon = (
+  line: VecLine2,
+  polygon: [number, number][],
+): [number, number][] | undefined => {
   if (!line) {
     return undefined;
   }

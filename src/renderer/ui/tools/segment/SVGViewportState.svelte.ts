@@ -11,7 +11,7 @@ export class SVGViewportState implements Deallocable {
   globalState: GlobalState;
   touches: SVGTouches;
   events: SVGViewportEvents;
-  unsub: Function[] = [];
+  unsub: (() => void)[] = [];
 
   segment: [[number, number], [number, number]] | undefined = $derived.by(() => {
     if (this.touches.snapPress && this.touches.snapRelease) {
@@ -27,11 +27,11 @@ export class SVGViewportState implements Deallocable {
     !this.segment
       ? undefined
       : {
-        x1: this.segment[0][0],
-        y1: this.segment[0][1],
-        x2: this.segment[1][0],
-        y2: this.segment[1][1],
-      },
+          x1: this.segment[0][0],
+          y1: this.segment[0][1],
+          x2: this.segment[1][0],
+          y2: this.segment[1][1],
+        },
   );
 
   constructor(viewport: SVGViewport, globalState: GlobalState) {
@@ -47,19 +47,19 @@ export class SVGViewportState implements Deallocable {
     this.viewport.layer = SVGLayer;
     const that = this;
     this.viewport.props = {
-      get line() {
+      get line(): { x1: number; y1: number; x2: number; y2: number } {
         return that.line;
       },
     };
   }
 
-  dealloc() {
+  dealloc(): void {
     this.unsub.forEach((u) => u());
     this.unsub = [];
     this.touches.reset();
   }
 
-  makeSegment() {
+  makeSegment(): () => void {
     return $effect.root(() => {
       $effect(() => {
         if (!this.touches.snapPress || !this.touches.snapRelease || !this.segment) {
@@ -69,7 +69,7 @@ export class SVGViewportState implements Deallocable {
         app.model.addLine(x1, y1, x2, y2);
         this.touches.reset();
       });
-      return () => { };
+      return () => {};
     });
   }
 }

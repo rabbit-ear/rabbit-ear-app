@@ -1,4 +1,4 @@
-const polarToCartesian = (a: number, d: number) => [
+const polarToCartesian = (a: number, d: number): [number, number] => [
   Math.cos(a) * d,
   Math.sin(a) * d,
 ];
@@ -10,7 +10,7 @@ export const arcPath = (
   startAngle: number,
   endAngle: number,
   includeCenter = false,
-) => {
+): string => {
   if (endAngle == null) {
     return "";
   }

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { SVGAttributes } from "svelte/elements";
   import type { Snippet } from "svelte";
 
   interface PropsType {
@@ -14,7 +15,7 @@
     ontouchend?: (e: TouchEvent) => void;
     ontouchcancel?: (e: TouchEvent) => void;
     children?: Snippet;
-    rest?: any[];
+    //props?: unknown[];
   }
 
   let {
@@ -30,16 +31,19 @@
     ontouchend,
     ontouchcancel,
     children,
-    ...rest
-  }: PropsType = $props();
+    ...props
+  }: PropsType & SVGAttributes<SVGSVGElement> = $props();
+
+  const onfocus = (): void => {};
+  const onblur = (): void => {};
 </script>
 
 <svg
   xmlns="http://www.w3.org/2000/svg"
   role="presentation"
   bind:this={svg}
-  onfocus={() => {}}
-  onblur={() => {}}
+  {onfocus}
+  {onblur}
   {viewBox}
   {onmousedown}
   {onmousemove}
@@ -50,7 +54,7 @@
   {ontouchmove}
   {ontouchend}
   {ontouchcancel}
-  {...rest}>
+  {...props}>
   {#if children}
     {@render children()}
   {/if}

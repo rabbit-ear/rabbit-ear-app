@@ -7,10 +7,13 @@ export class ViewportState implements Deallocable {
     this.viewport = viewport;
   }
 
-  dealloc() { }
+  dealloc(): void {
+    // empty
+  }
 }
 
 export class GlobalState implements Deallocable {
-  constructor() { }
-  dealloc() { }
+  dealloc(): void {
+    // empty
+  }
 }

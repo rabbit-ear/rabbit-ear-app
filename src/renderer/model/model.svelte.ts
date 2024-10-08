@@ -7,7 +7,20 @@ import { excludeS } from "rabbit-ear/math/compare.js";
 
 export type Shape = {
   name: string;
-  params: object;
+  params: {
+    x1?: number;
+    y1?: number;
+    x2?: number;
+    y2?: number;
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+    cx?: number;
+    cy?: number;
+    r?: number;
+    d?: string;
+  };
 };
 
 const intersectLines = (a, b): [number, number] => {
@@ -33,11 +46,14 @@ export const shapeToElement = ({ name, params }: Shape): SVGElement | undefined 
       return ear.svg.circle(params.cx, params.cy, params.r);
     case "path":
       return ear.svg.path(params.d);
+    default:
+      return undefined;
   }
 };
 
 // temporarily returns all circles, that's all.
-const getShapesInRect = (shapes: Shape[], rect): number[] => {
+//const getShapesInRect = (shapes: Shape[], rect): number[] => {
+const getShapesInRect = (shapes: Shape[]): number[] => {
   return shapes
     .map(({ name }, i) => (name === "circle" ? i : undefined))
     .filter((a) => a !== undefined);
@@ -52,8 +68,10 @@ export class Model {
   // snap points
   snapPoints: [number, number][] = $state([]);
 
-  selectedInsideRect(rect): void {
-    this.selected = getShapesInRect(this.shapes, rect);
+  //selectedInsideRect(rect): void {
+  selectedInsideRect(): void {
+    //this.selected = getShapesInRect(this.shapes, rect);
+    this.selected = getShapesInRect(this.shapes);
   }
 
   push(...newShapes: Shape[]): void {
@@ -113,6 +131,10 @@ export class Model {
 
   constructor() {
     this.#effects = [this.#makeIntersectionsEffect()];
+  }
+
+  dealloc(): void {
+    this.#effects.forEach((fn) => fn());
   }
 }
 

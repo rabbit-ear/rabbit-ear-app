@@ -1,11 +1,6 @@
 //import { identity4x4 } from "../../math/matrix4.js";
 const identity4x4 = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
-/**
- * @description Uniforms must exist so there are protections to ensure
- * that at least some value gets passed.
- * @return {{ [key: string]: WebGLUniform }}
- */
 export const makeUniforms = ({ projectionMatrix, modelViewMatrix, origin, canvas }) => ({
   u_projection: {
     func: "uniformMatrix4fv",

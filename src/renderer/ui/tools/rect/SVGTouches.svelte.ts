@@ -21,21 +21,21 @@ export class SVGTouches {
     this.viewport = viewport;
   }
 
-  addPress(point: [number, number]) {
+  addPress(point: [number, number]): void {
     const snapPoint = this.viewport.snap.snapToPoint(point).coords;
     this.presses.push(point);
     // if point is not undefined, result is not undefined
     this.snapPresses.push(snapPoint as [number, number]);
   }
 
-  addRelease(point: [number, number]) {
+  addRelease(point: [number, number]): void {
     const snapPoint = this.viewport.snap.snapToPoint(point).coords;
     this.releases.push(point);
     // if point is not undefined, result is not undefined
     this.snapReleases.push(snapPoint as [number, number]);
   }
 
-  reset() {
+  reset(): void {
     this.move = undefined;
     this.drag = undefined;
     while (this.presses.length) {

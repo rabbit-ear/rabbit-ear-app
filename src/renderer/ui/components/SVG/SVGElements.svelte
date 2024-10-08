@@ -1,11 +1,12 @@
 <script lang="ts">
+  import type { SVGAttributes } from "svelte/elements";
   import { shapeToElement, type Shape } from "../../../model/model.svelte.ts";
 
   type PropsType = {
     elements: Shape[];
   };
 
-  const { elements, ...rest }: PropsType = $props();
+  const { elements, ...props }: PropsType & SVGAttributes<SVGGElement> = $props();
 
   let g: SVGGElement;
 
@@ -13,7 +14,7 @@
     elements.map(shapeToElement).filter((a) => a !== undefined),
   );
 
-  const remove = (el: Element) => {
+  const remove = (el: Element): void => {
     while (el.children.length) {
       el.removeChild(el.children[0]);
     }
@@ -25,4 +26,4 @@
   });
 </script>
 
-<g bind:this={g} {...rest} />
+<g bind:this={g} {...props} />

@@ -43,14 +43,14 @@
     ontouchstart?: (e: TouchEvent) => void;
     ontouchend?: (e: TouchEvent) => void;
     ontouchcancel?: (e: TouchEvent) => void;
-    redraw?: Function;
+    redraw?: () => void;
   };
 
   let {
     graph = {},
     perspective = "orthographic",
     renderStyle = "creasePattern",
-    canvasSize: boundCanvasSize = $bindable([0, 0]),
+    canvasSize = $bindable([0, 0]),
     projectionMatrix: boundProjectionMatrix = $bindable([...identity4x4]),
     viewMatrix = [...identity4x4],
     layerNudge = 0.01,
@@ -82,7 +82,7 @@
   let { gl, version } = $derived(
     canvas ? initializeWebGL(canvas) : { gl: undefined, version: 0 },
   );
-  let canvasSize: [number, number] = $state([1, 1]);
+  //let canvasSize: [number, number] = $state([1, 1]);
   let modelMatrix = $derived(makeModelMatrix(graph));
   let modelViewMatrix = $derived(multiplyMatrices4(viewMatrix, modelMatrix));
   let projectionMatrix = $derived(makeProjectionMatrix(canvasSize, perspective, fov));
@@ -90,9 +90,9 @@
   $effect(() => {
     boundProjectionMatrix = [...projectionMatrix];
   });
-  $effect(() => {
-    boundCanvasSize = [...canvasSize];
-  });
+  //$effect(() => {
+  //  boundCanvasSize = [...canvasSize];
+  //});
 
   let uniformOptions = $derived({
     projectionMatrix,
@@ -140,9 +140,9 @@
 
   let uniforms = $derived(models.map((model) => model.makeUniforms(uniformOptions)));
 
-  const deallocModels = () => models.forEach((model) => deallocModel(gl, model));
+  const deallocModels = (): void => models.forEach((model) => deallocModel(gl, model));
 
-  const onresize = () => {
+  const onresize = (): void => {
     if (!gl || !canvas) {
       return;
     }

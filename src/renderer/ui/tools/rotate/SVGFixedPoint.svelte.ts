@@ -1,4 +1,4 @@
-import { distance2, subtract2 } from "rabbit-ear/math/vector.js";
+import { distance2 } from "rabbit-ear/math/vector.js";
 import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
 
@@ -9,7 +9,7 @@ export class SVGFixedPoint {
   origin: [number, number] = $state([0, 0]);
   selected: boolean = $state(false);
 
-  equivalent = (point1: [number, number], point2: [number, number]) =>
+  equivalent = (point1: [number, number], point2: [number, number]): boolean =>
     distance2(point1, point2) < this.viewport.uiEpsilon;
 
   highlighted: boolean = $derived.by(() => {
@@ -22,14 +22,14 @@ export class SVGFixedPoint {
     return false;
   });
 
-  reset() {
+  reset(): void {
     this.selected = false;
   }
 
   // set this object's "selected" state.
   // - false: if presses is empty, or, the press was far from the fixed point
   // - true: if presses is not empty and the press was near to the fixed point
-  updateSelected() {
+  updateSelected(): () => void {
     return $effect.root(() => {
       $effect(() => {
         if (this.selected) {
@@ -43,13 +43,13 @@ export class SVGFixedPoint {
           }
         }
       });
-      return () => { };
+      return () => {};
     });
   }
 
   // set this object's "origin" position, only if:
   // "selected" is true and releases or drag is not undefined
-  update() {
+  update(): () => void {
     return $effect.root(() => {
       $effect(() => {
         if (!this.selected) {
@@ -66,10 +66,9 @@ export class SVGFixedPoint {
           return;
         }
       });
-      return () => { };
+      return () => {};
     });
   }
-
 
   //// set this object's "origin" position, only if:
   //// "selected" is true if releases or drag is not undefined

@@ -1,3 +1,4 @@
+import type { SVGAttributes } from "svelte/elements";
 import type { Component } from "svelte";
 import type { VecLine2 } from "rabbit-ear/types.js";
 import type { Viewport } from "../viewport.ts";
@@ -30,17 +31,18 @@ export class SVGViewport implements Viewport, ViewportEvents {
   onmouseup?: (event: ViewportMouseEvent) => void;
   onmouseleave?: (event: ViewportMouseEvent) => void;
   onwheel?: (event: ViewportWheelEvent) => void;
-  touchstart?: (event: ViewportTouchEvent) => void;
-  touchend?: (event: ViewportTouchEvent) => void;
-  touchmove?: (event: ViewportTouchEvent) => void;
-  touchcancel?: (event: ViewportTouchEvent) => void;
+  ontouchstart?: (event: ViewportTouchEvent) => void;
+  ontouchend?: (event: ViewportTouchEvent) => void;
+  ontouchmove?: (event: ViewportTouchEvent) => void;
+  ontouchcancel?: (event: ViewportTouchEvent) => void;
   onkeydown?: (event: KeyboardEvent) => void;
   onkeyup?: (event: KeyboardEvent) => void;
 
   static settings: typeof settings = settings;
 
-  layer?: any = $state();
-  props?: any = $state();
+  layer?: Component = $state();
+  //props?: object & SVGAttributes<SVGGElement> = $state();
+  props?: object = $state();
 
   uiEpsilon: number = $derived.by(() => this.view.vmax * settings.uiEpsilonFactor);
 
@@ -52,13 +54,13 @@ export class SVGViewport implements Viewport, ViewportEvents {
     this.snap = new Snap(this.view);
   }
 
-  dealloc() {
+  dealloc(): void {
     unsetViewportEvents(this);
     this.layer = undefined;
     this.props = undefined;
   }
 
-  clipLine(line: VecLine2) {
+  clipLine(line: VecLine2): [number, number][] | undefined {
     return clipLineInPolygon(line, this.view.viewBoxPolygon);
   }
 }

@@ -24,4 +24,3 @@ const Tools: { [key: string]: typeof UITool } = {
 };
 
 export default Tools;
-

@@ -15,7 +15,7 @@ export class UI {
     WebGLViewport,
   };
 
-  get tool(): UITool {
+  get tool(): UITool | undefined {
     return this.#tool;
   }
   // no need to set the tool directly. use a string ("line", "zoom"), the tool's name.

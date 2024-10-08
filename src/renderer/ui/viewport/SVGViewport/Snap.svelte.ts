@@ -9,6 +9,15 @@ import {
 import settings from "./Settings.svelte.ts";
 import app from "../../../app/App.svelte.ts";
 
+const emptySnapFunction = (
+  point: [number, number],
+  snapRadius: number,
+): [number, number] | undefined => {
+  point;
+  snapRadius;
+  return undefined;
+};
+
 export class Snap {
   view: View;
 
@@ -22,14 +31,17 @@ export class Snap {
     ([] as [number, number][]).concat(this.points).concat(app.model.snapPoints),
   );
 
-  gridSnapFunction = $derived.by(() => {
+  gridSnapFunction: (
+    point: [number, number],
+    snapRadius: number,
+  ) => [number, number] | undefined = $derived.by(() => {
     switch (settings.tiling) {
       case "triangle":
         return triangleGridSnapFunction;
       case "square":
         return squareGridSnapFunction;
       default:
-        return (): void => undefined;
+        return emptySnapFunction;
     }
   });
 

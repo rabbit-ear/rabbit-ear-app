@@ -3,7 +3,7 @@ import * as models from "./models.js";
 import * as uniforms from "./uniforms.js";
 
 export default {
-	...models,
-	// ...shaders,
-	...uniforms,
+  ...models,
+  // ...shaders,
+  ...uniforms,
 };
