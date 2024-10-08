@@ -1,6 +1,6 @@
 import type { FilePathInfo } from "../../main/fs/path.ts";
 import app from "../app/App.svelte.ts";
-import { EXTENSION, UNTITLED_FILENAME } from "../app/meta.svelte.ts";
+import { EXTENSION, UNTITLED_FILENAME } from "../app/constants.svelte.ts";
 
 //const emptyFilePathInfo = () => ({
 //  fullpath: "",

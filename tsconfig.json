@@ -19,8 +19,7 @@
       "ESNext",
       "DOM",
       "DOM.Iterable"
-    ],
-    "noUnusedLocals": false
+    ]
   },
   "references": [{
     "path": "./tsconfig.node.json"

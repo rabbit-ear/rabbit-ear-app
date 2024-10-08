@@ -104,8 +104,6 @@
   const ontouchstart = (e: TouchEvent): void => touchstart?.(formatTouchEvent(e));
   const ontouchend = (e: TouchEvent): void => touchend?.(formatTouchEvent(e));
   const ontouchcancel = (e: TouchEvent): void => touchcancel?.(formatTouchEvent(e));
-
-  // <!-- viewMatrix={Renderer.ViewMatrix} -->
 </script>
 
 <WebGLCanvas

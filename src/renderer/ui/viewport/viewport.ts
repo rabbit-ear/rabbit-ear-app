@@ -37,12 +37,6 @@ export interface Viewport extends ViewportEvents, Deallocable {
 
   // this method will unbind all of the above events (set them to undefined)
   dealloc: () => void;
-
-  // a UI touch event, coming from a pointer device, will have some
-  // built-in error correcting (like snapping, for example), and this behavior
-  // is zoom-level dependent. Use this variable to get an appropriate error-
-  // correcting value.
-  uiEpsilon: number;
 }
 
 export const unsetViewportEvents = (viewport: Viewport): void => {

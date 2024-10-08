@@ -1,6 +1,5 @@
 import ear from "rabbit-ear";
 import type { FOLD } from "rabbit-ear/types.js";
-//import snap from "./snap.svelte.ts";
 import { subtract2 } from "rabbit-ear/math/vector.js";
 import { intersectLineLine } from "rabbit-ear/math/intersect.js";
 import { excludeS } from "rabbit-ear/math/compare.js";

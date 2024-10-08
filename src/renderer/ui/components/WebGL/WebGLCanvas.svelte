@@ -1,5 +1,5 @@
 <script lang="ts">
-  // import earcut from "earcut";
+  import earcut from "earcut";
   import type { FOLD, WebGLModel } from "rabbit-ear/types.js";
   import { identity4x4, multiplyMatrices4 } from "rabbit-ear/math/matrix4.js";
   import { initializeWebGL } from "rabbit-ear/webgl/general/webgl.js";
@@ -51,7 +51,7 @@
     perspective = "orthographic",
     renderStyle = "creasePattern",
     canvasSize = $bindable([0, 0]),
-    projectionMatrix: boundProjectionMatrix = $bindable([...identity4x4]),
+    projectionMatrix: _boundProjectionMatrix = $bindable([...identity4x4]),
     viewMatrix = [...identity4x4],
     layerNudge = 0.01,
     fov = 30.25,
@@ -72,7 +72,7 @@
     ontouchstart,
     ontouchend,
     ontouchcancel,
-    redraw = $bindable(),
+    redraw: _redraw = $bindable(),
   }: WebGLCanvasProps = $props();
 
   let outlineColor = $derived(darkMode ? "white" : "black");
@@ -82,17 +82,13 @@
   let { gl, version } = $derived(
     canvas ? initializeWebGL(canvas) : { gl: undefined, version: 0 },
   );
-  //let canvasSize: [number, number] = $state([1, 1]);
   let modelMatrix = $derived(makeModelMatrix(graph));
   let modelViewMatrix = $derived(multiplyMatrices4(viewMatrix, modelMatrix));
   let projectionMatrix = $derived(makeProjectionMatrix(canvasSize, perspective, fov));
 
   $effect(() => {
-    boundProjectionMatrix = [...projectionMatrix];
+    _boundProjectionMatrix = [...projectionMatrix];
   });
-  //$effect(() => {
-  //  boundCanvasSize = [...canvasSize];
-  //});
 
   let uniformOptions = $derived({
     projectionMatrix,
@@ -112,7 +108,7 @@
     outlines: showFoldedFaceOutlines,
     edges: showFoldedCreases,
     faces: showFoldedFaces,
-    // earcut,
+    earcut,
   });
 
   let models: WebGLModel[] = $derived.by(() => {
@@ -150,7 +146,7 @@
     canvasSize = [canvas.clientWidth, canvas.clientHeight];
   };
 
-  redraw = onresize;
+  _redraw = onresize;
 
   $effect(() => {
     if (!gl || !canvas) {

@@ -9,9 +9,13 @@ import type {
   ViewportTouchEvent,
 } from "../events.ts";
 
+const defaultViewMatrix = (): number[] => [
+  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -5, 1,
+];
+
 class WebGLViewportView {
   projectionMatrix: number[] = $state([...identity4x4]);
-  viewMatrix: number[] = $state([...identity4x4]);
+  viewMatrix: number[] = $state(defaultViewMatrix());
   modelMatrix: number[] = $state([...identity4x4]);
   canvasSize: [number, number] = $state([0, 0]);
   perspective: string = $state("perspective");
@@ -62,6 +66,11 @@ export class WebGLViewport implements Viewport, ViewportEvents {
 
   uiEpsilonFactor = 0.01;
   snapRadiusFactor = 0.05;
+  // a UI touch event, coming from a pointer device, will have some
+  // built-in error correcting (like snapping, for example), and this behavior
+  // is zoom-level dependent. Use this variable to get an appropriate error-
+  // correcting value.
+  //uiEpsilon: number = $derived.by(() => this.view.vmax * settings.uiEpsilonFactor);
   uiEpsilon: number = $derived.by(() => this.view.vmax * this.uiEpsilonFactor);
   snapRadius: number = $derived.by(() => this.view.vmax * this.snapRadiusFactor);
 }

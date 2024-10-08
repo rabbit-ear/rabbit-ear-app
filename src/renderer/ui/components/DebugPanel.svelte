@@ -23,12 +23,6 @@
 </script>
 
 <hr />
-<p>debug</p>
-
-<label for="verticalUp">Y axis</label>
-<button onclick={logModel}>model</button>
-
-<hr />
 <p>viewport</p>
 <button onclick={newSVG}>+ SVG</button>
 <button onclick={newWebGL}>+ GL</button>
@@ -37,6 +31,10 @@
 <hr />
 
 <button onclick={toggleSVGHandedness}>y flip</button>
+
+<hr />
+
+<button onclick={logModel}>model</button>
 
 <style>
   button {
