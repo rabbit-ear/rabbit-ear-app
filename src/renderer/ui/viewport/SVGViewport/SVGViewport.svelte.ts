@@ -18,14 +18,27 @@ import { clipLineInPolygon } from "./clip.ts";
 import settings from "./Settings.svelte.ts";
 
 export class SVGViewport implements Viewport, ViewportEvents {
+  static settings: typeof settings = settings;
+
   component: Component;
   grid: Grid;
   snap: Snap;
   style: Style;
   view: View;
 
-  redraw?: () => void;
+  // the SVG Viewport comes with the ability to instantiate a <g> layer.
+  // currently, this is primarily used by the tools, to draw indicator marks.
+  layer?: Component = $state();
+  //props?: object & SVGAttributes<SVGGElement> = $state();
+  props?: object = $state();
 
+  // a UI touch event, coming from a pointer device, will have some
+  // built-in error correcting (like snapping, for example), and this behavior
+  // is zoom-level dependent. Use this variable to get an appropriate error-
+  // correcting value.
+  uiEpsilon: number = $derived.by(() => this.view.vmax * settings.uiEpsilonFactor);
+
+  redraw?: () => void;
   onmousemove?: (event: ViewportMouseEvent) => void;
   onmousedown?: (event: ViewportMouseEvent) => void;
   onmouseup?: (event: ViewportMouseEvent) => void;
@@ -37,18 +50,6 @@ export class SVGViewport implements Viewport, ViewportEvents {
   ontouchcancel?: (event: ViewportTouchEvent) => void;
   onkeydown?: (event: KeyboardEvent) => void;
   onkeyup?: (event: KeyboardEvent) => void;
-
-  static settings: typeof settings = settings;
-
-  layer?: Component = $state();
-  //props?: object & SVGAttributes<SVGGElement> = $state();
-  props?: object = $state();
-
-  // a UI touch event, coming from a pointer device, will have some
-  // built-in error correcting (like snapping, for example), and this behavior
-  // is zoom-level dependent. Use this variable to get an appropriate error-
-  // correcting value.
-  uiEpsilon: number = $derived.by(() => this.view.vmax * settings.uiEpsilonFactor);
 
   constructor() {
     this.component = ViewportComponent;

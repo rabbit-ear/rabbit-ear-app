@@ -13,14 +13,14 @@ export interface Deallocable {
 // an abstract class would allow us to describe the "settings" static property.
 //export abstract class Viewport implements ViewportEvents, Deallocable {
 export interface Viewport extends ViewportEvents, Deallocable {
+  // to be implemented by each component:
+  // static settings: any;
+
   // the Svelte component to be instanced as one of the App's display canvases
   component: Component;
 
   // force the screen to re-calculate window bounds. used when viewports are added/removed
   redraw?: () => void;
-
-  // to be implemented by each component:
-  // static settings: any;
 
   // all events are optional
   onmousemove?: ((e: ViewportMouseEvent) => void) | undefined;

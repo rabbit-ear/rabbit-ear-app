@@ -3,12 +3,14 @@
   const viewports = $derived(app.ui?.viewports || []);
 
   // hard coded the Terminal Viewport for now
-  import TerminalViewport from "../viewport/TerminalViewport/Viewport.svelte";
+  import { TerminalViewport } from "../viewport/TerminalViewport/TerminalViewport.svelte.ts";
+  import TerminalViewportComponent from "../viewport/TerminalViewport/Viewport.svelte";
+  const terminalViewport = new TerminalViewport();
 </script>
 
 <div class="column">
   <div class="terminal">
-    <TerminalViewport />
+    <TerminalViewportComponent viewport={terminalViewport} />
   </div>
   <div class="canvases row gap">
     {#each viewports as viewport}
