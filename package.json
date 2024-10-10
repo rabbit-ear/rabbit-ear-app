@@ -39,6 +39,7 @@
     "electron-vite": "^2.3.0",
     "eslint": "^8.57.0",
     "eslint-plugin-svelte": "^2.41.0",
+    "js-tokens": "^9.0.0",
     "prettier": "^3.3.2",
     "prettier-plugin-svelte": "^3.2.5",
     "rabbit-ear": "^0.9.4",

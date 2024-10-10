@@ -1,12 +1,15 @@
 import type { UI } from "../ui/UI.svelte.ts";
 import { Model } from "../model/model.svelte.ts";
+import { Invoker } from "../kernel/Invoker.svelte.ts";
 
 class Application {
+  invoker: Invoker;
   model: Model;
   // app should be able to run without a UI. UI is added inside UI.svelte component.
   ui: UI | undefined;
 
   constructor() {
+    this.invoker = new Invoker();
     this.model = new Model();
 
     this.model.shapes.push({ name: "circle", params: { cx: 0, cy: 0, r: 1 } });

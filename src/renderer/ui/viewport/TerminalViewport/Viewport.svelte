@@ -1,13 +1,11 @@
 <script lang="ts">
   import type { TerminalViewport } from "./TerminalViewport.svelte";
-  import settings from "./Settings.svelte.ts";
+  import app from "../../../app/App.svelte.ts";
+  //import settings from "./Settings.svelte.ts";
 
   type PropsType = {
     viewport: TerminalViewport;
-    //props?: unknown[];
   };
-
-  //let { viewport, ...props }: PropsType = $props();
   let { viewport }: PropsType = $props();
 
   // when the text area content updates, scroll to the bottom of the container.
@@ -18,18 +16,34 @@
     viewport.terminalValue;
     historyContainer.scrollTop = historyContainer.scrollHeight;
   });
+
+  let htmlString: string = $derived(app.invoker.historyAsHTML.join("\n"));
+
+  // number of carriage returns in the input field
+  const returnCount = $derived(
+    ((viewport.terminalValue || "").match(/\r?\n/g) || []).length,
+  );
+  const rows = $derived(Math.max(returnCount + 1, 1));
+
+  //<pre>{@html settings.commandHistoryHTMLString}</pre>
 </script>
+
+<!--
+<svelte:window onkeyup={viewport.onkeyup} onkeydown={viewport.onkeydown} />
+-->
 
 <div class="container">
   <div class="history-container" bind:this={historyContainer}>
-    <pre>{@html settings.commandHistoryHTMLString}</pre>
+    <pre>{@html htmlString}</pre>
   </div>
   <textarea
     bind:this={viewport.terminalTextarea}
     bind:value={viewport.terminalValue}
     autocomplete="off"
     autocorrect="off"
-    rows="1"></textarea>
+    onkeydown={viewport.onkeydown}
+    onkeyup={viewport.onkeyup}
+    {rows}></textarea>
 </div>
 
 <style>
@@ -83,7 +97,8 @@
   }
 
   textarea {
-    height: 1rem;
+    min-height: 1rem;
+    /*height: 1rem;*/
     flex: 0 0 auto;
     resize: none;
     border: 0;

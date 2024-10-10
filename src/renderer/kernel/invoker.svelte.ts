@@ -8,25 +8,27 @@ const stringifyArgs = (...args: any[]): string =>
   `${args.map((v) => JSON.stringify(v)).join(", ")}`;
 
 class CommandResult implements Tokenizable {
-  private result: any;
-  private isError: boolean;
-  private stringified: string;
+  #result: unknown;
+  #isError: boolean;
+  #stringified: string;
 
   get asString(): string {
-    return this.stringified;
+    return this.#stringified;
   }
 
   get asTokenString(): string {
     // if (this.isError) { console.error(this.result); }
-    return this.isError
-      ? `<span class="error">${this.stringified}</span>`
-      : `<span>${this.stringified}</span>`;
+    return this.#isError
+      ? `<span class="error">${this.#stringified}</span>`
+      : `<span>${this.#stringified}</span>`;
   }
 
-  constructor(result: any) {
-    this.isError = result instanceof Error;
-    this.result = result;
-    this.stringified = this.isError ? `${result}` : formatCommandResult(result) || "";
+  constructor(result: unknown) {
+    this.#isError = result instanceof Error;
+    this.#result = result;
+    this.#stringified = this.#isError
+      ? `${this.#result}`
+      : formatCommandResult(this.#result) || "";
   }
 }
 
@@ -35,15 +37,15 @@ export type CommandAndResult = {
   result: CommandResult;
 };
 
-class Invoker {
-  public history = $state<CommandAndResult[]>([]);
-  public redoStack = $state<CommandAndResult[]>([]);
+export class Invoker {
+  history = $state<CommandAndResult[]>([]);
+  redoStack = $state<CommandAndResult[]>([]);
 
   /**
    * @description An array of the history of the command inputs.
    * This contains the inputs only, no results. There is no HTML span wrapper.
    */
-  public historyAsHTML = $derived<string[]>(
+  historyAsHTML = $derived<string[]>(
     this.history.flatMap(({ command, result }) => [
       `<span>${command.asTokenString}</span>`,
       `<span class="result">${result.asTokenString}</span>`,
@@ -54,7 +56,7 @@ class Invoker {
    * @description An array of the history of the command inputs.
    * This contains the inputs only, no results. There is no HTML span wrapper.
    */
-  public commandHistory = $derived<string[]>(
+  commandHistory = $derived<string[]>(
     this.history.map(({ command }) => command.asString),
   );
 
@@ -139,5 +141,3 @@ class Invoker {
     // should we return anything?
   }
 }
-
-export const invoker = new Invoker();

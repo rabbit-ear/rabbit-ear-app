@@ -21,11 +21,12 @@ export class BackgroundColorCommand implements Command {
     return formatJavascript(this.asString);
   }
 
-  execute(): any {
+  execute(): string {
     this.previousColor =
       document.body.style.backgroundColor ||
       getComputedStyle(document.body)["background-color"];
     document.body.style.backgroundColor = this.color;
+    return this.color;
   }
 
   undo(): any {

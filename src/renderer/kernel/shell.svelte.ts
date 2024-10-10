@@ -18,8 +18,8 @@ const hoist = Object.keys(scope)
  * object will be whatever the final line of code returns, or
  * "undefined" if nothing is returned.
  */
-const scopedEval = (jsBlob: string, scope: object): any => {
-  const line0 = shouldUseStrict ? '"use strict";' : ";";
+const scopedEval = (jsBlob: string, scope: object): unknown => {
+  const line0 = shouldUseStrict ? "'use strict';" : ";";
   // const fileString = files
   // 	.map(f => `var ${f.name} = this.${f.name};`).join("");
   // hoist = hoist + fileString;
@@ -42,7 +42,7 @@ const scopedEval = (jsBlob: string, scope: object): any => {
  * @param {string} js a valid Javascript blob
  * @returns {any} whatever is the result of executing the javascript
  */
-export const execute = (js: string): object[] => scopedEval(js, scope);
+export const execute = (js: string): unknown => scopedEval(js, scope);
 
 // // injections might work this way
 // export const execute = (js: string) => {

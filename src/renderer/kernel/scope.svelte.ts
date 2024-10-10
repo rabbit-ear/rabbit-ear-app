@@ -1,7 +1,8 @@
 // import ear from "rabbit-ear";
 import { BackgroundColorCommand } from "./commands/background.ts";
 import { CursorCommand } from "./commands/cursor.ts";
-import { invoker } from "./invoker.svelte.ts";
+// this might cause a circular reference, scope inherits app, app inherits Invoker.
+import app from "../app/App.svelte.ts";
 
 // all command should be bound to this scope object.
 
@@ -9,8 +10,8 @@ import { invoker } from "./invoker.svelte.ts";
 // const context = Object.assign({ ...ear }, Commands);
 export const scope = {
   // invoker,
-  [BackgroundColorCommand.name]: (color: string) =>
-    invoker.executeCommand(new BackgroundColorCommand(color)),
+  [BackgroundColorCommand.name]: (color: string): string =>
+    app.invoker.executeCommand(new BackgroundColorCommand(color)),
   [CursorCommand.name]: (cursor: string) =>
-    invoker.executeCommand(new CursorCommand(cursor)),
+    app.invoker.executeCommand(new CursorCommand(cursor)),
 };

@@ -1,4 +1,4 @@
-import jsTokens from "../lib/js-tokens/index.js";
+import jsTokens from "js-tokens";
 
 /**
  * @description Maximum string length in terminal
@@ -26,7 +26,7 @@ const capLength = (str: string): string =>
 /**
  *
  */
-const stringifyAny = (el: any): string => {
+const stringifyAny = (el: unknown): string => {
   if (el == null) {
     return "";
   }
@@ -69,7 +69,7 @@ const stringifyAny = (el: any): string => {
 // 	}
 // 	return undefined;
 // };
-export const formatCommandResult = (result: any): string | undefined => {
+export const formatCommandResult = (result: unknown): string | undefined => {
   if (result == null) {
     return undefined;
   }
