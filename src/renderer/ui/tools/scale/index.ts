@@ -1,10 +1,12 @@
 import type { UITool } from "../../UITool.ts";
 import type { Viewport } from "../../viewport/viewport.ts";
+//import type { Panel } from "../../panel/panel.ts";
 import { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import { WebGLViewport } from "../../viewport/WebGLViewport/WebGLViewport.svelte.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
-import { SVGViewportState } from "./SVGViewportState.svelte.ts";
+import { SVGViewportState } from "./svg/SVGViewportState.svelte.ts";
 import { GLViewportState } from "./GLViewportState.svelte.ts";
+import { ToolPanel } from "./panel/Panel.svelte.ts";
 import icon from "./icon.svelte";
 
 class Tool implements UITool {
@@ -13,7 +15,7 @@ class Tool implements UITool {
   static icon = icon;
 
   state = new GlobalState();
-  panel = undefined;
+  panel = new ToolPanel(this.state);
 
   viewportStates: (SVGViewportState | GLViewportState)[] = [];
 
@@ -34,6 +36,7 @@ class Tool implements UITool {
   dealloc(): void {
     this.viewportStates.forEach((state) => state.dealloc());
     this.state.dealloc();
+    this.panel.dealloc();
   }
 }
 

@@ -2,6 +2,7 @@
   import Toolbar from "./Toolbar.svelte";
   import DebugPanel from "./DebugPanel.svelte";
   import Canvases from "./Canvases.svelte";
+  import Panels from "./Panels.svelte";
   import app from "../../app/App.svelte.ts";
   import { UI as UIClass } from "../UI.svelte.ts";
   import { SVGViewport } from "../viewport/SVGViewport/SVGViewport.svelte.ts";
@@ -22,6 +23,9 @@
     </div>
     <div class="canvases">
       <Canvases />
+    </div>
+    <div class="panels">
+      <Panels />
     </div>
   </div>
 </main>
@@ -67,6 +71,14 @@
     height: 100%;
     min-width: 0;
     flex: 1 1 auto;
+  }
+
+  .panels {
+    height: 100%;
+    width: 16rem;
+    flex: 0 0 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   /* colors */

@@ -5,6 +5,7 @@ import type {
   ViewportTouchEvent,
   ViewportEvents,
 } from "./events.ts";
+import type { Panel } from "../panel/panel.ts";
 
 export interface Deallocable {
   dealloc(): void;
@@ -15,6 +16,8 @@ export interface Deallocable {
 export interface Viewport extends ViewportEvents, Deallocable {
   // to be implemented by each component:
   // static settings: any;
+  // an optional panel associated with this viewport.
+  panel?: Panel;
 
   // the Svelte component to be instanced as one of the App's display canvases
   component: Component;

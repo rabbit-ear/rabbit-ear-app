@@ -1,9 +1,6 @@
 import { isFormElementActive } from "../general/dom.ts";
 import keyboard from "./keyboard.svelte.ts";
 
-// this is not a part of this app
-const TerminalTextarea = document.getElementById("element-does-not-yet-exist");
-
 /**
  *
  */
@@ -39,53 +36,24 @@ const Keybindings: {
 /**
  *
  */
-const onkeydownApp = $state((event: KeyboardEvent) => {
+const onkeydownWindow = $state((event: KeyboardEvent) => {
   const modifier = encodeModifier(event);
   const boundFunction = Keybindings.down[event.code]?.[modifier];
-  if (!boundFunction) {
-    return false;
+  if (boundFunction) {
+    event.preventDefault();
+    boundFunction(event);
   }
-  event.preventDefault();
-  boundFunction(event);
-  return true;
 });
 
 /**
  *
  */
-const onkeyupApp = $state((event: KeyboardEvent) => {
+const onkeyupWindow = $state((event: KeyboardEvent) => {
   const modifier = encodeModifier(event);
   const boundFunction = Keybindings.up[event.code]?.[modifier];
-  if (!boundFunction) {
-    return false;
-  }
-  event.preventDefault();
-  boundFunction(event);
-  return true;
-});
-
-/**
- *
- */
-const onkeydownTerminal = $state((event: KeyboardEvent): void => {
-  switch (event.code) {
-    case "Enter":
-      if (!event.shiftKey) {
-        // event.preventDefault();
-        // execute($TerminalValue);
-        // TerminalValue.set("");
-      }
-      break;
-    case "ArrowUp":
-      // ReplayCommandIndex.decrement();
-      // TerminalValue.set(get(ReplayCommand).text);
-      break;
-    case "ArrowDown":
-      // ReplayCommandIndex.increment();
-      // TerminalValue.set(get(ReplayCommand).text);
-      break;
-    default:
-      break;
+  if (boundFunction) {
+    event.preventDefault();
+    boundFunction(event);
   }
 });
 
@@ -94,9 +62,6 @@ const onkeydownTerminal = $state((event: KeyboardEvent): void => {
  * it's probably reloading a new function every single state update.
  */
 const onkeydownForm = $state((event: KeyboardEvent): void => {
-  if (document.activeElement === TerminalTextarea) {
-    return onkeydownTerminal(event);
-  }
   switch (event.code) {
     case "KeyC":
       if (event.metaKey || event.ctrlKey) {
@@ -109,7 +74,6 @@ const onkeydownForm = $state((event: KeyboardEvent): void => {
       }
       break;
   }
-  //return false;
 });
 
 /**
@@ -118,27 +82,7 @@ const onkeydownForm = $state((event: KeyboardEvent): void => {
 //const onkeyupForm = $state((event: KeyboardEvent) => {});
 const onkeyupForm = $state((event: KeyboardEvent) => {
   if (!event) {
-    console.log("to be filled in later");
-  }
-});
-
-/**
- *
- */
-const onkeydownWindow = $derived((event: KeyboardEvent): void => {
-  //if (tool.value?.onkeydown?.(event)) { return; }
-  if (onkeydownApp(event)) {
-    return;
-  }
-});
-
-/**
- *
- */
-const onkeyupWindow = $derived((event: KeyboardEvent): void => {
-  //if (tool.value?.onkeyup?.(event)) { return; }
-  if (onkeyupApp(event)) {
-    return;
+    console.log("form element key up");
   }
 });
 
@@ -146,7 +90,6 @@ const onkeyupWindow = $derived((event: KeyboardEvent): void => {
  *
  */
 export const onkeydown = (event: KeyboardEvent): void => {
-  console.log(event.code);
   keyboard.keys[event.code] = true;
   return isFormElementActive() ? onkeydownForm(event) : onkeydownWindow(event);
 };

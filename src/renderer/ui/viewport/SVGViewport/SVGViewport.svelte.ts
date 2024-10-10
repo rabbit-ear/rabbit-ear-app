@@ -8,6 +8,7 @@ import type {
   ViewportWheelEvent,
   ViewportTouchEvent,
 } from "../events.ts";
+import type { Panel } from "../../panel/panel.ts";
 import { unsetViewportEvents } from "../viewport.ts";
 import { Grid } from "./Grid.svelte.ts";
 import { Snap } from "./Snap.svelte.ts";
@@ -16,11 +17,16 @@ import { View } from "./View.svelte.ts";
 import ViewportComponent from "./Viewport.svelte";
 import { clipLineInPolygon } from "./clip.ts";
 import settings from "./Settings.svelte.ts";
+import { ViewportPanel } from "./Panel.svelte.ts";
+//import PanelComponent from "./PanelComponent.svelte";
 
 export class SVGViewport implements Viewport, ViewportEvents {
   static settings: typeof settings = settings;
+  //static panel: Panel = ViewportPanel;
 
   component: Component;
+  panel: Panel;
+
   grid: Grid;
   snap: Snap;
   style: Style;
@@ -57,6 +63,7 @@ export class SVGViewport implements Viewport, ViewportEvents {
     this.style = new Style(this.view);
     this.grid = new Grid(this.view);
     this.snap = new Snap(this.view);
+    this.panel = new ViewportPanel();
   }
 
   dealloc(): void {

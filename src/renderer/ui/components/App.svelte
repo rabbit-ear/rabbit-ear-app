@@ -1,9 +1,9 @@
 <script lang="ts">
-  import UI from "./UI.svelte";
-  import Events from "./Events.svelte";
   import DragAndDrop from "./DragAndDrop.svelte";
+  import Events from "./Events.svelte";
+  import UI from "./UI.svelte";
 </script>
 
 <DragAndDrop />
-<UI />
 <Events />
+<UI />

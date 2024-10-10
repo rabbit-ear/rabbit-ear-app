@@ -1,5 +1,6 @@
 import type { Component } from "svelte";
 import type { Viewport } from "./viewport/viewport.ts";
+import type { Panel } from "./panel/panel.ts";
 
 export interface Deallocable {
   dealloc(): void;
@@ -26,7 +27,8 @@ export abstract class UITool implements Deallocable {
   static icon: Component;
 
   // an optional .svelte component, intended to contain settings for the tool
-  panel?: Component;
+  //panel?: Component;
+  panel?: Panel;
 
   // A UI tool is intended for a Viewport, a tool will be instanced once per app,
   // but may need to subinstance internal state once per viewport (one app can

@@ -1,5 +1,6 @@
 import type { UITool } from "./UITool.ts";
 import type { Viewport } from "./viewport/viewport.ts";
+import type { Panel } from "./panel/panel.ts";
 import Tools from "./tools/index.ts";
 import { SVGViewport } from "./viewport/SVGViewport/SVGViewport.svelte.ts";
 import { WebGLViewport } from "./viewport/WebGLViewport/WebGLViewport.svelte.ts";
@@ -8,6 +9,15 @@ export class UI {
   viewports: Viewport[] = $state([]);
   #tool: UITool | undefined = $state();
   #effects: (() => void)[] = [];
+
+  // the complete set of panels are: app-wide panels + viewport panels + tool panels
+  //panels: Panel[] = $state([]);
+  panels: Panel[] = $derived(
+    this.viewports
+      .map((view) => view?.panel)
+      .concat([this.#tool?.panel])
+      .filter((a) => a !== undefined),
+  );
 
   // this binding allows each viewports' global settings objects to be accessed.
   types = {
@@ -25,6 +35,8 @@ export class UI {
     const NewTool: typeof UITool | undefined = Tools[name];
     // @ts-ignore - UITool is abstract, but none of these are UITools, ignore warning.
     this.#tool = NewTool === undefined ? undefined : new NewTool();
+    console.log(this.viewports.map((view) => view.panel));
+    console.log(this.panels);
   }
 
   #makeToolViewportEffect = (): (() => void) =>

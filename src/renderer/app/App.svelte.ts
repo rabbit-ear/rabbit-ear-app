@@ -5,7 +5,8 @@ import { Invoker } from "../kernel/Invoker.svelte.ts";
 class Application {
   invoker: Invoker;
   model: Model;
-  // app should be able to run without a UI. UI is added inside UI.svelte component.
+  // UI is optional, the app is able to run without a UI.
+  // UI is added inside components/UI.svelte.
   ui: UI | undefined;
 
   constructor() {

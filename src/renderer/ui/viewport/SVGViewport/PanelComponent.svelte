@@ -5,14 +5,16 @@
 <div class="row">
   <input
     type="radio"
-    id="radio-tiling-triangle"
+    id="radio-tiling-square"
     value="square"
     bind:group={settings.tiling} />
+  <label for="radio-tiling-square">rect</label>
   <input
     type="radio"
     id="radio-tiling-triangle"
     value="triangle"
     bind:group={settings.tiling} />
+  <label for="radio-tiling-triangle">triangle</label>
 </div>
 
 <div class="row">
