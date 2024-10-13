@@ -1,4 +1,4 @@
-import file, { setNewEmptyFile } from "../model/file.svelte.ts";
+import app from "../app/App.svelte.ts";
 
 /**
  * @description ask the app to create a new file.
@@ -7,11 +7,11 @@ import file, { setNewEmptyFile } from "../model/file.svelte.ts";
  * with the model (on the front-end) whether or not there are unsaved changes.
  */
 export const newFile = async (): Promise<void> => {
-  if (file.modified) {
+  if (app.file.modified) {
     const { response } = await window.api.unsavedChangesDialog("New File", "Cancel");
     if (response !== 0) {
       return;
     }
   }
-  setNewEmptyFile();
+  app.file.loadEmpty();
 };

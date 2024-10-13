@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { SVGAttributes } from "svelte/elements";
-  import { shapeToElement, type Shape } from "../../../model/model.svelte.ts";
+  import { shapeToElement, type Shape } from "../../../file/Geometry.svelte.ts";
 
   type PropsType = {
     elements: Shape[];

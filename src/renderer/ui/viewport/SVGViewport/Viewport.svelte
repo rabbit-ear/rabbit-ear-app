@@ -59,7 +59,7 @@
   {#if settings.showGrid}
     <GridLayer {viewport} />
   {/if}
-  <SVGElements elements={app.model.shapes} class="model-layer" />
+  <SVGElements elements={app.file.geometry.shapes} class="model-layer" />
   {#if SVGToolLayer}
     <g
       class="tool-layer"

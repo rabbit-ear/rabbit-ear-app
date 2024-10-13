@@ -1,4 +1,4 @@
-import { type Command } from "./command.ts";
+import { type Command } from "./Command.svelte.ts";
 import { formatJavascript } from "../format.ts";
 
 export class BackgroundColorCommand implements Command {

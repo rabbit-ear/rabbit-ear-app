@@ -1,4 +1,4 @@
-import { type Command } from "./command.ts";
+import { type Command } from "./Command.svelte.ts";
 import { execute } from "../shell.svelte.ts";
 import { formatJavascript } from "../format.ts";
 

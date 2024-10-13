@@ -17,8 +17,4 @@ export class ViewportPanel implements Panel {
     //  },
     //};
   }
-
-  dealloc(): void {
-    // empty
-  }
 }

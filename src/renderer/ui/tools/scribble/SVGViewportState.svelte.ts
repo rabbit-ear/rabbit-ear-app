@@ -82,7 +82,8 @@ export class SVGViewportState implements Deallocable {
       .snapshot(this.touches.drags)
       .map(([p0, p1]) => [p0, p1]);
     // console.log("adding path to model", makePathD(points));
-    app.model.addPath({ d: makePathD(points) });
+    app.invoker.executeJavascript(`addPath(${JSON.stringify(points)})`);
+    //app.model.addPath({ d: makePathD(points) });
     this.touches.reset();
   }
 }

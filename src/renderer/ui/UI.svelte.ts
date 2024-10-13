@@ -35,8 +35,6 @@ export class UI {
     const NewTool: typeof UITool | undefined = Tools[name];
     // @ts-ignore - UITool is abstract, but none of these are UITools, ignore warning.
     this.#tool = NewTool === undefined ? undefined : new NewTool();
-    console.log(this.viewports.map((view) => view.panel));
-    console.log(this.panels);
   }
 
   #makeToolViewportEffect = (): (() => void) =>

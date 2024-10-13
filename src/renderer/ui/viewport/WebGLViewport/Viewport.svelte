@@ -29,7 +29,7 @@
   onmouseleave={(...args): void => viewport.onmouseleave?.(...args)}
   onwheel={(...args): void => viewport.onwheel?.(...args)}
   bind:redraw={viewport.redraw}
-  graph={app.model.fold}
+  graph={app.file.geometry.fold}
   perspective={viewport.view.perspective}
   renderStyle={"creasePattern"}
   viewMatrix={viewport.view.viewMatrix}

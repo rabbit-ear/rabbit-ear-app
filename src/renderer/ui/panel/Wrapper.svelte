@@ -24,7 +24,7 @@
 
 <style>
   .container {
-    margin: 0.5rem;
+    margin: 0.25rem;
   }
 
   button {
@@ -32,6 +32,8 @@
     box-sizing: border-box;
     width: 100%;
     cursor: pointer;
+    display: flex;
+    align-items: center;
   }
   button:focus {
     outline: 2px solid var(--uiblue);
@@ -39,7 +41,7 @@
   }
 
   .title {
-    padding: 0.25rem 0.5rem;
+    padding: 0.2rem 0.5rem;
     /* background-color: var(--uiblue); */
     background-color: var(--background-3);
     font-weight: bold;

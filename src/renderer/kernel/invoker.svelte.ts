@@ -1,40 +1,21 @@
-import type { Command, Tokenizable } from "./commands/command.ts";
+import type { Command, CommandAndResult } from "./commands/Command.svelte.ts";
 import { JavascriptCommand } from "./commands/jsCommand.ts";
-import { formatCommandResult } from "./format.ts";
-import { matchFromArray } from "./arrays.ts";
-import { scope } from "./scope.svelte.ts";
+import scope from "./commands/index.svelte.ts";
+import { CommandResult } from "./commands/Command.svelte.ts";
+import { stringifyArgs } from "./format.ts";
 
-const stringifyArgs = (...args: any[]): string =>
-  `${args.map((v) => JSON.stringify(v)).join(", ")}`;
-
-class CommandResult implements Tokenizable {
-  #result: unknown;
-  #isError: boolean;
-  #stringified: string;
-
-  get asString(): string {
-    return this.#stringified;
+/**
+ *
+ */
+export const matchFromArray = (matchString: string, array: string[]): string[] => {
+  const matches: string[] = [];
+  for (const str of array) {
+    const regex = new RegExp(`\\b${str}\\b`, "g");
+    if (regex.test(matchString)) {
+      matches.push(str);
+    }
   }
-
-  get asTokenString(): string {
-    // if (this.isError) { console.error(this.result); }
-    return this.#isError
-      ? `<span class="error">${this.#stringified}</span>`
-      : `<span>${this.#stringified}</span>`;
-  }
-
-  constructor(result: unknown) {
-    this.#isError = result instanceof Error;
-    this.#result = result;
-    this.#stringified = this.#isError
-      ? `${this.#result}`
-      : formatCommandResult(this.#result) || "";
-  }
-}
-
-export type CommandAndResult = {
-  command: Command;
-  result: CommandResult;
+  return matches;
 };
 
 export class Invoker {

@@ -58,7 +58,7 @@ const getShapesInRect = (shapes: Shape[]): number[] => {
     .filter((a) => a !== undefined);
 };
 
-export class Model {
+export class Geometry {
   shapes: Shape[] = $state([]);
   selected: number[] = $state([]);
   fold: FOLD = $state({});
@@ -83,7 +83,7 @@ export class Model {
     this.shapes = [];
   }
 
-  addLine(x1: number, y1: number, x2: number, y2: number): void {
+  addSegment(x1: number, y1: number, x2: number, y2: number): void {
     this.shapes.push({ name: "line", params: { x1, y1, x2, y2 } });
   }
   addCircle(cx: number, cy: number, r: number): void {
@@ -128,22 +128,23 @@ export class Model {
     });
   }
 
+  loadExampleData(): void {
+    this.shapes.push({ name: "circle", params: { cx: 0, cy: 0, r: 1 } });
+    this.shapes.push({
+      name: "circle",
+      params: { cx: 0.5, cy: 0.5, r: Math.SQRT1_2 },
+    });
+    this.shapes.push({ name: "rect", params: { x: 0, y: 0, width: 1, height: 1 } });
+    this.shapes.push({ name: "line", params: { x1: 0, y1: 0, x2: 1, y2: 1 } });
+    this.shapes.push({ name: "line", params: { x1: 1, y1: 0, x2: 0, y2: 1 } });
+  }
+
   constructor() {
     this.#effects = [this.#makeIntersectionsEffect()];
+    this.loadExampleData();
   }
 
   dealloc(): void {
     this.#effects.forEach((fn) => fn());
   }
 }
-
-//export const model = new Model();
-
-// export const Reset = () => {
-// 	RecalculateModelMatrix();
-// 	Selection.reset();
-// 	FrameIndex.set(0);
-// 	FileMetadata.set(getFileMetadata(FOLD));
-// 	Frames.set(frames);
-// 	CameraMatrix.reset();
-// };

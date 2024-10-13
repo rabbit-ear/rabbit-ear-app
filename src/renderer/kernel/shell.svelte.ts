@@ -1,4 +1,4 @@
-import { scope } from "./scope.svelte.ts";
+import scope from "./commands/index.svelte.ts";
 
 const shouldUseStrict = true;
 
@@ -45,9 +45,9 @@ const scopedEval = (jsBlob: string, scope: object): unknown => {
 export const execute = (js: string): unknown => scopedEval(js, scope);
 
 // // injections might work this way
-// export const execute = (js: string) => {
-// 	const commands = [js];
-// 	get(Injections).forEach((injection) => injection.execute(commands));
-// 	// add to the undo stack. clear the redo stack
-// 	return commands.flatMap((command) => scopedEval(command, scope));
-// };
+//export const execute = (js: string): unknown[] => {
+//  const commands = [js];
+//  get(Injections).forEach((injection) => injection.execute(commands));
+//  // add to the undo stack. clear the redo stack
+//  return commands.flatMap((command) => scopedEval(command, scope));
+//};

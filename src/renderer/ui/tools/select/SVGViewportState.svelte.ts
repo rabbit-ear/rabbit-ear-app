@@ -73,8 +73,7 @@ export class SVGViewportState implements Deallocable {
           $state.snapshot(this.touches.release),
         ];
         //app.model.selectedInsideRect(this.box);
-        app.model.selectedInsideRect();
-        console.log("make selection", ...points);
+        app.invoker.executeJavascript(`select(${JSON.stringify([...points])})`);
         this.touches.reset();
       });
       return () => {};

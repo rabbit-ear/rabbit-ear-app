@@ -1,4 +1,4 @@
-import file from "../model/file.svelte.ts";
+import app from "../app/App.svelte.ts";
 
 /**
  * @description methods available to both the front and back ends.
@@ -16,7 +16,7 @@ let quitInProgress = false;
  */
 export const quitApp = async (): Promise<void> => {
   // console.log("quit app request");
-  if (file.modified) {
+  if (app.file.modified) {
     const { response } = await window.api.unsavedChangesDialog();
     if (response !== 0) {
       return;
@@ -31,7 +31,7 @@ export const quitApp = async (): Promise<void> => {
  * This will prompt the user if there are unsaved changes.
  */
 window.addEventListener("beforeunload", (event) => {
-  if (!file.modified || quitInProgress) {
+  if (!app.file.modified || quitInProgress) {
     return;
   }
   event.preventDefault();

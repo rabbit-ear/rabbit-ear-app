@@ -90,7 +90,10 @@ export class SVGViewportState implements Deallocable {
         ) {
           return;
         }
-        app.model.addRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+        app.invoker.executeJavascript(
+          `addRect(${[this.rect.x, this.rect.y, this.rect.width, this.rect.height].join(", ")})`,
+        );
+        //app.model.addRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
         this.touches.reset();
         // setTimeout(this.reset, 0);
       });

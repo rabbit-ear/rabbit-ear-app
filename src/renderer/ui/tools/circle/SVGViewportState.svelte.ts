@@ -6,6 +6,7 @@ import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
 import app from "../../../app/App.svelte.ts";
+import { AddCircle } from "../../../kernel/commands/AddCircle.ts";
 
 const makeCircle = (
   p0: [number, number],
@@ -84,7 +85,9 @@ export class SVGViewportState implements Deallocable {
         ) {
           return;
         }
-        app.model.addCircle(this.circle.cx, this.circle.cy, this.circle.r);
+        app.invoker.executeCommand(
+          new AddCircle(this.circle.cx, this.circle.cy, this.circle.r),
+        );
         this.touches.reset();
         // setTimeout(this.reset, 10);
       });

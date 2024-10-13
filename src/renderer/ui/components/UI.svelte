@@ -1,6 +1,5 @@
 <script lang="ts">
   import Toolbar from "./Toolbar.svelte";
-  import DebugPanel from "./DebugPanel.svelte";
   import Canvases from "./Canvases.svelte";
   import Panels from "./Panels.svelte";
   import app from "../../app/App.svelte.ts";
@@ -19,7 +18,6 @@
   <div class="gui horizontal">
     <div class="toolbar" role="toolbar">
       <Toolbar />
-      <DebugPanel />
     </div>
     <div class="canvases">
       <Canvases />
