@@ -16,7 +16,8 @@ let quitInProgress = false;
  */
 export const quitApp = async (): Promise<void> => {
   // console.log("quit app request");
-  if (app.file.modified) {
+  //if (app.file.modified) {
+  if (app.fileManager.hasUnsavedChanges()) {
     const { response } = await window.api.unsavedChangesDialog();
     if (response !== 0) {
       return;
@@ -31,7 +32,8 @@ export const quitApp = async (): Promise<void> => {
  * This will prompt the user if there are unsaved changes.
  */
 window.addEventListener("beforeunload", (event) => {
-  if (!app.file.modified || quitInProgress) {
+  //if (!app.file.modified || quitInProgress) {
+  if (!app.fileManager.hasUnsavedChanges() || quitInProgress) {
     return;
   }
   event.preventDefault();

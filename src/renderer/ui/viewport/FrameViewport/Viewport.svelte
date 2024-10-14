@@ -1,17 +1,19 @@
 <script lang="ts">
-  import type { FrameViewport } from "./FrameViewport.svelte.ts";
-  import Frames from "./Frames.svelte";
+  //import type { FrameViewport } from "./FrameViewport.svelte.ts";
+  //import Frames from "./Frames.svelte";
 
-  type PropsType = {
-    viewport: FrameViewport;
-  };
-  let { viewport }: PropsType = $props();
+  //type PropsType = {
+  //  viewport: FrameViewport;
+  //};
+  //let { viewport }: PropsType = $props();
 </script>
 
+<!--
 <svelte:window onkeyup={viewport.onkeyup} onkeydown={viewport.onkeydown} />
+-->
 
 <div class="container">
-  <Frames />
+  <!-- <Frames /> -->
 </div>
 
 <style>

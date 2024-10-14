@@ -12,7 +12,7 @@ export const fileDropDidUpdate = async (event: DragEvent): Promise<void> => {
 
   const fileOnLoad = (event: ProgressEvent<FileReader>): void => {
     if (event.target && event.target.result && typeof event.target.result === "string") {
-      app.file.load(event.target.result, info);
+      app.fileManager.loadFOLDString(info, event.target.result);
     }
   };
 

@@ -7,15 +7,15 @@ import app from "../app/App.svelte.ts";
  * with the model (on the front-end) whether or not there are unsaved changes.
  */
 export const openFile = async (): Promise<void> => {
-  if (app.file.modified) {
+  if (app.fileManager.hasUnsavedChanges()) {
     const { response } = await window.api.unsavedChangesDialog("Proceed", "Cancel");
     if (response !== 0) {
       return;
     }
   }
 
-  const { data, fileInfo: info } = await window.api.openFile();
-  if (info) {
-    app.file.load(data, info);
+  const { data, fileInfo: path } = await window.api.openFile();
+  if (path) {
+    app.fileManager.loadFOLDString(path, data);
   }
 };

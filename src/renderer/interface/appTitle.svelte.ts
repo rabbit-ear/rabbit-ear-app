@@ -2,9 +2,9 @@ import { APP_NAME, UNTITLED_FILENAME } from "../app/constants.svelte.ts";
 import app from "../app/App.svelte.ts";
 
 const filename: string = $derived(
-  app.file.path === undefined ? UNTITLED_FILENAME : app.file.path.file,
+  app.file?.path === undefined ? UNTITLED_FILENAME : app.file.path.file,
 );
-const modifiedMark: string = $derived(app.file.modified ? " *" : "");
+const modifiedMark: string = $derived(app.file?.modified ? " *" : "");
 
 // description Watch "FilePath" for any changes, update the window title
 // to include the currently opened filename.
@@ -24,5 +24,5 @@ $effect.root(() => {
     previousAppTitle = appTitle;
     window.api?.setAppTitle(appTitle);
   });
-  return (): void => {};
+  return (): void => { };
 });

@@ -1,36 +1,29 @@
+import type { FOLD, FOLDFileMetadata } from "rabbit-ear/types.js";
+import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import type { FilePathInfo } from "../../main/fs/path.ts";
-import { EXTENSION, UNTITLED_FILENAME } from "../app/constants.svelte.ts";
 import { Geometry } from "./Geometry.svelte.ts";
 
 // basically all information related to the file-system properties
 // of the currently opened file.
 // and more
 export class File {
-  // The currently opened filename as a full path, including the directory prefix.
-  path: FilePathInfo | undefined = $state();
+  path: FilePathInfo = $state();
+  graph: FOLD = $state();
+  metadata: FOLDFileMetadata;
+  geometry: Geometry;
   // Has the current file been edited and not yet saved?
   modified: boolean = $state(false);
-  geometry: Geometry;
 
-  constructor() {
+  constructor(path: FilePathInfo, data: FOLD) {
+    this.path = path;
+    this.graph = data;
+    this.metadata = getFileMetadata(data);
     this.geometry = new Geometry();
   }
 
-  load(data: string, info: FilePathInfo): void {
+  load(data: string, path: FilePathInfo): void {
     this.geometry.setFromString(data);
-    this.path = info;
-    this.modified = false;
-  }
-
-  loadEmpty(): void {
-    this.geometry.clear();
-    this.path = {
-      fullpath: "",
-      directory: "",
-      file: UNTITLED_FILENAME,
-      root: "untitled",
-      extension: `.${EXTENSION}`,
-    };
+    this.path = path;
     this.modified = false;
   }
 
