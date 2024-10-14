@@ -36,7 +36,7 @@ export class SVGViewportState implements Deallocable {
     // pass data back up through the viewport: assign the SVGLayer and
     // build the props object so that data can pass from here to the component.
     this.viewport.layer = SVGLayer;
-    const that = this;
+    //const that = this;
     this.viewport.props = {
       //get example() {
       //  return "example";

@@ -22,7 +22,7 @@ export class JavascriptCommand implements Command {
   }
 
   //undo(): void {
-  undo(): unknown {
+  undo(): any {
     console.log("todo: undo", this.js);
   }
 }

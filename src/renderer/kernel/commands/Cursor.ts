@@ -1,7 +1,7 @@
 import { type Command } from "./Command.svelte.ts";
 import { formatJavascript } from "../format.ts";
 
-export class CursorCommand implements Command {
+export class Cursor implements Command {
   static name: string = "cursor";
   private cursor: string;
   private previousCursor: string | null;
@@ -13,20 +13,20 @@ export class CursorCommand implements Command {
   }
 
   get asString(): string {
-    return `${CursorCommand.name}(${JSON.stringify(this.cursor)})`;
+    return `${this.constructor.name}(${JSON.stringify(this.cursor)})`;
   }
 
   get asTokenString(): string {
     return formatJavascript(this.asString);
   }
 
-  execute(): any {
+  execute(): void {
     this.previousCursor =
       document.body.style.cursor || getComputedStyle(document.body)["cursor"];
     document.body.style.cursor = this.cursor;
   }
 
-  undo(): any {
+  undo(): void {
     if (this.previousCursor) {
       document.body.style.cursor = this.previousCursor;
     } else {

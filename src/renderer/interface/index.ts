@@ -8,7 +8,7 @@ import "./appTitle.svelte.ts";
 // this is duplicated (in part) from src/preload/index.d.ts
 declare global {
   interface Window {
-    api?: WindowAPI;
+    api: WindowAPI;
   }
 }
 

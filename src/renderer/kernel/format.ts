@@ -50,3 +50,18 @@ export const formatCommandResult = (result: unknown): string | undefined => {
   }
   return undefined;
 };
+
+/**
+ * @description Given a reference string to match against, iterate through an array
+ * of strings and return an array item which appears anywhere inside of the reference string.
+ */
+export const matchFromArray = (matchString: string, array: string[]): string[] => {
+  const matches: string[] = [];
+  for (const str of array) {
+    const regex = new RegExp(`\\b${str}\\b`, "g");
+    if (regex.test(matchString)) {
+      matches.push(str);
+    }
+  }
+  return matches;
+};

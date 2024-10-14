@@ -67,5 +67,6 @@ export class Events {
    * @description If a keyboard up event occured on a form element this method
    * will be called. Behavior can be tied to particular DOM form elements.
    */
-  onkeyup = (event: KeyboardEvent): void => {};
+  //onkeyup = (event: KeyboardEvent): void => {};
+  onkeyup = (_event: KeyboardEvent): void => {};
 }

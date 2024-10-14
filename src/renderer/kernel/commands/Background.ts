@@ -1,7 +1,7 @@
 import { type Command } from "./Command.svelte.ts";
 import { formatJavascript } from "../format.ts";
 
-export class BackgroundColorCommand implements Command {
+export class BackgroundColor implements Command {
   static name: string = "background";
   private color: string;
   private previousColor: string | null;
@@ -14,7 +14,7 @@ export class BackgroundColorCommand implements Command {
   }
 
   get asString(): string {
-    return `${BackgroundColorCommand.name}(${JSON.stringify(this.color)})`;
+    return `${this.constructor.name}(${JSON.stringify(this.color)})`;
   }
 
   get asTokenString(): string {

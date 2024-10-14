@@ -62,6 +62,7 @@ export class Geometry {
   shapes: Shape[] = $state([]);
   selected: number[] = $state([]);
   fold: FOLD = $state({});
+  frames: FOLD[] = $state([]);
   #effects: (() => void)[] = [];
 
   // snap points

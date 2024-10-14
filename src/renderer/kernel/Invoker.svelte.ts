@@ -1,22 +1,8 @@
 import type { Command, CommandAndResult } from "./commands/Command.svelte.ts";
-import { JavascriptCommand } from "./commands/jsCommand.ts";
+import { JavascriptCommand } from "./commands/JavascriptCommand.ts";
 import scope from "./commands/index.svelte.ts";
 import { CommandResult } from "./commands/Command.svelte.ts";
-import { stringifyArgs } from "./format.ts";
-
-/**
- *
- */
-export const matchFromArray = (matchString: string, array: string[]): string[] => {
-  const matches: string[] = [];
-  for (const str of array) {
-    const regex = new RegExp(`\\b${str}\\b`, "g");
-    if (regex.test(matchString)) {
-      matches.push(str);
-    }
-  }
-  return matches;
-};
+import { stringifyArgs, matchFromArray } from "./format.ts";
 
 export class Invoker {
   history = $state<CommandAndResult[]>([]);
@@ -41,6 +27,7 @@ export class Invoker {
     this.history.map(({ command }) => command.asString),
   );
 
+  // the return type will be that of the Command's return type.
   executeCommand(command: Command): any {
     const res = command.execute();
     const result = new CommandResult(res);
@@ -72,7 +59,7 @@ export class Invoker {
    * constructing a valid Javascript blob.
    * @example executeMethod("add", 3, 4) will call the method add(3, 4);
    */
-  executeMethod(name: string, ...args: any[]) {
+  executeMethod(name: string, ...args: unknown[]): any {
     const js = `${name}(${stringifyArgs(...args)})`;
     return this.executeJavascript(js);
   }
@@ -83,7 +70,8 @@ export class Invoker {
       console.log("no command to undo");
       return;
     }
-    const { command, result } = latest;
+    //const { command, result } = latest;
+    const { command } = latest;
     this.redoStack.push(latest);
     if (command) {
       return command.undo();
@@ -99,7 +87,8 @@ export class Invoker {
       console.log("no command to redo");
       return;
     }
-    const { command, result } = latest;
+    //const { command, result } = latest;
+    const { command } = latest;
     if (command) {
       // we need an entire copy of the "execute" call but without the
       // clearing of the redoStack at the end.

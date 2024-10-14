@@ -4,6 +4,6 @@
   import UI from "./UI.svelte";
 </script>
 
-<DragAndDrop />
 <Events />
 <UI />
+<DragAndDrop />

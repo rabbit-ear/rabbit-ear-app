@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { TerminalViewport } from "./TerminalViewport.svelte";
+  import type { TerminalViewport } from "./TerminalViewport.svelte.ts";
   import app from "../../../app/App.svelte.ts";
   //import settings from "./Settings.svelte.ts";
 

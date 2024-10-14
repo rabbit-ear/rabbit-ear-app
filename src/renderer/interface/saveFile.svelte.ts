@@ -10,7 +10,7 @@ export const saveFile = async (): Promise<void> => {
   // const success = await window.api.saveFile({ ...fileInfo.value }, model.value);
   const success = await window.api.saveFile(
     $state.snapshot(app.file.path),
-    app.file.valueAsString(),
+    app.file.getCopy(),
   );
   if (success) {
     app.file.modified = false;
@@ -24,7 +24,7 @@ export const saveFile = async (): Promise<void> => {
  * this can be called from the front-end or the back-end.
  */
 export const saveFileAs = async (): Promise<void> => {
-  const info = await window.api.saveFileAs(app.file.valueAsString());
+  const info = await window.api.saveFileAs(app.file.getCopy());
   if (info) {
     app.file.path = info;
     app.file.modified = false;

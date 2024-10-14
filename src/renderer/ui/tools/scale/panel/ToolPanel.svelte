@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { Panel } from "../../../panel/panel.ts";
-  import type { GlobalState } from "../GlobalState.svelte.ts";
+  //import type { Panel } from "../../../panel/panel.ts";
+  //import type { GlobalState } from "../GlobalState.svelte.ts";
 
-  type PropsType = {
-    panel: Panel;
-    state: GlobalState;
-  };
-  let { panel, state }: PropsType = $props();
+  //type PropsType = {
+  //  panel: Panel;
+  //  state: GlobalState;
+  //};
+  //let { panel, state }: PropsType = $props();
 </script>
 
 <div>

@@ -14,5 +14,6 @@
     display: grid;
     grid-template-columns: 50% 50%;
     align-content: flex-start;
+    position: relative;
   }
 </style>

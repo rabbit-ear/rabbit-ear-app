@@ -2,21 +2,25 @@ import { type Command } from "./Command.svelte.ts";
 import { formatJavascript } from "../format.ts";
 import app from "../../app/App.svelte.ts";
 
-export class AddCircle implements Command {
-  static name: string = "addCircle";
-  #cx: number;
-  #cy: number;
-  #r: number;
+export class AddSegment implements Command {
+  static name: string = "addSegment";
+  #x1: number;
+  #y1: number;
+  #x2: number;
+  #y2: number;
   #backup: string | undefined;
 
-  constructor(cx: number, cy: number, r: number) {
-    this.#cx = cx;
-    this.#cy = cy;
-    this.#r = r;
+  constructor(x1: number, y1: number, x2: number, y2: number) {
+    this.#x1 = x1;
+    this.#y1 = y1;
+    this.#x2 = x2;
+    this.#y2 = y2;
   }
 
   paramsString(): string {
-    return [this.#cx, this.#cy, this.#r].map((n) => JSON.stringify(n)).join(", ");
+    return [this.#x1, this.#y1, this.#x2, this.#y2]
+      .map((n) => JSON.stringify(n))
+      .join(", ");
   }
 
   get asString(): string {
@@ -29,7 +33,7 @@ export class AddCircle implements Command {
 
   execute(): void {
     this.#backup = app.file.getCopy();
-    app.file.geometry.addCircle(this.#cx, this.#cy, this.#r);
+    app.file.geometry.addSegment(this.#x1, this.#y1, this.#x2, this.#y2);
   }
 
   undo(): void {

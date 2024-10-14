@@ -28,7 +28,7 @@ export const fileDropDidUpdate = async (event: DragEvent): Promise<void> => {
 
     if (transferFile) {
       // todo: for some reason, File type (contents) does not contain .path, but it does.
-      info = await window.api.makeFilePathInfo(transferFile.contents.path);
+      info = await window.api?.makeFilePathInfo(transferFile.contents.path);
 
       //console.log(transferFile.contents.path);
       const reader = new FileReader();

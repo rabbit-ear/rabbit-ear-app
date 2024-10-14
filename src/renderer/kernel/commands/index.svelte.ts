@@ -1,7 +1,8 @@
 // import ear from "rabbit-ear";
 import { AddCircle } from "./AddCircle.ts";
-import { BackgroundColorCommand } from "./background.ts";
-import { CursorCommand } from "./cursor.ts";
+import { AddSegment } from "./AddSegment.ts";
+import { BackgroundColor } from "./Background.ts";
+import { Cursor } from "./Cursor.ts";
 // this might cause a circular reference, scope inherits app, app inherits Invoker.
 import app from "../../app/App.svelte.ts";
 
@@ -17,12 +18,14 @@ import app from "../../app/App.svelte.ts";
  */
 const scope = {
   // invoker,
-  [AddCircle.name]: (cx: number, cy: number, r: number): string =>
-    app.invoker.executeCommand(new AddCircle(cx, cy, r)),
-  [BackgroundColorCommand.name]: (color: string): string =>
-    app.invoker.executeCommand(new BackgroundColorCommand(color)),
-  [CursorCommand.name]: (cursor: string) =>
-    app.invoker.executeCommand(new CursorCommand(cursor)),
+  // todo: revisit these method return types
+  [AddCircle.name]: (cx: number, cy: number, radius: number): void =>
+    app.invoker.executeCommand(new AddCircle(cx, cy, radius)),
+  [AddSegment.name]: (x1: number, y1: number, x2: number, y2: number): void =>
+    app.invoker.executeCommand(new AddSegment(x1, y1, x2, y2)),
+  [BackgroundColor.name]: (color: string): string =>
+    app.invoker.executeCommand(new BackgroundColor(color)),
+  [Cursor.name]: (cursor: string): void => app.invoker.executeCommand(new Cursor(cursor)),
 };
 
 export default scope;
