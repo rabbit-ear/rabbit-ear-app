@@ -1,10 +1,13 @@
 <script lang="ts">
   import type { FOLD } from "rabbit-ear/types.js";
   import FrameItem from "./FrameItem.svelte";
-  import WebGlCanvas from "../../components/WebGL/WebGLCanvas.svelte";
-  import SvgCanvas from "../../components/SVG/SVGCanvas.svelte";
-  import { VerticalUp } from "../../stores/App.js";
-  import { IsFoldedForm } from "../../js/graph.js";
+  //import WebGlCanvas from "../../components/WebGL/WebGLCanvas.svelte";
+  import SVGCanvas from "../../components/SVG/SVGCanvas.svelte";
+  import SVGFOLDVertices from "../../components/SVG/SVGFOLDVertices.svelte";
+  import SVGFOLDEdges from "../../components/SVG/SVGFOLDEdges.svelte";
+  import SVGFOLDFaces from "../../components/SVG/SVGFOLDFaces.svelte";
+  //import { VerticalUp } from "../../stores/App.js";
+  //import { IsFoldedForm } from "../../js/graph.js";
   import app from "../../../app/App.svelte.js";
 
   type PropsType = {
@@ -32,10 +35,17 @@
   onmousedown={(): void => mousedown(index)}
   onmousemove={(): void => mousemove(index)}
   onmouseup={(): void => mouseup(index)}
-  highlighted={index === $FrameIndex}
+  highlighted={index === app.file.activeFrame}
   {index}>
   <!-- <WebGLRender {graph} {viewMatrix} /> -->
+  <SVGCanvas>
+    <SVGFOLDVertices {graph} />
+    <SVGFOLDEdges {graph} />
+    <SVGFOLDFaces {graph} />
+  </SVGCanvas>
+  <!--
   <div class={isFoldedForm ? "folded-form" : "crease-pattern"}>
     <SVGCanvas {graph} {invertVertical} />
   </div>
+  -->
 </FrameItem>

@@ -1,14 +1,23 @@
 <script lang="ts">
   import type { FOLD } from "rabbit-ear/types.js";
-  import type { SVGAttributes } from "svelte/elements";
-  import { makeEdgesCoords } from "rabbit-ear/graph/make/edges.js";
-  import { assignmentColor } from "rabbit-ear/fold/colors.js";
+  //import { makeEdgesCoords } from "rabbit-ear/graph/make/edges.js";
 
   type PropsType = {
-    graph: FOLD;
+    graph?: FOLD;
   };
 
-  const { graph }: PropsType & SVGAttributes<SVGGElement> = $props();
+  const { graph = {} }: PropsType = $props();
+
+  const makeEdgesCoords = (
+    g: FOLD,
+  ): [
+    [number, number] | [number, number, number],
+    [number, number] | [number, number, number],
+  ][] =>
+    (g.edges_vertices || []).map((ev) => [
+      g.vertices_coords[ev[0]],
+      g.vertices_coords[ev[1]],
+    ]);
 
   const angleToOpacity = (angle: number): string =>
     angle === undefined ||
@@ -20,60 +29,64 @@
       : String(Math.abs(angle) / 180);
 
   const edges_vertices = $derived(graph.edges_vertices || []);
-  const edges_assignment: string[] = $derived(
-    edges_vertices
-      .map((_, i) => graph.edges_assignment[i] || "U")
-      .map((a) => assignmentColor[a]),
-  );
-  const edges_foldAngle: string[] = $derived(
-    edges_vertices.map((_, i) => graph.edges_foldAngle[i]).map(angleToOpacity),
+  const edges_assignment = $derived(graph.edges_assignment || []);
+  const edges_foldAngle = $derived(graph.edges_foldAngle || []);
+
+  const lines = $derived(
+    makeEdgesCoords(graph).map((s) => ({
+      x1: s[0][0],
+      y1: s[0][1],
+      x2: s[1][0],
+      y2: s[1][1],
+    })),
   );
 
-  const lines = makeEdgesCoords(graph).map((s) => ({
-    x1: s[0][0],
-    y1: s[0][1],
-    x2: s[1][0],
-    y2: s[1][1],
-  }));
+  const classes: string[] = $derived(
+    edges_vertices.map((_, i) => edges_assignment[i] || "U"),
+  );
+
+  const opacities: string[] = $derived(
+    edges_vertices.map((_, i) => edges_foldAngle[i]).map(angleToOpacity),
+  );
 </script>
 
 {#each lines as line, i}
-  <line {...line} class={edges_assignment[i]} opacity={edges_foldAngle[i]} />
+  <line {...line} class={classes[i]} opacity={opacities[i]} />
 {/each}
 
 <style>
   .B,
   .b {
-    stroke: "black";
+    stroke: black;
   }
 
   .M,
   .m {
-    stroke: "crimson";
+    stroke: crimson;
   }
 
   .V,
   .v {
-    stroke: "royalblue";
+    stroke: royalblue;
   }
 
   .F,
   .f {
-    stroke: "lightgray";
+    stroke: lightgray;
   }
 
   .J,
   .j {
-    stroke: "gold";
+    stroke: gold;
   }
 
   .C,
   .c {
-    stroke: "limegreen";
+    stroke: limegreen;
   }
 
   .U,
   .u {
-    stroke: "orchid";
+    stroke: orchid;
   }
 </style>

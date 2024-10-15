@@ -1,5 +1,4 @@
 import ear from "rabbit-ear";
-import type { FOLD } from "rabbit-ear/types.js";
 import { subtract2 } from "rabbit-ear/math/vector.js";
 import { intersectLineLine } from "rabbit-ear/math/intersect.js";
 import { excludeS } from "rabbit-ear/math/compare.js";
@@ -61,8 +60,6 @@ const getShapesInRect = (shapes: Shape[]): number[] => {
 export class Geometry {
   shapes: Shape[] = $state([]);
   selected: number[] = $state([]);
-  fold: FOLD = $state({});
-  frames: FOLD[] = $state([]);
   #effects: (() => void)[] = [];
 
   // snap points
@@ -125,7 +122,7 @@ export class Geometry {
         }
         this.snapPoints = results;
       });
-      return () => {};
+      return () => { };
     });
   }
 
@@ -142,7 +139,7 @@ export class Geometry {
 
   constructor() {
     this.#effects = [this.#makeIntersectionsEffect()];
-    this.loadExampleData();
+    //this.loadExampleData();
   }
 
   dealloc(): void {

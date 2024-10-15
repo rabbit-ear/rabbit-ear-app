@@ -4,13 +4,15 @@
 
   // hard coded the Terminal Viewport for now
   import { TerminalViewport } from "../viewport/TerminalViewport/TerminalViewport.svelte.ts";
-  import Terminal from "../viewport/TerminalViewport/Viewport.svelte";
   const terminalViewport = new TerminalViewport();
+
+  import { FrameViewport } from "../viewport/FrameViewport/FrameViewport.svelte.ts";
+  const frameViewport = new FrameViewport();
 </script>
 
 <div class="column">
   <div class="terminal">
-    <Terminal viewport={terminalViewport} />
+    <terminalViewport.component viewport={terminalViewport} />
   </div>
   <div class="canvases row gap">
     {#each viewports as viewport}
@@ -18,6 +20,9 @@
         <viewport.component {viewport} />
       </div>
     {/each}
+  </div>
+  <div class="frames">
+    <frameViewport.component viewport={frameViewport} />
   </div>
 </div>
 
@@ -53,6 +58,9 @@
 
   /* hard coding the terminal viewport. could get rid of these later */
   .terminal {
+    height: 8rem;
+  }
+  .frames {
     height: 8rem;
   }
 </style>

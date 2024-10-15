@@ -62,10 +62,16 @@ export class FileManager {
     );
   }
 
+  // this method is called if "File -> Save" was successful.
+  // the actual fs.write operation happens outside of the app (in the backend),
+  // so all we can do is get a confirmation if the save was successful or not.
   updateFileAsSaved(): void {
     this.currentFile.modified = false;
   }
 
+  // this method is called if "File -> SaveAs" was successful.
+  // the actual fs.write operation happens outside of the app (in the backend),
+  // so all we can do is get a confirmation if the save was successful or not.
   updateFileAsSavedAs(path: FilePathInfo): void {
     this.currentFile.path = path;
     this.currentFile.modified = false;

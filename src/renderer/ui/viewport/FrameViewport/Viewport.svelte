@@ -1,6 +1,6 @@
 <script lang="ts">
-  //import type { FrameViewport } from "./FrameViewport.svelte.ts";
-  //import Frames from "./Frames.svelte";
+  import type { FrameViewport } from "./FrameViewport.svelte.ts";
+  import Frames from "./Frames.svelte";
 
   //type PropsType = {
   //  viewport: FrameViewport;
@@ -13,7 +13,7 @@
 -->
 
 <div class="container">
-  <!-- <Frames /> -->
+  <Frames />
 </div>
 
 <style>

@@ -3,7 +3,7 @@
   import NewFrameButton from "./NewFrameButton.svelte";
   import app from "../../../app/App.svelte.js";
 
-  const frames = app.file.geometry.frames;
+  const frames = $derived(app.file?.framesFlat || []);
 
   let pressIndex: number;
   let hoverIndex: number;
