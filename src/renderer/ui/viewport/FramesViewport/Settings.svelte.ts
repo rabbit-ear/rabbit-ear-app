@@ -99,25 +99,3 @@ class Settings {
 }
 
 export default new Settings();
-
-//class Settings {
-//  // is the Y axis on top (true) or on bottom (false)?
-//  rightHanded: boolean = localState<boolean>(storageKeys.svgRightHanded, true).value;
-//
-//  // the unit grid that contributes to snap points ("square" or "triangle")
-//  tiling: string = localState<string>(storageKeys.svgTiling, "square").value;
-//
-//  showGrid: boolean = localState<boolean>(storageKeys.svgShowGrid, true).value;
-//  showAxes: boolean = localState<boolean>(storageKeys.svgShowAxes, true).value;
-//
-//  radialSnap: boolean = $derived(keyboard.shift);
-//  radialSnapDegrees: number = localState<number>(storageKeys.svgRadialSnapDegrees, 22.5).value;
-//  radialSnapOffset: number = localState<number>(storageKeys.svgRadialSnapOffset, 0).value;
-//
-//  strokeWidthFactor: number = localState(storageKeys.svgStrokeWidthFactor, 0.001).value;
-//  strokeWidthAbsoluteMin: number = localState(storageKeys.svgStrokeWidthAbsoluteMin, 0.001).value;
-//  vertexRadiusFactor: number = localState(storageKeys.svgVertexRadiusFactor, 0.00666).value;
-//
-//  constructor() { }
-//}
-//

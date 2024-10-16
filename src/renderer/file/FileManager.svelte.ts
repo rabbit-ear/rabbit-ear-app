@@ -3,7 +3,7 @@ import type { FilePathInfo } from "../../main/fs/path.ts";
 import { File } from "../file/File.svelte.ts";
 import { EXTENSION, UNTITLED_FILENAME } from "../app/constants.svelte.ts";
 import { file_spec, file_creator } from "rabbit-ear/fold/rabbitear.js";
-import { ShowError } from "../app/Dialogs.svelte.ts";
+import { showError } from "../app/Dialogs.svelte.ts";
 
 const emptyFOLD = (): FOLD => ({ file_spec, file_creator });
 
@@ -45,7 +45,7 @@ export class FileManager {
     try {
       return this.loadFOLD(path, JSON.parse(str));
     } catch (error) {
-      ShowError(error);
+      showError(error);
     }
   }
 

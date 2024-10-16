@@ -6,8 +6,8 @@
   import { TerminalViewport } from "../viewport/TerminalViewport/TerminalViewport.svelte.ts";
   const terminalViewport = new TerminalViewport();
 
-  import { FrameViewport } from "../viewport/FrameViewport/FrameViewport.svelte.ts";
-  const frameViewport = new FrameViewport();
+  import { FramesViewport } from "../viewport/FramesViewport/FramesViewport.svelte.ts";
+  const framesViewport = new FramesViewport();
 </script>
 
 <div class="column">
@@ -22,7 +22,7 @@
     {/each}
   </div>
   <div class="frames">
-    <frameViewport.component viewport={frameViewport} />
+    <framesViewport.component viewport={framesViewport} />
   </div>
 </div>
 

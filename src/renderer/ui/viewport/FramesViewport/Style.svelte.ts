@@ -1,9 +1,13 @@
+import type { FOLD } from "rabbit-ear/types.js";
 import { View } from "./View.svelte.ts";
 import settings from "./Settings.svelte.ts";
 
 export class Style {
+  graph: FOLD;
   view: View;
-  constructor(view: View) {
+
+  constructor(graph: FOLD, view: View) {
+    this.graph = graph;
     this.view = view;
   }
 
