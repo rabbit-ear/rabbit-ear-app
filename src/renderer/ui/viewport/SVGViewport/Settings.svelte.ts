@@ -5,12 +5,14 @@ import {
   getStorageNumber,
   getStorageString,
 } from "../../../app/localStorage.svelte.ts";
+import AppSettings from "../../../app/Settings.svelte.ts";
 
 // these are global view settings that apply to all instances of SVGViewport
 // accessible via the app: app.ui.types.SVGViewport.settings
 class Settings {
   // is the Y axis on top (true) or on bottom (false)?
-  rightHanded: boolean = $state(getStorageBoolean(storageKeys.svgRightHanded, true));
+  rightHanded: boolean = $derived(AppSettings.rightHanded);
+
   // the unit grid that contributes to snap points ("square" or "triangle")
   tiling: string = $state(getStorageString(storageKeys.svgTiling, "square"));
   showGrid: boolean = $state(getStorageBoolean(storageKeys.svgShowGrid, true));
@@ -47,7 +49,6 @@ class Settings {
   #bindToLocalStorage(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        localStorage.setItem(storageKeys.svgRightHanded, String(this.rightHanded));
         localStorage.setItem(storageKeys.svgTiling, String(this.tiling));
         localStorage.setItem(storageKeys.svgShowGrid, String(this.showGrid));
         localStorage.setItem(storageKeys.svgShowAxes, String(this.showAxes));

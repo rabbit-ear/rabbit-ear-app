@@ -1,11 +1,11 @@
 import type { FOLD } from "rabbit-ear/types.js";
 import type { Component } from "svelte";
-import type { Viewport as ViewportType } from "../viewport.ts";
-import ViewportComponent from "./ViewportComponent.svelte";
+import type { Viewport } from "../viewport.ts";
+import FramesViewportComponent from "./FramesViewportComponent.svelte";
 import app from "../../../app/App.svelte.js";
 import { Frame } from "./Frame.svelte.ts";
 
-export class FramesViewport implements ViewportType {
+export class FramesViewport implements Viewport {
   component: Component;
 
   redraw?: () => void;
@@ -36,14 +36,14 @@ export class FramesViewport implements ViewportType {
       !isNaN(this.hoverIndex) &&
       this.pressIndex !== this.hoverIndex
     ) {
-      //app.invoker.executeCommand("moveFrameIndex", pressIndex, hoverIndex);
+      app.invoker.executeMethod("moveFrameIndex", this.pressIndex, this.hoverIndex);
     }
     this.pressIndex = undefined;
     this.hoverIndex = undefined;
   }
 
   constructor() {
-    this.component = ViewportComponent;
+    this.component = FramesViewportComponent;
   }
 
   dealloc(): void {

@@ -4,6 +4,25 @@ import type { Panel } from "./panel/panel.ts";
 import Tools from "./tools/index.ts";
 import { SVGViewport } from "./viewport/SVGViewport/SVGViewport.svelte.ts";
 import { WebGLViewport } from "./viewport/WebGLViewport/WebGLViewport.svelte.ts";
+// panels
+import AppPanel from "./panel/AppPanel.svelte";
+import DebugPanel from "./panel/DebugPanel.svelte";
+
+const makeAppPanel = (): Panel => {
+  class AppClass implements Panel {
+    title = "App";
+    component = AppPanel;
+  }
+  return new AppClass();
+};
+
+const makeDebugPanel = (): Panel => {
+  class Debug implements Panel {
+    title = "Debug";
+    component = DebugPanel;
+  }
+  return new Debug();
+};
 
 export class UI {
   viewports: Viewport[] = $state([]);
@@ -12,12 +31,16 @@ export class UI {
 
   // the complete set of panels are: app-wide panels + viewport panels + tool panels
   //panels: Panel[] = $state([]);
-  panels: Panel[] = $derived(
+  #appPanels: Panel[] = [makeAppPanel(), makeDebugPanel()];
+
+  #viewportPanels: Panel[] = $derived(
     this.viewports
       .map((view) => view?.panel)
       .concat([this.#tool?.panel])
       .filter((a) => a !== undefined),
   );
+
+  panels: Panel[] = $derived(this.#appPanels.concat(this.#viewportPanels));
 
   // this binding allows each viewports' global settings objects to be accessed.
   types = {

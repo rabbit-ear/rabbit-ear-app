@@ -4,8 +4,10 @@ import type { UI } from "../ui/UI.svelte.ts";
 import { File } from "../file/File.svelte.ts";
 import { FileManager } from "../file/FileManager.svelte.ts";
 import { Invoker } from "../kernel/Invoker.svelte.ts";
+import Settings from "./Settings.svelte.ts";
 
 class Application {
+  settings: typeof Settings;
   invoker: Invoker;
   #fileManager: FileManager;
   // UI is optional, the app is able to run without a UI.
@@ -13,6 +15,7 @@ class Application {
   ui: UI | undefined;
 
   constructor() {
+    this.settings = Settings;
     this.invoker = new Invoker();
     this.#fileManager = new FileManager();
   }

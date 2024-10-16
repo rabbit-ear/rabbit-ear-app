@@ -20,14 +20,6 @@
     <button onclick={newWebGL}>+ GL</button>
     <button onclick={removeView}>- view</button>
   </div>
-
-  <div class="row gap">
-    <input
-      type="checkbox"
-      id="verticalUp"
-      bind:checked={SVGViewport.settings.rightHanded} />
-    <label for="verticalUp">y-axis up</label>
-  </div>
 </div>
 
 <style>

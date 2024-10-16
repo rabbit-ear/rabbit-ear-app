@@ -6,17 +6,13 @@ import {
   multiplyMatrix2Vector2,
 } from "rabbit-ear/math/matrix2.js";
 import { viewBoxOrigin } from "../../../general/matrix.ts";
-//import settings from "./Settings.svelte.ts";
+import Settings from "../../../app/Settings.svelte.ts";
+import { graphToMatrix2 } from "./matrix.ts";
 
 export class View {
-  constructor(graph) {
-    this.graph = graph;
-  }
-
   graph: FOLD;
 
-  //rightHanded = $derived(settings.rightHanded);
-  rightHanded = true;
+  rightHanded = $derived(Settings.rightHanded);
 
   canvasSize: [number, number] | undefined = $state(undefined);
 
@@ -100,12 +96,18 @@ export class View {
     [this.aspectFitViewBox[0], this.aspectFitViewBox[1] + this.aspectFitViewBox[3]],
   ]);
 
+  constructor(graph) {
+    this.graph = graph;
+    this.reset();
+  }
+
   resetCamera(): void {
     this.camera = [...identity2x3];
   }
 
   resetModel(): void {
-    this.model = [...identity2x3];
+    this.#model = graphToMatrix2(this.graph, this.rightHanded);
+    //this.#model = [...identity2x3];
   }
 
   reset(): void {

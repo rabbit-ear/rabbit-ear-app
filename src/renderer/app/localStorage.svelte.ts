@@ -1,5 +1,5 @@
 export const storageKeys = {
-  svgRightHanded: "svgRightHanded",
+  rightHanded: "rightHanded",
   svgTiling: "svgTiling",
   svgShowGrid: "svgShowGrid",
   svgShowAxes: "svgShowAxes",

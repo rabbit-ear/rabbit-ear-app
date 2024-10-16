@@ -20,7 +20,7 @@ export class Frame {
     this.index = index;
     this.component = FrameComponent;
     this.view = new View(this.graph);
-    this.style = new Style(this.graph, this.view);
+    this.style = new Style(this.view);
   }
 
   dealloc(): void {

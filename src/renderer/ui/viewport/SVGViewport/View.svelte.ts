@@ -99,7 +99,8 @@ export class View {
   }
 
   resetModel(): void {
-    this.model = [...identity2x3];
+    this.#model = [...identity2x3];
+    //this.#model = graphToMatrix2(this.graph, Settings.rightHanded);
   }
 
   reset(): void {

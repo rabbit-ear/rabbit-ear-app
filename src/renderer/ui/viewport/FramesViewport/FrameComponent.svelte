@@ -26,6 +26,10 @@
   };
 
   const highlighted = $derived(index === app.file.activeFrame);
+
+  const matrix = $derived(
+    frame.view.rightHanded ? [1, 0, 0, -1, 0, 0].join(", ") : undefined,
+  );
 </script>
 
 <button
@@ -37,10 +41,18 @@
   onmouseup={(): void => viewport.mouseup(index)}>
   <!-- <WebGLRender {graph} {viewMatrix} /> -->
   <!-- <div class={isFoldedForm ? "folded-form" : "crease-pattern"}></div> -->
-  <SVGCanvas stroke-width={0.005}>
-    <SVGFOLDVertices {graph} />
-    <SVGFOLDEdges {graph} />
-    <SVGFOLDFaces {graph} />
+  <SVGCanvas viewBox={frame.view.viewBoxString} stroke-width={frame.style.strokeWidth}>
+    {#if matrix}
+      <g class="wrapper" style="transform: matrix({matrix})">
+        <SVGFOLDVertices {graph} />
+        <SVGFOLDEdges {graph} />
+        <SVGFOLDFaces {graph} />
+      </g>
+    {:else}
+      <SVGFOLDVertices {graph} />
+      <SVGFOLDEdges {graph} />
+      <SVGFOLDFaces {graph} />
+    {/if}
   </SVGCanvas>
 </button>
 
