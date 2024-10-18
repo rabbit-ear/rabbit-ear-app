@@ -1,23 +1,19 @@
 <script lang="ts">
-  import type { WebGLModel } from "rabbit-ear/types.js";
   import type {
     ViewportMouseEvent,
     ViewportWheelEvent,
     ViewportTouchEvent,
   } from "../../viewport/events.ts";
   import { identity4x4 } from "rabbit-ear/math/matrix4.js";
-  import WebGLCanvas from "./WebGLCanvas.svelte";
   import { vectorFromScreenLocation } from "../../../general/matrix.ts";
+  import WebGLCanvas from "./WebGLCanvas.svelte";
 
-  type WebGLTouchCanvasProps = {
+  type PropsType = {
     gl?: WebGLRenderingContext | WebGL2RenderingContext;
     version?: number;
     canvas?: HTMLCanvasElement;
     canvasSize?: [number, number];
-    models?: WebGLModel[];
-    uniformOptions?: object;
-    perspective?: string;
-    fov?: number;
+    redraw?: () => void;
     projectionMatrix?: number[];
     onmousedown?: (e: ViewportMouseEvent) => void;
     onmousemove?: (e: ViewportMouseEvent) => void;
@@ -28,7 +24,6 @@
     ontouchstart?: (e: ViewportTouchEvent) => void;
     ontouchend?: (e: ViewportTouchEvent) => void;
     ontouchcancel?: (e: ViewportTouchEvent) => void;
-    redraw?: () => void;
   };
 
   let {
@@ -36,11 +31,8 @@
     version = $bindable(),
     canvas = $bindable(),
     canvasSize: _canvasSize = $bindable([0, 0]),
-    models = [],
-    uniformOptions = {},
-    perspective = "orthographic",
-    fov = 30.25,
-    projectionMatrix: _projectionMatrix = $bindable([...identity4x4]),
+    redraw = $bindable(),
+    projectionMatrix = [...identity4x4],
     onmousedown: mousedown,
     onmousemove: mousemove,
     onmouseup: mouseup,
@@ -50,16 +42,9 @@
     ontouchstart: touchstart,
     ontouchend: touchend,
     ontouchcancel: touchcancel,
-    redraw = $bindable(),
-  }: WebGLTouchCanvasProps = $props();
+  }: PropsType = $props();
 
-  let projectionMatrix: number[] = $state([...identity4x4]);
   let canvasSize: [number, number] = $state([0, 0]);
-
-  $effect(() => {
-    _projectionMatrix = [...projectionMatrix];
-  });
-
   $effect(() => {
     _canvasSize = [...canvasSize];
   });
@@ -107,11 +92,6 @@
   bind:version
   bind:canvas
   bind:canvasSize
-  {models}
-  {uniformOptions}
-  {perspective}
-  {fov}
-  bind:projectionMatrix
   bind:redraw
   {onmousedown}
   {onmousemove}

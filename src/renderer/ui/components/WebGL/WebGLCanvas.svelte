@@ -1,45 +1,28 @@
 <script lang="ts">
   import type { HTMLCanvasAttributes } from "svelte/elements";
-  import type { WebGLModel } from "rabbit-ear/types.js";
-  import { identity4x4 } from "rabbit-ear/math/matrix4.js";
   import { initializeWebGL } from "rabbit-ear/webgl/general/webgl.js";
-  import {
-    rebuildViewport,
-    makeProjectionMatrix,
-  } from "rabbit-ear/webgl/general/view.js";
-  import { drawModel } from "rabbit-ear/webgl/general/model.js";
+  import { rebuildViewport } from "rabbit-ear/webgl/general/view.js";
 
   type WebGLCanvasProps = {
     gl?: WebGLRenderingContext | WebGL2RenderingContext;
     version?: number;
     canvas?: HTMLCanvasElement;
     canvasSize?: [number, number];
-    projectionMatrix?: number[];
     redraw?: () => void;
-    models?: WebGLModel[];
-    uniformOptions?: object;
-    perspective?: string;
-    fov?: number;
   } & HTMLCanvasAttributes;
 
   let {
     gl = $bindable(),
     version = $bindable(),
     canvas: _canvas = $bindable(),
-    canvasSize = $bindable([0, 0]),
-    projectionMatrix: _projectionMatrix = $bindable([...identity4x4]),
+    canvasSize: _canvasSize = $bindable([0, 0]),
     redraw = $bindable(),
-    models = [],
-    uniformOptions = {},
-    perspective = "orthographic",
-    fov = 30.25,
     ...rest
   }: WebGLCanvasProps = $props();
 
-  let canvas: HTMLCanvasElement | undefined = $state(undefined);
+  let canvas: HTMLCanvasElement | undefined = $state();
+  let canvasSize: [number, number] = $state([0, 0]);
   let instance = $derived(canvas ? initializeWebGL(canvas) : undefined);
-  let projectionMatrix = $derived(makeProjectionMatrix(canvasSize, perspective, fov));
-  let uniforms = $derived(models.map((model) => model.makeUniforms(uniformOptions)));
 
   $effect(() => {
     gl = instance.gl;
@@ -50,9 +33,8 @@
   $effect(() => {
     _canvas = canvas;
   });
-
   $effect(() => {
-    _projectionMatrix = [...projectionMatrix];
+    _canvasSize = [...canvasSize];
   });
 
   $effect(() => {
@@ -65,14 +47,6 @@
     canvasSize = [canvas.clientWidth, canvas.clientHeight];
   });
 
-  $effect(() => {
-    if (!gl) {
-      return;
-    }
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    models.forEach((model, i) => drawModel(gl, version, model, uniforms[i]));
-  });
-
   const onresize = (): void => {
     if (!gl || !canvas) {
       return;
@@ -81,7 +55,7 @@
     canvasSize = [canvas.clientWidth, canvas.clientHeight];
   };
 
-  //redraw = onresize;
+  redraw = onresize;
 </script>
 
 <svelte:window {onresize} />

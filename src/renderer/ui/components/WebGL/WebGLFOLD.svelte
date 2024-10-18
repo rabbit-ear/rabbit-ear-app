@@ -7,26 +7,25 @@
     ViewportTouchEvent,
   } from "../../viewport/events.ts";
   import { identity4x4, multiplyMatrices4 } from "rabbit-ear/math/matrix4.js";
-  import {
-    makeProjectionMatrix,
-    makeModelMatrix,
-  } from "rabbit-ear/webgl/general/view.js";
+  import { makeModelMatrix } from "rabbit-ear/webgl/general/view.js";
   import { creasePattern } from "rabbit-ear/webgl/creasePattern/models.js";
   import { foldedForm } from "rabbit-ear/webgl/foldedForm/models.js";
+  import { makeProjectionMatrix } from "rabbit-ear/webgl/general/view.js";
   import { worldAxes } from "./WorldAxes/models.js";
   // import { touchIndicators } from "rabbit-ear/webgl/touches/models.js";
   import { deallocModel } from "rabbit-ear/webgl/general/model.js";
   import { dark, light } from "rabbit-ear/webgl/general/colors.js";
+  import WebGLModelView from "./WebGLModelView.svelte";
   import WebGLTouchCanvas from "./WebGLTouchCanvas.svelte";
 
-  type WebGLFOLDProps = {
+  type PropsType = {
     gl?: WebGLRenderingContext | WebGL2RenderingContext;
     version?: number;
     graph?: FOLD;
     perspective?: string;
     renderStyle?: string;
     canvasSize?: [number, number];
-    projectionMatrix?: number[];
+    //projectionMatrix?: number[];
     viewMatrix?: number[];
     layerNudge?: number;
     fov?: number;
@@ -59,7 +58,7 @@
     perspective = "orthographic",
     renderStyle = "creasePattern",
     canvasSize: _canvasSize = $bindable([0, 0]),
-    projectionMatrix: _projectionMatrix = $bindable([...identity4x4]),
+    //projectionMatrix: _projectionMatrix = $bindable([...identity4x4]),
     viewMatrix = [...identity4x4],
     layerNudge = 0.01,
     fov = 30.25,
@@ -81,26 +80,24 @@
     ontouchend,
     ontouchcancel,
     redraw = $bindable(),
-  }: WebGLFOLDProps = $props();
+  }: PropsType = $props();
 
-  let canvas: HTMLCanvasElement | undefined = $state(undefined);
+  let canvas: HTMLCanvasElement | undefined = $state();
   let canvasSize: [number, number] = $state([0, 0]);
-  let projectionMatrix: number[] = $state([...identity4x4]);
+  let projectionMatrix = $derived(makeProjectionMatrix(canvasSize, perspective, fov));
 
   $effect(() => {
     _canvasSize = canvasSize;
   });
-  $effect(() => {
-    _projectionMatrix = projectionMatrix;
-  });
+  //$effect(() => {
+  //  _projectionMatrix = projectionMatrix;
+  //});
 
   let outlineColor = $derived(darkMode ? "white" : "black");
   let cpColor = $derived(darkMode ? "#111111" : "white");
 
   let modelMatrix = $derived(makeModelMatrix(graph));
   let modelViewMatrix = $derived(multiplyMatrices4(viewMatrix, modelMatrix));
-
-  //let uniformOptions = {};
 
   let uniformOptions = $derived({
     projectionMatrix,
@@ -123,7 +120,6 @@
     earcut,
   });
 
-  //let models: WebGLModel[] = $derived([]);
   let models: WebGLModel[] = $derived.by(() => {
     try {
       if (!gl) {
@@ -147,9 +143,10 @@
     }
   });
 
-  //const deallocModels = (): void => models.forEach((model) => deallocModel(gl, model));
+  const deallocModels = (): void => models.forEach((model) => deallocModel(gl, model));
 
-  //$effect(() => deallocModel);
+  // return a function to be called when the page is deallocated- deallocate the models.
+  $effect(() => deallocModels);
 </script>
 
 <WebGLTouchCanvas
@@ -158,11 +155,7 @@
   bind:canvas
   bind:redraw
   bind:canvasSize
-  bind:projectionMatrix
-  {models}
-  {uniformOptions}
-  {perspective}
-  {fov}
+  {projectionMatrix}
   {onmousedown}
   {onmousemove}
   {onmouseup}
@@ -172,3 +165,5 @@
   {ontouchmove}
   {ontouchend}
   {ontouchcancel} />
+
+<WebGLModelView {gl} {version} {models} {uniformOptions} />

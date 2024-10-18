@@ -1,8 +1,5 @@
 <script lang="ts">
-  import WebGLCanvas from "../../components/WebGL/WebGLCanvas.svelte";
-  import WebGLTouchCanvas from "../../components/WebGL/WebGLTouchCanvas.svelte";
   import WebGLFOLD from "../../components/WebGL/WebGLFOLD.svelte";
-  // import GLElements from "./WebGL/GLElements.svelte";
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
   import app from "../../../app/App.svelte.ts";
 
@@ -12,16 +9,6 @@
   };
 
   let { viewport, ...rest }: PropsType = $props();
-
-  // https://www.youtube.com/live/nMs4X8-L_yo?feature=shared&t=1667
-  //const WebGLToolLayer = $derived(viewport.layer);
-  //const webglToolLayerProps = $derived(viewport.props || {});
-
-  // before, the methods were bound like this
-  // onmousemove={viewport.onmousemove}
-  // i think this will not work because the actual variable changes throughout,
-  // UNLESS. oh wait. we can make the functions a $state rune.
-  // then maybe we can return the bindings to the above and it will auto-update.
 </script>
 
 <WebGLFOLD
