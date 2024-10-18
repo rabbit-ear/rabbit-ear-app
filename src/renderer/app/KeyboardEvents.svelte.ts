@@ -1,5 +1,5 @@
 import { isFormElementActive } from "../general/dom.ts";
-import keyboard from "./keyboard.svelte.ts";
+import keyboard from "./Keyboard.svelte.ts";
 
 /**
  *

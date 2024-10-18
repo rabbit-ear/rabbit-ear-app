@@ -1,5 +1,7 @@
 <script lang="ts">
+  import WebGLCanvas from "../../components/WebGL/WebGLCanvas.svelte";
   import WebGLTouchCanvas from "../../components/WebGL/WebGLTouchCanvas.svelte";
+  import WebGLFOLD from "../../components/WebGL/WebGLFOLD.svelte";
   // import GLElements from "./WebGL/GLElements.svelte";
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
   import app from "../../../app/App.svelte.ts";
@@ -22,14 +24,14 @@
   // then maybe we can return the bindings to the above and it will auto-update.
 </script>
 
-<WebGLTouchCanvas
+<WebGLFOLD
   onmousemove={(...args): void => viewport.onmousemove?.(...args)}
   onmousedown={(...args): void => viewport.onmousedown?.(...args)}
   onmouseup={(...args): void => viewport.onmouseup?.(...args)}
   onmouseleave={(...args): void => viewport.onmouseleave?.(...args)}
   onwheel={(...args): void => viewport.onwheel?.(...args)}
   bind:redraw={viewport.redraw}
-  graph={app.file?.geometry.fold}
+  graph={app.file?.graph}
   perspective={viewport.view.perspective}
   renderStyle={"creasePattern"}
   viewMatrix={viewport.view.viewMatrix}
@@ -43,5 +45,4 @@
   showFoldedFaceOutlines={true}
   showFoldedCreases={false}
   showFoldedFaces={true}
-  {...rest}>
-</WebGLTouchCanvas>
+  {...rest} />

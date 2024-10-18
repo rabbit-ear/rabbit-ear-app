@@ -24,6 +24,6 @@
     <SVGFOLDEdges {graph} />
   </g>
   <g class="vertices">
-    <SVGFOLDVertices {graph} />
+    <!-- <SVGFOLDVertices {graph} /> -->
   </g>
 </g>

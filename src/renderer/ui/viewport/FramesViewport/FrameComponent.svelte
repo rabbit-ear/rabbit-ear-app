@@ -44,12 +44,12 @@
   <SVGCanvas viewBox={frame.view.viewBoxString} stroke-width={frame.style.strokeWidth}>
     {#if matrix}
       <g class="wrapper" style="transform: matrix({matrix})">
-        <SVGFOLDVertices {graph} />
+        <!-- <SVGFOLDVertices {graph} /> -->
         <SVGFOLDEdges {graph} />
         <SVGFOLDFaces {graph} />
       </g>
     {:else}
-      <SVGFOLDVertices {graph} />
+      <!-- <SVGFOLDVertices {graph} /> -->
       <SVGFOLDEdges {graph} />
       <SVGFOLDFaces {graph} />
     {/if}

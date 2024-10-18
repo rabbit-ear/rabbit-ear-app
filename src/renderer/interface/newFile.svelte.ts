@@ -13,5 +13,5 @@ export const newFile = async (): Promise<void> => {
       return;
     }
   }
-  app.fileManager.loadNewEmpty();
+  app.fileManager.loadUntitled();
 };

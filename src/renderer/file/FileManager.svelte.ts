@@ -3,7 +3,8 @@ import type { FilePathInfo } from "../../main/fs/path.ts";
 import { File } from "../file/File.svelte.ts";
 import { EXTENSION, UNTITLED_FILENAME } from "../app/constants.svelte.ts";
 import { file_spec, file_creator } from "rabbit-ear/fold/rabbitear.js";
-import { showError } from "../app/Dialogs.svelte.ts";
+import app from "../app/App.svelte.ts";
+//import { showError } from "../app/Dialogs.svelte.ts";
 
 const emptyFOLD = (): FOLD => ({ file_spec, file_creator });
 
@@ -16,7 +17,7 @@ export class FileManager {
   files: File[] = $state([]);
   index: number = $state(0);
 
-  get currentFile(): File | undefined {
+  get file(): File | undefined {
     return this.files[this.index];
   }
 
@@ -33,11 +34,11 @@ export class FileManager {
   //  this.index = this.files.length - 1;
   //}
 
-  loadFOLD(path: FilePathInfo, data: FOLD): void {
+  loadFOLD(path: FilePathInfo, fold: FOLD): void {
     if (this.files[0]) {
       this.files[0].dealloc();
     }
-    this.files[0] = new File(path, data);
+    this.files[0] = new File(path, fold);
   }
 
   // throws
@@ -45,12 +46,12 @@ export class FileManager {
     try {
       return this.loadFOLD(path, JSON.parse(str));
     } catch (error) {
-      showError(error);
+      app.dialog.showError(error);
     }
   }
 
-  loadNewEmpty(): void {
-    this.loadFOLD(
+  loadUntitled(fold?: FOLD): void {
+    return this.loadFOLD(
       {
         fullpath: "",
         directory: "",
@@ -58,7 +59,7 @@ export class FileManager {
         root: "untitled",
         extension: `.${EXTENSION}`,
       },
-      emptyFOLD(),
+      fold ? fold : emptyFOLD(),
     );
   }
 
@@ -66,14 +67,14 @@ export class FileManager {
   // the actual fs.write operation happens outside of the app (in the backend),
   // so all we can do is get a confirmation if the save was successful or not.
   updateFileAsSaved(): void {
-    this.currentFile.modified = false;
+    this.file.modified = false;
   }
 
   // this method is called if "File -> SaveAs" was successful.
   // the actual fs.write operation happens outside of the app (in the backend),
   // so all we can do is get a confirmation if the save was successful or not.
   updateFileAsSavedAs(path: FilePathInfo): void {
-    this.currentFile.path = path;
-    this.currentFile.modified = false;
+    this.file.path = path;
+    this.file.modified = false;
   }
 }

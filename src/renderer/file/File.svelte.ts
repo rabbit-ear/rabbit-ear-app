@@ -27,6 +27,10 @@ export class File {
   metadata: FOLDFileMetadata = $state();
   frames: FOLD[] = $state([]);
   activeFrame: number = $state(0);
+  // Has the current file been edited and not yet saved?
+  modified: boolean = $state(false);
+
+  geometry: Geometry;
 
   framesFlat: FOLD[] = $derived.by(() => {
     try {
@@ -39,10 +43,6 @@ export class File {
   });
 
   graph: FOLD = $derived(this.framesFlat[this.activeFrame]);
-
-  geometry: Geometry;
-  // Has the current file been edited and not yet saved?
-  modified: boolean = $state(false);
 
   constructor(path: FilePathInfo, data: FOLD) {
     this.path = path;

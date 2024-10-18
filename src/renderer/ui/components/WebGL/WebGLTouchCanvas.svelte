@@ -1,31 +1,24 @@
 <script lang="ts">
-  import { type FOLD } from "rabbit-ear/types.js";
-  import { identity4x4 } from "rabbit-ear/math/matrix4.js";
-  import WebGLCanvas from "./WebGLCanvas.svelte";
+  import type { WebGLModel } from "rabbit-ear/types.js";
   import type {
     ViewportMouseEvent,
     ViewportWheelEvent,
     ViewportTouchEvent,
   } from "../../viewport/events.ts";
+  import { identity4x4 } from "rabbit-ear/math/matrix4.js";
+  import WebGLCanvas from "./WebGLCanvas.svelte";
   import { vectorFromScreenLocation } from "../../../general/matrix.ts";
 
   type WebGLTouchCanvasProps = {
-    graph: FOLD;
-    perspective: string;
-    renderStyle: string;
-    viewMatrix: number[];
-    layerNudge?: number;
+    gl?: WebGLRenderingContext | WebGL2RenderingContext;
+    version?: number;
+    canvas?: HTMLCanvasElement;
+    canvasSize?: [number, number];
+    models?: WebGLModel[];
+    uniformOptions?: object;
+    perspective?: string;
     fov?: number;
-    darkMode?: boolean;
-    frontColor?: string;
-    backColor?: string;
-    outlineColor?: string;
-    cpColor?: string;
-    strokeWidth?: number;
-    opacity?: number;
-    showFoldedFaceOutlines?: boolean;
-    showFoldedCreases?: boolean;
-    showFoldedFaces?: boolean;
+    projectionMatrix?: number[];
     onmousedown?: (e: ViewportMouseEvent) => void;
     onmousemove?: (e: ViewportMouseEvent) => void;
     onmouseup?: (e: ViewportMouseEvent) => void;
@@ -39,20 +32,15 @@
   };
 
   let {
-    graph = {},
+    gl = $bindable(),
+    version = $bindable(),
+    canvas = $bindable(),
+    canvasSize: _canvasSize = $bindable([0, 0]),
+    models = [],
+    uniformOptions = {},
     perspective = "orthographic",
-    renderStyle = "creasePattern",
-    viewMatrix = [...identity4x4],
-    layerNudge = 0.01,
     fov = 30.25,
-    darkMode = true,
-    frontColor = "#17F",
-    backColor = "#fff",
-    strokeWidth = 0.0025,
-    opacity = 1,
-    showFoldedFaceOutlines = true,
-    showFoldedCreases = false,
-    showFoldedFaces = true,
+    projectionMatrix: _projectionMatrix = $bindable([...identity4x4]),
     onmousedown: mousedown,
     onmousemove: mousemove,
     onmouseup: mouseup,
@@ -67,6 +55,14 @@
 
   let projectionMatrix: number[] = $state([...identity4x4]);
   let canvasSize: [number, number] = $state([0, 0]);
+
+  $effect(() => {
+    _projectionMatrix = [...projectionMatrix];
+  });
+
+  $effect(() => {
+    _canvasSize = [...canvasSize];
+  });
 
   const formatMouseEvent = (e: MouseEvent): ViewportMouseEvent =>
     Object.assign(e, {
@@ -107,22 +103,16 @@
 </script>
 
 <WebGLCanvas
-  {graph}
-  {perspective}
-  {renderStyle}
+  bind:gl
+  bind:version
+  bind:canvas
   bind:canvasSize
-  bind:projectionMatrix
-  {viewMatrix}
-  {layerNudge}
+  {models}
+  {uniformOptions}
+  {perspective}
   {fov}
-  {darkMode}
-  {frontColor}
-  {backColor}
-  {strokeWidth}
-  {opacity}
-  {showFoldedFaceOutlines}
-  {showFoldedCreases}
-  {showFoldedFaces}
+  bind:projectionMatrix
+  bind:redraw
   {onmousedown}
   {onmousemove}
   {onmouseup}
@@ -131,5 +121,4 @@
   {ontouchstart}
   {ontouchmove}
   {ontouchend}
-  {ontouchcancel}
-  bind:redraw></WebGLCanvas>
+  {ontouchcancel} />

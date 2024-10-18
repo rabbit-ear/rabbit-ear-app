@@ -44,7 +44,7 @@ export class SVGViewport implements Viewport, ViewportEvents {
   // correcting value.
   uiEpsilon: number = $derived.by(() => this.view.vmax * settings.uiEpsilonFactor);
 
-  redraw?: () => void;
+  redraw?: () => void = $state();
   onmousemove?: (event: ViewportMouseEvent) => void;
   onmousedown?: (event: ViewportMouseEvent) => void;
   onmouseup?: (event: ViewportMouseEvent) => void;

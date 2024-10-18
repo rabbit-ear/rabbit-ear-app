@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { FramesViewport } from "./FramesViewport.svelte.ts";
   import NewFrameButton from "./NewFrameButton.svelte";
-  import { showNewFrameModal } from "../../../app/Dialogs.svelte.ts";
+  import app from "../../../app/App.svelte.ts";
+  //import { showNewFrameModal } from "../../../app/Dialogs.svelte.ts";
 
   type PropsType = {
     viewport: FramesViewport;
@@ -17,7 +18,7 @@
   {#each viewport.frames as frame}
     <frame.component {frame} {viewport} />
   {/each}
-  <NewFrameButton onclick={showNewFrameModal} />
+  <NewFrameButton onclick={app.dialog.showNewFrameModal} />
 </div>
 
 <style>
