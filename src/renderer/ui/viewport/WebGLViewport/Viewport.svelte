@@ -2,6 +2,7 @@
   import WebGLFOLD from "../../components/WebGL/WebGLFOLD.svelte";
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
   import app from "../../../app/App.svelte.ts";
+  import settings from "./Settings.svelte.ts";
 
   type PropsType = {
     viewport: WebGLViewport;
@@ -20,16 +21,16 @@
   onwheel={(...args): void => viewport.onwheel?.(...args)}
   bind:redraw={viewport.redraw}
   perspective={viewport.view.perspective}
-  renderStyle={"creasePattern"}
   viewMatrix={viewport.view.viewMatrix}
-  layerNudge={0.01}
-  fov={30.25}
-  darkMode={true}
-  frontColor={"#17F"}
-  backColor={"#fff"}
-  strokeWidth={0.0025}
-  opacity={1}
-  showFoldedFaceOutlines={true}
-  showFoldedCreases={false}
-  showFoldedFaces={true}
+  renderStyle={settings.renderStyle}
+  layerNudge={settings.layerNudge}
+  fov={settings.fov}
+  darkMode={settings.darkMode}
+  frontColor={settings.frontColor}
+  backColor={settings.backColor}
+  strokeWidth={settings.strokeWidth}
+  opacity={settings.opacity}
+  showFoldedFaceOutlines={settings.showFoldedFaceOutlines}
+  showFoldedCreases={settings.showFoldedCreases}
+  showFoldedFaces={settings.showFoldedFaces}
   {...rest} />

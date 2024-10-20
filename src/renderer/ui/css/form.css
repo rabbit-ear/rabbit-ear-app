@@ -1,3 +1,7 @@
+:root {
+  --form-gap: 0.5rem;
+}
+
 /* text input fields */
 
 input[type="text"],

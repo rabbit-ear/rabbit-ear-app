@@ -30,6 +30,6 @@
   }
 
   .gap {
-    gap: 3px;
+    gap: var(--form-gap);
   }
 </style>

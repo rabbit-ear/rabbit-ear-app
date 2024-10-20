@@ -84,7 +84,7 @@
     align-items: center;
   }
   .container :global(.gap) {
-    gap: 0.333rem;
+    gap: var(--form-gap);
   }
   .container :global(.center) {
     justify-content: center;

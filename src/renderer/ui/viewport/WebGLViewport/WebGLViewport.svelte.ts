@@ -1,13 +1,15 @@
 import type { Component } from "svelte";
-import { identity4x4 } from "rabbit-ear/math/matrix4.js";
-import { unsetViewportEvents, type Viewport } from "../viewport.ts";
-import ViewportComponent from "./Viewport.svelte";
+import type { Panel } from "../../panel/panel.ts";
 import type {
   ViewportEvents,
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportTouchEvent,
 } from "../events.ts";
+import { identity4x4 } from "rabbit-ear/math/matrix4.js";
+import { unsetViewportEvents, type Viewport } from "../viewport.ts";
+import ViewportComponent from "./Viewport.svelte";
+import { ViewportPanel } from "./Panel.svelte.ts";
 
 const defaultViewMatrix = (): number[] => [
   1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -5, 1,
@@ -33,6 +35,8 @@ class WebGLViewportStyle {
 
 export class WebGLViewport implements Viewport, ViewportEvents {
   component: Component;
+  panel: Panel;
+
   view: WebGLViewportView;
   style: WebGLViewportStyle;
 
@@ -57,6 +61,7 @@ export class WebGLViewport implements Viewport, ViewportEvents {
     this.component = ViewportComponent;
     this.view = new WebGLViewportView();
     this.style = new WebGLViewportStyle(this.view);
+    this.panel = new ViewportPanel();
   }
 
   dealloc(): void {

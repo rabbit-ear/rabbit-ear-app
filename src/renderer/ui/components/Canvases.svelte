@@ -1,6 +1,6 @@
 <script lang="ts">
   import app from "../../app/App.svelte.ts";
-  import CanvasControl from "./CanvasControl.svelte";
+  import ViewportSettings from "./ViewportSettings.svelte";
   const viewports = $derived(app.ui?.viewports || []);
 </script>
 
@@ -14,7 +14,7 @@
   <div class="canvases row gap">
     {#each viewports as viewport, index}
       <div class="canvas">
-        <CanvasControl {index} panel={viewport.panel} />
+        <ViewportSettings {index} {viewport} panel={viewport.panel} />
         <viewport.component {viewport} />
       </div>
     {/each}
@@ -44,7 +44,7 @@
   }
 
   .gap {
-    gap: 3px;
+    gap: var(--form-gap);
   }
 
   .canvases {
