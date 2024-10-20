@@ -1,29 +1,30 @@
 <script lang="ts">
   import app from "../../app/App.svelte.ts";
+  import CanvasControl from "./CanvasControl.svelte";
   const viewports = $derived(app.ui?.viewports || []);
-
-  // hard coded the Terminal Viewport for now
-  import { TerminalViewport } from "../viewport/TerminalViewport/TerminalViewport.svelte.ts";
-  const terminalViewport = new TerminalViewport();
-
-  import { FramesViewport } from "../viewport/FramesViewport/FramesViewport.svelte.ts";
-  const framesViewport = new FramesViewport();
 </script>
 
 <div class="column">
-  <div class="terminal">
-    <terminalViewport.component viewport={terminalViewport} />
-  </div>
+  {#if app.ui?.terminalViewport}
+    <div class="terminal">
+      <app.ui.terminalViewport.component viewport={app.ui.terminalViewport} />
+    </div>
+  {/if}
+
   <div class="canvases row gap">
-    {#each viewports as viewport}
+    {#each viewports as viewport, index}
       <div class="canvas">
+        <CanvasControl {index} panel={viewport.panel} />
         <viewport.component {viewport} />
       </div>
     {/each}
   </div>
-  <div class="frames">
-    <framesViewport.component viewport={framesViewport} />
-  </div>
+
+  {#if app.ui?.framesViewport}
+    <div class="frames">
+      <app.ui.framesViewport.component viewport={app.ui.framesViewport} />
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -47,13 +48,16 @@
   }
 
   .canvases {
-    height: calc(100vh - 8rem);
+    /* todo: this needs to be dynamically calculated based on */
+    /* whether or not the terminal or frames is visible */
+    height: calc(100vh - 8rem - 6rem);
   }
 
   /*component wrapper is required because svg and canvas elements have*/
   /*strange competing sizing rules when inside the same flexbox container*/
   .canvas {
     flex: 1 1 auto;
+    position: relative;
   }
 
   /* hard coding the terminal viewport. could get rid of these later */
@@ -61,6 +65,6 @@
     height: 8rem;
   }
   .frames {
-    height: 8rem;
+    height: 6rem;
   }
 </style>

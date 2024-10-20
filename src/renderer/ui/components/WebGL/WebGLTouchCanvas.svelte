@@ -30,7 +30,7 @@
     gl = $bindable(),
     version = $bindable(),
     canvas = $bindable(),
-    canvasSize: _canvasSize = $bindable([0, 0]),
+    canvasSize = $bindable([0, 0]),
     redraw = $bindable(),
     projectionMatrix = [...identity4x4],
     onmousedown: mousedown,
@@ -43,11 +43,6 @@
     ontouchend: touchend,
     ontouchcancel: touchcancel,
   }: PropsType = $props();
-
-  let canvasSize: [number, number] = $state([0, 0]);
-  $effect(() => {
-    _canvasSize = [...canvasSize];
-  });
 
   const formatMouseEvent = (e: MouseEvent): ViewportMouseEvent =>
     Object.assign(e, {

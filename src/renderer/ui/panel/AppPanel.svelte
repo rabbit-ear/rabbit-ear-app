@@ -1,11 +1,17 @@
 <script lang="ts">
+  import app from "../../app/App.svelte.ts";
   import Settings from "../../app/Settings.svelte.ts";
 </script>
 
 <div class="column gap">
   <div class="row gap">
-    <input type="checkbox" id="verticalUp" bind:checked={Settings.rightHanded} />
-    <label for="verticalUp">y-axis up</label>
+    <input type="checkbox" id="right-handed" bind:checked={Settings.rightHanded} />
+    <label for="right-handed">right handed</label>
+  </div>
+  <div class="row gap">
+    <p>View</p>
+    <button onclick={() => app.ui?.addViewport()}>+</button>
+    <button onclick={() => app.ui?.removeViewport()}>-</button>
   </div>
 </div>
 
@@ -24,5 +30,9 @@
 
   .gap {
     gap: 3px;
+  }
+
+  button {
+    width: 100%;
   }
 </style>

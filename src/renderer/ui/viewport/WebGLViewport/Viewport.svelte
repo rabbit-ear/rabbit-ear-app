@@ -12,13 +12,13 @@
 </script>
 
 <WebGLFOLD
+  graph={app.file?.graph}
   onmousemove={(...args): void => viewport.onmousemove?.(...args)}
   onmousedown={(...args): void => viewport.onmousedown?.(...args)}
   onmouseup={(...args): void => viewport.onmouseup?.(...args)}
   onmouseleave={(...args): void => viewport.onmouseleave?.(...args)}
   onwheel={(...args): void => viewport.onwheel?.(...args)}
   bind:redraw={viewport.redraw}
-  graph={app.file?.graph}
   perspective={viewport.view.perspective}
   renderStyle={"creasePattern"}
   viewMatrix={viewport.view.viewMatrix}

@@ -1,16 +1,27 @@
 <script lang="ts">
+  import type { HTMLAttributes } from "svelte/elements";
   import type { Snippet } from "svelte";
   import type { Panel } from "../panel/panel.ts";
-  let showPanel = $state(true);
 
-  let { children, panel }: { children: Snippet; panel: Panel } = $props();
+  let {
+    children,
+    panel,
+    expanded, // the initial condition
+    ...rest
+  }: {
+    children: Snippet;
+    panel: Panel;
+    expanded?: boolean;
+  } & HTMLAttributes<HTMLDivElement> = $props();
+
+  let showPanel = $state(expanded === undefined ? true : expanded);
 
   const onclick = (): void => {
     showPanel = !showPanel;
   };
 </script>
 
-<div class="container">
+<div class="container" {...rest}>
   <button class={showPanel ? "title expanded" : "title collapsed"} {onclick}>
     <span>{panel.title}</span>
   </button>

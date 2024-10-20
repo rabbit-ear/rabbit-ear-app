@@ -8,7 +8,7 @@ export const APP_NAME = "Rabbit Ear";
  * The app is able to modify (import and export) many other file types,
  * but there should be only one native type.
  */
-export const EXTENSION = "txt";
+export const EXTENSION = "fold";
 
 /**
  * @description the default file name for a new file

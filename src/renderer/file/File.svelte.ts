@@ -25,7 +25,7 @@ export const reassembleFramesToFOLD = (frames): FOLD => {
 export class File {
   path: FilePathInfo = $state();
   metadata: FOLDFileMetadata = $state();
-  frames: FOLD[] = $state([]);
+  frames: FOLD[] = $state.raw([]);
   activeFrame: number = $state(0);
   // Has the current file been edited and not yet saved?
   modified: boolean = $state(false);

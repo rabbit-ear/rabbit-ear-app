@@ -7,6 +7,9 @@ import { WebGLViewport } from "./viewport/WebGLViewport/WebGLViewport.svelte.ts"
 // panels
 import AppPanel from "./panel/AppPanel.svelte";
 import DebugPanel from "./panel/DebugPanel.svelte";
+// hard-coded viewports, need to somehow auto-place them into the correct location
+import { TerminalViewport } from "./viewport/TerminalViewport/TerminalViewport.svelte.ts";
+import { FramesViewport } from "./viewport/FramesViewport/FramesViewport.svelte.ts";
 
 const makeAppPanel = (): Panel => {
   class AppClass implements Panel {
@@ -29,12 +32,18 @@ export class UI {
   #tool: UITool | undefined = $state();
   #effects: (() => void)[] = [];
 
+  // can be included in viewports, but we need to figure out
+  // how to auto-place them in their correct location on screen
+  terminalViewport?: TerminalViewport;
+  framesViewport?: FramesViewport;
+
   // the complete set of panels are: app-wide panels + viewport panels + tool panels
   //panels: Panel[] = $state([]);
   #appPanels: Panel[] = [makeAppPanel(), makeDebugPanel()];
 
   #viewportPanels: Panel[] = $derived(
     this.viewports
+      .concat([this.terminalViewport, this.framesViewport])
       .map((view) => view?.panel)
       .concat([this.#tool?.panel])
       .filter((a) => a !== undefined),
@@ -76,11 +85,40 @@ export class UI {
       $effect(() => {
         this.viewports.forEach((viewport) => viewport.redraw?.());
       });
-      return () => {};
+      return () => {
+        // empty
+      };
     });
 
   constructor() {
     this.#effects = [this.#triggerViewportRedraw(), this.#makeToolViewportEffect()];
+    this.terminalViewport = new TerminalViewport();
+    this.framesViewport = new FramesViewport();
+  }
+
+  // manage viewport array
+
+  addViewport(ViewClass: typeof SVGViewport | typeof WebGLViewport | undefined): void {
+    if (!ViewClass) {
+      this.viewports.push(new SVGViewport());
+    } else {
+      this.viewports.push(new ViewClass());
+    }
+  }
+
+  swapViewport(
+    index: number,
+    ViewClass: typeof SVGViewport | typeof WebGLViewport,
+  ): void {
+    this.viewports.splice(index, 1, new ViewClass());
+  }
+
+  removeViewport(index: number | undefined): void {
+    if (index === undefined) {
+      this.viewports.pop();
+    } else {
+      this.viewports.splice(index, 1);
+    }
   }
 
   // this is not really planned, but if ever the app was to completely de-initialize and

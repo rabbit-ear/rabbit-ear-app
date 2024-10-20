@@ -1,4 +1,5 @@
 <script lang="ts">
+  //import { untrack } from "svelte";
   import earcut from "earcut";
   import type { FOLD, WebGLModel } from "rabbit-ear/types.js";
   import type {
@@ -19,13 +20,9 @@
   import WebGLTouchCanvas from "./WebGLTouchCanvas.svelte";
 
   type PropsType = {
-    gl?: WebGLRenderingContext | WebGL2RenderingContext;
-    version?: number;
     graph?: FOLD;
     perspective?: string;
     renderStyle?: string;
-    canvasSize?: [number, number];
-    //projectionMatrix?: number[];
     viewMatrix?: number[];
     layerNudge?: number;
     fov?: number;
@@ -52,13 +49,9 @@
   };
 
   let {
-    gl = $bindable(),
-    version = $bindable(),
     graph = {},
     perspective = "orthographic",
     renderStyle = "creasePattern",
-    canvasSize: _canvasSize = $bindable([0, 0]),
-    //projectionMatrix: _projectionMatrix = $bindable([...identity4x4]),
     viewMatrix = [...identity4x4],
     layerNudge = 0.01,
     fov = 30.25,
@@ -82,20 +75,14 @@
     redraw = $bindable(),
   }: PropsType = $props();
 
+  let gl: WebGLRenderingContext | WebGL2RenderingContext = $state();
+  let version: number = $state();
   let canvas: HTMLCanvasElement | undefined = $state();
   let canvasSize: [number, number] = $state([0, 0]);
+
   let projectionMatrix = $derived(makeProjectionMatrix(canvasSize, perspective, fov));
-
-  $effect(() => {
-    _canvasSize = canvasSize;
-  });
-  //$effect(() => {
-  //  _projectionMatrix = projectionMatrix;
-  //});
-
   let outlineColor = $derived(darkMode ? "white" : "black");
   let cpColor = $derived(darkMode ? "#111111" : "white");
-
   let modelMatrix = $derived(makeModelMatrix(graph));
   let modelViewMatrix = $derived(multiplyMatrices4(viewMatrix, modelMatrix));
 
@@ -125,7 +112,8 @@
       if (!gl) {
         return [];
       }
-      // deallocModels();
+      // todo: need to delete buffers and programs (call deallocModels()).
+      //untrack(() => deallocModels());
       return renderStyle === "creasePattern"
         ? [
             ...creasePattern(gl, version, graph, programOptions),
@@ -153,8 +141,8 @@
   bind:gl
   bind:version
   bind:canvas
-  bind:redraw
   bind:canvasSize
+  bind:redraw
   {projectionMatrix}
   {onmousedown}
   {onmousemove}
