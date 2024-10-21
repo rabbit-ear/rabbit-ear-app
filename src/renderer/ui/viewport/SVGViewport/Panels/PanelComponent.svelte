@@ -20,3 +20,11 @@
   <input type="checkbox" id="checkbox-show-axes" bind:checked={settings.showAxes} /><label
     for="checkbox-show-axes">show axes</label>
 </div>
+
+<style>
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+</style>

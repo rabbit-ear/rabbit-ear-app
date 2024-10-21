@@ -147,6 +147,12 @@
 {/if}
 
 <style>
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
   button.swap {
     width: 1.5rem;
     height: 1.5rem;

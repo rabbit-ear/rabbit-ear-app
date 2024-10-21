@@ -26,6 +26,9 @@
   const rows = $derived(Math.max(returnCount + 1, 1));
 
   //<pre>{@html settings.commandHistoryHTMLString}</pre>
+
+  // this is non standard and not a part of the HTMLTextarea spec
+  // autocorrect="off"
 </script>
 
 <!--
@@ -40,7 +43,6 @@
     bind:this={viewport.terminalTextarea}
     bind:value={viewport.terminalValue}
     autocomplete="off"
-    autocorrect="off"
     onkeydown={viewport.onkeydown}
     onkeyup={viewport.onkeyup}
     {rows}></textarea>

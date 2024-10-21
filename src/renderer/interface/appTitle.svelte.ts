@@ -24,5 +24,7 @@ $effect.root(() => {
     previousAppTitle = appTitle;
     window.api?.setAppTitle(appTitle);
   });
-  return (): void => { };
+  return (): void => {
+    // empty
+  };
 });

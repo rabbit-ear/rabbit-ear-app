@@ -5,7 +5,7 @@
   const panels: Panel[] = $derived(app.ui?.panels || []);
 </script>
 
-<div class="column gap">
+<div class="column">
   {#each panels as panel}
     <Wrapper {panel}>
       <panel.component {panel} />
@@ -24,7 +24,8 @@
     flex-direction: column;
   }
 
-  .gap {
-    gap: var(--form-gap);
-  }
+  /*gap is accomplished by each Wrapper's margin, this also gives margin at the top*/
+  /*.gap {*/
+  /*  gap: var(--form-gap);*/
+  /*}*/
 </style>

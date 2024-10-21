@@ -1,4 +1,3 @@
-
 export const showMessage = (message: string): void => {
   window.alert(message);
 };

@@ -1,5 +1,5 @@
 import type { Component } from "svelte";
-import type { Panel } from "../../panel/panel.ts";
+import type { Panel } from "../../../panel/panel.ts";
 import PanelComponent from "./PanelComponent.svelte";
 //import app from "../../../app/App.svelte.ts";
 

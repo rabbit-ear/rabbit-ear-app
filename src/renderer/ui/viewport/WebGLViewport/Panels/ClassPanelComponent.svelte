@@ -39,3 +39,11 @@
     step="0.01"
     bind:value={strokeWidthSlider} />
 </div>
+
+<style>
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+</style>

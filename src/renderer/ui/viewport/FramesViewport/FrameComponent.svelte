@@ -3,7 +3,7 @@
   import type { FramesViewport } from "./FramesViewport.svelte.ts";
   import type { Frame } from "./Frame.svelte.ts";
   import SVGCanvas from "../../components/SVG/SVGCanvas.svelte";
-  import SVGFOLDVertices from "../../components/SVG/SVGFOLDVertices.svelte";
+  //import SVGFOLDVertices from "../../components/SVG/SVGFOLDVertices.svelte";
   import SVGFOLDEdges from "../../components/SVG/SVGFOLDEdges.svelte";
   import SVGFOLDFaces from "../../components/SVG/SVGFOLDFaces.svelte";
   import app from "../../../app/App.svelte.js";

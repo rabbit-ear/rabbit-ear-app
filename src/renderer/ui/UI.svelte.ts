@@ -7,7 +7,6 @@ import { SVGViewport } from "./viewport/SVGViewport/SVGViewport.svelte.ts";
 import { WebGLViewport } from "./viewport/WebGLViewport/WebGLViewport.svelte.ts";
 // panels
 import AppPanel from "./panel/AppPanel.svelte";
-import DebugPanel from "./panel/DebugPanel.svelte";
 // hard-coded viewports, need to somehow auto-place them into the correct location
 import { TerminalViewport } from "./viewport/TerminalViewport/TerminalViewport.svelte.ts";
 import { FramesViewport } from "./viewport/FramesViewport/FramesViewport.svelte.ts";
@@ -34,14 +33,6 @@ const makeAppPanel = (): Panel => {
   return new AppClass();
 };
 
-const makeDebugPanel = (): Panel => {
-  class Debug implements Panel {
-    title = "Debug";
-    component = DebugPanel;
-  }
-  return new Debug();
-};
-
 export class UI {
   viewports: Viewport[] = $state([]);
   #tool: UITool | undefined = $state();
@@ -56,11 +47,10 @@ export class UI {
   // for example. multiple SVGViewports on screen but will only appear once
   #uniqueViewports: Viewport[] = $derived(uniqueObjects(this.viewports));
 
-  #appPanels: Panel[] = [makeAppPanel(), makeDebugPanel()];
+  #appPanels: Panel[] = [makeAppPanel()];
 
   #viewportPanels: Panel[] = $derived(
-    this.#uniqueViewports
-      .concat([this.terminalViewport, this.framesViewport])
+    [this.framesViewport, this.terminalViewport, ...this.#uniqueViewports]
       .map((view) => (view?.constructor as typeof ViewportStatics)?.panel)
       .concat([this.#tool?.panel])
       .filter((a) => a !== undefined),
@@ -116,7 +106,7 @@ export class UI {
 
   // manage viewport array
 
-  addViewport(ViewClass: typeof SVGViewport | typeof WebGLViewport | undefined): void {
+  addViewport(ViewClass?: typeof SVGViewport | typeof WebGLViewport): void {
     if (!ViewClass) {
       this.viewports.push(new SVGViewport());
     } else {
@@ -131,7 +121,7 @@ export class UI {
     this.viewports.splice(index, 1, new ViewClass());
   }
 
-  removeViewport(index: number | undefined): void {
+  removeViewport(index?: number): void {
     if (index === undefined) {
       this.viewports.pop();
     } else {

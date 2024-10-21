@@ -10,8 +10,8 @@
   </div>
   <div class="row gap">
     <p>View</p>
-    <button onclick={() => app.ui?.addViewport()}>+</button>
-    <button onclick={() => app.ui?.removeViewport()}>-</button>
+    <button onclick={(): void => app.ui?.addViewport()}>+</button>
+    <button onclick={(): void => app.ui?.removeViewport()}>-</button>
   </div>
 </div>
 

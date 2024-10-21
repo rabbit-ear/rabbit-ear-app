@@ -70,10 +70,6 @@ input[type="checkbox"] {
   height: 1rem;
 }
 
-input[type="checkbox"] + label {
-  margin-left: 0.5rem;
-}
-
 input[type="checkbox"]:focus {
   outline-offset: 2px;
   outline: 2px solid var(--uiblue);
@@ -132,11 +128,7 @@ input[type="range"] {
   background: transparent;
   cursor: pointer;
   width: 100%;
-  margin: 0.85rem 0;
-}
-
-label + input[type="range"] {
-  margin-left: 0.5rem;
+  margin: 0.25rem 0;
 }
 
 /*slider track*/
@@ -220,4 +212,20 @@ input[type="color"] {
   height: 2rem;
   margin: 0;
   padding: 0;
+}
+
+/* all form components, overrides */
+
+label + input[type="text"],
+label + input[type="number"],
+label + input[type="checkbox"],
+label + input[type="range"] {
+  margin-left: 0.5rem;
+}
+
+input[type="text"] + label,
+input[type="number"] + label,
+input[type="checkbox"] + label,
+input[type="range"] + label {
+  margin-left: 0.5rem;
 }

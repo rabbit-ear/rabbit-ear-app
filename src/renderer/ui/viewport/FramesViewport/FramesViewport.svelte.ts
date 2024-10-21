@@ -4,11 +4,12 @@ import type { Panel } from "../../panel/panel.ts";
 import FramesViewportComponent from "./FramesViewportComponent.svelte";
 import app from "../../../app/App.svelte.js";
 import { Frame } from "./Frame.svelte.ts";
-import { FramesPanel } from "./Panel.svelte.ts";
+import { FramesPanel } from "./Panels/Panel.svelte.ts";
 
 export class FramesViewport implements Viewport {
+  static panel: Panel = new FramesPanel();
+
   component: Component;
-  panel: Panel;
 
   redraw?: () => void;
 
@@ -46,7 +47,6 @@ export class FramesViewport implements Viewport {
 
   constructor() {
     this.component = FramesViewportComponent;
-    this.panel = new FramesPanel();
   }
 
   dealloc(): void {

@@ -75,7 +75,8 @@ hr {
   height: 1px;
   border: 0;
   padding: 0;
-  margin: 0.25rem auto;
+  /*margin: 0.25rem auto;*/
+  margin: 0;
   background-color: var(--background-4);
 }
 
