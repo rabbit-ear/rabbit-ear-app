@@ -1,8 +1,8 @@
 <script lang="ts">
-  import WebGLFOLD from "../../components/WebGL/WebGLFOLD.svelte";
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
+  import WebGLFOLD from "../../components/WebGL/WebGLFOLD.svelte";
   import app from "../../../app/App.svelte.ts";
-  import settings from "./Settings.svelte.ts";
+  import settings from "./Settings/ClassSettings.svelte.ts";
 
   type PropsType = {
     viewport: WebGLViewport;

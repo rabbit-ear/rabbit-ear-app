@@ -1,15 +1,15 @@
-import Keyboard from "../../../app/Keyboard.svelte.ts";
+import Keyboard from "../../../../app/Keyboard.svelte.ts";
 import {
   storageKeys,
   getStorageBoolean,
   getStorageNumber,
   getStorageString,
-} from "../../../app/localStorage.svelte.ts";
-import AppSettings from "../../../app/Settings.svelte.ts";
+} from "../../../../app/localStorage.svelte.ts";
+import AppSettings from "../../../../app/Settings.svelte.ts";
 
 // these are global view settings that apply to all instances of SVGViewport
 // accessible via the app: app.ui.types.SVGViewport.settings
-class Settings {
+class ClassSettings {
   // is the Y axis on top (true) or on bottom (false)?
   rightHanded: boolean = $derived(AppSettings.rightHanded);
 
@@ -25,11 +25,13 @@ class Settings {
   uiEpsilonFactor: number = $state(
     getStorageNumber(storageKeys.svgUIEpsilonFactor, 0.05),
   );
+
   // Snapping is zoom-level dependent, this is the factor
   // (out of 1) which is scaled to the viewbox to get the snap radius.
   snapRadiusFactor: number = $state(
     getStorageNumber(storageKeys.svgSnapRadiusFactor, 0.05),
   );
+
   radialSnap: boolean = $derived(Keyboard.shift);
   radialSnapDegrees: number = $state(
     getStorageNumber(storageKeys.svgRadialSnapDegrees, 22.5),
@@ -42,6 +44,7 @@ class Settings {
   strokeWidthAbsoluteMin: number = $state(
     getStorageNumber(storageKeys.svgStrokeWidthAbsoluteMin, 0.001),
   );
+
   vertexRadiusFactor: number = $state(
     getStorageNumber(storageKeys.svgVertexRadiusFactor, 0.00666),
   );
@@ -84,7 +87,9 @@ class Settings {
           String(this.vertexRadiusFactor),
         );
       });
-      return () => {};
+      return () => {
+        // empty
+      };
     });
   }
 
@@ -99,7 +104,7 @@ class Settings {
   }
 }
 
-export default new Settings();
+export default new ClassSettings();
 
 //class Settings {
 //  // is the Y axis on top (true) or on bottom (false)?

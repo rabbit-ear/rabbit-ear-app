@@ -33,6 +33,7 @@
         class={viewport?.constructor === WebGLViewport ? "highlighted" : ""}
         onclick={swapWebGL}>WebGL</button>
     </div>
+    <hr />
     {#if PanelComponent}
       <PanelComponent {panel} />
     {/if}

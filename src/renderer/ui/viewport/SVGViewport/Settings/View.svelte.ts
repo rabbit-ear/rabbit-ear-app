@@ -6,8 +6,8 @@ import {
   //makeMatrix2Translate,
   //makeMatrix2UniformScale,
 } from "rabbit-ear/math/matrix2.js";
-import { viewBoxOrigin } from "../../../general/matrix.ts";
-import settings from "./Settings.svelte.ts";
+import { viewBoxOrigin } from "../../../../general/matrix.ts";
+import settings from "./ClassSettings.svelte.ts";
 
 export class View {
   rightHanded = $derived(settings.rightHanded);

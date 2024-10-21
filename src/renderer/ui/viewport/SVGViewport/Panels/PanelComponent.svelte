@@ -1,5 +1,5 @@
 <script lang="ts">
-  import settings from "./Settings.svelte.ts";
+  import settings from "../Settings/ClassSettings.svelte.ts";
 </script>
 
 <div class="row toggle-row">

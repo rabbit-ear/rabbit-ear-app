@@ -26,13 +26,14 @@
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
     "earcut": "^3.0.0",
-    "electron-updater": "^6.1.7"
+    "electron-updater": "^6.1.7",
+    "rabbit-ear": "^0.9.4"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
-    "@sveltejs/vite-plugin-svelte": "^4.0.0-next.7",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@types/earcut": "^2.1.4",
     "@types/node": "^20.14.8",
     "electron": "^31.0.2",
@@ -43,8 +44,7 @@
     "js-tokens": "^9.0.0",
     "prettier": "^3.3.2",
     "prettier-plugin-svelte": "^3.2.5",
-    "rabbit-ear": "^0.9.4",
-    "svelte": "^5.0.0",
+    "svelte": "^5.0.4",
     "svelte-check": "^3.8.2",
     "tslib": "^2.6.3",
     "typescript": "^5.5.2",

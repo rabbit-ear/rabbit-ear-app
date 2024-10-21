@@ -6,39 +6,29 @@ import type {
   ViewportWheelEvent,
   ViewportTouchEvent,
 } from "../events.ts";
-import { identity4x4 } from "rabbit-ear/math/matrix4.js";
-import { unsetViewportEvents, type Viewport } from "../viewport.ts";
-import ViewportComponent from "./Viewport.svelte";
-import { ViewportPanel } from "./Panel.svelte.ts";
+import { ViewportStatics, unsetViewportEvents, type Viewport } from "../viewport.ts";
+import ViewportComponent from "./ViewportComponent.svelte";
+import { ViewportPanel } from "./Panels/Panel.svelte.ts";
+import { ClassPanel } from "./Panels/ClassPanel.svelte.ts";
+import settings from "./Settings/ClassSettings.svelte.ts";
+import { View } from "./Settings/View.svelte.ts";
 
-const defaultViewMatrix = (): number[] => [
-  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -5, 1,
-];
+//class Style {
+//  view: View;
+//  constructor(view: View) {
+//    this.view = view;
+//  }
+//}
 
-class WebGLViewportView {
-  projectionMatrix: number[] = $state([...identity4x4]);
-  viewMatrix: number[] = $state(defaultViewMatrix());
-  modelMatrix: number[] = $state([...identity4x4]);
-  canvasSize: [number, number] = $state([0, 0]);
-  perspective: string = $state("perspective");
+export class WebGLViewport extends ViewportStatics implements Viewport, ViewportEvents {
+  static settings = settings;
+  static panel = new ClassPanel();
 
-  vmax = 2;
-  vmin = 2;
-}
-
-class WebGLViewportStyle {
-  view: WebGLViewportView;
-  constructor(view: WebGLViewportView) {
-    this.view = view;
-  }
-}
-
-export class WebGLViewport implements Viewport, ViewportEvents {
   component: Component;
   panel: Panel;
 
-  view: WebGLViewportView;
-  style: WebGLViewportStyle;
+  view: View;
+  //style: Style;
 
   redraw?: () => void = $state();
 
@@ -58,9 +48,10 @@ export class WebGLViewport implements Viewport, ViewportEvents {
   // props?: unknown = $state();
 
   constructor() {
+    super();
     this.component = ViewportComponent;
-    this.view = new WebGLViewportView();
-    this.style = new WebGLViewportStyle(this.view);
+    this.view = new View();
+    //this.style = new Style(this.view);
     this.panel = new ViewportPanel();
   }
 

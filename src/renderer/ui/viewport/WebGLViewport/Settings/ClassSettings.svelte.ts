@@ -1,11 +1,11 @@
-import Keyboard from "../../../app/Keyboard.svelte.ts";
+import Keyboard from "../../../../app/Keyboard.svelte.ts";
 import {
   storageKeys,
   getStorageBoolean,
   getStorageNumber,
   getStorageString,
-} from "../../../app/localStorage.svelte.ts";
-import AppSettings from "../../../app/Settings.svelte.ts";
+} from "../../../../app/localStorage.svelte.ts";
+import AppSettings from "../../../../app/Settings.svelte.ts";
 
 // these are global view settings that apply to all instances of SVGViewport
 // accessible via the app: app.ui.types.SVGViewport.settings

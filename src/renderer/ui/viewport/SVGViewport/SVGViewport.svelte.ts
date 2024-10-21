@@ -1,4 +1,3 @@
-//import type { SVGAttributes } from "svelte/elements";
 import type { Component } from "svelte";
 import type { VecLine2 } from "rabbit-ear/types.js";
 import type { Viewport } from "../viewport.ts";
@@ -9,20 +8,20 @@ import type {
   ViewportTouchEvent,
 } from "../events.ts";
 import type { Panel } from "../../panel/panel.ts";
-import { unsetViewportEvents } from "../viewport.ts";
-import { Grid } from "./Grid.svelte.ts";
-import { Snap } from "./Snap.svelte.ts";
-import { Style } from "./Style.svelte.ts";
-import { View } from "./View.svelte.ts";
-import ViewportComponent from "./Viewport.svelte";
+import { ViewportStatics, unsetViewportEvents } from "../viewport.ts";
 import { clipLineInPolygon } from "./clip.ts";
-import settings from "./Settings.svelte.ts";
-import { ViewportPanel } from "./Panel.svelte.ts";
-//import PanelComponent from "./PanelComponent.svelte";
+import { Grid } from "./Settings/Grid.svelte.ts";
+import { Snap } from "./Settings/Snap.svelte.ts";
+import { View } from "./Settings/View.svelte.ts";
+import ViewportComponent from "./ViewportComponent.svelte";
+import settings from "./Settings/ClassSettings.svelte.ts";
+import { Style } from "./Settings/Style.svelte.ts";
+import { ViewportPanel } from "./Panels/Panel.svelte.ts";
+import { ClassPanel } from "./Panels/ClassPanel.svelte.ts";
 
-export class SVGViewport implements Viewport, ViewportEvents {
+export class SVGViewport extends ViewportStatics implements Viewport, ViewportEvents {
   static settings: typeof settings = settings;
-  //static panel: Panel = ViewportPanel;
+  static panel: Panel = new ClassPanel();
 
   component: Component;
   panel: Panel;
@@ -58,6 +57,7 @@ export class SVGViewport implements Viewport, ViewportEvents {
   onkeyup?: (event: KeyboardEvent) => void;
 
   constructor() {
+    super();
     this.component = ViewportComponent;
     this.view = new View();
     this.style = new Style(this.view);

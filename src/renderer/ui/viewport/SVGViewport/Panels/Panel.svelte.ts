@@ -1,11 +1,11 @@
 import type { Component } from "svelte";
-import type { Panel } from "../../panel/panel.ts";
+import type { Panel } from "../../../panel/panel.ts";
 import PanelComponent from "./PanelComponent.svelte";
 //import app from "../../../app/App.svelte.ts";
 
 export class ViewportPanel implements Panel {
   component: Component = PanelComponent;
-  title: string = "WebGL Viewport";
+  title: string = "SVG Viewport";
 
   constructor() {
     // pass data back up through the viewport: assign the SVGLayer and

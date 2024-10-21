@@ -11,11 +11,18 @@ export interface Deallocable {
   dealloc(): void;
 }
 
+export abstract class ViewportStatics {
+  static settings?: object;
+  static panel?: Panel;
+}
+
 // an abstract class would allow us to describe the "settings" static property.
 //export abstract class Viewport implements ViewportEvents, Deallocable {
 export interface Viewport extends ViewportEvents, Deallocable {
-  // to be implemented by each component:
-  // static settings: any;
+  // static properties (unable to be defined here, please define them)
+  // static settings?: any;
+  // static panel?: Panel;
+
   // an optional panel associated with this viewport.
   panel?: Panel;
 

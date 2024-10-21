@@ -1,5 +1,6 @@
 import type { UITool } from "./UITool.ts";
 import type { Viewport } from "./viewport/viewport.ts";
+import { ViewportStatics } from "./viewport/viewport.ts";
 import type { Panel } from "./panel/panel.ts";
 import Tools from "./tools/index.ts";
 import { SVGViewport } from "./viewport/SVGViewport/SVGViewport.svelte.ts";
@@ -10,6 +11,20 @@ import DebugPanel from "./panel/DebugPanel.svelte";
 // hard-coded viewports, need to somehow auto-place them into the correct location
 import { TerminalViewport } from "./viewport/TerminalViewport/TerminalViewport.svelte.ts";
 import { FramesViewport } from "./viewport/FramesViewport/FramesViewport.svelte.ts";
+
+// compares their constructors with ===
+const uniqueObjects = <T>(objs: T[]): T[] => {
+  const result: T[] = [];
+  objs.forEach((view, a) => {
+    for (let b = 0; b < a; b += 1) {
+      if (view.constructor === objs[b].constructor) {
+        return;
+      }
+    }
+    result.push(view);
+  });
+  return result;
+};
 
 const makeAppPanel = (): Panel => {
   class AppClass implements Panel {
@@ -37,18 +52,21 @@ export class UI {
   terminalViewport?: TerminalViewport;
   framesViewport?: FramesViewport;
 
-  // the complete set of panels are: app-wide panels + viewport panels + tool panels
-  //panels: Panel[] = $state([]);
+  // all viewports currently active, but only one instance of each.
+  // for example. multiple SVGViewports on screen but will only appear once
+  #uniqueViewports: Viewport[] = $derived(uniqueObjects(this.viewports));
+
   #appPanels: Panel[] = [makeAppPanel(), makeDebugPanel()];
 
   #viewportPanels: Panel[] = $derived(
-    this.viewports
+    this.#uniqueViewports
       .concat([this.terminalViewport, this.framesViewport])
-      .map((view) => view?.panel)
+      .map((view) => (view?.constructor as typeof ViewportStatics)?.panel)
       .concat([this.#tool?.panel])
       .filter((a) => a !== undefined),
   );
 
+  // the complete set of panels are: app-wide panels + viewport panels + tool panels
   panels: Panel[] = $derived(this.#appPanels.concat(this.#viewportPanels));
 
   // this binding allows each viewports' global settings objects to be accessed.
