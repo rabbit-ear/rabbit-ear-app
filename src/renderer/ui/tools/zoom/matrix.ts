@@ -1,9 +1,8 @@
 import {
+  makeMatrix2Translate,
   makeMatrix2UniformScale,
   multiplyMatrices2,
   determinant2,
-  makeMatrix2Translate,
-  invertMatrix2,
 } from "rabbit-ear/math/matrix2.js";
 import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import { getScreenPoint } from "../../../general/matrix.ts";
@@ -58,54 +57,14 @@ export const wheelEventZoomMatrix = (
 ): void => {
   const scaleOffset = deltaY / 333;
   const scale = 1 - scaleOffset;
-  const modelMatrix = viewport.view.model;
-  //const inverseModelMatrix = invertMatrix2(modelMatrix);
-  //console.log("modelMatrix", modelMatrix);
-  //console.log("inverseModelMatrix", inverseModelMatrix);
-  const screenPoint = getScreenPoint(point, modelMatrix);
-  //const screenPoint = point;
-  console.log("screenPoint", point, screenPoint);
+  const screenPoint = getScreenPoint(
+    point,
+    viewport.view.model,
+    viewport.view.rightHanded,
+  );
   const origin: [number, number] = screenPoint ? screenPoint : [0, 0];
-  // this fix does not work when the model matrix contains something other than x:0, y:0
-  //origin[1] *= viewport.view.rightHanded ? -1 : 1;
-  if (viewport.view.rightHanded) {
-    //console.log("model matrix", modelMatrix);
-    origin[1] *= -1;
-    origin[1] += -(modelMatrix[5] * 2);
-    //console.log("origin", origin);
-  }
-  //viewport.view.camera = zoomCameraMatrix(viewport.view.camera, scale, origin);
-  const newMat = zoomCameraMatrix(viewport.view.camera, scale, origin);
-  //console.log("new camera matrix", newMat);
-  viewport.view.camera = newMat;
+  viewport.view.camera = zoomCameraMatrix(viewport.view.camera, scale, origin);
 };
-
-//export const wheelEventZoomMatrix = (
-//  viewport: SVGViewport,
-//  { point, deltaY }: { point: [number, number]; deltaY: number },
-//): void => {
-//  const scaleOffset = deltaY / 333;
-//  const scale = 1 - scaleOffset;
-//  const modelMatrix = viewport.view.model;
-//  //const inverseModelMatrix = invertMatrix2(modelMatrix);
-//  //console.log("modelMatrix", modelMatrix);
-//  //console.log("inverseModelMatrix", inverseModelMatrix);
-//  const screenPoint = getScreenPoint(point, modelMatrix);
-//  console.log("screenPoint", point, screenPoint);
-//  const origin: [number, number] = screenPoint ? screenPoint : [0, 0];
-//  // this fix does not work when the model matrix contains something other than x:0, y:0
-//  //origin[1] *= viewport.view.rightHanded ? -1 : 1;
-//  if (viewport.view.rightHanded) {
-//    //console.log("model matrix", modelMatrix);
-//    origin[1] *= -1;
-//    origin[1] += -(modelMatrix[5] * 2);
-//    //console.log("origin", origin);
-//  }
-//  //viewport.view.camera = zoomCameraMatrix(viewport.view.camera, scale, origin);
-//  const newMat = zoomCameraMatrix(viewport.view.camera, scale, origin);
-//  //console.log("new camera matrix", newMat);
-//  viewport.view.camera = newMat;
-//};
 
 /**
  *

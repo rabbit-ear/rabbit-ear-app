@@ -2,6 +2,7 @@ import {
   identity2x3,
   invertMatrix2,
   multiplyMatrix2Vector2,
+  multiplyMatrices2,
 } from "rabbit-ear/math/matrix2.js";
 import { magnitude2, subtract2 } from "rabbit-ear/math/vector.js";
 import {
@@ -64,14 +65,17 @@ export const viewBoxOrigin = (
 export const getScreenPoint = (
   point: [number, number],
   modelMatrix: number[],
+  invertY: boolean,
 ): [number, number] | undefined => {
   if (point === undefined) {
     return undefined;
   }
+  const handedness = invertY ? [1, 0, 0, -1, 0, 0] : [1, 0, 0, 1, 0, 0];
   const inverseModelMatrix = invertMatrix2(modelMatrix);
-  return inverseModelMatrix === undefined
-    ? point
-    : multiplyMatrix2Vector2(inverseModelMatrix, point);
+  const inverseMatrix = !inverseModelMatrix
+    ? undefined
+    : multiplyMatrices2(inverseModelMatrix, handedness);
+  return !inverseMatrix ? point : multiplyMatrix2Vector2(inverseMatrix, point);
 };
 
 /**

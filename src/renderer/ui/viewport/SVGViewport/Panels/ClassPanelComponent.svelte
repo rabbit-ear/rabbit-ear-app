@@ -35,27 +35,38 @@
   });
 </script>
 
-<div class="row">
-  {#if panel.cursor}
-    <p>{niceNumber(panel.cursor[0], 4)}, {niceNumber(panel.cursor[1], 4)}</p>
-  {/if}
-</div>
+<div class="column gap">
+  <div class="row">
+    {#if panel.cursor}
+      <p>{niceNumber(panel.cursor[0], 4)}, {niceNumber(panel.cursor[1], 4)}</p>
+    {/if}
+  </div>
 
-<div class="row">
-  <label for="input-stroke-width-slider">stroke</label>
-  <input
-    id="input-stroke-width-slider"
-    type="range"
-    min="1"
-    max="20"
-    step="0.01"
-    bind:value={strokeWidthSlider} />
+  <div class="row">
+    <label for="input-stroke-width-slider">stroke</label>
+    <input
+      id="input-stroke-width-slider"
+      type="range"
+      min="1"
+      max="20"
+      step="0.01"
+      bind:value={strokeWidthSlider} />
+  </div>
 </div>
 
 <style>
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+
   .row {
     display: flex;
     flex-direction: row;
     align-items: center;
+  }
+
+  .gap {
+    gap: var(--form-gap);
   }
 </style>
