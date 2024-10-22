@@ -35,7 +35,7 @@
     </div>
     <hr />
     {#if PanelComponent}
-      <PanelComponent {panel} />
+      <PanelComponent {viewport} {panel} />
     {/if}
   </div>
 </Wrapper>

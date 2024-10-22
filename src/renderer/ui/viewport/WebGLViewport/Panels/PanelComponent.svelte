@@ -1,8 +1,12 @@
 <script lang="ts">
   import { untrack } from "svelte";
   import settings from "../Settings/ClassSettings.svelte.ts";
+  import type { WebGLViewport } from "../WebGLViewport.svelte.ts";
+  import type { ViewportPanel } from "./Panel.svelte.ts";
 
-  let isFolded = $derived(settings.renderStyle === "foldedForm");
+  let { panel, viewport }: { panel: ViewportPanel; viewport: WebGLViewport } = $props();
+
+  let isFolded = $derived(viewport.view.renderStyle === "foldedForm");
 
   let strokeWidthSlider = $state(5);
   let layerNudgeSlider = $state(6);
@@ -48,35 +52,38 @@
   });
 
   const swapColors = (): void => {
-    [settings.frontColor, settings.backColor] = [settings.backColor, settings.frontColor];
+    [viewport.view.frontColor, viewport.view.backColor] = [
+      viewport.view.backColor,
+      viewport.view.frontColor,
+    ];
   };
 </script>
 
 <div class="row toggle-row">
   <button
-    class={settings.perspective === "orthographic" ? "highlighted" : ""}
+    class={viewport.view.perspective === "orthographic" ? "highlighted" : ""}
     onclick={(): void => {
-      settings.perspective = "orthographic";
+      viewport.view.perspective = "orthographic";
     }}>2D</button>
   <button
-    class={settings.perspective === "perspective" ? "highlighted" : ""}
+    class={viewport.view.perspective === "perspective" ? "highlighted" : ""}
     onclick={(): void => {
-      settings.perspective = "perspective";
+      viewport.view.perspective = "perspective";
     }}>3D</button>
 </div>
 
 <div class="row toggle-row">
   <button
-    class={settings.renderStyle === "creasePattern" ? "highlighted" : ""}
-    onclick={(): string => (settings.renderStyle = "creasePattern")}>cp</button>
+    class={viewport.view.renderStyle === "creasePattern" ? "highlighted" : ""}
+    onclick={(): string => (viewport.view.renderStyle = "creasePattern")}>cp</button>
   <button
-    class={settings.renderStyle === "foldedForm" ? "highlighted" : ""}
-    onclick={(): string => (settings.renderStyle = "foldedForm")}>folded</button>
+    class={viewport.view.renderStyle === "foldedForm" ? "highlighted" : ""}
+    onclick={(): string => (viewport.view.renderStyle = "foldedForm")}>folded</button>
 </div>
 
 <div class="row">
   <label for="input-fov">FOV</label>
-  <input type="text" bind:value={settings.fov} id="input-fov" />
+  <input type="text" bind:value={viewport.view.fov} id="input-fov" />
 </div>
 
 <div class="row">
@@ -92,8 +99,8 @@
 
 {#if isFolded}
   <div class="row">
-    <input type="color" bind:value={settings.frontColor} />
-    <input type="color" bind:value={settings.backColor} />
+    <input type="color" bind:value={viewport.view.frontColor} />
+    <input type="color" bind:value={viewport.view.backColor} />
     <button aria-label="swap" class="swap" onclick={swapColors}>
       <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -110,15 +117,15 @@
     <input
       type="checkbox"
       id="checkbox-show-folded-faces"
-      bind:checked={settings.showFoldedFaces} /><label for="checkbox-show-folded-faces"
-      >show face</label>
+      bind:checked={viewport.view.showFoldedFaces} /><label
+      for="checkbox-show-folded-faces">show face</label>
   </div>
 
   <div class="row">
     <input
       type="checkbox"
       id="checkbox-show-folded-creases"
-      bind:checked={settings.showFoldedCreases} /><label
+      bind:checked={viewport.view.showFoldedCreases} /><label
       for="checkbox-show-folded-creases">show creases</label>
   </div>
 
@@ -126,7 +133,7 @@
     <input
       type="checkbox"
       id="checkbox-show-folded-face-outlines"
-      bind:checked={settings.showFoldedFaceOutlines} /><label
+      bind:checked={viewport.view.showFoldedFaceOutlines} /><label
       for="checkbox-show-folded-face-outlines">show face outlines</label>
   </div>
 

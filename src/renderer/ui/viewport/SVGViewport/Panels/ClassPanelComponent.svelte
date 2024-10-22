@@ -1,6 +1,12 @@
 <script lang="ts">
   import { untrack } from "svelte";
+  import type { ClassPanel } from "./ClassPanel.svelte.ts";
+  //import type { SVGViewport } from "../SVGViewport.svelte.ts";
   import settings from "../Settings/ClassSettings.svelte.ts";
+  import { niceNumber } from "../../../../general/epsilon.ts";
+
+  //let { panel, viewport }: { panel: ClassPanel; viewport: SVGViewport } = $props();
+  let { panel }: { panel: ClassPanel } = $props();
 
   let strokeWidthSlider = $state(5);
 
@@ -28,6 +34,12 @@
     settings.strokeWidthFactor = newStrokeWidth;
   });
 </script>
+
+<div class="row">
+  {#if panel.cursor}
+    <p>{niceNumber(panel.cursor[0], 4)}, {niceNumber(panel.cursor[1], 4)}</p>
+  {/if}
+</div>
 
 <div class="row">
   <label for="input-stroke-width-slider">stroke</label>

@@ -29,6 +29,11 @@
   });
 </script>
 
+<div class="row toggle-row">
+  <button>A</button>
+  <button>B</button>
+</div>
+
 <div class="row">
   <label for="input-stroke-width-slider">stroke</label>
   <input

@@ -13,18 +13,8 @@ class Settings {
   // is the Y axis on top (true) or on bottom (false)?
   rightHanded: boolean = $derived(AppSettings.rightHanded);
 
-  perspective: string = $state("perspective");
-  renderStyle: string = $state("creasePattern");
   layerNudge: number = $state(0.01);
-  fov: number = $state(30.25);
-  darkMode: boolean = $state(true);
-  frontColor: string = $state("#1177FF");
-  backColor: string = $state("#ffffff");
   strokeWidth: number = $state(0.0025);
-  opacity: number = $state(1);
-  showFoldedFaceOutlines: boolean = $state(true);
-  showFoldedCreases: boolean = $state(false);
-  showFoldedFaces: boolean = $state(true);
 
   // the unit grid that contributes to snap points ("square" or "triangle")
   tiling: string = $state(getStorageString(storageKeys.svgTiling, "square"));
@@ -38,6 +28,7 @@ class Settings {
   uiEpsilonFactor: number = $state(
     getStorageNumber(storageKeys.svgUIEpsilonFactor, 0.05),
   );
+
   // Snapping is zoom-level dependent, this is the factor
   // (out of 1) which is scaled to the viewbox to get the snap radius.
   snapRadiusFactor: number = $state(
@@ -55,6 +46,7 @@ class Settings {
   strokeWidthAbsoluteMin: number = $state(
     getStorageNumber(storageKeys.svgStrokeWidthAbsoluteMin, 0.001),
   );
+
   vertexRadiusFactor: number = $state(
     getStorageNumber(storageKeys.svgVertexRadiusFactor, 0.00666),
   );

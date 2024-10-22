@@ -6,6 +6,8 @@ export class ClassPanel implements Panel {
   component: Component = ClassPanelComponent;
   title: string = "SVG Viewports";
 
+  cursor: [number, number] = $state();
+
   constructor() {
     // empty
   }

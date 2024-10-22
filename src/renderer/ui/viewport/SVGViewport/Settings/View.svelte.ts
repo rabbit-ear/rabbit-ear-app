@@ -1,3 +1,4 @@
+import { untrack } from "svelte";
 import {
   identity2x3,
   invertMatrix2,
@@ -6,7 +7,8 @@ import {
   //makeMatrix2Translate,
   //makeMatrix2UniformScale,
 } from "rabbit-ear/math/matrix2.js";
-import { viewBoxOrigin } from "../../../../general/matrix.ts";
+import { viewBoxOrigin, graphToMatrix2 } from "../../../../general/matrix.ts";
+import app from "../../../../app/App.svelte.ts";
 import settings from "./ClassSettings.svelte.ts";
 
 export class View {
@@ -94,11 +96,32 @@ export class View {
     [this.aspectFitViewBox[0], this.aspectFitViewBox[1] + this.aspectFitViewBox[3]],
   ]);
 
+  // track model, on change, set model matrix to aspect-fit matrix
+  #makeModelMatrixEffect(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const matrix = graphToMatrix2(app?.file?.graph);
+        console.log("new SVG Model matrix", matrix);
+        untrack(() => {
+          this.model = matrix;
+        });
+      });
+      return (): void => {};
+    });
+  }
+
+  #unsub: (() => void)[] = [];
+
+  constructor() {
+    this.#unsub = [this.#makeModelMatrixEffect()];
+  }
+
   resetCamera(): void {
     this.camera = [...identity2x3];
   }
 
   resetModel(): void {
+    console.log("reset model");
     this.#model = [...identity2x3];
     //this.#model = graphToMatrix2(this.graph, Settings.rightHanded);
   }
@@ -106,5 +129,9 @@ export class View {
   reset(): void {
     this.resetCamera();
     this.resetModel();
+  }
+
+  dealloc(): void {
+    this.#unsub.forEach((fn) => fn());
   }
 }

@@ -22,15 +22,15 @@
   bind:redraw={viewport.redraw}
   perspective={viewport.view.perspective}
   viewMatrix={viewport.view.viewMatrix}
-  renderStyle={settings.renderStyle}
+  renderStyle={viewport.view.renderStyle}
   layerNudge={settings.layerNudge}
-  fov={settings.fov}
-  darkMode={settings.darkMode}
-  frontColor={settings.frontColor}
-  backColor={settings.backColor}
+  fov={viewport.view.fov}
+  darkMode={viewport.view.darkMode}
+  frontColor={viewport.view.frontColor}
+  backColor={viewport.view.backColor}
   strokeWidth={settings.strokeWidth}
-  opacity={settings.opacity}
-  showFoldedFaceOutlines={settings.showFoldedFaceOutlines}
-  showFoldedCreases={settings.showFoldedCreases}
-  showFoldedFaces={settings.showFoldedFaces}
+  opacity={viewport.view.opacity}
+  showFoldedFaceOutlines={viewport.view.showFoldedFaceOutlines}
+  showFoldedCreases={viewport.view.showFoldedCreases}
+  showFoldedFaces={viewport.view.showFoldedFaces}
   {...rest} />

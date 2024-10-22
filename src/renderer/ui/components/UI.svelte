@@ -12,6 +12,7 @@
 
   // initial set of viewports
   app.ui?.viewports.push(new SVGViewport(), new WebGLViewport());
+  app.ui?.setToolName("line");
 </script>
 
 <main class="vertical">
