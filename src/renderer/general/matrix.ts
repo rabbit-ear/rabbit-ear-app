@@ -23,7 +23,6 @@ import { boundingBox } from "rabbit-ear/graph/boundary.js";
  */
 export const graphToMatrix2 = (graph = {}, verticalUp = false): number[] => {
   const box = boundingBox(graph);
-  // console.log("graphToMatrix2", box, graph, verticalUp);
   // no vertices
   if (!box || !box.span || !box.min) {
     return verticalUp ? [1, 0, 0, 1, 0, -1] : [...identity2x3];

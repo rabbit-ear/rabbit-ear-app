@@ -1,6 +1,9 @@
 <script lang="ts">
   import app from "../../app/App.svelte.ts";
   import Settings from "../../app/Settings.svelte.ts";
+
+  //let showScriptView: boolean = $state(false);
+  //$effect(() => app.ui?.showScriptViewport(showScriptView));
 </script>
 
 <div class="column gap">
@@ -13,6 +16,15 @@
     <button onclick={(): void => app.ui?.addViewport()}>+</button>
     <button onclick={(): void => app.ui?.removeViewport()}>-</button>
   </div>
+  <div class="row gap">
+    <button onclick={(): void => app.ui?.addScriptViewport()}>Script Editor</button>
+  </div>
+  <!--
+  <div class="row gap">
+    <input type="checkbox" id="checkbox-script-view" bind:checked={showScriptView} />
+    <label for="checkbox-script-view">Script Editor</label>
+  </div>
+  -->
 </div>
 
 <style>

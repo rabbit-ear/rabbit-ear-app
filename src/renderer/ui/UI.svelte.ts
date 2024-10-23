@@ -1,3 +1,4 @@
+import { untrack } from "svelte";
 import type { UITool } from "./UITool.ts";
 import type { Viewport } from "./viewport/viewport.ts";
 import { ViewportStatics } from "./viewport/viewport.ts";
@@ -5,6 +6,7 @@ import type { Panel } from "./panel/panel.ts";
 import Tools from "./tools/index.ts";
 import { SVGViewport } from "./viewport/SVGViewport/SVGViewport.svelte.ts";
 import { WebGLViewport } from "./viewport/WebGLViewport/WebGLViewport.svelte.ts";
+import { ScriptViewport } from "./viewport/ScriptViewport/ScriptViewport.svelte.ts";
 // panels
 import AppPanel from "./panel/AppPanel.svelte";
 // hard-coded viewports, need to somehow auto-place them into the correct location
@@ -58,12 +60,6 @@ export class UI {
 
   // the complete set of panels are: app-wide panels + viewport panels + tool panels
   panels: Panel[] = $derived(this.#appPanels.concat(this.#viewportPanels));
-
-  // this binding allows each viewports' global settings objects to be accessed.
-  types = {
-    SVGViewport,
-    WebGLViewport,
-  };
 
   get tool(): UITool | undefined {
     return this.#tool;
@@ -127,6 +123,24 @@ export class UI {
     } else {
       this.viewports.splice(index, 1);
     }
+  }
+
+  addScriptViewport(): void {
+    this.viewports.push(new ScriptViewport());
+  }
+
+  showScriptViewport(visible: boolean): void {
+    untrack(() => {
+      if (visible) {
+        this.viewports = this.viewports
+          .filter((view) => view.constructor !== ScriptViewport)
+          .concat([new ScriptViewport()]);
+      } else {
+        this.viewports = this.viewports.filter(
+          (view) => view.constructor !== ScriptViewport,
+        );
+      }
+    });
   }
 
   // this is not really planned, but if ever the app was to completely de-initialize and

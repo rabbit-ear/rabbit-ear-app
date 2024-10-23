@@ -96,14 +96,16 @@ export class View {
     [this.aspectFitViewBox[0], this.aspectFitViewBox[1] + this.aspectFitViewBox[3]],
   ]);
 
-  // track model, on change, set model matrix to aspect-fit matrix
+  // reset model and camera matrix to aspect fit. the effect is watching:
+  // - this.file.graph
+  // - this.rightHanded
   #makeModelMatrixEffect(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const matrix = graphToMatrix2(app?.file?.graph);
-        console.log("new SVG Model matrix", matrix);
+        const matrix = graphToMatrix2(app?.file?.graph, this.rightHanded);
         untrack(() => {
-          this.model = matrix;
+          this.#model = matrix;
+          this.camera = [...identity2x3];
         });
       });
       return (): void => {};
@@ -120,10 +122,10 @@ export class View {
     this.camera = [...identity2x3];
   }
 
+  // todo: not sure that this is ever being called.
   resetModel(): void {
     console.log("reset model");
     this.#model = [...identity2x3];
-    //this.#model = graphToMatrix2(this.graph, Settings.rightHanded);
   }
 
   reset(): void {
