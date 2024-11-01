@@ -5,6 +5,7 @@
   import app from "../../app/App.svelte";
   import { SVGViewport } from "../viewport/SVGViewport/SVGViewport.svelte.ts";
   import { WebGLViewport } from "../viewport/WebGLViewport/WebGLViewport.svelte.ts";
+  import { SimulatorViewport } from "../viewport/SimulatorViewport/SimulatorViewport.svelte.ts";
 
   let {
     index,
@@ -17,6 +18,7 @@
 
   const swapSVG = (): void => app.ui?.swapViewport(index, SVGViewport);
   const swapWebGL = (): void => app.ui?.swapViewport(index, WebGLViewport);
+  const swapSimulator = (): void => app.ui?.swapViewport(index, SimulatorViewport);
 
   let pad = $state("0.5rem");
   // background-color: #0002;
@@ -32,6 +34,9 @@
       <button
         class={viewport?.constructor === WebGLViewport ? "highlighted" : ""}
         onclick={swapWebGL}>WebGL</button>
+      <button
+        class={viewport?.constructor === SimulatorViewport ? "highlighted" : ""}
+        onclick={swapSimulator}>Sim</button>
     </div>
     <hr />
     {#if PanelComponent}

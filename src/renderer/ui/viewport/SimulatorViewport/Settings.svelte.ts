@@ -7,25 +7,16 @@
 //} from "../../../app/localStorage.svelte.ts";
 //import AppSettings from "../../../app/Settings.svelte.ts";
 
-// these are global view settings that apply to all instances of SVGViewport
-// accessible via the app: app.ui.types.SVGViewport.settings
+// these are global view settings that apply to all instances of SimulatorViewport
+// accessible via the app: app.ui.types.SimulatorViewport.settings
 class Settings {
-  vim: boolean = $state(true);
+  // override the material to show the model's strain forces
+  strain = $state(false);
 
-  fontSize: number = $state(16);
-  textColor: string = $state("#ffffff");
-
-  //#bindToLocalStorage(): () => void {
-  //  return $effect.root(() => {
-  //    $effect(() => {
-  //      localStorage.setItem(storageKeys.scriptFontSize, String(this.fontSize));
-  //    });
-  //    return () => { };
-  //  });
-  //}
+  // ask origami simulator to export the current 3D state
+  exportModel = $state(() => { });
 
   unbind: (() => void)[] = [];
-
   constructor() {
     //this.unbind = [this.#bindToLocalStorage()];
   }

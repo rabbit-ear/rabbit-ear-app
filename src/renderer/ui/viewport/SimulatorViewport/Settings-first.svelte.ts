@@ -10,10 +10,7 @@
 // these are global view settings that apply to all instances of SVGViewport
 // accessible via the app: app.ui.types.SVGViewport.settings
 class Settings {
-  vim: boolean = $state(true);
-
-  fontSize: number = $state(16);
-  textColor: string = $state("#ffffff");
+  foldAmount: number = $state(0.0);
 
   //#bindToLocalStorage(): () => void {
   //  return $effect.root(() => {

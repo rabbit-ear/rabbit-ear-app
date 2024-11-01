@@ -30,6 +30,7 @@
     "@codemirror/view": "^6.34.1",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
+    "@replit/codemirror-vim": "^6.2.1",
     "codemirror": "^6.0.1",
     "earcut": "^3.0.0",
     "electron-updater": "^6.1.7",

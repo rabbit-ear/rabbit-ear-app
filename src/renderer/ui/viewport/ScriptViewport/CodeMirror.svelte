@@ -7,6 +7,7 @@
   import { oneDark } from "@codemirror/theme-one-dark";
   import { foldGutter } from "@codemirror/language";
   import { closeSearchPanel, openSearchPanel, search } from "@codemirror/search";
+  import { vim } from "@replit/codemirror-vim";
 
   let { ...rest } = $props();
 
@@ -18,6 +19,7 @@
 `;
 
   const extensions = [
+    vim(),
     keymap.of(defaultKeymap),
     basicSetup,
     keymap.of([indentWithTab]),

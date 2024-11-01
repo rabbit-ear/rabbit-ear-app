@@ -6,6 +6,7 @@ import type { Panel } from "./panel/panel.ts";
 import Tools from "./tools/index.ts";
 import { SVGViewport } from "./viewport/SVGViewport/SVGViewport.svelte.ts";
 import { WebGLViewport } from "./viewport/WebGLViewport/WebGLViewport.svelte.ts";
+import { SimulatorViewport } from "./viewport/SimulatorViewport/SimulatorViewport.svelte.ts";
 import { ScriptViewport } from "./viewport/ScriptViewport/ScriptViewport.svelte.ts";
 // panels
 import AppPanel from "./panel/AppPanel.svelte";
@@ -102,7 +103,9 @@ export class UI {
 
   // manage viewport array
 
-  addViewport(ViewClass?: typeof SVGViewport | typeof WebGLViewport): void {
+  addViewport(
+    ViewClass?: typeof SVGViewport | typeof WebGLViewport | typeof SimulatorViewport,
+  ): void {
     if (!ViewClass) {
       this.viewports.push(new SVGViewport());
     } else {
@@ -112,7 +115,7 @@ export class UI {
 
   swapViewport(
     index: number,
-    ViewClass: typeof SVGViewport | typeof WebGLViewport,
+    ViewClass: typeof SVGViewport | typeof WebGLViewport | typeof SimulatorViewport,
   ): void {
     this.viewports.splice(index, 1, new ViewClass());
   }
