@@ -6,6 +6,22 @@ import { type FilePathInfo, getFilePathInfo } from "./path.ts";
 import { validateFileType } from "./validate.ts";
 
 /**
+ * @description The directory "Resources" inside of the application bundle
+ */
+export const getResourcesDirectory = (): string =>
+  process.platform === "win32"
+    ? path.join(app.getAppPath(), "/")
+    : path.join(app.getAppPath(), "/../");
+
+/**
+ * @description The directory the application resides inside.
+ */
+export const getBaseDirectory = (): string =>
+  process.platform === "win32"
+    ? path.join(app.getAppPath(), "/../../../")
+    : path.join(app.getAppPath(), "/../../../../");
+
+/**
  * @description Perform an "Open File" operation, which tells the system
  * to open an open file dialog.
  */

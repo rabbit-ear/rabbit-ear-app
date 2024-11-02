@@ -101,10 +101,10 @@ export const cross = (
   v: [number, number, number],
   u: [number, number, number],
 ): [number, number, number] => [
-    v[1] * u[2] - v[2] * u[1],
-    v[2] * u[0] - v[0] * u[2],
-    v[0] * u[1] - v[1] * u[0],
-  ];
+  v[1] * u[2] - v[2] * u[1],
+  v[2] * u[0] - v[0] * u[2],
+  v[0] * u[1] - v[1] * u[0],
+];
 
 /**
  * @description compute the distance between two 3D vectors

@@ -6,7 +6,8 @@
   import { javascript } from "@codemirror/lang-javascript";
   import { oneDark } from "@codemirror/theme-one-dark";
   import { foldGutter } from "@codemirror/language";
-  import { closeSearchPanel, openSearchPanel, search } from "@codemirror/search";
+  //import { closeSearchPanel, openSearchPanel, search } from "@codemirror/search";
+  import { search } from "@codemirror/search";
   import { vim } from "@replit/codemirror-vim";
 
   let { ...rest } = $props();

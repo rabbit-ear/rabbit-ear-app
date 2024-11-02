@@ -9,6 +9,7 @@ import Settings from "./Settings.svelte.ts";
 
 // example file
 import craneString from "../../../resources/crane.fold?raw";
+import { TextCommand } from "../kernel/commands/Text.ts";
 
 class Application {
   settings: typeof Settings;
@@ -27,6 +28,18 @@ class Application {
 
     // load example file
     this.#fileManager.loadUntitled(JSON.parse(craneString));
+
+    this.bootInformation();
+  }
+
+  // some general app info to print to the console on boot
+  async bootInformation(): Promise<void> {
+    console.log(window, window.api);
+    const baseDirectory = await window?.api?.getBaseDirectory?.();
+    const bootInfo = baseDirectory
+      ? `app started ${new Date()} from ${baseDirectory}`
+      : `app started ${new Date()}`;
+    this.invoker.executeCommand(new TextCommand(bootInfo));
   }
 
   get file(): File | undefined {

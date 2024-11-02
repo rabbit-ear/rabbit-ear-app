@@ -1,4 +1,3 @@
-
 /**
  * @description Given a number (N) find the largest number (x) which satisfies:
  * N < Pow(x, 2)

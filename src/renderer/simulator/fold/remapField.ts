@@ -1,10 +1,12 @@
-const keysStartingWith = (fold, prefix) =>
+import type { FOLD } from "../types.ts";
+
+const keysStartingWith = (fold, prefix): string[] =>
   Object.keys(fold).filter((key) => key.slice(0, prefix.length) === prefix);
 
-const keysEndingWith = (fold, suffix) =>
+const keysEndingWith = (fold, suffix): string[] =>
   Object.keys(fold).filter((key) => key.slice(-suffix.length) === suffix);
 
-const remapField = (fold, field, old2new) => {
+const remapField = (fold, field, old2new): FOLD => {
   const new2old: number[] = [];
   // later overwrites earlier
   for (let i = 0; i < old2new.length; i += 1) {

@@ -21,7 +21,8 @@ class Settings {
   error = $state(0);
 
   // reset the vertices back to their starting location
-  reset = $state(() => { });
+  reset = $state(() => {});
+  exportModel = $state(() => {});
 }
 
 export default new Settings();

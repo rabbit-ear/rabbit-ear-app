@@ -19,9 +19,9 @@ export const exportFOLD = (
   model: Model,
   foldUnmodified: FOLD,
   foldTriangulated: FOLDMesh,
-  { triangulated, angles }: { triangulated?: boolean; angles?: boolean } = {},
-) => {
-
+  { triangulated }: { triangulated?: boolean } = {},
+  //{ triangulated, angles }: { triangulated?: boolean; angles?: boolean } = {},
+): FOLD => {
   if (!model.positions || !foldUnmodified.vertices_coords) {
     triangulated = true;
   } else {

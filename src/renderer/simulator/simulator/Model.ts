@@ -71,8 +71,11 @@ export class Model {
     // that also works with the ray caster. for whatever reason,
     // translating the model or translating a parent layer causes the
     // raycaster to fail outside of the boundary which would have been eclipsed.
-    this.fold.vertices_coords = this.fold.vertices_coords
-      .map(([x, y, z]) => [x - center[0], y - center[1], z - center[2]]);
+    this.fold.vertices_coords = this.fold.vertices_coords.map(([x, y, z]) => [
+      x - center[0],
+      y - center[1],
+      z - center[2],
+    ]);
     this.fold.vertices_coordsInitial = structuredClone(this.fold.vertices_coords);
 
     this.#axialStiffness = 20;
@@ -152,7 +155,7 @@ export class Model {
    * @description Some properties require rewrite to the shader textures,
    * after setting these properties, call this to update the texture data.
    */
-  update(initing: boolean = false) {
+  update(initing: boolean = false): void {
     // { creaseMeta, textureDimCreases }
     this.gpuMath.updateCreasesMeta(this, initing);
     // { meta, beamMeta, textureDimNodeEdges }
@@ -178,7 +181,9 @@ export class Model {
     this.update();
   }
 
-  get axialStiffness(): number { return this.#axialStiffness; }
+  get axialStiffness(): number {
+    return this.#axialStiffness;
+  }
   set axialStiffness(value: string | number) {
     const number = typeof value === "number" ? value : parseFloat(value);
     this.gpuMath.setProgram("velocityCalc");
@@ -268,9 +273,9 @@ export class Model {
     return exportFOLD(this, this.initialFOLD, this.fold, options);
   }
 
-  dealloc() {
-    console.log("Model dealloc()");
-    this.fold = {};
+  dealloc(): void {
+    //this.fold = {};
+    this.fold = undefined;
     this.initialFOLD = {};
     this.nodes.forEach(destroyNode);
     this.edges.forEach((edge) => edge.destroy());

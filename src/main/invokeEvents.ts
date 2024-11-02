@@ -5,6 +5,7 @@ import {
   openFile as fsOpenFile,
   saveFile as fsSaveFile,
   saveFileAs as fsSaveFileAs,
+  getBaseDirectory as fsGetBaseDirectory,
 } from "./fs/file.ts";
 import { unsavedChanges } from "./dialog/dialogs.ts";
 
@@ -41,3 +42,6 @@ export const saveFile = async (
   fileInfo: FilePathInfo,
   data: string,
 ): Promise<boolean> => fsSaveFile(fileInfo, data);
+
+export const getBaseDirectory = async (_: IpcMainInvokeEvent): Promise<string> =>
+  fsGetBaseDirectory();

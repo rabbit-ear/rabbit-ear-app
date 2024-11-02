@@ -17,7 +17,7 @@ const sortVerticesCounterClockwise = (
   { vertices_coords = [] }: FOLD,
   vertices: number[],
   vertex: number,
-) =>
+): number[] =>
   vertices
     .map((v) => vertices_coords[v])
     .map(resize2)
@@ -37,7 +37,7 @@ const sortVerticesCounterClockwise = (
  * @returns {number[][]} array of array of numbers, where each row corresponds to a
  * vertex index and the values in the inner array are edge indices.
  */
-export const makeVerticesEdgesUnsorted = ({ edges_vertices = [] }: FOLD) => {
+export const makeVerticesEdgesUnsorted = ({ edges_vertices = [] }: FOLD): number[][] => {
   const vertices_edges: number[][] = [];
   // iterate over edges_vertices and swap the index for each of the contents
   // each edge (index 0: [3, 4]) will be converted into (index 3: [0], index 4: [0])
@@ -61,7 +61,9 @@ export const makeVerticesEdgesUnsorted = ({ edges_vertices = [] }: FOLD) => {
  * @param {FOLD} graph a FOLD object, containing edges_vertices
  * @returns {object} space-separated vertex pair keys, edge indices values
  */
-const makeVerticesToEdgeBidirectional = ({ edges_vertices = [] }: FOLD) => {
+const makeVerticesToEdgeBidirectional = ({
+  edges_vertices = [],
+}: FOLD): { [key: string]: number } => {
   const map = {};
   edges_vertices
     .map((ev) => ev.join(" "))
@@ -83,7 +85,10 @@ const makeVerticesToEdgeBidirectional = ({ edges_vertices = [] }: FOLD) => {
  * @returns {number[][]} array of array of numbers, where each row corresponds to a
  * vertex index and the values in the inner array are edge indices.
  */
-export const makeVerticesEdges = ({ edges_vertices, vertices_vertices = [] }: FOLD) => {
+export const makeVerticesEdges = ({
+  edges_vertices,
+  vertices_vertices = [],
+}: FOLD): number[][] => {
   const edge_map = makeVerticesToEdgeBidirectional({ edges_vertices });
   return vertices_vertices.map((verts, i) => verts.map((v) => edge_map[`${i} ${v}`]));
 };
@@ -97,7 +102,7 @@ export const makeVerticesEdges = ({ edges_vertices, vertices_vertices = [] }: FO
 export const makeVerticesVertices2D = ({
   vertices_coords,
   edges_vertices = [],
-}: FOLD) => {
+}: FOLD): number[][] => {
   // use adjacent edges to find adjacent vertices
   const vertices_vertices = makeVerticesEdgesUnsorted({ edges_vertices }).map(
     (edges, v) =>
@@ -109,8 +114,8 @@ export const makeVerticesVertices2D = ({
   return vertices_coords === undefined
     ? vertices_vertices
     : vertices_vertices.map((verts, i) =>
-      sortVerticesCounterClockwise({ vertices_coords }, verts, i),
-    );
+        sortVerticesCounterClockwise({ vertices_coords }, verts, i),
+      );
 };
 
 /**
@@ -123,7 +128,7 @@ export const makeVerticesVertices2D = ({
 export const makeVerticesFacesUnsorted = ({
   vertices_coords = [],
   faces_vertices = [],
-}: FOLD) => {
+}: FOLD): number[][] => {
   if (!faces_vertices) {
     return vertices_coords.map(() => []);
   }
@@ -154,13 +159,13 @@ export const makeVerticesVerticesFromFaces = ({
   vertices_coords,
   vertices_faces,
   faces_vertices = [],
-}: FOLD) => {
+}: FOLD): number[][] => {
   if (!vertices_faces) {
     vertices_faces = makeVerticesFacesUnsorted({ vertices_coords, faces_vertices });
   }
   // every iterate through every vertices_faces's faces_vertices
   const vertices_faces_vertices = vertices_faces.map((faces) =>
-    faces.filter(a => a !== undefined && a !== null).map((f) => faces_vertices[f]),
+    faces.filter((a) => a !== undefined && a !== null).map((f) => faces_vertices[f]),
   );
   // for every vertex, find its index in its faces_vertices array.
   const vertices_faces_indexOf = vertices_faces_vertices.map((faces, vertex) =>
@@ -175,7 +180,8 @@ export const makeVerticesVerticesFromFaces = ({
       (vertices_faces_indexOf[vertex][j] + 1) % verts.length,
     ]),
   );
-  // conver these three indices in face_vertices arrays into absolute
+
+  // convert these three indices in face_vertices arrays into absolute
   // indices to vertices, so that we have three consecutive vertex indices.
   // for example, vertex #7's entry might be an array containing:
   // [141, 7, 34]
@@ -186,6 +192,7 @@ export const makeVerticesVerticesFromFaces = ({
       indices.map((index) => vertices_faces_vertices[vertex][j][index]),
     ),
   );
+
   // convert the three neighbor vertices into two pairs, maintaining order,
   // which include the vertex in the middle, these represent the pairs of
   // vertices which make up the edge of the face, for all faces, in counter-
@@ -209,6 +216,7 @@ export const makeVerticesVerticesFromFaces = ({
     });
     return { facesVerts, to, from };
   });
+
   // using the data from above, walk around the vertex by starting with an
   // edge, an edge represented as a pair of vertices, and alternate:
   // 1. using the vertex-pair's adjacent face to get the other pair in
@@ -292,7 +300,7 @@ export const makeVerticesVerticesFromFaces = ({
  * @returns {number[][]} array of array of numbers, where each row corresponds to a
  * vertex index and the values in the inner array are vertex indices.
  */
-export const makeVerticesVertices = (graph: FOLD) => {
+export const makeVerticesVertices = (graph: FOLD): number[][] => {
   if (!graph.vertices_coords || !graph.vertices_coords.length) {
     return [];
   }

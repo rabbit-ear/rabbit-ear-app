@@ -45,6 +45,7 @@ export type FOLD = FOLDFileMetadata & FOLDFrame;
 //type FOLDMeshFrame = {
 export type FOLDMesh = {
   vertices_coords: [number, number, number][];
+  vertices_coordsInitial: [number, number, number][];
   edges_vertices: [number, number][];
   edges_assignment: string[];
   edges_foldAngle: number[];
@@ -56,23 +57,21 @@ export type FOLDMesh = {
   // difference from FOLD spec, these do not contain null or undefined.
   vertices_faces: number[][];
   // this is needed to make creases
-  edges_faces?: number[][],
+  edges_faces?: number[][];
 
   //edges_length?: number[];
-  faces_backmap?: number[],
-  faces_nextmap?: number[][],
+  faces_backmap: number[];
+  faces_nextmap: number[][];
 
-  vertices_coordsInitial: [number, number, number][];
   // creases_ data is the imaginary perpendicular
   // to a folded edge that "pulls" two faces together
-  creases: Crease[],
-  //creases_edge: number[],
-  //creases_faces: [number, number][],
-  //creases_vertices: [number, number][],
+  creases?: Crease[];
+  //creases_edge: number[];
+  //creases_faces: [number, number][];
+  //creases_vertices: [number, number][];
   //// does the crease have a bend (1) or is fold angle 0 (0)?
   //crease_type: (0 | 1)[], // crease_bend: (0, 1)[]
-  //crease_node_type: (0 | 1 | 2 | 3 | 4)[],
+  //crease_node_type: (0 | 1 | 2 | 3 | 4)[];
 };
 
 //export type FOLDMesh = FOLDFileMetadata & FOLDMeshFrame;
-

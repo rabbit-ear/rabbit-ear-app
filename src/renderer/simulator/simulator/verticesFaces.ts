@@ -6,7 +6,7 @@ import type { Model } from "./Model.ts";
  * Note: this is not the FOLD vertices_faces array. Conceptually this is,
  * but build using the Origami Simulator Model type as input.
  */
-export const verticesFaces = (model: Model) => {
+export const verticesFaces = (model: Model): number[][] => {
   const vertices_faces: number[][] = model.nodes.map(() => []);
   // iterate over every face, then iterate over each of the face's vertices
   model.fold.faces_vertices.forEach((face, f) => {

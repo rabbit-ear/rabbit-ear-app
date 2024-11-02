@@ -114,7 +114,7 @@ export const createProgramFromSource = (
   gl: WebGLRenderingContext | WebGL2RenderingContext,
   vertexShaderSrc: string,
   fragmentShaderSrc: string,
-) => {
+): WebGLProgram => {
   const vertexShader = createShaderFromSource(gl, vertexShaderSrc, gl.VERTEX_SHADER);
   const fragmentShader = createShaderFromSource(
     gl,
@@ -133,7 +133,7 @@ export const createProgramFromSource = (
 export const loadVertexData = (
   gl: WebGLRenderingContext | WebGL2RenderingContext,
   program: WebGLProgram,
-) => {
+): void => {
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
   gl.bufferData(
     gl.ARRAY_BUFFER,
@@ -159,7 +159,7 @@ export const makeTexture = (
   height: number,
   type: GLenum,
   data: ArrayBufferView,
-) => {
+): WebGLTexture => {
   const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
   // Set the parameters so we can render any size image.

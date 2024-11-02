@@ -9,6 +9,9 @@ export type WindowAPI = {
   quitApp: () => void;
   setAppTitle: (title: string) => void;
 
+  // new, still exploring its usage
+  getBaseDirectory: () => Promise<string>;
+
   // two way, from renderer to main and back
   unsavedChangesDialog: (
     yesString?: string,
@@ -35,6 +38,9 @@ export const api: WindowAPI = {
   // one way, front end to back end
   quitApp: () => ipcRenderer.send("quitApp"),
   setAppTitle: (title: string) => ipcRenderer.send("setAppTitle", title),
+
+  // new
+  getBaseDirectory: () => ipcRenderer.invoke("getBaseDirectory"),
 
   // two way, front to back with a response
   unsavedChangesDialog: (yesString?: string, noString?: string) =>

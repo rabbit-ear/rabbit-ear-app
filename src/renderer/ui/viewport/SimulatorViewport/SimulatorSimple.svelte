@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Box } from "rabbit-ear/types.d.ts";
   import { boundingBox } from "rabbit-ear/graph/boundary.js";
-  import type { SimulatorViewport } from "./SimulatorViewport.svelte.ts";
+  //import type { SimulatorViewport } from "./SimulatorViewport.svelte.ts";
   //import * as THREE from "three";
   import { untrack } from "svelte";
   //import TrackballView from "./ThreeJS/TrackballView.svelte";
@@ -12,12 +12,12 @@
   //import { MeshThree } from "../../../simulator/three/MeshThree.ts";
   import app from "../../../app/App.svelte.ts";
 
-  type PropsType = {
-    viewport: SimulatorViewport;
-    rest?: unknown[];
-  };
+  //type PropsType = {
+  //  viewport: SimulatorViewport;
+  //  rest?: unknown[];
+  //};
 
-  let { viewport, ...rest }: PropsType = $props();
+  //let { viewport, ...rest }: PropsType = $props();
 
   let origami = $derived(app.file?.graph);
 
@@ -72,6 +72,7 @@
         model?.dealloc();
         //mesh?.dealloc();
         model = new Model(fold);
+        //model = new Model({});
         //mesh = new MeshThree(model);
         //mesh.scene = scene;
         box = boundingBox(fold);
@@ -86,6 +87,8 @@
       modelSize = box ? Math.max(...box.span) : 1;
     }
   });
+
+  $inspect(modelSize);
 
   //// on file load.
   //// move the camera to aspect-fit to the model

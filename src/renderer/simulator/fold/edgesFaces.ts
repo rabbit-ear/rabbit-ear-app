@@ -7,7 +7,10 @@ import { makeVerticesToEdge } from "./lookup.ts";
  * edges_vertices and faces_vertices
  * @returns {number[][]} a `faces_edges` array
  */
-export const makeFacesEdgesFromVertices = ({ edges_vertices, faces_vertices }: FOLD) => {
+export const makeFacesEdgesFromVertices = ({
+  edges_vertices,
+  faces_vertices,
+}: FOLD): number[][] => {
   const map = makeVerticesToEdge({ edges_vertices });
   return faces_vertices
     .map((face) => face.map((v, i, arr) => [v, arr[(i + 1) % arr.length]].join(" ")))
@@ -26,7 +29,7 @@ export const makeEdgesFacesUnsorted = ({
   edges_vertices,
   faces_vertices,
   faces_edges,
-}: FOLD) => {
+}: FOLD): (number | null | undefined)[][] => {
   // faces_vertices is only needed to build this array, if it doesn't exist.
   if (!faces_edges) {
     faces_edges = makeFacesEdgesFromVertices({ edges_vertices, faces_vertices });

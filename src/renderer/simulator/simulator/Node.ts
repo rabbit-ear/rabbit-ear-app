@@ -29,10 +29,7 @@ export type Node = {
  * @param {number} index the index of the node in the model
  * @returns {SimulatorNode}
  */
-export const makeNode = (
-  [x, y, z]: [number, number, number],
-  index: number,
-): Node => ({
+export const makeNode = ([x, y, z]: [number, number, number], index: number): Node => ({
   originalPosition: [x, y, z],
   index: index,
 
@@ -47,7 +44,7 @@ export const makeNode = (
 /**
  * @param {SimulatorNode} node
  */
-export const destroyNode = (node: Node) => {
+export const destroyNode = (node: Node): void => {
   node.edges = [];
   node.creases = [];
   node.invCreases = [];

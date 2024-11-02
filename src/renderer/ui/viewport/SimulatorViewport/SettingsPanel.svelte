@@ -4,9 +4,15 @@
 </script>
 
 <div class={"container"}>
+  <!--
   <h3>
     show strain
     <input type="checkbox" disabled={!Settings.active} bind:checked={Settings.strain} />
+  </h3>
+  -->
+  <h3>
+    show strain
+    <input type="checkbox" bind:checked={Settings.strain} />
   </h3>
 
   <h3>

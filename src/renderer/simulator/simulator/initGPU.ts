@@ -51,7 +51,7 @@ export const initGPU = (
     lastTheta,
   }: GPUMathSettings,
   options: SolverOptions = {},
-) => {
+): void => {
   const defaults: SolverOptions = { ...defaultSolverOptions, ...options };
 
   const float_type = gpuMath.float_type || "FLOAT";
@@ -130,8 +130,22 @@ export const initGPU = (
   gpuMath.initFrameBufferForTexture("u_lastTheta", true);
   gpuMath.initFrameBufferForTexture("u_normals", true);
 
-  gpuMath.initTextureFromData("u_meta", textureDimNodes, textureDimNodes, float_type, meta, true);
-  gpuMath.initTextureFromData("u_meta2", textureDimNodes, textureDimNodes, float_type, meta2, true);
+  gpuMath.initTextureFromData(
+    "u_meta",
+    textureDimNodes,
+    textureDimNodes,
+    float_type,
+    meta,
+    true,
+  );
+  gpuMath.initTextureFromData(
+    "u_meta2",
+    textureDimNodes,
+    textureDimNodes,
+    float_type,
+    meta2,
+    true,
+  );
   gpuMath.initTextureFromData(
     "u_nominalTrinagles",
     textureDimFaces,

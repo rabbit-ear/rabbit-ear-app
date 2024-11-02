@@ -137,9 +137,6 @@
   .long {
     width: 8rem;
   }
-  .medium {
-    width: 5rem;
-  }
   .short {
     width: 3rem;
   }

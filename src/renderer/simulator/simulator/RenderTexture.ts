@@ -78,7 +78,7 @@ export class RenderTexture {
     );
   }
 
-  setFloatPixels(data: ArrayBufferView, width: number, height: number) {
+  setFloatPixels(data: ArrayBufferView, width: number, height: number): void {
     this.width = width;
     this.height = height;
     this.texture = makeTexture(this.gl, this.width, this.height, this.gl.FLOAT, data);
@@ -86,7 +86,7 @@ export class RenderTexture {
 
   // Unlike images, textures do not have a width and height associated
   // with them so we'll pass in the width and height of the texture
-  draw() {
+  draw(): void {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
     this.gl.useProgram(this.program);

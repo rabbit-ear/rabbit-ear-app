@@ -1,12 +1,12 @@
 /**
  * Created by amandaghassaei on 2/25/17.
  */
-import type { FOLDMesh } from "../types.ts";
+import type { FOLD } from "../types.ts";
 import remapField from "./remapField.ts";
 import { makeVerticesVertices } from "./adjacentVertices.ts";
 
 // v2 is center vertex
-function mergeEdge(fold: FOLDMesh, v1: number, v2: number, v3: number): boolean {
+function mergeEdge(fold: FOLD, v1: number, v2: number, v3: number): boolean {
   if (!fold.vertices_vertices) {
     return false;
   }
@@ -60,7 +60,7 @@ function mergeEdge(fold: FOLDMesh, v1: number, v2: number, v3: number): boolean 
 }
 
 // the FOLD parameter should have vertices_vertices
-function removeRedundantVertices(fold: FOLDMesh, epsilon: number = 1e-4) {
+const removeRedundantVertices = (fold: FOLD, epsilon: number = 1e-4): FOLD => {
   if (!fold.vertices_vertices) {
     fold.vertices_vertices = makeVerticesVertices(fold);
   }
@@ -122,6 +122,6 @@ function removeRedundantVertices(fold: FOLDMesh, epsilon: number = 1e-4) {
     }
   }
   return fold;
-}
+};
 
 export default removeRedundantVertices;

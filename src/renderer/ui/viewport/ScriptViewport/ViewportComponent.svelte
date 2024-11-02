@@ -11,8 +11,8 @@
 
   let { viewport, ...rest }: PropsType = $props();
 
-  let fontSize = $derived(viewport.view.fontSize);
-  $inspect(fontSize);
+  //let fontSize = $derived(viewport.view.fontSize);
+  //$inspect(fontSize);
 </script>
 
 <CodeMirror {...rest} />

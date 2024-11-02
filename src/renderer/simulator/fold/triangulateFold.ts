@@ -1,15 +1,17 @@
 /**
  * Created by amandaghassaei on 2/25/17.
  */
-import type { FOLDMesh } from "../types.ts";
+import type { FOLD } from "../types.ts";
 import earcut from "earcut";
+
 /**
  * @description distance squared between two points, 2D or 3D
  */
-const distSq = (a, b) => {
+const distSq = (a, b): number => {
   const vector = [b[0] - a[0], b[1] - a[1], (b[2] || 0) - (a[2] || 0)];
   return vector[0] ** 2 + vector[1] ** 2 + vector[2] ** 2;
 };
+
 /**
  * @description Triangulate faces inside a FOLD graph. This will
  * modify the input parameter.
@@ -18,7 +20,7 @@ const distSq = (a, b) => {
  * @returns {number[]} an array matching the length of the new
  * faces, with index:value mapping indices between newFace:oldFace.
  */
-const triangulatedFOLD = (fold: FOLDMesh, is2d: boolean = true): number[] => {
+const triangulatedFOLD = (fold: FOLD, is2d: boolean = true): number[] => {
   // as this loop encounters faces which need to be subdivided,
   // new join edges will be added inside the loop.
   // new faces_vertices will be made here, and set at the end.
@@ -46,14 +48,14 @@ const triangulatedFOLD = (fold: FOLDMesh, is2d: boolean = true): number[] => {
       const e_v = shorter ? [0, 2] : [1, 3];
       const f_v = shorter
         ? [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
+            [0, 1, 2],
+            [0, 2, 3],
+          ]
         : [
-          [0, 1, 3],
-          [1, 2, 3],
-        ];
-      fold.edges_vertices.push(e_v.map((j) => face[j]));
+            [0, 1, 3],
+            [1, 2, 3],
+          ];
+      fold.edges_vertices.push(e_v.map((j) => face[j]) as [number, number]);
       triangulated_vertices.push(...f_v.map((f) => f.map((j) => face[j])));
       fold.edges_foldAngle.push(0);
       fold.edges_assignment.push("J");
