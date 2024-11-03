@@ -1,12 +1,12 @@
 <script lang="ts">
   import { untrack } from "svelte";
-  import type { ClassPanel } from "./ClassPanel.svelte.ts";
+  //import type { ClassPanel } from "./ClassPanel.svelte.ts";
   //import type { SVGViewport } from "../SVGViewport.svelte.ts";
-  import settings from "../Settings/ClassSettings.svelte.ts";
-  import { niceNumber } from "../../../../general/epsilon.ts";
+  import settings from "./Settings/Settings.svelte.ts";
+  import { niceNumber } from "../../../general/epsilon.ts";
 
-  //let { panel, viewport }: { panel: ClassPanel; viewport: SVGViewport } = $props();
-  let { panel }: { panel: ClassPanel } = $props();
+  //let { viewport }: { viewport: SVGViewport } = $props();
+  //let { panel }: { panel: ClassPanel } = $props();
 
   let strokeWidthSlider = $state(5);
 
@@ -37,8 +37,8 @@
 
 <div class="column gap">
   <div class="row">
-    {#if panel.cursor}
-      <p>{niceNumber(panel.cursor[0], 4)}, {niceNumber(panel.cursor[1], 4)}</p>
+    {#if settings.cursor}
+      <p>{niceNumber(settings.cursor[0], 4)}, {niceNumber(settings.cursor[1], 4)}</p>
     {/if}
   </div>
 

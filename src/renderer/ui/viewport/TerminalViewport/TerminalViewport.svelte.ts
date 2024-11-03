@@ -1,6 +1,6 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../viewport.ts";
-import type { ViewportEvents } from "../events.ts";
+import type { ViewportEvents } from "../viewport.ts";
 import { unsetViewportEvents } from "../viewport.ts";
 import ViewportComponent from "./Viewport.svelte";
 import { Events } from "./Events.svelte.ts";

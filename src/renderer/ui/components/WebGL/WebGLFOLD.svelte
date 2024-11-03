@@ -2,11 +2,7 @@
   //import { untrack } from "svelte";
   import earcut from "earcut";
   import type { FOLD, WebGLModel } from "rabbit-ear/types.js";
-  import type {
-    ViewportMouseEvent,
-    ViewportWheelEvent,
-    ViewportTouchEvent,
-  } from "../../viewport/events.ts";
+  import type { ViewportEvents } from "../../viewport/viewport.ts";
   import { identity4x4, multiplyMatrices4 } from "rabbit-ear/math/matrix4.js";
   import { makeModelMatrix } from "rabbit-ear/webgl/general/view.js";
   import { creasePattern } from "rabbit-ear/webgl/creasePattern/models.js";
@@ -19,7 +15,7 @@
   import WebGLModelView from "./WebGLModelView.svelte";
   import WebGLTouchCanvas from "./WebGLTouchCanvas.svelte";
 
-  type PropsType = {
+  type PropsType = ViewportEvents & {
     graph?: FOLD;
     perspective?: string;
     renderStyle?: string;
@@ -36,15 +32,6 @@
     showFoldedFaceOutlines?: boolean;
     showFoldedCreases?: boolean;
     showFoldedFaces?: boolean;
-    onmousedown?: (e: ViewportMouseEvent) => void;
-    onmousemove?: (e: ViewportMouseEvent) => void;
-    onmouseup?: (e: ViewportMouseEvent) => void;
-    onmouseleave?: (e: ViewportMouseEvent) => void;
-    onwheel?: (e: ViewportWheelEvent) => void;
-    ontouchmove?: (e: ViewportTouchEvent) => void;
-    ontouchstart?: (e: ViewportTouchEvent) => void;
-    ontouchend?: (e: ViewportTouchEvent) => void;
-    ontouchcancel?: (e: ViewportTouchEvent) => void;
     redraw?: () => void;
   };
 

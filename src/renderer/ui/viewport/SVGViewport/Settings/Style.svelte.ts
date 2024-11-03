@@ -1,5 +1,5 @@
 import { View } from "./View.svelte.ts";
-import settings from "./ClassSettings.svelte.ts";
+import settings from "./Settings.svelte.ts";
 
 export class Style {
   view: View;

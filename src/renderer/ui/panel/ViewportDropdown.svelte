@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Panel } from "../panel/panel.ts";
+  import type { Snippet } from "svelte";
   import type { Viewport } from "../viewport/viewport.ts";
   import Wrapper from "../panel/Wrapper.svelte";
   import app from "../../app/App.svelte";
@@ -10,11 +10,8 @@
   let {
     index,
     viewport,
-    panel,
-  }: { index: number; viewport?: Viewport; panel?: Panel | undefined } = $props();
-
-  let PanelComponent = $derived(panel?.component);
-  let wrapperPanel = $derived({ ...panel, title: "▼" });
+    children,
+  }: { index: number; viewport?: Viewport; children: Snippet } = $props();
 
   const swapSVG = (): void => app.ui?.swapViewport(index, SVGViewport);
   const swapWebGL = (): void => app.ui?.swapViewport(index, WebGLViewport);
@@ -25,7 +22,7 @@
   let style = $derived(`position: absolute; top: ${pad}; right: ${pad};`);
 </script>
 
-<Wrapper panel={wrapperPanel} {style} expanded={false}>
+<Wrapper title={"▼"} {style} expanded={false}>
   <div class="column gap">
     <div class="row toggle-row">
       <button
@@ -39,9 +36,7 @@
         onclick={swapSimulator}>Sim</button>
     </div>
     <hr />
-    {#if PanelComponent}
-      <PanelComponent {viewport} {panel} />
-    {/if}
+    {@render children?.()}
   </div>
 </Wrapper>
 

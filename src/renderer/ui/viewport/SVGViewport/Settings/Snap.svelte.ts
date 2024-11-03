@@ -6,7 +6,7 @@ import {
   triangleGridSnapFunction,
   squareGridSnapFunction,
 } from "./snap.ts";
-import settings from "./ClassSettings.svelte.ts";
+import settings from "./Settings.svelte.ts";
 import app from "../../../../app/App.svelte.ts";
 
 const emptySnapFunction = (

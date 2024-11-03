@@ -5,7 +5,7 @@ import type {
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportTouchEvent,
-} from "../events.ts";
+} from "../viewport.ts";
 import { ViewportStatics, unsetViewportEvents, type Viewport } from "../viewport.ts";
 import ViewportComponent from "./ViewportComponent.svelte";
 import { ViewportPanel } from "./Panels/Panel.svelte.ts";

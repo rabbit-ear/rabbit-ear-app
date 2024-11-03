@@ -9,7 +9,7 @@ import {
 } from "rabbit-ear/math/matrix2.js";
 import { viewBoxOrigin, graphToMatrix2 } from "../../../../general/matrix.ts";
 import app from "../../../../app/App.svelte.ts";
-import settings from "./ClassSettings.svelte.ts";
+import settings from "./Settings.svelte.ts";
 
 export class View {
   rightHanded = $derived(settings.rightHanded);

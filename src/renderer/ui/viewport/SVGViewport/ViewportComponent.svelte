@@ -4,12 +4,12 @@
     ViewportMouseEvent,
     ViewportWheelEvent,
     ViewportTouchEvent,
-  } from "../../viewport/events.ts";
-  import GridLayer from "./Settings/GridLayer.svelte";
+  } from "../../viewport/viewport.ts";
+  import GridLayer from "./GridLayer.svelte";
   import SVGTouchCanvas from "../../components/SVG/SVGTouchCanvas.svelte";
   import SVGElements from "../../components/SVG/SVGElements.svelte";
   import SVGFOLD from "../../components/SVG/SVGFOLD.svelte";
-  import settings from "./Settings/ClassSettings.svelte.ts";
+  import settings from "./Settings/Settings.svelte.ts";
   import app from "../../../app/App.svelte.ts";
 
   type PropsType = {

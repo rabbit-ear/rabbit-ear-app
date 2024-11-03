@@ -5,7 +5,7 @@ import type {
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportTouchEvent,
-} from "../events.ts";
+} from "../viewport.ts";
 import { ViewportStatics, unsetViewportEvents, type Viewport } from "../viewport.ts";
 //import ViewportComponent from "./Simulator.svelte";
 import ViewportComponent from "./SimulatorSimple.svelte";
@@ -15,7 +15,8 @@ import settings from "./ClassSettings.svelte.ts";
 
 export class SimulatorViewport
   extends ViewportStatics
-  implements Viewport, ViewportEvents {
+  implements Viewport, ViewportEvents
+{
   static settings = settings;
   static panel = new ClassPanel();
 

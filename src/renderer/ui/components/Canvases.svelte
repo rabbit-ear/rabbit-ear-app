@@ -1,6 +1,6 @@
 <script lang="ts">
   import app from "../../app/App.svelte.ts";
-  import ViewportSettings from "./ViewportSettings.svelte";
+  import ViewportDropdown from "../panel/ViewportDropdown.svelte";
   const viewports = $derived(app.ui?.viewports || []);
 </script>
 
@@ -14,7 +14,9 @@
   <div class="canvases row gap">
     {#each viewports as viewport, index}
       <div class="canvas">
-        <ViewportSettings {index} {viewport} panel={viewport.panel} />
+        <ViewportDropdown {index} {viewport}>
+          <viewport.panel {viewport} />
+        </ViewportDropdown>
         <viewport.component {viewport} />
       </div>
     {/each}

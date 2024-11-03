@@ -2,7 +2,7 @@ import type {
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportEvents,
-} from "../../viewport/events.ts";
+} from "../../viewport/viewport.ts";
 import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import type { ClassPanel } from "../../viewport/SVGViewport/Panels/ClassPanel.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";

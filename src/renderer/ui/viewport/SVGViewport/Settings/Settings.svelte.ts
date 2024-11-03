@@ -9,7 +9,12 @@ import AppSettings from "../../../../app/Settings.svelte.ts";
 
 // these are global view settings that apply to all instances of SVGViewport
 // accessible via the app: app.ui.types.SVGViewport.settings
-class ClassSettings {
+class Settings {
+  // these are not stored in local storage
+  cursor: [number, number] = $state();
+
+  // these are stored in local storage
+
   // is the Y axis on top (true) or on bottom (false)?
   rightHanded: boolean = $derived(AppSettings.rightHanded);
 
@@ -104,7 +109,7 @@ class ClassSettings {
   }
 }
 
-export default new ClassSettings();
+export default new Settings();
 
 //class Settings {
 //  // is the Y axis on top (true) or on bottom (false)?

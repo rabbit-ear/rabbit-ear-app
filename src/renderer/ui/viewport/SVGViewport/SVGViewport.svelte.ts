@@ -1,30 +1,29 @@
 import type { Component } from "svelte";
 import type { VecLine2 } from "rabbit-ear/types.js";
-import type { Viewport } from "../viewport.ts";
 import type {
-  ViewportEvents,
+  GuiViewport,
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportTouchEvent,
-} from "../events.ts";
-import type { Panel } from "../../panel/panel.ts";
-import { ViewportStatics, unsetViewportEvents } from "../viewport.ts";
-import { clipLineInPolygon } from "./clip.ts";
+} from "../viewport.ts";
+import { unsetViewportEvents } from "../viewport.ts";
 import { Grid } from "./Settings/Grid.svelte.ts";
 import { Snap } from "./Settings/Snap.svelte.ts";
 import { View } from "./Settings/View.svelte.ts";
-import ViewportComponent from "./ViewportComponent.svelte";
-import settings from "./Settings/ClassSettings.svelte.ts";
 import { Style } from "./Settings/Style.svelte.ts";
-import { ViewportPanel } from "./Panels/Panel.svelte.ts";
-import { ClassPanel } from "./Panels/ClassPanel.svelte.ts";
+import settings from "./Settings/Settings.svelte.ts";
+import ViewportPanel from "./Panels/PanelComponent.svelte";
+import ClassPanel from "./Panels/ClassPanelComponent.svelte";
+import ViewportComponent from "./ViewportComponent.svelte";
+import { clipLineInPolygon } from "./clip.ts";
 
-export class SVGViewport extends ViewportStatics implements Viewport, ViewportEvents {
+export class SVGViewport implements GuiViewport {
   static settings: typeof settings = settings;
-  static panel: Panel = new ClassPanel();
+  //static panel: Panel = new ClassPanel();
+  static panel: Component = ClassPanel;
 
   component: Component;
-  panel: Panel;
+  panel: Component;
 
   grid: Grid;
   snap: Snap;
@@ -57,13 +56,12 @@ export class SVGViewport extends ViewportStatics implements Viewport, ViewportEv
   onkeyup?: (event: KeyboardEvent) => void;
 
   constructor() {
-    super();
     this.component = ViewportComponent;
     this.view = new View();
     this.style = new Style(this.view);
     this.grid = new Grid(this.view);
     this.snap = new Snap(this.view);
-    this.panel = new ViewportPanel();
+    this.panel = ViewportPanel;
   }
 
   dealloc(): void {

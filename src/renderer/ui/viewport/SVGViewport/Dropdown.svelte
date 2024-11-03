@@ -1,7 +1,7 @@
 <script lang="ts">
   //import type { SVGViewpot } from "../SVGViewport.svelte.ts";
   //import type { ViewportPanel } from "./Panel.svelte.ts";
-  import settings from "../Settings/ClassSettings.svelte.ts";
+  import settings from "./Settings/Settings.svelte.ts";
 
   //let { panel, viewport }: { panel: ViewportPanel; viewport: SVGViewport } = $props();
 </script>

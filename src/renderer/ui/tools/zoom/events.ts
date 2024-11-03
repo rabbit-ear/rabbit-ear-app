@@ -2,7 +2,7 @@ import type {
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportEvents,
-} from "../../viewport/events.ts";
+} from "../../viewport/viewport.ts";
 import { ToolState } from "./state.svelte.ts";
 import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import type { WebGLViewport } from "../../viewport/WebGLViewport/WebGLViewport.svelte.ts";

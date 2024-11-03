@@ -1,29 +1,21 @@
 <script lang="ts">
   import type {
+    ViewportEvents,
     ViewportMouseEvent,
     ViewportWheelEvent,
     ViewportTouchEvent,
-  } from "../../viewport/events.ts";
+  } from "../../viewport/viewport.ts";
   import { identity4x4 } from "rabbit-ear/math/matrix4.js";
   import { vectorFromScreenLocation } from "../../../general/matrix.ts";
   import WebGLCanvas from "./WebGLCanvas.svelte";
 
-  type PropsType = {
+  type PropsType = ViewportEvents & {
     gl?: WebGLRenderingContext | WebGL2RenderingContext;
     version?: number;
     canvas?: HTMLCanvasElement;
     canvasSize?: [number, number];
     redraw?: () => void;
     projectionMatrix?: number[];
-    onmousedown?: (e: ViewportMouseEvent) => void;
-    onmousemove?: (e: ViewportMouseEvent) => void;
-    onmouseup?: (e: ViewportMouseEvent) => void;
-    onmouseleave?: (e: ViewportMouseEvent) => void;
-    onwheel?: (e: ViewportWheelEvent) => void;
-    ontouchmove?: (e: ViewportTouchEvent) => void;
-    ontouchstart?: (e: ViewportTouchEvent) => void;
-    ontouchend?: (e: ViewportTouchEvent) => void;
-    ontouchcancel?: (e: ViewportTouchEvent) => void;
   };
 
   let {

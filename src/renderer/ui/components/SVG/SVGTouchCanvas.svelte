@@ -2,26 +2,18 @@
   import type { SVGAttributes } from "svelte/elements";
   import type { Snippet } from "svelte";
   import type {
+    ViewportEvents,
     ViewportMouseEvent,
     ViewportWheelEvent,
     ViewportTouchEvent,
-  } from "../../viewport/events.ts";
+  } from "../../viewport/viewport.ts";
   import { convertToViewBox, findInParents } from "../../../general/dom.ts";
   import SVGCanvas from "./SVGCanvas.svelte";
 
-  interface PropsType {
+  interface PropsType extends ViewportEvents {
     svg?: SVGSVGElement;
     viewBox?: string;
     invertVertical?: boolean;
-    onmousedown?: (e: ViewportMouseEvent) => void;
-    onmousemove?: (e: ViewportMouseEvent) => void;
-    onmouseup?: (e: ViewportMouseEvent) => void;
-    onmouseleave?: (e: ViewportMouseEvent) => void;
-    onwheel?: (e: ViewportWheelEvent) => void;
-    ontouchmove?: (e: ViewportTouchEvent) => void;
-    ontouchstart?: (e: ViewportTouchEvent) => void;
-    ontouchend?: (e: ViewportTouchEvent) => void;
-    ontouchcancel?: (e: ViewportTouchEvent) => void;
     children?: Snippet;
     //props?: unknown[];
   }

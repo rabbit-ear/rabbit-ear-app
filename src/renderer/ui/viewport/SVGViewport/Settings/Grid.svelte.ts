@@ -1,6 +1,6 @@
 import { makeSquareGrid, makeTriangleGrid } from "./grid.ts";
 import { View } from "./View.svelte.ts";
-import settings from "./ClassSettings.svelte.ts";
+import settings from "./Settings.svelte.ts";
 
 export class Grid {
   view: View;
