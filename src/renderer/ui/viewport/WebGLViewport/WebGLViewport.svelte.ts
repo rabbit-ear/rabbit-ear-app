@@ -1,15 +1,14 @@
 import type { Component } from "svelte";
-import type { Panel } from "../../panel/panel.ts";
 import type {
-  ViewportEvents,
+  IModelViewport,
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportTouchEvent,
 } from "../viewport.ts";
-import { ViewportStatics, unsetViewportEvents, type Viewport } from "../viewport.ts";
+import { unsetViewportEvents } from "../viewport.ts";
 import ViewportComponent from "./ViewportComponent.svelte";
-import { ViewportPanel } from "./Panels/Panel.svelte.ts";
-import { ClassPanel } from "./Panels/ClassPanel.svelte.ts";
+import Dropdown from "./Dropdown.svelte";
+import Panel from "./Panel.svelte";
 import settings from "./Settings/ClassSettings.svelte.ts";
 import { View } from "./Settings/View.svelte.ts";
 
@@ -20,12 +19,12 @@ import { View } from "./Settings/View.svelte.ts";
 //  }
 //}
 
-export class WebGLViewport extends ViewportStatics implements Viewport, ViewportEvents {
+export class WebGLViewport implements IModelViewport {
   static settings = settings;
-  static panel = new ClassPanel();
+  static panel: Component = Panel;
 
   component: Component;
-  panel: Panel;
+  panel: Component;
 
   view: View;
   //style: Style;
@@ -48,11 +47,10 @@ export class WebGLViewport extends ViewportStatics implements Viewport, Viewport
   // props?: unknown = $state();
 
   constructor() {
-    super();
     this.component = ViewportComponent;
+    this.panel = Dropdown;
     this.view = new View();
     //this.style = new Style(this.view);
-    this.panel = new ViewportPanel();
   }
 
   dealloc(): void {

@@ -1,14 +1,15 @@
 <script lang="ts">
-  import type { Panel } from "../panel/panel.ts";
+  import type { Component } from "svelte";
   import Wrapper from "../panel/Wrapper.svelte";
   import app from "../../app/App.svelte.ts";
-  const panels: Panel[] = $derived(app.ui?.panels || []);
+  const panels: Component[] = $derived(app.ui?.panels || []);
+  const panelsName: string[] = $derived(app.ui?.panelsName || []);
 </script>
 
 <div class="column">
-  {#each panels as panel}
-    <Wrapper {panel}>
-      <panel.component {panel} />
+  {#each panels as PanelComponent, i}
+    <Wrapper title={panelsName[i]}>
+      <PanelComponent />
     </Wrapper>
   {/each}
 </div>

@@ -1,11 +1,10 @@
 <script lang="ts">
   import { untrack } from "svelte";
-  import settings from "../Settings/ClassSettings.svelte.ts";
-  import type { WebGLViewport } from "../WebGLViewport.svelte.ts";
-  import type { ViewportPanel } from "./Panel.svelte.ts";
+  import settings from "./Settings/ClassSettings.svelte.ts";
+  import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
 
   //let { panel, viewport }: { panel: ViewportPanel; viewport: WebGLViewport } = $props();
-  let { viewport }: { panel: ViewportPanel; viewport: WebGLViewport } = $props();
+  let { viewport }: { viewport: WebGLViewport } = $props();
 
   let isFolded = $derived(viewport.view.renderStyle === "foldedForm");
 

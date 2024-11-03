@@ -1,6 +1,6 @@
 <script lang="ts">
   import { untrack } from "svelte";
-  import settings from "../Settings/ClassSettings.svelte.ts";
+  import settings from "./Settings/ClassSettings.svelte.ts";
 
   let strokeWidthSlider = $state(5);
 

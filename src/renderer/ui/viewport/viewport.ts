@@ -34,8 +34,9 @@ export interface Deallocable {
 //  static panel?: Panel;
 //}
 
-export interface Viewport extends Deallocable {
+export interface IViewport extends Deallocable {
   // static properties (unable to be defined here, please define them)
+  //static name?: string;
   //static panel?: Component;
 
   // an optional panel associated with this viewport.
@@ -52,8 +53,9 @@ export interface Viewport extends Deallocable {
 }
 
 //export abstract class GuiViewport implements ViewportEvents, Deallocable {
-export interface GuiViewport extends Viewport, ViewportEvents, Deallocable {
+export interface IModelViewport extends IViewport, ViewportEvents, Deallocable {
   // static properties (unable to be defined here, please define them)
+  //static name?: string;
   //static panel?: Component;
 
   // an optional panel associated with this viewport.
@@ -82,7 +84,7 @@ export interface GuiViewport extends Viewport, ViewportEvents, Deallocable {
   dealloc: () => void;
 }
 
-export const unsetViewportEvents = (viewport: GuiViewport): void => {
+export const unsetViewportEvents = (viewport: IModelViewport): void => {
   viewport.onmousemove = undefined;
   viewport.onmousedown = undefined;
   viewport.onmouseup = undefined;

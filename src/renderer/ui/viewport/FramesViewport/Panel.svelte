@@ -1,6 +1,6 @@
 <script lang="ts">
   //import settings from "../Settings.svelte.ts";
-  import app from "../../../../app/App.svelte.ts";
+  import app from "../../../app/App.svelte.ts";
 
   let frame = $derived(1 + app.fileManager.file.activeFrame);
   let frameCount = $derived(app.fileManager.file.frames.length);

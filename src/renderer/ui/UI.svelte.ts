@@ -1,12 +1,10 @@
-import { untrack } from "svelte";
+import { type Component, untrack } from "svelte";
 import type { UITool } from "./UITool.ts";
-import type { Viewport } from "./viewport/viewport.ts";
-import { ViewportStatics } from "./viewport/viewport.ts";
-import type { Panel } from "./panel/panel.ts";
+import type { IModelViewport } from "./viewport/viewport.ts";
+import { type ModelViewportType, ModelViewports } from "./viewport/viewports.ts";
+//import { ViewportStatics } from "./viewport/viewport.ts";
+//import type { Panel } from "./panel/panel.ts";
 import Tools from "./tools/index.ts";
-import { SVGViewport } from "./viewport/SVGViewport/SVGViewport.svelte.ts";
-import { WebGLViewport } from "./viewport/WebGLViewport/WebGLViewport.svelte.ts";
-import { SimulatorViewport } from "./viewport/SimulatorViewport/SimulatorViewport.svelte.ts";
 import { ScriptViewport } from "./viewport/ScriptViewport/ScriptViewport.svelte.ts";
 // panels
 import AppPanel from "./panel/AppPanel.svelte";
@@ -28,16 +26,16 @@ const uniqueObjects = <T>(objs: T[]): T[] => {
   return result;
 };
 
-const makeAppPanel = (): Panel => {
-  class AppClass implements Panel {
-    title = "App";
-    component = AppPanel;
-  }
-  return new AppClass();
-};
+//const makeAppPanel = (): Panel => {
+//  class AppClass implements Panel {
+//    title = "App";
+//    component = AppPanel;
+//  }
+//  return new AppClass();
+//};
 
 export class UI {
-  viewports: Viewport[] = $state([]);
+  viewports: IModelViewport[] = $state([]);
   #tool: UITool | undefined = $state();
   #effects: (() => void)[] = [];
 
@@ -48,23 +46,51 @@ export class UI {
 
   // all viewports currently active, but only one instance of each.
   // for example. multiple SVGViewports on screen but will only appear once
-  #uniqueViewports: Viewport[] = $derived(uniqueObjects(this.viewports));
+  #uniqueViewports: IModelViewport[] = $derived(uniqueObjects(this.viewports));
 
-  #appPanels: Panel[] = [makeAppPanel()];
+  //#appPanels: Component[] = [makeAppPanel()];
+  #appPanels: Component[] = [AppPanel];
+  #appPanelsNames: string[] = ["App"];
+  //#appPanels: { component: Component; name: string }[] = [
+  //  {
+  //    name: "App",
+  //    component: AppPanel,
+  //  },
+  //];
 
-  #viewportPanels: Panel[] = $derived(
+  //#viewportPanels: Component[] = $derived(
+  //  [this.framesViewport, this.terminalViewport, ...this.#uniqueViewports]
+  //    //.map((view) => (view?.constructor as typeof ViewportStatics)?.panel)
+  //    .map((view) => view?.constructor?.panel)
+  //    .concat([this.#tool?.panel])
+  //    .filter((a) => a !== undefined),
+  //);
+  #viewportPanelsAndNames: { component: Component; name: string }[] = $derived(
     [this.framesViewport, this.terminalViewport, ...this.#uniqueViewports]
-      .map((view) => (view?.constructor as typeof ViewportStatics)?.panel)
-      .concat([this.#tool?.panel])
-      .filter((a) => a !== undefined),
+      //.map((view) => (view?.constructor as typeof ViewportStatics)?.panel)
+      .map((view) => ({
+        component: view?.constructor?.panel,
+        name: view?.constructor?.name,
+      }))
+      .concat([{ component: this.#tool?.panel, name: this.#tool?.name }])
+      .filter((a) => a.component !== undefined),
+  );
+  #viewportPanels: Component[] = $derived(
+    this.#viewportPanelsAndNames.map((el) => el.component),
+  );
+  #viewportPanelsNames: string[] = $derived(
+    this.#viewportPanelsAndNames.map((el) => el.name),
   );
 
   // the complete set of panels are: app-wide panels + viewport panels + tool panels
-  panels: Panel[] = $derived(this.#appPanels.concat(this.#viewportPanels));
+  //panels: Panel[] = $derived(this.#appPanels.concat(this.#viewportPanels));
+  panels: Component[] = $derived(this.#appPanels.concat(this.#viewportPanels));
+  panelsName: string[] = $derived(this.#appPanelsNames.concat(this.#viewportPanelsNames));
 
   get tool(): UITool | undefined {
     return this.#tool;
   }
+
   // no need to set the tool directly. use a string ("line", "zoom"), the tool's name.
   // if no tool matches the string, the tool will become unset (undefined).
   setToolName(name: string): void {
@@ -103,20 +129,15 @@ export class UI {
 
   // manage viewport array
 
-  addViewport(
-    ViewClass?: typeof SVGViewport | typeof WebGLViewport | typeof SimulatorViewport,
-  ): void {
+  addViewport(ViewClass?: ModelViewportType): void {
     if (!ViewClass) {
-      this.viewports.push(new SVGViewport());
+      this.viewports.push(new ModelViewports[0]());
     } else {
       this.viewports.push(new ViewClass());
     }
   }
 
-  swapViewport(
-    index: number,
-    ViewClass: typeof SVGViewport | typeof WebGLViewport | typeof SimulatorViewport,
-  ): void {
+  swapViewport(index: number, ViewClass: ModelViewportType): void {
     this.viewports.splice(index, 1, new ViewClass());
   }
 

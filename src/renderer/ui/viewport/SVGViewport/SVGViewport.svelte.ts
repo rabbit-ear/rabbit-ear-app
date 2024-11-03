@@ -1,7 +1,7 @@
 import type { Component } from "svelte";
 import type { VecLine2 } from "rabbit-ear/types.js";
 import type {
-  GuiViewport,
+  IModelViewport,
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportTouchEvent,
@@ -12,15 +12,16 @@ import { Snap } from "./Settings/Snap.svelte.ts";
 import { View } from "./Settings/View.svelte.ts";
 import { Style } from "./Settings/Style.svelte.ts";
 import settings from "./Settings/Settings.svelte.ts";
-import ViewportPanel from "./Panels/PanelComponent.svelte";
-import ClassPanel from "./Panels/ClassPanelComponent.svelte";
+import ViewportPanel from "./Dropdown.svelte";
+import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./ViewportComponent.svelte";
 import { clipLineInPolygon } from "./clip.ts";
 
-export class SVGViewport implements GuiViewport {
+export class SVGViewport implements IModelViewport {
+  static name: string = "SVG Viewport";
   static settings: typeof settings = settings;
-  //static panel: Panel = new ClassPanel();
   static panel: Component = ClassPanel;
+  //static panel: Panel = new ClassPanel();
 
   component: Component;
   panel: Component;
@@ -57,11 +58,11 @@ export class SVGViewport implements GuiViewport {
 
   constructor() {
     this.component = ViewportComponent;
+    this.panel = ViewportPanel;
     this.view = new View();
     this.style = new Style(this.view);
     this.grid = new Grid(this.view);
     this.snap = new Snap(this.view);
-    this.panel = ViewportPanel;
   }
 
   dealloc(): void {

@@ -1,27 +1,23 @@
 import type { Component } from "svelte";
-import type { Panel } from "../../panel/panel.ts";
 import type {
-  ViewportEvents,
+  IModelViewport,
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportTouchEvent,
 } from "../viewport.ts";
-import { ViewportStatics, unsetViewportEvents, type Viewport } from "../viewport.ts";
+import { unsetViewportEvents } from "../viewport.ts";
 //import ViewportComponent from "./Simulator.svelte";
 import ViewportComponent from "./SimulatorSimple.svelte";
 //import { ViewportPanel } from "./SettingsPanel.svelte.ts";
-import { ClassPanel } from "./ClassPanel.svelte.ts";
+import Panel from "./Panel.svelte";
 import settings from "./ClassSettings.svelte.ts";
 
-export class SimulatorViewport
-  extends ViewportStatics
-  implements Viewport, ViewportEvents
-{
+export class SimulatorViewport implements IModelViewport {
   static settings = settings;
-  static panel = new ClassPanel();
+  static panel: Component = Panel;
 
   component: Component;
-  panel: Panel;
+  panel: Component;
 
   //view: View;
   //style: Style;
@@ -41,7 +37,6 @@ export class SimulatorViewport
   onkeyup?: (event: KeyboardEvent) => void;
 
   constructor() {
-    super();
     this.component = ViewportComponent;
     //this.panel = new ViewportPanel();
   }

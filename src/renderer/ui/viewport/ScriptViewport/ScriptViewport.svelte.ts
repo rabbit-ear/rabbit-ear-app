@@ -1,23 +1,22 @@
 import type { Component } from "svelte";
-import type { Panel } from "../../panel/panel.ts";
 import type {
-  ViewportEvents,
+  IViewport,
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportTouchEvent,
 } from "../viewport.ts";
-import { ViewportStatics, unsetViewportEvents, type Viewport } from "../viewport.ts";
+import { unsetViewportEvents } from "../viewport.ts";
 import ViewportComponent from "./ViewportComponent.svelte";
 //import { ViewportPanel } from "./Panels/Panel.svelte.ts";
 //import { ClassPanel } from "./Panels/ClassPanel.svelte.ts";
 //import settings from "./Settings/ClassSettings.svelte.ts";
 
-export class ScriptViewport extends ViewportStatics implements Viewport, ViewportEvents {
+export class ScriptViewport implements IViewport {
   //static settings = settings;
   //static panel = new ClassPanel();
 
   component: Component;
-  panel: Panel;
+  panel: Component;
 
   redraw?: () => void = $state();
 
@@ -34,7 +33,6 @@ export class ScriptViewport extends ViewportStatics implements Viewport, Viewpor
   onkeyup?: (event: KeyboardEvent) => void;
 
   constructor() {
-    super();
     this.component = ViewportComponent;
     //this.panel = new ViewportPanel();
   }
