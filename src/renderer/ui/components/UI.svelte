@@ -5,14 +5,13 @@
   import app from "../../app/App.svelte.ts";
   import { UI as UIClass } from "../UI.svelte.ts";
   import { SVGViewport } from "../viewport/SVGViewport/SVGViewport.svelte.ts";
-  //import { WebGLViewport } from "../viewport/WebGLViewport/WebGLViewport.svelte.ts";
+  import { WebGLViewport } from "../viewport/WebGLViewport/WebGLViewport.svelte.ts";
 
   // attach the UI to the app. from now on, app.ui is a valid property.
   app.ui = new UIClass();
 
   // initial set of viewports
-  //app.ui?.viewports.push(new SVGViewport(), new WebGLViewport());
-  app.ui?.viewports.push(new SVGViewport());
+  app.ui?.viewports.modelViewports.push(new SVGViewport(), new WebGLViewport());
   app.ui?.setToolName("line");
 </script>
 

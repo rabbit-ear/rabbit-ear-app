@@ -20,17 +20,17 @@
   onmouseleave={(...args): void => viewport.onmouseleave?.(...args)}
   onwheel={(...args): void => viewport.onwheel?.(...args)}
   bind:redraw={viewport.redraw}
-  perspective={viewport.view.perspective}
-  viewMatrix={viewport.view.viewMatrix}
-  renderStyle={viewport.view.renderStyle}
+  perspective={viewport?.view?.perspective}
+  viewMatrix={viewport?.view?.viewMatrix}
+  renderStyle={viewport?.view?.renderStyle}
   layerNudge={settings.layerNudge}
   fov={viewport.view.fov}
-  darkMode={viewport.view.darkMode}
-  frontColor={viewport.view.frontColor}
-  backColor={viewport.view.backColor}
+  darkMode={viewport?.view?.darkMode}
+  frontColor={viewport?.view?.frontColor}
+  backColor={viewport?.view?.backColor}
   strokeWidth={settings.strokeWidth}
-  opacity={viewport.view.opacity}
-  showFoldedFaceOutlines={viewport.view.showFoldedFaceOutlines}
-  showFoldedCreases={viewport.view.showFoldedCreases}
-  showFoldedFaces={viewport.view.showFoldedFaces}
+  opacity={viewport?.view?.opacity}
+  showFoldedFaceOutlines={viewport?.view?.showFoldedFaceOutlines}
+  showFoldedCreases={viewport?.view?.showFoldedCreases}
+  showFoldedFaces={viewport?.view?.showFoldedFaces}
   {...rest} />

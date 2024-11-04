@@ -1,12 +1,12 @@
+import type { Component } from "svelte";
 import type { UITool } from "../../UITool.ts";
-import type { Viewport } from "../../viewport/viewport.ts";
-//import type { Panel } from "../../panel/panel.ts";
+import type { IViewport } from "../../viewport/viewport.ts";
 import { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import { WebGLViewport } from "../../viewport/WebGLViewport/WebGLViewport.svelte.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGViewportState } from "./svg/SVGViewportState.svelte.ts";
 import { GLViewportState } from "./GLViewportState.svelte.ts";
-import { ToolPanel } from "./panel/Panel.svelte.ts";
+import Panel from "./Panel.svelte";
 import icon from "./icon.svelte";
 
 class Tool implements UITool {
@@ -15,11 +15,11 @@ class Tool implements UITool {
   static icon = icon;
 
   state = new GlobalState();
-  panel = new ToolPanel(this.state);
+  panel: Component = Panel;
 
   viewportStates: (SVGViewportState | GLViewportState)[] = [];
 
-  bindTo(viewport: Viewport): () => void {
+  bindTo(viewport: IViewport): () => void {
     if (viewport instanceof SVGViewport) {
       const viewportState = new SVGViewportState(viewport, this.state);
       this.viewportStates.push(viewportState);
@@ -29,14 +29,15 @@ class Tool implements UITool {
       this.viewportStates.push(viewportState);
       return viewportState.dealloc;
     } else {
-      return () => {};
+      return () => {
+        // empty
+      };
     }
   }
 
   dealloc(): void {
     this.viewportStates.forEach((state) => state.dealloc());
     this.state.dealloc();
-    this.panel.dealloc();
   }
 }
 

@@ -1,18 +1,18 @@
 <script lang="ts">
   import app from "../../app/App.svelte.ts";
   import ViewportDropdown from "../panel/ViewportDropdown.svelte";
-  const viewports = $derived(app.ui?.viewports || []);
+  const modelViewports = $derived(app.ui?.viewports?.modelViewports || []);
 </script>
 
 <div class="column">
-  {#if app.ui?.terminalViewport}
+  {#if app.ui?.viewports?.terminal}
     <div class="terminal">
-      <app.ui.terminalViewport.component viewport={app.ui.terminalViewport} />
+      <app.ui.viewports.terminal.component viewport={app.ui.viewports.terminal} />
     </div>
   {/if}
 
   <div class="canvases row gap">
-    {#each viewports as viewport, index}
+    {#each modelViewports as viewport, index}
       <div class="canvas">
         <ViewportDropdown {index} {viewport}>
           <viewport.panel {viewport} />
@@ -22,9 +22,9 @@
     {/each}
   </div>
 
-  {#if app.ui?.framesViewport}
+  {#if app.ui?.viewports?.frames}
     <div class="frames">
-      <app.ui.framesViewport.component viewport={app.ui.framesViewport} />
+      <app.ui.viewports.frames.component viewport={app.ui.viewports.frames} />
     </div>
   {/if}
 </div>

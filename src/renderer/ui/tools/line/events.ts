@@ -4,7 +4,7 @@ import type {
   ViewportEvents,
 } from "../../viewport/viewport.ts";
 import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
-import type { ClassPanel } from "../../viewport/SVGViewport/Panels/ClassPanel.svelte.ts";
+//import type { Settings } from "../../viewport/SVGViewport/Settings/Settings.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
 import { wheelEventZoomMatrix } from "../zoom/matrix.ts";
 
@@ -15,7 +15,8 @@ export class SVGViewportEvents implements ViewportEvents {
   onmousemove = ({ point, buttons }: ViewportMouseEvent): void => {
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
-    const panel = (this.viewport.constructor as typeof SVGViewport).panel as ClassPanel;
+    // todo change Settings to not export a default, get the type here.
+    const panel = (this.viewport.constructor as typeof SVGViewport).settings;
     panel.cursor = point;
   };
 
@@ -38,7 +39,7 @@ export class SVGViewportEvents implements ViewportEvents {
 
   onwheel = ({ point, deltaY }: ViewportWheelEvent): void => {
     wheelEventZoomMatrix(this.viewport, { point, deltaY });
-    const panel = (this.viewport.constructor as typeof SVGViewport).panel as ClassPanel;
+    const panel = (this.viewport.constructor as typeof SVGViewport).settings;
     panel.cursor = point;
   };
 

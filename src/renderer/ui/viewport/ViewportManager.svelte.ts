@@ -1,0 +1,95 @@
+import { untrack } from "svelte";
+import type { UI } from "../UI.svelte.ts";
+import type { IModelViewport } from "./viewport.ts";
+import { type ModelViewportType, ModelViewports } from "./viewports.ts";
+//import { ViewportStatics } from "./viewport/viewport.ts";
+import { ScriptViewport } from "./ScriptViewport/ScriptViewport.svelte.ts";
+// panels
+// hard-coded viewports, need to somehow auto-place them into the correct location
+import { TerminalViewport } from "./TerminalViewport/TerminalViewport.svelte.ts";
+import { FramesViewport } from "./FramesViewport/FramesViewport.svelte.ts";
+
+export class ViewportManager {
+  ui: UI;
+  #effects: (() => void)[] = [];
+
+  modelViewports: IModelViewport[] = $state([]);
+  // can be included in viewports, but we need to figure out
+  // how to auto-place them in their correct location on screen
+  terminal?: TerminalViewport;
+  frames?: FramesViewport;
+
+  #makeToolViewportEffect = (): (() => void) =>
+    $effect.root(() => {
+      $effect(() => {
+        this.modelViewports.forEach((viewport) => viewport.dealloc());
+        this.modelViewports.forEach((viewport) => this.ui.tool?.bindTo(viewport));
+      });
+      return () => {
+        this.modelViewports.forEach((viewport) => viewport.dealloc());
+      };
+    });
+
+  #triggerViewportRedraw = (): (() => void) =>
+    $effect.root(() => {
+      $effect(() => {
+        this.modelViewports.forEach((viewport) => viewport.redraw?.());
+      });
+      return () => {
+        // empty
+      };
+    });
+
+  constructor(ui: UI) {
+    this.ui = ui;
+    this.#effects = [this.#triggerViewportRedraw(), this.#makeToolViewportEffect()];
+    this.terminal = new TerminalViewport();
+    this.frames = new FramesViewport();
+  }
+
+  // manage viewport array
+
+  add(ViewClass?: ModelViewportType): void {
+    if (!ViewClass) {
+      this.modelViewports.push(new ModelViewports[0]());
+    } else {
+      this.modelViewports.push(new ViewClass());
+    }
+  }
+
+  swap(index: number, ViewClass: ModelViewportType): void {
+    this.modelViewports.splice(index, 1, new ViewClass());
+  }
+
+  remove(index?: number): void {
+    if (index === undefined) {
+      this.modelViewports.pop();
+    } else {
+      this.modelViewports.splice(index, 1);
+    }
+  }
+
+  addScriptViewport(): void {
+    this.modelViewports.push(new ScriptViewport());
+  }
+
+  showScriptViewport(visible: boolean): void {
+    untrack(() => {
+      if (visible) {
+        this.modelViewports = this.modelViewports
+          .filter((view) => view.constructor !== ScriptViewport)
+          .concat([new ScriptViewport()]);
+      } else {
+        this.modelViewports = this.modelViewports.filter(
+          (view) => view.constructor !== ScriptViewport,
+        );
+      }
+    });
+  }
+
+  // this is not really planned, but if ever the app was to completely de-initialize and
+  // re-initialize itself, we would call this method to cleanup the hanging effect.
+  dealloc(): void {
+    this.#effects.forEach((cleanup) => cleanup());
+  }
+}
