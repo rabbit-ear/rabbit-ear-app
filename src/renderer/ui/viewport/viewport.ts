@@ -36,8 +36,8 @@ export interface Deallocable {
 
 export abstract class IViewport implements Deallocable {
   // static properties (unable to be defined here, please define them)
-  //static name?: string;
-  //static panel?: Component;
+  static name?: string;
+  static panel?: Component;
 
   // an optional panel associated with this viewport.
   panel?: Component;
@@ -56,8 +56,8 @@ export abstract class IViewport implements Deallocable {
 //export interface IModelViewport extends IViewport, ViewportEvents, Deallocable {
 export abstract class IModelViewport implements IViewport, ViewportEvents, Deallocable {
   // static properties (unable to be defined here, please define them)
-  //static name?: string;
-  //static panel?: Component;
+  static name?: string;
+  static panel?: Component;
 
   // an optional panel associated with this viewport.
   panel?: Component;

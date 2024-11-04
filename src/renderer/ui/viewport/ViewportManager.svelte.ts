@@ -1,11 +1,8 @@
 import { untrack } from "svelte";
 import type { UI } from "../UI.svelte.ts";
-import type { IModelViewport } from "./viewport.ts";
-import { type ModelViewportType, ModelViewports } from "./viewports.ts";
-//import { ViewportStatics } from "./viewport/viewport.ts";
+import type { ModelViewportTypes, ModelViewportClassTypes } from "./viewports.ts";
+import { ModelViewports } from "./viewports.ts";
 import { ScriptViewport } from "./ScriptViewport/ScriptViewport.svelte.ts";
-// panels
-// hard-coded viewports, need to somehow auto-place them into the correct location
 import { TerminalViewport } from "./TerminalViewport/TerminalViewport.svelte.ts";
 import { FramesViewport } from "./FramesViewport/FramesViewport.svelte.ts";
 
@@ -13,7 +10,7 @@ export class ViewportManager {
   ui: UI;
   #effects: (() => void)[] = [];
 
-  modelViewports: IModelViewport[] = $state([]);
+  modelViewports: ModelViewportTypes[] = $state([]);
   // can be included in viewports, but we need to figure out
   // how to auto-place them in their correct location on screen
   terminal?: TerminalViewport;
@@ -47,9 +44,7 @@ export class ViewportManager {
     this.frames = new FramesViewport();
   }
 
-  // manage viewport array
-
-  add(ViewClass?: ModelViewportType): void {
+  add(ViewClass?: ModelViewportClassTypes): void {
     if (!ViewClass) {
       this.modelViewports.push(new ModelViewports[0]());
     } else {
@@ -57,7 +52,7 @@ export class ViewportManager {
     }
   }
 
-  swap(index: number, ViewClass: ModelViewportType): void {
+  replace(index: number, ViewClass: ModelViewportClassTypes): void {
     this.modelViewports.splice(index, 1, new ViewClass());
   }
 

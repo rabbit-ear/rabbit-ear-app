@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import type { Viewport } from "../viewport/viewport.ts";
+  import type { IViewport } from "../viewport/viewport.ts";
   import Wrapper from "../panel/Wrapper.svelte";
   import app from "../../app/App.svelte";
   import { SVGViewport } from "../viewport/SVGViewport/SVGViewport.svelte.ts";
@@ -11,11 +11,11 @@
     index,
     viewport,
     children,
-  }: { index: number; viewport?: Viewport; children: Snippet } = $props();
+  }: { index: number; viewport?: IViewport; children: Snippet } = $props();
 
-  const swapSVG = (): void => app.ui?.swapViewport(index, SVGViewport);
-  const swapWebGL = (): void => app.ui?.swapViewport(index, WebGLViewport);
-  const swapSimulator = (): void => app.ui?.swapViewport(index, SimulatorViewport);
+  const swapSVG = (): void => app.ui?.viewports.replace(index, SVGViewport);
+  const swapWebGL = (): void => app.ui?.viewports.replace(index, WebGLViewport);
+  const swapSimulator = (): void => app.ui?.viewports.replace(index, SimulatorViewport);
 
   let pad = $state("0.5rem");
   // background-color: #0002;
