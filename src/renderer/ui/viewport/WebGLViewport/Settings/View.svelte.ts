@@ -1,17 +1,36 @@
-import { identity4x4 } from "rabbit-ear/math/matrix4.js";
+import { identity4x4, multiplyMatrices4 } from "rabbit-ear/math/matrix4.js";
+import settings from "./ClassSettings.svelte.ts";
+import {
+  viewMatrixRightHanded,
+  viewMatrixLeftHanded,
+} from "../../../../general/matrix.ts";
 
-const defaultViewMatrix = (): number[] => [
-  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -5, 1,
-];
+const defaultViewMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -5, 1];
 
 export class View {
   projectionMatrix: number[] = $state([...identity4x4]);
-  viewMatrix: number[] = $state(defaultViewMatrix());
+
+  // view matrix
+  viewMatrix: number[] = $state([...defaultViewMatrix]);
+  //#viewMatrixPre: number[] = $state([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -5, 1]);
+  //#handedMatrix: number[] = $derived(
+  //  settings.rightHanded ? [...viewMatrixRightHanded] : [...viewMatrixLeftHanded],
+  //);
+  //#viewMatrix: number[] = $derived(
+  //  multiplyMatrices4(this.#handedMatrix, this.#viewMatrixPre),
+  //);
+  //get viewMatrix(): number[] {
+  //  return this.#viewMatrix;
+  //}
+  //set viewMatrix(value: number[]) {
+  //  this.#viewMatrixPre = value;
+  //}
+
   modelMatrix: number[] = $state([...identity4x4]);
 
   canvasSize: [number, number] = $state([0, 0]);
 
-  perspective: string = $state("perspective");
+  perspective: string = $state("orthographic");
   renderStyle: string = $state("creasePattern");
   fov: number = $state(30.25);
 

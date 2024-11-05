@@ -1,4 +1,4 @@
-import type { Deallocable } from "../../viewport/viewport.ts";
+import type { Deallocable } from "../../viewport/Viewport.ts";
 
 export class GlobalState implements Deallocable {
   dealloc(): void {

@@ -4,8 +4,8 @@ import type {
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportTouchEvent,
-} from "../viewport.ts";
-import { unsetViewportEvents } from "../viewport.ts";
+} from "../ViewportTypes.ts";
+import { unsetViewportEvents } from "../ViewportTypes.ts";
 import ViewportComponent from "./ViewportComponent.svelte";
 import Dropdown from "./Dropdown.svelte";
 import Panel from "./Panel.svelte";

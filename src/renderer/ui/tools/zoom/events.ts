@@ -2,7 +2,7 @@ import type {
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportEvents,
-} from "../../viewport/viewport.ts";
+} from "../../viewport/ViewportTypes.ts";
 import { ToolState } from "./state.svelte.ts";
 import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import type { WebGLViewport } from "../../viewport/WebGLViewport/WebGLViewport.svelte.ts";
@@ -14,7 +14,7 @@ export class WebGLViewportEvents implements ViewportEvents {
   previousPoint: [number, number] | undefined;
 
   onmousemove = (event: ViewportMouseEvent): void => {
-    // console.log("onmousemove", this, this.viewport);
+    //console.log("onmousemove", this, this.viewport);
     event.preventDefault();
     const { point } = event;
     const buttons = this.previousPoint ? 1 : 0;

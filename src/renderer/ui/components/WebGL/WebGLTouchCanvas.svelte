@@ -4,7 +4,7 @@
     ViewportMouseEvent,
     ViewportWheelEvent,
     ViewportTouchEvent,
-  } from "../../viewport/viewport.ts";
+  } from "../../viewport/ViewportTypes.ts";
   import { identity4x4 } from "rabbit-ear/math/matrix4.js";
   import { vectorFromScreenLocation } from "../../../general/matrix.ts";
   import WebGLCanvas from "./WebGLCanvas.svelte";

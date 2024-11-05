@@ -1,5 +1,5 @@
 import type { Component } from "svelte";
-import type { IModelViewport } from "./viewport/viewport.ts";
+import type { IModelViewport } from "../viewport/viewport.ts";
 
 export interface Deallocable {
   dealloc(): void;

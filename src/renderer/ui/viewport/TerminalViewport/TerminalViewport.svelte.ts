@@ -1,7 +1,6 @@
 import type { Component } from "svelte";
-import type { IViewport } from "../viewport.ts";
-import type { ViewportEvents } from "../viewport.ts";
-import { unsetViewportEvents } from "../viewport.ts";
+import type { IViewport, ViewportEvents } from "../ViewportTypes.ts";
+import { unsetViewportEvents } from "../ViewportTypes.ts";
 import ViewportComponent from "./Viewport.svelte";
 import { Events } from "./Events.svelte.ts";
 import { TerminalReprint } from "./TerminalReprint.svelte.ts";

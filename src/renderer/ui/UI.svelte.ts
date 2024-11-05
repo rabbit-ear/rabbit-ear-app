@@ -1,8 +1,7 @@
-import type { UITool } from "./UITool.ts";
-//import type { Panel } from "./panel/panel.ts";
-import Tools from "./tools/index.ts";
+import type { UITool } from "./tools/UITool.ts";
 import { ViewportManager } from "./viewport/ViewportManager.svelte.ts";
 import { PanelsManager } from "./panel/PanelsManager.svelte.ts";
+import Tools from "./tools/index.ts";
 
 export class UI {
   viewports: ViewportManager;

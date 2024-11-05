@@ -11,6 +11,8 @@ import {
   makeMatrix4Translate,
   multiplyMatrices4,
   multiplyMatrix4Vector3,
+  makeOrthographicMatrix4,
+  makePerspectiveMatrix4,
 } from "rabbit-ear/math/matrix4.js";
 import {
   quaternionFromTwoVectors,
@@ -82,13 +84,21 @@ export const getScreenPoint = (
  */
 const SENSITIVITY = 0.075;
 
-export const makeViewMatrixFront = (): number[] => [
-  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1.85, 1,
-];
+//export const viewMatrixRightHanded: readonly number[] = Object.freeze([
+//  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1.85, 1,
+//]);
+//
+//export const viewMatrixLeftHanded: readonly number[] = Object.freeze([
+//  -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, -1.85, 1,
+//]);
 
-export const makeViewMatrixBack = (): number[] => [
-  -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, -1.85, 1,
-];
+export const viewMatrixRightHanded: readonly number[] = Object.freeze([
+  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+]);
+
+export const viewMatrixLeftHanded: readonly number[] = Object.freeze([
+  1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+]);
 
 /**
  * @description Convert a point on a canvas into a 2D vector in the
@@ -193,5 +203,42 @@ export const zoomViewMatrix = (
     }
     default:
       return viewMatrix;
+  }
+};
+
+/**
+ * @description Create a 4x4 projection matrix for either a
+ * perspective or orthographic view.
+ * @param {[number, number]} size the size of the HTML canvas
+ * @param {string} perspective "orthographic" or "perspective"
+ * @param {number} fov the field of view (perspective only)
+ * @returns {number[]} a 4x4 projection matrix
+ */
+export const makeProjectionMatrix = (
+  [width, height],
+  perspective = "perspective",
+  fov = 45,
+  rightHanded = true,
+) => {
+  console.log("rightHanded", rightHanded);
+  const Z_NEAR = 0.1;
+  const Z_FAR = 20;
+  const ORTHO_FAR = -100;
+  const ORTHO_NEAR = 100;
+  const vmin = Math.min(width, height);
+  const padding = [(width - vmin) / vmin / 2, (height - vmin) / vmin / 2];
+  const side = padding.map((p) => p + 0.5);
+  switch (perspective) {
+    case "orthographic":
+      return rightHanded
+        ? makeOrthographicMatrix4(side[1], side[0], -side[1], -side[0], ORTHO_FAR, ORTHO_NEAR)
+        : makeOrthographicMatrix4(-side[1], side[0], side[1], -side[0], ORTHO_FAR, ORTHO_NEAR);
+    case "perspective":
+    default:
+      return rightHanded
+        ? makePerspectiveMatrix4(fov * (Math.PI / 180), width / height, Z_NEAR, Z_FAR)
+        : multiplyMatrices4(
+          makePerspectiveMatrix4(fov * (Math.PI / 180), width / height, Z_NEAR, Z_FAR),
+          [1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
   }
 };

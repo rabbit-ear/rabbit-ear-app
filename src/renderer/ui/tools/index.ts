@@ -1,4 +1,4 @@
-import type { UITool } from "../UITool.ts";
+import type { UITool } from "../tools/UITool.ts";
 import circle from "./circle/index.ts";
 import line from "./line/index.ts";
 import rect from "./rect/index.ts";

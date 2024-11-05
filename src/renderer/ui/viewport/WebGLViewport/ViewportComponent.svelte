@@ -14,12 +14,13 @@
 
 <WebGLFOLD
   graph={app.file?.graph}
-  onmousemove={(...args): void => viewport.onmousemove?.(...args)}
-  onmousedown={(...args): void => viewport.onmousedown?.(...args)}
-  onmouseup={(...args): void => viewport.onmouseup?.(...args)}
-  onmouseleave={(...args): void => viewport.onmouseleave?.(...args)}
-  onwheel={(...args): void => viewport.onwheel?.(...args)}
+  onmousemove={viewport.onmousemove}
+  onmousedown={viewport.onmousedown}
+  onmouseup={viewport.onmouseup}
+  onmouseleave={viewport.onmouseleave}
+  onwheel={viewport.onwheel}
   bind:redraw={viewport.redraw}
+  rightHanded={settings.rightHanded}
   perspective={viewport?.view?.perspective}
   viewMatrix={viewport?.view?.viewMatrix}
   renderStyle={viewport?.view?.renderStyle}

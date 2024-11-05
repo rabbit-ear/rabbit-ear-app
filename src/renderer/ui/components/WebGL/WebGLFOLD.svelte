@@ -2,21 +2,23 @@
   //import { untrack } from "svelte";
   import earcut from "earcut";
   import type { FOLD, WebGLModel } from "rabbit-ear/types.js";
-  import type { ViewportEvents } from "../../viewport/viewport.ts";
+  import type { ViewportEvents } from "../../viewport/ViewportTypes.ts";
   import { identity4x4, multiplyMatrices4 } from "rabbit-ear/math/matrix4.js";
   import { makeModelMatrix } from "rabbit-ear/webgl/general/view.js";
   import { creasePattern } from "rabbit-ear/webgl/creasePattern/models.js";
   import { foldedForm } from "rabbit-ear/webgl/foldedForm/models.js";
-  import { makeProjectionMatrix } from "rabbit-ear/webgl/general/view.js";
+  //import { makeProjectionMatrix } from "rabbit-ear/webgl/general/view.js";
   import { worldAxes } from "./WorldAxes/models.js";
   // import { touchIndicators } from "rabbit-ear/webgl/touches/models.js";
   import { deallocModel } from "rabbit-ear/webgl/general/model.js";
   import { dark, light } from "rabbit-ear/webgl/general/colors.js";
   import WebGLModelView from "./WebGLModelView.svelte";
   import WebGLTouchCanvas from "./WebGLTouchCanvas.svelte";
+  import { makeProjectionMatrix } from "../../../general/matrix.ts";
 
   type PropsType = ViewportEvents & {
     graph?: FOLD;
+    rightHanded?: boolean;
     perspective?: string;
     renderStyle?: string;
     viewMatrix?: number[];
@@ -37,6 +39,7 @@
 
   let {
     graph = {},
+    rightHanded = true,
     perspective = "orthographic",
     renderStyle = "creasePattern",
     viewMatrix = [...identity4x4],
@@ -67,7 +70,9 @@
   let canvas: HTMLCanvasElement | undefined = $state();
   let canvasSize: [number, number] = $state([0, 0]);
 
-  let projectionMatrix = $derived(makeProjectionMatrix(canvasSize, perspective, fov));
+  let projectionMatrix = $derived(
+    makeProjectionMatrix(canvasSize, perspective, fov, rightHanded),
+  );
   let outlineColor = $derived(darkMode ? "white" : "black");
   let cpColor = $derived(darkMode ? "#111111" : "white");
   let modelMatrix = $derived(makeModelMatrix(graph));

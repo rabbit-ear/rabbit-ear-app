@@ -5,8 +5,8 @@ import type {
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportTouchEvent,
-} from "../viewport.ts";
-import { unsetViewportEvents } from "../viewport.ts";
+} from "../ViewportTypes.ts";
+import { unsetViewportEvents } from "../ViewportTypes.ts";
 import { Grid } from "./Settings/Grid.svelte.ts";
 import { Snap } from "./Settings/Snap.svelte.ts";
 import { View } from "./Settings/View.svelte.ts";

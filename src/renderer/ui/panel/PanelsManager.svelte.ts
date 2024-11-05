@@ -1,8 +1,8 @@
 import type { Component } from "svelte";
 import type { UI } from "../UI.svelte.ts";
 import type {
-  ModelViewportClassTypes,
   ViewportClassTypes,
+  ModelViewportClassTypes,
 } from "../viewport/viewports.ts";
 import AppPanel from "./AppPanel.svelte";
 import { uniqueObjects } from "./arrays.ts";
