@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Settings from "./ClassSettings.svelte.ts";
+  import Settings from "./Settings/ClassSettings.svelte.ts";
 </script>
 
 <div class="column gap">

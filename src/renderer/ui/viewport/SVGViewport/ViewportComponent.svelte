@@ -7,7 +7,7 @@
   } from "../../viewport/ViewportTypes.ts";
   import GridLayer from "./GridLayer.svelte";
   import SVGTouchCanvas from "../../components/SVG/SVGTouchCanvas.svelte";
-  import SVGElements from "../../components/SVG/SVGElements.svelte";
+  import SVGShapes from "../../components/SVG/SVGShapes.svelte";
   import SVGFOLD from "../../components/SVG/SVGFOLD.svelte";
   import settings from "./Settings/Settings.svelte.ts";
   import app from "../../../app/App.svelte.ts";
@@ -60,7 +60,7 @@
   {#if settings.showGrid}
     <GridLayer {viewport} />
   {/if}
-  <SVGElements elements={app.file?.geometry.shapes} class="model-layer" />
+  <SVGShapes shapes={app.file?.geometry.shapes} class="model-layer" />
   <SVGFOLD graph={app.file?.graph} />
   {#if SVGToolLayer}
     <g

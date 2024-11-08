@@ -1,23 +1,21 @@
 <script lang="ts">
   import type { FOLD, Box } from "rabbit-ear/types.d.ts";
   import { boundingBox } from "rabbit-ear/graph/boundary.js";
-  //import type { SimulatorViewport } from "./SimulatorViewport.svelte.ts";
-  //import * as THREE from "three";
+  import type { SimulatorViewport } from "./SimulatorViewport.svelte.ts";
   import { untrack } from "svelte";
   //import TrackballView from "./ThreeJS/TrackballView.svelte";
-  import Settings from "./Settings.svelte.ts";
-  import ClassSettings from "./ClassSettings.svelte.ts";
+  import Settings from "./Settings/Settings.svelte.ts";
+  import ClassSettings from "./Settings/ClassSettings.svelte.ts";
   import { Model } from "../../../simulator/simulator/Model.ts";
   import WebGLFOLD from "../../components/WebGL/WebGLFOLD.svelte";
-  //import { MeshThree } from "../../../simulator/three/MeshThree.ts";
   import app from "../../../app/App.svelte.ts";
 
-  //type PropsType = {
-  //  viewport: SimulatorViewport;
-  //  rest?: unknown[];
-  //};
+  type PropsType = {
+    viewport: SimulatorViewport;
+    rest?: unknown[];
+  };
 
-  //let { viewport, ...rest }: PropsType = $props();
+  let { viewport, ...rest }: PropsType = $props();
 
   let abstractGraph: FOLD = $state({});
   let vertices_coords: [number, number, number][] = $state([]);
@@ -30,24 +28,12 @@
   });
 
   let model: Model = $state();
-  //let mesh: MeshThree = $state();
-  //let camera: THREE.PerspectiveCamera;
-  //let scene: THREE.Scene;
   let modelSize = $state(1);
-
-  //// This is the callback from the ThreeView component
-  //// after three.js has finished loading.
-  //const didMount = ({ scene: defaultScene, camera: trackballCamera }) => {
-  //  scene = defaultScene;
-  //  camera = trackballCamera;
-  //  scene.add(new THREE.AmbientLight(0xffffff, 2.0));
-  //};
 
   // cleanup all memory associated with origami simulator
   const dealloc = (): void => {
     console.log("simulator cleanup");
     model?.dealloc();
-    //mesh?.dealloc();
   };
 
   // this is the solver loop, attach this to requestAnimationFrame
@@ -78,11 +64,7 @@
     untrack(() => {
       try {
         model?.dealloc();
-        //mesh?.dealloc();
         model = new Model(fold);
-        //model = new Model({});
-        //mesh = new MeshThree(model);
-        //mesh.scene = scene;
         box = boundingBox(fold);
         ClassSettings.exportModel = model.export.bind(model);
         ClassSettings.reset = model.reset.bind(model);
@@ -129,10 +111,31 @@
 
   // cleanup when navigating away from the page.
   $effect(() => dealloc);
+  //ontouchmove,
+  //ontouchstart,
+  //ontouchend,
+  //ontouchcancel
 </script>
 
 <WebGLFOLD
   graph={$state.snapshot(graph)}
-  perspective="perspective"
-  renderStyle="creasePattern"
-  viewMatrix={[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1]} />
+  perspective={viewport.view.perspective}
+  renderStyle={viewport.view.renderStyle}
+  viewMatrix={viewport.view.viewMatrix}
+  bind:redraw={viewport.redraw}
+  rightHanded={viewport.view.rightHanded}
+  layerNudge={0.01}
+  fov={viewport.view.fov}
+  darkMode={true}
+  frontColor={viewport.style.frontColor}
+  backColor={viewport.style.backColor}
+  strokeWidth={viewport.style.strokeWidth}
+  showFoldedFaceOutlines={true}
+  showFoldedCreases={false}
+  showFoldedFaces={true}
+  onmousemove={viewport.onmousemove}
+  onmousedown={viewport.onmousedown}
+  onmouseup={viewport.onmouseup}
+  onmouseleave={viewport.onmouseleave}
+  onwheel={viewport.onwheel}
+  {...rest} />

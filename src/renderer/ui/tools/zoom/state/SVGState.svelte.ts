@@ -1,10 +1,9 @@
 import { untrack } from "svelte";
 import { subtract2 } from "rabbit-ear/math/vector.js";
-import type { Deallocable } from "../../viewport/viewport.ts";
-import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
-import type { WebGLViewport } from "../../viewport/WebGLViewport/WebGLViewport.svelte.ts";
-import { panCameraMatrix } from "./matrix.ts";
-import { SVGViewportEvents, WebGLViewportEvents } from "./events.ts";
+import type { Deallocable } from "../../../viewport/ViewportTypes.ts";
+import type { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svelte.ts";
+import { panCameraMatrix } from "../matrix.ts";
+import { SVGEvents } from "../events/SVGEvents.ts";
 
 export class ToolState {
   press: [number, number] | undefined = $state();
@@ -49,16 +48,16 @@ export class ToolState {
   }
 }
 
-export class SVGViewportState implements Deallocable {
+export class SVGState implements Deallocable {
   viewport: SVGViewport;
   tool: ToolState;
-  events: SVGViewportEvents;
+  events: SVGEvents;
   unsub: (() => void)[] = [];
 
   constructor(viewport: SVGViewport) {
     this.viewport = viewport;
     this.tool = new ToolState(this.viewport);
-    this.events = new SVGViewportEvents(this.viewport, this.tool);
+    this.events = new SVGEvents(this.viewport, this.tool);
     this.unsub.push(this.tool.doPan());
   }
 
@@ -66,25 +65,5 @@ export class SVGViewportState implements Deallocable {
     this.unsub.forEach((u) => u());
     this.unsub = [];
     this.tool.reset();
-  }
-}
-
-export class GLViewportState implements Deallocable {
-  viewport: WebGLViewport;
-  events: WebGLViewportEvents;
-
-  constructor(viewport: WebGLViewport) {
-    this.viewport = viewport;
-    this.events = new WebGLViewportEvents(this.viewport);
-  }
-
-  dealloc(): void {
-    // empty
-  }
-}
-
-export class GlobalState implements Deallocable {
-  dealloc(): void {
-    // empty
   }
 }

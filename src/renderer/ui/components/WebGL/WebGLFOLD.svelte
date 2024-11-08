@@ -109,12 +109,12 @@
       return renderStyle === "creasePattern"
         ? [
             ...creasePattern(gl, version, graph, programOptions),
-            ...worldAxes(gl),
+            //...worldAxes(gl),
             // ...touchIndicators(gl, programOptions),
           ]
         : [
             ...foldedForm(gl, version, graph, programOptions),
-            ...worldAxes(gl),
+            //...worldAxes(gl),
             // ...touchIndicators(gl, programOptions),
           ];
     } catch (error) {

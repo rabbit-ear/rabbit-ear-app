@@ -1,33 +1,76 @@
 <script lang="ts">
-  import Settings from "./Settings.svelte.ts";
-  import Style from "./Style.svelte.ts";
+  import { SimulatorViewport } from "./SimulatorViewport.svelte.ts";
+  //import type { ViewportPanel } from "./Panel.svelte.ts";
+  //import Settings from "./Settings/Settings.svelte.ts";
+  //import Style from "./Settings/Style.svelte.ts";
+  let { viewport }: { viewport: SimulatorViewport } = $props();
 </script>
 
-<div class={"container"}>
-  <!--
-  <h3>
-    show strain
-    <input type="checkbox" disabled={!Settings.active} bind:checked={Settings.strain} />
-  </h3>
-  -->
+<div class="row toggle-row">
+  <button
+    class={viewport.view.perspective === "perspective" ? "highlighted" : ""}
+    onclick={(): string => (viewport.view.perspective = "perspective")}>3D</button>
+  <button
+    class={viewport.view.perspective === "orthographic" ? "highlighted" : ""}
+    onclick={(): string => (viewport.view.perspective = "orthographic")}>2D</button>
+</div>
+
+<div class="row toggle-row">
+  <button
+    class={viewport.view.renderStyle === "creasePattern" ? "highlighted" : ""}
+    onclick={(): string => (viewport.view.renderStyle = "creasePattern")}>CP</button>
+  <button
+    class={viewport.view.renderStyle === "foldedForm" ? "highlighted" : ""}
+    onclick={(): string => (viewport.view.renderStyle = "foldedForm")}>folded</button>
+</div>
+
+<div class="row gap">
+  <p>lines</p>
+  <input
+    type="range"
+    min="0"
+    max="1"
+    step="0.02"
+    bind:value={viewport.style.lineOpacity} />
+</div>
+<div class="row gap">
+  <input type="checkbox" id="show-boundary" bind:checked={viewport.style.showBoundary} />
+  <input type="text" class="medium" bind:value={viewport.style.boundaryColor} />
+  <label for="show-boundary">boundary</label>
+</div>
+<div class="row gap">
+  <input type="checkbox" id="show-mountain" bind:checked={viewport.style.showMountain} />
+  <input type="text" class="medium" bind:value={viewport.style.mountainColor} />
+  <label for="show-mountain">mountain</label>
+</div>
+<div class="row gap">
+  <input type="checkbox" id="show-valley" bind:checked={viewport.style.showValley} />
+  <input type="text" class="medium" bind:value={viewport.style.valleyColor} />
+  <label for="show-valley">valley</label>
+</div>
+<div class="row gap">
+  <input type="checkbox" id="show-flat" bind:checked={viewport.style.showFlat} />
+  <input type="text" class="medium" bind:value={viewport.style.flatColor} />
+  <label for="show-flat">flat</label>
+</div>
+<div class="row gap">
+  <input type="checkbox" id="show-join" bind:checked={viewport.style.showJoin} />
+  <input type="text" class="medium" bind:value={viewport.style.joinColor} />
+  <label for="show-join">triangulated</label>
+</div>
+<div class="row gap">
+  <input
+    type="checkbox"
+    id="show-unassigned"
+    bind:checked={viewport.style.showUnassigned} />
+  <input type="text" class="medium" bind:value={viewport.style.unassignedColor} />
+  <label for="show-unassigned">unassigned</label>
+</div>
+
+<!--
   <h3>
     show strain
     <input type="checkbox" bind:checked={Settings.strain} />
-  </h3>
-
-  <h3>
-    show touches
-    <input type="checkbox" bind:checked={Style.showTouches} />
-  </h3>
-
-  <h3>
-    show shadows
-    <input type="checkbox" disabled={Settings.strain} bind:checked={Style.showShadows} />
-  </h3>
-
-  <h3>
-    background
-    <input type="text" class="medium" bind:value={Style.backgroundColor} />
   </h3>
 
   <h3>
@@ -40,60 +83,18 @@
     <input type="checkbox" id="show-faces-back" bind:checked={Style.showBack} />
     <input type="text" class="medium" bind:value={Style.backColor} />
   </h3>
-
-  <h3>lines</h3>
-  <input type="range" min="0" max="1" step="0.02" bind:value={Style.lineOpacity} />
-  <div>
-    <input type="checkbox" id="show-line-boundary" bind:checked={Style.showBoundary} />
-    <input type="text" class="medium" bind:value={Style.boundaryColor} />
-    <label for="show-line-boundary">boundary</label>
-    <br />
-    <input type="checkbox" id="show-line-mountain" bind:checked={Style.showMountain} />
-    <input type="text" class="medium" bind:value={Style.mountainColor} />
-    <label for="show-line-mountain">mountain</label>
-    <br />
-    <input type="checkbox" id="show-line-valley" bind:checked={Style.showValley} />
-    <input type="text" class="medium" bind:value={Style.valleyColor} />
-    <label for="show-line-valley">valley</label>
-    <br />
-    <input type="checkbox" id="show-line-flat" bind:checked={Style.showFlat} />
-    <input type="text" class="medium" bind:value={Style.flatColor} />
-    <label for="show-line-flat">flat</label>
-    <br />
-    <input type="checkbox" id="show-line-join" bind:checked={Style.showJoin} />
-    <input type="text" class="medium" bind:value={Style.joinColor} />
-    <label for="show-line-join">triangulated</label>
-    <br />
-    <input
-      type="checkbox"
-      id="show-line-unassigned"
-      bind:checked={Style.showUnassigned} />
-    <input type="text" class="medium" bind:value={Style.unassignedColor} />
-    <label for="show-line-unassigned">unassigned</label>
-  </div>
-</div>
+-->
 
 <style>
-  .container {
-    background-color: #000b;
-    z-index: 2;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 0.5rem;
-    overflow-y: auto;
-    max-height: 100vh;
-    text-shadow:
-      -1px -1px 0 #0008,
-      1px -1px 0 #0008,
-      -1px 1px 0 #0008,
-      1px 1px 0 #0008;
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
-  .container > * {
-    margin: 0.33rem 0;
+  .gap {
+    gap: 0.5rem;
   }
-  /*.container input[type=radio] + * {*/
-  .container input {
-    margin: 0rem 0.25rem;
+  input[type="text"] {
+    width: 4rem;
   }
 </style>

@@ -8,9 +8,11 @@ import type {
 import { unsetViewportEvents } from "../ViewportTypes.ts";
 //import ViewportComponent from "./Simulator.svelte";
 import ViewportComponent from "./SimulatorSimple.svelte";
-//import { ViewportPanel } from "./SettingsPanel.svelte.ts";
+import { View } from "./Settings/View.svelte.ts";
+import { Style } from "./Settings/Style.svelte.ts";
 import Panel from "./Panel.svelte";
-import settings from "./ClassSettings.svelte.ts";
+import Dropdown from "./Dropdown.svelte";
+import settings from "./Settings/ClassSettings.svelte.ts";
 
 export class SimulatorViewport implements IModelViewport {
   static settings = settings;
@@ -19,8 +21,8 @@ export class SimulatorViewport implements IModelViewport {
   component: Component;
   panel: Component;
 
-  //view: View;
-  //style: Style;
+  view: View;
+  style: Style;
 
   redraw?: () => void = $state();
 
@@ -38,6 +40,9 @@ export class SimulatorViewport implements IModelViewport {
 
   constructor() {
     this.component = ViewportComponent;
+    this.panel = Dropdown;
+    this.view = new View();
+    this.style = new Style();
     //this.panel = new ViewportPanel();
   }
 

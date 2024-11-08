@@ -14,7 +14,9 @@ class Settings {
   strain = $state(false);
 
   // ask origami simulator to export the current 3D state
-  exportModel = $state(() => {});
+  exportModel = $state(() => {
+    // todo
+  });
 
   unbind: (() => void)[] = [];
   constructor() {

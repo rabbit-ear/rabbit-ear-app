@@ -3,15 +3,15 @@
   import { shapeToElement, type Shape } from "../../../geometry/shapes.ts";
 
   type PropsType = {
-    elements: Shape[] | undefined;
+    shapes: Shape[] | undefined;
   };
 
-  const { elements, ...props }: PropsType & SVGAttributes<SVGGElement> = $props();
+  const { shapes, ...props }: PropsType & SVGAttributes<SVGGElement> = $props();
 
   let g: SVGGElement;
 
   const svgElements = $derived(
-    (elements || []).map(shapeToElement).filter((a) => a !== undefined),
+    (shapes || []).map(shapeToElement).filter((a) => a !== undefined),
   );
 
   const remove = (el: Element): void => {

@@ -1,7 +1,9 @@
 //
 // show/hide things
 //
-class Style {
+export class Style {
+  strokeWidth = $state(0.005);
+
   // highlight vertices/faces under the cursor
   showTouches = $state(true);
 
@@ -42,6 +44,3 @@ class Style {
   joinColor = $state("#f80");
   unassignedColor = $state("#80f");
 }
-
-export default new Style();
-
