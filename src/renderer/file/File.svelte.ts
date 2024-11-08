@@ -30,8 +30,6 @@ export class File {
   // Has the current file been edited and not yet saved?
   modified: boolean = $state(false);
 
-  geometry: Geometry;
-
   framesFlat: FOLD[] = $derived.by(() => {
     try {
       const fold = reassembleFramesToFOLD($state.snapshot(this.frames));
@@ -43,6 +41,7 @@ export class File {
   });
 
   graph: FOLD = $derived(this.framesFlat[this.activeFrame]);
+  geometry: Geometry;
 
   constructor(path: FilePathInfo, data: FOLD) {
     this.path = path;

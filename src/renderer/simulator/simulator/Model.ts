@@ -162,6 +162,24 @@ export class Model {
     this.gpuMath.updateMaterials(this, initing);
   }
 
+  /**
+   * @description Call this method from inside the animation frame loop.
+   * This will pack the model's positions into a vertices_coords FOLD array.
+   * The rest of the graph (edges, faces) will not change so they can be cached
+   * at load, then this is the only FOLD array that needs updating in the loop.
+   */
+  get vertices_coords(): [number, number, number][] {
+    const length = Math.floor(this.positions.length / 3);
+    return Array.from(Array(length)).map(
+      (_, v) =>
+        [v * 3, v * 3 + 1, v * 3 + 2].map((i) => this.positions[i]) as [
+          number,
+          number,
+          number,
+        ],
+    );
+  }
+
   set integration(integration: string) {
     this.gpuMath.integrationType = integration;
     this.reset();

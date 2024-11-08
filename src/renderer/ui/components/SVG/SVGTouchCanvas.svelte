@@ -6,7 +6,7 @@
     ViewportMouseEvent,
     ViewportWheelEvent,
     ViewportTouchEvent,
-  } from "../../viewport/viewport.ts";
+  } from "../../viewport/ViewportTypes.ts";
   import { convertToViewBox, findInParents } from "../../../general/dom.ts";
   import SVGCanvas from "./SVGCanvas.svelte";
 

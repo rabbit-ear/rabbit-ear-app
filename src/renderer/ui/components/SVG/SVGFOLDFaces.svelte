@@ -31,4 +31,17 @@
     stroke: none;
     fill: #fff1;
   }
+  :global(.foldedForm) {
+    polygon {
+      stroke: none;
+      fill: #fff1;
+    }
+  }
+  :global(.creasePattern) {
+    polygon {
+      stroke: none;
+      /*fill: #fff1;*/
+      fill: #111;
+    }
+  }
 </style>

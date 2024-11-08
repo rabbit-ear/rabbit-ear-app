@@ -1,5 +1,5 @@
 import type { Component } from "svelte";
-import type { IViewport, IModelViewport } from "./types.ts";
+import type { IViewport, IModelViewport } from "./ViewportTypes.ts";
 import { FramesViewport } from "./FramesViewport/FramesViewport.svelte.ts";
 import { ScriptViewport } from "./ScriptViewport/ScriptViewport.svelte.ts";
 import { SimulatorViewport } from "./SimulatorViewport/SimulatorViewport.svelte.ts";

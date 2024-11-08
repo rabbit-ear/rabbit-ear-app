@@ -4,7 +4,7 @@
     ViewportMouseEvent,
     ViewportWheelEvent,
     ViewportTouchEvent,
-  } from "../../viewport/viewport.ts";
+  } from "../../viewport/ViewportTypes.ts";
   import GridLayer from "./GridLayer.svelte";
   import SVGTouchCanvas from "../../components/SVG/SVGTouchCanvas.svelte";
   import SVGElements from "../../components/SVG/SVGElements.svelte";

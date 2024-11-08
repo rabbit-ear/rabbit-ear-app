@@ -57,7 +57,7 @@
 <style>
   .B,
   .b {
-    stroke: black;
+    stroke: darkgray;
   }
 
   .M,
@@ -72,7 +72,7 @@
 
   .F,
   .f {
-    stroke: lightgray;
+    stroke: #555;
   }
 
   .J,

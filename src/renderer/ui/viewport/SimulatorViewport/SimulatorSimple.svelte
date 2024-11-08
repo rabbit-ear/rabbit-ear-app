@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Box } from "rabbit-ear/types.d.ts";
+  import type { FOLD, Box } from "rabbit-ear/types.d.ts";
   import { boundingBox } from "rabbit-ear/graph/boundary.js";
   //import type { SimulatorViewport } from "./SimulatorViewport.svelte.ts";
   //import * as THREE from "three";
@@ -19,7 +19,15 @@
 
   //let { viewport, ...rest }: PropsType = $props();
 
-  let origami = $derived(app.file?.graph);
+  let abstractGraph: FOLD = $state({});
+  let vertices_coords: [number, number, number][] = $state([]);
+  let graph: FOLD = $derived({
+    vertices_coords,
+    edges_vertices: abstractGraph?.edges_vertices,
+    edges_assignment: abstractGraph?.edges_assignment,
+    edges_foldAngle: abstractGraph?.edges_foldAngle,
+    faces_vertices: abstractGraph?.faces_vertices,
+  });
 
   let model: Model = $state();
   //let mesh: MeshThree = $state();
@@ -47,12 +55,12 @@
   const computeLoop = (): void => {
     computeLoopID = window.requestAnimationFrame(computeLoop);
     ClassSettings.error = model?.solve(100);
-    //mesh?.sync();
+    vertices_coords = model.vertices_coords;
   };
 
   // start or stop the animation loop, depending on Settings.active
   $effect(() => {
-    console.log("updating loop", $state.snapshot(ClassSettings.active));
+    //console.log("updating loop", $state.snapshot(ClassSettings.active));
     if (computeLoopID) {
       window.cancelAnimationFrame(computeLoopID);
       computeLoopID = undefined;
@@ -65,7 +73,7 @@
   // on file load.
   // untrack is needed to prevent re-loading at other times too.
   $effect(() => {
-    const fold = $state.snapshot(origami);
+    const fold = $state.snapshot(app.file?.graph);
     let box: Box | undefined;
     untrack(() => {
       try {
@@ -78,6 +86,9 @@
         box = boundingBox(fold);
         ClassSettings.exportModel = model.export.bind(model);
         ClassSettings.reset = model.reset.bind(model);
+        // edges and faces are built here and never change, only vertices need updating
+        abstractGraph = structuredClone(model.fold);
+        vertices_coords = structuredClone(model.fold.vertices_coords);
       } catch (error) {
         console.error(error);
         window.alert(error);
@@ -121,7 +132,7 @@
 </script>
 
 <WebGLFOLD
-  graph={app.file?.graph}
+  graph={$state.snapshot(graph)}
   perspective="perspective"
-  renderStyle="foldedForm"
-  viewMatrix={[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -5, 1]} />
+  renderStyle="creasePattern"
+  viewMatrix={[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1]} />

@@ -1,79 +1,5 @@
-import ear from "rabbit-ear";
-import { subtract2 } from "rabbit-ear/math/vector.js";
-import { intersectLineLine } from "rabbit-ear/math/intersect.js";
-import { excludeS } from "rabbit-ear/math/compare.js";
-
-export type Line = {
-  x1?: number;
-  y1?: number;
-  x2?: number;
-  y2?: number;
-};
-
-export type Rect = {
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
-};
-
-export type Circle = {
-  cx?: number;
-  cy?: number;
-  r?: number;
-};
-
-export type Path = {
-  d?: string;
-};
-
-export type Shape = {
-  name: string;
-  params: Line | Rect | Circle | Path;
-};
-
-const intersectLines = (a, b): [number, number] => {
-  const lineA = {
-    vector: subtract2([a.x2, a.y2], [a.x1, a.y1]),
-    origin: [a.x1, a.y1],
-  };
-  const lineB = {
-    vector: subtract2([b.x2, b.y2], [b.x1, b.y1]),
-    origin: [b.x1, b.y1],
-  };
-  const { point } = intersectLineLine(lineA, lineB, excludeS, excludeS);
-  return point;
-};
-
-export const shapeToElement = ({ name, params }: Shape): SVGElement | undefined => {
-  switch (name) {
-    case "rect": {
-      const rect = params as Rect;
-      return ear.svg.rect(rect.x, rect.y, rect.width, rect.height);
-    }
-    case "line": {
-      const line = params as Line;
-      return ear.svg.line(line.x1, line.y1, line.x2, line.y2);
-    }
-    case "circle": {
-      const circle = params as Circle;
-      return ear.svg.circle(circle.cx, circle.cy, circle.r);
-    }
-    case "path": {
-      return ear.svg.path((params as Path).d);
-    }
-    default:
-      return undefined;
-  }
-};
-
-// temporarily returns all circles, that's all.
-//const getShapesInRect = (shapes: Shape[], rect): number[] => {
-const getShapesInRect = (shapes: Shape[]): number[] => {
-  return shapes
-    .map(({ name }, i) => (name === "circle" ? i : undefined))
-    .filter((a) => a !== undefined);
-};
+import type { Shape } from "../geometry/shapes.ts";
+import { getShapesInRect, intersectAllShapes } from "../geometry/intersect.ts";
 
 export class Geometry {
   shapes: Shape[] = $state([]);
@@ -123,22 +49,7 @@ export class Geometry {
   #makeIntersectionsEffect(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const results = [];
-        for (let i = 0; i < this.shapes.length - 1; i += 1) {
-          if (this.shapes[i].name !== "line") {
-            continue;
-          }
-          for (let j = i + 1; j < this.shapes.length; j += 1) {
-            if (this.shapes[j].name !== "line") {
-              continue;
-            }
-            const result = intersectLines(this.shapes[i].params, this.shapes[j].params);
-            if (result) {
-              results.push(result);
-            }
-          }
-        }
-        this.snapPoints = results;
+        this.snapPoints = intersectAllShapes(this.shapes);
       });
       return () => {
         // empty
@@ -146,16 +57,16 @@ export class Geometry {
     });
   }
 
-  loadExampleData(): void {
-    this.shapes.push({ name: "circle", params: { cx: 0, cy: 0, r: 1 } });
-    this.shapes.push({
-      name: "circle",
-      params: { cx: 0.5, cy: 0.5, r: Math.SQRT1_2 },
-    });
-    this.shapes.push({ name: "rect", params: { x: 0, y: 0, width: 1, height: 1 } });
-    this.shapes.push({ name: "line", params: { x1: 0, y1: 0, x2: 1, y2: 1 } });
-    this.shapes.push({ name: "line", params: { x1: 1, y1: 0, x2: 0, y2: 1 } });
-  }
+  //loadExampleData(): void {
+  //  this.shapes.push({ name: "circle", params: { cx: 0, cy: 0, r: 1 } });
+  //  this.shapes.push({
+  //    name: "circle",
+  //    params: { cx: 0.5, cy: 0.5, r: Math.SQRT1_2 },
+  //  });
+  //  this.shapes.push({ name: "rect", params: { x: 0, y: 0, width: 1, height: 1 } });
+  //  this.shapes.push({ name: "line", params: { x1: 0, y1: 0, x2: 1, y2: 1 } });
+  //  this.shapes.push({ name: "line", params: { x1: 1, y1: 0, x2: 0, y2: 1 } });
+  //}
 
   constructor() {
     this.#effects = [this.#makeIntersectionsEffect()];

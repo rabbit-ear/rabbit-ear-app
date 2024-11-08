@@ -11,9 +11,9 @@
 
   const { graph = {}, ...props }: PropsType & SVGAttributes<SVGGElement> = $props();
 
-  const file_classes = graph.file_classes || [];
-  const frame_classes = graph.frame_classes || [];
-  const className = file_classes.concat(frame_classes).join(" ");
+  const file_classes = $derived(graph.file_classes || []);
+  const frame_classes = $derived(graph.frame_classes || []);
+  const className = $derived(file_classes.concat(frame_classes).join(" "));
 </script>
 
 <g class={className} {...props}>
@@ -23,7 +23,9 @@
   <g class="edges">
     <SVGFOLDEdges {graph} />
   </g>
+  <!--
   <g class="vertices">
-    <!-- <SVGFOLDVertices {graph} /> -->
+    <SVGFOLDVertices {graph} />
   </g>
+  -->
 </g>

@@ -219,7 +219,7 @@ export const makeProjectionMatrix = (
   perspective = "perspective",
   fov = 45,
   rightHanded = true,
-) => {
+): number[] => {
   console.log("rightHanded", rightHanded);
   const Z_NEAR = 0.1;
   const Z_FAR = 20;
@@ -231,14 +231,29 @@ export const makeProjectionMatrix = (
   switch (perspective) {
     case "orthographic":
       return rightHanded
-        ? makeOrthographicMatrix4(side[1], side[0], -side[1], -side[0], ORTHO_FAR, ORTHO_NEAR)
-        : makeOrthographicMatrix4(-side[1], side[0], side[1], -side[0], ORTHO_FAR, ORTHO_NEAR);
+        ? makeOrthographicMatrix4(
+            side[1],
+            side[0],
+            -side[1],
+            -side[0],
+            ORTHO_FAR,
+            ORTHO_NEAR,
+          )
+        : makeOrthographicMatrix4(
+            -side[1],
+            side[0],
+            side[1],
+            -side[0],
+            ORTHO_FAR,
+            ORTHO_NEAR,
+          );
     case "perspective":
     default:
       return rightHanded
         ? makePerspectiveMatrix4(fov * (Math.PI / 180), width / height, Z_NEAR, Z_FAR)
         : multiplyMatrices4(
-          makePerspectiveMatrix4(fov * (Math.PI / 180), width / height, Z_NEAR, Z_FAR),
-          [1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+            makePerspectiveMatrix4(fov * (Math.PI / 180), width / height, Z_NEAR, Z_FAR),
+            [1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+          );
   }
 };
