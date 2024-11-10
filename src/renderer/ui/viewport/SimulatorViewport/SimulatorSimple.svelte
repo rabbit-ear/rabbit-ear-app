@@ -33,6 +33,10 @@
   // cleanup all memory associated with origami simulator
   const dealloc = (): void => {
     console.log("simulator cleanup");
+    if (computeLoopID) {
+      window.cancelAnimationFrame(computeLoopID);
+      computeLoopID = undefined;
+    }
     model?.dealloc();
   };
 
@@ -41,7 +45,7 @@
   const computeLoop = (): void => {
     computeLoopID = window.requestAnimationFrame(computeLoop);
     ClassSettings.error = model?.solve(100);
-    vertices_coords = model.vertices_coords;
+    vertices_coords = model?.vertices_coords;
   };
 
   // start or stop the animation loop, depending on Settings.active

@@ -2,9 +2,9 @@ import type { UITool } from "../../tools/UITool.ts";
 import type { IViewport } from "../../viewport/ViewportTypes.ts";
 import { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import { WebGLViewport } from "../../viewport/WebGLViewport/WebGLViewport.svelte.ts";
-import { GlobalState } from "./GlobalState.svelte.ts";
-import { SVGViewportState } from "./SVGViewportState.svelte.ts";
-import { GLViewportState } from "./GLViewportState.svelte.ts";
+import { GlobalState } from "./state/GlobalState.svelte.ts";
+import { SVGState } from "./state/SVGState.svelte.ts";
+import { WebGLState } from "./state/WebGLState.svelte.ts";
 import icon from "./icon.svelte";
 
 class Tool implements UITool {
@@ -15,17 +15,21 @@ class Tool implements UITool {
   state = new GlobalState();
   panel = undefined;
 
-  viewportStates: (SVGViewportState | GLViewportState)[] = [];
+  viewportStates: (SVGState | WebGLState)[] = [];
 
   bindTo(viewport: IViewport): () => void {
     if (viewport instanceof SVGViewport) {
-      const viewportState = new SVGViewportState(viewport, this.state);
+      const viewportState = new SVGState(viewport, this.state);
       this.viewportStates.push(viewportState);
       return viewportState.dealloc;
     } else if (viewport instanceof WebGLViewport) {
-      const viewportState = new GLViewportState(viewport);
+      const viewportState = new WebGLState(viewport);
       this.viewportStates.push(viewportState);
       return viewportState.dealloc;
+      //} else if (viewport instanceof SimulatorState) {
+      //  const viewportState = new WebGLState(viewport);
+      //  this.viewportStates.push(viewportState);
+      //  return viewportState.dealloc;
     } else {
       return () => {};
     }

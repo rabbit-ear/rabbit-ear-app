@@ -9,10 +9,11 @@ import {
 } from "rabbit-ear/math/matrix2.js";
 import { viewBoxOrigin, graphToMatrix2 } from "../../../../general/matrix.ts";
 import app from "../../../../app/App.svelte.ts";
-import settings from "./Settings.svelte.ts";
+import AppSettings from "../../../../app/Settings.svelte.ts";
 
 export class View {
-  rightHanded = $derived(settings.rightHanded);
+  // is the Y axis on top (true) or on bottom (false)?
+  rightHanded: boolean = $derived(AppSettings.rightHanded);
 
   canvasSize: [number, number] | undefined = $state(undefined);
 

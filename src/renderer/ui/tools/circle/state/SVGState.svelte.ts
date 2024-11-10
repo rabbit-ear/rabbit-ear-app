@@ -1,12 +1,12 @@
 import { distance2 } from "rabbit-ear/math/vector.js";
-import type { Deallocable } from "../../viewport/ViewportTypes.ts";
-import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
-import { SVGViewportEvents } from "./events.ts";
+import type { Deallocable } from "../../../viewport/ViewportTypes.ts";
+import type { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svelte.ts";
+import { SVGEvents } from "../events/SVGEvents.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
-import SVGLayer from "./SVGLayer.svelte";
-import app from "../../../app/App.svelte.ts";
-import { AddCircle } from "../../../kernel/commands/AddCircle.ts";
+import SVGLayer from "../SVGLayer.svelte";
+import app from "../../../../app/App.svelte.ts";
+import { AddCircle } from "../../../../kernel/commands/AddCircle.ts";
 
 const makeCircle = (
   p0: [number, number],
@@ -17,11 +17,11 @@ const makeCircle = (
   return { cx, cy, r };
 };
 
-export class SVGViewportState implements Deallocable {
+export class SVGState implements Deallocable {
   viewport: SVGViewport;
   globalState: GlobalState;
   touches: SVGTouches;
-  events: SVGViewportEvents;
+  events: SVGEvents;
   unsub: (() => void)[] = [];
 
   circle: { cx: number; cy: number; r: number } | undefined = $derived.by(() => {
@@ -39,7 +39,7 @@ export class SVGViewportState implements Deallocable {
     this.globalState = globalState;
 
     this.touches = new SVGTouches(this.viewport);
-    this.events = new SVGViewportEvents(this.viewport, this.touches);
+    this.events = new SVGEvents(this.viewport, this.touches);
     this.unsub.push(this.makeCircle());
     this.unsub.push(this.preventBadInput());
 

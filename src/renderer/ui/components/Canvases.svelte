@@ -52,7 +52,8 @@
   .canvases {
     /* todo: this needs to be dynamically calculated based on */
     /* whether or not the terminal or frames is visible */
-    height: calc(100vh - 8rem - 6rem);
+    /*height: calc(100vh - 6rem - 6rem);*/
+    height: calc(100vh - 6rem);
   }
 
   /*component wrapper is required because svg and canvas elements have*/
@@ -64,7 +65,7 @@
 
   /* hard coding the terminal viewport. could get rid of these later */
   .terminal {
-    height: 8rem;
+    height: 6rem;
   }
   .frames {
     height: 6rem;

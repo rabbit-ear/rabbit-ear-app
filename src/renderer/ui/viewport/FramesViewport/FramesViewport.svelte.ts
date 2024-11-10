@@ -3,10 +3,10 @@ import type { IViewport } from "../ViewportTypes.ts";
 import FramesViewportComponent from "./FramesViewportComponent.svelte";
 import app from "../../../app/App.svelte.js";
 import { Frame } from "./Frame.svelte.ts";
-import FramesPanel from "./Panel.svelte";
+//import FramesPanel from "./Panel.svelte";
 
 export class FramesViewport implements IViewport {
-  static panel: Component = FramesPanel;
+  //static panel: Component = FramesPanel;
 
   component: Component;
 

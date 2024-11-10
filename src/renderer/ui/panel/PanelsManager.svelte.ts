@@ -4,7 +4,8 @@ import type {
   ViewportClassTypes,
   ModelViewportClassTypes,
 } from "../viewport/viewports.ts";
-import AppPanel from "./AppPanel.svelte";
+import AppPanel from "./AppPanel/AppPanel.svelte";
+import FramesPanel from "./FramesPanel/FramesPanel.svelte";
 import { uniqueObjects } from "./arrays.ts";
 
 export class PanelsManager {
@@ -53,7 +54,10 @@ export class PanelsManager {
   );
 
   //appPanels: Component[] = [makeAppPanel()];
-  appPanels: [Component, object][] = [[AppPanel, { name: "App" }]];
+  appPanels: [Component, object][] = [
+    [AppPanel, { name: "App" }],
+    [FramesPanel, { name: "Frames" }],
+  ];
 
   toolPanels: [Component, object][] = $derived.by(() =>
     this.ui.tool?.panel !== undefined

@@ -2,12 +2,12 @@ import type {
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportEvents,
-} from "../../viewport/ViewportTypes.ts";
-import { SVGTouches } from "./SVGTouches.svelte.ts";
-import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
-import { wheelEventZoomMatrix } from "../zoom/matrix.ts";
+} from "../../../viewport/ViewportTypes.ts";
+import type { SVGTouches } from "../state/SVGTouches.svelte.ts";
+import type { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svelte.ts";
+import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
 
-export class SVGViewportEvents implements ViewportEvents {
+export class SVGEvents implements ViewportEvents {
   touches: SVGTouches;
   viewport: SVGViewport;
 

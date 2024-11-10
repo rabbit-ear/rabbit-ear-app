@@ -41,7 +41,7 @@ export class ViewportManager {
     this.ui = ui;
     this.#effects = [this.#triggerViewportRedraw(), this.#makeToolViewportEffect()];
     this.terminal = new TerminalViewport();
-    this.frames = new FramesViewport();
+    //this.frames = new FramesViewport();
   }
 
   add(ViewClass?: ModelViewportClassTypes): void {

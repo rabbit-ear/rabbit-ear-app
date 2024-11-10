@@ -6,7 +6,6 @@
 
   let framesFlat = $derived(app.fileManager.file?.framesFlat);
   let activeFrame = $derived(app.fileManager.file?.activeFrame);
-  let frameCount = $derived(app.fileManager.file?.frames.length);
   let framesStyle = $derived(
     framesFlat
       .map((graph) => graph?.frame_classes || [])
@@ -21,13 +20,6 @@
   };
 </script>
 
-<!--
-<div class="column gap-lg">
-  <div class="row">
-    <p>{frameCount} frames</p>
-  </div>
-</div>
--->
 <div class="column gap-sm">
   {#each framesFlat as graph, i}
     {#if i !== 0}

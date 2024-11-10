@@ -1,6 +1,6 @@
 <script lang="ts">
-  import app from "../../app/App.svelte.ts";
-  import Settings from "../../app/Settings.svelte.ts";
+  import app from "../../../app/App.svelte.ts";
+  import Settings from "../../../app/Settings.svelte.ts";
 
   //let showScriptView: boolean = $state(false);
   //$effect(() => app.ui?.showScriptViewport(showScriptView));
