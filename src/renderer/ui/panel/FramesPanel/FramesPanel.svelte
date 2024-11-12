@@ -36,9 +36,13 @@
 <style>
   button {
     all: unset;
+    cursor: pointer;
   }
   button:hover {
     background-color: var(--background-3);
+  }
+  p {
+    pointer-events: none;
   }
 
   .gap-sm {

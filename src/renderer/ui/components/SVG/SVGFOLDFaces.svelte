@@ -8,7 +8,9 @@
   const { graph = {} }: PropsType = $props();
 
   const makeFacesCoords = (g: FOLD): ([number, number] | [number, number, number])[][] =>
-    (g.faces_vertices || []).map((fv) => fv.map((v) => g.vertices_coords[v]));
+    g.faces_vertices && g.vertices_coords
+      ? (g.faces_vertices || []).map((fv) => fv.map((v) => g.vertices_coords[v]))
+      : [];
 
   const faces_vertices = $derived(graph.faces_vertices || []);
 
