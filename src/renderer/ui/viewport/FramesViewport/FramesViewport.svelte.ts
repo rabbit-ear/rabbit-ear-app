@@ -14,7 +14,9 @@ export class FramesViewport implements IViewport {
 
   frames: Frame[] = $derived.by(() => {
     //this.renderings.forEach(obj => obj?.dealloc());
-    return (app.file?.framesFlat || []).map((frame, i) => new Frame(frame, i));
+    return (app.fileManager.file?.framesFlat || []).map(
+      (frame, i) => new Frame(frame, i),
+    );
   });
 
   hoverIndex: number;

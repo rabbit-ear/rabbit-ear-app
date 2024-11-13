@@ -28,13 +28,13 @@ export class AddCircle implements Command {
   }
 
   execute(): void {
-    this.#backup = app.file.getCopy();
-    app.file.geometry.addCircle(this.#cx, this.#cy, this.#r);
+    this.#backup = app.fileManager.file.getCopy();
+    app.fileManager.file.geometry.addCircle(this.#cx, this.#cy, this.#r);
   }
 
   undo(): void {
     if (this.#backup) {
-      app.file.update(this.#backup);
+      app.fileManager.file.update(this.#backup);
     }
   }
 }

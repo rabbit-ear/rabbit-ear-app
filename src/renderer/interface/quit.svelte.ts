@@ -32,7 +32,7 @@ export const quitApp = async (): Promise<void> => {
  * This will prompt the user if there are unsaved changes.
  */
 window.addEventListener("beforeunload", (event) => {
-  //if (!app.file.modified || quitInProgress) {
+  //if (!app.fileManager.file.modified || quitInProgress) {
   if (!app.fileManager.hasUnsavedChanges() || quitInProgress) {
     return;
   }

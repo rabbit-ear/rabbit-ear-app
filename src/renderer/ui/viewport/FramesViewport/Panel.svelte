@@ -15,8 +15,8 @@
   );
 
   const onclick = (index: number): void => {
-    if (app.file) {
-      app.file.activeFrame = index;
+    if (app.fileManager.file) {
+      app.fileManager.file.activeFrame = index;
     }
   };
 </script>

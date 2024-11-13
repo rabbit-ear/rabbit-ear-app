@@ -6,6 +6,7 @@ import { FileManager } from "../file/FileManager.svelte.ts";
 import { Invoker } from "../kernel/Invoker.svelte.ts";
 import * as Dialog from "../dialog/index.ts";
 import Settings from "./Settings.svelte.ts";
+import { Models } from "../file/Models.svelte.ts";
 
 // example file
 import craneString from "../../../resources/crane.fold?raw";
@@ -15,6 +16,7 @@ class Application {
   settings: typeof Settings;
   invoker: Invoker;
   #fileManager: FileManager;
+  models: Models;
   // UI is optional, the app is able to run without a UI.
   // UI is added inside components/UI.svelte.
   ui: UI | undefined;
@@ -24,6 +26,7 @@ class Application {
     this.settings = Settings;
     this.invoker = new Invoker();
     this.#fileManager = new FileManager();
+    this.models = new Models(this.#fileManager);
     this.dialog = Dialog;
 
     // load example file
@@ -42,9 +45,9 @@ class Application {
     this.invoker.executeCommand(new TextCommand(bootInfo));
   }
 
-  get file(): File | undefined {
-    return this.#fileManager.file;
-  }
+  //get file(): File | undefined {
+  //  return this.#fileManager.file;
+  //}
 
   get fileManager(): FileManager {
     return this.#fileManager;

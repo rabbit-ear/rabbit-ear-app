@@ -1,8 +1,11 @@
-import { isFoldedForm } from "rabbit-ear/fold/spec.js";
 import type { FOLD } from "rabbit-ear/types.d.ts";
+import { isFoldedForm } from "rabbit-ear/fold/spec.js";
+import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
+import { FileManager } from "./FileManager.svelte";
 
-interface IModel {
-  graph: FOLD;
+export interface IModel {
+  //set frame(frame: FOLD);
+  //#graph: FOLD;
   //vertices_coordsSimulator: [number, number, number][];
   //vertices_coordsFolded: [number, number, number][];
   //faceOrders: [number, number, number][];
@@ -10,82 +13,90 @@ interface IModel {
 }
 
 class CreasePatternModel implements IModel {
-  graph: FOLD = $state.raw({});
-  isFoldedForm: boolean = $derived(isFoldedForm(this.graph));
+  #fileManager: FileManager;
+  #frame: FOLD = $derived.by(() => this.#fileManager.file.graph);
+  #isFoldedForm: boolean = $derived(isFoldedForm(this.#frame));
 
-  constructor(graph: FOLD) {
-    this.graph = graph;
+  constructor(fileManager: FileManager) {
+    this.#fileManager = fileManager;
   }
 
   // it might be possible to "unfold" the vertices
   get fold(): FOLD {
-    return isFoldedForm ? {} : this.graph;
+    return this.#isFoldedForm ? {} : this.#frame;
     //return $state.snapshot(this.graph);
   }
 }
 
 class FoldedFormModel implements IModel {
-  graph: FOLD = $state.raw({});
-  vertices_coords: [number, number, number][] = $state.raw([]);
-  faceOrders: [number, number, number][] = $state.raw([]);
+  #fileManager: FileManager;
+  #frame: FOLD = $derived.by(() => this.#fileManager.file.graph);
+  #isFoldedForm: boolean = $derived(isFoldedForm(this.#frame));
 
-  constructor(graph: FOLD) {
-    this.graph = graph;
+  #vertices_coords: [number, number][] | [number, number, number][] = $derived.by(() => {
+    if (this.#isFoldedForm) {
+      return this.#frame?.vertices_coords || [];
+    }
+    try {
+      return makeVerticesCoordsFolded(this.#frame);
+    } catch (error) {
+      //app.console.error(error);
+      return [];
+    }
+  });
+
+  constructor(fileManager: FileManager) {
+    this.#fileManager = fileManager;
   }
+
+  //faceOrders: [number, number, number][] = $state.raw([]);
 
   get fold(): FOLD {
     return {
       //...$state.snapshot(this.graph),
-      ...this.graph,
-      vertices_coords: this.vertices_coords,
-      faceOrders: this.faceOrders,
+      ...this.#frame,
+      vertices_coords: this.#vertices_coords,
+      //faceOrders: this.faceOrders,
     };
   }
 }
 
 class SimulatorModel implements IModel {
-  graph: FOLD = $state.raw({});
-  vertices_coords: [number, number, number][] = $state.raw([]);
+  #fileManager: FileManager;
+  #frame: FOLD = $derived.by(() => this.#fileManager.file.graph);
+  #vertices_coords: [number, number, number][] = $state.raw([]);
 
-  constructor(graph: FOLD) {
-    this.graph = graph;
+  constructor(fileManager: FileManager) {
+    this.#fileManager = fileManager;
   }
 
   get fold(): FOLD {
     return {
       //...$state.snapshot(this.graph),
-      ...this.graph,
-      vertices_coords: this.vertices_coords,
+      ...this.#frame,
+      vertices_coords: this.#vertices_coords,
     };
   }
 }
 
 export class Models {
-  #frame: FOLD = $state.raw({});
-
-  set frame(frame: FOLD) {
-    this.#frame = frame;
-    this.models.forEach((model) => {
-      model.graph = this.#frame;
-    });
-  }
-
-  vertices_coordsSimulator: [number, number, number][] = $derived.by(() => []);
-  vertices_coordsFolded: [number, number, number][] = $derived.by(() => []);
-  faceOrders: [number, number, number][] = $derived.by(() => []);
-
   models: IModel[] = $state([]);
 
-  constructor() {
-    const cp = new CreasePatternModel(this.frame);
+  get cp(): IModel {
+    return this.models[0];
+  }
+  get folded(): IModel {
+    return this.models[1];
+  }
+  get simulator(): IModel {
+    return this.models[2];
+  }
 
-    const simulator = new SimulatorModel(this.frame);
-    simulator.vertices_coords = this.vertices_coordsSimulator;
-
-    const foldedForm = new FoldedFormModel(this.frame);
-    foldedForm.vertices_coords = this.vertices_coordsFolded;
-    foldedForm.faceOrders = this.faceOrders;
-
-    this.models = [cp, foldedForm, simulator];
+  constructor(fileManager: FileManager) {
+    this.models = [
+      new CreasePatternModel(fileManager),
+      new FoldedFormModel(fileManager),
+      new SimulatorModel(fileManager),
+    ];
   }
 }

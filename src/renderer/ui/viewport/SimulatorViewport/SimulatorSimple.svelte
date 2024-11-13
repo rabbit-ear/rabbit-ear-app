@@ -8,7 +8,6 @@
   import ClassSettings from "./Settings/ClassSettings.svelte.ts";
   import { Model } from "../../../simulator/simulator/Model.ts";
   import WebGLFOLD from "../../components/WebGL/WebGLFOLD.svelte";
-  import app from "../../../app/App.svelte.ts";
 
   type PropsType = {
     viewport: SimulatorViewport;
@@ -63,7 +62,7 @@
   // on file load.
   // untrack is needed to prevent re-loading at other times too.
   $effect(() => {
-    const fold = $state.snapshot(app.file?.graph);
+    const fold = $state.snapshot(viewport.model?.fold);
     let box: Box | undefined;
     untrack(() => {
       try {

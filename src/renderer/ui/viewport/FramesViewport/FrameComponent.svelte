@@ -19,13 +19,13 @@
   let index: number = $derived(frame.index);
 
   const onclick = (): void => {
-    if (!app.file) {
+    if (!app.fileManager.file) {
       return;
     }
-    app.file.activeFrame = index;
+    app.fileManager.file.activeFrame = index;
   };
 
-  const highlighted = $derived(index === app.file.activeFrame);
+  const highlighted = $derived(index === app.fileManager.file.activeFrame);
 
   const matrix = $derived(
     frame.view.rightHanded ? [1, 0, 0, -1, 0, 0].join(", ") : undefined,

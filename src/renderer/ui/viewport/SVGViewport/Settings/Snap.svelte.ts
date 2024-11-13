@@ -28,7 +28,9 @@ export class Snap {
   points: [number, number][] = $state([]);
 
   #snapPoints: [number, number][] = $derived(
-    ([] as [number, number][]).concat(this.points).concat(app.file.geometry.snapPoints),
+    ([] as [number, number][])
+      .concat(this.points)
+      .concat(app.fileManager.file.geometry.snapPoints),
   );
 
   gridSnapFunction: (

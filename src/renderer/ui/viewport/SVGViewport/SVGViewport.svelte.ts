@@ -1,5 +1,6 @@
 import type { Component } from "svelte";
 import type { VecLine2 } from "rabbit-ear/types.js";
+import type { IModel } from "../../../file/Models.svelte.ts";
 import type {
   IModelViewport,
   ViewportMouseEvent,
@@ -16,6 +17,7 @@ import ViewportPanel from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./ViewportComponent.svelte";
 import { clipLineInPolygon } from "./clip.ts";
+import app from "../../../app/App.svelte.ts";
 
 export class SVGViewport implements IModelViewport {
   static name: string = "SVG Viewport";
@@ -25,6 +27,8 @@ export class SVGViewport implements IModelViewport {
 
   component: Component;
   panel: Component;
+
+  model?: IModel = $state.raw();
 
   grid: Grid;
   snap: Snap;
@@ -63,6 +67,7 @@ export class SVGViewport implements IModelViewport {
     this.style = new Style(this.view);
     this.grid = new Grid(this.view);
     this.snap = new Snap(this.view);
+    this.model = app.models.cp;
   }
 
   dealloc(): void {

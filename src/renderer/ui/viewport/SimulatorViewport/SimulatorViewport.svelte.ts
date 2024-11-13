@@ -1,4 +1,5 @@
 import type { Component } from "svelte";
+import type { IModel } from "../../../file/Models.svelte.ts";
 import type {
   IModelViewport,
   ViewportMouseEvent,
@@ -13,6 +14,7 @@ import { Style } from "./Settings/Style.svelte.ts";
 import Panel from "./Panel.svelte";
 import Dropdown from "./Dropdown.svelte";
 import settings from "./Settings/ClassSettings.svelte.ts";
+import app from "../../../app/App.svelte.ts";
 
 export class SimulatorViewport implements IModelViewport {
   static settings = settings;
@@ -20,6 +22,8 @@ export class SimulatorViewport implements IModelViewport {
 
   component: Component;
   panel: Component;
+
+  model?: IModel = $state.raw();
 
   view: View;
   style: Style;
@@ -44,6 +48,7 @@ export class SimulatorViewport implements IModelViewport {
     this.view = new View();
     this.style = new Style();
     //this.panel = new ViewportPanel();
+    this.model = app.models.cp;
   }
 
   dealloc(): void {

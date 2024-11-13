@@ -10,7 +10,6 @@
   import SVGShapes from "../../components/SVG/SVGShapes.svelte";
   import SVGFOLD from "../../components/SVG/SVGFOLD.svelte";
   import settings from "./Settings/Settings.svelte.ts";
-  import app from "../../../app/App.svelte.ts";
 
   type PropsType = {
     viewport: SVGViewport;
@@ -60,8 +59,10 @@
   {#if settings.showGrid}
     <GridLayer {viewport} />
   {/if}
-  <SVGShapes shapes={app.file?.geometry.shapes} class="model-layer" />
-  <SVGFOLD graph={app.file?.graph} />
+  <!--
+  <SVGShapes shapes={app.fileManager.file?.geometry.shapes} class="model-layer" />
+  -->
+  <SVGFOLD graph={viewport.model?.fold} />
   {#if SVGToolLayer}
     <g
       class="tool-layer"

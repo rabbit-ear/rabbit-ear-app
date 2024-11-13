@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
   import WebGLFOLD from "../../components/WebGL/WebGLFOLD.svelte";
-  import app from "../../../app/App.svelte.ts";
   import settings from "./Settings/ClassSettings.svelte.ts";
 
   type PropsType = {
@@ -13,7 +12,7 @@
 </script>
 
 <WebGLFOLD
-  graph={app.file?.graph}
+  graph={viewport.model?.fold}
   onmousemove={viewport.onmousemove}
   onmousedown={viewport.onmousedown}
   onmouseup={viewport.onmouseup}

@@ -1,4 +1,5 @@
 import type { Component } from "svelte";
+import type { IModel } from "../../file/Models.svelte";
 
 export type ViewportUIEvent = {
   point: [number, number];
@@ -64,6 +65,9 @@ export abstract class IModelViewport implements IViewport, ViewportEvents, Deall
 
   // the Svelte component to be instanced as one of the App's display canvases
   component: Component;
+
+  // the model to be rendered
+  model?: IModel;
 
   // force the screen to re-calculate window bounds. used when viewports are added/removed
   redraw?: () => void;
