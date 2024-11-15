@@ -3,6 +3,7 @@ import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { flattenFrame, getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
 import type { FilePathInfo } from "../../main/fs/path.ts";
 import { Geometry } from "./Geometry.svelte.ts";
+import type { CommandAndResult } from "../kernel/commands/Command.svelte.ts";
 
 /**
  * @description a FOLD object with frames is arranged such that
@@ -30,6 +31,9 @@ export class File {
   // Has the current file been edited and not yet saved?
   modified: boolean = $state(false);
 
+  history = $state<CommandAndResult[]>([]);
+  redoStack = $state<CommandAndResult[]>([]);
+
   framesFlat: FOLD[] = $derived.by(() => {
     try {
       const fold = reassembleFramesToFOLD($state.snapshot(this.frames));
@@ -40,7 +44,6 @@ export class File {
     }
   });
 
-  graph: FOLD = $derived(this.framesFlat[this.activeFrame]);
   geometry: Geometry;
 
   constructor(path: FilePathInfo, data: FOLD) {
@@ -48,7 +51,6 @@ export class File {
     this.metadata = getFileMetadata(data);
     this.frames = getFileFramesAsArray(data);
     this.activeFrame = 0;
-
     this.geometry = new Geometry();
   }
 

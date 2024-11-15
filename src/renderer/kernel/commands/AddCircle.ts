@@ -29,7 +29,8 @@ export class AddCircle implements Command {
 
   execute(): void {
     this.#backup = app.fileManager.file.getCopy();
-    app.fileManager.file.geometry.addCircle(this.#cx, this.#cy, this.#r);
+    //app.fileManager.file.geometry.addCircle(this.#cx, this.#cy, this.#r);
+    app.models.geometry.addCircle(this.#cx, this.#cy, this.#r);
   }
 
   undo(): void {

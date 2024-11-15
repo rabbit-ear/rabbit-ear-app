@@ -8,10 +8,11 @@ import {
   //makeMatrix2UniformScale,
 } from "rabbit-ear/math/matrix2.js";
 import { viewBoxOrigin, graphToMatrix2 } from "../../../../general/matrix.ts";
-import app from "../../../../app/App.svelte.ts";
 import AppSettings from "../../../../app/Settings.svelte.ts";
+import type { SVGViewport } from "../SVGViewport.svelte.ts";
 
 export class View {
+  viewport: SVGViewport;
   // is the Y axis on top (true) or on bottom (false)?
   rightHanded: boolean = $derived(AppSettings.rightHanded);
 
@@ -98,12 +99,12 @@ export class View {
   ]);
 
   // reset model and camera matrix to aspect fit. the effect is watching:
-  // - this.file.graph
+  // - the current file frame
   // - this.rightHanded
   #makeModelMatrixEffect(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const matrix = graphToMatrix2(app?.file?.graph, this.rightHanded);
+        const matrix = graphToMatrix2(this.viewport.model?.fold, this.rightHanded);
         untrack(() => {
           this.#model = matrix;
           this.camera = [...identity2x3];
@@ -115,7 +116,8 @@ export class View {
 
   #unsub: (() => void)[] = [];
 
-  constructor() {
+  constructor(viewport: SVGViewport) {
+    this.viewport = viewport;
     this.#unsub = [this.#makeModelMatrixEffect()];
   }
 

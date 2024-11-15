@@ -33,7 +33,8 @@ export class AddSegment implements Command {
 
   execute(): void {
     this.#backup = app.fileManager.file.getCopy();
-    app.fileManager.file.geometry.addSegment(this.#x1, this.#y1, this.#x2, this.#y2);
+    //app.fileManager.file.geometry.addSegment(this.#x1, this.#y1, this.#x2, this.#y2);
+    app.models.geometry.addSegment(this.#x1, this.#y1, this.#x2, this.#y2);
   }
 
   undo(): void {

@@ -1,19 +1,20 @@
-import type { Command, CommandAndResult } from "./commands/Command.svelte.ts";
+import type { Command } from "./commands/Command.svelte.ts";
 import { JavascriptCommand } from "./commands/JavascriptCommand.ts";
 import scope from "./commands/index.svelte.ts";
 import { CommandResult } from "./commands/Command.svelte.ts";
 import { stringifyArgs, matchFromArray } from "./format.ts";
+import app from "../app/App.svelte.ts";
 
 export class Invoker {
-  history = $state<CommandAndResult[]>([]);
-  redoStack = $state<CommandAndResult[]>([]);
+  //history = $state<CommandAndResult[]>([]);
+  //redoStack = $state<CommandAndResult[]>([]);
 
   /**
    * @description An array of the history of the command inputs.
    * This contains the inputs only, no results. There is no HTML span wrapper.
    */
   historyAsHTML = $derived<string[]>(
-    this.history.flatMap(({ command, result }) => [
+    app.fileManager.file?.history.flatMap(({ command, result }) => [
       `<span>${command.asTokenString}</span>`,
       `<span class="result">${result.asTokenString}</span>`,
     ]),
@@ -24,7 +25,7 @@ export class Invoker {
    * This contains the inputs only, no results. There is no HTML span wrapper.
    */
   commandHistory = $derived<string[]>(
-    this.history.map(({ command }) => command.asString),
+    app.fileManager.file?.history.map(({ command }) => command.asString),
   );
 
   // the return type will be that of the Command's return type.
@@ -41,10 +42,12 @@ export class Invoker {
     ) {
       // console.log(`! 3b invoker: skipping javascript command ${command.asString}`);
     } else {
-      this.history.push({ command, result });
+      app.fileManager.file?.history.push({ command, result });
     }
     // clear the redo history
-    this.redoStack = [];
+    if (app.fileManager.file?.redoStack) {
+      app.fileManager.file.redoStack = [];
+    }
     return result;
   }
 
@@ -65,14 +68,14 @@ export class Invoker {
   }
 
   undo(): any {
-    const latest = this.history.pop();
+    const latest = app.fileManager.file?.history.pop();
     if (!latest) {
       console.log("no command to undo");
       return;
     }
     //const { command, result } = latest;
     const { command } = latest;
-    this.redoStack.push(latest);
+    app.fileManager.file?.redoStack.push(latest);
     if (command) {
       return command.undo();
     } else {
@@ -82,7 +85,7 @@ export class Invoker {
   }
 
   redo(): any {
-    const latest = this.redoStack.pop();
+    const latest = app.fileManager.file?.redoStack.pop();
     if (!latest) {
       console.log("no command to redo");
       return;
@@ -105,7 +108,7 @@ export class Invoker {
       ) {
         // console.log(`! 3b invoker: skipping javascript command ${command.asString}`);
       } else {
-        this.history.push({ command, result });
+        app.fileManager.file?.history.push({ command, result });
       }
     }
     // should we return anything?

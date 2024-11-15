@@ -63,10 +63,10 @@ export class SVGViewport implements IModelViewport {
   constructor() {
     this.component = ViewportComponent;
     this.panel = ViewportPanel;
-    this.view = new View();
+    this.view = new View(this);
     this.style = new Style(this.view);
     this.grid = new Grid(this.view);
-    this.snap = new Snap(this.view);
+    this.snap = new Snap(this, this.view);
     this.model = app.models.cp;
   }
 

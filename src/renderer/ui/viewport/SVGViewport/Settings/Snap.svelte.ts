@@ -1,4 +1,5 @@
 import type { SnapResult, LineType } from "./snap.ts";
+import type { SVGViewport } from "../SVGViewport.svelte.ts";
 import type { View } from "./View.svelte.ts";
 import {
   snapToPointOrGrid,
@@ -7,7 +8,6 @@ import {
   squareGridSnapFunction,
 } from "./snap.ts";
 import settings from "./Settings.svelte.ts";
-import app from "../../../../app/App.svelte.ts";
 
 const emptySnapFunction = (
   point: [number, number],
@@ -19,6 +19,7 @@ const emptySnapFunction = (
 };
 
 export class Snap {
+  viewport: SVGViewport;
   view: View;
 
   // This is the radius of the snapping range to the
@@ -30,7 +31,7 @@ export class Snap {
   #snapPoints: [number, number][] = $derived(
     ([] as [number, number][])
       .concat(this.points)
-      .concat(app.fileManager.file.geometry.snapPoints),
+      .concat(this.viewport.model?.snapPoints),
   );
 
   gridSnapFunction: (
@@ -66,7 +67,8 @@ export class Snap {
     );
   }
 
-  constructor(view: View) {
+  constructor(viewport: SVGViewport, view: View) {
+    this.viewport = viewport;
     this.view = view;
   }
 }

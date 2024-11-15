@@ -55,7 +55,8 @@ export class WebGLViewport implements IModelViewport {
     this.panel = Dropdown;
     this.view = new View();
     //this.style = new Style(this.view);
-    this.model = app.models.cp;
+    //this.model = app.models.cp;
+    this.model = app.models.folded;
   }
 
   dealloc(): void {
