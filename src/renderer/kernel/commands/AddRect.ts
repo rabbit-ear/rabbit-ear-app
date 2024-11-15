@@ -3,21 +3,25 @@ import { type Command } from "./Command.svelte.ts";
 import { formatJavascript } from "../format.ts";
 import app from "../../app/App.svelte.ts";
 
-export class AddCircle implements Command {
-  static name: string = "addCircle";
-  #cx: number;
-  #cy: number;
-  #r: number;
+export class AddRect implements Command {
+  static name: string = "addRect";
+  #x: number;
+  #y: number;
+  #width: number;
+  #height: number;
   #backup: FOLD | undefined;
 
-  constructor(cx: number, cy: number, r: number) {
-    this.#cx = cx;
-    this.#cy = cy;
-    this.#r = r;
+  constructor(x: number, y: number, width: number, height: number) {
+    this.#x = x;
+    this.#y = y;
+    this.#width = width;
+    this.#height = height;
   }
 
   paramsString(): string {
-    return [this.#cx, this.#cy, this.#r].map((n) => JSON.stringify(n)).join(", ");
+    return [this.#x, this.#y, this.#width, this.#height]
+      .map((n) => JSON.stringify(n))
+      .join(", ");
   }
 
   get asString(): string {
@@ -29,19 +33,15 @@ export class AddCircle implements Command {
   }
 
   execute(): void {
-    //this.#backup = app.fileManager.file.getCopy();
     this.#backup = app.fileManager.file.export();
-    //app.fileManager.file.geometry.addCircle(this.#cx, this.#cy, this.#r);
-    //app.models.geometry.addCircle(this.#cx, this.#cy, this.#r);
     app.fileManager.file?.shapes.push({
-      name: "circle",
-      params: { cx: this.#cx, cy: this.#cy, r: this.#r },
+      name: "rect",
+      params: { x: this.#x, y: this.#y, width: this.#width, height: this.#height },
     });
   }
 
   undo(): void {
     if (this.#backup) {
-      //app.fileManager.file.update(this.#backup);
       app.fileManager.file.import(this.#backup);
     }
   }

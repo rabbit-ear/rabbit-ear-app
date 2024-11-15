@@ -2,35 +2,33 @@ import type { FOLD } from "rabbit-ear/types.d.ts";
 import { isFoldedForm } from "rabbit-ear/fold/spec.js";
 import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 import { FileManager } from "./FileManager.svelte";
-import type { Geometry } from "./Geometry.svelte";
+import type { Shape } from "../geometry/shapes.ts";
 
 export interface IModel {
-  //set frame(frame: FOLD);
-  //#graph: FOLD;
-  //vertices_coordsSimulator: [number, number, number][];
-  //vertices_coordsFolded: [number, number, number][];
-  //faceOrders: [number, number, number][];
+  // get the (compiled if necessary) FOLD graph
   fold: FOLD;
+
+  // other
+  shapes: Shape[];
+
+  // some optional properties that might exist
+  snapPoints?: [number, number][] | [number, number, number][];
 }
 
 class CreasePatternModel implements IModel {
   #models: Models;
-  //#fileManager: FileManager;
-  //#frame: FOLD = $derived.by(() => this.#fileManager.file.graph);
   #frame: FOLD = $derived.by(() => this.#models.frame);
   #isFoldedForm: boolean = $derived(isFoldedForm(this.#frame));
 
   // todo
   snapPoints: [number, number][] = $state([]);
 
-  //constructor(fileManager: FileManager) {
   constructor(models: Models) {
     this.#models = models;
-    //this.#fileManager = fileManager;
   }
 
-  get geometry(): Geometry {
-    return this.#models.geometry;
+  get shapes(): Shape[] {
+    return this.#models.shapes;
   }
 
   // it might be possible to "unfold" the vertices
@@ -57,12 +55,15 @@ class FoldedFormModel implements IModel {
     }
   });
 
+  // todo
+  snapPoints: [number, number][] | [number, number, number][] = $state([]);
+
   constructor(models: Models) {
     this.#models = models;
   }
 
-  get geometry(): Geometry {
-    return this.#models.geometry;
+  get shapes(): Shape[] {
+    return this.#models.shapes;
   }
 
   //faceOrders: [number, number, number][] = $state.raw([]);
@@ -86,8 +87,8 @@ class SimulatorModel implements IModel {
     this.#models = models;
   }
 
-  get geometry(): Geometry {
-    return this.#models.geometry;
+  get shapes(): Shape[] {
+    return this.#models.shapes;
   }
 
   get fold(): FOLD {
@@ -105,7 +106,7 @@ export class Models {
     () => this.fileManager.file?.framesFlat[this.fileManager.file?.activeFrame],
   );
   models: IModel[] = $state([]);
-  geometry: Geometry = $derived.by(() => this.fileManager.file?.geometry);
+  shapes: Shape[] = $derived.by(() => this.fileManager.file?.shapes);
 
   get cp(): IModel {
     return this.models[0];
@@ -126,3 +127,31 @@ export class Models {
     ];
   }
 }
+
+//import { getShapesInRect, intersectAllShapes } from "../geometry/intersect.ts";
+//export class Geometry {
+//  shapes: Shape[] = $state([]);
+//  #effects: (() => void)[] = [];
+//
+//  // snap points
+//  //snapPoints: [number, number][] = $state([]);
+//
+//  #makeIntersectionsEffect(): () => void {
+//    return $effect.root(() => {
+//      $effect(() => {
+//        this.snapPoints = intersectAllShapes(this.shapes);
+//      });
+//      return () => {
+//        // empty
+//      };
+//    });
+//  }
+//
+//  constructor() {
+//    this.#effects = [this.#makeIntersectionsEffect()];
+//  }
+//
+//  dealloc(): void {
+//    this.#effects.forEach((fn) => fn());
+//  }
+//}

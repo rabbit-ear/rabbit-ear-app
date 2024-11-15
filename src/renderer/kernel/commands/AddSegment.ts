@@ -1,3 +1,4 @@
+import type { FOLD } from "rabbit-ear/types.d.ts";
 import { type Command } from "./Command.svelte.ts";
 import { formatJavascript } from "../format.ts";
 import app from "../../app/App.svelte.ts";
@@ -8,7 +9,7 @@ export class AddSegment implements Command {
   #y1: number;
   #x2: number;
   #y2: number;
-  #backup: string | undefined;
+  #backup: FOLD | undefined;
 
   constructor(x1: number, y1: number, x2: number, y2: number) {
     this.#x1 = x1;
@@ -32,14 +33,16 @@ export class AddSegment implements Command {
   }
 
   execute(): void {
-    this.#backup = app.fileManager.file.getCopy();
-    //app.fileManager.file.geometry.addSegment(this.#x1, this.#y1, this.#x2, this.#y2);
-    app.models.geometry.addSegment(this.#x1, this.#y1, this.#x2, this.#y2);
+    this.#backup = app.fileManager.file.export();
+    app.fileManager.file?.shapes.push({
+      name: "line",
+      params: { x1: this.#x1, y1: this.#y1, x2: this.#x2, y2: this.#y2 },
+    });
   }
 
   undo(): void {
     if (this.#backup) {
-      app.fileManager.file.update(this.#backup);
+      app.fileManager.file.import(this.#backup);
     }
   }
 }

@@ -2,8 +2,8 @@ import type { FOLD, FOLDFileMetadata } from "rabbit-ear/types.js";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { flattenFrame, getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
 import type { FilePathInfo } from "../../main/fs/path.ts";
-import { Geometry } from "./Geometry.svelte.ts";
 import type { CommandAndResult } from "../kernel/commands/Command.svelte.ts";
+import type { Shape } from "../geometry/shapes.ts";
 
 /**
  * @description a FOLD object with frames is arranged such that
@@ -28,6 +28,7 @@ export class File {
   metadata: FOLDFileMetadata = $state();
   frames: FOLD[] = $state.raw([]);
   activeFrame: number = $state(0);
+  shapes: Shape[] = $state([]);
   // Has the current file been edited and not yet saved?
   modified: boolean = $state(false);
 
@@ -44,14 +45,12 @@ export class File {
     }
   });
 
-  geometry: Geometry;
-
   constructor(path: FilePathInfo, data: FOLD) {
     this.path = path;
     this.metadata = getFileMetadata(data);
     this.frames = getFileFramesAsArray(data);
     this.activeFrame = 0;
-    this.geometry = new Geometry();
+    this.shapes = [];
   }
 
   //load(data: string, path: FilePathInfo): void {
@@ -61,15 +60,21 @@ export class File {
   //}
 
   // used by kernel commands undo()
-  update(data: string): void {
-    this.geometry.setFromString(data);
+  export(): FOLD {
+    return Object.assign(
+      reassembleFramesToFOLD($state.snapshot(this.frames)),
+      this.metadata,
+      { shapes: this.shapes },
+    );
   }
 
-  getCopy(): string {
-    return `shape count: ${this.geometry.shapes.length}`;
+  import(fold: FOLD): void {
+    this.metadata = getFileMetadata(fold);
+    this.frames = getFileFramesAsArray(fold);
+    this.shapes = fold.shapes || [];
   }
 
   dealloc(): void {
-    this.geometry.dealloc();
+    // empty
   }
 }
