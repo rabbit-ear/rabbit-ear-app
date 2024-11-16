@@ -1,5 +1,5 @@
 import type { Component } from "svelte";
-import type { IModel } from "../../../file/Models.svelte.ts";
+import type { IModel } from "../../../model/Models.svelte.ts";
 import type {
   IModelViewport,
   ViewportMouseEvent,
@@ -8,7 +8,8 @@ import type {
 } from "../ViewportTypes.ts";
 import { unsetViewportEvents } from "../ViewportTypes.ts";
 //import ViewportComponent from "./Simulator.svelte";
-import ViewportComponent from "./SimulatorSimple.svelte";
+//import ViewportComponent from "./SimulatorSimple.svelte";
+import ViewportComponent from "./Simulator.svelte";
 import { View } from "./Settings/View.svelte.ts";
 import { Style } from "./Settings/Style.svelte.ts";
 import Panel from "./Panel.svelte";

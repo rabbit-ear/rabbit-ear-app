@@ -6,6 +6,7 @@ import type {
 } from "../viewport/viewports.ts";
 import AppPanel from "./AppPanel/AppPanel.svelte";
 import FramesPanel from "./FramesPanel/FramesPanel.svelte";
+import SimulatorPanel from "./SimulatorPanel/SimulatorPanel.svelte";
 import { uniqueObjects } from "./arrays.ts";
 
 export class PanelsManager {
@@ -57,6 +58,7 @@ export class PanelsManager {
   appPanels: [Component, object][] = [
     [AppPanel, { name: "App" }],
     [FramesPanel, { name: "Frames" }],
+    [SimulatorPanel, { name: "Simulator" }],
   ];
 
   toolPanels: [Component, object][] = $derived.by(() =>

@@ -1,14 +1,12 @@
-//import type { FOLD } from "rabbit-ear/types.js";
-//import type { FilePathInfo } from "../../main/fs/path.ts";
 import type { UI } from "../ui/UI.svelte.ts";
-import type { File } from "../file/File.svelte.ts";
 import { FileManager } from "../file/FileManager.svelte.ts";
 import { Invoker } from "../kernel/Invoker.svelte.ts";
 import * as Dialog from "../dialog/index.ts";
 import Settings from "./Settings.svelte.ts";
-import { Models } from "../file/Models.svelte.ts";
+import { Models } from "../model/Models.svelte.ts";
+import { Simulator } from "../simulator/Simulator.svelte.ts";
 
-// example file
+// on-boot events, and example file
 import craneString from "../../../resources/crane.fold?raw";
 import { TextCommand } from "../kernel/commands/Text.ts";
 
@@ -18,15 +16,17 @@ class Application {
   #fileManager: FileManager;
   models: Models;
   // UI is optional, the app is able to run without a UI.
-  // UI is added inside components/UI.svelte.
+  // UI is undefined here, initialized inside components/UI.svelte.
   ui: UI | undefined;
   dialog: typeof Dialog;
+  simulator: Simulator;
 
   constructor() {
     this.settings = Settings;
     this.invoker = new Invoker();
     this.#fileManager = new FileManager();
     this.models = new Models(this.#fileManager);
+    this.simulator = new Simulator(this.#fileManager);
     this.dialog = Dialog;
 
     // load example file
@@ -45,10 +45,6 @@ class Application {
     this.invoker.executeCommand(new TextCommand(bootInfo));
   }
 
-  //get file(): File | undefined {
-  //  return this.#fileManager.file;
-  //}
-
   get fileManager(): FileManager {
     return this.#fileManager;
   }
@@ -57,6 +53,7 @@ class Application {
   // re-initialize itself, we would call this method to cleanup the hanging effect.
   dealloc(): void {
     this.ui?.dealloc();
+    this.simulator?.dealloc();
   }
 }
 

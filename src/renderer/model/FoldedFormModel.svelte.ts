@@ -1,0 +1,45 @@
+import type { FOLD } from "rabbit-ear/types.d.ts";
+import type { IModel, Models } from "./Models.svelte.ts";
+import type { Shape } from "../geometry/shapes.ts";
+import { isFoldedForm } from "rabbit-ear/fold/spec.js";
+import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
+
+export class FoldedFormModel implements IModel {
+  #models: Models;
+  #frame: FOLD = $derived.by(() => this.#models.frame);
+  #isFoldedForm: boolean = $derived(isFoldedForm(this.#frame));
+
+  #vertices_coords: [number, number][] | [number, number, number][] = $derived.by(() => {
+    if (this.#isFoldedForm) {
+      return this.#frame?.vertices_coords || [];
+    }
+    try {
+      return makeVerticesCoordsFolded(this.#frame);
+    } catch (error) {
+      //app.console.error(error);
+      return [];
+    }
+  });
+
+  // todo
+  snapPoints: [number, number][] | [number, number, number][] = $state([]);
+
+  constructor(models: Models) {
+    this.#models = models;
+  }
+
+  get shapes(): Shape[] {
+    return this.#models.shapes;
+  }
+
+  //faceOrders: [number, number, number][] = $state.raw([]);
+
+  get fold(): FOLD {
+    return {
+      //...$state.snapshot(this.graph),
+      ...this.#frame,
+      vertices_coords: this.#vertices_coords,
+      //faceOrders: this.faceOrders,
+    };
+  }
+}
