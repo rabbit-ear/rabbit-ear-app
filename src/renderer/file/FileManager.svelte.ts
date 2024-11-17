@@ -12,13 +12,18 @@ const emptyFOLD = (): FOLD => ({ file_spec, file_creator });
 // but that only one file is "currently open" (being shown on screen).
 // in this way, we can flip between files, and for example, copy and paste data between.
 //
-// currently, this is hard coded to only ever have one file in spot [0]. "index" never changes.
+// currently, this is hard coded to only ever have one file in spot [0]. "activeFile" never changes.
 export class FileManager {
   files: File[] = $state([]);
-  index: number = $state(0);
+  activeFile: number = $state(0);
+  activeFrame: number = $state(0);
 
   get file(): File | undefined {
-    return this.files[this.index];
+    return this.files[this.activeFile];
+  }
+
+  get frame(): FOLD | undefined {
+    return this.file?.framesFlat[this.activeFrame];
   }
 
   // true: at least one opened file has unsaved changes.
@@ -31,7 +36,7 @@ export class FileManager {
   //loadFOLD(path: FilePathInfo, data: FOLD): void {
   //  const file = new File(path, data);
   //  this.files.push(file);
-  //  this.index = this.files.length - 1;
+  //  this.activeFile = this.files.length - 1;
   //}
 
   loadFOLD(path: FilePathInfo, fold: FOLD): void {
@@ -39,6 +44,7 @@ export class FileManager {
       this.files[0].dealloc();
     }
     this.files[0] = new File(path, fold);
+    this.activeFrame = 0;
   }
 
   // throws

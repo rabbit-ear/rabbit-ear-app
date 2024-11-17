@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { SimulatorViewport } from "./SimulatorViewport.svelte.ts";
-  //import type { ViewportPanel } from "./Panel.svelte.ts";
-  //import Settings from "./Settings/Settings.svelte.ts";
-  //import Style from "./Settings/Style.svelte.ts";
+  import type { SimulatorViewport } from "./SimulatorViewport.svelte.ts";
   let { viewport }: { viewport: SimulatorViewport } = $props();
 </script>
 

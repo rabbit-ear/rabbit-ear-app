@@ -18,8 +18,9 @@ export interface IModel {
 
 export class Models {
   fileManager: FileManager;
-  frame: FOLD = $derived.by(
-    () => this.fileManager.file?.framesFlat[this.fileManager.file?.activeFrame],
+  frame: FOLD = $derived.by(() => this.fileManager.frame);
+  isFoldedForm: boolean = $derived.by(
+    () => this.fileManager.file?.framesIsFoldedForm[this.fileManager.activeFrame],
   );
   models: IModel[] = $state([]);
   shapes: Shape[] = $derived.by(() => this.fileManager.file?.shapes);

@@ -1,12 +1,11 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { IModel, Models } from "./Models.svelte.ts";
 import type { Shape } from "../geometry/shapes.ts";
-import { isFoldedForm } from "rabbit-ear/fold/spec.js";
 
 export class CreasePatternModel implements IModel {
   #models: Models;
   #frame: FOLD = $derived.by(() => this.#models.frame);
-  #isFoldedForm: boolean = $derived(isFoldedForm(this.#frame));
+  #isFoldedForm: boolean = $derived.by(() => this.#models.isFoldedForm);
 
   // todo
   snapPoints: [number, number][] = $state([]);

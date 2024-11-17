@@ -1,5 +1,5 @@
 import type { FOLD, FOLDFileMetadata } from "rabbit-ear/types.js";
-import { getFileMetadata } from "rabbit-ear/fold/spec.js";
+import { getFileMetadata, isFoldedForm } from "rabbit-ear/fold/spec.js";
 import { flattenFrame, getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
 import type { FilePathInfo } from "../../main/fs/path.ts";
 import type { CommandAndResult } from "../kernel/commands/Command.svelte.ts";
@@ -27,7 +27,6 @@ export class File {
   path: FilePathInfo = $state();
   metadata: FOLDFileMetadata = $state();
   frames: FOLD[] = $state.raw([]);
-  activeFrame: number = $state(0);
   shapes: Shape[] = $state([]);
   // Has the current file been edited and not yet saved?
   modified: boolean = $state(false);
@@ -45,11 +44,14 @@ export class File {
     }
   });
 
+  framesIsFoldedForm: boolean[] = $derived.by(() =>
+    this.framesFlat.map((frame) => isFoldedForm(frame)),
+  );
+
   constructor(path: FilePathInfo, data: FOLD) {
     this.path = path;
     this.metadata = getFileMetadata(data);
     this.frames = getFileFramesAsArray(data);
-    this.activeFrame = 0;
     this.shapes = [];
   }
 

@@ -5,7 +5,7 @@
   const classNames = { creasePattern: "crease pattern", foldedForm: "folded form" };
 
   let framesFlat = $derived(app.fileManager.file?.framesFlat);
-  let activeFrame = $derived(app.fileManager.file?.activeFrame);
+  let activeFrame = $derived(app.fileManager.activeFrame);
   let framesStyle = $derived(
     framesFlat
       .map((graph) => graph?.frame_classes || [])
@@ -14,13 +14,11 @@
   );
 
   const onclick = (index: number): void => {
-    if (app.fileManager.file) {
-      app.fileManager.file.activeFrame = index;
-    }
+    app.fileManager.activeFrame = index;
   };
 </script>
 
-<div class="column gap-sm">
+<div class="column gap-sm scrollable">
   {#each framesFlat as graph, i}
     {#if i !== 0}
       <hr />
@@ -28,7 +26,11 @@
     <button onclick={(): void => onclick(i)} class="row frame gap-lg">
       <p>{activeFrame === i ? "●" : "○"}</p>
       <Rendering {graph} />
-      <p>{framesStyle[i]}</p>
+      {#if activeFrame === i}
+        <p class="strong">{framesStyle[i]}</p>
+      {:else}
+        <p>{framesStyle[i]}</p>
+      {/if}
     </button>
   {/each}
 </div>
@@ -43,6 +45,9 @@
   }
   p {
     pointer-events: none;
+  }
+  .strong {
+    font-weight: bold;
   }
 
   .gap-sm {
@@ -60,6 +65,11 @@
   .row {
     display: flex;
     flex-direction: row;
+  }
+
+  .scrollable {
+    max-height: 12rem;
+    overflow-y: scroll;
   }
 
   .frame {

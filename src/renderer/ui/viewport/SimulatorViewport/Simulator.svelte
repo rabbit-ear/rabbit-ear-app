@@ -19,10 +19,6 @@
     faces_vertices: app.simulator.abstractGraph?.faces_vertices,
   });
 
-  let modelSize = $state(1);
-
-  $inspect(modelSize);
-
   //// on file load.
   //// move the camera to aspect-fit to the model
   //$effect(() => {

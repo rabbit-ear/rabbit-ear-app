@@ -5,8 +5,8 @@
   const classNames = { creasePattern: "crease pattern", foldedForm: "folded form" };
 
   let framesFlat = $derived(app.fileManager.file?.framesFlat);
-  let activeFrame = $derived(app.fileManager.file?.activeFrame);
-  let frameCount = $derived(app.fileManager.file?.frames.length);
+  let activeFrame = $derived(app.fileManager.activeFrame);
+  //let frameCount = $derived(app.fileManager.file?.frames.length);
   let framesStyle = $derived(
     framesFlat
       .map((graph) => graph?.frame_classes || [])
@@ -15,9 +15,7 @@
   );
 
   const onclick = (index: number): void => {
-    if (app.fileManager.file) {
-      app.fileManager.file.activeFrame = index;
-    }
+    app.fileManager.activeFrame = index;
   };
 </script>
 

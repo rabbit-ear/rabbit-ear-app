@@ -1,13 +1,12 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { IModel, Models } from "./Models.svelte.ts";
 import type { Shape } from "../geometry/shapes.ts";
-import { isFoldedForm } from "rabbit-ear/fold/spec.js";
 import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 
 export class FoldedFormModel implements IModel {
   #models: Models;
   #frame: FOLD = $derived.by(() => this.#models.frame);
-  #isFoldedForm: boolean = $derived(isFoldedForm(this.#frame));
+  #isFoldedForm: boolean = $derived.by(() => this.#models.isFoldedForm);
 
   #vertices_coords: [number, number][] | [number, number, number][] = $derived.by(() => {
     if (this.#isFoldedForm) {

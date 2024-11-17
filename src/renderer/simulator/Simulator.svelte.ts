@@ -11,9 +11,7 @@ export class Simulator {
   model: Model;
   options: SolverOptions;
 
-  graph: FOLD = $derived.by(
-    () => this.#fileManager.file?.framesFlat[this.#fileManager.file?.activeFrame],
-  );
+  graph: FOLD = $derived.by(() => this.#fileManager.frame);
 
   abstractGraph: FOLD;
   vertices_coords: [number, number, number][] = $state.raw([]);
@@ -120,7 +118,7 @@ export class Simulator {
 
   dealloc(): void {
     this.effects.forEach((fn) => fn());
-    console.log("simulator cleanup");
+    console.log("dealloc simulator");
     if (this.computeLoopID) {
       window.cancelAnimationFrame(this.computeLoopID);
       this.computeLoopID = undefined;

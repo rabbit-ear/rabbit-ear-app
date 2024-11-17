@@ -7,18 +7,15 @@ import type {
   ViewportTouchEvent,
 } from "../ViewportTypes.ts";
 import { unsetViewportEvents } from "../ViewportTypes.ts";
-//import ViewportComponent from "./Simulator.svelte";
-//import ViewportComponent from "./SimulatorSimple.svelte";
 import ViewportComponent from "./Simulator.svelte";
 import { View } from "./Settings/View.svelte.ts";
 import { Style } from "./Settings/Style.svelte.ts";
-import Panel from "./Panel.svelte";
 import Dropdown from "./Dropdown.svelte";
-import settings from "./Settings/ClassSettings.svelte.ts";
+import Panel from "./Panel.svelte";
 import app from "../../../app/App.svelte.ts";
 
 export class SimulatorViewport implements IModelViewport {
-  static settings = settings;
+  //static settings = settings;
   static panel: Component = Panel;
 
   component: Component;
@@ -48,12 +45,10 @@ export class SimulatorViewport implements IModelViewport {
     this.panel = Dropdown;
     this.view = new View();
     this.style = new Style();
-    //this.panel = new ViewportPanel();
     this.model = app.models.cp;
   }
 
   dealloc(): void {
     unsetViewportEvents(this);
-    // todo
   }
 }
