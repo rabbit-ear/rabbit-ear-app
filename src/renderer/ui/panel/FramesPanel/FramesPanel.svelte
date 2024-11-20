@@ -4,17 +4,18 @@
 
   const classNames = { creasePattern: "crease pattern", foldedForm: "folded form" };
 
-  let framesFlat = $derived(app.fileManager.file?.framesFlat);
-  let activeFrame = $derived(app.fileManager.activeFrame);
+  let framesFlat = $derived(app.models.framesFlat);
+  let activeFrame = $derived(app.models.activeFrame);
   let framesStyle = $derived(
     framesFlat
       .map((graph) => graph?.frame_classes || [])
       .map((classes) => classes.map((cl) => classNames[cl]))
       .map((classes) => classes.filter((a) => a).join(" ")),
   );
+  let frameStyles = $derived(app.models.framesStyle);
 
   const onclick = (index: number): void => {
-    app.fileManager.activeFrame = index;
+    app.models.activeFrame = index;
   };
 </script>
 
@@ -25,7 +26,7 @@
     {/if}
     <button onclick={(): void => onclick(i)} class="row frame gap-lg">
       <p>{activeFrame === i ? "●" : "○"}</p>
-      <Rendering {graph} />
+      <Rendering {graph} frameStyle={frameStyles[i]} />
       {#if activeFrame === i}
         <p class="strong">{framesStyle[i]}</p>
       {:else}

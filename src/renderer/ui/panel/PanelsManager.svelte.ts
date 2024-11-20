@@ -6,6 +6,8 @@ import type {
 } from "../viewport/viewports.ts";
 import AppPanel from "./AppPanel/AppPanel.svelte";
 import FramesPanel from "./FramesPanel/FramesPanel.svelte";
+import FramePanel from "./FramePanel/FramePanel.svelte";
+import ModelsPanel from "./ModelsPanel/ModelsPanel.svelte";
 import SimulatorPanel from "./SimulatorPanel/SimulatorPanel.svelte";
 import { uniqueObjects } from "./arrays.ts";
 
@@ -58,6 +60,8 @@ export class PanelsManager {
   appPanels: [Component, object][] = [
     [AppPanel, { name: "App" }],
     [FramesPanel, { name: "Frames" }],
+    [FramePanel, { name: "Frame" }],
+    [ModelsPanel, { name: "View Models" }],
     [SimulatorPanel, { name: "Simulator" }],
   ];
 

@@ -1,6 +1,6 @@
 import type { Component } from "svelte";
 import type { VecLine2 } from "rabbit-ear/types.js";
-import type { IModel } from "../../../file/Models.svelte.ts";
+import type { IModel } from "../../../model/Models.svelte.ts";
 import type {
   IModelViewport,
   ViewportMouseEvent,

@@ -25,8 +25,9 @@ class Application {
     this.settings = Settings;
     this.invoker = new Invoker();
     this.#fileManager = new FileManager();
-    this.models = new Models(this.#fileManager);
-    this.simulator = new Simulator(this.#fileManager);
+    this.models = this.#fileManager.models;
+    //this.models = new Models(this.#fileManager);
+    this.simulator = new Simulator(this.models);
     this.dialog = Dialog;
 
     // load example file

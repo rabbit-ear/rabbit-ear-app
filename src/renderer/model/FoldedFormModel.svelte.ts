@@ -4,16 +4,17 @@ import type { Shape } from "../geometry/shapes.ts";
 import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 
 export class FoldedFormModel implements IModel {
+  name: string = "foldedForm";
   #models: Models;
-  #frame: FOLD = $derived.by(() => this.#models.frame);
+  #graph: FOLD = $derived.by(() => this.#models.flatFrame);
   #isFoldedForm: boolean = $derived.by(() => this.#models.isFoldedForm);
 
   #vertices_coords: [number, number][] | [number, number, number][] = $derived.by(() => {
     if (this.#isFoldedForm) {
-      return this.#frame?.vertices_coords || [];
+      return this.#graph?.vertices_coords || [];
     }
     try {
-      return makeVerticesCoordsFolded(this.#frame);
+      return makeVerticesCoordsFolded(this.#graph);
     } catch (error) {
       //app.console.error(error);
       return [];
@@ -36,7 +37,7 @@ export class FoldedFormModel implements IModel {
   get fold(): FOLD {
     return {
       //...$state.snapshot(this.graph),
-      ...this.#frame,
+      ...this.#graph,
       vertices_coords: this.#vertices_coords,
       //faceOrders: this.faceOrders,
     };

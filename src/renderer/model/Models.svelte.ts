@@ -1,11 +1,22 @@
-import type { FOLD } from "rabbit-ear/types.d.ts";
+import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.d.ts";
 import type { Shape } from "../geometry/shapes.ts";
 import { FileManager } from "../file/FileManager.svelte";
 import { CreasePatternModel } from "./CreasePatternModel.svelte.ts";
 import { FoldedFormModel } from "./FoldedFormModel.svelte.ts";
 import { SimulatorModel } from "./SimulatorModel.svelte.ts";
+import { flattenFrame } from "rabbit-ear/fold/frames.js";
+import { getDimensionQuick, isFoldedForm } from "rabbit-ear/fold/spec.js";
+import { reassembleFramesToFOLD } from "../general/fold.ts";
+
+export type FrameStyleType = {
+  isFoldedForm: boolean;
+  dimension: number;
+  showVertices: boolean;
+};
 
 export interface IModel {
+  name: string;
+
   // get the (compiled if necessary) FOLD graph
   fold: FOLD;
 
@@ -18,30 +29,68 @@ export interface IModel {
 
 export class Models {
   fileManager: FileManager;
-  frame: FOLD = $derived.by(() => this.fileManager.frame);
-  isFoldedForm: boolean = $derived.by(
-    () => this.fileManager.file?.framesIsFoldedForm[this.fileManager.activeFrame],
+
+  activeFrame: number = $state(0);
+
+  frames: FOLDChildFrame[] = $derived.by(() => this.fileManager.file?.frames);
+  frame: FOLDChildFrame = $derived.by(() => this.frames[this.activeFrame]);
+
+  framesFlat: FOLD[] = $derived.by(() => {
+    try {
+      const fold = reassembleFramesToFOLD($state.snapshot(this.fileManager.file?.frames));
+      return this.fileManager.file?.frames.map((_, i) => flattenFrame(fold, i));
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  });
+
+  //flatFrame: FOLD = $derived.by(() => this.framesFlat[this.fileManager.activeFrame]);
+  flatFrame: FOLD = $derived.by(() => this.framesFlat[this.activeFrame]);
+
+  // style related to the frames
+  framesStyle: FrameStyleType[] = $derived.by(() =>
+    this.framesFlat.map(
+      (graph): FrameStyleType => ({
+        isFoldedForm: isFoldedForm(graph),
+        dimension: getDimensionQuick(graph),
+        showVertices:
+          graph?.vertices_coords && !graph?.edges_vertices && !graph?.faces_vertices,
+      }),
+    ),
   );
-  models: IModel[] = $state([]);
+
+  isFoldedForm: boolean = $derived.by(
+    //() => this.framesStyle[this.fileManager.activeFrame]?.isFoldedForm,
+    () => this.framesStyle[this.activeFrame]?.isFoldedForm,
+  );
+  models: { [key: string]: IModel } = $state({});
   shapes: Shape[] = $derived.by(() => this.fileManager.file?.shapes);
 
+  getModelWithName(name: string): IModel | undefined {
+    return this.models[name];
+  }
+
   get cp(): IModel {
-    return this.models[0];
+    return this.models.creasePattern;
   }
   get folded(): IModel {
-    return this.models[1];
+    return this.models.foldedForm;
   }
   get simulator(): IModel {
-    return this.models[2];
+    return this.models.simulator;
   }
 
   constructor(fileManager: FileManager) {
     this.fileManager = fileManager;
-    this.models = [
-      new CreasePatternModel(this),
-      new FoldedFormModel(this),
-      new SimulatorModel(this),
-    ];
+    const cp = new CreasePatternModel(this);
+    const folded = new FoldedFormModel(this);
+    const simulator = new SimulatorModel(this);
+    this.models = {
+      [cp.name]: cp,
+      [folded.name]: folded,
+      [simulator.name]: simulator,
+    };
   }
 }
 

@@ -1,6 +1,7 @@
 import type { FOLD } from "rabbit-ear/types.js";
 import type { FilePathInfo } from "../../main/fs/path.ts";
 import { File } from "../file/File.svelte.ts";
+import { Models } from "../model/Models.svelte.ts";
 import { EXTENSION, UNTITLED_FILENAME } from "../app/constants.svelte.ts";
 import { file_spec, file_creator } from "rabbit-ear/fold/rabbitear.js";
 import app from "../app/App.svelte.ts";
@@ -16,14 +17,14 @@ const emptyFOLD = (): FOLD => ({ file_spec, file_creator });
 export class FileManager {
   files: File[] = $state([]);
   activeFile: number = $state(0);
-  activeFrame: number = $state(0);
+  models: Models;
 
   get file(): File | undefined {
     return this.files[this.activeFile];
   }
 
-  get frame(): FOLD | undefined {
-    return this.file?.framesFlat[this.activeFrame];
+  constructor() {
+    this.models = new Models(this);
   }
 
   // true: at least one opened file has unsaved changes.
@@ -44,7 +45,8 @@ export class FileManager {
       this.files[0].dealloc();
     }
     this.files[0] = new File(path, fold);
-    this.activeFrame = 0;
+    // todo- this seems a little out of place
+    this.models.activeFrame = 0;
   }
 
   // throws

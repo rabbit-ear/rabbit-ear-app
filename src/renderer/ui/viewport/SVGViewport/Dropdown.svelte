@@ -1,10 +1,19 @@
 <script lang="ts">
-  //import type { SVGViewpot } from "../SVGViewport.svelte.ts";
-  //import type { ViewportPanel } from "./Panel.svelte.ts";
+  import type { IModel } from "../../../model/Models.svelte.ts";
+  import type { SVGViewpot } from "./SVGViewport.svelte.ts";
   import settings from "./Settings/Settings.svelte.ts";
+  import app from "../../../app/App.svelte.ts";
 
-  //let { panel, viewport }: { panel: ViewportPanel; viewport: SVGViewport } = $props();
+  let { viewport }: { viewport: SVGViewport } = $props();
 </script>
+
+<div class="row toggle-row">
+  {#each Object.entries(app.models.models) as [name, model]}
+    <button
+      class={viewport.model === model ? "highlighted" : ""}
+      onclick={(): IModel => (viewport.model = model)}>{name}</button>
+  {/each}
+</div>
 
 <div class="row toggle-row">
   <button

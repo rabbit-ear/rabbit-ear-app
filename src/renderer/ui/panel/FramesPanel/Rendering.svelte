@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { FOLD } from "rabbit-ear/types.js";
+  import type { FrameStyleType } from "../../../file/File.svelte.ts";
   import SVGCanvas from "../../components/SVG/SVGCanvas.svelte";
   //import SVGFOLDVertices from "../../components/SVG/SVGFOLDVertices.svelte";
   import SVGFOLDEdges from "../../components/SVG/SVGFOLDEdges.svelte";
@@ -8,24 +9,33 @@
   const rightHanded = $derived(Settings.rightHanded);
   import { View } from "./View.svelte.ts";
 
-  let { graph }: { graph: FOLD } = $props();
+  let { graph, frameStyle }: { graph: FOLD; frameStyle: FrameStyleType } = $props();
 
   const view = $derived(new View(graph));
 
   const matrix = $derived(rightHanded ? [1, 0, 0, -1, 0, 0].join(", ") : undefined);
   const strokeWidth = $derived(view.vmax * 0.02);
+  const isFoldedForm = $derived(frameStyle?.isFoldedForm);
+  //const dimension = $derived(frameStyle?.dimension);
+  const className = $derived(isFoldedForm ? "foldedForm" : "creasePattern");
 </script>
 
-<SVGCanvas viewBox={view.viewBoxString} stroke-width={strokeWidth}>
+<SVGCanvas class={className} viewBox={view.viewBoxString} stroke-width={strokeWidth}>
   {#if matrix}
     <g class="wrapper" style="transform: matrix({matrix})">
       <!-- <SVGFOLDVertices {graph} /> -->
-      <SVGFOLDEdges {graph} />
-      <SVGFOLDFaces {graph} />
+      {#if !isFoldedForm}
+        <SVGFOLDEdges {graph} />
+      {:else}
+        <SVGFOLDFaces {graph} />
+      {/if}
     </g>
   {:else}
     <!-- <SVGFOLDVertices {graph} /> -->
-    <SVGFOLDEdges {graph} />
-    <SVGFOLDFaces {graph} />
+    {#if !isFoldedForm}
+      <SVGFOLDEdges {graph} />
+    {:else}
+      <SVGFOLDFaces {graph} />
+    {/if}
   {/if}
 </SVGCanvas>

@@ -59,8 +59,8 @@
   {#if settings.showGrid}
     <GridLayer {viewport} />
   {/if}
-  <SVGShapes shapes={viewport.model?.shapes} class="model-layer" />
   <SVGFOLD graph={viewport.model?.fold} />
+  <SVGShapes shapes={viewport.model?.shapes} class="model-layer" />
   {#if SVGToolLayer}
     <g
       class="tool-layer"

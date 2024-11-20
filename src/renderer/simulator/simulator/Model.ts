@@ -301,5 +301,6 @@ export class Model {
     this.nodes = [];
     this.edges = [];
     this.creases = [];
+    this.gpuMath.dealloc();
   }
 }

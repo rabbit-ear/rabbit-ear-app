@@ -2,16 +2,16 @@ import type { FOLD, Box } from "rabbit-ear/types.d.ts";
 import { boundingBox } from "rabbit-ear/graph/boundary.js";
 import { untrack } from "svelte";
 import type { SolverOptions } from "./simulator/GPUMath.ts";
-import type { FileManager } from "../file/FileManager.svelte.ts";
+import type { Models } from "../model/Models.svelte.ts";
 import { Model } from "./simulator/Model.ts";
 import Settings from "./Settings.svelte.ts";
 
 export class Simulator {
-  #fileManager: FileManager;
+  #models: Models;
   model: Model;
   options: SolverOptions;
 
-  graph: FOLD = $derived.by(() => this.#fileManager.frame);
+  graph: FOLD = $derived.by(() => this.#models.flatFrame);
 
   abstractGraph: FOLD;
   vertices_coords: [number, number, number][] = $state.raw([]);
@@ -19,8 +19,8 @@ export class Simulator {
 
   effects: (() => void)[] = [];
 
-  constructor(fileManager: FileManager) {
-    this.#fileManager = fileManager;
+  constructor(models: Models) {
+    this.#models = models;
     this.effects = [
       this.#makeStartLoopEffect(),
       this.#makeLoadEffect(),

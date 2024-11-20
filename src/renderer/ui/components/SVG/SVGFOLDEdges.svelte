@@ -15,10 +15,9 @@
     [number, number] | [number, number, number],
   ][] =>
     g.edges_vertices && g.vertices_coords
-      ? (g.edges_vertices || []).map((ev) => [
-          g.vertices_coords[ev[0]],
-          g.vertices_coords[ev[1]],
-        ])
+      ? (g.edges_vertices || [])
+          .map((ev) => [g.vertices_coords[ev[0]], g.vertices_coords[ev[1]]])
+          .filter(([p, q]) => p !== undefined && q !== undefined)
       : [];
 
   const angleToOpacity = (angle: number): string =>

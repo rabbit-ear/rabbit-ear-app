@@ -3,8 +3,9 @@ import type { IModel, Models } from "./Models.svelte.ts";
 import type { Shape } from "../geometry/shapes.ts";
 
 export class CreasePatternModel implements IModel {
+  name: string = "creasePattern";
   #models: Models;
-  #frame: FOLD = $derived.by(() => this.#models.frame);
+  #graph: FOLD = $derived.by(() => this.#models.flatFrame);
   #isFoldedForm: boolean = $derived.by(() => this.#models.isFoldedForm);
 
   // todo
@@ -20,7 +21,7 @@ export class CreasePatternModel implements IModel {
 
   // it might be possible to "unfold" the vertices
   get fold(): FOLD {
-    return this.#isFoldedForm ? {} : this.#frame;
+    return this.#isFoldedForm ? {} : this.#graph;
     //return $state.snapshot(this.graph);
   }
 }

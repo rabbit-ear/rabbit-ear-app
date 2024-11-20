@@ -9,7 +9,9 @@
 
   const makeFacesCoords = (g: FOLD): ([number, number] | [number, number, number])[][] =>
     g.faces_vertices && g.vertices_coords
-      ? (g.faces_vertices || []).map((fv) => fv.map((v) => g.vertices_coords[v]))
+      ? (g.faces_vertices || []).map((fv) =>
+          fv.map((v) => g.vertices_coords[v]).filter((p) => p !== undefined),
+        )
       : [];
 
   const faces_vertices = $derived(graph.faces_vertices || []);
