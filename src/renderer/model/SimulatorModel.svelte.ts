@@ -1,5 +1,5 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import type { IModel, Models } from "./Models.svelte.ts";
+import type { FrameStyleType, IModel, Models } from "./Models.svelte.ts";
 import type { Shape } from "../geometry/shapes.ts";
 import app from "../app/App.svelte.ts";
 
@@ -10,6 +10,13 @@ export class SimulatorModel implements IModel {
   constructor(models: Models) {
     this.#models = models;
   }
+
+  //style: FrameStyleType = $derived({
+  style: FrameStyleType = {
+    isFoldedForm: true,
+    dimension: 3,
+    showVertices: false,
+  };
 
   get shapes(): Shape[] {
     return this.#models.shapes;

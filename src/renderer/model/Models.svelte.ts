@@ -14,11 +14,20 @@ export type FrameStyleType = {
   showVertices: boolean;
 };
 
+const makeFrameStyle = (graph: FOLD): FrameStyleType => ({
+  isFoldedForm: isFoldedForm(graph),
+  dimension: getDimensionQuick(graph),
+  showVertices:
+    graph?.vertices_coords && !graph?.edges_vertices && !graph?.faces_vertices,
+});
+
 export interface IModel {
   name: string;
 
   // get the (compiled if necessary) FOLD graph
   fold: FOLD;
+
+  style: FrameStyleType;
 
   // other
   shapes: Shape[];
@@ -49,16 +58,10 @@ export class Models {
   flatFrame: FOLD = $derived.by(() => this.framesFlat[this.activeFrame]);
 
   // style related to the frames
-  framesStyle: FrameStyleType[] = $derived.by(() =>
-    this.framesFlat.map(
-      (graph): FrameStyleType => ({
-        isFoldedForm: isFoldedForm(graph),
-        dimension: getDimensionQuick(graph),
-        showVertices:
-          graph?.vertices_coords && !graph?.edges_vertices && !graph?.faces_vertices,
-      }),
-    ),
-  );
+  framesStyle: FrameStyleType[] = $derived.by(() => this.framesFlat.map(makeFrameStyle));
+  //frameStyle: FrameStyleType | undefined = $derived.by(
+  //  () => this.framesStyle[this.activeFrame],
+  //);
 
   isFoldedForm: boolean = $derived.by(
     //() => this.framesStyle[this.fileManager.activeFrame]?.isFoldedForm,
