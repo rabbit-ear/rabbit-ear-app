@@ -50,6 +50,10 @@ export class FramesViewport implements IViewport {
     this.component = FramesViewportComponent;
   }
 
+  unbindTool(): void {
+    // empty
+  }
+
   dealloc(): void {
     // empty
   }

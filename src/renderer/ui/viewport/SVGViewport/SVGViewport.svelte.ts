@@ -36,7 +36,7 @@ export class SVGViewport implements IModelViewport {
   view: View;
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
-  // currently, this is primarily used by the tools, to draw indicator marks.
+  // currently, this is used by the tools to draw indicator marks.
   layer?: Component = $state();
   //props?: object & SVGAttributes<SVGGElement> = $state();
   props?: object = $state();
@@ -61,6 +61,7 @@ export class SVGViewport implements IModelViewport {
   onkeyup?: (event: KeyboardEvent) => void;
 
   constructor() {
+    //console.log("+++ SVGViewport()");
     this.component = ViewportComponent;
     this.panel = ViewportPanel;
     this.view = new View(this);
@@ -70,10 +71,15 @@ export class SVGViewport implements IModelViewport {
     this.model = app.models.cp;
   }
 
-  dealloc(): void {
+  unbindTool(): void {
+    //console.log("--- SVGViewport unbindTool()");
     unsetViewportEvents(this);
     this.layer = undefined;
     this.props = undefined;
+  }
+
+  dealloc(): void {
+    // empty
   }
 
   clipLine(line: VecLine2): [number, number][] | undefined {

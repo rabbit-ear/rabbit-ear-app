@@ -1,5 +1,5 @@
 import type { Component } from "svelte";
-import type { IModel } from "../../file/Models.svelte";
+import type { IModel } from "../../model/Models.svelte.ts";
 
 export type ViewportUIEvent = {
   point: [number, number];
@@ -26,16 +26,17 @@ export interface ViewportEvents {
   onkeyup?: (event: KeyboardEvent) => void;
 }
 
-export interface Deallocable {
-  dealloc(): void;
-}
+//export interface Deallocable {
+//  dealloc(): void;
+//}
 
 //export abstract class ViewportStatics {
 //  static settings?: object;
 //  static panel?: Panel;
 //}
 
-export abstract class IViewport implements Deallocable {
+//export abstract class IViewport implements Deallocable {
+export abstract class IViewport {
   // static properties (unable to be defined here, please define them)
   static name?: string;
   static panel?: Component;
@@ -49,13 +50,14 @@ export abstract class IViewport implements Deallocable {
   // force the screen to re-calculate window bounds. used when viewports are added/removed
   redraw?: () => void;
 
-  // this method will unbind all of the above events (set them to undefined)
+  // called when removed from the screen
   dealloc: () => void;
 }
 
 //export abstract class GuiViewport implements ViewportEvents, Deallocable {
 //export interface IModelViewport extends IViewport, ViewportEvents, Deallocable {
-export abstract class IModelViewport implements IViewport, ViewportEvents, Deallocable {
+//export abstract class IModelViewport implements IViewport, ViewportEvents, Deallocable {
+export abstract class IModelViewport implements IViewport, ViewportEvents {
   // static properties (unable to be defined here, please define them)
   static name?: string;
   static panel?: Component;
@@ -86,10 +88,14 @@ export abstract class IModelViewport implements IViewport, ViewportEvents, Deall
   onkeyup?: ((event: KeyboardEvent) => void) | undefined;
 
   // this method will unbind all of the above events (set them to undefined)
+  unbindTool: () => void;
+
+  // called when removed from the screen
   dealloc: () => void;
 }
 
 export const unsetViewportEvents = (viewport: IModelViewport): void => {
+  //console.log("unset viewport events", viewport);
   viewport.onmousemove = undefined;
   viewport.onmousedown = undefined;
   viewport.onmouseup = undefined;

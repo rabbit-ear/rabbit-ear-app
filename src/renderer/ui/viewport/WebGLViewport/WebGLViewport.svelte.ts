@@ -14,6 +14,7 @@ import Panel from "./Panel.svelte";
 import { View } from "./Settings/View.svelte.ts";
 import settings from "./Settings/ClassSettings.svelte.ts";
 import app from "../../../app/App.svelte.ts";
+import type { ModelStyle } from "../../../model/ModelStyle.ts";
 
 //class Style {
 //  view: View;
@@ -50,47 +51,76 @@ export class WebGLViewport implements IModelViewport {
 
   effects: (() => void)[];
 
+  modelStyle: ModelStyle = $state();
+
   // layer?: unknown = $state();
   // props?: unknown = $state();
 
   constructor() {
+    //console.log("+++ WebGLViewport()");
     this.component = ViewportComponent;
     this.panel = Dropdown;
     this.view = new View();
     //this.style = new Style(this.view);
     //this.model = app.models.cp;
     this.model = app.models.folded;
-    this.effects = [this.makeFrameChangeStyleEffect()];
-    this.setFrameStyle(this.model.style);
-    console.log(this.model.style);
+    this.effects = [this.makeFrameStyleEffect()];
+    this.setModelStyle(this.model.style);
+    //console.log(this.model.style);
+  }
+
+  unbindTool(): void {
+    //console.log("--- WebGLViewport toolDidUnbind()");
+    unsetViewportEvents(this);
   }
 
   dealloc(): void {
-    unsetViewportEvents(this);
-    this.effects.forEach((fn) => fn());
-    // todo
+    //console.log("--- WebGLViewport dealloc()");
+    this.effects.forEach((cleanup) => cleanup());
   }
 
-  setFrameStyle(frameStyle): void {
-    if (!frameStyle) {
+  setModelStyle(modelStyle): void {
+    if (!modelStyle) {
       return;
     }
     // set initial state using the model style
-    //console.log("WebGL Frame style", frameStyle);
-    this.view.renderStyle = frameStyle.isFoldedForm ? "foldedForm" : "creasePattern";
-    this.view.perspective = frameStyle.dimension === 2 ? "orthographic" : "perspective";
+    //console.log("WebGL Frame style", modelStyle);
+    this.view.renderStyle = modelStyle.isFoldedForm ? "foldedForm" : "creasePattern";
+    this.view.perspective = modelStyle.dimension === 2 ? "orthographic" : "perspective";
+    this.view.opacity = modelStyle.transparentFaces ? 0.2 : 1.0;
+    // todo: something else to tell it to draw transparent faces
   }
 
-  makeFrameChangeStyleEffect(): () => void {
+  makeFrameStyleEffect(): () => void {
+    //console.log("make frame style effect");
     return $effect.root(() => {
       $effect(() => {
-        const frameStyle = this.model.style;
-        console.log("web gl effect", frameStyle);
-        untrack(() => this.setFrameStyle(frameStyle));
+        //console.log("WebGLViewport effect: active frame", app.models.activeFrame);
+        this.modelStyle = app.models.framesStyle[app.models.activeFrame];
+        const modelStyle = app.models.framesStyle[app.models.activeFrame];
+        //const modelStyle = this.model.style;
+        //console.log("web gl effect", this.modelStyle);
+        //untrack(() => this.setModelStyle(modelStyle));
+        this.setModelStyle(modelStyle);
       });
       return () => {};
     });
   }
+
+  //makeFrameChangeStyleEffect(): () => void {
+  //  console.log("starting make frame change style effect");
+  //  return $effect.root(() => {
+  //    $effect(() => {
+  //      console.log("WebGLViewport effect: active frame", app.models.activeFrame);
+  //      const modelStyle = app.models.framesStyle[app.models.activeFrame];
+  //      //const modelStyle = this.model.style;
+  //      console.log("web gl effect", modelStyle);
+  //      //untrack(() => this.setModelStyle(modelStyle));
+  //      this.setModelStyle(modelStyle);
+  //    });
+  //    return () => {};
+  //  });
+  //}
 
   uiEpsilonFactor = 0.01;
   snapRadiusFactor = 0.05;

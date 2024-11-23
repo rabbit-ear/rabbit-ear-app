@@ -106,17 +106,24 @@
       }
       // todo: need to delete buffers and programs (call deallocModels()).
       //untrack(() => deallocModels());
-      return renderStyle === "creasePattern"
-        ? [
-            ...creasePattern(gl, version, graph, programOptions),
-            //...worldAxes(gl),
-            // ...touchIndicators(gl, programOptions),
-          ]
-        : [
-            ...foldedForm(gl, version, graph, programOptions),
-            //...worldAxes(gl),
-            // ...touchIndicators(gl, programOptions),
-          ];
+      const models =
+        renderStyle === "creasePattern"
+          ? [
+              ...creasePattern(gl, version, graph, programOptions),
+              //...worldAxes(gl),
+              // ...touchIndicators(gl, programOptions),
+            ]
+          : [
+              ...foldedForm(gl, version, graph, programOptions),
+              //...worldAxes(gl),
+              // ...touchIndicators(gl, programOptions),
+            ];
+      // remove the one flag that is on by default: DepthTest.
+      // this nicely renders the transparent faces and prevents z-fighting
+      if (opacity < 1.0) {
+        models.forEach((model) => (model.flags = []));
+      }
+      return models;
     } catch (error) {
       console.error(error);
       return [];

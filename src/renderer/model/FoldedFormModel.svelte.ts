@@ -1,5 +1,6 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import type { FrameStyleType, IModel, Models } from "./Models.svelte.ts";
+import type { IModel, Models } from "./Models.svelte.ts";
+import type { ModelStyle } from "./ModelStyle.ts";
 import type { Shape } from "../geometry/shapes.ts";
 import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 import { getDimensionQuick, isFoldedForm } from "rabbit-ear/fold/spec.js";
@@ -29,7 +30,7 @@ export class FoldedFormModel implements IModel {
     this.#models = models;
   }
 
-  style: FrameStyleType = $derived({
+  style: ModelStyle = $derived({
     //isFoldedForm: isFoldedForm(this.#graph),
     isFoldedForm: true,
     dimension: getDimensionQuick({ vertices_coords: this.#vertices_coords }),
@@ -37,6 +38,7 @@ export class FoldedFormModel implements IModel {
       this.#graph?.vertices_coords &&
       !this.#graph?.edges_vertices &&
       !this.#graph?.faces_vertices,
+    transparentFaces: this.#graph.faceOrders == null,
   });
 
   get shapes(): Shape[] {

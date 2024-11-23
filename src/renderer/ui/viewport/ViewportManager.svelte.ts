@@ -19,11 +19,11 @@ export class ViewportManager {
   #makeToolViewportEffect = (): (() => void) =>
     $effect.root(() => {
       $effect(() => {
-        this.modelViewports.forEach((viewport) => viewport.dealloc());
+        this.modelViewports.forEach((viewport) => viewport.unbindTool());
         this.modelViewports.forEach((viewport) => this.ui.tool?.bindTo(viewport));
       });
       return () => {
-        this.modelViewports.forEach((viewport) => viewport.dealloc());
+        this.modelViewports.forEach((viewport) => viewport.unbindTool());
       };
     });
 
@@ -53,14 +53,16 @@ export class ViewportManager {
   }
 
   replace(index: number, ViewClass: ModelViewportClassTypes): void {
-    this.modelViewports.splice(index, 1, new ViewClass());
+    this.modelViewports
+      .splice(index, 1, new ViewClass())
+      .forEach((viewport) => viewport?.dealloc());
   }
 
   remove(index?: number): void {
     if (index === undefined) {
-      this.modelViewports.pop();
+      this.modelViewports.pop()?.dealloc();
     } else {
-      this.modelViewports.splice(index, 1);
+      this.modelViewports.splice(index, 1).forEach((viewport) => viewport?.dealloc());
     }
   }
 

@@ -9,6 +9,11 @@
   };
 
   let { viewport, ...rest }: PropsType = $props();
+
+  let opacity = $derived(viewport?.view?.opacity);
+  let frontColor = $derived(opacity === 1 ? viewport?.view?.frontColor : "#999");
+  let backColor = $derived(opacity === 1 ? viewport?.view?.backColor : "#999");
+  let outlineColor = $derived(opacity === 1 ? viewport?.view?.outlineColor : "white");
 </script>
 
 <WebGLFOLD
@@ -26,8 +31,9 @@
   layerNudge={settings.layerNudge}
   fov={viewport.view.fov}
   darkMode={viewport?.view?.darkMode}
-  frontColor={viewport?.view?.frontColor}
-  backColor={viewport?.view?.backColor}
+  {frontColor}
+  {backColor}
+  {outlineColor}
   strokeWidth={settings.strokeWidth}
   opacity={viewport?.view?.opacity}
   showFoldedFaceOutlines={viewport?.view?.showFoldedFaceOutlines}

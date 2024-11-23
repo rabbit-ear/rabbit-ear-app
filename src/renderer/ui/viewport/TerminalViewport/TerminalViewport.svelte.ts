@@ -31,8 +31,12 @@ export class TerminalViewport implements IViewport, ViewportEvents {
     this.onkeyup = this.events.onkeyup;
   }
 
-  dealloc(): void {
+  unbindTool(): void {
     unsetViewportEvents(this);
     this.props = undefined;
+  }
+
+  dealloc(): void {
+    // empty
   }
 }

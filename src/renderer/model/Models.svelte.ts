@@ -1,25 +1,13 @@
 import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.d.ts";
 import type { Shape } from "../geometry/shapes.ts";
+import type { ModelStyle } from "./ModelStyle.ts";
 import { FileManager } from "../file/FileManager.svelte";
 import { CreasePatternModel } from "./CreasePatternModel.svelte.ts";
 import { FoldedFormModel } from "./FoldedFormModel.svelte.ts";
 import { SimulatorModel } from "./SimulatorModel.svelte.ts";
 import { flattenFrame } from "rabbit-ear/fold/frames.js";
-import { getDimensionQuick, isFoldedForm } from "rabbit-ear/fold/spec.js";
 import { reassembleFramesToFOLD } from "../general/fold.ts";
-
-export type FrameStyleType = {
-  isFoldedForm: boolean;
-  dimension: number;
-  showVertices: boolean;
-};
-
-const makeFrameStyle = (graph: FOLD): FrameStyleType => ({
-  isFoldedForm: isFoldedForm(graph),
-  dimension: getDimensionQuick(graph),
-  showVertices:
-    graph?.vertices_coords && !graph?.edges_vertices && !graph?.faces_vertices,
-});
+import { makeModelStyle } from "./ModelStyle.ts";
 
 export interface IModel {
   name: string;
@@ -27,7 +15,7 @@ export interface IModel {
   // get the (compiled if necessary) FOLD graph
   fold: FOLD;
 
-  style: FrameStyleType;
+  style: ModelStyle;
 
   // other
   shapes: Shape[];
@@ -58,8 +46,8 @@ export class Models {
   flatFrame: FOLD = $derived.by(() => this.framesFlat[this.activeFrame]);
 
   // style related to the frames
-  framesStyle: FrameStyleType[] = $derived.by(() => this.framesFlat.map(makeFrameStyle));
-  //frameStyle: FrameStyleType | undefined = $derived.by(
+  framesStyle: ModelStyle[] = $derived.by(() => this.framesFlat.map(makeModelStyle));
+  //frameStyle: ModelStyle | undefined = $derived.by(
   //  () => this.framesStyle[this.activeFrame],
   //);
 

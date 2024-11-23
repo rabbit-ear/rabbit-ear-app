@@ -220,7 +220,7 @@ export const makeProjectionMatrix = (
   fov = 45,
   rightHanded = true,
 ): number[] => {
-  console.log("rightHanded", rightHanded);
+  //console.log("rightHanded", rightHanded);
   const Z_NEAR = 0.1;
   const Z_FAR = 20;
   const ORTHO_FAR = -100;

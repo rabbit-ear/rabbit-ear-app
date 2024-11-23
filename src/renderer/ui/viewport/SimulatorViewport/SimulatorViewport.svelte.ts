@@ -48,7 +48,11 @@ export class SimulatorViewport implements IModelViewport {
     this.model = app.models.cp;
   }
 
-  dealloc(): void {
+  unbindTool(): void {
     unsetViewportEvents(this);
+  }
+
+  dealloc(): void {
+    // empty
   }
 }

@@ -37,8 +37,12 @@ export class ScriptViewport implements IViewport {
     //this.panel = new ViewportPanel();
   }
 
-  dealloc(): void {
+  unbindTool(): void {
     unsetViewportEvents(this);
     // todo
+  }
+
+  dealloc(): void {
+    // empty
   }
 }

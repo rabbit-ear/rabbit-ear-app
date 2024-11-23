@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { FOLD } from "rabbit-ear/types.js";
-  import type { FrameStyleType } from "../../../file/File.svelte.ts";
+  import type { ModelStyle } from "../../../model/ModelStyle.ts";
   import SVGCanvas from "../../components/SVG/SVGCanvas.svelte";
   //import SVGFOLDVertices from "../../components/SVG/SVGFOLDVertices.svelte";
   import SVGFOLDEdges from "../../components/SVG/SVGFOLDEdges.svelte";
@@ -9,7 +9,7 @@
   const rightHanded = $derived(Settings.rightHanded);
   import { View } from "./View.svelte.ts";
 
-  let { graph, frameStyle }: { graph: FOLD; frameStyle: FrameStyleType } = $props();
+  let { graph, frameStyle }: { graph: FOLD; frameStyle: ModelStyle } = $props();
 
   const view = $derived(new View(graph));
 
