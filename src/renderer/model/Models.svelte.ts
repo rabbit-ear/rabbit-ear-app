@@ -1,13 +1,11 @@
 import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.d.ts";
 import type { Shape } from "../geometry/shapes.ts";
 import type { ModelStyle } from "./ModelStyle.ts";
+import type { FrameStyle } from "../file/FrameStyle.ts";
 import { FileManager } from "../file/FileManager.svelte";
 import { CreasePatternModel } from "./CreasePatternModel.svelte.ts";
 import { FoldedFormModel } from "./FoldedFormModel.svelte.ts";
 import { SimulatorModel } from "./SimulatorModel.svelte.ts";
-import { flattenFrame } from "rabbit-ear/fold/frames.js";
-import { reassembleFramesToFOLD } from "../general/fold.ts";
-import { makeModelStyle } from "./ModelStyle.ts";
 
 export interface IModel {
   name: string;
@@ -25,38 +23,31 @@ export interface IModel {
 }
 
 export class Models {
-  fileManager: FileManager;
+  #fileManager: FileManager;
+  #frames: FOLDChildFrame[] = $derived.by(() => this.#fileManager.file?.frames);
+  #framesFlat: FOLD[] = $derived.by(() => this.#fileManager.file?.framesFlat);
+  #framesStyle: FrameStyle[] = $derived.by(() => this.#fileManager.file?.framesStyle);
 
-  activeFrame: number = $state(0);
+  activeFrameIndex: number = $state(0);
 
-  frames: FOLDChildFrame[] = $derived.by(() => this.fileManager.file?.frames);
-  frame: FOLDChildFrame = $derived.by(() => this.frames[this.activeFrame]);
+  frame: FOLDChildFrame = $derived.by(() => this.#frames[this.activeFrameIndex]);
+  frameFlat: FOLD = $derived.by(() => this.#framesFlat[this.activeFrameIndex]);
+  frameStyle: FrameStyle = $derived.by(() => this.#framesStyle[this.activeFrameIndex]);
 
-  framesFlat: FOLD[] = $derived.by(() => {
-    try {
-      const fold = reassembleFramesToFOLD($state.snapshot(this.fileManager.file?.frames));
-      return this.fileManager.file?.frames.map((_, i) => flattenFrame(fold, i));
-    } catch (error) {
-      console.log(error);
-      return [];
-    }
-  });
-
-  //flatFrame: FOLD = $derived.by(() => this.framesFlat[this.fileManager.activeFrame]);
-  flatFrame: FOLD = $derived.by(() => this.framesFlat[this.activeFrame]);
-
-  // style related to the frames
-  framesStyle: ModelStyle[] = $derived.by(() => this.framesFlat.map(makeModelStyle));
-  //frameStyle: ModelStyle | undefined = $derived.by(
-  //  () => this.framesStyle[this.activeFrame],
-  //);
-
-  isFoldedForm: boolean = $derived.by(
-    //() => this.framesStyle[this.fileManager.activeFrame]?.isFoldedForm,
-    () => this.framesStyle[this.activeFrame]?.isFoldedForm,
-  );
   models: { [key: string]: IModel } = $state({});
-  shapes: Shape[] = $derived.by(() => this.fileManager.file?.shapes);
+  shapes: Shape[] = $derived.by(() => this.#fileManager.file?.shapes);
+
+  constructor(fileManager: FileManager) {
+    this.#fileManager = fileManager;
+    const cp = new CreasePatternModel(this);
+    const folded = new FoldedFormModel(this);
+    const simulator = new SimulatorModel(this);
+    this.models = {
+      [cp.name]: cp,
+      [folded.name]: folded,
+      [simulator.name]: simulator,
+    };
+  }
 
   getModelWithName(name: string): IModel | undefined {
     return this.models[name];
@@ -72,16 +63,8 @@ export class Models {
     return this.models.simulator;
   }
 
-  constructor(fileManager: FileManager) {
-    this.fileManager = fileManager;
-    const cp = new CreasePatternModel(this);
-    const folded = new FoldedFormModel(this);
-    const simulator = new SimulatorModel(this);
-    this.models = {
-      [cp.name]: cp,
-      [folded.name]: folded,
-      [simulator.name]: simulator,
-    };
+  newFileDidLoad(): void {
+    this.activeFrameIndex = 0;
   }
 }
 

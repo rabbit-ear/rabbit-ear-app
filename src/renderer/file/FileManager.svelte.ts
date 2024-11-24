@@ -46,7 +46,7 @@ export class FileManager {
     }
     this.files[0] = new File(path, fold);
     // todo- this seems a little out of place
-    this.models.activeFrame = 0;
+    this.models.newFileDidLoad();
   }
 
   // throws

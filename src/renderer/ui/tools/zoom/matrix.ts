@@ -75,7 +75,7 @@ export const wheelPanMatrix = (
 ): void => {
   //const invertedY = viewport.view.rightHanded;
   const touchScale = -1 / 300;
-  const impliedScale = viewport.view.modelView[0];
+  const impliedScale = viewport.view.view[0];
   const translate: [number, number] = [
     deltaX * touchScale * impliedScale,
     //deltaY * touchScale * impliedScale * (viewport.view.invertY ? -1 : 1),

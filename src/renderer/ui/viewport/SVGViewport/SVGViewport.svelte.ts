@@ -61,7 +61,6 @@ export class SVGViewport implements IModelViewport {
   onkeyup?: (event: KeyboardEvent) => void;
 
   constructor() {
-    //console.log("+++ SVGViewport()");
     this.component = ViewportComponent;
     this.panel = ViewportPanel;
     this.view = new View(this);
@@ -72,7 +71,6 @@ export class SVGViewport implements IModelViewport {
   }
 
   unbindTool(): void {
-    //console.log("--- SVGViewport unbindTool()");
     unsetViewportEvents(this);
     this.layer = undefined;
     this.props = undefined;

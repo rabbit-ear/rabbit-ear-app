@@ -2,9 +2,11 @@ import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js
 import type { FilePathInfo } from "../../main/fs/path.ts";
 import type { CommandAndResult } from "../kernel/commands/Command.svelte.ts";
 import type { Shape } from "../geometry/shapes.ts";
+import type { FrameStyle } from "./FrameStyle.ts";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
-import { reassembleFramesToFOLD } from "../general/fold.ts";
+import { reassembleFramesToFOLD, makeFlatFramesFromFrames } from "../general/fold.ts";
+import { makeFrameStyle } from "./FrameStyle.ts";
 
 // basically all information related to the file-system properties
 // of the currently opened file.
@@ -12,10 +14,13 @@ import { reassembleFramesToFOLD } from "../general/fold.ts";
 export class File {
   path: FilePathInfo = $state();
   metadata: FOLDFileMetadata = $state();
-  frames: FOLDChildFrame[] = $state.raw([]);
   shapes: Shape[] = $state([]);
   // Has the current file been edited and not yet saved?
   modified: boolean = $state(false);
+
+  frames: FOLDChildFrame[] = $state.raw([]);
+  framesFlat: FOLD[] = $derived(makeFlatFramesFromFrames(this.frames));
+  framesStyle: FrameStyle[] = $derived.by(() => this.framesFlat.map(makeFrameStyle));
 
   history = $state<CommandAndResult[]>([]);
   redoStack = $state<CommandAndResult[]>([]);

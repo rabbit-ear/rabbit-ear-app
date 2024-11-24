@@ -22,10 +22,10 @@
     if (!app.fileManager.file) {
       return;
     }
-    app.fileManager.activeFrame = index;
+    app.fileManager.activeFrameIndex = index;
   };
 
-  const highlighted = $derived(index === app.fileManager.activeFrame);
+  const highlighted = $derived(index === app.fileManager.activeFrameIndex);
 
   const matrix = $derived(
     frame.view.rightHanded ? [1, 0, 0, -1, 0, 0].join(", ") : undefined,

@@ -4,18 +4,18 @@
 
   const classNames = { creasePattern: "crease pattern", foldedForm: "folded form" };
 
-  let framesFlat = $derived(app.models.framesFlat);
-  let activeFrame = $derived(app.models.activeFrame);
+  let framesFlat = $derived(app.fileManager.file?.framesFlat);
+  let activeFrameIndex = $derived(app.models.activeFrameIndex);
   let framesStyle = $derived(
     framesFlat
       .map((graph) => graph?.frame_classes || [])
       .map((classes) => classes.map((cl) => classNames[cl]))
       .map((classes) => classes.filter((a) => a).join(" ")),
   );
-  let frameStyles = $derived(app.models.framesStyle);
+  let frameStyles = $derived(app.fileManager.file?.framesStyle);
 
   const onclick = (index: number): void => {
-    app.models.activeFrame = index;
+    app.models.activeFrameIndex = index;
   };
 </script>
 
@@ -25,9 +25,9 @@
       <hr />
     {/if}
     <button onclick={(): void => onclick(i)} class="row frame gap-lg">
-      <p>{activeFrame === i ? "●" : "○"}</p>
+      <p>{activeFrameIndex === i ? "●" : "○"}</p>
       <Rendering {graph} frameStyle={frameStyles[i]} />
-      {#if activeFrame === i}
+      {#if activeFrameIndex === i}
         <p class="strong">{framesStyle[i]}</p>
       {:else}
         <p>{framesStyle[i]}</p>
@@ -70,7 +70,8 @@
 
   .scrollable {
     max-height: 12rem;
-    overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .frame {

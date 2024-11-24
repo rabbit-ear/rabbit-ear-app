@@ -3,13 +3,9 @@
 
   //const classNames = { creasePattern: "crease pattern", foldedForm: "folded form" };
 
-  //let frame = $derived(app.fileManager.frame);
-  //let frame = $derived(app.fileManager.file?.frames[app.fileManager.activeFrame]);
+  let activeFrameIndex = $derived(app.models.activeFrameIndex);
   let frame = $derived(app.models.frame);
-  //let frame = $derived(app.models.flatFrame);
-  let activeFrame = $derived(app.models.activeFrame);
-
-  //let flatFrame = $derived(app.fileManager.flatFrame);
+  //let frameFlat = $derived(app.models.frameFlat);
 
   //let frame_classes = $derived(frame?.frame_classes || []);
   let frame_parent = $derived(frame?.frame_parent);
@@ -24,7 +20,7 @@
 
 <div class="column gap">
   <div class="row">
-    <p>frame {activeFrame}</p>
+    <p>frame {activeFrameIndex}</p>
   </div>
   {#if hasParent}
     <p>inherited (#{frame_parent})</p>

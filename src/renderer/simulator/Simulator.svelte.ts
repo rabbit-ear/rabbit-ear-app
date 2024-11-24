@@ -11,7 +11,7 @@ export class Simulator {
   model: Model;
   options: SolverOptions;
 
-  graph: FOLD = $derived.by(() => this.#models.flatFrame);
+  graph: FOLD = $derived.by(() => this.#models.frameFlat);
 
   abstractGraph: FOLD;
   vertices_coords: [number, number, number][] = $state.raw([]);
@@ -21,12 +21,13 @@ export class Simulator {
 
   constructor(models: Models) {
     this.#models = models;
-    this.effects = [
-      this.#makeStartLoopEffect(),
-      this.#makeLoadEffect(),
-      this.#makeFoldAmountEffect(),
-      //this.#makeStrainEffect(),
-    ];
+    // this is disabling the simulator for now
+    //this.effects = [
+    //  this.#makeStartLoopEffect(),
+    //  this.#makeLoadEffect(),
+    //  this.#makeFoldAmountEffect(),
+    //  //this.#makeStrainEffect(),
+    //];
   }
 
   load(fold: FOLD): void {
@@ -66,7 +67,9 @@ export class Simulator {
           console.log("stopping simulator");
         }
       });
-      return (): void => {};
+      return (): void => {
+        // empty
+      };
     });
   }
 
@@ -83,8 +86,10 @@ export class Simulator {
             Settings.exportModel = this.model.export.bind(this.model);
             Settings.reset = this.model.reset.bind(this.model);
             // edges and faces are built here and never change, only vertices need updating
-            this.abstractGraph = structuredClone(this.model.fold);
-            this.vertices_coords = structuredClone(this.model.fold.vertices_coords);
+            //this.abstractGraph = structuredClone(this.model.fold);
+            //this.vertices_coords = structuredClone(this.model.fold.vertices_coords);
+            this.abstractGraph = $state.snapshot(this.model.fold);
+            this.vertices_coords = $state.snapshot(this.model.fold.vertices_coords);
           } catch (error) {
             console.error(error);
             window.alert(error);
@@ -94,7 +99,9 @@ export class Simulator {
           this.modelSize = box ? Math.max(...box.span) : 1;
         }
       });
-      return (): void => {};
+      return (): void => {
+        // empty
+      };
     });
   }
 
@@ -103,7 +110,9 @@ export class Simulator {
       $effect(() => {
         this.model.foldAmount = Settings.foldAmount;
       });
-      return () => {};
+      return () => {
+        // empty
+      };
     });
   }
 

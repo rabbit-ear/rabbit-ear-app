@@ -6,8 +6,8 @@ import type { Shape } from "../geometry/shapes.ts";
 export class CreasePatternModel implements IModel {
   name: string = "creasePattern";
   #models: Models;
-  #graph: FOLD = $derived.by(() => this.#models.flatFrame);
-  #isFoldedForm: boolean = $derived.by(() => this.#models.isFoldedForm);
+  #graph: FOLD = $derived.by(() => this.#models.frameFlat);
+  #isFoldedForm: boolean = $derived.by(() => this.#models.frameStyle?.isFoldedForm);
 
   // todo
   snapPoints: [number, number][] = $state([]);

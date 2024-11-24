@@ -5,7 +5,7 @@
   const classNames = { creasePattern: "crease pattern", foldedForm: "folded form" };
 
   let framesFlat = $derived(app.fileManager.file?.framesFlat);
-  let activeFrame = $derived(app.fileManager.activeFrame);
+  let activeFrame = $derived(app.fileManager.activeFrameIndex);
   //let frameCount = $derived(app.fileManager.file?.frames.length);
   let framesStyle = $derived(
     framesFlat
@@ -15,7 +15,7 @@
   );
 
   const onclick = (index: number): void => {
-    app.fileManager.activeFrame = index;
+    app.fileManager.activeFrameIndex = index;
   };
 </script>
 

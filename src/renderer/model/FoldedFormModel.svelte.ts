@@ -8,8 +8,8 @@ import { getDimensionQuick, isFoldedForm } from "rabbit-ear/fold/spec.js";
 export class FoldedFormModel implements IModel {
   name: string = "foldedForm";
   #models: Models;
-  #graph: FOLD = $derived.by(() => this.#models.flatFrame);
-  #isFoldedForm: boolean = $derived.by(() => this.#models.isFoldedForm);
+  #graph: FOLD = $derived.by(() => this.#models.frameFlat);
+  #isFoldedForm: boolean = $derived.by(() => this.#models.frameStyle?.isFoldedForm);
 
   #vertices_coords: [number, number][] | [number, number, number][] = $derived.by(() => {
     if (this.#isFoldedForm) {
