@@ -138,14 +138,12 @@ export const makeVerticesFacesUnsorted = ({
   // iterate over every face, then iterate over each of the face's vertices
   faces_vertices.forEach((face, f) => {
     // in the case that one face visits the same vertex multiple times,
-    // this hash acts as an intermediary, basically functioning like a set,
-    // and only allow one occurence of each vertex index.
-    const hash: number[] = [];
-    face.forEach((vertex) => {
-      hash[vertex] = f;
-    });
-    hash.forEach((fa, v) => vertices_faces[v].push(fa));
+    // use a set to allow one occurence of each vertex index.
+    const set = new Set();
+    face.forEach((vertex) => set.add(vertex));
+    set.forEach((v) => vertices_faces[v].push(f));
   });
+
   return vertices_faces;
 };
 

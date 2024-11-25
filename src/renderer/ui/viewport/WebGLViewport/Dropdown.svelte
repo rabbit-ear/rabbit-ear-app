@@ -1,6 +1,6 @@
 <script lang="ts">
   import { untrack } from "svelte";
-  import type { IModel } from "../../../model/Models.svelte.ts";
+  import type { IModel } from "../../../model/Model.svelte.ts";
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
   import settings from "./Settings/ClassSettings.svelte.ts";
   import app from "../../../app/App.svelte.ts";

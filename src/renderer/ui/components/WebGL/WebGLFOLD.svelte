@@ -104,7 +104,7 @@
       if (!gl) {
         return [];
       }
-      const startTime = performance.now();
+      //const startTime = performance.now();
       // todo: need to delete buffers and programs (call deallocModels()).
       //untrack(() => deallocModels());
       const models =
@@ -124,7 +124,7 @@
       if (opacity < 1.0) {
         models.forEach((model) => (model.flags = []));
       }
-      console.log("WebGL make models (ms):", performance.now() - startTime);
+      //console.log("WebGL make models (ms):", performance.now() - startTime);
       return models;
     } catch (error) {
       console.error(error);

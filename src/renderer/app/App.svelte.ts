@@ -4,7 +4,6 @@ import { Invoker } from "../kernel/Invoker.svelte.ts";
 import * as Dialog from "../dialog/index.ts";
 import Settings from "./Settings.svelte.ts";
 import { Models } from "../model/Models.svelte.ts";
-import { Simulator } from "../simulator/Simulator.svelte.ts";
 
 // on-boot events, and example file
 import craneString from "../../../resources/crane.fold?raw";
@@ -19,7 +18,6 @@ class Application {
   // UI is undefined here, initialized inside components/UI.svelte.
   ui: UI | undefined;
   dialog: typeof Dialog;
-  simulator: Simulator;
 
   constructor() {
     this.settings = Settings;
@@ -27,7 +25,6 @@ class Application {
     this.#fileManager = new FileManager();
     this.models = this.#fileManager.models;
     //this.models = new Models(this.#fileManager);
-    this.simulator = new Simulator(this.models);
     this.dialog = Dialog;
 
     // load example file
@@ -54,7 +51,7 @@ class Application {
   // re-initialize itself, we would call this method to cleanup the hanging effect.
   dealloc(): void {
     this.ui?.dealloc();
-    this.simulator?.dealloc();
+    this.models?.dealloc();
   }
 }
 

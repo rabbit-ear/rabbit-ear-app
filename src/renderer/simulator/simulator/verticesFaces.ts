@@ -11,12 +11,10 @@ export const verticesFaces = (model: Model): number[][] => {
   // iterate over every face, then iterate over each of the face's vertices
   model.fold.faces_vertices.forEach((face, f) => {
     // in the case that one face visits the same vertex multiple times,
-    // this hash acts like a set and only allow one of each vertex index.
-    const hash: number[] = [];
-    face.forEach((vertex: number) => {
-      hash[vertex] = f;
-    });
-    hash.forEach((fa, v) => vertices_faces[v].push(fa));
+    // use a set to allow one occurence of each vertex index.
+    const set = new Set();
+    face.forEach((vertex: number) => set.add(vertex));
+    set.forEach((v) => vertices_faces[v].push(f));
   });
   return vertices_faces;
 };

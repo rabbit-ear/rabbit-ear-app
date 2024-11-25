@@ -1,5 +1,6 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import type { IModel, Models } from "./Models.svelte.ts";
+import type { IModel } from "./Model.svelte.ts";
+import type { Models } from "./Models.svelte.ts";
 import type { ModelStyle } from "./ModelStyle.ts";
 import type { Shape } from "../geometry/shapes.ts";
 import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";

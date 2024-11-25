@@ -1,26 +1,11 @@
 import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.d.ts";
 import type { Shape } from "../geometry/shapes.ts";
-import type { ModelStyle } from "./ModelStyle.ts";
+import type { IModel } from "./Model.svelte.ts";
 import type { FrameStyle } from "../file/FrameStyle.ts";
 import { FileManager } from "../file/FileManager.svelte";
 import { CreasePatternModel } from "./CreasePatternModel.svelte.ts";
 import { FoldedFormModel } from "./FoldedFormModel.svelte.ts";
 import { SimulatorModel } from "./SimulatorModel.svelte.ts";
-
-export interface IModel {
-  name: string;
-
-  // get the (compiled if necessary) FOLD graph
-  fold: FOLD;
-
-  style: ModelStyle;
-
-  // other
-  shapes: Shape[];
-
-  // some optional properties that might exist
-  snapPoints?: [number, number][] | [number, number, number][];
-}
 
 export class Models {
   #fileManager: FileManager;
@@ -34,6 +19,7 @@ export class Models {
   frameFlat: FOLD = $derived.by(() => this.#framesFlat[this.activeFrameIndex]);
   frameStyle: FrameStyle = $derived.by(() => this.#framesStyle[this.activeFrameIndex]);
 
+  // if models are removed, they need to call their dealloc() method
   models: { [key: string]: IModel } = $state({});
   shapes: Shape[] = $derived.by(() => this.#fileManager.file?.shapes);
 
@@ -47,6 +33,11 @@ export class Models {
       [folded.name]: folded,
       [simulator.name]: simulator,
     };
+  }
+
+  dealloc(): void {
+    Object.values(this.models).forEach((model) => model?.dealloc());
+    this.models = {};
   }
 
   getModelWithName(name: string): IModel | undefined {
@@ -63,6 +54,7 @@ export class Models {
     return this.models.simulator;
   }
 
+  // this gets called when FileManager loads a new file
   newFileDidLoad(): void {
     this.activeFrameIndex = 0;
   }

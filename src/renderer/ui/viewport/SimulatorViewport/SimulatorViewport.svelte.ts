@@ -1,5 +1,5 @@
 import type { Component } from "svelte";
-import type { IModel } from "../../../model/Models.svelte.ts";
+import type { IModel } from "../../../model/Model.svelte.ts";
 import type {
   IModelViewport,
   ViewportMouseEvent,

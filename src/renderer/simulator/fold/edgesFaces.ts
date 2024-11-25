@@ -38,13 +38,12 @@ export const makeEdgesFacesUnsorted = ({
   // the length of something like edges_vertices)
   const edges_faces = edges_vertices.map(() => []);
   faces_edges.forEach((face, f) => {
-    const hash: number[] = [];
-    // in the case that one face visits the same edge multiple times,
-    // this hash acts as a set allowing one occurence of each edge index.
-    face.forEach((edge) => {
-      hash[edge] = f;
-    });
-    hash.forEach((fa, e) => edges_faces[e].push(fa));
+    // in the case that one face visits the same vertex multiple times,
+    // use a set to allow one occurence of each vertex index.
+    const set = new Set();
+    face.forEach((edge) => set.add(edge));
+    set.forEach((e) => edges_faces[e].push(f));
   });
+
   return edges_faces;
 };

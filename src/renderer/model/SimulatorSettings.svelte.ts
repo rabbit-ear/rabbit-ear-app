@@ -1,4 +1,4 @@
-class Settings {
+export class Settings {
   // turn on/off Origami Simulator's folding engine
   active = $state(false);
 
@@ -24,5 +24,3 @@ class Settings {
   reset = $state(() => {});
   exportModel = $state(() => {});
 }
-
-export default new Settings();
