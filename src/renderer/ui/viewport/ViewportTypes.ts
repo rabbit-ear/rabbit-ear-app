@@ -90,6 +90,9 @@ export abstract class IModelViewport implements IViewport, ViewportEvents {
   // this method will unbind all of the above events (set them to undefined)
   unbindTool: () => void;
 
+  // reset the camera to aspect fit the model
+  resetView: () => void;
+
   // called when removed from the screen
   dealloc: () => void;
 }

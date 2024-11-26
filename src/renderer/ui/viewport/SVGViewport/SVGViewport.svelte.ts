@@ -76,6 +76,10 @@ export class SVGViewport implements IModelViewport {
     this.props = undefined;
   }
 
+  resetView(): void {
+    this.view.resetCamera();
+  }
+
   dealloc(): void {
     // empty
   }

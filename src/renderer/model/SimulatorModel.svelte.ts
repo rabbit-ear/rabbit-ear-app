@@ -1,7 +1,7 @@
 import type { FOLD, Box } from "rabbit-ear/types.d.ts";
 import type { IModel } from "./Model.svelte.ts";
 import type { Models } from "./Models.svelte.ts";
-import type { ModelStyle } from "./ModelStyle.ts";
+import type { FrameStyle } from "../file/FrameStyle.ts";
 import type { Shape } from "../geometry/shapes.ts";
 import type { SolverOptions } from "../simulator/simulator/GPUMath.ts";
 import { boundingBox } from "rabbit-ear/graph/boundary.js";
@@ -28,7 +28,7 @@ export class SimulatorModel implements IModel {
   effects: (() => void)[] = [];
 
   //style: FrameStyleType = $derived({
-  style: ModelStyle = {
+  style: FrameStyle = {
     isFoldedForm: true,
     dimension: 3,
     showVertices: false,

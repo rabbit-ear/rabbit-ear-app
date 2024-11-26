@@ -6,7 +6,9 @@ import { identity4x4 } from "rabbit-ear/math/matrix4.js";
 //  viewMatrixLeftHanded,
 //} from "../../../../general/matrix.ts";
 
-const defaultViewMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -5, 1];
+const defaultViewMatrix: number[] = [
+  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1.866025, 1,
+];
 
 export class View {
   projectionMatrix: number[] = $state([...identity4x4]);

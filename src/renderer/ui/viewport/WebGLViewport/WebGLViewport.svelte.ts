@@ -68,6 +68,10 @@ export class WebGLViewport implements IModelViewport {
     unsetViewportEvents(this);
   }
 
+  resetView(): void {
+    this.view.viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1.866025, 1];
+  }
+
   dealloc(): void {
     this.effects.forEach((cleanup) => cleanup());
   }

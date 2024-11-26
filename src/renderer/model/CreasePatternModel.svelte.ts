@@ -1,7 +1,7 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { IModel } from "./Model.svelte.ts";
 import type { Models } from "./Models.svelte.ts";
-import type { ModelStyle } from "./ModelStyle.ts";
+import type { FrameStyle } from "../file/FrameStyle.ts";
 import type { Shape } from "../geometry/shapes.ts";
 
 export class CreasePatternModel implements IModel {
@@ -17,7 +17,7 @@ export class CreasePatternModel implements IModel {
     this.#models = models;
   }
 
-  style: ModelStyle = $derived({
+  style: FrameStyle = $derived({
     isFoldedForm: false,
     dimension: 2,
     showVertices:

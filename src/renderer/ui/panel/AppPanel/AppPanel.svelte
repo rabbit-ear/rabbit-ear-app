@@ -11,15 +11,22 @@
     <input type="checkbox" id="right-handed" bind:checked={Settings.rightHanded} />
     <label for="right-handed">right handed</label>
   </div>
+
   <div class="row gap">
     <p>View</p>
     <button onclick={(): void => app.ui?.viewports.add()}>+</button>
     <button onclick={(): void => app.ui?.viewports.remove()}>-</button>
   </div>
+
   <div class="row gap">
     <button onclick={(): void => app.ui?.viewports.addScriptViewport()}
       >Script Editor</button>
   </div>
+
+  <div class="row gap">
+    <button onclick={(): void => app.ui?.viewports.resetCameras()}>reset cameras</button>
+  </div>
+
   <!--
   <div class="row gap">
     <input type="checkbox" id="checkbox-script-view" bind:checked={showScriptView} />

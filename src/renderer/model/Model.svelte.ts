@@ -1,6 +1,6 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Shape } from "../geometry/shapes.ts";
-import type { ModelStyle } from "./ModelStyle.ts";
+import type { FrameStyle } from "../file/FrameStyle.ts";
 
 export interface IModel {
   name: string;
@@ -8,7 +8,7 @@ export interface IModel {
   // get the (compiled if necessary) FOLD graph
   fold: FOLD;
 
-  style: ModelStyle;
+  style: FrameStyle;
 
   // other
   shapes: Shape[];

@@ -66,6 +66,10 @@ export class ViewportManager {
     }
   }
 
+  resetCameras(): void {
+    this.modelViewports.forEach((viewport) => viewport.resetView());
+  }
+
   addScriptViewport(): void {
     this.modelViewports.push(new ScriptViewport());
   }
