@@ -25,6 +25,9 @@ const Keybindings: {
     KeyV: {
       2: () => console.log("paste from clipboard"),
     },
+    KeyZ: {
+      2: () => console.log("undo"),
+    },
   },
   up: {
     Enter: {
@@ -90,6 +93,7 @@ const onkeyupForm = $state((event: KeyboardEvent) => {
  *
  */
 export const onkeydown = (event: KeyboardEvent): void => {
+  //console.log("onkeydown", isFormElementActive(), event);
   keyboard.keys[event.code] = true;
   return isFormElementActive() ? onkeydownForm(event) : onkeydownWindow(event);
 };
@@ -98,6 +102,7 @@ export const onkeydown = (event: KeyboardEvent): void => {
  *
  */
 export const onkeyup = (event: KeyboardEvent): void => {
+  //console.log("onkeyup", isFormElementActive(), event);
   delete keyboard.keys[event.code];
   return isFormElementActive() ? onkeyupForm(event) : onkeyupWindow(event);
 };

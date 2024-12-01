@@ -1,9 +1,10 @@
-import type { Deallocable, Viewport } from "../../viewport/viewport.ts";
+import type { Deallocable } from "../UITool.ts";
+import type { IViewport } from "../../viewport/ViewportTypes.ts";
 
 export class ViewportState implements Deallocable {
-  viewport: Viewport;
+  viewport: IViewport;
 
-  constructor(viewport: Viewport) {
+  constructor(viewport: IViewport) {
     this.viewport = viewport;
   }
 

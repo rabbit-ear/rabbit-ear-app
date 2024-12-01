@@ -36,6 +36,10 @@ export class TerminalViewport implements IViewport, ViewportEvents {
     this.props = undefined;
   }
 
+  resetView(): void {
+    // empty
+  }
+
   dealloc(): void {
     // empty
   }

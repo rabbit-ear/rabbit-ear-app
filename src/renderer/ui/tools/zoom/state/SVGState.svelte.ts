@@ -1,6 +1,6 @@
 import { untrack } from "svelte";
 import { subtract2 } from "rabbit-ear/math/vector.js";
-import type { Deallocable } from "../../../viewport/ViewportTypes.ts";
+import type { Deallocable } from "../../UITool.ts";
 import type { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import { panCameraMatrix } from "../matrix.ts";
 import { SVGEvents } from "../events/SVGEvents.ts";
@@ -37,6 +37,7 @@ export class ToolState {
           this.dragVector[1] * (this.viewport.view.rightHanded ? -1 : 1),
         ];
         untrack(() => {
+          console.log("do pan");
           this.viewport.view.camera = panCameraMatrix(
             this.viewport.view.camera,
             translation,

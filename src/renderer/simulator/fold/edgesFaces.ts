@@ -40,7 +40,7 @@ export const makeEdgesFacesUnsorted = ({
   faces_edges.forEach((face, f) => {
     // in the case that one face visits the same vertex multiple times,
     // use a set to allow one occurence of each vertex index.
-    const set = new Set();
+    const set: Set<number> = new Set();
     face.forEach((edge) => set.add(edge));
     set.forEach((e) => edges_faces[e].push(f));
   });

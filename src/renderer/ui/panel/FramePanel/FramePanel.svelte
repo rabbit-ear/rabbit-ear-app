@@ -62,12 +62,6 @@
     <p>[{hasParent ? `child of #${frame_parent}` : "root"}]</p>
   </div>
 
-  <div class="row sm-gap">
-    {#each graphBadges as name}
-      <span class="badge">{name}</span>
-    {/each}
-  </div>
-
   <!--
   <div class="row">
     <p>attributes</p>
@@ -75,6 +69,12 @@
   -->
   <div class="row sm-gap">
     {#each attributeBadges as name}
+      <span class="badge">{name}</span>
+    {/each}
+  </div>
+
+  <div class="row sm-gap">
+    {#each graphBadges as name}
       <span class="badge">{name}</span>
     {/each}
   </div>

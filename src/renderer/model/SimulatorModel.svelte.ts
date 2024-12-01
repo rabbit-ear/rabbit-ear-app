@@ -10,6 +10,7 @@ import { Settings } from "./SimulatorSettings.svelte.ts";
 
 export class SimulatorModel implements IModel {
   name: string = "simulator";
+  abbreviation: string = "sim";
   #models: Models;
 
   model: Model;
@@ -123,14 +124,14 @@ export class SimulatorModel implements IModel {
     });
   }
 
-  #makeStrainEffect(): () => void {
-    return $effect.root(() => {
-      $effect(() => {
-        //this.model.strain = this.settings.strain;
-      });
-      return () => {};
-    });
-  }
+  //#makeStrainEffect(): () => void {
+  //  return $effect.root(() => {
+  //    $effect(() => {
+  //      //this.model.strain = this.settings.strain;
+  //    });
+  //    return () => {};
+  //  });
+  //}
 
   dealloc(): void {
     this.effects.forEach((fn) => fn());

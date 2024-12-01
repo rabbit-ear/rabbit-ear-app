@@ -1,5 +1,5 @@
 import { identity4x4 } from "rabbit-ear/math/matrix4.js";
-import AppSettings from "../../../../app/Settings.svelte.ts";
+import AppSettings from "../../../app/Settings.svelte.ts";
 
 const defaultViewMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1.86, 1];
 

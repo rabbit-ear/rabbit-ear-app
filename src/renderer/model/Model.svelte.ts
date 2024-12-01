@@ -4,6 +4,7 @@ import type { FrameStyle } from "../file/FrameStyle.ts";
 
 export interface IModel {
   name: string;
+  abbreviation: string;
 
   // get the (compiled if necessary) FOLD graph
   fold: FOLD;

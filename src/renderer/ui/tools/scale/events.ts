@@ -2,7 +2,7 @@ import type {
   ViewportMouseEvent,
   ViewportWheelEvent,
   ViewportEvents,
-} from "../../viewport/viewport.ts";
+} from "../../viewport/ViewportTypes.ts";
 import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import { wheelEventZoomMatrix } from "../zoom/matrix.ts";
 import { SVGTouches } from "./svg/SVGTouches.svelte.ts";

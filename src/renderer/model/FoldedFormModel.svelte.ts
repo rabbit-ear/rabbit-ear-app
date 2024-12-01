@@ -8,6 +8,7 @@ import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 
 export class FoldedFormModel implements IModel {
   name: string = "foldedForm";
+  abbreviation: string = "folded";
   #models: Models;
   #graph: FOLD = $derived.by(() => this.#models.frameFlat);
   #isFoldedForm: boolean = $derived.by(() => this.#models.frameStyle?.isFoldedForm);

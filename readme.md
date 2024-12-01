@@ -1,5 +1,30 @@
 # Rabbit Ear app
 
+# build
+
+This app requires [node](https://nodejs.org/). To test the app, download and run:
+
+```sh
+npm i
+npm run dev
+```
+
+to build the app, the platform-specific commands are located in the `package.json`:
+
+```sh
+npm run build:mac
+# or
+npm run build:linux
+# or
+npm run build:win
+```
+
+`npm run build` is more strict than `npm run dev`, if you have issues with build, try dev first.
+
+### rabbit-ear dependency
+
+During development, this app is using the nightly build of the [Rabbit Ear](https://github.com/rabbit-ear/rabbit-ear) library. If the package.json reference is a local reference, please clone your own copy from the **dev** branch of rabbit-ear and place in the same directory. If the package.json reference is to "rabbit-ear": "^0.9.x", you don't need to do anything.
+
 # repository overview
 
 Due to this being an electron app, there are three top level `src/` directories: `main`, `preload`, `renderer`. `main` and `preload` are essentially the backend (primarily Electron-exclusive), and `renderer` is the front-end, having little to do with Electron. Communication between the back and front ends occurs through [Electron's Inter-Process Communication](https://www.electronjs.org/docs/latest/tutorial/ipc), essentially leveraging the `window` global object, binding methods to it, and passing data back and forth.
@@ -11,29 +36,4 @@ The bulk of the app exists inside the `renderer`.
 The app is inherently an Electron app, but with minimal effort the front-end can be isolated and run alone (uncouple the `interface/` dir). Additionally, the front-end app is intended to be able to run without a user interface. The app's UI is fully contained inside of the `src/renderer/ui` directory. The UI communicates upwards to the app via `src/renderer/App`. An app without a UI appears like an empty screen, but there exists a command-line interface to edit the model. It should be entirely possible to disconnect the UI and still load a file, modify it, save it again, via some kind of command interface.
 
 The final portion of the app worth mentioning is the command pattern interface. All modifications to the app and the model are formed as strings and handed off to a terminal-like interface to be executed by an application shell.
-
-# dev notes
-
-With minimal changes, this project began as an [Electron-Vite](https://electron-vite.org/guide/) starter project.
-
-I updated Svelte to version 5 and added runes to the config:
-
-```
-compilerOptions: {
-  runes: true,
-},
-```
-
-**tsconfig.json**: these were required to import typescript files and they went into both ts config files.
-
-```
-"allowImportingTsExtensions": true,
-"noEmit": true,
-```
-
-moduleResolution was required to include "rabbit-ear", an ES6 package into this Electron project which compiles to cjs.
-
-```
-"moduleResolution": "bundler",
-```
 

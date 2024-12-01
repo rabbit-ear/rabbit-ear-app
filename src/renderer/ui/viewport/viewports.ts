@@ -1,6 +1,5 @@
 import type { Component } from "svelte";
 import type { IViewport, IModelViewport } from "./ViewportTypes.ts";
-import { FramesViewport } from "./FramesViewport/FramesViewport.svelte.ts";
 import { ScriptViewport } from "./ScriptViewport/ScriptViewport.svelte.ts";
 import { SVGViewport } from "./SVGViewport/SVGViewport.svelte.ts";
 import { TerminalViewport } from "./TerminalViewport/TerminalViewport.svelte.ts";
@@ -30,17 +29,10 @@ export type ViewportClassTypes = (
   | typeof SVGViewport
   | typeof WebGLViewport
   | typeof TerminalViewport
-  | typeof FramesViewport
   | typeof ScriptViewport
 ) &
   IViewportConstructorWithStatics;
 
 export const ModelViewports = [SVGViewport, WebGLViewport];
 
-export const Viewports = [
-  SVGViewport,
-  WebGLViewport,
-  ScriptViewport,
-  FramesViewport,
-  TerminalViewport,
-];
+export const Viewports = [SVGViewport, WebGLViewport, ScriptViewport, TerminalViewport];

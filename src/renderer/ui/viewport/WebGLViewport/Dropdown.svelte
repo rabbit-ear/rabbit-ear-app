@@ -1,9 +1,7 @@
 <script lang="ts">
   import { untrack } from "svelte";
-  import type { IModel } from "../../../model/Model.svelte.ts";
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
   import settings from "./Settings/ClassSettings.svelte.ts";
-  import app from "../../../app/App.svelte.ts";
 
   //let { panel, viewport }: { panel: ViewportPanel; viewport: WebGLViewport } = $props();
   let { viewport }: { viewport: WebGLViewport } = $props();
@@ -60,14 +58,6 @@
     ];
   };
 </script>
-
-<div class="row toggle-row">
-  {#each Object.entries(app.models.models) as [name, model]}
-    <button
-      class={viewport.model === model ? "highlighted" : ""}
-      onclick={(): IModel => (viewport.model = model)}>{name}</button>
-  {/each}
-</div>
 
 <div class="row toggle-row">
   <button

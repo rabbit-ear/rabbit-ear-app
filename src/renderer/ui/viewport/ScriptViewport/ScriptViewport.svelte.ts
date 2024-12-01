@@ -42,6 +42,10 @@ export class ScriptViewport implements IViewport {
     // todo
   }
 
+  resetView(): void {
+    // empty
+  }
+
   dealloc(): void {
     // empty
   }

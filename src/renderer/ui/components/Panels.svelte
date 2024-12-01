@@ -4,7 +4,7 @@
   import app from "../../app/App.svelte.ts";
 
   const panels: Component[] = $derived(app.ui?.panels.components);
-  const props: object[] = $derived(app.ui?.panels.props);
+  const props: { name: string }[] = $derived(app.ui?.panels.props);
 </script>
 
 <div class="column">

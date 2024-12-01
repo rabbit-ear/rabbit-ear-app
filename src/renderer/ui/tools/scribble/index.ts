@@ -1,5 +1,5 @@
-import type { UITool } from "../../UITool.ts";
-import type { Viewport } from "../../viewport/viewport.ts";
+import type { UITool } from "../UITool.ts";
+import type { IModelViewport } from "../../viewport/ViewportTypes.ts";
 import { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import { WebGLViewport } from "../../viewport/WebGLViewport/WebGLViewport.svelte.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
@@ -17,7 +17,7 @@ class Tool implements UITool {
 
   viewportStates: (SVGViewportState | GLViewportState)[] = [];
 
-  bindTo(viewport: Viewport): () => void {
+  bindTo(viewport: IModelViewport): () => void {
     if (viewport instanceof SVGViewport) {
       const viewportState = new SVGViewportState(viewport, this.state);
       this.viewportStates.push(viewportState);

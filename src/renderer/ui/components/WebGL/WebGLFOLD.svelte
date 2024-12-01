@@ -8,7 +8,7 @@
   import { creasePattern } from "rabbit-ear/webgl/creasePattern/models.js";
   import { foldedForm } from "rabbit-ear/webgl/foldedForm/models.js";
   //import { makeProjectionMatrix } from "rabbit-ear/webgl/general/view.js";
-  import { worldAxes } from "./WorldAxes/models.js";
+  //import { worldAxes } from "./WorldAxes/models.js";
   // import { touchIndicators } from "rabbit-ear/webgl/touches/models.js";
   import { deallocModel } from "rabbit-ear/webgl/general/model.js";
   import { dark, light } from "rabbit-ear/webgl/general/colors.js";

@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.rabbit-ear.rabbit-ear
 productName: rabbit-ear-app
 directories:
   buildResources: build

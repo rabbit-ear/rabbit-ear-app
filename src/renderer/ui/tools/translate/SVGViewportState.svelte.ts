@@ -1,5 +1,5 @@
 import { subtract2 } from "rabbit-ear/math/vector.js";
-import type { Deallocable } from "../../viewport/viewport.ts";
+import type { Deallocable } from "../UITool.ts";
 import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import { SVGViewportEvents } from "./events.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";

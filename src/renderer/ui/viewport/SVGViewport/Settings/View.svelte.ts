@@ -104,6 +104,7 @@ export class View {
   #makeModelMatrixEffect(): () => void {
     return $effect.root(() => {
       $effect(() => {
+        console.log("SVGViewport view effect");
         const matrix = graphToMatrix2(this.viewport.model?.fold, this.rightHanded);
         untrack(() => {
           this.#model = matrix;

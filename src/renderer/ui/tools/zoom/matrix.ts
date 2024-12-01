@@ -45,6 +45,7 @@ export const panCameraMatrix = (
   translate: [number, number],
 ): number[] => {
   const matrix = makeMatrix2Translate(translate[0], translate[1]);
+  console.log("pan", matrix);
   return multiplyMatrices2(camera, matrix);
 };
 

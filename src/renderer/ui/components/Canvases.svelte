@@ -21,12 +21,6 @@
       </div>
     {/each}
   </div>
-
-  {#if app.ui?.viewports?.frames}
-    <div class="frames">
-      <app.ui.viewports.frames.component viewport={app.ui.viewports.frames} />
-    </div>
-  {/if}
 </div>
 
 <style>
@@ -65,9 +59,6 @@
 
   /* hard coding the terminal viewport. could get rid of these later */
   .terminal {
-    height: 6rem;
-  }
-  .frames {
     height: 6rem;
   }
 </style>

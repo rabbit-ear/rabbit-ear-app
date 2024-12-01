@@ -5,7 +5,6 @@ import { WebGLViewport } from "../../viewport/WebGLViewport/WebGLViewport.svelte
 import { GlobalState } from "./state/GlobalState.svelte.ts";
 import { SVGState } from "./state/SVGState.svelte.ts";
 import { WebGLState } from "./state/WebGLState.svelte.ts";
-import { SimulatorViewport } from "../../viewport/SimulatorViewport/SimulatorViewport.svelte.ts";
 import icon from "./icon.svelte";
 
 class Tool implements UITool {
@@ -24,10 +23,6 @@ class Tool implements UITool {
       this.viewportStates.push(viewportState);
       return viewportState.dealloc;
     } else if (viewport instanceof WebGLViewport) {
-      const viewportState = new WebGLState(viewport);
-      this.viewportStates.push(viewportState);
-      return viewportState.dealloc;
-    } else if (viewport instanceof SimulatorViewport) {
       const viewportState = new WebGLState(viewport);
       this.viewportStates.push(viewportState);
       return viewportState.dealloc;

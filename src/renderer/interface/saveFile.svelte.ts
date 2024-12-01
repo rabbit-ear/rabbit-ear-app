@@ -13,7 +13,8 @@ export const saveFile = async (): Promise<void> => {
   // const success = await window.api.saveFile({ ...fileInfo.value }, model.value);
   const success = await window.api.saveFile(
     $state.snapshot(app.fileManager.file.path),
-    app.fileManager.file.getCopy(),
+    // todo: replace this with an "export as string" method which contains its own try catch.
+    JSON.stringify(app.fileManager.file.export()),
   );
   if (success) {
     app.fileManager.updateFileAsSaved();
@@ -30,7 +31,8 @@ export const saveFileAs = async (): Promise<void> => {
   if (!app.fileManager.file) {
     return;
   }
-  const path = await window.api.saveFileAs(app.fileManager.file.getCopy());
+  //const path = await window.api.saveFileAs(app.fileManager.file.getCopy());
+  const path = await window.api.saveFileAs(JSON.stringify(app.fileManager.file.export()));
   if (path) {
     app.fileManager.updateFileAsSavedAs(path);
   }

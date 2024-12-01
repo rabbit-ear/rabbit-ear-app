@@ -1,5 +1,5 @@
-import type { UITool } from "../../UITool.ts";
-import type { Viewport } from "../../viewport/viewport.ts";
+import type { UITool } from "../UITool.ts";
+import type { IViewport } from "../../viewport/ViewportTypes.ts";
 import { GlobalState, ViewportState } from "./state.svelte.ts";
 import icon from "./icon.svelte";
 
@@ -13,7 +13,7 @@ class Tool implements UITool {
 
   viewportStates: ViewportState[] = [];
 
-  bindTo(viewport: Viewport): () => void {
+  bindTo(viewport: IViewport): () => void {
     const viewportState = new ViewportState(viewport);
     this.viewportStates.push(viewportState);
     return viewportState.dealloc;

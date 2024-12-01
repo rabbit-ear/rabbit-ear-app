@@ -6,6 +6,7 @@ import type { Shape } from "../geometry/shapes.ts";
 
 export class CreasePatternModel implements IModel {
   name: string = "creasePattern";
+  abbreviation: string = "cp";
   #models: Models;
   #graph: FOLD = $derived.by(() => this.#models.frameFlat);
   #isFoldedForm: boolean = $derived.by(() => this.#models.frameStyle?.isFoldedForm);

@@ -1,6 +1,6 @@
 import type { Component } from "svelte";
 import type { IModel } from "../../../model/Model.svelte.ts";
-import type { ModelStyle } from "../../../model/ModelStyle.ts";
+import type { FrameStyle } from "../../../file/FrameStyle.ts";
 import type {
   IModelViewport,
   ViewportMouseEvent,
@@ -76,7 +76,7 @@ export class WebGLViewport implements IModelViewport {
     this.effects.forEach((cleanup) => cleanup());
   }
 
-  setModelStyle(modelStyle: ModelStyle): void {
+  setModelStyle(modelStyle: FrameStyle): void {
     if (!modelStyle) {
       return;
     }

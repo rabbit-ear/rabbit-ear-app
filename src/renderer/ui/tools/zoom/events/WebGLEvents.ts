@@ -4,12 +4,11 @@ import type {
   ViewportEvents,
 } from "../../../viewport/ViewportTypes.ts";
 import type { WebGLViewport } from "../../../viewport/WebGLViewport/WebGLViewport.svelte.ts";
-import type { SimulatorViewport } from "../../../viewport/SimulatorViewport/SimulatorViewport.svelte.ts";
 import { rotateViewMatrix, zoomViewMatrix } from "../../../../general/matrix.ts";
 
 // WebGL and Simulator can both use this same event class
 export class WebGLEvents implements ViewportEvents {
-  viewport: WebGLViewport | SimulatorViewport;
+  viewport: WebGLViewport;
   previousPoint: [number, number] | undefined;
 
   onmousemove = (event: ViewportMouseEvent): void => {
@@ -54,7 +53,7 @@ export class WebGLEvents implements ViewportEvents {
     }
   };
 
-  constructor(viewport: WebGLViewport | SimulatorViewport) {
+  constructor(viewport: WebGLViewport) {
     this.viewport = viewport;
     // console.log("webgl viewport events constructor", this, this.viewport);
 

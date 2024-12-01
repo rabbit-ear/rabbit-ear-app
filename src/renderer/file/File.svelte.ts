@@ -50,7 +50,8 @@ export class File {
   import(fold: FOLD): void {
     this.metadata = getFileMetadata(fold);
     this.frames = getFileFramesAsArray(fold);
-    this.shapes = fold.shapes || [];
+    // todo: extended FOLD format
+    //this.shapes = fold.shapes || [];
   }
 
   dealloc(): void {

@@ -12,7 +12,7 @@ export const verticesFaces = (model: Model): number[][] => {
   model.fold.faces_vertices.forEach((face, f) => {
     // in the case that one face visits the same vertex multiple times,
     // use a set to allow one occurence of each vertex index.
-    const set = new Set();
+    const set: Set<number> = new Set();
     face.forEach((vertex: number) => set.add(vertex));
     set.forEach((v) => vertices_faces[v].push(f));
   });

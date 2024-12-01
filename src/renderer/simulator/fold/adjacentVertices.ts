@@ -114,8 +114,8 @@ export const makeVerticesVertices2D = ({
   return vertices_coords === undefined
     ? vertices_vertices
     : vertices_vertices.map((verts, i) =>
-        sortVerticesCounterClockwise({ vertices_coords }, verts, i),
-      );
+      sortVerticesCounterClockwise({ vertices_coords }, verts, i),
+    );
 };
 
 /**
@@ -139,7 +139,7 @@ export const makeVerticesFacesUnsorted = ({
   faces_vertices.forEach((face, f) => {
     // in the case that one face visits the same vertex multiple times,
     // use a set to allow one occurence of each vertex index.
-    const set = new Set();
+    const set: Set<number> = new Set();
     face.forEach((vertex) => set.add(vertex));
     set.forEach((v) => vertices_faces[v].push(f));
   });

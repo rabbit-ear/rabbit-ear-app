@@ -1,6 +1,6 @@
 import { type Box } from "rabbit-ear/types.js";
 import { boundingBox } from "rabbit-ear/math/polygon.js";
-import type { Deallocable } from "../../viewport/viewport.ts";
+import type { Deallocable } from "../UITool.ts";
 import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import { SVGViewportEvents } from "./events.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";

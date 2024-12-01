@@ -2,9 +2,8 @@ import { untrack } from "svelte";
 import type { UI } from "../UI.svelte.ts";
 import type { ModelViewportTypes, ModelViewportClassTypes } from "./viewports.ts";
 import { ModelViewports } from "./viewports.ts";
-import { ScriptViewport } from "./ScriptViewport/ScriptViewport.svelte.ts";
 import { TerminalViewport } from "./TerminalViewport/TerminalViewport.svelte.ts";
-import { FramesViewport } from "./FramesViewport/FramesViewport.svelte.ts";
+//import { ScriptViewport } from "./ScriptViewport/ScriptViewport.svelte.ts";
 
 export class ViewportManager {
   ui: UI;
@@ -14,7 +13,6 @@ export class ViewportManager {
   // can be included in viewports, but we need to figure out
   // how to auto-place them in their correct location on screen
   terminal?: TerminalViewport;
-  frames?: FramesViewport;
 
   #makeToolViewportEffect = (): (() => void) =>
     $effect.root(() => {
@@ -71,19 +69,19 @@ export class ViewportManager {
   }
 
   addScriptViewport(): void {
-    this.modelViewports.push(new ScriptViewport());
+    //this.modelViewports.push(new ScriptViewport());
   }
 
   showScriptViewport(visible: boolean): void {
     untrack(() => {
       if (visible) {
-        this.modelViewports = this.modelViewports
-          .filter((view) => view.constructor !== ScriptViewport)
-          .concat([new ScriptViewport()]);
+        //      this.modelViewports = this.modelViewports
+        //        .filter((view) => view.constructor !== ScriptViewport)
+        //        .concat([new ScriptViewport()]);
       } else {
-        this.modelViewports = this.modelViewports.filter(
-          (view) => view.constructor !== ScriptViewport,
-        );
+        //      this.modelViewports = this.modelViewports.filter(
+        //        (view) => view.constructor !== ScriptViewport,
+        //      );
       }
     });
   }

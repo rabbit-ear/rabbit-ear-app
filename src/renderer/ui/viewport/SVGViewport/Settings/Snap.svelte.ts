@@ -1,3 +1,4 @@
+import { resize2 } from "rabbit-ear/math/vector.js";
 import type { SnapResult, LineType } from "./snap.ts";
 import type { SVGViewport } from "../SVGViewport.svelte.ts";
 import type { View } from "./View.svelte.ts";
@@ -28,10 +29,11 @@ export class Snap {
 
   points: [number, number][] = $state([]);
 
-  #snapPoints: [number, number][] = $derived(
+  // todo: get rid of resize2
+  #snapPoints: [number, number][] = $derived.by(() =>
     ([] as [number, number][])
       .concat(this.points)
-      .concat(this.viewport.model?.snapPoints),
+      .concat(this.viewport.model?.snapPoints.map(resize2)),
   );
 
   gridSnapFunction: (

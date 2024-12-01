@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resize2 } from "rabbit-ear/math/vector.js";
   import type { FOLD } from "rabbit-ear/types.js";
   //import { makeEdgesCoords } from "rabbit-ear/graph/make/edges.js";
 
@@ -8,17 +9,30 @@
 
   const { graph = {} }: PropsType = $props();
 
-  const makeEdgesCoords = (
-    g: FOLD,
-  ): [
-    [number, number] | [number, number, number],
-    [number, number] | [number, number, number],
-  ][] =>
-    g.edges_vertices && g.vertices_coords
-      ? (g.edges_vertices || [])
-          .map((ev) => [g.vertices_coords[ev[0]], g.vertices_coords[ev[1]]])
-          .filter(([p, q]) => p !== undefined && q !== undefined)
-      : [];
+  //const makeEdgesCoords = (
+  //  g: FOLD,
+  //): (
+  //  | [[number, number], [number, number]]
+  //  | [[number, number, number], [number, number, number]]
+  //)[] =>
+  //  g.edges_vertices && g.vertices_coords
+  //    ? (g.edges_vertices || [])
+  //        .map((ev) => [g.vertices_coords[ev[0]], g.vertices_coords[ev[1]]])
+  //        .filter(([p, q]) => p !== undefined && q !== undefined)
+  //    : [];
+
+  const makeEdgesCoords = (g: FOLD): [[number, number], [number, number]][] => {
+    if (!g.edges_vertices || !g.vertices_coords) {
+      return [];
+    }
+    const edges_coords = (g.edges_vertices || []).map((ev) => [
+      g.vertices_coords[ev[0]],
+      g.vertices_coords[ev[1]],
+    ]);
+    return edges_coords
+      .filter(([p, q]) => p !== undefined && q !== undefined)
+      .map(([a, b]) => [resize2(a), resize2(b)] as [[number, number], [number, number]]);
+  };
 
   const angleToOpacity = (angle: number): string =>
     angle === undefined ||

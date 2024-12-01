@@ -1,6 +1,10 @@
 <script lang="ts">
-  import type { SimulatorViewport } from "./SimulatorViewport.svelte.ts";
-  let { viewport }: { viewport: SimulatorViewport } = $props();
+  import { View } from "./View.svelte.ts";
+  import { Style } from "./Style.svelte.ts";
+  const viewport = {
+    view: new View(),
+    style: new Style(),
+  };
 </script>
 
 <div class="row toggle-row">

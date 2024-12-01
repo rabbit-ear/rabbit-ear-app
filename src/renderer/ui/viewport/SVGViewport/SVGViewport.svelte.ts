@@ -60,6 +60,8 @@ export class SVGViewport implements IModelViewport {
   onkeydown?: (event: KeyboardEvent) => void;
   onkeyup?: (event: KeyboardEvent) => void;
 
+  // todo: somehow we need to be able to swap viewports (WebGL to SVG)
+  // and carry over the style settings (view and render style).
   constructor() {
     this.component = ViewportComponent;
     this.panel = ViewportPanel;
