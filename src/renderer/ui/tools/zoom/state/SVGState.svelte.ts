@@ -1,5 +1,5 @@
 import { untrack } from "svelte";
-import { subtract2 } from "rabbit-ear/math/vector.js";
+//import { subtract2 } from "rabbit-ear/math/vector.js";
 import type { Deallocable } from "../../UITool.ts";
 import type { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svelte.ts";
 import { panCameraMatrix } from "../matrix.ts";
@@ -12,9 +12,10 @@ export class ToolState {
 
   viewport: SVGViewport;
 
-  dragVector: [number, number] = $derived(
-    !this.drag || !this.press ? [0, 0] : subtract2(this.drag, this.press),
-  );
+  //dragVector: [number, number] = $derived(
+  //  !this.drag || !this.press ? [0, 0] : subtract2(this.drag, this.press),
+  //);
+  dragVector: [number, number] = $state([0, 0]);
 
   constructor(viewport: SVGViewport) {
     this.viewport = viewport;
@@ -26,27 +27,31 @@ export class ToolState {
     this.press = undefined;
   }
 
-  doPan(): () => void {
-    return $effect.root(() => {
-      $effect(() => {
-        if (!this.dragVector) {
-          return;
-        }
-        const translation: [number, number] = [
-          this.dragVector[0],
-          this.dragVector[1] * (this.viewport.view.rightHanded ? -1 : 1),
-        ];
-        untrack(() => {
-          console.log("do pan");
-          this.viewport.view.camera = panCameraMatrix(
-            this.viewport.view.camera,
-            translation,
-          );
-        });
-      });
-      return () => {};
-    });
-  }
+  //doPan(): () => void {
+  //  return $effect.root(() => {
+  //    $effect(() => {
+  //      if (!this.dragVector) {
+  //        return;
+  //      }
+  //      const translation: [number, number] = [
+  //        this.dragVector[0],
+  //        this.dragVector[1] * (this.viewport.view.rightHanded ? -1 : 1),
+  //      ];
+  //
+  //      untrack(() => {
+  //        const impliedScale = this.viewport.view.view[0];
+  //        translation[0] *= impliedScale;
+  //        translation[1] *= impliedScale;
+  //        //console.log("drag pan", this.dragVector, translation, impliedScale);
+  //        this.viewport.view.camera = panCameraMatrix(
+  //          this.viewport.view.camera,
+  //          translation,
+  //        );
+  //      });
+  //    });
+  //    return () => {};
+  //  });
+  //}
 }
 
 export class SVGState implements Deallocable {
@@ -59,7 +64,7 @@ export class SVGState implements Deallocable {
     this.viewport = viewport;
     this.tool = new ToolState(this.viewport);
     this.events = new SVGEvents(this.viewport, this.tool);
-    this.unsub.push(this.tool.doPan());
+    //this.unsub.push(this.tool.doPan());
   }
 
   dealloc(): void {

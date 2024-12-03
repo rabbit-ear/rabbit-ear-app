@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
+  import type { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svelte.ts";
 
   type PropsType = {
     rect: { x: number; y: number; width: number; height: number };

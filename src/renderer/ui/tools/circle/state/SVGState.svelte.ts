@@ -4,7 +4,7 @@ import type { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svel
 import { SVGEvents } from "../events/SVGEvents.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
-import SVGLayer from "../SVGLayer.svelte";
+import SVGLayer from "./SVGLayer.svelte";
 import app from "../../../../app/App.svelte.ts";
 import { AddCircle } from "../../../../kernel/commands/AddCircle.ts";
 

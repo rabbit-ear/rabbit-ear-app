@@ -1,4 +1,4 @@
-import { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
+import { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svelte.ts";
 
 export class SVGTouches {
   viewport: SVGViewport;

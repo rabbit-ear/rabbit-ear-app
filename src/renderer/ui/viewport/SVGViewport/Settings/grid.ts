@@ -8,8 +8,13 @@ const _0_866 = Math.sqrt(3) / 2;
  * @param {number} start the viewbox corner (origin, x or y)
  * @param {number} size the viewbox size (width or height)
  */
-export const makeIntervals = (start: number, size: number, spacing = 1): number[] => {
-  while (size / spacing > 64) {
+export const makeIntervals = (
+  start: number,
+  size: number,
+  spacing = 1,
+  max = 128,
+): number[] => {
+  while (size / spacing > max) {
     spacing *= 2;
   }
   const count = Math.floor(size / spacing);
@@ -50,7 +55,7 @@ export const makeSquareGrid = (
   // calculate correct spacing ahead of time
   const size = Math.max(viewBoxArray[2] * 3, viewBoxArray[3] * 4);
   let spacing = 1;
-  while (size / spacing > 64) {
+  while (size / spacing > 256) {
     spacing *= 2;
   }
   return [
@@ -58,6 +63,7 @@ export const makeSquareGrid = (
       viewBoxArray[0] - viewBoxArray[2] * 1,
       viewBoxArray[2] * 3,
       spacing,
+      256,
     ).map((x) => ({
       x1: x,
       y1: viewBoxArray[1] - viewBoxArray[3],
@@ -68,6 +74,7 @@ export const makeSquareGrid = (
       viewBoxArray[1] - viewBoxArray[3] * 1,
       viewBoxArray[3] * 4,
       spacing,
+      256,
     ).map((y) => ({
       x1: viewBoxArray[0] - viewBoxArray[2],
       y1: y,
@@ -117,9 +124,10 @@ export const makeTriangleGrid = (
     viewport[1] - viewport[3] * 1,
     viewport[3] * 4,
     _0_866,
+    128,
   );
-  const aIntervals = makeIntervals(aVecProject[0], aVecLength, _0_866);
-  const bIntervals = makeIntervals(bVecProject[0], bVecLength, _0_866);
+  const aIntervals = makeIntervals(aVecProject[0], aVecLength, _0_866, 128);
+  const bIntervals = makeIntervals(bVecProject[0], bVecLength, _0_866, 128);
   // the horizontal centers can be read from the viewport.
   // the diagonal centers are a point along the line through the origin
   // that travels along the line perpendicular to the drawn lines.

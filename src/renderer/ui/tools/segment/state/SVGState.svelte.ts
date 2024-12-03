@@ -1,12 +1,12 @@
-import type { Deallocable } from "../UITool.ts";
-import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
-import { SVGViewportEvents } from "./events.ts";
+import type { Deallocable } from "../../UITool.ts";
+import type { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svelte.ts";
+import { SVGViewportEvents } from "../events/SVGEvents.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
-import app from "../../../app/App.svelte.ts";
+import app from "../../../../app/App.svelte.ts";
 
-export class SVGViewportState implements Deallocable {
+export class SVGState implements Deallocable {
   viewport: SVGViewport;
   globalState: GlobalState;
   touches: SVGTouches;
