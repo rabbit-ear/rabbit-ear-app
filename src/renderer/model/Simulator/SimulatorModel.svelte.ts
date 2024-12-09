@@ -1,16 +1,21 @@
+import type { Component } from "svelte";
 import type { FOLD, Box } from "rabbit-ear/types.d.ts";
-import type { IModel } from "./Model.svelte.ts";
-import type { Models } from "./Models.svelte.ts";
-import type { FrameStyle } from "../file/FrameStyle.ts";
-import type { Shape } from "../geometry/shapes.ts";
-import type { SolverOptions } from "../simulator/simulator/GPUMath.ts";
+import type { IModel } from "../Model.svelte.ts";
+import type { Models } from "../Models.svelte.ts";
+import type { FrameStyle } from "../../file/FrameStyle.ts";
+import type { Shape } from "../../geometry/shapes.ts";
+import type { SolverOptions } from "../../simulator/simulator/GPUMath.ts";
 import { boundingBox } from "rabbit-ear/graph/boundary.js";
-import { Model } from "../simulator/simulator/Model.ts";
-import { Settings } from "./SimulatorSettings.svelte.ts";
+import { Model } from "../../simulator/simulator/Model.ts";
+import { Settings } from "./Settings.svelte.ts";
+import Panel from "./Panel.svelte";
 
 export class SimulatorModel implements IModel {
   name: string = "simulator";
   abbreviation: string = "sim";
+  errors: string[];
+  panel: Component = Panel;
+
   #models: Models;
 
   model: Model;

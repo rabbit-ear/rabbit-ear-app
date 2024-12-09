@@ -3,9 +3,9 @@ import type { Shape } from "../geometry/shapes.ts";
 import type { IModel } from "./Model.svelte.ts";
 import type { FrameStyle } from "../file/FrameStyle.ts";
 import { FileManager } from "../file/FileManager.svelte";
-import { CreasePatternModel } from "./CreasePatternModel.svelte.ts";
-import { FoldedFormModel } from "./FoldedFormModel.svelte.ts";
-import { SimulatorModel } from "./SimulatorModel.svelte.ts";
+import { CreasePatternModel } from "./CreasePattern/CreasePatternModel.svelte.ts";
+import { FoldedFormModel } from "./FoldedForm/FoldedFormModel.svelte.ts";
+import { SimulatorModel } from "./Simulator/SimulatorModel.svelte.ts";
 
 export class Models {
   #fileManager: FileManager;

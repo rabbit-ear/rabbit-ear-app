@@ -1,3 +1,4 @@
+import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Shape } from "../geometry/shapes.ts";
 import type { FrameStyle } from "../file/FrameStyle.ts";
@@ -5,6 +6,8 @@ import type { FrameStyle } from "../file/FrameStyle.ts";
 export interface IModel {
   name: string;
   abbreviation: string;
+  errors: string[];
+  panel?: Component;
 
   // get the (compiled if necessary) FOLD graph
   fold: FOLD;

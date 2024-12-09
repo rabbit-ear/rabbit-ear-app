@@ -1,12 +1,17 @@
+import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import type { IModel } from "./Model.svelte.ts";
-import type { Models } from "./Models.svelte.ts";
-import type { FrameStyle } from "../file/FrameStyle.ts";
-import type { Shape } from "../geometry/shapes.ts";
+import type { IModel } from "../Model.svelte.ts";
+import type { Models } from "../Models.svelte.ts";
+import type { FrameStyle } from "../../file/FrameStyle.ts";
+import type { Shape } from "../../geometry/shapes.ts";
+import Panel from "./Panel.svelte";
 
 export class CreasePatternModel implements IModel {
   name: string = "creasePattern";
   abbreviation: string = "cp";
+  errors: string[] = [];
+  panel: Component = Panel;
+
   #models: Models;
   #graph: FOLD = $derived.by(() => this.#models.frameFlat);
   #isFoldedForm: boolean = $derived.by(() => this.#models.frameStyle?.isFoldedForm);

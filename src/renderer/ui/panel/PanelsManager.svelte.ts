@@ -9,7 +9,7 @@ import FramesPanel from "./FramesPanel/FramesPanel.svelte";
 import FramePanel from "./FramePanel/FramePanel.svelte";
 import HistoryPanel from "./HistoryPanel/HistoryPanel.svelte";
 import ModelsPanel from "./ModelsPanel/ModelsPanel.svelte";
-import SimulatorPanel from "./SimulatorPanel/SimulatorPanel.svelte";
+//import SimulatorPanel from "./SimulatorPanel/SimulatorPanel.svelte";
 import { uniqueObjects } from "./arrays.ts";
 
 type Props = {
@@ -64,7 +64,7 @@ export class PanelsManager {
     [FramePanel, { name: "Frame" }],
     [HistoryPanel, { name: "History" }],
     [ModelsPanel, { name: "View Models" }],
-    [SimulatorPanel, { name: "Simulator" }],
+    //[SimulatorPanel, { name: "Simulator" }],
   ];
 
   toolPanels: [Component, Props][] = $derived.by(() =>
