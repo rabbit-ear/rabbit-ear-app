@@ -1,7 +1,0 @@
-everything in this directory contains a default export which is a global variable,
-and can be accessed from anywhere inside the app, indiscriminately.
-
-most other things are accessible somewhere inside the global variable "app".
-But, for example, you are also allowed to call dialogs from anywhere, without
-having to go through the "app" variable.
-

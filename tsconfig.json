@@ -1,27 +1,56 @@
 {
-  "extends": "@electron-toolkit/tsconfig/tsconfig.json",
-  "include": [
-    "src/renderer/env.d.ts",
-    "src/renderer/**/*",
-    "src/renderer/**/*.svelte",
-    "src/preload/*.d.ts"
-  ],
   "compilerOptions": {
-    "verbatimModuleSyntax": true,
+    // "target": "ES2020",
+    "target": "esnext",
+    "module": "esnext",
+
     "useDefineForClassFields": true,
-    "strict": false,
+    // "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["esnext", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
     "allowJs": true,
     "checkJs": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "moduleResolution": "bundler",
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ]
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "rootDirs": [
+      "..",
+      "./types"
+    ],
+    /**
+      Svelte Preprocess cannot figure out whether you have a value or a type, so tell TypeScript
+      to enforce using `import type` instead of `import` for Types.
+     */
+    "verbatimModuleSyntax": true,
+    /**
+      To have warnings/errors of the Svelte compiler at the correct position,
+      enable source maps by default.
+     */
+    "sourceMap": true,
   },
-  "references": [{
-    "path": "./tsconfig.node.json"
-  }]
+  "include": [
+    "./vite.config.js",
+    "./vite.config.ts",
+    "./src/**/*.js",
+    "./src/**/*.ts",
+    "./src/**/*.svelte",
+    "./tests/**/*.js",
+    "./tests/**/*.ts",
+    "./tests/**/*.svelte"
+  ],
+  "exclude": [
+    "./node_modules/**",
+  ]
 }
