@@ -1,17 +1,12 @@
 import type { Component } from "svelte";
-import type {
-  IModelViewport,
-  ViewportMouseEvent,
-  ViewportWheelEvent,
-  ViewportTouchEvent,
-} from "../types.ts";
+import type { Viewport } from "../Viewport.ts";
 import { unsetViewportEvents } from "../types.ts";
 // import ViewportPanel from "./Dropdown.svelte";
 // import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./Component.svelte";
 import Settings from "./Settings.svelte.ts";
 
-export class SVGViewport implements IModelViewport {
+export class SVGViewport implements Viewport {
   static name: string = "SVG Viewport";
   static settings: Settings = new Settings();
   // static panel: Component = ClassPanel;
@@ -19,6 +14,10 @@ export class SVGViewport implements IModelViewport {
 
   component: Component;
   panel: Component;
+
+  domElement?: SVGSVGElement;
+
+  // get domElement(): Element { return this.component.element; } 
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
   // currently, this is used by the tools to draw indicator marks.
@@ -34,17 +33,6 @@ export class SVGViewport implements IModelViewport {
   uiEpsilon: number = 1e-2;
 
   redraw?: () => void = $state();
-  onmousemove?: (event: ViewportMouseEvent) => void;
-  onmousedown?: (event: ViewportMouseEvent) => void;
-  onmouseup?: (event: ViewportMouseEvent) => void;
-  onmouseleave?: (event: ViewportMouseEvent) => void;
-  onwheel?: (event: ViewportWheelEvent) => void;
-  ontouchstart?: (event: ViewportTouchEvent) => void;
-  ontouchend?: (event: ViewportTouchEvent) => void;
-  ontouchmove?: (event: ViewportTouchEvent) => void;
-  ontouchcancel?: (event: ViewportTouchEvent) => void;
-  onkeydown?: (event: KeyboardEvent) => void;
-  onkeyup?: (event: KeyboardEvent) => void;
 
   // todo: somehow we need to be able to swap viewports (WebGL to SVG)
   // and carry over the style settings (view and render style).

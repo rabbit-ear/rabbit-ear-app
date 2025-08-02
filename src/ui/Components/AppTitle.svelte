@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getCurrentWindow } from "@tauri-apps/api/window";
-  import app from "../../state/app.svelte.ts";
+  import context from "../../state/context.svelte.ts";
 
   /**
    * @description update the system app title name to include the file name
@@ -8,6 +8,6 @@
    * send an update if the desired and the current titles differ.
    */
   $effect(() => {
-    getCurrentWindow().setTitle(app.appTitle);
+    getCurrentWindow().setTitle(context.appTitle);
   });
 </script>

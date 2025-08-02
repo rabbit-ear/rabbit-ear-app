@@ -1,11 +1,11 @@
 <script lang="ts">
-  import app from "../../../state/app.svelte.ts";
-  const documents = $derived(app.fileManager.documents);
+  import context from "../../../state/context.svelte.ts";
+  const documents = $derived(context.fileManager.documents);
 </script>
 
 <div>
   <h1>files</h1>
-  <p>index: {app.fileManager.activeIndex}/{app.fileManager.documents.length}</p>
+  <p>index: {context.fileManager.activeIndex}/{context.fileManager.documents.length}</p>
   <ul>
     {#each documents as document}
       <li>{document.path}</li>

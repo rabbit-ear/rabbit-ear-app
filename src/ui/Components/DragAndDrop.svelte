@@ -1,10 +1,10 @@
 <script lang="ts">
-  import app from "../../state/app.svelte.ts";
+  import context from "../../state/context.svelte.ts";
 </script>
 
 <svelte:body {ondragenter} {ondragleave} {ondragover} {ondrop} />
 
-<div class={app.dragIsHovering ? "hovering" : ""}></div>
+<div class={context.dragIsHovering ? "hovering" : ""}></div>
 
 <style>
   div {

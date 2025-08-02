@@ -1,12 +1,20 @@
-// import type { UITool } from "./tools/UITool.ts";
 import { ViewportManager } from "./ViewportManager.svelte.ts";
+import { ToolManager } from "./ToolManager.svelte.ts";
+import { storageKeys, getStorageBoolean } from "./localStorage.svelte.ts";
 // import { PanelsManager } from "./panel/PanelsManager.svelte.ts";
-// import Tools from "./tools/index.ts";
 
 export class UI {
   tool: string = $state("");
   viewportManager: ViewportManager;
+  toolManager: ToolManager;
   // panels: PanelsManager;
+
+  // if the X axis is to the right, is the Y axis up (right handed) or down (left).
+  // is the Y axis on top (true) or on bottom (false)?
+  rightHanded: boolean = $state(getStorageBoolean(storageKeys.rightHanded, true));
+
+  // custom effect.root will be unbound when this component is deallocated
+  unbind: (() => void)[] = [];
 
   // #tool: UITool | undefined = $state();
   //
@@ -25,7 +33,18 @@ export class UI {
 
   constructor() {
     this.viewportManager = new ViewportManager(this);
+    this.toolManager = new ToolManager(this);
     // this.panels = new PanelsManager(this);
+    this.unbind = [this.#bindToLocalStorage()];
+  }
+
+  #bindToLocalStorage(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        localStorage.setItem(storageKeys.rightHanded, String(this.rightHanded));
+      });
+      return () => { };
+    });
   }
 
   // this is not really planned, but if ever the app was to completely de-initialize and
@@ -33,6 +52,7 @@ export class UI {
   dealloc(): void {
     this.viewportManager.dealloc();
     // this.panels.dealloc();
+    this.unbind.forEach((fn) => fn());
   }
 };
 

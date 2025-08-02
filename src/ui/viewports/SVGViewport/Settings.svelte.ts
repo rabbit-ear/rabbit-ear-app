@@ -5,7 +5,7 @@ import {
   getStorageNumber,
   getStorageString,
 } from "../../../state/localStorage.svelte.ts";
-import app from "../../../state/app.svelte.ts";
+import context from "../../../state/context.svelte.ts";
 // import AppSettings from "../../../app/Settings.svelte.ts";
 
 // these are global view settings that apply to all instances of SVGViewport
@@ -14,7 +14,7 @@ class Settings {
   // these are stored in local storage
 
   // is the Y axis on top (true) or on bottom (false)?
-  rightHanded: boolean = $derived(app.rightHanded);
+  rightHanded: boolean = $derived(context.ui ? context.ui.rightHanded : true);
 
   // the unit grid that contributes to snap points ("square" or "triangle")
   tiling: string = $state(getStorageString(storageKeys.svgTiling, "square"));

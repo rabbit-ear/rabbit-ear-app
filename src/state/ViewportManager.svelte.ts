@@ -1,9 +1,7 @@
 // import { untrack } from "svelte";
 import type { UI } from "./UI.svelte.ts";
-import {
-  type Viewport,
-  type ModelViewportType,
-} from "../ui/viewports/types.ts";
+// import type { ModelViewportType } from "../ui/viewports/types.ts";
+import type { Viewport } from "../ui/viewports/Viewport.ts";
 import { FilesViewport } from "../ui/viewports/FilesViewport/FilesViewport.svelte.ts";
 import { SVGViewport } from "../ui/viewports/SVGViewport/SVGViewport.svelte.ts";
 // import { ModelViewports } from "./viewports.ts";
@@ -15,6 +13,9 @@ export class ViewportManager {
   #effects: (() => void)[] = [];
 
   viewports: Viewport[] = $state([]);
+
+  activeViewport: Viewport | undefined = $state(undefined);
+
   // can be included in viewports, but we need to figure out
   // how to auto-place them in their correct location on screen
   // terminal?: TerminalViewport;
@@ -50,12 +51,23 @@ export class ViewportManager {
     //this.frames = new FramesViewport();
   }
 
-  add(ViewClass?: ModelViewportType): void {
-    if (!ViewClass) {
-      // this.viewports.push(new ModelViewports[0]());
-    } else {
-      this.viewports.push(new ViewClass());
-    }
+  // add(ViewClass?: ModelViewportType): void {
+  //   if (!ViewClass) {
+  //     // this.viewports.push(new ModelViewports[0]());
+  //   } else {
+  //     this.viewports.push(new ViewClass());
+  //   }
+  // }
+
+  addViewport(viewport: Viewport) {
+    this.viewports.push(viewport);
+    this.ui.toolManager.registerViewport(viewport);
+    // viewport.domElement?.
+  }
+
+  setActiveViewport(viewport: Viewport) {
+    this.activeViewport = viewport;
+    this.ui.emit("activeViewportChange", viewport);
   }
 
   // replace(index: number, ViewClass: ModelViewportClassTypes): void {
@@ -63,7 +75,7 @@ export class ViewportManager {
   //     .splice(index, 1, new ViewClass())
   //     .forEach((viewport) => viewport?.dealloc());
   // }
-  //
+
   // remove(index?: number): void {
   //   if (index === undefined) {
   //     this.modelViewports.pop()?.dealloc();

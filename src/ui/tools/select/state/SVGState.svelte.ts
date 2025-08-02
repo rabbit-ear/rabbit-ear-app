@@ -2,17 +2,18 @@ import { type Box } from "rabbit-ear/types.js";
 import { boundingBox } from "rabbit-ear/math/polygon.js";
 import type { Deallocable } from "../../UITool.ts";
 import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
-import { SVGViewportEvents } from "../events/SVGEvents.ts";
+import type { Viewport } from "../../../viewports/Viewport.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
 // import app from "../../../../app/App.svelte.ts";
+import { getSVGViewportPoint } from "../../../viewports/touches.ts";
+import type { ToolEvents } from "../../ToolEvents.ts";
 
-export class SVGState implements Deallocable {
+export class SVGState implements Deallocable, ToolEvents {
   viewport: SVGViewport;
   globalState: GlobalState;
   touches: SVGTouches;
-  events: SVGViewportEvents;
   unsub: (() => void)[] = [];
 
   box: Box | undefined = $derived.by(() => {
@@ -42,7 +43,6 @@ export class SVGState implements Deallocable {
     this.globalState = globalState;
 
     this.touches = new SVGTouches(this.viewport);
-    this.events = new SVGViewportEvents(this.viewport, this.touches);
     this.unsub.push(this.doSelection());
 
     // pass data back up through the viewport: assign the SVGLayer and
@@ -60,6 +60,26 @@ export class SVGState implements Deallocable {
     this.unsub.forEach((u) => u());
     this.unsub = [];
     this.touches.reset();
+  }
+
+  onmousemove(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [x, y]);
+    this.touches.move = buttons ? undefined : point;
+    this.touches.drag = buttons ? point : undefined;
+  }
+
+  onmousedown(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [x, y]);
+    this.touches.move = buttons ? undefined : point;
+    this.touches.drag = buttons ? point : undefined;
+    this.touches.press = point;
+  }
+
+  onmouseup(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [x, y]);
+    this.touches.move = buttons ? undefined : point;
+    this.touches.drag = buttons ? point : undefined;
+    this.touches.release = point;
   }
 
   doSelection(): () => void {

@@ -1,4 +1,4 @@
-import type { UITool } from "../tools/UITool.ts";
+import type { Tool } from "../tools/Tool.ts";
 // import circle from "./circle/index.ts";
 // import line from "./line/index.ts";
 // import rect from "./rect/index.ts";
@@ -10,7 +10,7 @@ import select from "./select/index.ts";
 // import translate from "./translate/index.ts";
 // import zoom from "./zoom/index.ts";
 
-const Tools: { [key: string]: typeof UITool } = {
+const Tools: { [key: string]: typeof Tool } = {
   // circle,
   // line,
   // rect,

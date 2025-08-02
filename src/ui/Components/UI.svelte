@@ -5,7 +5,7 @@
   import "../css/colors.css";
   import Toolbar from "./Toolbar.svelte";
   import Canvases from "./Canvases.svelte";
-  import app from "../../state/app.svelte.ts";
+  import context from "../../state/context.svelte.ts";
 </script>
 
 <main class="vertical">
@@ -13,9 +13,9 @@
     <div class="toolbar" role="toolbar">
       <!-- app.ui?.tool?.constructor.name -->
       <Toolbar
-        tool={app.ui?.tool || ""}
+        tool={context.ui?.tool || ""}
         setTool={(tool: string) => {
-          if (app.ui) app.ui.tool = tool;
+          if (context.ui) context.ui.tool = tool;
         }} />
     </div>
     <div class="canvases">

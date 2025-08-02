@@ -6,7 +6,7 @@ import { readTextFile } from "../system/fs.ts";
 import { getFilePathInfo } from "../system/path.ts";
 import { validateFileType } from "../system/validate.ts";
 import { saveFileAs } from "./save.svelte.ts";
-import app from "../state/app.svelte.ts";
+import context from "../state/context.svelte.ts";
 
 export const dragOpenFile = async (filePath: string): Promise<void> => {
   if (file.modified) {

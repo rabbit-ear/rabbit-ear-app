@@ -1,6 +1,6 @@
 import { Menu, MenuItem, Submenu, PredefinedMenuItem } from '@tauri-apps/api/menu';
 import { quitApp } from '../interface/quit.svelte';
-import app from "../state/app.svelte.ts";
+import context from "../state/context.svelte.ts";
 
 // Will become the application submenu on MacOS
 const aboutSubmenu = await Submenu.new({
@@ -54,14 +54,14 @@ const fileSubmenu = await Submenu.new({
       id: 'new',
       text: 'New',
       // action: newFile,
-      action: () => app.fileController.newFile(),
+      action: () => context.fileController.newFile(),
       accelerator: "CmdOrCtrl+N",
     }),
     await MenuItem.new({
       id: 'open',
       text: 'Open',
       // action: openFile,
-      action: () => app.fileController.openFilesWithDialog(),
+      action: () => context.fileController.openFilesWithDialog(),
       accelerator: "CmdOrCtrl+O",
     }),
 
@@ -74,7 +74,7 @@ const fileSubmenu = await Submenu.new({
       id: 'save',
       text: 'Save',
       // action: saveFile,
-      action: () => app.fileController.saveActiveDocument(),
+      action: () => context.fileController.saveActiveDocument(),
       accelerator: "CmdOrCtrl+S",
     }),
 
@@ -82,7 +82,7 @@ const fileSubmenu = await Submenu.new({
       id: 'save_as',
       text: 'Save As...',
       // action: saveFileAs,
-      action: () => app.fileController.saveActiveDocumentWithSaveAsDialog(),
+      action: () => context.fileController.saveActiveDocumentWithSaveAsDialog(),
       accelerator: "CmdOrCtrl+Shift+S",
     }),
   ],

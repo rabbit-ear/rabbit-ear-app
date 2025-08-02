@@ -13,22 +13,22 @@ export type ViewportMouseEvent = MouseEvent & ViewportUIEvent;
 export type ViewportTouchEvent = TouchEvent & ViewportUIEvent;
 export type ViewportWheelEvent = WheelEvent & ViewportUIEvent;
 
-export interface ViewportEvents {
-  // mouse events
-  onmousemove?: (event: ViewportMouseEvent) => void;
-  onmousedown?: (event: ViewportMouseEvent) => void;
-  onmouseup?: (event: ViewportMouseEvent) => void;
-  onmouseleave?: (event: ViewportMouseEvent) => void;
-  onwheel?: (event: ViewportWheelEvent) => void;
-  // touch screen events
-  ontouchstart?: (event: ViewportTouchEvent) => void;
-  ontouchend?: (event: ViewportTouchEvent) => void;
-  ontouchmove?: (event: ViewportTouchEvent) => void;
-  ontouchcancel?: (event: ViewportTouchEvent) => void;
-  // keyboard events
-  onkeydown?: (event: KeyboardEvent) => void;
-  onkeyup?: (event: KeyboardEvent) => void;
-}
+// export interface ViewportEvents {
+//   // mouse events
+//   onmousemove?: (event: ViewportMouseEvent) => void;
+//   onmousedown?: (event: ViewportMouseEvent) => void;
+//   onmouseup?: (event: ViewportMouseEvent) => void;
+//   onmouseleave?: (event: ViewportMouseEvent) => void;
+//   onwheel?: (event: ViewportWheelEvent) => void;
+//   // touch screen events
+//   ontouchstart?: (event: ViewportTouchEvent) => void;
+//   ontouchend?: (event: ViewportTouchEvent) => void;
+//   ontouchmove?: (event: ViewportTouchEvent) => void;
+//   ontouchcancel?: (event: ViewportTouchEvent) => void;
+//   // keyboard events
+//   onkeydown?: (event: KeyboardEvent) => void;
+//   onkeyup?: (event: KeyboardEvent) => void;
+// }
 
 //export interface Deallocable {
 //  dealloc(): void;
@@ -50,6 +50,9 @@ export abstract class IViewport {
 
   // the Svelte component to be instanced as one of the App's display canvases
   component: Component;
+
+  //
+  domElement: Element;
 
   // force the screen to re-calculate window bounds. used when viewports are added/removed
   redraw?: () => void;
@@ -102,37 +105,37 @@ export abstract class IModelViewport implements IViewport, ViewportEvents {
   dealloc: () => void;
 }
 
-type IViewportConstructor = new (...args: unknown[]) => IViewport;
-interface IViewportConstructorWithStatics extends IViewportConstructor {
-  panel?: Component;
-  name?: string;
-}
+// type IViewportConstructor = new (...args: unknown[]) => IViewport;
+// interface IViewportConstructorWithStatics extends IViewportConstructor {
+//   panel?: Component;
+//   name?: string;
+// }
+//
+// type IModelViewportConstructor = new (...args: unknown[]) => IModelViewport;
+// interface IModelViewportConstructorWithStatics extends IModelViewportConstructor {
+//   panel?: Component;
+//   name?: string;
+// }
 
-type IModelViewportConstructor = new (...args: unknown[]) => IModelViewport;
-interface IModelViewportConstructorWithStatics extends IModelViewportConstructor {
-  panel?: Component;
-  name?: string;
-}
 
-
-export type Viewport = SVGViewport | WebGLViewport | FilesViewport;
+// export type Viewport = SVGViewport | WebGLViewport | FilesViewport;
 // | TerminalViewport | ScriptViewport;
 
 // Now restrict ViewportClass to constructors that return an instance of IViewport
 //export type ModelViewports = SVGViewport | WebGLViewport | SimulatorViewport;
-export type ModelViewport = SVGViewport | WebGLViewport;
+// export type ModelViewport = SVGViewport | WebGLViewport;
 
 // Define the types of the classes
-export type ModelViewportType = (typeof SVGViewport | typeof WebGLViewport) &
-  IModelViewportConstructorWithStatics;
+// export type ModelViewportType = (typeof SVGViewport | typeof WebGLViewport) &
+//   IModelViewportConstructorWithStatics;
 
-export type ViewportType = (
-  | typeof SVGViewport
-  | typeof WebGLViewport
-  // | typeof TerminalViewport
-  // | typeof ScriptViewport
-) &
-  IViewportConstructorWithStatics;
+// export type ViewportType = (
+//   | typeof SVGViewport
+//   | typeof WebGLViewport
+//   // | typeof TerminalViewport
+//   // | typeof ScriptViewport
+// ) &
+//   IViewportConstructorWithStatics;
 
 // export const ModelViewports = [SVGViewport, WebGLViewport];
 // export const Viewports = [SVGViewport, WebGLViewport, ScriptViewport, TerminalViewport];

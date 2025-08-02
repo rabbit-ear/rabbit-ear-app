@@ -1,9 +1,7 @@
 import type { Component } from "svelte";
-import type { IModelViewport } from "../viewports/ViewportTypes.ts";
-
-export interface Deallocable {
-  dealloc(): void;
-}
+import type { Viewport } from "../viewports/Viewport.ts";
+import type { ToolEvents } from "./ToolEvents.ts";
+import type { Deallocable } from "./Deallocable.ts";
 
 /**
  * @description This is the currently selected UI tool, as seen on the
@@ -14,7 +12,7 @@ export interface Deallocable {
  * intended to cleanup or initialize Svelte stores which are specific
  * to each tool.
  */
-export abstract class UITool implements Deallocable {
+export abstract class Tool implements ToolEvents, Deallocable {
   // unique UUID for this tool
   static key: string;
 
@@ -32,7 +30,24 @@ export abstract class UITool implements Deallocable {
   // but may need to subinstance internal state once per viewport (one app can
   // have many viewports). This is that internal "constructor" for each viewport.
   // The return function is the dealloc for everything made in the bindTo().
-  abstract bindTo(viewport: IModelViewport): () => void;
+  abstract bindTo(viewport: Viewport): () => void;
+
+  // mouse events
+  abstract onmousemove?: (viewport: Viewport, event: MouseEvent) => void;
+  abstract onmousedown?: (viewport: Viewport, event: MouseEvent) => void;
+  abstract onmouseup?: (viewport: Viewport, event: MouseEvent) => void;
+  abstract onmouseleave?: (viewport: Viewport, event: MouseEvent) => void;
+  abstract onwheel?: (viewport: Viewport, event: WheelEvent) => void;
+
+  // touch screen events
+  abstract ontouchstart?: (viewport: Viewport, event: TouchEvent) => void;
+  abstract ontouchend?: (viewport: Viewport, event: TouchEvent) => void;
+  abstract ontouchmove?: (viewport: Viewport, event: TouchEvent) => void;
+  abstract ontouchcancel?: (viewport: Viewport, event: TouchEvent) => void;
+
+  // keyboard events
+  abstract onkeydown?: (viewport: Viewport, event: KeyboardEvent) => void;
+  abstract onkeyup?: (viewport: Viewport, event: KeyboardEvent) => void;
 
   // This function should clean up anything that was created/bound in the constructor.
   // This will be called when this tool is removed (during a switching of tools).
@@ -53,3 +68,4 @@ export abstract class UITool implements Deallocable {
 // that one instance should allow you to create multiple viewport states
 // where each viewport state can be created and destroyed, and has
 // access to the global state object.
+

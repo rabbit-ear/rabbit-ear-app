@@ -1,13 +1,14 @@
 <script lang="ts">
-  import app from "../../state/app.svelte.ts";
+  import context from "../../state/context.svelte.ts";
   // import ViewportDropdown from "../panel/ViewportDropdown.svelte";
-  const viewports = $derived(app.ui?.viewportManager?.viewports || []);
+  const viewports = $derived(context.ui?.viewportManager?.viewports || []);
 </script>
 
 <div class="column">
-  {#if app.ui?.viewports?.terminal}
+  {#if context.ui?.viewportManager?.terminal}
     <div class="terminal">
-      <app.ui.viewports.terminal.component viewport={app.ui.viewports.terminal} />
+      <context.ui.viewportManager.terminal.component
+        viewport={context.ui.viewportManager.terminal} />
     </div>
   {/if}
 

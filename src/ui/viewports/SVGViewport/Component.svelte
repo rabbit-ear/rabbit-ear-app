@@ -1,12 +1,7 @@
 <script lang="ts">
   import type { SVGViewport } from "./SVGViewport.svelte.ts";
-  import type {
-    ViewportMouseEvent,
-    ViewportWheelEvent,
-    ViewportTouchEvent,
-  } from "../types.ts";
   // import GridLayer from "./GridLayer.svelte";
-  import SVGTouchCanvas from "../../Components/SVG/SVGTouchCanvas.svelte";
+  import SVGCanvas from "../../Components/SVG/SVGCanvas.svelte";
   // import SVGShapes from "../../Components/SVG/SVGShapes.svelte";
   // import SVGFOLD from "../../Components/SVG/SVGFOLD.svelte";
 
@@ -42,6 +37,10 @@
 
   let svg: SVGSVGElement | undefined = $state();
 
+  $effect(() => {
+    viewport.domElement = svg;
+  });
+
   // todo: issue-
   // creating and removing other Viewports causes a resize, but does not fire this.
   // const onresize = (): void => {
@@ -72,24 +71,7 @@
 <!--   {/if} -->
 <!-- {/snippet} -->
 
-<SVGTouchCanvas
-  bind:svg
-  onmousemove={(e: ViewportMouseEvent): void =>
-    viewport.onmousemove?.(prep<ViewportMouseEvent>(e))}
-  onmousedown={(e: ViewportMouseEvent): void =>
-    viewport.onmousedown?.(prep<ViewportMouseEvent>(e))}
-  onmouseup={(e: ViewportMouseEvent): void =>
-    viewport.onmouseup?.(prep<ViewportMouseEvent>(e))}
-  onmouseleave={(e: ViewportMouseEvent): void =>
-    viewport.onmouseleave?.(prep<ViewportMouseEvent>(e))}
-  onwheel={(e): void => viewport.onwheel?.(prep<ViewportWheelEvent>(e))}
-  ontouchmove={(e): void => viewport.ontouchmove?.(prep<ViewportTouchEvent>(e))}
-  ontouchstart={(e): void => viewport.ontouchstart?.(prep<ViewportTouchEvent>(e))}
-  ontouchend={(e): void => viewport.ontouchend?.(prep<ViewportTouchEvent>(e))}
-  ontouchcancel={(e): void => viewport.ontouchcancel?.(prep<ViewportTouchEvent>(e))}
-  fill="none"
-  stroke="white"
-  {...props}>
+<SVGCanvas bind:svg fill="none" stroke="white" {...props}>
   <!-- viewBox={viewport.view.viewBoxString} -->
   <!-- stroke-width={viewport.style.strokeWidth} -->
   {#if matrix}
@@ -99,4 +81,4 @@
   {:else}
     {@render contents()}
   {/if}
-</SVGTouchCanvas>
+</SVGCanvas>
