@@ -1,14 +1,9 @@
 import type { Component } from "svelte";
 import type { UI } from "./UI.svelte.ts";
 import type { Viewport } from "./viewports/Viewport.ts";
+import AppPanels from "./panels/index.ts";
 
-// import AppPanel from "./AppPanel/AppPanel.svelte";
-// import FramesPanel from "./FramesPanel/FramesPanel.svelte";
-// import FramePanel from "./FramePanel/FramePanel.svelte";
-// import HistoryPanel from "./HistoryPanel/HistoryPanel.svelte";
-// import ModelsPanel from "./ModelsPanel/ModelsPanel.svelte";
-// import { uniqueObjects } from "./arrays.ts";
-
+// todo: try to replace this with a Set
 // compares their constructors with ===
 export const uniqueObjects = <T>(objs: T[]): T[] => {
   const result: T[] = [];
@@ -37,25 +32,17 @@ export class PanelManager {
   // for example. multiple SVGViewports on screen but will only appear once
   viewportPanels: PanelType[] = $derived.by(() => uniqueObjects(this.ui.viewportManager.viewports
     .map(viewport => viewport.constructor as typeof Viewport)
-    .map(ViewportClass => ({ name: ViewportClass.name, component: ViewportClass.panel }))
+    .map(ViewportClass => ({ name: ViewportClass.name || "", component: ViewportClass.panel }))
     .filter(obj => obj.component !== undefined)));
 
   toolPanel: PanelType | undefined = $derived.by(() => this.ui.toolManager.activeTool?.panel
-    ? ({ name: this.ui.toolManager.activeTool?.name, component: this.ui.toolManager.activeTool?.panel })
+    ? ({ name: this.ui.toolManager.activeTool?.constructor.name, component: this.ui.toolManager.activeTool?.panel })
     : undefined);
 
-  panels: PanelType[] = $derived(this.viewportPanels.concat([this.toolPanel])
+  panels: PanelType[] = $derived(this.viewportPanels
+    .concat([this.toolPanel])
+    .concat(AppPanels)
     .filter(a => a !== undefined));
-
-  // //appPanels: Component[] = [makeAppPanel()];
-  // appPanels: [Component, Props][] = [
-  //   [AppPanel, { name: "App" }],
-  //   [FramesPanel, { name: "Frames" }],
-  //   [FramePanel, { name: "Frame" }],
-  //   [HistoryPanel, { name: "History" }],
-  //   [ModelsPanel, { name: "View Models" }],
-  //   //[SimulatorPanel, { name: "Simulator" }],
-  // ];
 
   // terminalViewportClass: ViewportClassTypes | undefined = $derived.by(
   //   () => this.ui.viewports.terminal?.constructor as ViewportClassTypes,
@@ -63,12 +50,6 @@ export class PanelManager {
   //
   // builtinViewportClasses: ViewportClassTypes[] = $derived.by(() =>
   //   [this.terminalViewportClass].filter((a) => a !== undefined),
-  // );
-  //
-  // viewportClasses: ViewportClassTypes[] = $derived.by(() =>
-  //   ([] as ViewportClassTypes[])
-  //     .concat(this.modelViewportClasses)
-  //     .concat(this.builtinViewportClasses),
   // );
 
   dealloc(): void {

@@ -5,39 +5,8 @@
 
   type PanelType = { name: string; component: Component };
 
-  // const panels: Component[] = $derived(app.ui?.panels.components);
-  // const props: { name: string }[] = $derived(app.ui?.panels.props);
-
-  // const panels: Component[] = [];
-  // const panels: PanelType[] = $derived(context.ui?.panelManager.viewportPanels);
   const panels: PanelType[] = $derived(context.ui?.panelManager.panels);
-
-  // $effect(() => {
-  //   console.log("all static panels", context.ui?.panelManager.allStaticPanels);
-  //   console.log("all static panels[0]", context.ui?.panelManager.allStaticPanels[0]);
-  // });
-
-  // $effect(() => {
-  //   console.log("static panels", context.ui?.panelManager.staticPanels);
-  //   console.log("static panels[0]", context.ui?.panelManager.staticPanels[0]);
-  //   console.log(
-  //     "static panels[0].name",
-  //     context.ui?.panelManager.staticPanels[0].panelName,
-  //   );
-  //   console.log(
-  //     "static panels[0].constructor",
-  //     context.ui?.panelManager.staticPanels[0].constructor,
-  //   );
-  // });
 </script>
-
-<!-- <div class="column"> -->
-<!--   {#each panels as Panel, i} -->
-<!--     <Wrapper title={props?.[i]?.name}> -->
-<!--       <Panel {...props} /> -->
-<!--     </Wrapper> -->
-<!--   {/each} -->
-<!-- </div> -->
 
 <div class="column">
   {#each panels as panel}

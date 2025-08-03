@@ -66,16 +66,15 @@ export class ViewportManager {
 
   addViewport(viewport: Viewport) {
     console.log("add viewport", viewport);
-    this.viewports.push(viewport);
-
-    this.ui.toolManager.getTool()?.bindTo(viewport);
 
     viewport.didMount = () => {
       console.log("viewport did mount callback, mounting.");
+      this.unbindViewport(viewport);
       this.bindViewport(viewport);
-      viewport.didMount = undefined;
+      // viewport.didMount = undefined;
     }
-
+    this.viewports.push(viewport);
+    this.ui.toolManager.getTool()?.bindTo(viewport);
     this.ui.toolManager.viewportDidAdd(viewport);
 
     // this.bindViewport(viewport);
@@ -84,9 +83,11 @@ export class ViewportManager {
   }
 
   removeViewport(viewport: Viewport) {
-    this.viewports.filter(v => v === viewport)
-      .forEach(v => unbindAllHandlers(v));
-    this.viewports = this.viewports.filter(v => v !== viewport);
+    const index = this.viewports.indexOf(viewport);
+    if (index === -1) { return; }
+    this.unbindViewport(viewport);
+    this.viewports.splice(index, 1);
+    // todo: should this be moved above the removal and be called WillRemove?
     this.ui.toolManager.viewportDidRemove(viewport);
   }
 
@@ -95,27 +96,16 @@ export class ViewportManager {
     // this.ui.emit("activeViewportChange", viewport);
   }
 
-  // onmousemove(e: MouseEvent) { this.ui.toolManager.getTool()?.onmousemove?.(this, e); }
-  // onmousedown(e: MouseEvent) { this.ui?.toolManager.getTool()?.onmousedown?.(this, e); }
-  // onmouseup(e: MouseEvent) { this.ui?.toolManager.getTool()?.onmouseup?.(this, e); }
-  // onmouseleave(e: MouseEvent) { this.ui?.toolManager.getTool()?.onmouseleave?.(this, e); }
-  // onwheel(e: WheelEvent) { this.ui?.toolManager.getTool()?.onwheel?.(this, e); }
-  // ontouchstart(e: TouchEvent) { this.ui?.toolManager.getTool()?.ontouchstart?.(this, e); }
-  // ontouchend(e: TouchEvent) { this.ui?.toolManager.getTool()?.ontouchend?.(this, e); }
-  // ontouchmove(e: TouchEvent) { this.ui?.toolManager.getTool()?.ontouchmove?.(this, e); }
-  // ontouchcancel(e: TouchEvent) { this.ui?.toolManager.getTool()?.ontouchcancel?.(this, e); }
-  // onkeydown(e: KeyboardEvent) { this.ui?.toolManager.getTool()?.onkeydown?.(this, e); }
-  // onkeyup(e: KeyboardEvent) { this.ui?.toolManager.getTool()?.onkeyup?.(this, e); }
-
   unbindViewport(viewport: Viewport) {
+    console.log("ToolManager unbindViewport()");
     const prevEvents = this.viewportEvents.get(viewport);
     if (prevEvents) {
-      console.log("found a previous set of events to unbind");
-      console.log(prevEvents);
+      console.log("events found");
+      // console.log(prevEvents);
       Object.keys(prevEvents)
         .forEach(key => viewport.domElement?.removeEventListener(key, prevEvents[key]));
     } else {
-      console.log("no previous events to unbind");
+      console.log("no events found");
     }
     this.viewportEvents.delete(viewport);
   }
