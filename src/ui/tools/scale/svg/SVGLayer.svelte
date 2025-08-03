@@ -1,6 +1,6 @@
 <script lang="ts">
   import ToolOrigin from "./ToolOrigin.svelte";
-  import type { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svelte.ts";
+  import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
   import type { SVGFixedPoint } from "./SVGViewportState.svelte.ts";
 
   type PropsType = {

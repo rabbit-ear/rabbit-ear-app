@@ -1,6 +1,6 @@
 import { type Box } from "rabbit-ear/types.js";
 import { boundingBox } from "rabbit-ear/math/polygon.js";
-import type { Deallocable } from "../../UITool.ts";
+import type { Deallocable } from "../../Deallocable.ts";
 import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import type { Viewport } from "../../../viewports/Viewport.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
@@ -64,12 +64,14 @@ export class SVGState implements Deallocable, ToolEvents {
 
   onmousemove(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
     const point = getSVGViewportPoint(viewport, [x, y]);
+    console.log("mousemove", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
   }
 
   onmousedown(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
     const point = getSVGViewportPoint(viewport, [x, y]);
+    console.log("mousedown", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.press = point;
@@ -77,6 +79,7 @@ export class SVGState implements Deallocable, ToolEvents {
 
   onmouseup(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
     const point = getSVGViewportPoint(viewport, [x, y]);
+    console.log("mouseup", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.release = point;

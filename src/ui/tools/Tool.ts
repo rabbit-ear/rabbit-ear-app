@@ -30,7 +30,7 @@ export abstract class Tool implements ToolEvents, Deallocable {
   // but may need to subinstance internal state once per viewport (one app can
   // have many viewports). This is that internal "constructor" for each viewport.
   // The return function is the dealloc for everything made in the bindTo().
-  abstract bindTo(viewport: Viewport): () => void;
+  abstract bindTo(viewport: Viewport): () => void | void;
 
   // mouse events
   abstract onmousemove?: (viewport: Viewport, event: MouseEvent) => void;

@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "document-app",
+  "productName": "Rabbit Ear",
   "version": "0.1.0",
-  "identifier": "com.document.app",
+  "identifier": "com.rabbit-ear.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,9 +12,9 @@
   "app": {
     "windows": [
       {
-        "title": "document-app",
-        "width": 800,
-        "height": 600
+        "title": "Rabbit Ear",
+        "width": 1400,
+        "height": 700
       }
     ],
     "security": {

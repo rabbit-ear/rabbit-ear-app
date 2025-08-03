@@ -10,7 +10,13 @@ import select from "./select/index.ts";
 // import translate from "./translate/index.ts";
 // import zoom from "./zoom/index.ts";
 
-const Tools: { [key: string]: typeof Tool } = {
+// the exported type is not a typeof Tool, because Tool
+// is an abstract class, and we will be instancing actual
+// class implementations. Otherwise typescript would yell at us
+// for trying to instance an abstract class
+type ToolConstructor<T extends Tool = Tool> = new () => T;
+
+const Tools: { [key: string]: ToolConstructor } = {
   // circle,
   // line,
   // rect,

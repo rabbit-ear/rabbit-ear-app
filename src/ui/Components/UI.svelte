@@ -11,12 +11,9 @@
 <main class="vertical">
   <div class="gui horizontal">
     <div class="toolbar" role="toolbar">
-      <!-- app.ui?.tool?.constructor.name -->
       <Toolbar
-        tool={context.ui?.tool || ""}
-        setTool={(tool: string) => {
-          if (context.ui) context.ui.tool = tool;
-        }} />
+        tool={context.ui?.toolManager.toolName || ""}
+        setTool={(tool: string) => context.ui?.toolManager.setToolWithName(tool)} />
     </div>
     <div class="canvases">
       <Canvases />

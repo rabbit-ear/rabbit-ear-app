@@ -1,4 +1,4 @@
-import type { Deallocable } from "../../UITool.ts";
+import type { Deallocable } from "../../Deallocable.ts";
 import type { Viewport } from "../../../viewports/Viewport.ts";
 import type { WebGLViewport } from "../../../viewports/WebGLViewport/WebGLViewport.svelte.ts";
 import type { ToolEvents } from "../../ToolEvents.ts";

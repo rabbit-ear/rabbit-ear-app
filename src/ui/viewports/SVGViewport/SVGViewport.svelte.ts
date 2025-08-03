@@ -17,6 +17,9 @@ export class SVGViewport implements Viewport {
 
   domElement?: SVGSVGElement;
 
+  // when this triggers, you are now able to access domElement
+  didMount?: () => void;
+
   // get domElement(): Element { return this.component.element; } 
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
@@ -40,6 +43,18 @@ export class SVGViewport implements Viewport {
     this.component = ViewportComponent;
     // this.panel = ViewportPanel;
   }
+
+  // onmousemove(e: MouseEvent) { context.ui?.toolManager.getTool()?.onmousemove?.(this, e); }
+  // onmousedown(e: MouseEvent) { context.ui?.toolManager.getTool()?.onmousedown?.(this, e); }
+  // onmouseup(e: MouseEvent) { context.ui?.toolManager.getTool()?.onmouseup?.(this, e); }
+  // onmouseleave(e: MouseEvent) { context.ui?.toolManager.getTool()?.onmouseleave?.(this, e); }
+  // onwheel(e: WheelEvent) { context.ui?.toolManager.getTool()?.onwheel?.(this, e); }
+  // ontouchstart(e: TouchEvent) { context.ui?.toolManager.getTool()?.ontouchstart?.(this, e); }
+  // ontouchend(e: TouchEvent) { context.ui?.toolManager.getTool()?.ontouchend?.(this, e); }
+  // ontouchmove(e: TouchEvent) { context.ui?.toolManager.getTool()?.ontouchmove?.(this, e); }
+  // ontouchcancel(e: TouchEvent) { context.ui?.toolManager.getTool()?.ontouchcancel?.(this, e); }
+  // onkeydown(e: KeyboardEvent) { context.ui?.toolManager.getTool()?.onkeydown?.(this, e); }
+  // onkeyup(e: KeyboardEvent) { context.ui?.toolManager.getTool()?.onkeyup?.(this, e); }
 
   unbindTool(): void {
     unsetViewportEvents(this);

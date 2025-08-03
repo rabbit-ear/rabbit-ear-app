@@ -1,9 +1,4 @@
 import type { Component } from "svelte";
-// import { ScriptViewport } from "./ScriptViewport/ScriptViewport.svelte.ts";
-import { SVGViewport } from "./SVGViewport/SVGViewport.svelte.ts";
-// import { TerminalViewport } from "./TerminalViewport/TerminalViewport.svelte.ts";
-import { WebGLViewport } from "./WebGLViewport/WebGLViewport.svelte.ts";
-import type { FilesViewport } from "./FilesViewport/FilesViewport.svelte.ts";
 
 export abstract class Viewport {
   // static properties (unable to be defined here, please define them)
@@ -16,8 +11,11 @@ export abstract class Viewport {
   // the Svelte component to be instanced as one of the App's display canvases
   abstract component: Component;
 
-  //
+  // the DOMElement, on which we will do things like bind touch event handlers
   abstract domElement?: Element;
+
+  // an optional callback, after this fires, domElement will be accessible
+  abstract didMount?: () => void;
 
   // force the screen to re-calculate window bounds. used when viewports are added/removed
   // abstract redraw?: () => void;

@@ -4,7 +4,7 @@ import { storageKeys, getStorageBoolean } from "./localStorage.svelte.ts";
 // import { PanelsManager } from "./panel/PanelsManager.svelte.ts";
 
 export class UI {
-  tool: string = $state("");
+  // tool: string = $state("");
   viewportManager: ViewportManager;
   toolManager: ToolManager;
   // panels: PanelsManager;

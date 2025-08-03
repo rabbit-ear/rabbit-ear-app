@@ -1,5 +1,5 @@
 import type { Component } from "svelte";
-import type { UITool } from "../UITool.ts";
+import type { Tool } from "../Tool.ts";
 import type { Viewport } from "../../viewports/Viewport.ts";
 import { SVGViewport } from "../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import { WebGLViewport } from "../../viewports/WebGLViewport/WebGLViewport.svelte.ts";
@@ -9,7 +9,7 @@ import { GLViewportState } from "./GLViewportState.svelte.ts";
 import Panel from "./Panel.svelte";
 import icon from "./icon.svelte";
 
-class Tool implements UITool {
+class ScaleTool implements Tool {
   static key = "scale";
   static name = "scale";
   static icon = icon;
@@ -29,9 +29,8 @@ class Tool implements UITool {
       this.viewportStates.push(viewportState);
       return viewportState.dealloc;
     } else {
-      return () => {
-        // empty
-      };
+      // empty
+      return () => { };
     }
   }
 
@@ -41,4 +40,4 @@ class Tool implements UITool {
   }
 }
 
-export default Tool;
+export default ScaleTool;

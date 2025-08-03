@@ -17,18 +17,15 @@ class SelectTool implements Tool {
 
   states = new Map<Viewport, (SVGState | WebGLState)>();
 
-  viewportStates: (SVGState | WebGLState)[] = [];
-
   bindTo(viewport: Viewport): () => void {
     if (viewport instanceof SVGViewport) {
       const viewportState = new SVGState(viewport, this.state);
       this.states.set(viewport, viewportState);
-      // this.viewportStates.push(viewportState);
-      return viewportState.dealloc;
+      return () => viewportState.dealloc?.();
     } else if (viewport instanceof WebGLViewport) {
       const viewportState = new WebGLState(viewport);
-      this.viewportStates.push(viewportState);
-      return viewportState.dealloc;
+      this.states.set(viewport, viewportState);
+      return () => viewportState.dealloc?.();
     } else {
       return () => { };
     }
@@ -64,7 +61,7 @@ class SelectTool implements Tool {
   // onkeyup?: (viewport: Viewport, event: KeyboardEvent) => void;
 
   dealloc(): void {
-    this.viewportStates.forEach((state) => state.dealloc());
+    this.states.forEach(state => state.dealloc());
     this.state.dealloc();
   }
 }

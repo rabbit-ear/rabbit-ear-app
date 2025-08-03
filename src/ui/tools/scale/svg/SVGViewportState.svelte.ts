@@ -1,6 +1,6 @@
 import { distance2, magnitude2, subtract2 } from "rabbit-ear/math/vector.js";
-import type { Deallocable } from "../../UITool.ts";
-import type { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svelte.ts";
+import type { Deallocable } from "../../Deallocable.ts";
+import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import { SVGViewportEvents } from "../events.ts";
 import { GlobalState } from "../GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
@@ -48,7 +48,7 @@ export class SVGFixedPoint {
           }
         }
       });
-      return () => {};
+      return () => { };
     });
   }
 
@@ -71,7 +71,7 @@ export class SVGFixedPoint {
           return;
         }
       });
-      return () => {};
+      return () => { };
     });
   }
 
@@ -157,7 +157,7 @@ export class SVGViewportState implements Deallocable {
         this.fixedPoint.reset();
         this.touches.reset();
       });
-      return () => {};
+      return () => { };
     });
   }
 }

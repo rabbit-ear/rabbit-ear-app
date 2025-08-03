@@ -2,6 +2,7 @@
   import type { SVGViewport } from "./SVGViewport.svelte.ts";
   // import GridLayer from "./GridLayer.svelte";
   import SVGCanvas from "../../Components/SVG/SVGCanvas.svelte";
+  import { onMount } from "svelte";
   // import SVGShapes from "../../Components/SVG/SVGShapes.svelte";
   // import SVGFOLD from "../../Components/SVG/SVGFOLD.svelte";
 
@@ -39,6 +40,13 @@
 
   $effect(() => {
     viewport.domElement = svg;
+  });
+
+  onMount(() => {
+    console.log("SVGViewport has mounted", viewport.domElement);
+    if (typeof viewport.didMount === "function") {
+      viewport.didMount();
+    }
   });
 
   // todo: issue-
