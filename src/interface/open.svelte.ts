@@ -1,6 +1,6 @@
 import { saveFileAs } from "./save.svelte.ts";
-import file from "../state/file.svelte.ts";
-import { model } from "../state/model.svelte.ts";
+import file from "../app/file.svelte.ts";
+import { model } from "../app/model.svelte.ts";
 import {
   unsavedChangesDialog,
   defaultFileDialogFilter,

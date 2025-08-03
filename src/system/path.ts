@@ -4,7 +4,7 @@ import {
   extname,
   join as pathJoin,
   resolve,
-} from '@tauri-apps/api/path';
+} from "@tauri-apps/api/path";
 
 /**
  * @description Verbose file path information

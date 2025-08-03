@@ -1,7 +1,7 @@
 import { exit } from "@tauri-apps/plugin-process";
 // import { saveFileAs } from "./save.svelte.ts";
 // import { unsavedChangesDialog } from "../system/dialogs.ts";
-import context from "../state/context.svelte.ts";
+import context from "../app/context.svelte.ts";
 
 /**
  * @description methods available to both the front and back ends.

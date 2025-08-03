@@ -3,7 +3,7 @@ import {
   open as systemOpenDialog,
   save as systemSaveDialog,
 } from "@tauri-apps/plugin-dialog";
-import { homeDir } from '@tauri-apps/api/path';
+import { homeDir } from "@tauri-apps/api/path";
 import { EXTENSION, EXTENSIONS, FILE_TYPE_NAME } from "./constants.ts";
 import { type FilePathInfo, getFilePathInfo } from "./path.ts";
 

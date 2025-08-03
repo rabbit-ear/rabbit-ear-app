@@ -1,5 +1,5 @@
 <script lang="ts">
-  import context from "../../state/context.svelte.ts";
+  import context from "../../app/context.svelte.ts";
 </script>
 
 <svelte:body {ondragenter} {ondragleave} {ondragover} {ondrop} />

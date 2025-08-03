@@ -1,4 +1,3 @@
-
 export class FileModel {
   private dataText: string;
 

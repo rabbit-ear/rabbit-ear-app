@@ -7,7 +7,7 @@ import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
 // import app from "../../../../app/App.svelte.ts";
-import { getSVGViewportPoint } from "../../../viewports/touches.ts";
+import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
 import type { ToolEvents } from "../../ToolEvents.ts";
 
 export class SVGState implements Deallocable, ToolEvents {

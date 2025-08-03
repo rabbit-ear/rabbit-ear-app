@@ -1,7 +1,7 @@
 import type { UI } from "./UI.svelte";
-import type { Viewport } from "../ui/viewports/Viewport.ts";
-import type { Tool } from "../ui/tools/Tool.ts";
-import Tools from "../ui/tools/index.ts";
+import type { Viewport } from "./viewports/Viewport.ts";
+import type { Tool } from "./tools/Tool.ts";
+import Tools from "./tools/index.ts";
 
 export class ToolManager {
   ui: UI;
@@ -9,12 +9,18 @@ export class ToolManager {
 
   toolName: string = $derived((this.tool?.constructor as typeof Tool).key ?? "");
 
-  // private unbindFromViewports: ((() => void) | undefined)[] = [];
-  private unbindFromViewports: (() => void)[] = [];
+  // private unbindFromViewports: (() => void)[] = [];
+  private unbindFromViewports: Map<Viewport, () => void> = new Map();
 
   constructor(ui: UI) {
     this.ui = ui;
   }
+
+  dealloc(): void {
+    // todo: anything we need to do here?
+  }
+
+  get activeTool(): Tool | undefined { return this.tool; }
 
   getTool() { return this.tool; }
 
@@ -22,15 +28,32 @@ export class ToolManager {
     // cleanup previous tool
     this.tool?.dealloc?.();
     this.unbindFromViewports.forEach(unbind => unbind());
+    this.unbindFromViewports.clear();
 
     // get next tool
     const tool = Tools[name];
     if (!tool) { return; }
-    console.log(this.tool);
     this.tool = new tool();
-    this.unbindFromViewports = this.ui.viewportManager.viewports
-      .map(viewport => this.tool?.bindTo(viewport))
-      .filter(unbind => unbind !== undefined);
+    console.log(this.tool);
+    this.ui.viewportManager.viewports.forEach(viewport => {
+      const unbind = this.tool?.bindTo(viewport);
+      if (!unbind) { return; }
+      this.unbindFromViewports.set(viewport, unbind);
+    });
+  }
+
+  viewportDidAdd(viewport: Viewport) {
+    this.viewportDidRemove(viewport);
+    const unbind = this.tool?.bindTo(viewport);
+    if (!unbind) { return; }
+    this.unbindFromViewports.set(viewport, unbind);
+  }
+
+  viewportDidRemove(viewport: Viewport) {
+    const unbind = this.unbindFromViewports.get(viewport);
+    if (!unbind) { return; }
+    unbind();
+    this.unbindFromViewports.delete(viewport);
   }
 
   // bindViewport(viewport: Viewport) {

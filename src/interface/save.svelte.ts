@@ -1,5 +1,5 @@
-import { model } from "../state/model.svelte.ts";
-import file from "../state/file.svelte.ts";
+import { model } from "../app/model.svelte.ts";
+import file from "../app/file.svelte.ts";
 import { type FilePathInfo } from "../system/path.ts";
 import { writeTextFile } from "../system/fs.ts";
 import { defaultFileDialogFilter, saveFileAsDialog } from "../system/dialogs.ts";

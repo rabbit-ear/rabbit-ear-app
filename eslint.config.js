@@ -12,7 +12,8 @@ export default defineConfig([
       globals: globals.browser
     },
     rules: {
-      "@typescript-eslint/no-explicit-any": ["off"]
+      // "@typescript-eslint/no-explicit-any": ["off"],
+      "no-explicit-any": ["off"]
     }
   },
   tseslint.configs.recommended,

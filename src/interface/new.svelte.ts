@@ -1,5 +1,5 @@
-import { model } from "../state/model.svelte.ts";
-import file from "../state/file.svelte.ts";
+import { model } from "../app/model.svelte.ts";
+import file from "../app/file.svelte.ts";
 import { EXTENSION, UNTITLED_FILENAME } from "../system/constants.ts";
 import { unsavedChangesDialog } from "../system/dialogs.ts";
 

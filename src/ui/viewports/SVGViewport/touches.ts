@@ -1,4 +1,4 @@
-import type { Viewport } from "./Viewport.ts";
+import type { Viewport } from "../Viewport.ts";
 // import { convertToViewBox, findInParents } from "./dom.ts";
 
 /**

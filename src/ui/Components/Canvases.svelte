@@ -1,5 +1,5 @@
 <script lang="ts">
-  import context from "../../state/context.svelte.ts";
+  import context from "../../app/context.svelte.ts";
   // import ViewportDropdown from "../panel/ViewportDropdown.svelte";
   const viewports = $derived(context.ui?.viewportManager?.viewports || []);
 </script>

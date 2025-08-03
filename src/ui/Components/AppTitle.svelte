@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getCurrentWindow } from "@tauri-apps/api/window";
-  import context from "../../state/context.svelte.ts";
+  import context from "../../app/context.svelte.ts";
 
   /**
    * @description update the system app title name to include the file name

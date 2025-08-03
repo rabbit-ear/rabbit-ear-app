@@ -1,7 +1,7 @@
 // import { untrack } from "svelte";
 import type { UI } from "./UI.svelte.ts";
 // import type { ModelViewportType } from "../ui/viewports/types.ts";
-import type { Viewport } from "../ui/viewports/Viewport.ts";
+import type { Viewport } from "./viewports/Viewport.ts";
 // import { ModelViewports } from "./viewports.ts";
 // import { TerminalViewport } from "./TerminalViewport/TerminalViewport.svelte.ts";
 // import { ScriptViewport } from "./ScriptViewport/ScriptViewport.svelte.ts";
@@ -76,6 +76,8 @@ export class ViewportManager {
       viewport.didMount = undefined;
     }
 
+    this.ui.toolManager.viewportDidAdd(viewport);
+
     // this.bindViewport(viewport);
     // setTimeout(() => this.bindViewport(viewport), 200);
     // this.ui.toolManager.registerViewport(viewport);
@@ -85,6 +87,7 @@ export class ViewportManager {
     this.viewports.filter(v => v === viewport)
       .forEach(v => unbindAllHandlers(v));
     this.viewports = this.viewports.filter(v => v !== viewport);
+    this.ui.toolManager.viewportDidRemove(viewport);
   }
 
   setActiveViewport(viewport: Viewport) {

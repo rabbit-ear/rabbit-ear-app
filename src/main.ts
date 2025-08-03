@@ -3,7 +3,7 @@ import "./system/menu.ts";
 // import "./interface/drag.svelte.ts";
 import "./interface/keyboard.svelte.ts";
 import App from "./ui/components/App.svelte";
-import { defaultAppSetup } from "./state/boot.svelte.ts";
+import { defaultAppSetup } from "./app/boot.svelte.ts";
 
 const app = mount(App, { target: document.getElementById("app")! });
 

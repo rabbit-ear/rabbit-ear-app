@@ -2,18 +2,18 @@ import type { Component } from "svelte";
 import type { Viewport } from "../Viewport.ts";
 import { unsetViewportEvents } from "../types.ts";
 // import ViewportPanel from "./Dropdown.svelte";
-// import ClassPanel from "./Panel.svelte";
+import ClassPanel from "./PanelComponent.svelte";
 import ViewportComponent from "./Component.svelte";
 import Settings from "./Settings.svelte.ts";
 
 export class SVGViewport implements Viewport {
   static name: string = "SVG Viewport";
   static settings: Settings = new Settings();
-  // static panel: Component = ClassPanel;
-  //static panel: Panel = new ClassPanel();
+  static panel: Component = ClassPanel;
+  // static panel: Panel = new ClassPanel();
 
   component: Component;
-  panel: Component;
+  // panel: Component;
 
   domElement?: SVGSVGElement;
 

@@ -1,13 +1,12 @@
 import { ViewportManager } from "./ViewportManager.svelte.ts";
 import { ToolManager } from "./ToolManager.svelte.ts";
-import { storageKeys, getStorageBoolean } from "./localStorage.svelte.ts";
-// import { PanelsManager } from "./panel/PanelsManager.svelte.ts";
+import { storageKeys, getStorageBoolean } from "../app/localStorage.svelte.ts";
+import { PanelManager } from "./PanelManager.svelte.ts";
 
 export class UI {
-  // tool: string = $state("");
   viewportManager: ViewportManager;
   toolManager: ToolManager;
-  // panels: PanelsManager;
+  panelManager: PanelManager;
 
   // if the X axis is to the right, is the Y axis up (right handed) or down (left).
   // is the Y axis on top (true) or on bottom (false)?
@@ -16,25 +15,10 @@ export class UI {
   // custom effect.root will be unbound when this component is deallocated
   unbind: (() => void)[] = [];
 
-  // #tool: UITool | undefined = $state();
-  //
-  // get tool(): UITool | undefined {
-  //   return this.#tool;
-  // }
-  //
-  // // no need to set the tool directly. use a string ("line", "zoom"), the tool's name.
-  // // if no tool matches the string, the tool will become unset (undefined).
-  // setToolName(name: string): void {
-  //   this.#tool?.dealloc();
-  //   const NewTool: typeof UITool | undefined = Tools[name];
-  //   // @ts-ignore - UITool is abstract, but none of these are UITools, ignore warning.
-  //   this.#tool = NewTool === undefined ? undefined : new NewTool();
-  // }
-
   constructor() {
     this.viewportManager = new ViewportManager(this);
     this.toolManager = new ToolManager(this);
-    // this.panels = new PanelsManager(this);
+    this.panelManager = new PanelManager(this);
     this.unbind = [this.#bindToLocalStorage()];
   }
 
@@ -51,7 +35,8 @@ export class UI {
   // re-initialize itself, we would call this method to cleanup the hanging effect.
   dealloc(): void {
     this.viewportManager.dealloc();
-    // this.panels.dealloc();
+    this.panelManager.dealloc();
+    this.toolManager.dealloc();
     this.unbind.forEach((fn) => fn());
   }
 };

@@ -1,5 +1,5 @@
 import type { Command } from "./Command.ts";
-import { FileDocument } from "../state/FileDocument.svelte.ts";
+import { FileDocument } from "../app/FileDocument.svelte.ts";
 
 export class InsertTextCommand implements Command {
   constructor(private document: FileDocument, private position: number, private text: string) { }

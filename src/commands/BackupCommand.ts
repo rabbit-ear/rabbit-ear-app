@@ -1,6 +1,6 @@
 import type { Command } from "./Command.ts";
-import { FileDocument } from "../state/FileDocument.svelte.ts";
-import { FileModel } from "../state/FileModel.svelte.ts";
+import { FileDocument } from "../app/FileDocument.svelte.ts";
+import { FileModel } from "../app/FileModel.svelte.ts";
 
 export class BackupCommand implements Command {
   constructor(private model: FileModel, private position: number, private text: string) {

@@ -5,7 +5,8 @@
   import "../css/colors.css";
   import Toolbar from "./Toolbar.svelte";
   import Canvases from "./Canvases.svelte";
-  import context from "../../state/context.svelte.ts";
+  import Panels from "./Panels.svelte";
+  import context from "../../app/context.svelte.ts";
 </script>
 
 <main class="vertical">
@@ -19,7 +20,7 @@
       <Canvases />
     </div>
     <div class="panels">
-      <!-- <Panels /> -->
+      <Panels />
     </div>
   </div>
 </main>

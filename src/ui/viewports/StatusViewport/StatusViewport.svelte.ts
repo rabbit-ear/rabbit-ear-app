@@ -1,12 +1,12 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport.ts";
-import FilesComponent from "./Component.svelte";
+import StatusComponent from "./Component.svelte";
 
-export class FilesViewport implements Viewport {
+export class StatusViewport implements Viewport {
   static name = "Files";
 
   // the Svelte component to be instanced as one of the App's display canvases
-  component: Component = FilesComponent;
+  component: Component = StatusComponent;
 
   redraw(): void { }
   dealloc(): void { }

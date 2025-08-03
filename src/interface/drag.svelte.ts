@@ -1,12 +1,12 @@
 import { getCurrentWebview } from "@tauri-apps/api/webview";
-import file from "../state/file.svelte.ts";
-import { model } from "../state/model.svelte.ts";
+import file from "../app/file.svelte.ts";
+import { model } from "../app/model.svelte.ts";
 import { unsavedChangesDialog } from "../system/dialogs.ts";
 import { readTextFile } from "../system/fs.ts";
 import { getFilePathInfo } from "../system/path.ts";
 import { validateFileType } from "../system/validate.ts";
 import { saveFileAs } from "./save.svelte.ts";
-import context from "../state/context.svelte.ts";
+import context from "../app/context.svelte.ts";
 
 export const dragOpenFile = async (filePath: string): Promise<void> => {
   if (file.modified) {

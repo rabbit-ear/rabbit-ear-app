@@ -4,8 +4,8 @@ import {
   getStorageBoolean,
   getStorageNumber,
   getStorageString,
-} from "../../../state/localStorage.svelte.ts";
-import context from "../../../state/context.svelte.ts";
+} from "../../../app/localStorage.svelte.ts";
+import context from "../../../app/context.svelte.ts";
 // import AppSettings from "../../../app/Settings.svelte.ts";
 
 // these are global view settings that apply to all instances of SVGViewport
