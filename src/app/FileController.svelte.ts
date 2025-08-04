@@ -113,7 +113,7 @@ export class FileController {
   }
 
   async requestCloseDocumentAtIndex(index: number) {
-    const document = this.fileManager.allDocuments[index];
+    const document = this.fileManager.documents[index];
     if (!document) { return; }
     return this.requestCloseDocument(document);
   }

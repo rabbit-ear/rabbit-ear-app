@@ -2,8 +2,6 @@
   import context from "../../app/context.svelte.ts";
 </script>
 
-<svelte:body {ondragenter} {ondragleave} {ondragover} {ondrop} />
-
 <div class={context.dragIsHovering ? "hovering" : ""}></div>
 
 <style>

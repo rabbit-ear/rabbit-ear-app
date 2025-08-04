@@ -6,6 +6,7 @@
   import Toolbar from "./Toolbar.svelte";
   import Canvases from "./Canvases.svelte";
   import Panels from "./Panels.svelte";
+  import FileTabs from "./FileTabs.svelte";
   import context from "../../app/context.svelte.ts";
 </script>
 
@@ -16,8 +17,13 @@
         tool={context.ui?.toolManager.toolName || ""}
         setTool={(tool: string) => context.ui?.toolManager.setToolWithName(tool)} />
     </div>
-    <div class="canvases">
-      <Canvases />
+    <div class="desktop vertical">
+      <div class="tabs">
+        <FileTabs />
+      </div>
+      <div class="canvases">
+        <Canvases />
+      </div>
     </div>
     <div class="panels">
       <Panels />
@@ -61,7 +67,7 @@
     overflow-y: auto;
   }
 
-  .canvases {
+  .desktop {
     width: 100%;
     height: 100%;
     min-width: 0;
@@ -74,6 +80,18 @@
     flex: 0 0 auto;
     overflow-x: hidden;
     overflow-y: auto;
+  }
+
+  .tabs {
+    width: 100%;
+    /* height: 2rem; */
+    flex: 0 0 auto;
+  }
+
+  .canvases {
+    width: 100%;
+    height: 100%;
+    flex: 1 1 auto;
   }
 
   /* colors */

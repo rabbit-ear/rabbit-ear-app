@@ -6,8 +6,14 @@
   const addSVGViewport = () => context.ui?.viewportManager.addViewport(new SVGViewport());
   const addWebGLViewport = () =>
     context.ui?.viewportManager.addViewport(new WebGLViewport());
+  // const removeViewport = () =>
+  //   context.ui?.viewportManager.removeViewport(context.ui?.viewportManager.viewports[0]);
   const removeViewport = () =>
-    context.ui?.viewportManager.removeViewport(context.ui?.viewportManager.viewports[0]);
+    context.ui?.viewportManager.removeViewport(
+      context.ui?.viewportManager.viewports[
+        context.ui?.viewportManager.viewports.length - 1
+      ],
+    );
 </script>
 
 <div class="column gap">
@@ -16,9 +22,9 @@
   </div>
 
   <div class="row">
-    <button on:click={addSVGViewport}>+ SVG</button>
-    <button on:click={addWebGLViewport}>+ WebGL</button>
-    <button on:click={removeViewport}>- Viewport</button>
+    <button onclick={addSVGViewport}>+ SVG</button>
+    <button onclick={addWebGLViewport}>+ WebGL</button>
+    <button onclick={removeViewport}>- Viewport</button>
   </div>
 </div>
 

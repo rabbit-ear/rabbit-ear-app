@@ -1,30 +1,34 @@
 import { writeTextFile, readTextFile } from "../system/fs.ts";
 import type { Command } from "../commands/Command";
 import { FileModel } from "./FileModel.svelte.ts";
+import { getFileName } from "../system/path.ts";
 
 export class FileDocument {
   private undoStack: Command[] = [];
   private redoStack: Command[] = [];
 
-  private filePath: string | undefined;
+  private filePath: string | undefined = $state();
   private dataModel: FileModel;
   private isDirty: boolean;
+
+  private fileName?: string = $derived(getFileName(this.filePath || ""));
+
+  get canUndo(): boolean { return this.undoStack.length > 0; }
+  get canRedo(): boolean { return this.redoStack.length > 0; }
+  get path() { return this.filePath; }
+  get dirty() { return this.isDirty; }
+  get name() { return this.fileName; }
+
+  // this returns a Readonly copy to prevent developers from modifying
+  // the contents of the data model directly.
+  // all modifications should use this.updateModel so the dirty flag is set.
+  getModel(): Readonly<FileModel> { return this.dataModel; }
 
   constructor(path: string | undefined, initialData: FileModel) {
     this.filePath = path;
     this.dataModel = initialData;
     this.isDirty = false;
   }
-
-  get canUndo(): boolean { return this.undoStack.length > 0; }
-  get canRedo(): boolean { return this.redoStack.length > 0; }
-  get path() { return this.filePath; }
-  get dirty() { return this.isDirty; }
-
-  // this returns a Readonly copy to prevent developers from modifying
-  // the contents of the data model directly.
-  // all modifications should use this.updateModel so the dirty flag is set.
-  getModel(): Readonly<FileModel> { return this.dataModel; }
 
   executeCommand(command: Command): void {
     command.execute();

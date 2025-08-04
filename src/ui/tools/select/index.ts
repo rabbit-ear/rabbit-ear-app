@@ -18,6 +18,7 @@ class SelectTool implements Tool {
   states = new Map<Viewport, (SVGState | WebGLState)>();
 
   bindTo(viewport: Viewport): () => void {
+    console.log("SelectTool bindTo() viewport")
     if (viewport instanceof SVGViewport) {
       const viewportState = new SVGState(viewport, this.state);
       this.states.set(viewport, viewportState);
@@ -61,6 +62,7 @@ class SelectTool implements Tool {
   // onkeyup?: (viewport: Viewport, event: KeyboardEvent) => void;
 
   dealloc(): void {
+    console.log("SelectTool dealloc()");
     this.states.forEach(state => state.dealloc());
     this.state.dealloc();
   }

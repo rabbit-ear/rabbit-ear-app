@@ -38,6 +38,11 @@ export const makeNumberedFilenames = (
     .map((num) => `${name}-${num}${extension}`);
 };
 
+export const getFileName = (filePath: string): string | undefined => {
+  const match = filePath.match(/[^\\/]+$/);
+  return match ? match[0] : undefined;
+};
+
 /**
  * @description Pick apart a file path into useful parts
  */

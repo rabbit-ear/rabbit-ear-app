@@ -18,7 +18,7 @@ export class ViewportManager {
 
   viewports: Viewport[] = $state([]);
 
-  activeViewport: Viewport | undefined = $state(undefined);
+  // activeViewport: Viewport | undefined = $state(undefined);
 
   viewportEvents: Map<Viewport, { [key: string]: EH }> = new Map();
 
@@ -74,7 +74,7 @@ export class ViewportManager {
       // viewport.didMount = undefined;
     }
     this.viewports.push(viewport);
-    this.ui.toolManager.getTool()?.bindTo(viewport);
+    // this.ui.toolManager.getTool()?.bindTo(viewport);
     this.ui.toolManager.viewportDidAdd(viewport);
 
     // this.bindViewport(viewport);
@@ -83,40 +83,62 @@ export class ViewportManager {
   }
 
   removeViewport(viewport: Viewport) {
-    const index = this.viewports.indexOf(viewport);
+    // const index = this.viewports.indexOf(viewport);
+    const index = this.viewports.findIndex(vp => vp === viewport);
     if (index === -1) { return; }
+    console.log(`ViewportManager removing viewport at index ${index}`);
     this.unbindViewport(viewport);
-    this.viewports.splice(index, 1);
+    // this.viewports.splice(index, 1);
+    this.viewports = this.viewports.filter(vp => vp !== viewport);
     // todo: should this be moved above the removal and be called WillRemove?
-    this.ui.toolManager.viewportDidRemove(viewport);
+    // this.ui.toolManager.viewportDidRemove(viewport);
   }
 
-  setActiveViewport(viewport: Viewport) {
-    this.activeViewport = viewport;
-    // this.ui.emit("activeViewportChange", viewport);
-  }
+  // setActiveViewport(viewport: Viewport) {
+  //   this.activeViewport = viewport;
+  //   // this.ui.emit("activeViewportChange", viewport);
+  // }
 
   unbindViewport(viewport: Viewport) {
-    console.log("ToolManager unbindViewport()");
+    console.log("ViewportManager unbindViewport()");
+    console.log(`  - number of viewports ${this.viewports.length}`);
+    console.log(`  - index of this viewport ${this.viewports.indexOf(viewport)}`);
+    console.log(`  - number of viewport events ${this.viewportEvents.size}`);
     const prevEvents = this.viewportEvents.get(viewport);
     if (prevEvents) {
-      console.log("events found");
+      console.log("  - events found");
+      console.log(`  - previous set of events ${Object.keys(prevEvents).reduce((a, b) => a + b, "")}`);
+      console.log(`  - viewport DOM element`, viewport.domElement);
+      this.viewports.forEach((vp, i) => {
+        console.log(`  - viewport[${i}] DOM element`, vp.domElement);
+      });
       // console.log(prevEvents);
       Object.keys(prevEvents)
         .forEach(key => viewport.domElement?.removeEventListener(key, prevEvents[key]));
+
+      // if (this.viewports[2]) {
+      //   Object.keys(prevEvents)
+      //     .forEach(key => this.viewports[2].domElement?.removeEventListener(key, prevEvents[key]));
+      // } else {
+      //   Object.keys(prevEvents)
+      //     .forEach(key => this.viewports[0].domElement?.removeEventListener(key, prevEvents[key]));
+      // }
+
+      this.viewportEvents.delete(viewport);
+      console.log(`  - number of viewport events (after delete) ${this.viewportEvents.size}`);
     } else {
-      console.log("no events found");
+      console.log("  - no events found");
     }
-    this.viewportEvents.delete(viewport);
   }
 
   bindViewport(viewport: Viewport) {
-    console.log("ToolManager bindViewport()");
+    console.log("ViewportManager bindViewport()");
     // console.log("ToolManager bindViewport() domElement", viewport, viewport.domElement);
     // const events: {[key: string]: (e: Event) => void } = {
     if (!viewport.domElement) { return; }
 
-    this.unbindViewport(viewport);
+    // todo: bring this back after debuggin
+    // this.unbindViewport(viewport);
 
     // const tm = this.ui.toolManager;
     const events: { [key: string]: EH } = {
@@ -139,35 +161,6 @@ export class ViewportManager {
     Object.keys(events).forEach(key => viewport.domElement?.addEventListener(key, events[key]));
     // Object.keys(events).forEach(key => console.log("add event listener", key, events[key]));
   }
-
-  // bindViewport(viewport: Viewport) {
-  //   if (!this.ui.toolManager.getTool() || !viewport.domElement) { return; }
-  //   // console.log("ToolManager bindViewport()");
-  //   // console.log("ToolManager bindViewport() domElement", viewport.domElement);
-  //   const onmousemove = (e: MouseEvent) => this.tool?.onmousemove?.(viewport, e);
-  //   const onmousedown = (e: MouseEvent) => this.tool?.onmousedown?.(viewport, e);
-  //   const onmouseup = (e: MouseEvent) => this.tool?.onmouseup?.(viewport, e);
-  //   const onmouseleave = (e: MouseEvent) => this.tool?.onmouseleave?.(viewport, e);
-  //   const onwheel = (e: WheelEvent) => this.tool?.onwheel?.(viewport, e);
-  //   const ontouchstart = (e: TouchEvent) => this.tool?.ontouchstart?.(viewport, e);
-  //   const ontouchend = (e: TouchEvent) => this.tool?.ontouchend?.(viewport, e);
-  //   const ontouchmove = (e: TouchEvent) => this.tool?.ontouchmove?.(viewport, e);
-  //   const ontouchcancel = (e: TouchEvent) => this.tool?.ontouchcancel?.(viewport, e);
-  //   const onkeydown = (e: KeyboardEvent) => this.tool?.onkeydown?.(viewport, e);
-  //   const onkeyup = (e: KeyboardEvent) => this.tool?.onkeyup?.(viewport, e);
-  //
-  //   viewport.domElement?.addEventListener("mousemove", onmousemove as EventHandler);
-  //   viewport.domElement?.addEventListener("mousedown", onmousedown as EventHandler);
-  //   viewport.domElement?.addEventListener("mouseup", onmouseup as EventHandler);
-  //   viewport.domElement?.addEventListener("mouseleave", onmouseleave as EventHandler);
-  //   viewport.domElement?.addEventListener("wheel", onwheel as EventHandler);
-  //   viewport.domElement?.addEventListener("touchstart", ontouchstart as EventHandler);
-  //   viewport.domElement?.addEventListener("touchend", ontouchend as EventHandler);
-  //   viewport.domElement?.addEventListener("touchmove", ontouchmove as EventHandler);
-  //   viewport.domElement?.addEventListener("touchcancel", ontouchcancel as EventHandler);
-  //   viewport.domElement?.addEventListener("keydown", onkeydown as EventHandler);
-  //   viewport.domElement?.addEventListener("keyup", onkeyup as EventHandler);
-  // }
 
   // replace(index: number, ViewClass: ModelViewportClassTypes): void {
   //   this.modelViewports

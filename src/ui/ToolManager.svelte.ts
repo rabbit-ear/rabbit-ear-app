@@ -24,25 +24,31 @@ export class ToolManager {
 
   getTool() { return this.tool; }
 
-  setToolWithName(name: string) {
-    // cleanup previous tool
+  unbindTool() {
     this.tool?.dealloc?.();
     this.unbindFromViewports.forEach(unbind => unbind());
     this.unbindFromViewports.clear();
+  }
 
+  setToolWithName(name: string) {
+    // cleanup previous tool
+    this.unbindTool();
     // get next tool
     const tool = Tools[name];
     if (!tool) { return; }
     this.tool = new tool();
-    console.log(this.tool);
+    // console.log(this.tool);
+    console.log(`ToolManager binding to ${this.ui.viewportManager.viewports.length} viewports`)
     this.ui.viewportManager.viewports.forEach(viewport => {
       const unbind = this.tool?.bindTo(viewport);
       if (!unbind) { return; }
+      console.log(" - adding unbind method");
       this.unbindFromViewports.set(viewport, unbind);
     });
   }
 
   viewportDidAdd(viewport: Viewport) {
+    console.log("ToolManager viewportDidAdd()");
     this.viewportDidRemove(viewport);
     const unbind = this.tool?.bindTo(viewport);
     if (!unbind) { return; }
@@ -50,6 +56,7 @@ export class ToolManager {
   }
 
   viewportDidRemove(viewport: Viewport) {
+    console.log("ToolManager viewportDidRemove()");
     const unbind = this.unbindFromViewports.get(viewport);
     if (!unbind) { return; }
     unbind();
