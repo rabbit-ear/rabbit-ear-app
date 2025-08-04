@@ -1,10 +1,13 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport.ts";
-import { unsetViewportEvents } from "../types.ts";
-// import ViewportPanel from "./Dropdown.svelte";
+import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./PanelComponent.svelte";
 import ViewportComponent from "./Component.svelte";
-import Settings from "./Settings.svelte.ts";
+import { Settings } from "./Settings.svelte.ts";
+import { View } from "./View.svelte.ts";
+import { Style } from "./Style.svelte.ts";
+import { Grid } from "./Grid.svelte.ts";
+import { Snap } from "./Snap.svelte.ts";
 
 export class SVGViewport implements Viewport {
   static name: string = "SVG Viewport";
@@ -15,12 +18,12 @@ export class SVGViewport implements Viewport {
   component: Component;
   // panel: Component;
 
+  dropdown: Component;
+
   domElement?: SVGSVGElement;
 
   // when this triggers, you are now able to access domElement
   didMount?: () => void;
-
-  // get domElement(): Element { return this.component.element; } 
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
   // currently, this is used by the tools to draw indicator marks.
@@ -37,27 +40,25 @@ export class SVGViewport implements Viewport {
 
   redraw?: () => void = $state();
 
+  grid: Grid;
+  snap: Snap;
+  style: Style;
+  view: View;
+
   // todo: somehow we need to be able to swap viewports (WebGL to SVG)
   // and carry over the style settings (view and render style).
   constructor() {
     this.component = ViewportComponent;
+    this.dropdown = Dropdown;
     // this.panel = ViewportPanel;
+    this.view = new View(this);
+    this.style = new Style(this);
+    this.grid = new Grid(this);
+    this.snap = new Snap(this);
   }
 
-  // onmousemove(e: MouseEvent) { context.ui?.toolManager.getTool()?.onmousemove?.(this, e); }
-  // onmousedown(e: MouseEvent) { context.ui?.toolManager.getTool()?.onmousedown?.(this, e); }
-  // onmouseup(e: MouseEvent) { context.ui?.toolManager.getTool()?.onmouseup?.(this, e); }
-  // onmouseleave(e: MouseEvent) { context.ui?.toolManager.getTool()?.onmouseleave?.(this, e); }
-  // onwheel(e: WheelEvent) { context.ui?.toolManager.getTool()?.onwheel?.(this, e); }
-  // ontouchstart(e: TouchEvent) { context.ui?.toolManager.getTool()?.ontouchstart?.(this, e); }
-  // ontouchend(e: TouchEvent) { context.ui?.toolManager.getTool()?.ontouchend?.(this, e); }
-  // ontouchmove(e: TouchEvent) { context.ui?.toolManager.getTool()?.ontouchmove?.(this, e); }
-  // ontouchcancel(e: TouchEvent) { context.ui?.toolManager.getTool()?.ontouchcancel?.(this, e); }
-  // onkeydown(e: KeyboardEvent) { context.ui?.toolManager.getTool()?.onkeydown?.(this, e); }
-  // onkeyup(e: KeyboardEvent) { context.ui?.toolManager.getTool()?.onkeyup?.(this, e); }
-
   unbindTool(): void {
-    unsetViewportEvents(this);
+    console.log("SVGViewport unbindTool()");
     this.layer = undefined;
     this.props = undefined;
   }

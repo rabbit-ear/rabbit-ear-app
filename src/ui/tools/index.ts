@@ -1,6 +1,6 @@
 import type { Tool } from "../tools/Tool.ts";
 // import circle from "./circle/index.ts";
-// import line from "./line/index.ts";
+import line from "./line/index.ts";
 // import rect from "./rect/index.ts";
 // import rotate from "./rotate/index.ts";
 // import scale from "./scale/index.ts";
@@ -18,7 +18,7 @@ type ToolConstructor<T extends Tool = Tool> = new () => T;
 
 const Tools: { [key: string]: ToolConstructor } = {
   // circle,
-  // line,
+  line,
   // rect,
   // rotate,
   // scale,

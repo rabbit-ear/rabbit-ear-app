@@ -3,12 +3,12 @@ import { boundingBox } from "rabbit-ear/math/polygon.js";
 import type { Deallocable } from "../../Deallocable.ts";
 import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import type { Viewport } from "../../../viewports/Viewport.ts";
+import type { ToolEvents } from "../../ToolEvents.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
-// import app from "../../../../app/App.svelte.ts";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
-import type { ToolEvents } from "../../ToolEvents.ts";
+// import context from "../../../../app/context.svelte.ts";
 
 export class SVGState implements Deallocable, ToolEvents {
   viewport: SVGViewport;

@@ -6,11 +6,10 @@ import {
   getStorageString,
 } from "../../../app/localStorage.svelte.ts";
 import context from "../../../app/context.svelte.ts";
-// import AppSettings from "../../../app/Settings.svelte.ts";
 
 // these are global view settings that apply to all instances of SVGViewport
 // accessible via the app: app.ui.types.SVGViewport.settings
-class Settings {
+export class Settings {
   // these are stored in local storage
 
   // is the Y axis on top (true) or on bottom (false)?
@@ -106,8 +105,6 @@ class Settings {
     this.unbind.forEach((fn) => fn());
   }
 };
-
-export default Settings;
 
 //class Settings {
 //  // is the Y axis on top (true) or on bottom (false)?

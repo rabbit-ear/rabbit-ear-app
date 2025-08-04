@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { VecLine2 } from "rabbit-ear/types.js";
-  import type { SVGViewport } from "../../viewport/SVGViewport/SVGViewport.svelte.ts";
+  import type { SVGViewport } from "../../viewports/SVGViewport/SVGViewport.svelte.ts";
 
   type PropsType = {
     viewport: SVGViewport;

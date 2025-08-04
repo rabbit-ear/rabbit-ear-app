@@ -1,6 +1,6 @@
 <script lang="ts">
   import context from "../../app/context.svelte.ts";
-  // import ViewportDropdown from "../panel/ViewportDropdown.svelte";
+  import ViewportDropdown from "../panels/ViewportDropdown.svelte";
   const viewports = $derived(context.ui?.viewportManager?.viewports || []);
 </script>
 
@@ -15,9 +15,11 @@
   <div class="canvases row gap">
     {#each viewports as viewport, index}
       <div class="canvas">
-        <!-- <ViewportDropdown {index} {viewport}> -->
-        <!--   <viewport.panel {viewport} /> -->
-        <!-- </ViewportDropdown> -->
+        {#if viewport.dropdown}
+          <ViewportDropdown {index} {viewport}>
+            <viewport.dropdown {viewport} />
+          </ViewportDropdown>
+        {/if}
         <viewport.component {viewport} />
       </div>
     {/each}
@@ -48,7 +50,8 @@
     /* todo: this needs to be dynamically calculated based on */
     /* whether or not the terminal or frames is visible */
     /*height: calc(100vh - 6rem - 6rem);*/
-    height: calc(100vh - 6rem);
+    /* height: calc(100vh - 6rem); */
+    height: calc(100vh - 1.5rem);
   }
 
   /*component wrapper is required because svg and canvas elements have*/

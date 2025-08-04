@@ -2,7 +2,7 @@
   import { untrack } from "svelte";
   //import type { ClassPanel } from "./ClassPanel.svelte.ts";
   //import type { SVGViewport } from "../SVGViewport.svelte.ts";
-  import settings from "./Settings.svelte.ts";
+  import { SVGViewport } from "./SVGViewport.svelte.ts";
   import { niceNumber } from "../../../general/epsilon.ts";
 
   //let { viewport }: { viewport: SVGViewport } = $props();
@@ -11,7 +11,7 @@
   let strokeWidthSlider = $state(5);
 
   $effect(() => {
-    settings.strokeWidthFactor = Math.pow(2, strokeWidthSlider) / 1e5;
+    SVGViewport.settings.strokeWidthFactor = Math.pow(2, strokeWidthSlider) / 1e5;
   });
 
   $effect(() => {
@@ -31,14 +31,19 @@
       strokeWidthSlider = Math.log2(strokeWidthGuess * 1e5);
       newStrokeWidth = Math.pow(2, strokeWidthSlider) / 1e5;
     });
-    settings.strokeWidthFactor = newStrokeWidth;
+    SVGViewport.settings.strokeWidthFactor = newStrokeWidth;
   });
 </script>
 
 <div class="column gap">
   <div class="row">
-    {#if settings.cursor}
-      <p>{niceNumber(settings.cursor[0], 4)}, {niceNumber(settings.cursor[1], 4)}</p>
+    {#if SVGViewport.settings.cursor}
+      <p>
+        {niceNumber(SVGViewport.settings.cursor[0], 4)}, {niceNumber(
+          SVGViewport.settings.cursor[1],
+          4,
+        )}
+      </p>
     {/if}
   </div>
 

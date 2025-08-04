@@ -1,3 +1,4 @@
+import type { FOLD } from "rabbit-ear/types.js";
 import { boundingBox } from "rabbit-ear/graph/boundary.js";
 import { cleanNumber as CleanNumber } from "rabbit-ear/general/number.js";
 import { Sqrt2LookupToFloat } from "./sqrt2.js";
@@ -11,7 +12,7 @@ import { Sqrt2LookupToFloat } from "./sqrt2.js";
  * @param {number} epsilonFactor the factor, to be multiplied by
  * the longest side length in the graph's bounding box.
  */
-export const findEpsilon = ({ vertices_coords }, epsilonFactor = 1e-4): number => {
+export const findEpsilon = ({ vertices_coords }: FOLD, epsilonFactor = 1e-4): number => {
   const bounds = boundingBox({ vertices_coords });
   const sideLength = Math.max(...bounds.span);
   return sideLength * epsilonFactor;

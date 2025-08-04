@@ -1,18 +1,12 @@
 import type { Component } from "svelte";
-import type {
-  IModelViewport,
-  ViewportMouseEvent,
-  ViewportWheelEvent,
-  ViewportTouchEvent,
-} from "../types.ts";
-import { unsetViewportEvents } from "../types.ts";
+import type { Viewport } from "../Viewport";
 // import ViewportComponent from "./ViewportComponent.svelte";
 // import Dropdown from "./Dropdown.svelte";
 // import Panel from "./Panel.svelte";
 
 const settings = {};
 
-export class WebGLViewport implements IModelViewport {
+export class WebGLViewport implements Viewport {
   static settings = settings;
   // static panel: Component = Panel;
 
@@ -20,18 +14,6 @@ export class WebGLViewport implements IModelViewport {
   panel: Component;
 
   redraw?: () => void = $state();
-
-  onmousemove?: (event: ViewportMouseEvent) => void;
-  onmousedown?: (event: ViewportMouseEvent) => void;
-  onmouseup?: (event: ViewportMouseEvent) => void;
-  onmouseleave?: (event: ViewportMouseEvent) => void;
-  onwheel?: (event: ViewportWheelEvent) => void;
-  ontouchstart?: (event: ViewportTouchEvent) => void;
-  ontouchend?: (event: ViewportTouchEvent) => void;
-  ontouchmove?: (event: ViewportTouchEvent) => void;
-  ontouchcancel?: (event: ViewportTouchEvent) => void;
-  onkeydown?: (event: KeyboardEvent) => void;
-  onkeyup?: (event: KeyboardEvent) => void;
 
   // layer?: unknown = $state();
   // props?: unknown = $state();
@@ -43,7 +25,6 @@ export class WebGLViewport implements IModelViewport {
   }
 
   unbindTool(): void {
-    unsetViewportEvents(this);
   }
 
   resetView(): void {
@@ -51,7 +32,7 @@ export class WebGLViewport implements IModelViewport {
   }
 
   dealloc(): void {
-    this.effects.forEach((cleanup) => cleanup());
+    // this.effects.forEach((cleanup) => cleanup());
   }
 
   uiEpsilonFactor = 0.01;

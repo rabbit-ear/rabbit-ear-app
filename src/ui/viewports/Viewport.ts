@@ -8,6 +8,9 @@ export abstract class Viewport {
   // an optional panel associated with this viewport.
   abstract panel?: Component;
 
+  // an optional panel placed inside the viewport, under a dropdown menu
+  abstract dropdown?: Component;
+
   // the Svelte component to be instanced as one of the App's display canvases
   abstract component: Component;
 
@@ -23,8 +26,4 @@ export abstract class Viewport {
   // called when removed from the screen
   abstract dealloc: () => void;
 }
-
-// export abstract class ModelViewport extends Viewport {
-//
-// }
 

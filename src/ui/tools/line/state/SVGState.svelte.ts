@@ -1,18 +1,20 @@
 import type { VecLine2 } from "rabbit-ear/types.js";
 import { pointsToLine2 } from "rabbit-ear/math/convert.js";
-import type { Deallocable } from "../../UITool.ts";
-import type { SVGViewport } from "../../../viewport/SVGViewport/SVGViewport.svelte.ts";
-import { SVGEvents } from "../events/SVGEvents.ts";
+import type { Viewport } from "../../../viewports/Viewport.ts";
+import type { Deallocable } from "../../Deallocable.ts";
+import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
+import type { ToolEvents } from "../../ToolEvents.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
 import SVGLayer from "../SVGLayer.svelte";
-import app from "../../../../app/App.svelte.ts";
+import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
+import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
+import context from "../../../../app/context.svelte.ts";
 
-export class SVGState implements Deallocable {
+export class SVGState implements Deallocable, ToolEvents {
   viewport: SVGViewport;
   globalState: GlobalState;
   touches: SVGTouches;
-  events: SVGEvents;
   unsub: (() => void)[] = [];
 
   constructor(viewport: SVGViewport, globalState: GlobalState) {
@@ -20,7 +22,6 @@ export class SVGState implements Deallocable {
     this.globalState = globalState;
 
     this.touches = new SVGTouches(this.viewport);
-    this.events = new SVGEvents(this.viewport, this.touches);
     this.unsub.push(this.makeLine());
     this.unsub.push(this.preventBadInput());
 
@@ -89,6 +90,41 @@ export class SVGState implements Deallocable {
     this.segmentPoints && this.segmentPoints.length < 2 ? undefined : this.segmentPoints,
   );
 
+  onmousemove(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [x, y]);
+    this.touches.move = buttons ? undefined : point;
+    this.touches.drag = buttons ? point : undefined;
+    // // todo change Settings to not export a default, get the type here.
+    // const panel = (this.viewport.constructor as typeof SVGViewport).settings;
+    // panel.cursor = point;
+  };
+
+  onmousedown(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [x, y]);
+    this.touches.move = buttons ? undefined : point;
+    this.touches.drag = buttons ? point : undefined;
+    this.touches.addPress(point);
+  };
+
+  onmouseup(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [x, y]);
+    this.touches.move = buttons ? undefined : point;
+    this.touches.drag = buttons ? point : undefined;
+    this.touches.addRelease(point);
+  };
+
+  // new plan for onwheel
+  // all tools must implement the "zoomTool.onwheel?.(event);" behavior.
+  // there is no longer an app-wide fallthrough that executes that method
+  // if no tool wheel event exists. the tool must specify the behavior explicitly.
+
+  onwheel(viewport: Viewport, { x, y, deltaY }: WheelEvent): void {
+    const point = getSVGViewportPoint(viewport, [x, y]);
+    wheelEventZoomMatrix(this.viewport, { point, deltaY });
+    // const panel = (this.viewport.constructor as typeof SVGViewport).settings;
+    // panel.cursor = point;
+  };
+
   preventBadInput(): () => void {
     return $effect.root(() => {
       $effect(() => {
@@ -99,7 +135,7 @@ export class SVGState implements Deallocable {
           this.touches.reset();
         }
       });
-      return () => {};
+      return () => { };
     });
   }
 
@@ -112,12 +148,12 @@ export class SVGState implements Deallocable {
           this.segment
         ) {
           const [[x1, y1], [x2, y2]] = this.segment;
-          app.invoker.executeJavascript(`addSegment(${[x1, y1, x2, y2].join(", ")})`);
-          //app.model.addLine(x1, y1, x2, y2);
+          // context.invoker.executeJavascript(`addSegment(${[x1, y1, x2, y2].join(", ")})`);
+          // // context.model.addLine(x1, y1, x2, y2);
           this.touches.reset();
         }
       });
-      return () => {};
+      return () => { };
     });
   }
 }

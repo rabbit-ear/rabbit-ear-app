@@ -1,7 +1,7 @@
 import type { Viewport } from "./Viewport";
 import { SVGViewport } from "./SVGViewport/SVGViewport.svelte";
 import { WebGLViewport } from "./WebGLViewport/WebGLViewport.svelte";
-import { FilesViewport } from "./FilesViewport/FilesViewport.svelte";
+import { StatusViewport } from "./StatusViewport/StatusViewport.svelte";
 
 // the exported type is not a typeof Viewport, because Viewport
 // is an abstract class, and we will be instancing actual
@@ -12,7 +12,7 @@ type ViewportConstructor<T extends Viewport = Viewport> = new () => T;
 const Viewports: { [key: string]: ViewportConstructor } = {
   SVGViewport,
   WebGLViewport,
-  FilesViewport,
+  StatusViewport,
 };
 
 export default Viewports;
