@@ -5,18 +5,19 @@
 
 <div class="row toggle-row">
   <button
-    class={SVGViewport.settings.tiling === "triangle" ? "highlighted" : ""}
-    onclick={(): string => (SVGViewport.settings.tiling = "triangle")}>triangle</button>
+    class={SVGViewport.settings.tiling.value === "triangle" ? "highlighted" : ""}
+    onclick={(): string => (SVGViewport.settings.tiling.value = "triangle")}
+    >triangle</button>
   <button
-    class={SVGViewport.settings.tiling === "square" ? "highlighted" : ""}
-    onclick={(): string => (SVGViewport.settings.tiling = "square")}>rect</button>
+    class={SVGViewport.settings.tiling.value === "square" ? "highlighted" : ""}
+    onclick={(): string => (SVGViewport.settings.tiling.value = "square")}>rect</button>
 </div>
 
 <div class="row">
   <input
     type="checkbox"
     id="checkbox-show-grid"
-    bind:checked={SVGViewport.settings.showGrid} /><label for="checkbox-show-grid"
+    bind:checked={SVGViewport.settings.showGrid.value} /><label for="checkbox-show-grid"
     >show grid</label>
 </div>
 
@@ -24,7 +25,7 @@
   <input
     type="checkbox"
     id="checkbox-show-axes"
-    bind:checked={SVGViewport.settings.showAxes} /><label for="checkbox-show-axes"
+    bind:checked={SVGViewport.settings.showAxes.value} /><label for="checkbox-show-axes"
     >show axes</label>
 </div>
 

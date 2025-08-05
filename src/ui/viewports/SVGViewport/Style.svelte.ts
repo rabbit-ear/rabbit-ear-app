@@ -7,12 +7,12 @@ export class Style {
     this.viewport = viewport;
   }
 
-  circleRadius = $derived.by(() => this.viewport.view.vmin * SVGViewport.settings.vertexRadiusFactor);
+  circleRadius = $derived.by(() => this.viewport.view.vmin * SVGViewport.settings.vertexRadiusFactor.value);
 
   strokeWidth = $derived.by(() =>
     Math.max(
-      SVGViewport.settings.strokeWidthAbsoluteMin,
-      this.viewport.view.vmin * SVGViewport.settings.strokeWidthFactor,
+      SVGViewport.settings.strokeWidthAbsoluteMin.value,
+      this.viewport.view.vmin * SVGViewport.settings.strokeWidthFactor.value,
     ),
   );
 

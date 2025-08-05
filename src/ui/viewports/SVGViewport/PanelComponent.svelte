@@ -1,7 +1,6 @@
 <script lang="ts">
   import { untrack } from "svelte";
   //import type { ClassPanel } from "./ClassPanel.svelte.ts";
-  //import type { SVGViewport } from "../SVGViewport.svelte.ts";
   import { SVGViewport } from "./SVGViewport.svelte.ts";
   import { niceNumber } from "../../../general/epsilon.ts";
 
@@ -11,7 +10,7 @@
   let strokeWidthSlider = $state(5);
 
   $effect(() => {
-    SVGViewport.settings.strokeWidthFactor = Math.pow(2, strokeWidthSlider) / 1e5;
+    SVGViewport.settings.strokeWidthFactor.value = Math.pow(2, strokeWidthSlider) / 1e5;
   });
 
   $effect(() => {
@@ -31,7 +30,8 @@
       strokeWidthSlider = Math.log2(strokeWidthGuess * 1e5);
       newStrokeWidth = Math.pow(2, strokeWidthSlider) / 1e5;
     });
-    SVGViewport.settings.strokeWidthFactor = newStrokeWidth;
+    // SVGViewport.settings.strokeWidthFactor = newStrokeWidth;
+    SVGViewport.settings.strokeWidthFactor.value = newStrokeWidth;
   });
 </script>
 

@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { SVGViewport } from "./SVGViewport.svelte.ts";
-  // import GridLayer from "./GridLayer.svelte";
+  import { SVGViewport } from "./SVGViewport.svelte.ts";
   import SVGCanvas from "../../Components/SVG/SVGCanvas.svelte";
+  import GridLayer from "./GridLayer.svelte";
   // import SVGShapes from "../../Components/SVG/SVGShapes.svelte";
   // import SVGFOLD from "../../Components/SVG/SVGFOLD.svelte";
 
@@ -62,22 +62,20 @@
 
 <svelte:window {onresize} />
 
-{#snippet contents()}{/snippet}
-
-<!-- {#snippet contents()} -->
-<!--   {#if settings.showGrid} -->
-<!--     <GridLayer {viewport} /> -->
-<!--   {/if} -->
-<!--   <SVGFOLD graph={viewport.model?.graph} /> -->
-<!--   <SVGShapes shapes={viewport.model?.shapes} class="model-layer" /> -->
-<!--   {#if SVGToolLayer} -->
-<!--     <g -->
-<!--       class="tool-layer" -->
-<!--       style={`--stroke-dash-length: ${viewport.style.strokeDashLength};`}> -->
-<!--       <SVGToolLayer class="hello-tool-layer" {viewport} {...svgToolLayerProps} /> -->
-<!--     </g> -->
-<!--   {/if} -->
-<!-- {/snippet} -->
+{#snippet contents()}
+  {#if SVGViewport.settings.showGrid}
+    <GridLayer {viewport} />
+  {/if}
+  <!-- <SVGFOLD graph={viewport.model?.graph} /> -->
+  <!-- <SVGShapes shapes={viewport.model?.shapes} class="model-layer" /> -->
+  <!-- {#if SVGToolLayer} -->
+  <!--   <g -->
+  <!--     class="tool-layer" -->
+  <!--     style={`--stroke-dash-length: ${viewport.style.strokeDashLength};`}> -->
+  <!--     <SVGToolLayer class="hello-tool-layer" {viewport} {...svgToolLayerProps} /> -->
+  <!--   </g> -->
+  <!-- {/if} -->
+{/snippet}
 
 <SVGCanvas bind:svg fill="none" stroke="white" {...props}>
   <!-- viewBox={viewport.view.viewBoxString} -->

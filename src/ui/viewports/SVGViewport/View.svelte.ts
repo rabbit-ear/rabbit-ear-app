@@ -14,7 +14,7 @@ import context from "../../../app/context.svelte.ts";
 export class View {
   viewport: SVGViewport;
   // is the Y axis on top (true) or on bottom (false)?
-  rightHanded: boolean = $derived(context.ui?.rightHanded ?? true);
+  rightHanded: boolean = $derived(context.ui?.settings.rightHanded.value ?? true);
 
   canvasSize: [number, number] | undefined = $state(undefined);
 

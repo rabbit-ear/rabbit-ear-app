@@ -22,7 +22,7 @@ export const makeIntervals = (
   // todo: got an "invalid array length" error.
   try {
     return Array.from(Array(count + 1)).map((_, i) => offset + spacing * i);
-  } catch (err) {
+  } catch {
     console.log("ERROR: makeIntervals", start, size, spacing, count, offset);
     return [];
   }

@@ -34,21 +34,3 @@ export const getSVGViewportPoint = (viewport: Viewport, point: [number, number])
   return convertToViewBox(svg, point);
 }
 
-const formatMouseEvent = (viewport: Viewport, e: MouseEvent): ViewportMouseEvent =>
-  Object.assign(e, {
-    point: unwrap(convertToViewBox(getSVG(e), [e.x, e.y])),
-  });
-
-const formatTouchEvent = (e: TouchEvent): ViewportTouchEvent =>
-  Object.assign(e, {
-    point: unwrap(
-      convertToViewBox(getSVG(e), [e.touches[0].clientX, e.touches[0].clientY]),
-    ),
-  });
-
-const formatWheelEvent = (e: WheelEvent): ViewportWheelEvent =>
-  Object.assign(e, {
-    point: convertToViewBox(getSVG(e), [e.x, e.y]),
-  });
-
-

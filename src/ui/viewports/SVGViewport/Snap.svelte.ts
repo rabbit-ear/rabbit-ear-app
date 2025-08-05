@@ -22,7 +22,7 @@ export class Snap {
 
   // This is the radius of the snapping range to the
   // nearest snappable point, it is dependent upon the current view zoom.
-  snapRadius: number = $derived.by(() => this.viewport.view.vmax * SVGViewport.settings.snapRadiusFactor);
+  snapRadius: number = $derived.by(() => this.viewport.view.vmax * SVGViewport.settings.snapRadiusFactor.value);
 
   points: [number, number][] = $state([]);
 
@@ -37,7 +37,7 @@ export class Snap {
     point: [number, number],
     snapRadius: number,
   ) => [number, number] | undefined = $derived.by(() => {
-    switch (SVGViewport.settings.tiling) {
+    switch (SVGViewport.settings.tiling.value) {
       case "triangle":
         return triangleGridSnapFunction;
       case "square":
