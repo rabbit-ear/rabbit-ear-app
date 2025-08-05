@@ -5,7 +5,7 @@ export class Settings {
   // <boolean> is the Y axis on top (true) or on bottom (false)?
   rightHanded = new LocalStorageItem<boolean>("ui", "rightHanded", true);
 
-  newEdgeAssignment = new LocalStorageItem<string>("ui", "newEdgeAssignment", "F");
+  // newEdgeAssignment = new LocalStorageItem<string>("ui", "newEdgeAssignment", "F");
 
   layersAutoSolve = new LocalStorageItem<boolean>("ui", "layersAutoSolve", true);
 }

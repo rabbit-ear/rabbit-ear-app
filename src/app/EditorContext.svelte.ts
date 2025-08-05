@@ -1,11 +1,13 @@
 import { UI } from "../ui/UI.svelte.ts";
 import { FileManager } from "./FileManager.svelte.ts";
 import { FileController } from "./FileController.svelte.ts";
+import { Settings } from "./Settings.svelte.ts";
 import { UNTITLED_FILENAME, APP_NAME } from "../system/constants.ts";
 
 export class EditorContext {
   readonly fileManager: FileManager;
   readonly fileController: FileController;
+  settings: Settings;
   // UI is optional, the app is able to run without a UI.
   readonly ui: UI | undefined;
 
@@ -31,6 +33,7 @@ export class EditorContext {
   constructor() {
     this.fileManager = new FileManager();
     this.fileController = new FileController(this.fileManager);
+    this.settings = new Settings();
     this.ui = new UI();
   }
 

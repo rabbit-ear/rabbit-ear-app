@@ -1,10 +1,7 @@
 // import { untrack } from "svelte";
 import type { UI } from "./UI.svelte.ts";
-// import type { ModelViewportType } from "../ui/viewports/types.ts";
 import type { Viewport } from "./viewports/Viewport.ts";
-// import { ModelViewports } from "./viewports.ts";
-// import { TerminalViewport } from "./TerminalViewport/TerminalViewport.svelte.ts";
-// import { ScriptViewport } from "./ScriptViewport/ScriptViewport.svelte.ts";
+import Viewports from "./viewports/index.ts";
 
 // Event handlers are typed with their event object as either:
 // MouseEvent, TouchEvent, WheelEvent, or KeyboardEvent
@@ -21,10 +18,6 @@ export class ViewportManager {
   // activeViewport: Viewport | undefined = $state(undefined);
 
   viewportEvents: Map<Viewport, { [key: string]: EH }> = new Map();
-
-  // can be included in viewports, but we need to figure out
-  // how to auto-place them in their correct location on screen
-  // terminal?: TerminalViewport;
 
   // #makeToolViewportEffect = (): (() => void) =>
   //   $effect.root(() => {
@@ -56,17 +49,9 @@ export class ViewportManager {
     //this.frames = new FramesViewport();
   }
 
-  // add(ViewClass?: ModelViewportType): void {
-  //   if (!ViewClass) {
-  //     // this.viewports.push(new ModelViewports[0]());
-  //   } else {
-  //     this.viewports.push(new ViewClass());
-  //   }
-  // }
-
   addViewport(viewport: Viewport) {
-    console.log("add viewport", viewport);
-
+    // this block needs to happen once viewport.domElement exists,
+    // which only happens after Svelte mounts, via this callback didMount.
     viewport.didMount = () => {
       console.log("viewport did mount callback, mounting.");
       this.unbindViewport(viewport);
@@ -74,24 +59,22 @@ export class ViewportManager {
       // viewport.didMount = undefined;
     }
     this.viewports.push(viewport);
-    // this.ui.toolManager.getTool()?.bindTo(viewport);
     this.ui.toolManager.viewportDidAdd(viewport);
-
-    // this.bindViewport(viewport);
-    // setTimeout(() => this.bindViewport(viewport), 200);
-    // this.ui.toolManager.registerViewport(viewport);
   }
 
   removeViewport(viewport: Viewport) {
-    // const index = this.viewports.indexOf(viewport);
-    const index = this.viewports.findIndex(vp => vp === viewport);
+    const index = this.viewports.indexOf(viewport);
+    // const index = this.viewports.findIndex(vp => vp === viewport);
     if (index === -1) { return; }
-    console.log(`ViewportManager removing viewport at index ${index}`);
+    // console.log(`ViewportManager removing viewport at index ${index}`);
     this.unbindViewport(viewport);
-    // this.viewports.splice(index, 1);
-    this.viewports = this.viewports.filter(vp => vp !== viewport);
+    this.viewports.splice(index, 1);
     // todo: should this be moved above the removal and be called WillRemove?
     // this.ui.toolManager.viewportDidRemove(viewport);
+  }
+
+  replaceViewport(index: number, ViewportClass: Viewport) {
+    // removeViewportAtIndex(index);
   }
 
   // setActiveViewport(viewport: Viewport) {
@@ -100,39 +83,18 @@ export class ViewportManager {
   // }
 
   unbindViewport(viewport: Viewport) {
-    console.log("ViewportManager unbindViewport()");
-    console.log(`  - number of viewports ${this.viewports.length}`);
-    console.log(`  - index of this viewport ${this.viewports.indexOf(viewport)}`);
-    console.log(`  - number of viewport events ${this.viewportEvents.size}`);
     const prevEvents = this.viewportEvents.get(viewport);
     if (prevEvents) {
-      console.log("  - events found");
-      console.log(`  - previous set of events ${Object.keys(prevEvents).reduce((a, b) => a + b, "")}`);
-      console.log(`  - viewport DOM element`, viewport.domElement);
-      this.viewports.forEach((vp, i) => {
-        console.log(`  - viewport[${i}] DOM element`, vp.domElement);
-      });
-      // console.log(prevEvents);
       Object.keys(prevEvents)
         .forEach(key => viewport.domElement?.removeEventListener(key, prevEvents[key]));
-
-      // if (this.viewports[2]) {
-      //   Object.keys(prevEvents)
-      //     .forEach(key => this.viewports[2].domElement?.removeEventListener(key, prevEvents[key]));
-      // } else {
-      //   Object.keys(prevEvents)
-      //     .forEach(key => this.viewports[0].domElement?.removeEventListener(key, prevEvents[key]));
-      // }
-
       this.viewportEvents.delete(viewport);
-      console.log(`  - number of viewport events (after delete) ${this.viewportEvents.size}`);
     } else {
-      console.log("  - no events found");
+      // console.log("  - no events found");
     }
   }
 
   bindViewport(viewport: Viewport) {
-    console.log("ViewportManager bindViewport()");
+    // console.log("ViewportManager bindViewport()");
     // console.log("ToolManager bindViewport() domElement", viewport, viewport.domElement);
     // const events: {[key: string]: (e: Event) => void } = {
     if (!viewport.domElement) { return; }

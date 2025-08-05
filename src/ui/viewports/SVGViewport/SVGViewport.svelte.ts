@@ -15,6 +15,8 @@ export class SVGViewport implements Viewport {
   static panel: Component = ClassPanel;
   // static panel: Panel = new ClassPanel();
 
+  id: string;
+
   component: Component;
   // panel: Component;
 
@@ -48,6 +50,7 @@ export class SVGViewport implements Viewport {
   // todo: somehow we need to be able to swap viewports (WebGL to SVG)
   // and carry over the style settings (view and render style).
   constructor() {
+    this.id = String(Math.random());
     this.component = ViewportComponent;
     this.dropdown = Dropdown;
     // this.panel = ViewportPanel;

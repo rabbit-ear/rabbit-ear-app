@@ -23,6 +23,8 @@ export class FileDocument {
   // the contents of the data model directly.
   // all modifications should use this.updateModel so the dirty flag is set.
   getModel(): Readonly<FileModel> { return this.dataModel; }
+  getUndoStack(): Readonly<Command[]> { return this.undoStack; }
+  getRedoStack(): Readonly<Command[]> { return this.redoStack; }
 
   constructor(path: string | undefined, initialData: FileModel) {
     this.filePath = path;

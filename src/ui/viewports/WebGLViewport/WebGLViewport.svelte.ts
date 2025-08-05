@@ -10,6 +10,8 @@ export class WebGLViewport implements Viewport {
   static settings = settings;
   // static panel: Component = Panel;
 
+  id: string;
+
   component: Component;
   panel: Component;
 
@@ -19,6 +21,7 @@ export class WebGLViewport implements Viewport {
   // props?: unknown = $state();
 
   constructor() {
+    this.id = String(Math.random());
     // this.component = ViewportComponent;
     // this.panel = Dropdown;
     // this.setModelStyle(this.model.style);

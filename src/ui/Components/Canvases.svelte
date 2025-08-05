@@ -13,7 +13,7 @@
   {/if}
 
   <div class="canvases row gap">
-    {#each viewports as viewport, index}
+    {#each viewports as viewport, index (viewport.id)}
       <div class="canvas">
         {#if viewport.dropdown}
           <ViewportDropdown {index} {viewport}>

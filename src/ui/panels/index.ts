@@ -4,7 +4,7 @@ import ViewportsPanel from "./ViewportsPanel.svelte";
 // import AppPanel from "./AppPanel/AppPanel.svelte";
 // import FramesPanel from "./FramesPanel/FramesPanel.svelte";
 // import FramePanel from "./FramePanel/FramePanel.svelte";
-// import HistoryPanel from "./HistoryPanel/HistoryPanel.svelte";
+import HistoryPanel from "./HistoryPanel.svelte";
 // import ModelsPanel from "./ModelsPanel/ModelsPanel.svelte";
 
 const Panels: { name: string, component: Component }[] = [
@@ -12,7 +12,7 @@ const Panels: { name: string, component: Component }[] = [
   // { name: "App", component: AppPanel },
   // { name: "Frames", component: FramesPanel },
   // { name: "Frame", component: FramePanel },
-  // { name: "History", component: HistoryPanel },
+  { name: "History", component: HistoryPanel },
   // { name: "View Models", component: ModelsPanel },
 ];
 

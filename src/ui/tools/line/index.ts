@@ -63,7 +63,6 @@ class LineTool implements Tool {
   // onkeyup?: (viewport: Viewport, event: KeyboardEvent) => void;
 
   dealloc(): void {
-    console.log("LineTool dealloc()");
     this.states.forEach(state => state.dealloc());
     this.state.dealloc();
   }

@@ -63,7 +63,7 @@
 <svelte:window {onresize} />
 
 {#snippet contents()}
-  {#if SVGViewport.settings.showGrid}
+  {#if SVGViewport.settings.showGrid.value}
     <GridLayer {viewport} />
   {/if}
   <!-- <SVGFOLD graph={viewport.model?.graph} /> -->

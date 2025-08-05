@@ -5,6 +5,10 @@ export abstract class Viewport {
   static name?: string;
   static panel?: Component;
 
+  // a unique UUID for each instance
+  // this is required for the Svelte {#each} loop to prevent element reuse
+  abstract id: string;
+
   // an optional panel associated with this viewport.
   abstract panel?: Component;
 

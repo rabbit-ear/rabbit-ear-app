@@ -64,14 +64,14 @@ export class SVGState implements Deallocable, ToolEvents {
 
   onmousemove(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
     const point = getSVGViewportPoint(viewport, [x, y]);
-    console.log("mousemove", viewport, point);
+    // console.log("mousemove", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
   }
 
   onmousedown(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
     const point = getSVGViewportPoint(viewport, [x, y]);
-    console.log("mousedown", viewport, point);
+    // console.log("mousedown", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.press = point;
@@ -79,7 +79,7 @@ export class SVGState implements Deallocable, ToolEvents {
 
   onmouseup(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
     const point = getSVGViewportPoint(viewport, [x, y]);
-    console.log("mouseup", viewport, point);
+    // console.log("mouseup", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.release = point;
