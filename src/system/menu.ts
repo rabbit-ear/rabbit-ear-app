@@ -1,5 +1,5 @@
 import { Menu, MenuItem, Submenu, PredefinedMenuItem } from "@tauri-apps/api/menu";
-import { quitApp } from "../interface/quit.svelte";
+import { quitApp } from "./quit.ts";
 import context from "../app/context.svelte.ts";
 
 // Will become the application submenu on MacOS

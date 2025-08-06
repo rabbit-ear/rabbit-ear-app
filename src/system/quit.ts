@@ -1,6 +1,4 @@
 import { exit } from "@tauri-apps/plugin-process";
-// import { saveFileAs } from "./save.svelte.ts";
-// import { unsavedChangesDialog } from "../system/dialogs.ts";
 import context from "../app/context.svelte.ts";
 
 /**
@@ -23,28 +21,6 @@ export const quitApp = async (): Promise<void> => {
     exit();
   }
 };
-
-// export const quitApp = async (): Promise<void> => {
-//   // console.log("quit app request");
-//   if (file.modified) {
-//     // todo: when 3-button dialogs are re-introduced this needs updating
-//     const response = await unsavedChangesDialog();
-//     if (response === false) {
-//       const info = await saveFileAs();
-//       // save was cancelled
-//       if (info === undefined) {
-//         return;
-//       }
-//       console.log(info);
-//     }
-//     // temporarily mute "cance" until Tauri has 3-button dialogs
-//     // if (response === 1) {
-//     //   return;
-//     // }
-//   }
-//   quitInProgress = true;
-//   exit();
-// };
 
 /**
  * @description Protection for quitting the app with the "X" or red circle.

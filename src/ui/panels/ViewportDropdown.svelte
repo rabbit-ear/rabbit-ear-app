@@ -14,6 +14,11 @@
 
   const swapSVG = (): void => context.ui?.viewportManager.replace(index, SVGViewport);
   const swapWebGL = (): void => context.ui?.viewportManager.replace(index, WebGLViewport);
+  const removeViewport = () => {
+    if (viewport) {
+      context.ui?.viewportManager.removeViewport(viewport);
+    }
+  };
 
   let pad = "0.5rem";
   // background-color: #0002;
@@ -22,6 +27,12 @@
 
 <Wrapper title={"▼"} {style} expanded={false}>
   <div class="column gap">
+    <div class="row">
+      <button onclick={removeViewport}>- Remove</button>
+    </div>
+
+    <hr />
+
     <div class="row gap">
       <p>View Model</p>
       <div class="row toggle-row">

@@ -8,7 +8,7 @@ import line from "./line/index.ts";
 // import segment from "./segment/index.ts";
 import select from "./select/index.ts";
 // import translate from "./translate/index.ts";
-// import zoom from "./zoom/index.ts";
+import zoom from "./zoom/index.ts";
 
 // the exported type is not a typeof Tool, because Tool
 // is an abstract class, and we will be instancing actual
@@ -26,7 +26,7 @@ const Tools: { [key: string]: ToolConstructor } = {
   // segment,
   select,
   // translate,
-  // zoom,
+  zoom,
 };
 
 export default Tools;

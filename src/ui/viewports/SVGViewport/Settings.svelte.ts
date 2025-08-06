@@ -1,5 +1,5 @@
 // import Keyboard from "../../../../app/Keyboard.svelte.ts";
-// import context from "../../../app/context.svelte.ts";
+import context from "../../../app/context.svelte.ts";
 import { LocalStorageItem } from "../../../app/LocalStorageItem.svelte.ts";
 
 // these are global view settings that apply to all instances of SVGViewport
@@ -28,7 +28,7 @@ export class Settings {
   vertexRadiusFactor = new LocalStorageItem<number>("ui/svg", "vertexRadiusFactor", 0.00666);
   // radialSnap: boolean = $derived(Keyboard.shift);
 
-  // rightHanded: boolean = $derived(context.ui?.settings.rightHanded.value ?? true);
+  rightHanded: boolean = $derived(context.ui?.settings.rightHanded.value ?? true);
 
   constructor() { }
 

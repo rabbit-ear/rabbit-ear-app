@@ -16,16 +16,16 @@ export class SVGViewport implements Viewport {
   // static panel: Panel = new ClassPanel();
 
   id: string;
-
   component: Component;
   // panel: Component;
-
   dropdown: Component;
-
   domElement?: SVGSVGElement;
-
-  // when this triggers, you are now able to access domElement
   didMount?: () => void;
+
+  grid: Grid;
+  snap: Snap;
+  style: Style;
+  view: View;
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
   // currently, this is used by the tools to draw indicator marks.
@@ -37,15 +37,9 @@ export class SVGViewport implements Viewport {
   // built-in error correcting (like snapping, for example), and this behavior
   // is zoom-level dependent. Use this variable to get an appropriate error-
   // correcting value.
-  // uiEpsilon: number = $derived.by(() => this.view.vmax * settings.uiEpsilonFactor);
-  uiEpsilon: number = 1e-2;
+  uiEpsilon: number = $derived.by(() => this.view.vmax * SVGViewport.settings.uiEpsilonFactor.value);
 
   redraw?: () => void = $state();
-
-  grid: Grid;
-  snap: Snap;
-  style: Style;
-  view: View;
 
   // todo: somehow we need to be able to swap viewports (WebGL to SVG)
   // and carry over the style settings (view and render style).

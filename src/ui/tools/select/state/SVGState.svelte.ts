@@ -8,6 +8,7 @@ import { GlobalState } from "./GlobalState.svelte.ts";
 import { SVGTouches } from "./SVGTouches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
+import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
 // import context from "../../../../app/context.svelte.ts";
 
 export class SVGState implements Deallocable, ToolEvents {
@@ -62,28 +63,48 @@ export class SVGState implements Deallocable, ToolEvents {
     this.touches.reset();
   }
 
-  onmousemove(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
-    const point = getSVGViewportPoint(viewport, [x, y]);
+  onmousemove(viewport: Viewport, { clientX, clientY, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
     // console.log("mousemove", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
   }
 
-  onmousedown(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
-    const point = getSVGViewportPoint(viewport, [x, y]);
+  onmousedown(viewport: Viewport, { clientX, clientY, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
     // console.log("mousedown", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.press = point;
   }
 
-  onmouseup(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
-    const point = getSVGViewportPoint(viewport, [x, y]);
+  onmouseup(viewport: Viewport, { clientX, clientY, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
     // console.log("mouseup", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.release = point;
   }
+
+  // new plan for onwheel
+  // all tools must implement the "zoomTool.onwheel?.(event);" behavior.
+  // there is no longer an app-wide fallthrough that executes that method
+  // if no tool wheel event exists. the tool must specify the behavior explicitly.
+  onwheel(viewport: Viewport, { clientX, clientY, deltaY }: WheelEvent): void {
+    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
+    wheelEventZoomMatrix(this.viewport, { point, deltaY });
+    // const panel = (this.viewport.constructor as typeof SVGViewport).settings;
+    // panel.cursor = point;
+  };
+
+  // // touch screen events
+  // ontouchstart?: (viewport: Viewport, event: TouchEvent) => void;
+  // ontouchend?: (viewport: Viewport, event: TouchEvent) => void;
+  // ontouchmove?: (viewport: Viewport, event: TouchEvent) => void;
+  // ontouchcancel?: (viewport: Viewport, event: TouchEvent) => void;
+  // // keyboard events
+  // onkeydown?: (viewport: Viewport, event: KeyboardEvent) => void;
+  // onkeyup?: (viewport: Viewport, event: KeyboardEvent) => void;
 
   doSelection(): () => void {
     return $effect.root(() => {

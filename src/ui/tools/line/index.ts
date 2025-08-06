@@ -17,7 +17,7 @@ class LineTool implements Tool {
 
   states = new Map<Viewport, (SVGState | WebGLState)>();
 
-  private makeViewportState(viewport: Viewport) {
+  private viewportState(viewport: Viewport) {
     if (viewport instanceof SVGViewport) {
       return new SVGState(viewport, this.state);
     } else if (viewport instanceof WebGLViewport) {
@@ -27,10 +27,10 @@ class LineTool implements Tool {
   }
 
   bindTo(viewport: Viewport): () => void {
-    const viewportState = this.makeViewportState(viewport);
-    if (!viewportState) { return () => { }; }
-    this.states.set(viewport, viewportState);
-    return () => viewportState.dealloc?.();
+    const state = this.viewportState(viewport);
+    if (!state) { return () => { }; }
+    this.states.set(viewport, state);
+    return () => state.dealloc?.();
   }
 
   onmousemove(viewport: Viewport, event: MouseEvent): void {

@@ -1,25 +1,23 @@
-import type { Tool } from "../Tool.ts";
+import type { Tool } from "../../tools/Tool.ts";
 import type { Viewport } from "../../viewports/Viewport.ts";
 import { SVGViewport } from "../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import { WebGLViewport } from "../../viewports/WebGLViewport/WebGLViewport.svelte.ts";
-import { GlobalState } from "./state/GlobalState.svelte.ts";
-import { SVGState } from "./state/SVGState.svelte.ts";
-import { WebGLState } from "./state/WebGLState.svelte.ts";
+import { SVGState } from "./SVGState.svelte.ts";
+import { WebGLState } from "./WebGLState.svelte.ts";
 import icon from "./icon.svelte";
 
-class SelectTool implements Tool {
-  static key = "select";
-  static name = "select";
+class ZoomTool implements Tool {
+  static key = "zoom";
+  static name = "zoom";
   static icon = icon;
 
-  state = new GlobalState();
   panel = undefined;
 
   states = new Map<Viewport, (SVGState | WebGLState)>();
 
   private viewportState(viewport: Viewport) {
     if (viewport instanceof SVGViewport) {
-      return new SVGState(viewport, this.state);
+      return new SVGState(viewport);
     } else if (viewport instanceof WebGLViewport) {
       return new WebGLState(viewport);
     }
@@ -64,8 +62,8 @@ class SelectTool implements Tool {
 
   dealloc(): void {
     this.states.forEach(state => state.dealloc());
-    this.state.dealloc();
   }
 }
 
-export default SelectTool;
+export default ZoomTool;
+

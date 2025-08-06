@@ -21,12 +21,14 @@ export const zoomCameraMatrix = (
   // CameraMatrix with this point, we need to "remove" the ModelMatrix
   // out of this point (multiply by the inverse of ModelMatrix).
   const matrix = makeMatrix2UniformScale(scale, origin);
+  // console.log("matrix", matrix);
 
   // safety check.
   // if the determininat is too small, return unchanged matrix
   // the reason is because the viewMatrix is built from the
   // inverse of this matrix, a bad det makes an invalid inverse.
   const newMatrix = multiplyMatrices2(camera, matrix);
+  // console.log("newMatrix", newMatrix);
   const det = determinant2(newMatrix);
   if (Math.abs(det) < 1e-11) {
     return [1e-5, 0, 0, 1e-5, camera[4], camera[5]];
@@ -63,7 +65,9 @@ export const wheelEventZoomMatrix = (
     viewport.view.model,
     viewport.view.rightHanded,
   );
+  // console.log("screenPoint", screenPoint);
   const origin: [number, number] = screenPoint ? screenPoint : [0, 0];
+  // console.log("origin", origin);
   viewport.view.camera = zoomCameraMatrix(viewport.view.camera, scale, origin);
 };
 

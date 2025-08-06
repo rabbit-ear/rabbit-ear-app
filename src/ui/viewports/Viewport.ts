@@ -21,7 +21,8 @@ export abstract class Viewport {
   // the DOMElement, on which we will do things like bind touch event handlers
   abstract domElement?: Element;
 
-  // an optional callback, after this fires, domElement will be accessible
+  // an optional callback, this will fire after the component has mounted.
+  // when this triggers, you are now able to access domElement
   abstract didMount?: () => void;
 
   // force the screen to re-calculate window bounds. used when viewports are added/removed

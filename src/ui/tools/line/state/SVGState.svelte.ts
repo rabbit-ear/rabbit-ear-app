@@ -117,7 +117,6 @@ export class SVGState implements Deallocable, ToolEvents {
   // all tools must implement the "zoomTool.onwheel?.(event);" behavior.
   // there is no longer an app-wide fallthrough that executes that method
   // if no tool wheel event exists. the tool must specify the behavior explicitly.
-
   onwheel(viewport: Viewport, { x, y, deltaY }: WheelEvent): void {
     const point = getSVGViewportPoint(viewport, [x, y]);
     wheelEventZoomMatrix(this.viewport, { point, deltaY });

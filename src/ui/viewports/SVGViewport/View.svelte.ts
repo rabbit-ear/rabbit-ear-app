@@ -21,9 +21,11 @@ export class View {
   camera = $state([...identity2x3]);
 
   #model = $state([...identity2x3]);
+
   get model(): number[] {
     return this.#model;
   }
+
   set model(matrix) {
     const old = this.#model;
     const scale = matrix[0] / old[0];

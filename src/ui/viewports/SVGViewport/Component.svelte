@@ -17,10 +17,9 @@
   // const SVGToolLayer = $derived(viewport.layer);
   // const svgToolLayerProps = $derived(viewport.props || {});
 
-  const matrix = [1, 0, 0, 1, 0, 0];
-  // const matrix = $derived(
-  //   viewport.settings.rightHanded ? [1, 0, 0, -1, 0, 0].join(", ") : undefined,
-  // );
+  const matrix = $derived(
+    SVGViewport.settings.rightHanded ? [1, 0, 0, -1, 0, 0].join(", ") : undefined,
+  );
 
   type HasPoint = {
     point: [number, number];
@@ -77,9 +76,13 @@
   <!-- {/if} -->
 {/snippet}
 
-<SVGCanvas bind:svg fill="none" stroke="white" {...props}>
-  <!-- viewBox={viewport.view.viewBoxString} -->
-  <!-- stroke-width={viewport.style.strokeWidth} -->
+<SVGCanvas
+  bind:svg
+  fill="none"
+  stroke="white"
+  viewBox={viewport.view.viewBoxString}
+  stroke-width={viewport.style.strokeWidth}
+  {...props}>
   {#if matrix}
     <g class="wrapper" style="transform: matrix({matrix})">
       {@render contents()}
