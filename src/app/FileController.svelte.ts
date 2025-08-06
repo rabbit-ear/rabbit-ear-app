@@ -19,9 +19,16 @@ export class FileController {
     const filters = [defaultFileDialogFilter()];
     const result = await open({ multiple: true, filters });
     if (Array.isArray(result)) {
-      await this.fileManager.openFiles(result);
+      const errors = await this.fileManager.openFiles(result);
+      if (errors.length) {
+        const errorString = errors.join("\n\n");
+        window.alert(`Error opening ${errors.length} files\n\n${errorString}`)
+      }
     } else if (result !== null && typeof result === "string") {
-      await this.fileManager.openFile(result);
+      const error = await this.fileManager.openFile(result);
+      if (error) {
+        window.alert(`Error opening file\n\n${error}`)
+      }
     } else {
       return;
     }

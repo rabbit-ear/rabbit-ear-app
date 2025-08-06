@@ -11,7 +11,13 @@ let dragDropUnlisten: (() => void) | undefined = await getCurrentWebview()
       context.dragIsHovering = false;
       console.log(event.payload.paths);
       // todo: consider alphabetical sorting of files
-      context.fileManager.openFiles(event.payload.paths);
+      // todo: another: this is duplicated inside of FileController
+      // we need some openFiles method without the openFilesWithDialog
+      const errors = await context.fileManager.openFiles(event.payload.paths);
+      if (errors.length) {
+        const errorString = errors.join("\n\n");
+        window.alert(`Error opening ${errors.length} files\n\n${errorString}`)
+      }
     } else {
       // console.log("File drop cancelled");
       context.dragIsHovering = false;

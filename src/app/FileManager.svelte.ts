@@ -20,7 +20,7 @@ export class FileManager {
     this.#activeIndex = index;
   }
 
-  async openFile(filePath: string): Promise<void> {
+  async openFile(filePath: string): Promise<Error | void> {
     // check if already open
     const existingIndex = this.#documents.findIndex(doc => doc.path === filePath);
     if (existingIndex !== -1) {
@@ -28,21 +28,38 @@ export class FileManager {
       return;
     }
     // load
-    const data = await readTextFile(filePath);
-    const document = new FileDocument(filePath, new FileModel(data));
-    this.#documents.push(document);
-    this.#activeIndex = this.#documents.length - 1;
+    try {
+      const text = await readTextFile(filePath);
+      const data = JSON.parse(text);
+      const document = new FileDocument(filePath, new FileModel(data));
+      this.#documents.push(document);
+      this.#activeIndex = this.#documents.length - 1;
+    } catch (err: unknown) {
+      return err instanceof Error
+        ? err
+        : new Error(String(err));
+    }
   }
 
-  async openFiles(filePaths: string[]): Promise<void> {
+  // throws
+  async openFiles(filePaths: string[]): Promise<Error[]> {
     // check if any of them are already open
     const unopenedFilePaths = filePaths
       .filter(path => this.#documents.findIndex(doc => doc.path === path) === -1);
-    if (!unopenedFilePaths.length) { return; }
+    if (!unopenedFilePaths.length) { return []; }
+    const errors: Error[] = [];
     await Promise.all(unopenedFilePaths.map(async filePath => {
-      const data = await readTextFile(filePath);
-      const document = new FileDocument(filePath, new FileModel(data));
-      this.#documents.push(document);
+      try {
+        const text = await readTextFile(filePath);
+        const data = JSON.parse(text);
+        const document = new FileDocument(filePath, new FileModel(data));
+        this.#documents.push(document);
+      } catch (err: unknown) {
+        const error = err instanceof Error
+          ? err
+          : new Error(String(err));
+        errors.push(error);
+      }
     }));
     // same as openFile(), if a document is already opened, make it active
     const alreadyOpenedDocuments = filePaths
@@ -51,10 +68,12 @@ export class FileManager {
     this.#activeIndex = alreadyOpenedDocuments.length
       ? alreadyOpenedDocuments[0]
       : this.#documents.length - 1;
+    return errors;
   }
 
   async newFile(): Promise<void> {
-    const document = new FileDocument(undefined, new FileModel());
+    // todo: should an empty FOLD file contain any metadata?
+    const document = new FileDocument(undefined, new FileModel({}));
     this.#documents.push(document);
     this.#activeIndex = this.#documents.length - 1;
   }

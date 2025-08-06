@@ -9,18 +9,28 @@ interface Keymap {
 }
 
 export class KeyboardManager {
-  #keys = new Set<string>();
+  #keys: Set<string> = $state(new Set<string>());
   #keymaps = new Map<string, Keymap>();
   #activeKeymap: Keymap | undefined;
+
+  shift: boolean = $derived(this.#keys.has("Shift"));
+  alt: boolean = $derived(this.#keys.has("Alt"));
+  control: boolean = $derived(this.#keys.has("Control"));
+  command: boolean = $derived(this.#keys.has("Meta"));
 
   // not currently used but possible to setup a system
   // that runs O(1), but idk let's see. This system has
   // its benefits too.
-  #keyCombination: string = "";
+  // #keyCombination: string = "";
 
   constructor() {
     window.addEventListener("keydown", this.#onkeydown.bind(this));
     window.addEventListener("keyup", this.#onkeyup.bind(this));
+  }
+
+  dealloc(): void {
+    window.removeEventListener("keydown", this.#onkeydown);
+    window.removeEventListener("keyup", this.#onkeyup);
   }
 
   createKeymap(name: string): Keymap {
@@ -51,32 +61,27 @@ export class KeyboardManager {
 
   #onkeydown(event: KeyboardEvent) {
     this.#keys.add(this.#normalize(event.key));
-    this.#keyCombination = this.#stringifyKeys();
+    // this.#keyCombination = this.#stringifyKeys();
     this.#checkActions();
   }
 
   #onkeyup(event: KeyboardEvent) {
     this.#keys.delete(this.#normalize(event.key));
-    this.#keyCombination = this.#stringifyKeys();
-    this.#checkActions();
   }
 
-  #stringifyKeys(): string {
-    return Array.from(this.#keys).sort().join("+");
-  }
+  // #stringifyKeys(): string {
+  //   return Array.from(this.#keys).sort().join("+");
+  // }
 
   #checkActions() {
-    // if (!this.activeKeymap) return;
-    // const combo = Array.from(this.#keys).sort().join("+");
-    // const actions = this.activeKeymap.comboMap.get(combo);
-    // if (actions) actions.forEach((a) => this.trigger(a, true));
     if (!this.#activeKeymap) return;
-    console.log(this.#keyCombination);
+    // console.log(this.#keys);
+    // console.log(this.#keyCombination);
+    // const actions = this.activeKeymap.comboMap.get(this.#keyCombination);
+    // if (actions) actions.forEach(handler => handler());
     for (const [action, combo] of this.#activeKeymap.bindings.entries()) {
       const active = combo.every((k) => this.#keys.has(k));
       if (!active) { continue; }
-      // this.#activeKeymap.listeners.get(action)
-      //   ?.forEach((fn) => fn(active));
       this.#activeKeymap.listeners.get(action)
         ?.forEach(handler => handler());
     }
@@ -86,10 +91,5 @@ export class KeyboardManager {
     if (key === " ") return "Space";
     if (key.length === 1) return key.toUpperCase();
     return key;
-  }
-
-  dealloc(): void {
-    window.removeEventListener("keydown", this.#onkeydown);
-    window.removeEventListener("keyup", this.#onkeyup);
   }
 }

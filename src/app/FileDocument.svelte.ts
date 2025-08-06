@@ -18,11 +18,13 @@ export class FileDocument {
   get path() { return this.filePath; }
   get dirty() { return this.isDirty; }
   get name() { return this.fileName; }
+  get model() { return this.dataModel; }
 
   // this returns a Readonly copy to prevent developers from modifying
   // the contents of the data model directly.
   // all modifications should use this.updateModel so the dirty flag is set.
-  getModel(): Readonly<FileModel> { return this.dataModel; }
+  // getModel(): Readonly<FileModel> { return this.dataModel; }
+
   getUndoStack(): Readonly<Command[]> { return this.undoStack; }
   getRedoStack(): Readonly<Command[]> { return this.redoStack; }
 

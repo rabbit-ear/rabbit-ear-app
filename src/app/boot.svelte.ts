@@ -4,6 +4,7 @@ import { SVGViewport } from "../ui/viewports/SVGViewport/SVGViewport.svelte.ts";
 export const defaultAppSetup = () => {
   // setup
   context.ui?.viewportManager.addViewport(new SVGViewport());
+  context.ui?.toolManager.setToolWithName("select");
 
   // setup keyboard event mapping
   const keyboard = context.keyboardManager;

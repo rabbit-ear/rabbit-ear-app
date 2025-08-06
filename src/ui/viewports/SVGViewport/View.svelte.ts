@@ -7,7 +7,9 @@ import {
   //makeMatrix2Translate,
   //makeMatrix2UniformScale,
 } from "rabbit-ear/math/matrix2.js";
+import type { VecLine2 } from "rabbit-ear/types.js";
 import type { SVGViewport } from "./SVGViewport.svelte.ts";
+import { clipLineInPolygon } from "./clip.ts";
 import { viewBoxOrigin, graphToMatrix2 } from "../../../general/matrix.ts";
 import context from "../../../app/context.svelte.ts";
 
@@ -57,6 +59,12 @@ export class View {
 
   vmin: number = $derived(Math.min(this.viewBox[2], this.viewBox[3]));
   vmax: number = $derived(Math.max(this.viewBox[2], this.viewBox[3]));
+
+  // a UI touch event, coming from a pointer device, will have some
+  // built-in error correcting (like snapping, for example), and this behavior
+  // is zoom-level dependent. Use this variable to get an appropriate error-
+  // correcting value.
+  uiEpsilon: number = $derived.by(() => this.vmax * this.viewport.constructor.settings.uiEpsilonFactor.value);
 
   viewBoxString = $derived(this.viewBox.join(" "));
 
@@ -122,6 +130,10 @@ export class View {
   constructor(viewport: SVGViewport) {
     this.viewport = viewport;
     this.#unsub = [this.#makeModelMatrixEffect()];
+  }
+
+  clipLine(line: VecLine2): [number, number][] | undefined {
+    return clipLineInPolygon(line, this.viewBoxPolygon);
   }
 
   resetCamera(): void {
