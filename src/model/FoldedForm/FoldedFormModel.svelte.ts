@@ -2,12 +2,12 @@ import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Model } from "../Model.ts";
 import type { FrameStyle } from "../FrameStyle.ts";
+import type { FileModel } from "../../app/FileModel.svelte.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
-import type { FileModel } from "../../app/FileModel.svelte.ts";
 
 export class FoldedFormModel implements Model {
   name: string = "foldedForm";
@@ -56,11 +56,11 @@ export class FoldedFormModel implements Model {
 
   style: FrameStyle = $derived({
     isFoldedForm: true,
-    dimension: getDimensionQuick({ vertices_coords: this.#vertices_coords }),
+    dimension: getDimensionQuick({ vertices_coords: this.#vertices_coords }) ?? 2,
     showVertices:
-      this.#graph?.vertices_coords &&
-      !this.#graph?.edges_vertices &&
-      !this.#graph?.faces_vertices,
+      (this.#graph?.vertices_coords &&
+        !this.#graph?.edges_vertices &&
+        !this.#graph?.faces_vertices) ?? false,
     transparentFaces: this.#graph.faceOrders == null,
   });
 

@@ -8,7 +8,7 @@ $effect.root(() => {
     console.log("rebuilding app menu");
     (await buildMenu()).setAsAppMenu();
   });
-})
+});
 
 export const defaultAppSetup = () => {
   // setup

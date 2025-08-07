@@ -10,6 +10,14 @@
 </script>
 
 <div class="column gap">
+  <div class="row gap">
+    <input
+      type="checkbox"
+      id="right-handed"
+      bind:checked={context.ui!.settings.rightHanded.value} />
+    <label for="right-handed">right handed</label>
+  </div>
+
   <div class="row">
     <p>{context.ui?.viewportManager.viewports.length} {t("ui.viewports")}</p>
   </div>
@@ -17,6 +25,11 @@
   <div class="row gap">
     <button onclick={addSVGViewport}>+ {t("ui.viewports.SVG")}</button>
     <button onclick={addWebGLViewport}>+ {t("ui.viewports.WebGL")}</button>
+  </div>
+
+  <div class="row gap">
+    <button onclick={(): void => context.ui?.viewportManager.resetCameras()}
+      >reset cameras</button>
   </div>
 </div>
 

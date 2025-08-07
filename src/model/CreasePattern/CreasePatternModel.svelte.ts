@@ -2,10 +2,10 @@ import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Model } from "../Model.ts";
 import type { FrameStyle } from "../FrameStyle.ts";
+import type { FileModel } from "../../app/FileModel.svelte.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import Panel from "./Panel.svelte";
 import { resize2 } from "rabbit-ear/math/vector.js";
-import type { FileModel } from "../../app/FileModel.svelte.ts";
 
 export class CreasePatternModel implements Model {
   name: string = "creasePattern";
@@ -19,7 +19,7 @@ export class CreasePatternModel implements Model {
 
   //snapPoints: [number, number][] = $state([]);
   snapPoints: [number, number][] = $derived.by(() =>
-    this.#graph?.vertices_coords?.map(resize2),
+    this.#graph?.vertices_coords?.map(resize2) ?? [],
   );
 
   constructor(model: FileModel) {
@@ -30,9 +30,9 @@ export class CreasePatternModel implements Model {
     isFoldedForm: false,
     dimension: 2,
     showVertices:
-      this.#graph.vertices_coords &&
-      !this.#graph?.edges_vertices &&
-      !this.#graph?.faces_vertices,
+      (this.#graph.vertices_coords &&
+        !this.#graph?.edges_vertices &&
+        !this.#graph?.faces_vertices) ?? false,
     transparentFaces: false,
   });
 

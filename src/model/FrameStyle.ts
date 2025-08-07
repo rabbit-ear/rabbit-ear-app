@@ -12,7 +12,7 @@ export const makeFrameStyle = (graph: FOLD): FrameStyle => ({
   isFoldedForm: isFoldedForm(graph),
   dimension: getDimensionQuick(graph) ?? 2,
   showVertices:
-    graph?.vertices_coords && !graph?.edges_vertices && !graph?.faces_vertices,
+    (graph?.vertices_coords && !graph?.edges_vertices && !graph?.faces_vertices) ?? false,
   transparentFaces: graph.faceOrders == null,
 });
 

@@ -3,8 +3,10 @@
   import { SVGViewport } from "./SVGViewport.svelte.ts";
   import SVGCanvas from "../../Components/SVG/SVGCanvas.svelte";
   import GridLayer from "./GridLayer.svelte";
+  // import ModelLayer from "./ModelLayer.svelte";
   // import SVGShapes from "../../Components/SVG/SVGShapes.svelte";
-  // import SVGFOLD from "../../Components/SVG/SVGFOLD.svelte";
+  import SVGFOLD from "../../Components/SVG/SVGFOLD.svelte";
+  import context from "../../../app/context.svelte.ts";
 
   type PropsType = {
     viewport: SVGViewport;
@@ -14,8 +16,8 @@
   let { viewport, ...props }: PropsType = $props();
 
   // https://www.youtube.com/live/nMs4X8-L_yo?feature=shared&t=1667
-  // const SVGToolLayer = $derived(viewport.layer);
-  // const svgToolLayerProps = $derived(viewport.props || {});
+  const SVGToolLayer = $derived(viewport.layer);
+  const svgToolLayerProps = $derived(viewport.props || {});
 
   const matrix = $derived(
     SVGViewport.settings.rightHanded ? [1, 0, 0, -1, 0, 0].join(", ") : undefined,
@@ -48,6 +50,8 @@
     }
   });
 
+  const graph = $derived(context.fileManager.activeDocument?.model.cp.graph);
+
   // todo: issue-
   // creating and removing other Viewports causes a resize, but does not fire this.
   // const onresize = (): void => {
@@ -61,19 +65,20 @@
 
 <svelte:window {onresize} />
 
-{#snippet contents()}
+{#snippet toolLayer()}
+  {#if SVGToolLayer}
+    <g
+      class="tool-layer"
+      style={`--stroke-dash-length: ${viewport.style.strokeDashLength};`}>
+      <SVGToolLayer class="hello-tool-layer" {viewport} {...svgToolLayerProps} />
+    </g>
+  {/if}
+{/snippet}
+
+{#snippet gridLayer()}
   {#if SVGViewport.settings.showGrid.value}
     <GridLayer {viewport} />
   {/if}
-  <!-- <SVGFOLD graph={viewport.model?.graph} /> -->
-  <!-- <SVGShapes shapes={viewport.model?.shapes} class="model-layer" /> -->
-  <!-- {#if SVGToolLayer} -->
-  <!--   <g -->
-  <!--     class="tool-layer" -->
-  <!--     style={`--stroke-dash-length: ${viewport.style.strokeDashLength};`}> -->
-  <!--     <SVGToolLayer class="hello-tool-layer" {viewport} {...svgToolLayerProps} /> -->
-  <!--   </g> -->
-  <!-- {/if} -->
 {/snippet}
 
 <SVGCanvas
@@ -85,9 +90,15 @@
   {...props}>
   {#if matrix}
     <g class="wrapper" style="transform: matrix({matrix})">
-      {@render contents()}
+      {@render gridLayer()}
+      <SVGFOLD {graph} />
+      <!-- <SVGShapes shapes={viewport.model?.shapes} class="model-layer" /> -->
+      {@render toolLayer()}
     </g>
   {:else}
-    {@render contents()}
+    {@render gridLayer()}
+    <SVGFOLD {graph} />
+    <!-- <SVGShapes shapes={viewport.model?.shapes} class="model-layer" /> -->
+    {@render toolLayer()}
   {/if}
 </SVGCanvas>
