@@ -38,15 +38,22 @@ export class FileModel {
       [folded.name]: folded,
       // [simulator.name]: simulator,
     };
+
+    console.log("metadata", $state.snapshot(this.#metadata));
+    console.log("frames", $state.snapshot(this.#frames));
   }
 
   export(): FOLD {
     return Object.assign(
-      reassembleFramesToFOLD($state.snapshot(this.#frames)),
-      // reassembleFramesToFOLD(this.#frames),
+      // reassembleFramesToFOLD($state.snapshot(this.#frames)),
+      reassembleFramesToFOLD(this.#frames),
       this.#metadata,
       // { shapes: this.shapes },
     );
+  }
+
+  exportToText(): string {
+    return JSON.stringify(this.export());
   }
 
   import(fold: FOLD): void {

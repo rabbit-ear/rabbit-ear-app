@@ -14,9 +14,14 @@ import type { Deallocable } from "./Deallocable.ts";
  */
 export abstract class Tool implements ToolEvents, Deallocable {
   // unique UUID for this tool
+  // technically, this can be any unique value, but for localization,
+  // please ensure this matches up with the tool's name's key.
+  // for example: "ui.tools.select" for the "select" tool
   static key: string;
 
-  // human readable display name for this tool
+  // human readable display name (in English) for this tool.
+  // this is a fall-back, as the name should be taken by
+  // running the localize function through the .key property instead
   static name: string;
 
   // an SVG image. an XML formatted file with a single top level <svg> element,

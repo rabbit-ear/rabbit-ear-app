@@ -9,7 +9,7 @@ let dragDropUnlisten: (() => void) | undefined = await getCurrentWebview()
     } else if (event.payload.type === "drop") {
       // console.log("User dropped", event.payload.paths);
       context.dragIsHovering = false;
-      console.log(event.payload.paths);
+      // console.log(event.payload.paths);
       // todo: consider alphabetical sorting of files
       // todo: another: this is duplicated inside of FileController
       // we need some openFiles method without the openFilesWithDialog

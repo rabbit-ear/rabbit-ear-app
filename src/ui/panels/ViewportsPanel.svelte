@@ -2,6 +2,7 @@
   import context from "../../app/context.svelte.ts";
   import { SVGViewport } from "../viewports/SVGViewport/SVGViewport.svelte.ts";
   import { WebGLViewport } from "../viewports/WebGLViewport/WebGLViewport.svelte.ts";
+  import t from "../../app/t.ts";
 
   const addSVGViewport = () => context.ui?.viewportManager.addViewport(new SVGViewport());
   const addWebGLViewport = () =>
@@ -10,12 +11,12 @@
 
 <div class="column gap">
   <div class="row">
-    <p>{context.ui?.viewportManager.viewports.length} viewports</p>
+    <p>{context.ui?.viewportManager.viewports.length} {t("ui.viewports")}</p>
   </div>
 
   <div class="row gap">
-    <button onclick={addSVGViewport}>+ SVG</button>
-    <button onclick={addWebGLViewport}>+ WebGL</button>
+    <button onclick={addSVGViewport}>+ {t("ui.viewports.SVG")}</button>
+    <button onclick={addWebGLViewport}>+ {t("ui.viewports.WebGL")}</button>
   </div>
 </div>
 

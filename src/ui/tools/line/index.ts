@@ -8,7 +8,7 @@ import { WebGLState } from "./state/WebGLState.svelte.ts";
 import icon from "./icon.svelte";
 
 class LineTool implements Tool {
-  static key = "line";
+  static key = "ui.tools.line";
   static name = "line";
   static icon = icon;
 

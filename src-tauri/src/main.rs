@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    document_app_lib::run()
+    rabbit_ear_app_lib::run()
 }

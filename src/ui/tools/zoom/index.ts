@@ -7,7 +7,7 @@ import { WebGLState } from "./WebGLState.svelte.ts";
 import icon from "./icon.svelte";
 
 class ZoomTool implements Tool {
-  static key = "zoom";
+  static key = "ui.tools.zoom";
   static name = "zoom";
   static icon = icon;
 

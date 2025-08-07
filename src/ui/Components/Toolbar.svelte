@@ -1,6 +1,8 @@
 <script lang="ts">
+  // import type { Viewport } from "../viewports/Viewport.ts";
   import Tools from "../tools/index.ts";
   import ToolbarButton from "./ToolbarButton.svelte";
+  import t from "../../app/t.ts";
 
   interface PropsType {
     tool: string;
@@ -11,12 +13,12 @@
 </script>
 
 <div class="grid-columns">
-  {#each Object.values(Tools) as t}
+  {#each Object.values(Tools) as Tool}
     <ToolbarButton
-      name={t.name}
-      Icon={t.icon}
-      onclick={() => setTool(t.name)}
-      selected={tool === t.name} />
+      name={t(Tool.key) ?? Tool.name}
+      Icon={Tool.icon}
+      onclick={() => setTool(Tool.key)}
+      selected={tool === Tool.key} />
   {/each}
 </div>
 

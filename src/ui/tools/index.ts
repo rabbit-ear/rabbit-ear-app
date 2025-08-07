@@ -16,7 +16,9 @@ import zoom from "./zoom/index.ts";
 // for trying to instance an abstract class
 type ToolConstructor<T extends Tool = Tool> = new () => T;
 
-const Tools: { [key: string]: ToolConstructor } = {
+const Tools: { [key: string]: ToolConstructor } = {};
+
+[
   // circle,
   line,
   // rect,
@@ -27,6 +29,7 @@ const Tools: { [key: string]: ToolConstructor } = {
   select,
   // translate,
   zoom,
-};
+].forEach(ToolItem => { Tools[ToolItem.key] = ToolItem; });
 
 export default Tools;
+

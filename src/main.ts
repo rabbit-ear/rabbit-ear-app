@@ -1,5 +1,4 @@
 import { mount } from "svelte";
-import "./system/menu.ts";
 import "./system/drag.ts";
 import App from "./ui/components/App.svelte";
 import { defaultAppSetup } from "./app/boot.svelte.ts";

@@ -34,7 +34,10 @@ export class ToolManager {
     this.unbindTool();
     // get next tool
     const tool = Tools[name];
-    if (!tool) { return; }
+    if (!tool) {
+      console.warn(`no tool with the name ${name}`);
+      return;
+    }
     this.tool = new tool();
     // console.log(this.tool);
     this.ui.viewportManager.viewports.forEach(viewport => {
@@ -56,15 +59,5 @@ export class ToolManager {
     if (!unbind) { return; }
     unbind();
     this.unbindFromViewports.delete(viewport);
-  }
-
-  private handleHover(event: PointerEvent, viewport: Viewport) {
-
-  }
-
-  private dispatchToActiveTool(kind: "press" | "move" | "release", event: PointerEvent, viewport: Viewport) {
-    if (!this.tool) { return; }
-    // const handlerName = `on${capitalize(kind)}${type}` as keyof Tool;
-    // (tool[handlerName] as any)?.call(tool, e, vp, this.ctx);
   }
 }

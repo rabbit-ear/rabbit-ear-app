@@ -1,10 +1,19 @@
 import context from "./context.svelte.ts";
 import { SVGViewport } from "../ui/viewports/SVGViewport/SVGViewport.svelte.ts";
+import { buildMenu } from "../system/menu.ts";
+
+$effect.root(() => {
+  $effect(async () => {
+    const _ = context.localization.language;
+    console.log("rebuilding app menu");
+    (await buildMenu()).setAsAppMenu();
+  });
+})
 
 export const defaultAppSetup = () => {
   // setup
   context.ui?.viewportManager.addViewport(new SVGViewport());
-  context.ui?.toolManager.setToolWithName("select");
+  context.ui?.toolManager.setToolWithName("ui.tools.select");
 
   // setup keyboard event mapping
   const keyboard = context.keyboardManager;

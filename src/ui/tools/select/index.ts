@@ -8,7 +8,7 @@ import { WebGLState } from "./state/WebGLState.svelte.ts";
 import icon from "./icon.svelte";
 
 class SelectTool implements Tool {
-  static key = "select";
+  static key = "ui.tools.select";
   static name = "select";
   static icon = icon;
 

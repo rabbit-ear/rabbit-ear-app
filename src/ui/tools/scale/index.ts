@@ -10,7 +10,7 @@ import Panel from "./Panel.svelte";
 import icon from "./icon.svelte";
 
 class ScaleTool implements Tool {
-  static key = "scale";
+  static key = "ui.tools.scale";
   static name = "scale";
   static icon = icon;
 

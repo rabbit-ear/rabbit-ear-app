@@ -1,0 +1,28 @@
+{
+  "name": "日本語",
+  "menu.File": "ファイル",
+  "menu.File.New": "",
+  "menu.File.Open": "",
+  "menu.File.Save": "上書き保存",
+  "menu.File.SaveAs": "名前を付けて保存",
+  "menu.File.Quit": "",
+  "menu.Edit": "",
+  "menu.Edit.Undo": "",
+  "menu.Edit.Redo": "",
+  "menu.Edit.Cut": "",
+  "menu.Edit.Copy": "",
+  "menu.Edit.Paste": "",
+  "menu.Edit.SelectAll": "",
+  "menu.View": "表示",
+  "menu.View.Minimize": "",
+  "menu.View.Maximize": "",
+  "ui.tools.line": "",
+  "ui.tools.select": "",
+  "ui.tools.scale": "",
+  "ui.tools.zoom": "",
+  "ui.viewport": "",
+  "ui.viewports": "",
+  "ui.viewports.SVG": "SVG",
+  "ui.viewports.WebGL": "WebGL"
+}
+

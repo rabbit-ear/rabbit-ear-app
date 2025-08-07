@@ -72,7 +72,7 @@ export class FileDocument {
     // }
     // fs.access(fileInfo.fullpath, fs.constants.F_OK)
     // fs.checkFileExistsAndWritable();
-    await writeTextFile(this.filePath, this.dataModel.text);
+    await writeTextFile(this.filePath, this.dataModel.exportToText());
     // todo: catch errors, if errors, do not run the next line.
     this.isDirty = false;
     return true;
