@@ -8,10 +8,13 @@ import { reassembleFramesToFOLD, makeFlatFramesFromFrames } from "../general/fol
 import { CreasePatternModel } from "../models/CreasePattern/CreasePatternModel.ts";
 import { FoldedFormModel } from "../models/FoldedForm/FoldedFormModel.ts";
 import { makeFrameStyle } from "../models/FrameStyle.ts";
+import { SceneState } from "./SceneState.svelte.ts";
 
 export class FileModel {
   #metadata: FOLDFileMetadata = $state({});
   #framesRaw: FOLDChildFrame[] = $state.raw([]);
+
+  sceneState: SceneState = $state(SceneState.empty);
 
   // which frame index is currently selected by the app for rendering/modification
   activeFrameIndex: number = $state(0);
@@ -43,6 +46,8 @@ export class FileModel {
 
   // constructor(json: string) {
   constructor(data: FOLD) {
+    this.sceneState = new SceneState(SceneState.getSceneFromFOLD(data));
+
     this.#metadata = getFileMetadata(data);
     this.#framesRaw = getFileFramesAsArray(data);
 
@@ -53,6 +58,7 @@ export class FileModel {
     console.log("+ New FileModel +");
     console.log("metadata", $state.snapshot(this.#metadata));
     console.log("frames", $state.snapshot(this.#framesRaw));
+    console.log("scene", this.sceneState);
   }
 
   export(): FOLD {
@@ -77,6 +83,7 @@ export class FileModel {
 
   dealloc(): void {
     // this.simulator.dealloc();
+    // scene state too?
   }
 }
 

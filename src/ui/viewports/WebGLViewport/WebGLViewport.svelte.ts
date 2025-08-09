@@ -5,6 +5,7 @@ import ViewportComponent from "./ViewportComponent.svelte";
 // import Dropdown from "./Dropdown.svelte";
 // import ClassPanel from "./Panel.svelte";
 import { View } from "./View.svelte.ts";
+import type { ViewportState } from "../../../app/ViewportState.svelte.ts";
 // import { Settings } from "./Settings.svelte.ts";
 
 //class Style {
@@ -18,6 +19,8 @@ export class WebGLViewport implements Viewport {
   static name: string = "WebGL Viewport";
   // static settings: Settings = new Settings();
   // static panel: Component = ClassPanel;
+
+  state: ViewportState;
 
   id: string;
   component: Component;
@@ -38,8 +41,9 @@ export class WebGLViewport implements Viewport {
 
   effects: (() => void)[];
 
-  constructor() {
+  constructor(state: ViewportState) {
     this.id = String(Math.random());
+    this.state = state;
     this.component = ViewportComponent;
     // this.dropdown = Dropdown;
     this.view = new View();

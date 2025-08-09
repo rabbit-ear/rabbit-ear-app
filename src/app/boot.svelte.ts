@@ -1,5 +1,5 @@
 import context from "./context.svelte.ts";
-import { SVGViewport } from "../ui/viewports/SVGViewport/SVGViewport.svelte.ts";
+// import { SVGViewport } from "../ui/viewports/SVGViewport/SVGViewport.svelte.ts";
 import { buildMenu } from "../system/menu.ts";
 
 $effect.root(() => {
@@ -14,9 +14,9 @@ export const defaultAppSetup = () => {
   // setup
   if (context.ui) {
     context.ui.toolManager.setToolWithName("ui.tools.select");
-    context.ui.viewportManager.addViewport(new SVGViewport());
-    context.ui.viewportManager.addViewport(new SVGViewport());
-    context.ui.viewportManager.viewports[1].modelName = "folded";
+    // context.ui.viewportManager.addViewport(new SVGViewport());
+    // context.ui.viewportManager.addViewport(new SVGViewport());
+    // context.ui.viewportManager.viewports[1].modelName = "folded";
   }
 
   // setup keyboard event mapping

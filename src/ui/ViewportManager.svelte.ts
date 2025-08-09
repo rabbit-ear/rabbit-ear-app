@@ -1,6 +1,9 @@
 import type { UI } from "./UI.svelte.ts";
 import type { Viewport } from "./viewports/Viewport.ts";
 import Viewports from "./viewports/index.ts";
+import { ViewportState } from "../app/ViewportState.svelte.ts";
+import context from "../app/context.svelte.ts";
+import type { FileModel } from "../app/FileModel.svelte.ts";
 
 // Event handlers are typed with their event object as either:
 // MouseEvent, TouchEvent, WheelEvent, or KeyboardEvent
@@ -8,15 +11,52 @@ import Viewports from "./viewports/index.ts";
 // Using this to silence a typescript warning.
 type EH = (e: Event) => void;
 
+// const viewportStateToViewport = (state: ViewportState): Viewport | undefined => {
+//   switch (state.type) {
+//     case "svg": return new SVGViewport();
+//     case "webGL": return new WebGLViewport();
+//     default: return undefined;
+//   }
+// }
+
+// type ViewportConstructor<T extends Viewport = Viewport> = new (model: FileModel) => T;
+
 export class ViewportManager {
   ui: UI;
   #effects: (() => void)[] = [];
-  viewports: Viewport[] = $state([]);
+
+  viewports: Viewport[] = $derived((context.fileManager.document?.model.sceneState.viewports ?? [])
+    .map(state => ({ constructor: Viewports[state?.type], state }))
+    .filter(el => el.constructor !== undefined)
+    .map(el => new el.constructor(el.state))
+    .filter(a => a !== undefined));
+
   viewportEvents: Map<Viewport, { [key: string]: EH }> = new Map();
+
+  #viewportBindEvents = (): (() => void) =>
+    $effect.root(() => {
+      $effect(() => {
+        console.log("$effect(): viewport-tool event handler bindings");
+        this.viewports.forEach(viewport => {
+          // this block needs to happen once viewport.domElement exists,
+          // which only happens after Svelte mounts, via this callback didMount.
+          viewport.didMount = () => {
+            console.log("viewport did mount callback, mounting.");
+            this.#unbindViewport(viewport);
+            this.#bindViewport(viewport);
+            // viewport.didMount = undefined;
+          };
+          this.ui.toolManager.viewportDidAdd(viewport);
+        })
+      });
+      // empty
+      return () => { };
+    });
 
   #triggerViewportRedraw = (): (() => void) =>
     $effect.root(() => {
       $effect(() => {
+        console.log("$effect(): viewport redraw");
         this.viewports.forEach((viewport) => viewport.redraw?.());
       });
       // empty
@@ -25,27 +65,30 @@ export class ViewportManager {
 
   constructor(ui: UI) {
     this.ui = ui;
-    this.#effects = [this.#triggerViewportRedraw()];
+    this.#effects = [
+      this.#viewportBindEvents(),
+      this.#triggerViewportRedraw(),
+    ];
     // this.terminal = new TerminalViewport();
   }
 
   addViewport(viewport: Viewport): void {
-    // this block needs to happen once viewport.domElement exists,
-    // which only happens after Svelte mounts, via this callback didMount.
-    viewport.didMount = () => {
-      console.log("viewport did mount callback, mounting.");
-      this.unbindViewport(viewport);
-      this.bindViewport(viewport);
-      // viewport.didMount = undefined;
-    }
-    this.viewports.push(viewport);
-    this.ui.toolManager.viewportDidAdd(viewport);
+    // // this block needs to happen once viewport.domElement exists,
+    // // which only happens after Svelte mounts, via this callback didMount.
+    // viewport.didMount = () => {
+    //   console.log("viewport did mount callback, mounting.");
+    //   this.#unbindViewport(viewport);
+    //   this.#bindViewport(viewport);
+    //   // viewport.didMount = undefined;
+    // }
+    // this.viewports.push(viewport);
+    // this.ui.toolManager.viewportDidAdd(viewport);
   }
 
   removeViewport(viewport: Viewport): void {
     const index = this.viewports.indexOf(viewport);
     if (index === -1) { return; }
-    this.unbindViewport(viewport);
+    this.#unbindViewport(viewport);
     this.viewports.splice(index, 1);
     // todo: should this be moved above the removal and be called WillRemove?
     // this.ui.toolManager.viewportDidRemove(viewport);
@@ -60,7 +103,7 @@ export class ViewportManager {
   //   // this.ui.emit("activeViewportChange", viewport);
   // }
 
-  unbindViewport(viewport: Viewport) {
+  #unbindViewport(viewport: Viewport) {
     const prevEvents = this.viewportEvents.get(viewport);
     if (prevEvents) {
       console.log("events found", Object.keys(prevEvents));
@@ -72,13 +115,13 @@ export class ViewportManager {
     }
   }
 
-  bindViewport(viewport: Viewport) {
+  #bindViewport(viewport: Viewport) {
     if (!viewport.domElement) { return; }
 
     // viewports should only have one of each event bound to it.
     // as a safety precaution, remove any events if they exist.
     // so far this case has never been observed, it's simply preventative.
-    this.unbindViewport(viewport);
+    this.#unbindViewport(viewport);
 
     const events: { [key: string]: EH } = {
       mousemove: ((e: MouseEvent) => this.ui.toolManager.tool?.onmousemove?.(viewport, e)) as EH,

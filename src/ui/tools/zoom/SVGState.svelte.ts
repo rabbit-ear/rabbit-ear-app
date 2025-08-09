@@ -82,6 +82,7 @@ export class SVGState implements Deallocable, ToolEvents {
 
   onwheel(viewport: Viewport, { clientX, clientY, deltaX, deltaY }: WheelEvent): void {
     const point = getSVGViewportPoint(viewport, [clientX, clientY]);
+    // todo: I thought i renamed this to the class names, SVGViewport for example
     const type: string = "svg"; // this.viewport.type;
     switch (type) {
       case "svg":
