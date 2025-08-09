@@ -9,6 +9,6 @@ export class Renderer {
 
   constructor(viewport: SVGViewport) {
     this.viewport = viewport;
-    this.model = context.fileManager.activeDocument?.model.cp;
+    this.model = context.fileManager.document?.model.cp;
   }
 }

@@ -1,14 +1,20 @@
 import { readTextFile } from "@tauri-apps/plugin-fs";
 import { FileDocument } from "./FileDocument.svelte";
 import { FileModel } from "./FileModel.svelte";
+import { UNTITLED_FILENAME } from "../system/constants.ts";
 
 export class FileManager {
   #documents: FileDocument[] = $state([]);
   #activeIndex: number = $state(0);
 
-  activeDocument: FileDocument | undefined = $derived(this.#documents[this.#activeIndex]);
+  document: FileDocument | undefined = $derived(this.#documents[this.#activeIndex]);
   get documents(): readonly FileDocument[] { return this.#documents; }
   // get documents(): FileDocument[] { return [...this.documents]; }
+  get activeIndex(): number { return this.#activeIndex; }
+
+  get activeFileName(): string {
+    return this.document?.path ?? UNTITLED_FILENAME;
+  };
 
   switchTo(index: number): void {
     this.#activeIndex = Math.max(0, Math.min(index, this.#documents.length - 1));

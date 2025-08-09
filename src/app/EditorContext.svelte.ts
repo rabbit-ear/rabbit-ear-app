@@ -1,33 +1,25 @@
 import { UI } from "../ui/UI.svelte.ts";
+import { APP_NAME } from "../system/constants.ts";
 import { FileManager } from "./FileManager.svelte.ts";
 import { FileController } from "./FileController.svelte.ts";
 import { KeyboardManager } from "./KeyboardManager.svelte.ts";
 import { Localization } from "./Localization.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
-import { UNTITLED_FILENAME, APP_NAME } from "../system/constants.ts";
 
 export class EditorContext {
-  readonly fileManager: FileManager;
-  readonly fileController: FileController;
-  readonly keyboardManager: KeyboardManager;
+  fileManager: FileManager;
+  fileController: FileController;
+  keyboardManager: KeyboardManager;
   localization: Localization;
   settings: Settings;
   // UI is optional, the app is able to run without a UI.
-  readonly ui: UI | undefined;
+  ui: UI | undefined;
 
-  // private listeners = new Map<string, Set<(payload?: any) => void>>();
-
-  /**
-   * @description Watch "FilePath" for any changes, update the window title
-   * to include the currently opened filename.
-   */
+  // the title of the application, with the currently active file,
+  // and an additional asterisk if the file is modified and not yet saved
   appTitle: string = $derived.by<string>(() => {
-    const file = this.fileManager.activeDocument;
-    if (!file) { return UNTITLED_FILENAME; }
-    // const displayName = file.info === undefined ? UNTITLED_FILENAME : file.info.file;
-    const displayName = !file.path ? UNTITLED_FILENAME : file.path;
-    const savedIndicator = file.dirty ? " *" : "";
-    return `${APP_NAME} - ${displayName}${savedIndicator}`;
+    const savedIndicator = this.fileManager.document?.dirty ? " *" : "";
+    return `${APP_NAME} - ${this.fileManager.activeFileName}${savedIndicator}`;
   });
 
   // drag and drop. communicates with the backend.
@@ -49,18 +41,5 @@ export class EditorContext {
     this.keyboardManager.dealloc();
     this.ui?.dealloc();
   }
-
-  // on(event: string, handler: (payload?: any) => void) {
-  //   if (!this.listeners.get(event)) { this.listeners.set(event, new Set()); }
-  //   this.listeners.get(event)?.add(handler);
-  // }
-
-  // off(event: string, handler: (payload?: any) => void) {
-  //   this.listeners.get(event)?.delete(handler);
-  // }
-
-  // emit(event: string, payload?: any) {
-  //   this.listeners.get(event)?.forEach(fn => fn(payload));
-  // }
 }
 

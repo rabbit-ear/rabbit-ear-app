@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { FoldedFormModel } from "./FoldedFormModel.svelte.ts";
+  import type { FoldedFormModel } from "./FoldedFormModel.ts";
 
   const { model }: { model: FoldedFormModel } = $props();
 </script>

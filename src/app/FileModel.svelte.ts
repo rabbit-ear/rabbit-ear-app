@@ -1,26 +1,34 @@
 import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js";
-import type { Model } from "../model/Model.ts";
-import type { FrameStyle } from "../model/FrameStyle.ts";
-import { CreasePatternModel } from "../model/CreasePattern/CreasePatternModel.svelte.ts";
-import { FoldedFormModel } from "../model/FoldedForm/FoldedFormModel.svelte.ts";
+import type { Model } from "../models/Model.ts";
+import type { FrameStyle } from "../models/FrameStyle.ts";
 // import { SimulatorModel } from "../model/Simulator/SimulatorModel.svelte.ts";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
 import { reassembleFramesToFOLD, makeFlatFramesFromFrames } from "../general/fold.ts";
-import { makeFrameStyle } from "../model/FrameStyle.ts";
-import type { SimulatorModel } from "../model/Simulator/SimulatorModel.svelte.ts";
+import { CreasePatternModel } from "../models/CreasePattern/CreasePatternModel.ts";
+import { FoldedFormModel } from "../models/FoldedForm/FoldedFormModel.ts";
+import { makeFrameStyle } from "../models/FrameStyle.ts";
 
 export class FileModel {
   #metadata: FOLDFileMetadata = $state({});
-  #frames: FOLDChildFrame[] = $state.raw([]);
+  #framesRaw: FOLDChildFrame[] = $state.raw([]);
 
-  framesFlat: FOLD[] = $derived(makeFlatFramesFromFrames(this.#frames));
-  framesStyle: FrameStyle[] = $derived.by(() => this.framesFlat.map(makeFrameStyle));
-
+  // which frame index is currently selected by the app for rendering/modification
   activeFrameIndex: number = $state(0);
 
-  frame: FOLDChildFrame = $derived.by(() => this.#frames[this.activeFrameIndex]);
-  frameFlat: FOLD = $derived.by(() => this.framesFlat[this.activeFrameIndex]);
+  // some frames inherit from a parent and need to be "collapsed" to be render-able.
+  // this is a list of all of the frames, collapsed, and in their "final form",
+  frames: FOLD[] = $derived(makeFlatFramesFromFrames(this.#framesRaw));
+
+  // which frame is currently selected by the app for rendering/modification
+  frame: FOLD = $derived.by(() => this.frames[this.activeFrameIndex]);
+
+  // which frame is currently selected by the app for rendering/modification
+  // taken from the "raw" frames (not collapsed if inherits from a parent)
+  frameRaw: FOLDChildFrame = $derived.by(() => this.#framesRaw[this.activeFrameIndex]);
+
+  // style-related properties for every frame, like is it 2D, folded, etc..
+  framesStyle: FrameStyle[] = $derived.by(() => this.frames.map(makeFrameStyle));
   frameStyle: FrameStyle = $derived.by(() => this.framesStyle[this.activeFrameIndex]);
 
   // if models are removed, they need to call their dealloc() method
@@ -29,29 +37,28 @@ export class FileModel {
   folded: FoldedFormModel;
   // simulator: SimulatorModel;
 
+  get creasePattern(): Model { return this.cp; }
+  get foldedForm(): Model { return this.folded; }
+  // get simulator(): Model { return this.simulator; }
+
   // constructor(json: string) {
   constructor(data: FOLD) {
     this.#metadata = getFileMetadata(data);
-    this.#frames = getFileFramesAsArray(data);
+    this.#framesRaw = getFileFramesAsArray(data);
 
     this.cp = new CreasePatternModel(this);
     this.folded = new FoldedFormModel(this);
     // this.simulator = new SimulatorModel(this);
 
-    // this.models = {
-    //   [cp.name]: cp,
-    //   [folded.name]: folded,
-    //   // [simulator.name]: simulator,
-    // };
-
+    console.log("+ New FileModel +");
     console.log("metadata", $state.snapshot(this.#metadata));
-    console.log("frames", $state.snapshot(this.#frames));
+    console.log("frames", $state.snapshot(this.#framesRaw));
   }
 
   export(): FOLD {
     return Object.assign(
       // reassembleFramesToFOLD($state.snapshot(this.#frames)),
-      reassembleFramesToFOLD(this.#frames),
+      reassembleFramesToFOLD(this.#framesRaw),
       this.#metadata,
       // { shapes: this.shapes },
     );
@@ -63,30 +70,14 @@ export class FileModel {
 
   import(fold: FOLD): void {
     this.#metadata = getFileMetadata(fold);
-    this.#frames = getFileFramesAsArray(fold);
+    this.#framesRaw = getFileFramesAsArray(fold);
     // todo: extended FOLD format
     //this.shapes = fold.shapes || [];
   }
 
   dealloc(): void {
-    // todo: these used to exist. i wonder
-    // if we're missing some important dealloc
-    // this.cp.dealloc();
-    // this.folded.dealloc();
     // this.simulator.dealloc();
   }
-
-  get creasePattern(): Model {
-    return this.cp;
-  }
-
-  get foldedForm(): Model {
-    return this.folded;
-  }
-
-  // get simulator(): Model {
-  //   return this.simulator;
-  // }
 }
 
 // export class FileModel {

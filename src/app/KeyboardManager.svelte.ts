@@ -46,7 +46,7 @@ export class KeyboardManager {
     this.#activeKeymap = keymap;
   }
 
-  bind(keymapName: string, action: Action, keyCombination: KeyCombination) {
+  bind(keymapName: string, action: Action, keyCombination: KeyCombination): void {
     const keymap = this.#keymaps.get(keymapName);
     if (!keymap) { return; }
     keymap.bindings.set(action, keyCombination);
@@ -59,13 +59,13 @@ export class KeyboardManager {
     keymap.listeners.get(action)?.push(handler);
   }
 
-  #onkeydown(event: KeyboardEvent) {
+  #onkeydown(event: KeyboardEvent): void {
     this.#keys.add(this.#normalize(event.key));
     // this.#keyCombination = this.#stringifyKeys();
     this.#checkActions();
   }
 
-  #onkeyup(event: KeyboardEvent) {
+  #onkeyup(event: KeyboardEvent): void {
     this.#keys.delete(this.#normalize(event.key));
   }
 
@@ -73,7 +73,7 @@ export class KeyboardManager {
   //   return Array.from(this.#keys).sort().join("+");
   // }
 
-  #checkActions() {
+  #checkActions(): void {
     if (!this.#activeKeymap) return;
     // console.log(this.#keys);
     // console.log(this.#keyCombination);

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { CreasePatternModel } from "./CreasePatternModel.svelte.ts";
+  import type { CreasePatternModel } from "./CreasePatternModel.ts";
 
   const { model }: { model: CreasePatternModel } = $props();
 </script>

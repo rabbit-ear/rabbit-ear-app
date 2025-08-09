@@ -1,7 +1,8 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport.ts";
+// import type { Model } from "../../../models/Model.ts";
 import Dropdown from "./Dropdown.svelte";
-import ClassPanel from "./PanelComponent.svelte";
+import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./Component.svelte";
 import { Settings } from "./Settings.svelte.ts";
 import { Renderer } from "./Renderer.svelte.ts";
@@ -18,7 +19,6 @@ export class SVGViewport implements Viewport {
   id: string;
   component: Component;
   dropdown: Component;
-  // panel: Component;
   domElement?: SVGSVGElement;
   didMount?: () => void;
 
@@ -27,6 +27,9 @@ export class SVGViewport implements Viewport {
   snap: Snap;
   style: Style;
   view: View;
+
+  // model?: Model = $state.raw();
+  modelName = $state("cp");
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
   // currently, this is used by the tools to draw indicator marks.
@@ -42,7 +45,6 @@ export class SVGViewport implements Viewport {
     this.id = String(Math.random());
     this.component = ViewportComponent;
     this.dropdown = Dropdown;
-    // this.panel = ViewportPanel;
     this.renderer = new Renderer(this);
     this.view = new View(this);
     this.style = new Style(this);
@@ -57,6 +59,7 @@ export class SVGViewport implements Viewport {
   }
 
   resetView(): void {
+    this.view.resetCamera();
   }
 
   dealloc(): void {

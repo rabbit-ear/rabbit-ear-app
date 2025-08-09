@@ -4,32 +4,29 @@ import type { Tool } from "./tools/Tool.ts";
 import Tools from "./tools/index.ts";
 
 export class ToolManager {
-  private ui: UI;
-  private tool?: Tool = $state();
+  #ui: UI;
+  #tool?: Tool = $state();
+  #unbindFromViewports: Map<Viewport, () => void> = new Map();
 
-  toolName: string = $derived((this.tool?.constructor as typeof Tool).key ?? "");
+  get tool(): Tool | undefined { return this.#tool; }
 
-  private unbindFromViewports: Map<Viewport, () => void> = new Map();
+  toolName: string = $derived((this.#tool?.constructor as typeof Tool).key ?? "");
 
   constructor(ui: UI) {
-    this.ui = ui;
+    this.#ui = ui;
   }
 
   dealloc(): void {
     // todo: anything we need to do here?
   }
 
-  get activeTool(): Tool | undefined { return this.tool; }
-
-  getTool() { return this.tool; }
-
-  unbindTool() {
-    this.tool?.dealloc?.();
-    this.unbindFromViewports.forEach(unbind => unbind());
-    this.unbindFromViewports.clear();
+  unbindTool(): void {
+    this.#tool?.dealloc?.();
+    this.#unbindFromViewports.forEach(unbind => unbind());
+    this.#unbindFromViewports.clear();
   }
 
-  setToolWithName(name: string) {
+  setToolWithName(name: string): void {
     // cleanup previous tool
     this.unbindTool();
     // get next tool
@@ -38,26 +35,26 @@ export class ToolManager {
       console.warn(`no tool with the name ${name}`);
       return;
     }
-    this.tool = new tool();
+    this.#tool = new tool();
     // console.log(this.tool);
-    this.ui.viewportManager.viewports.forEach(viewport => {
-      const unbind = this.tool?.bindTo(viewport);
+    this.#ui.viewportManager.viewports.forEach(viewport => {
+      const unbind = this.#tool?.bindTo(viewport);
       if (!unbind) { return; }
-      this.unbindFromViewports.set(viewport, unbind);
+      this.#unbindFromViewports.set(viewport, unbind);
     });
   }
 
-  viewportDidAdd(viewport: Viewport) {
+  viewportDidAdd(viewport: Viewport): void {
     this.viewportDidRemove(viewport);
-    const unbind = this.tool?.bindTo(viewport);
+    const unbind = this.#tool?.bindTo(viewport);
     if (!unbind) { return; }
-    this.unbindFromViewports.set(viewport, unbind);
+    this.#unbindFromViewports.set(viewport, unbind);
   }
 
-  viewportDidRemove(viewport: Viewport) {
-    const unbind = this.unbindFromViewports.get(viewport);
+  viewportDidRemove(viewport: Viewport): void {
+    const unbind = this.#unbindFromViewports.get(viewport);
     if (!unbind) { return; }
     unbind();
-    this.unbindFromViewports.delete(viewport);
+    this.#unbindFromViewports.delete(viewport);
   }
 }

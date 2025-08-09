@@ -47,7 +47,7 @@ export class Localization {
     return languages;
   }
 
-  setLanguage(code: string) {
+  setLanguage(code: string): void {
     this.#language = code;
   }
 

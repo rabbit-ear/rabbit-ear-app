@@ -50,7 +50,8 @@
     }
   });
 
-  const graph = $derived(context.fileManager.activeDocument?.model.cp.graph);
+  // const graph = $derived(context.fileManager.document?.model.cp.graph);
+  const graph = $derived(context.fileManager.document?.model[viewport.modelName]?.graph);
 
   // todo: issue-
   // creating and removing other Viewports causes a resize, but does not fire this.

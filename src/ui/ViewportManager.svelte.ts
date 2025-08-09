@@ -1,4 +1,3 @@
-// import { untrack } from "svelte";
 import type { UI } from "./UI.svelte.ts";
 import type { Viewport } from "./viewports/Viewport.ts";
 import Viewports from "./viewports/index.ts";
@@ -12,44 +11,25 @@ type EH = (e: Event) => void;
 export class ViewportManager {
   ui: UI;
   #effects: (() => void)[] = [];
-
   viewports: Viewport[] = $state([]);
-
-  // activeViewport: Viewport | undefined = $state(undefined);
-
   viewportEvents: Map<Viewport, { [key: string]: EH }> = new Map();
-
-  // #makeToolViewportEffect = (): (() => void) =>
-  //   $effect.root(() => {
-  //     $effect(() => {
-  //       this.viewports.forEach((viewport) => viewport.unbindTool());
-  //       this.viewports.forEach((viewport) => this.ui.tool?.bindTo(viewport));
-  //     });
-  //     return () => {
-  //       this.viewports.forEach((viewport) => viewport.unbindTool());
-  //     };
-  //   });
 
   #triggerViewportRedraw = (): (() => void) =>
     $effect.root(() => {
       $effect(() => {
         this.viewports.forEach((viewport) => viewport.redraw?.());
       });
-      return () => {
-        // empty
-      };
+      // empty
+      return () => { };
     });
 
   constructor(ui: UI) {
     this.ui = ui;
-    // this.#effects = [this.#triggerViewportRedraw(), this.#makeToolViewportEffect()];
     this.#effects = [this.#triggerViewportRedraw()];
-    // this.addViewport(new FilesViewport());
     // this.terminal = new TerminalViewport();
-    //this.frames = new FramesViewport();
   }
 
-  addViewport(viewport: Viewport) {
+  addViewport(viewport: Viewport): void {
     // this block needs to happen once viewport.domElement exists,
     // which only happens after Svelte mounts, via this callback didMount.
     viewport.didMount = () => {
@@ -62,11 +42,9 @@ export class ViewportManager {
     this.ui.toolManager.viewportDidAdd(viewport);
   }
 
-  removeViewport(viewport: Viewport) {
+  removeViewport(viewport: Viewport): void {
     const index = this.viewports.indexOf(viewport);
-    // const index = this.viewports.findIndex(vp => vp === viewport);
     if (index === -1) { return; }
-    // console.log(`ViewportManager removing viewport at index ${index}`);
     this.unbindViewport(viewport);
     this.viewports.splice(index, 1);
     // todo: should this be moved above the removal and be called WillRemove?
@@ -85,43 +63,39 @@ export class ViewportManager {
   unbindViewport(viewport: Viewport) {
     const prevEvents = this.viewportEvents.get(viewport);
     if (prevEvents) {
+      console.log("events found", Object.keys(prevEvents));
       Object.keys(prevEvents)
         .forEach(key => viewport.domElement?.removeEventListener(key, prevEvents[key]));
       this.viewportEvents.delete(viewport);
     } else {
-      // console.log("  - no events found");
+      console.log("  - no events found");
     }
   }
 
   bindViewport(viewport: Viewport) {
-    // console.log("ViewportManager bindViewport()");
-    // console.log("ToolManager bindViewport() domElement", viewport, viewport.domElement);
-    // const events: {[key: string]: (e: Event) => void } = {
     if (!viewport.domElement) { return; }
 
-    // todo: bring this back after debuggin
-    // this.unbindViewport(viewport);
+    // viewports should only have one of each event bound to it.
+    // as a safety precaution, remove any events if they exist.
+    // so far this case has never been observed, it's simply preventative.
+    this.unbindViewport(viewport);
 
-    // const tm = this.ui.toolManager;
     const events: { [key: string]: EH } = {
-      mousemove: ((e: MouseEvent) => this.ui.toolManager.getTool()?.onmousemove?.(viewport, e)) as EH,
-      mousedown: ((e: MouseEvent) => this.ui.toolManager.getTool()?.onmousedown?.(viewport, e)) as EH,
-      mouseup: ((e: MouseEvent) => this.ui.toolManager.getTool()?.onmouseup?.(viewport, e)) as EH,
-      mouseleave: ((e: MouseEvent) => this.ui.toolManager.getTool()?.onmouseleave?.(viewport, e)) as EH,
-      wheel: ((e: WheelEvent) => this.ui.toolManager.getTool()?.onwheel?.(viewport, e)) as EH,
-      touchstart: ((e: TouchEvent) => this.ui.toolManager.getTool()?.ontouchstart?.(viewport, e)) as EH,
-      touchend: ((e: TouchEvent) => this.ui.toolManager.getTool()?.ontouchend?.(viewport, e)) as EH,
-      touchmove: ((e: TouchEvent) => this.ui.toolManager.getTool()?.ontouchmove?.(viewport, e)) as EH,
-      touchcancel: ((e: TouchEvent) => this.ui.toolManager.getTool()?.ontouchcancel?.(viewport, e)) as EH,
-      keydown: ((e: KeyboardEvent) => this.ui.toolManager.getTool()?.onkeydown?.(viewport, e)) as EH,
-      keyup: ((e: KeyboardEvent) => this.ui.toolManager.getTool()?.onkeyup?.(viewport, e)) as EH,
+      mousemove: ((e: MouseEvent) => this.ui.toolManager.tool?.onmousemove?.(viewport, e)) as EH,
+      mousedown: ((e: MouseEvent) => this.ui.toolManager.tool?.onmousedown?.(viewport, e)) as EH,
+      mouseup: ((e: MouseEvent) => this.ui.toolManager.tool?.onmouseup?.(viewport, e)) as EH,
+      mouseleave: ((e: MouseEvent) => this.ui.toolManager.tool?.onmouseleave?.(viewport, e)) as EH,
+      wheel: ((e: WheelEvent) => this.ui.toolManager.tool?.onwheel?.(viewport, e)) as EH,
+      touchstart: ((e: TouchEvent) => this.ui.toolManager.tool?.ontouchstart?.(viewport, e)) as EH,
+      touchend: ((e: TouchEvent) => this.ui.toolManager.tool?.ontouchend?.(viewport, e)) as EH,
+      touchmove: ((e: TouchEvent) => this.ui.toolManager.tool?.ontouchmove?.(viewport, e)) as EH,
+      touchcancel: ((e: TouchEvent) => this.ui.toolManager.tool?.ontouchcancel?.(viewport, e)) as EH,
+      keydown: ((e: KeyboardEvent) => this.ui.toolManager.tool?.onkeydown?.(viewport, e)) as EH,
+      keyup: ((e: KeyboardEvent) => this.ui.toolManager.tool?.onkeyup?.(viewport, e)) as EH,
     };
-
-    // console.log(events);
 
     this.viewportEvents.set(viewport, events);
     Object.keys(events).forEach(key => viewport.domElement?.addEventListener(key, events[key]));
-    // Object.keys(events).forEach(key => console.log("add event listener", key, events[key]));
   }
 
   // replace(index: number, ViewClass: ModelViewportClassTypes): void {

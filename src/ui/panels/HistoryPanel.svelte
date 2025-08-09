@@ -1,8 +1,8 @@
 <script lang="ts">
   import context from "../../app/context.svelte.ts";
 
-  const undoStack = context.fileManager.activeDocument?.getUndoStack();
-  const redoStack = context.fileManager.activeDocument?.getRedoStack();
+  const undoStack = context.fileManager.document?.getUndoStack();
+  const redoStack = context.fileManager.document?.getRedoStack();
 </script>
 
 <div class="column gap">

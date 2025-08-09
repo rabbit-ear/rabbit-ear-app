@@ -14,7 +14,7 @@ export class LocalStorageRegistry {
     return this.registry.get(key) as LocalStorageItem<T>;
   }
 
-  static listKeys() {
+  static listKeys(): string[] {
     return [...this.registry.keys()];
   }
 }

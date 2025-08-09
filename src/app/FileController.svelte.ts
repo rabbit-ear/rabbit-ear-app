@@ -3,7 +3,7 @@ import { confirm } from "@tauri-apps/plugin-dialog";
 import { homeDir } from '@tauri-apps/api/path';
 import { FileManager } from "./FileManager.svelte.ts";
 import { FileDocument } from "./FileDocument.svelte.ts";
-import { EXTENSION, EXTENSIONS, FILE_TYPE_NAME, UNTITLED_FILENAME } from "../system/constants.ts";
+import { EXTENSION, FILE_TYPE_NAME } from "../system/constants.ts";
 
 const defaultFileDialogFilter = () => ({
   name: FILE_TYPE_NAME,
@@ -52,7 +52,7 @@ export class FileController {
   }
 
   async saveActiveDocumentWithSaveAsDialog(): Promise<boolean> {
-    const document = this.fileManager.activeDocument;
+    const document = this.fileManager.document;
     // todo: there are 3 types of results not 2, but two of them
     // are both failures: user cancelled, and this- error with document
     if (!document) { return false; }
@@ -62,7 +62,7 @@ export class FileController {
   // save the currently opened document. If the document does not have a path
   // (has not yet been saved), then open a "Save As..." dialog.
   async saveActiveDocument(): Promise<boolean> {
-    const document = this.fileManager.activeDocument;
+    const document = this.fileManager.document;
     // todo: there are 3 types of results not 2, but two of them
     // are both failures: user cancelled, and this- error with document
     if (!document) { return false; }
@@ -119,15 +119,15 @@ export class FileController {
     return false;
   }
 
-  async requestCloseDocumentAtIndex(index: number) {
+  async requestCloseDocumentAtIndex(index: number): Promise<boolean> {
     const document = this.fileManager.documents[index];
-    if (!document) { return; }
+    if (!document) { return Promise.resolve(false); }
     return this.requestCloseDocument(document);
   }
 
-  async requestCloseActiveDocument() {
-    const document = this.fileManager.activeDocument;
-    if (!document) { return; }
+  async requestCloseActiveDocument(): Promise<boolean> {
+    const document = this.fileManager.document;
+    if (!document) { return Promise.resolve(false); }
     return this.requestCloseDocument(document);
   }
 

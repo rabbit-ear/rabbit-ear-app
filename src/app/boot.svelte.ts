@@ -12,8 +12,12 @@ $effect.root(() => {
 
 export const defaultAppSetup = () => {
   // setup
-  context.ui?.viewportManager.addViewport(new SVGViewport());
-  context.ui?.toolManager.setToolWithName("ui.tools.select");
+  if (context.ui) {
+    context.ui.toolManager.setToolWithName("ui.tools.select");
+    context.ui.viewportManager.addViewport(new SVGViewport());
+    context.ui.viewportManager.addViewport(new SVGViewport());
+    context.ui.viewportManager.viewports[1].modelName = "folded";
+  }
 
   // setup keyboard event mapping
   const keyboard = context.keyboardManager;

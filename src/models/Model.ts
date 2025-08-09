@@ -20,5 +20,6 @@ export interface Model {
   // some optional properties that might exist
   snapPoints?: [number, number][] | [number, number, number][];
 
+  // the Simulator Model in particular uses this to dealloc WebGL things
   dealloc?: () => void;
 }

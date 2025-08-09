@@ -12,6 +12,9 @@
     children,
   }: { index: number; viewport?: Viewport; children: Snippet } = $props();
 
+  const modelTypes = ["cp", "folded", "simulator"];
+  const modelTypeNames = { cp: "cp", folded: "folded", simulator: "sim" };
+
   const swapSVG = (): void => context.ui?.viewportManager.replace(index, SVGViewport);
   const swapWebGL = (): void => context.ui?.viewportManager.replace(index, WebGLViewport);
   const removeViewport = () => {
@@ -36,13 +39,13 @@
     <div class="row gap">
       <p>View Model</p>
       <div class="row toggle-row">
-        <!---->
-        <!-- {#each Object.values(context.fileManager.models.models) as model} -->
-        <!--   <button -->
-        <!--     class={viewport.model === model ? "highlighted" : ""} -->
-        <!--     onclick={(): IModel => (viewport.model = model)}>{model.abbreviation}</button> -->
-        <!-- {/each} -->
-        <!---->
+        {#each modelTypes as name}
+          <button
+            class={viewport.modelName === name ? "highlighted" : ""}
+            onclick={() => {
+              viewport.modelName = name;
+            }}>{modelTypeNames[name]}</button>
+        {/each}
       </div>
     </div>
 

@@ -25,6 +25,9 @@ export abstract class Viewport {
   // when this triggers, you are now able to access domElement
   abstract didMount?: () => void;
 
+  // cp, folded, simulator
+  abstract modelName?: string;
+
   // force the screen to re-calculate window bounds. used when viewports are added/removed
   // abstract redraw?: () => void;
 

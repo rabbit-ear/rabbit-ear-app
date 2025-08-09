@@ -35,8 +35,8 @@ export class PanelManager {
     .map(ViewportClass => ({ name: ViewportClass.name || "", component: ViewportClass.panel }))
     .filter(obj => obj.component !== undefined)));
 
-  toolPanel: PanelType | undefined = $derived.by(() => this.ui.toolManager.activeTool?.panel
-    ? ({ name: this.ui.toolManager.activeTool?.constructor.name, component: this.ui.toolManager.activeTool?.panel })
+  toolPanel: PanelType | undefined = $derived.by(() => this.ui.toolManager.tool?.panel
+    ? ({ name: this.ui.toolManager.tool?.constructor.name, component: this.ui.toolManager.tool?.panel })
     : undefined);
 
   panels: PanelType[] = $derived(this.viewportPanels

@@ -1,41 +1,79 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport";
-// import ViewportComponent from "./ViewportComponent.svelte";
+import type { FrameStyle } from "../../../models/FrameStyle.ts";
+import ViewportComponent from "./ViewportComponent.svelte";
 // import Dropdown from "./Dropdown.svelte";
-// import Panel from "./Panel.svelte";
+// import ClassPanel from "./Panel.svelte";
+import { View } from "./View.svelte.ts";
+// import { Settings } from "./Settings.svelte.ts";
 
-const settings = {};
+//class Style {
+//  view: View;
+//  constructor(view: View) {
+//    this.view = view;
+//  }
+//}
 
 export class WebGLViewport implements Viewport {
-  static settings = settings;
-  // static panel: Component = Panel;
+  static name: string = "WebGL Viewport";
+  // static settings: Settings = new Settings();
+  // static panel: Component = ClassPanel;
 
   id: string;
-
   component: Component;
-  panel: Component;
+  // dropdown: Component;
+  domElement?: SVGSVGElement;
+  didMount?: () => void;
 
-  redraw?: () => void = $state();
+  view: View;
+  //style: Style;
+
+  // model?: Model = $state.raw();
+  modelName = $state("cp");
 
   // layer?: unknown = $state();
   // props?: unknown = $state();
 
+  redraw?: () => void = $state();
+
+  effects: (() => void)[];
+
   constructor() {
     this.id = String(Math.random());
-    // this.component = ViewportComponent;
-    // this.panel = Dropdown;
+    this.component = ViewportComponent;
+    // this.dropdown = Dropdown;
+    this.view = new View();
+    //this.style = new Style(this.view);
+    this.effects = [this.makeFrameStyleEffect()];
     // this.setModelStyle(this.model.style);
   }
 
-  unbindTool(): void {
+  setModelStyle(modelStyle: FrameStyle): void {
+    if (!modelStyle) {
+      return;
+    }
+    // set initial state using the model style
+    this.view.renderStyle = modelStyle.isFoldedForm ? "foldedForm" : "creasePattern";
+    this.view.perspective = modelStyle.dimension === 2 ? "orthographic" : "perspective";
+    this.view.opacity = modelStyle.transparentFaces ? 0.2 : 1.0;
+    // todo: something else to tell it to draw transparent faces
+  }
+
+  makeFrameStyleEffect(): () => void {
+    return $effect.root(() => {
+      $effect(() => this.setModelStyle(this.model.style));
+      return () => {
+        // empty
+      };
+    });
   }
 
   resetView(): void {
-    // this.view.viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1.866025, 1];
+    this.view.viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1.866025, 1];
   }
 
   dealloc(): void {
-    // this.effects.forEach((cleanup) => cleanup());
+    this.effects.forEach((cleanup) => cleanup());
   }
 
   uiEpsilonFactor = 0.01;

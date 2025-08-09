@@ -4,33 +4,34 @@
   import context from "../../app/context.svelte.ts";
   // import Rendering from "./Rendering.svelte";
 
-  const classNames = { creasePattern: "crease pattern", foldedForm: "folded form" };
+  const classNames: { [key: string]: string } = {
+    creasePattern: "crease pattern",
+    foldedForm: "folded form",
+  };
 
-  let framesFlat: FOLD[] = $derived(context.fileManager.activeDocument?.model.framesFlat);
+  let frames: FOLD[] = $derived(context.fileManager.document?.model.frames ?? []);
 
-  let activeFrameIndex = $derived(
-    context.fileManager.activeDocument?.model.activeFrameIndex,
-  );
+  let activeFrameIndex = $derived(context.fileManager.document?.model.activeFrameIndex);
 
   let framesStyle = $derived(
-    framesFlat
+    frames
       .map((graph) => graph?.frame_classes || [])
       .map((classes) => classes.map((cl) => classNames[cl]))
       .map((classes) => classes.filter((a) => a).join(" ")),
   );
 
-  let frameStyles = $derived(context.fileManager.activeDocument?.model.framesStyle);
+  let frameStyles = $derived(context.fileManager.document?.model.framesStyle);
 
   const onclick = (index: number): void => {
-    if (!context.fileManager.activeDocument) {
+    if (!context.fileManager.document) {
       return;
     }
-    context.fileManager.activeDocument.model.activeFrameIndex = index;
+    context.fileManager.document.model.activeFrameIndex = index;
   };
 </script>
 
 <div class="column gap-sm scrollable">
-  {#each framesFlat as graph, i}
+  {#each frames as graph, i}
     {#if i !== 0}
       <hr />
     {/if}
