@@ -12,7 +12,7 @@
   let { viewport, ...props }: PropsType = $props();
 
   // const graph = $derived(viewport.model?.graph);
-  const graph = $derived(context.fileManager.document?.model);
+  const graph = $derived(viewport.model?.graph);
 </script>
 
 <SVGFOLD {graph} />

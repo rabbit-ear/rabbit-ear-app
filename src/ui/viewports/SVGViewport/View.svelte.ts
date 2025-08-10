@@ -20,27 +20,26 @@ export class View {
 
   canvasSize: [number, number] | undefined = $state(undefined);
 
-  camera = $state([...identity2x3]);
-
-  #model = $state([...identity2x3]);
+  // camera = $state([...identity2x3]);
+  // #model = $state([...identity2x3]);
 
   get model(): number[] {
-    return this.#model;
+    return this.viewport.modelView.model;
   }
 
   set model(matrix) {
-    const old = this.#model;
+    const old = this.viewport.modelView.model;
     const scale = matrix[0] / old[0];
     const x = (matrix[4] - old[4]) / old[0];
     const y = (matrix[5] - old[5]) / old[0];
     const difference = [scale, 0, 0, scale, x, y];
-    const newCamera = multiplyMatrices2(this.camera, difference);
-    this.camera = newCamera;
-    this.#model = matrix;
+    const newCamera = multiplyMatrices2(this.viewport.modelView.camera, difference);
+    this.viewport.modelView.camera = newCamera;
+    this.viewport.modelView.model = matrix;
   }
 
   view = $derived.by(() => {
-    const inverted = invertMatrix2(this.camera);
+    const inverted = invertMatrix2(this.viewport.modelView.camera);
     return inverted ? inverted : [...identity2x3];
   });
 
@@ -117,8 +116,8 @@ export class View {
         console.log("SVGViewport view effect");
         const matrix = graphToMatrix2(this.viewport.model?.graph, this.rightHanded);
         untrack(() => {
-          this.#model = matrix;
-          this.camera = [...identity2x3];
+          this.viewport.modelView.model = matrix;
+          this.viewport.modelView.camera = [...identity2x3];
         });
       });
       return (): void => { };
@@ -137,13 +136,13 @@ export class View {
   }
 
   resetCamera(): void {
-    this.camera = [...identity2x3];
+    this.viewport.modelView.camera = [...identity2x3];
   }
 
   // todo: not sure that this is ever being called.
   resetModel(): void {
     console.log("reset model");
-    this.#model = [...identity2x3];
+    this.viewport.modelView.model = [...identity2x3];
   }
 
   reset(): void {

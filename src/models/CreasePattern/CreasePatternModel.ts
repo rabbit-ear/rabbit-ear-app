@@ -6,6 +6,7 @@ import type { FileModel } from "../FileModel.svelte.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import Panel from "./Panel.svelte";
 import { resize2 } from "rabbit-ear/math/vector.js";
+import type { FrameView } from "../FrameView.svelte.ts";
 
 export class CreasePatternModel implements Model {
   name: string = "creasePattern";
@@ -16,7 +17,7 @@ export class CreasePatternModel implements Model {
 
   // it might be possible to "unfold" the vertices
   get graph(): FOLD | undefined {
-    return this.#model.frameProperties?.isFoldedForm ? undefined : this.#model.frame as FOLD;
+    return this.#model.frameAttributes?.isFoldedForm ? undefined : this.#model.frame as FOLD;
   }
 
   get snapPoints(): [number, number][] {
@@ -27,12 +28,18 @@ export class CreasePatternModel implements Model {
     return {
       isFoldedForm: false,
       dimension: 2,
-      showVertices:
+      isAbstract:
         (this.graph?.vertices_coords &&
           !this.graph?.edges_vertices &&
           !this.graph?.faces_vertices) ?? false,
-      transparentFaces: false,
+      // unclear what we should say here. a CP does not render layer orders
+      // (not the folded form of a CP, but the CP itself)
+      hasLayerOrder: true,
     };
+  }
+
+  get view(): FrameView | undefined {
+    return this.#model.frameView;
   }
 
   // get shapes(): Shape[] {

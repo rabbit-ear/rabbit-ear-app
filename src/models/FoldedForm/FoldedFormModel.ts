@@ -8,6 +8,7 @@ import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
+import type { FrameView } from "../FrameView.svelte.ts";
 
 export class FoldedFormModel implements Model {
   name: string = "foldedForm";
@@ -21,7 +22,7 @@ export class FoldedFormModel implements Model {
     error: Error | undefined;
     result: [number, number][] | [number, number, number][];
   } {
-    if (this.#model.frameProperties?.isFoldedForm) {
+    if (this.#model.frameAttributes?.isFoldedForm) {
       return { error: undefined, result: this.#model.frame.vertices_coords ?? [] };
     }
     if (!this.settings.active) {
@@ -41,6 +42,10 @@ export class FoldedFormModel implements Model {
     return this.foldedVerticesResultAndErrors.result;
   };
 
+  get view(): FrameView | undefined {
+    return this.#model.frameView;
+  }
+
   // todo
   get snapPoints(): [number, number][] {
     return [];
@@ -59,11 +64,15 @@ export class FoldedFormModel implements Model {
     return {
       isFoldedForm: true,
       dimension: getDimensionQuick({ vertices_coords: this.vertices_coords }) ?? 2,
-      showVertices:
+      // isAbstract:
+      //   (this.graph?.vertices_coords &&
+      //     !this.graph?.edges_vertices &&
+      //     !this.graph?.faces_vertices) ?? false,
+      isAbstract:
         (this.#model.frame.vertices_coords &&
           !this.#model.frame.edges_vertices &&
           !this.#model.frame.faces_vertices) ?? false,
-      transparentFaces: this.#model.frame.faceOrders == null,
+      hasLayerOrder: this.#model.frame.faceOrders != null,
     };
   }
 

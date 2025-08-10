@@ -59,7 +59,7 @@ export class WebGLViewport implements Viewport {
     // set initial state using the model style
     this.view.renderStyle = modelStyle.isFoldedForm ? "foldedForm" : "creasePattern";
     this.view.perspective = modelStyle.dimension === 2 ? "orthographic" : "perspective";
-    this.view.opacity = modelStyle.transparentFaces ? 0.2 : 1.0;
+    this.view.opacity = modelStyle.hasLayerOrder ? 1.0 : 0.2;
     // todo: something else to tell it to draw transparent faces
   }
 

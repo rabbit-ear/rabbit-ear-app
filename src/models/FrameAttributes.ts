@@ -5,15 +5,15 @@ import { getDimensionQuick, isFoldedForm } from "rabbit-ear/fold/spec.js";
 export type FrameAttributes = {
   isFoldedForm: boolean;
   dimension: number;
-  showVertices: boolean;
-  transparentFaces: boolean;
+  isAbstract: boolean;
+  hasLayerOrder: boolean;
 };
 
 export const makeFrameAttributes = (graph: FOLD): FrameAttributes => ({
   isFoldedForm: isFoldedForm(graph),
   dimension: getDimensionQuick(graph) ?? 2,
-  showVertices:
+  isAbstract:
     (graph?.vertices_coords && !graph?.edges_vertices && !graph?.faces_vertices) ?? false,
-  transparentFaces: graph.faceOrders == null,
+  hasLayerOrder: graph.faceOrders != null,
 });
 
