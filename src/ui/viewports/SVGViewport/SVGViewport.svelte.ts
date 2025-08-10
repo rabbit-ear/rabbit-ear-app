@@ -1,8 +1,8 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport.ts";
 import type { ViewportState } from "../../../app/ViewportState.svelte.ts";
-import type { FileModel } from "../../../app/FileModel.svelte.ts";
-// import type { Model } from "../../../models/Model.ts";
+import type { FileModel } from "../../../models/FileModel.svelte.ts";
+import type { Model } from "../../../models/Model.ts";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./Component.svelte";
@@ -12,6 +12,7 @@ import { View } from "./View.svelte.ts";
 import { Style } from "./Style.svelte.ts";
 import { Grid } from "./Grid.svelte.ts";
 import { Snap } from "./Snap.svelte.ts";
+import context from "../../../app/context.svelte.ts";
 
 export class SVGViewport implements Viewport {
   static name: string = "SVG Viewport";
@@ -30,11 +31,11 @@ export class SVGViewport implements Viewport {
   style: Style;
   view: View;
 
-  state: ViewportState;
-
   // model?: Model = $state.raw();
-  // modelName = $state("cp");
-  modelName = $derived.by(() => this.state.model);
+  modelName = $state("creasePattern");
+  // modelName = $derived.by(() => this.state.model);
+
+  model?: Model = $derived(context.fileManager.document?.model[this.modelName]);
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
   // currently, this is used by the tools to draw indicator marks.
@@ -46,9 +47,8 @@ export class SVGViewport implements Viewport {
 
   // todo: somehow we need to be able to swap viewports (WebGL to SVG)
   // and carry over the style settings (view and render style).
-  constructor(state: ViewportState) {
+  constructor() {
     this.id = String(Math.random());
-    this.state = state;
     this.component = ViewportComponent;
     this.dropdown = Dropdown;
     this.renderer = new Renderer(this);

@@ -1,7 +1,7 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 // import type { Shape } from "../geometry/shapes.ts";
-import type { FrameStyle } from "./FrameStyle.ts";
+import type { FrameAttributes } from "./FrameAttributes.ts";
 
 export interface Model {
   name: string;
@@ -10,9 +10,9 @@ export interface Model {
   panel?: Component;
 
   // get the (compiled if necessary) FOLD graph
-  graph: FOLD;
+  graph: FOLD | undefined;
 
-  style: FrameStyle;
+  attributes: FrameAttributes;
 
   // other
   // shapes: Shape[];

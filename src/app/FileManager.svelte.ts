@@ -1,6 +1,5 @@
 import { readTextFile } from "@tauri-apps/plugin-fs";
 import { FileDocument } from "./FileDocument.svelte";
-import { FileModel } from "./FileModel.svelte";
 import { UNTITLED_FILENAME } from "../system/constants.ts";
 
 export class FileManager {
@@ -37,7 +36,7 @@ export class FileManager {
     try {
       const text = await readTextFile(filePath);
       const data = JSON.parse(text);
-      const document = new FileDocument(filePath, new FileModel(data));
+      const document = new FileDocument(filePath, data);
       this.#documents.push(document);
       this.#activeIndex = this.#documents.length - 1;
     } catch (err: unknown) {
@@ -58,7 +57,7 @@ export class FileManager {
       try {
         const text = await readTextFile(filePath);
         const data = JSON.parse(text);
-        const document = new FileDocument(filePath, new FileModel(data));
+        const document = new FileDocument(filePath, data);
         this.#documents.push(document);
       } catch (err: unknown) {
         const error = err instanceof Error
@@ -79,7 +78,7 @@ export class FileManager {
 
   async newFile(): Promise<void> {
     // todo: should an empty FOLD file contain any metadata?
-    const document = new FileDocument(undefined, new FileModel({}));
+    const document = new FileDocument(undefined, {});
     this.#documents.push(document);
     this.#activeIndex = this.#documents.length - 1;
   }

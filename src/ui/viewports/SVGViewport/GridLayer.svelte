@@ -1,9 +1,14 @@
 <script lang="ts">
   import type { SVGViewport } from "./SVGViewport.svelte.ts";
   let { viewport }: { viewport: SVGViewport } = $props();
+
+  const modelExists = $derived(!!viewport.model?.graph);
 </script>
 
-<g class="grid-layer" stroke-width={viewport.grid.strokeWidth}>
+<!-- <g class="grid-layer" stroke-width={viewport.grid.strokeWidth}> -->
+<g
+  class={modelExists ? "grid-layer" : "grid-layer no-model"}
+  stroke-width={viewport.grid.strokeWidth}>
   {#each viewport.grid.lines as line}
     <line {...line} />
   {/each}
@@ -21,7 +26,10 @@
 </g>
 
 <style>
-  line {
+  .grid-layer {
     stroke: var(--background-3);
+  }
+  .no-model {
+    stroke: var(--dark-yellow);
   }
 </style>

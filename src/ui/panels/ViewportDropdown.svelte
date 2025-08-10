@@ -12,8 +12,10 @@
     children,
   }: { index: number; viewport?: Viewport; children: Snippet } = $props();
 
-  const modelTypes = ["cp", "folded", "simulator"];
-  const modelTypeNames = { cp: "cp", folded: "folded", simulator: "sim" };
+  // these match with the Viewport.modelName property
+  const modelTypes = ["creasePattern", "foldedForm", "simulator"];
+  // convert the above into what is shown on screen (abbreviated if necessary)
+  const modelTypeNames = { creasePattern: "cp", foldedForm: "folded", simulator: "sim" };
 
   const swapSVG = (): void => context.ui?.viewportManager.replace(index, SVGViewport);
   const swapWebGL = (): void => context.ui?.viewportManager.replace(index, WebGLViewport);

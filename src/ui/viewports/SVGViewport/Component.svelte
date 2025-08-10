@@ -6,7 +6,6 @@
   // import ModelLayer from "./ModelLayer.svelte";
   // import SVGShapes from "../../Components/SVG/SVGShapes.svelte";
   import SVGFOLD from "../../Components/SVG/SVGFOLD.svelte";
-  import context from "../../../app/context.svelte.ts";
 
   type PropsType = {
     viewport: SVGViewport;
@@ -50,8 +49,7 @@
     }
   });
 
-  // const graph = $derived(context.fileManager.document?.model.cp.graph);
-  const graph = $derived(context.fileManager.document?.model[viewport.modelName]?.graph);
+  const graph = $derived(viewport.model?.graph);
 
   // todo: issue-
   // creating and removing other Viewports causes a resize, but does not fire this.

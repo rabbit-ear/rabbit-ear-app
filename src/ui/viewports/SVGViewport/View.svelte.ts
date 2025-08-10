@@ -115,7 +115,7 @@ export class View {
     return $effect.root(() => {
       $effect(() => {
         console.log("SVGViewport view effect");
-        const matrix = graphToMatrix2(this.viewport.model?.fold, this.rightHanded);
+        const matrix = graphToMatrix2(this.viewport.model?.graph, this.rightHanded);
         untrack(() => {
           this.#model = matrix;
           this.camera = [...identity2x3];

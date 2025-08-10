@@ -1,14 +1,15 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import { getDimensionQuick, isFoldedForm } from "rabbit-ear/fold/spec.js";
 
-export type FrameStyle = {
+// FrameAttributes
+export type FrameAttributes = {
   isFoldedForm: boolean;
   dimension: number;
   showVertices: boolean;
   transparentFaces: boolean;
 };
 
-export const makeFrameStyle = (graph: FOLD): FrameStyle => ({
+export const makeFrameAttributes = (graph: FOLD): FrameAttributes => ({
   isFoldedForm: isFoldedForm(graph),
   dimension: getDimensionQuick(graph) ?? 2,
   showVertices:

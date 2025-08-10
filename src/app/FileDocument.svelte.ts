@@ -1,6 +1,7 @@
+import type { FOLD } from "rabbit-ear/types.d.ts";
 import { writeTextFile, readTextFile } from "../system/fs.ts";
 import type { Command } from "../commands/Command";
-import { FileModel } from "./FileModel.svelte.ts";
+import { FileModel } from "../models/FileModel.svelte.ts";
 import { getFileName } from "../system/path.ts";
 
 export class FileDocument {
@@ -28,9 +29,9 @@ export class FileDocument {
   getUndoStack(): Readonly<Command[]> { return this.#undoStack; }
   getRedoStack(): Readonly<Command[]> { return this.#redoStack; }
 
-  constructor(path: string | undefined, initialData: FileModel) {
+  constructor(path: string | undefined, initialData: FOLD) {
     this.#filePath = path;
-    this.#dataModel = initialData;
+    this.#dataModel = new FileModel(initialData);
     this.#isDirty = false;
   }
 

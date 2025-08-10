@@ -1,18 +1,17 @@
 import type { Component } from "svelte";
-import type { ViewportState } from "../../app/ViewportState.svelte";
+import type { Model } from "../../models/Model.ts";
 
 export abstract class Viewport {
   // static properties (unable to be defined here, please define them)
   static name?: string;
   static panel?: Component;
 
-  // abstract constructor(state: ViewportState);
+  // a (reactive) reference to the model currently being displayed
+  abstract model?: Model;
 
   // a unique UUID for each instance
   // this is required for the Svelte {#each} loop to prevent element reuse
   abstract id: string;
-
-  abstract state: ViewportState;
 
   // an optional panel associated with this viewport.
   abstract panel?: Component;
@@ -30,7 +29,8 @@ export abstract class Viewport {
   // when this triggers, you are now able to access domElement
   abstract didMount?: () => void;
 
-  // cp, folded, simulator
+  // the currently opened FileModel has a few different Model types available
+  // for display. must be one of <string>: creasePattern, foldedForm, simulator
   abstract modelName?: string;
 
   // force the screen to re-calculate window bounds. used when viewports are added/removed

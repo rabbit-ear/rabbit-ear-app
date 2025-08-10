@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js";
-  import type { FrameStyle } from "../../model/FrameStyle.ts";
+  import type { FrameAttributes } from "../../model/FrameAttributes.ts";
   import context from "../../app/context.svelte.ts";
   // import Rendering from "./Rendering.svelte";
 

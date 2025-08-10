@@ -1,8 +1,8 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Model } from "../Model.ts";
-import type { FrameStyle } from "../FrameStyle.ts";
-import type { FileModel } from "../../app/FileModel.svelte.ts";
+import type { FrameAttributes } from "../FrameAttributes.ts";
+import type { FileModel } from "../FileModel.svelte.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
@@ -21,7 +21,7 @@ export class FoldedFormModel implements Model {
     error: Error | undefined;
     result: [number, number][] | [number, number, number][];
   } {
-    if (this.#model.frameStyle?.isFoldedForm) {
+    if (this.#model.frameProperties?.isFoldedForm) {
       return { error: undefined, result: this.#model.frame.vertices_coords ?? [] };
     }
     if (!this.settings.active) {
@@ -55,7 +55,7 @@ export class FoldedFormModel implements Model {
       : [];
   }
 
-  get style(): FrameStyle {
+  get attributes(): FrameAttributes {
     return {
       isFoldedForm: true,
       dimension: getDimensionQuick({ vertices_coords: this.vertices_coords }) ?? 2,
@@ -73,7 +73,7 @@ export class FoldedFormModel implements Model {
 
   //faceOrders: [number, number, number][] = $state.raw([]);
 
-  get graph(): FOLD {
+  get graph(): FOLD | undefined {
     return {
       //...$state.snapshot(this.graph),
       ...this.#model.frame,

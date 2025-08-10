@@ -1,8 +1,8 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Model } from "../Model.ts";
-import type { FrameStyle } from "../FrameStyle.ts";
-import type { FileModel } from "../../app/FileModel.svelte.ts";
+import type { FrameAttributes } from "../FrameAttributes.ts";
+import type { FileModel } from "../FileModel.svelte.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import Panel from "./Panel.svelte";
 import { resize2 } from "rabbit-ear/math/vector.js";
@@ -15,22 +15,22 @@ export class CreasePatternModel implements Model {
   #model: FileModel;
 
   // it might be possible to "unfold" the vertices
-  get graph(): FOLD {
-    return this.#model.frameStyle?.isFoldedForm ? {} : this.#model.frame as FOLD;
+  get graph(): FOLD | undefined {
+    return this.#model.frameProperties?.isFoldedForm ? undefined : this.#model.frame as FOLD;
   }
 
   get snapPoints(): [number, number][] {
-    return this.graph.vertices_coords?.map(resize2) ?? [];
+    return this.graph?.vertices_coords?.map(resize2) ?? [];
   }
 
-  get style(): FrameStyle {
+  get attributes(): FrameAttributes {
     return {
       isFoldedForm: false,
       dimension: 2,
       showVertices:
-        (this.graph.vertices_coords &&
-          !this.graph.edges_vertices &&
-          !this.graph.faces_vertices) ?? false,
+        (this.graph?.vertices_coords &&
+          !this.graph?.edges_vertices &&
+          !this.graph?.faces_vertices) ?? false,
       transparentFaces: false,
     };
   }

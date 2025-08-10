@@ -12,14 +12,15 @@ export interface ViewportStateType {
   frames?: FrameViewState[];
 };
 
-const defaultViewportState = (): ViewportStateType => ({
-  id: String(Math.random()),
-  type: "svg",
-  model: "cp",
-  projection: "orthographic",
-  viewMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-  projectionMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-})
+export const defaultViewportState = (defaults: ViewportStateType = {}): ViewportStateType => Object
+  .assign({
+    id: String(Math.random()),
+    type: "svg",
+    model: "cp",
+    projection: "orthographic",
+    viewMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+    projectionMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+  }, defaults);
 
 export class ViewportState {
   id: string = $state(String(Math.random()));

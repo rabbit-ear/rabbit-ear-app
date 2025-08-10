@@ -1,5 +1,9 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import { ViewportState, type ViewportStateType } from "./ViewportState.svelte";
+import {
+  type ViewportStateType,
+  ViewportState,
+  defaultViewportState,
+} from "./ViewportState.svelte";
 
 export interface SceneStateType {
   tool?: string;
@@ -11,21 +15,7 @@ export interface SceneStateType {
 
 const defaultSceneState = (): SceneStateType => ({
   tool: "ui.tools.select",
-  viewports: [{
-    id: String(Math.random()),
-    type: "SVGViewport",
-    model: "cp",
-    viewMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-    projection: "orthographic",
-    projectionMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-  }, {
-    id: String(Math.random()),
-    type: "SVGViewport",
-    model: "folded",
-    viewMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-    projection: "orthographic",
-    projectionMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-  }],
+  viewports: [defaultViewportState(), defaultViewportState({ model: "folded" })],
   settings: {
     grid: true,
   }

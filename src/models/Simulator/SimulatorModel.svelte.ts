@@ -1,14 +1,14 @@
 import type { Component } from "svelte";
 import type { FOLD, Box } from "rabbit-ear/types.d.ts";
 import type { Model as ModelInterface } from "../Model.ts";
-import type { FrameStyle } from "../FrameStyle.ts";
+import type { FrameAttributes } from "../FrameAttributes.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import type { SolverOptions } from "../../simulator/simulator/GPUMath.ts";
 import { boundingBox } from "rabbit-ear/graph/boundary.js";
 import { Model as OriSimModel } from "../../simulator/simulator/Model.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
-import type { FileModel } from "../../app/FileModel.svelte.ts";
+import type { FileModel } from "../FileModel.svelte.ts";
 
 export class SimulatorModel implements ModelInterface {
   name: string = "simulator";
@@ -35,8 +35,8 @@ export class SimulatorModel implements ModelInterface {
 
   effects: (() => void)[] = [];
 
-  //style: FrameStyleType = $derived({
-  style: FrameStyle = {
+  //should this be $derived({
+  attributes: FrameAttributes = {
     isFoldedForm: true,
     dimension: 3,
     showVertices: false,

@@ -62,6 +62,6 @@
 
   button:focus {
     outline-offset: -1px;
-    outline: 2px solid var(--uiblue);
+    outline: 2px solid var(--ui-blue);
   }
 </style>

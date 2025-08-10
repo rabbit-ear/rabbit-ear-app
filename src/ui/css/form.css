@@ -18,7 +18,7 @@ input[type="text"]:focus,
 input[type="number"]:focus,
 textarea:focus {
   outline-offset: 2px;
-  outline: 2px solid var(--uiblue);
+  outline: 2px solid var(--ui-blue);
 }
 
 /* button */
@@ -32,7 +32,7 @@ button {
   line-height: 0.75rem;
   font-weight: bold;
   color: var(--bright);
-  background-color: var(--uiblue);
+  background-color: var(--ui-blue);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,12 +44,12 @@ button {
 }
 
 button:hover {
-  background-color: var(--uidarkblue);
+  background-color: var(--ui-dark-blue);
 }
 
 button:focus {
   outline-offset: 2px;
-  outline: 2px solid var(--uiblue);
+  outline: 2px solid var(--ui-blue);
 }
 
 button[disabled] {
@@ -58,7 +58,7 @@ button[disabled] {
 }
 
 button[disabled]:hover {
-  background-color: var(--uiblue);
+  background-color: var(--ui-blue);
 }
 
 /* checkbox */
@@ -72,7 +72,7 @@ input[type="checkbox"] {
 
 input[type="checkbox"]:focus {
   outline-offset: 2px;
-  outline: 2px solid var(--uiblue);
+  outline: 2px solid var(--ui-blue);
 }
 
 /* button-style replacement for radio buttons */
@@ -90,7 +90,7 @@ input[type="checkbox"]:focus {
 }
 
 .toggle-row button.highlighted {
-  background-color: var(--uiblue);
+  background-color: var(--ui-blue);
 }
 
 .toggle-row button:hover {
@@ -98,7 +98,7 @@ input[type="checkbox"]:focus {
 }
 
 .toggle-row button.highlighted:hover {
-  background-color: var(--uidarkblue);
+  background-color: var(--ui-dark-blue);
 }
 
 .toggle-row button[disabled]:hover {
@@ -106,7 +106,7 @@ input[type="checkbox"]:focus {
 }
 
 .toggle-row button[disabled].highlighted:hover {
-  background-color: var(--uiblue);
+  background-color: var(--ui-blue);
 }
 
 .toggle-row button:first-of-type {
@@ -182,19 +182,19 @@ input[type="range"]::-moz-range-track {
 }
 
 input[type="range"]::-webkit-slider-thumb {
-  background-color: var(--uiblue);
+  background-color: var(--ui-blue);
 }
 
 input[type="range"]::-moz-range-thumb {
-  background-color: var(--uiblue);
+  background-color: var(--ui-blue);
 }
 
 input[type="range"]:focus::-webkit-slider-thumb {
-  outline-color: var(--uiblue);
+  outline-color: var(--ui-blue);
 }
 
 input[type="range"]:focus::-moz-range-thumb {
-  outline-color: var(--uiblue);
+  outline-color: var(--ui-blue);
 }
 
 input[type="range"][disabled]::-webkit-slider-thumb {

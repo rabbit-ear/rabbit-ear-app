@@ -1,20 +1,18 @@
 import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js";
-import type { Model } from "../models/Model.ts";
-import type { FrameStyle } from "../models/FrameStyle.ts";
+import type { Model } from "./Model.ts";
+import type { FrameAttributes } from "./FrameAttributes.ts";
 // import { SimulatorModel } from "../model/Simulator/SimulatorModel.svelte.ts";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
 import { reassembleFramesToFOLD, makeFlatFramesFromFrames } from "../general/fold.ts";
-import { CreasePatternModel } from "../models/CreasePattern/CreasePatternModel.ts";
-import { FoldedFormModel } from "../models/FoldedForm/FoldedFormModel.ts";
-import { makeFrameStyle } from "../models/FrameStyle.ts";
-import { SceneState } from "./SceneState.svelte.ts";
+import { CreasePatternModel } from "./CreasePattern/CreasePatternModel.ts";
+import { FoldedFormModel } from "./FoldedForm/FoldedFormModel.ts";
+import { makeFrameAttributes } from "./FrameAttributes.ts";
+import { FrameSettings } from "./FrameSettings.svelte.ts";
 
 export class FileModel {
   #metadata: FOLDFileMetadata = $state({});
   #framesRaw: FOLDChildFrame[] = $state.raw([]);
-
-  sceneState: SceneState = $state(SceneState.empty);
 
   // which frame index is currently selected by the app for rendering/modification
   activeFrameIndex: number = $state(0);
@@ -31,8 +29,13 @@ export class FileModel {
   frameRaw: FOLDChildFrame = $derived.by(() => this.#framesRaw[this.activeFrameIndex]);
 
   // style-related properties for every frame, like is it 2D, folded, etc..
-  framesStyle: FrameStyle[] = $derived.by(() => this.frames.map(makeFrameStyle));
-  frameStyle: FrameStyle = $derived.by(() => this.framesStyle[this.activeFrameIndex]);
+  framesProperties: FrameAttributes[] = $derived.by(() => this.frames.map(makeFrameAttributes));
+  frameProperties: FrameAttributes = $derived.by(() => this.framesProperties[this.activeFrameIndex]);
+
+  framesSettings: FrameSettings[] = $derived
+    .by(() => this.frames.map(FrameSettings.makeFromFOLDFrame));
+  frameSettings: FrameSettings = $derived
+    .by(() => this.framesSettings[this.activeFrameIndex]);
 
   // if models are removed, they need to call their dealloc() method
   // models: { [key: string]: Model } = $state({});
@@ -44,12 +47,9 @@ export class FileModel {
   get foldedForm(): Model { return this.folded; }
   // get simulator(): Model { return this.simulator; }
 
-  // constructor(json: string) {
-  constructor(data: FOLD) {
-    this.sceneState = new SceneState(SceneState.getSceneFromFOLD(data));
-
-    this.#metadata = getFileMetadata(data);
-    this.#framesRaw = getFileFramesAsArray(data);
+  constructor(fold: FOLD) {
+    this.#metadata = getFileMetadata(fold);
+    this.#framesRaw = getFileFramesAsArray(fold);
 
     this.cp = new CreasePatternModel(this);
     this.folded = new FoldedFormModel(this);

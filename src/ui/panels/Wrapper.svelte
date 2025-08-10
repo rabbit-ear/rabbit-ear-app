@@ -46,13 +46,13 @@
     align-items: center;
   }
   button:focus {
-    outline: 2px solid var(--uiblue);
+    outline: 2px solid var(--ui-blue);
     outline-offset: 2px;
   }
 
   .title {
     padding: 0.2rem 0.5rem;
-    /* background-color: var(--uiblue); */
+    /* background-color: var(--ui-blue); */
     background-color: var(--background-3);
     font-weight: bold;
   }
@@ -63,7 +63,7 @@
     color: var(--dim);
   }
   .title:hover {
-    /* background-color: var(--uidarkblue); */
+    /* background-color: var(--ui-dark-blue); */
     background-color: var(--background-4);
   }
 

@@ -10,14 +10,17 @@
   --background-4: #4e4b4b;
   --black: #0c0a0a;
   --red: #e53;
-  --darkred: #b00020;
+  /* --dark-red: #b00020; */
+  /* maybe should be called "dim-red" */
+  --dark-red: #502010;
   --yellow: #fb4;
-  --brightgreen: #5e3;
+  --dark-yellow: #431;
+  --bright-green: #5e3;
   --green: #5c6;
   --blue: #158;
-  --lightblue: #39e;
-  --uiblue: #1177ff;
-  --uidarkblue: #1155d4;
+  --light-blue: #39e;
+  --ui-blue: #1177ff;
+  --ui-dark-blue: #1155d4;
   --purple: #80f;
   --highlight: var(--yellow);
   --body-background: var(--background-0);

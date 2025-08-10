@@ -1,11 +1,11 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport";
-import type { FrameStyle } from "../../../models/FrameStyle.ts";
+import type { FrameAttributes } from "../../../models/FrameAttributes.ts";
 import ViewportComponent from "./ViewportComponent.svelte";
 // import Dropdown from "./Dropdown.svelte";
 // import ClassPanel from "./Panel.svelte";
 import { View } from "./View.svelte.ts";
-import type { ViewportState } from "../../../app/ViewportState.svelte.ts";
+import type { ViewportState } from "../ViewportState.svelte.ts";
 // import { Settings } from "./Settings.svelte.ts";
 
 //class Style {
@@ -48,11 +48,11 @@ export class WebGLViewport implements Viewport {
     // this.dropdown = Dropdown;
     this.view = new View();
     //this.style = new Style(this.view);
-    this.effects = [this.makeFrameStyleEffect()];
+    this.effects = [this.makeFrameAttributesEffect()];
     // this.setModelStyle(this.model.style);
   }
 
-  setModelStyle(modelStyle: FrameStyle): void {
+  setModelStyle(modelStyle: FrameAttributes): void {
     if (!modelStyle) {
       return;
     }
@@ -63,9 +63,9 @@ export class WebGLViewport implements Viewport {
     // todo: something else to tell it to draw transparent faces
   }
 
-  makeFrameStyleEffect(): () => void {
+  makeFrameAttributesEffect(): () => void {
     return $effect.root(() => {
-      $effect(() => this.setModelStyle(this.model.style));
+      $effect(() => this.setModelStyle(this.model.attributes));
       return () => {
         // empty
       };
