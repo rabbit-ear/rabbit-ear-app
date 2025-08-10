@@ -25,27 +25,42 @@ export class ViewportManager {
   ui: UI;
   #effects: (() => void)[] = [];
 
+  viewportEvents: Map<Viewport, { [key: string]: EH }> = new Map();
+  // viewportEvents: Map<string, { [key: string]: EH }> = new Map();
+
+  // the issue with this reactive implementation is that when the watched value changes
+  // this new derived value has no way of calling "unbindViewport" on the
+  // now-nonexisting viewports, the ones which got removed, thereby justifying the
+  // need to be able to manually deallocate things.
   viewports: Viewport[] = $derived((context.fileManager.document?.model.sceneState.viewports ?? [])
     .map(state => ({ constructor: Viewports[state?.type], state }))
     .filter(el => el.constructor !== undefined)
     .map(el => new el.constructor(el.state))
     .filter(a => a !== undefined));
 
-  viewportEvents: Map<Viewport, { [key: string]: EH }> = new Map();
-
   #viewportBindEvents = (): (() => void) =>
     $effect.root(() => {
       $effect(() => {
         console.log("$effect(): viewport-tool event handler bindings");
+        for (const [key] of this.viewportEvents.entries()) {
+          if (!this.viewports.includes(key)) { this.#unbindViewport(key); }
+        }
+
         this.viewports.forEach(viewport => {
           // this block needs to happen once viewport.domElement exists,
           // which only happens after Svelte mounts, via this callback didMount.
-          viewport.didMount = () => {
-            console.log("viewport did mount callback, mounting.");
-            this.#unbindViewport(viewport);
+          if (viewport.didMount) {
+            console.log("viewport already has a didMount");
             this.#bindViewport(viewport);
-            // viewport.didMount = undefined;
-          };
+          } else {
+            console.log("viewport does not yet have a didMount");
+            viewport.didMount = () => {
+              console.log("viewport did mount callback, mounting.");
+              // this.#unbindViewport(viewport);
+              this.#bindViewport(viewport);
+              // viewport.didMount = undefined;
+            };
+          }
           this.ui.toolManager.viewportDidAdd(viewport);
         })
       });
@@ -104,6 +119,7 @@ export class ViewportManager {
   // }
 
   #unbindViewport(viewport: Viewport) {
+    console.log("ViewportManager, unbindViewport()");
     const prevEvents = this.viewportEvents.get(viewport);
     if (prevEvents) {
       console.log("events found", Object.keys(prevEvents));
@@ -116,6 +132,7 @@ export class ViewportManager {
   }
 
   #bindViewport(viewport: Viewport) {
+    console.log("ViewportManager, bindViewport()");
     if (!viewport.domElement) { return; }
 
     // viewports should only have one of each event bound to it.

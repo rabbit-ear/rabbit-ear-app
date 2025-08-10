@@ -55,10 +55,10 @@ export class FileModel {
     this.folded = new FoldedFormModel(this);
     // this.simulator = new SimulatorModel(this);
 
-    console.log("+ New FileModel +");
-    console.log("metadata", $state.snapshot(this.#metadata));
-    console.log("frames", $state.snapshot(this.#framesRaw));
-    console.log("scene", this.sceneState);
+    // console.log("+ New FileModel +");
+    // console.log("metadata", $state.snapshot(this.#metadata));
+    // console.log("frames", $state.snapshot(this.#framesRaw));
+    // console.log("scene", this.sceneState);
   }
 
   export(): FOLD {
