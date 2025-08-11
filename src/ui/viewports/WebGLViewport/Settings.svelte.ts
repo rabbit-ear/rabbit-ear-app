@@ -5,6 +5,8 @@ import context from "../../../app/context.svelte.ts";
 // these are global view settings that apply to all instances of SVGViewport
 // accessible via the app: app.ui.types.SVGViewport.settings
 export class Settings {
+  cursor: [number, number] = $state([0, 0]);
+
   layersNudge = $derived(context.ui?.settings.layersNudge ?? 0.01);
   layersAutoSolve = $derived(context.ui?.settings.layersAutoSolve ?? true);
 

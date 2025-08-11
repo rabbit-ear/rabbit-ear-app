@@ -109,6 +109,17 @@ input[type="checkbox"]:focus {
   background-color: var(--ui-blue);
 }
 
+.toggle-row button[class^="row-title"] {
+  padding: 0.25rem 0.5rem;
+  /* font-weight: normal; */
+  cursor: unset;
+}
+
+.toggle-row button[class^="row-title"]:hover {
+  background-color: var(--background-4);
+  cursor: unset;
+}
+
 .toggle-row button:first-of-type {
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;

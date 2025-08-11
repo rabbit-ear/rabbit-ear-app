@@ -4,8 +4,8 @@ import type { View } from "../View.ts";
 import type { FrameAttributes } from "../../../models/FrameAttributes.ts";
 import type { Model } from "../../../models/Model.ts";
 import ViewportComponent from "./Component.svelte";
-// import Dropdown from "./Dropdown.svelte";
-// import ClassPanel from "./Panel.svelte";
+import Dropdown from "./Dropdown.svelte";
+import ClassPanel from "./Panel.svelte";
 import { WebGLView } from "./View.svelte.ts";
 import { Style } from "./Style.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
@@ -14,11 +14,11 @@ import context from "../../../app/context.svelte.ts";
 export class WebGLViewport implements Viewport {
   static name: string = "WebGL Viewport";
   static settings: Settings = new Settings();
-  // static panel: Component = ClassPanel;
+  static panel: Component = ClassPanel;
 
   id: string;
   component: Component;
-  // dropdown: Component;
+  dropdown: Component;
   domElement?: SVGSVGElement;
   didMount?: () => void;
 
@@ -38,8 +38,8 @@ export class WebGLViewport implements Viewport {
   constructor() {
     this.id = String(Math.random());
     this.component = ViewportComponent;
-    // this.dropdown = Dropdown;
-    this.view = new WebGLView();
+    this.dropdown = Dropdown;
+    this.view = new WebGLView(this);
     this.style = new Style(this);
     this.effects = [this.makeFrameAttributesEffect()];
     // this.setModelStyle(this.model.style);

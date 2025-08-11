@@ -10,8 +10,14 @@
     context.ui?.viewportManager.addViewport(new WebGLViewport());
 
   let strokeWidthSlider = $state(5);
+  let layersNudgeSlider = $state(6);
+
   $effect(() => {
     context.ui!.settings.strokeWidthFactor.value = Math.pow(2, strokeWidthSlider) / 1e5;
+  });
+
+  $effect(() => {
+    context.ui!.settings.layersNudge.value = Math.pow(2, layersNudgeSlider) / 1e6;
   });
 
   $effect(() => {
@@ -22,9 +28,9 @@
     //    : getStrokeWidth(Frame.value);
 
     // todo: hardcoded
+    const bounds = { span: [1, 1] };
     const strokeWidthGuess = 0.005;
 
-    //
     let newStrokeWidth: number = 0;
     untrack(() => {
       // invert this: Math.pow(2, strokeWidthSlider) / 1e5;
@@ -32,10 +38,32 @@
       newStrokeWidth = Math.pow(2, strokeWidthSlider) / 1e5;
     });
     context.ui!.settings.strokeWidthFactor.value = newStrokeWidth;
+
+    // find a decent spacing between layers (LayerNudge)
+    if (bounds && bounds.span) {
+      const maxSpan = Math.max(...bounds.span);
+      let newLayerNudge: number = 0;
+      untrack(() => {
+        layersNudgeSlider = Math.log2(maxSpan * 0.001 * 1e5);
+        newLayerNudge = Math.pow(2, layersNudgeSlider) / 1e6;
+      });
+      context.ui!.settings.layersNudge.value = newLayerNudge;
+    }
   });
 </script>
 
 <div class="column gap">
+  <div class="row gap">
+    <button onclick={addSVGViewport}>+ {t("ui.viewports.SVG")}</button>
+    <button onclick={addWebGLViewport}>+ {t("ui.viewports.WebGL")}</button>
+  </div>
+
+  <div class="row">
+    <p>{context.ui?.viewportManager.viewports.length} {t("ui.viewports")}</p>
+  </div>
+
+  <hr />
+
   <div class="row gap">
     <input
       type="checkbox"
@@ -45,7 +73,7 @@
   </div>
 
   <div class="row">
-    <label for="input-stroke-width-slider">stroke</label>
+    <label for="input-stroke-width-slider">{t("ui.viewports.stroke")}</label>
     <input
       id="input-stroke-width-slider"
       type="range"
@@ -82,12 +110,21 @@
   </div>
 
   <div class="row">
-    <p>{context.ui?.viewportManager.viewports.length} {t("ui.viewports")}</p>
-  </div>
-
-  <div class="row gap">
-    <button onclick={addSVGViewport}>+ {t("ui.viewports.SVG")}</button>
-    <button onclick={addWebGLViewport}>+ {t("ui.viewports.WebGL")}</button>
+    <div>
+      <input
+        type="range"
+        min="1"
+        max="20"
+        step="0.01"
+        id="slider-layer-nudge"
+        bind:value={layersNudgeSlider} />
+    </div>
+    <div>
+      <input
+        type="text"
+        class="long-input"
+        bind:value={context.ui!.settings.layersNudge.value} />
+    </div>
   </div>
 
   <div class="row gap">

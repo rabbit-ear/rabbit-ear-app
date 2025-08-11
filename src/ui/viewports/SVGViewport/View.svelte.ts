@@ -113,13 +113,14 @@ export class SVGView implements View {
   // correcting value.
   uiEpsilon: number = $derived.by(() => this.vmax * this.viewport.constructor.settings.uiEpsilonFactor.value);
 
+  // todo: this is O(n), would be nice if it was O(1)
   // reset model and camera matrix to aspect fit. the effect is watching:
   // - the current file frame
   // - this.rightHanded
   #makeModelMatrixEffect(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        console.log("SVGViewport view effect");
+        console.log("SVGViewport building new model/camera matrix");
         const matrix = graphToMatrix2(this.viewport.model?.graph, this.rightHanded);
         untrack(() => {
           this.#model = matrix;

@@ -3,7 +3,7 @@ import {
   type ViewportStateType,
   ViewportState,
   defaultViewportState,
-} from "./ViewportState.svelte";
+} from "./viewports/ViewportState.svelte.ts";
 
 export interface SceneStateType {
   tool?: string;

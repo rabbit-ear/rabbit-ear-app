@@ -9,9 +9,6 @@
 
   let { viewport, ...rest }: PropsType = $props();
 
-  // todo: adjust the shaders inside Rabbit Ear to use half the stroke width
-  let strokeWidth = $derived(viewport.style.strokeWidth / 2);
-
   let opacity = $derived(viewport.style.opacity);
   let frontColor = $derived(opacity === 1 ? viewport.style.frontColor : "#999");
   let backColor = $derived(opacity === 1 ? viewport.style.backColor : "#999");
@@ -31,7 +28,7 @@
   {frontColor}
   {backColor}
   {outlineColor}
-  {strokeWidth}
+  strokeWidth={viewport.style.strokeWidth}
   opacity={viewport.style.opacity}
   showFoldedFaceOutlines={viewport.style.showFoldedFaceOutlines}
   showFoldedCreases={viewport.style.showFoldedCreases}

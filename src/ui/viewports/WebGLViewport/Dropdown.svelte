@@ -1,59 +1,15 @@
 <script lang="ts">
-  import { untrack } from "svelte";
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
 
   //let { panel, viewport }: { panel: ViewportPanel; viewport: WebGLViewport } = $props();
   let { viewport }: { viewport: WebGLViewport } = $props();
 
-  let isFolded = $derived(viewport.view.renderStyle === "foldedForm");
-
-  let strokeWidthSlider = $state(5);
-  let layerNudgeSlider = $state(6);
-
-  $effect(() => {
-    viewport.constructor.settings.strokeWidth = Math.pow(2, strokeWidthSlider) / 1e5;
-  });
-
-  $effect(() => {
-    viewport.constructor.settings.layerNudge = Math.pow(2, layerNudgeSlider) / 1e6;
-  });
-
-  $effect(() => {
-    //const bounds = boundingBox(Frame.value);
-    //const strokeWidthGuess =
-    //  bounds && bounds.span
-    //    ? getStrokeWidth(Frame.value, Math.max(...bounds.span))
-    //    : getStrokeWidth(Frame.value);
-
-    // todo: hardcoded
-    const bounds = { span: [1, 1] };
-    const strokeWidthGuess = 0.005;
-
-    //
-    let newStrokeWidth: number = 0;
-    untrack(() => {
-      // invert this: Math.pow(2, strokeWidthSlider) / 1e5;
-      strokeWidthSlider = Math.log2(strokeWidthGuess * 1e5);
-      newStrokeWidth = Math.pow(2, strokeWidthSlider) / 1e5;
-    });
-    viewport.constructor.settings.strokeWidth = newStrokeWidth;
-
-    // find a decent spacing between layers (LayerNudge)
-    if (bounds && bounds.span) {
-      const maxSpan = Math.max(...bounds.span);
-      let newLayerNudge: number = 0;
-      untrack(() => {
-        layerNudgeSlider = Math.log2(maxSpan * 0.001 * 1e5);
-        newLayerNudge = Math.pow(2, layerNudgeSlider) / 1e6;
-      });
-      viewport.constructor.settings.layerNudge = newLayerNudge;
-    }
-  });
+  let isFolded = $derived(viewport.style.renderStyle === "foldedForm");
 
   const swapColors = (): void => {
-    [viewport.view.frontColor, viewport.view.backColor] = [
-      viewport.view.backColor,
-      viewport.view.frontColor,
+    [viewport.style.frontColor, viewport.style.backColor] = [
+      viewport.style.backColor,
+      viewport.style.frontColor,
     ];
   };
 </script>
@@ -71,35 +27,24 @@
     }}>3D</button>
 </div>
 
-<div class="row toggle-row">
-  <button
-    class={viewport.view.renderStyle === "creasePattern" ? "highlighted" : ""}
-    onclick={(): string => (viewport.view.renderStyle = "creasePattern")}>cp</button>
-  <button
-    class={viewport.view.renderStyle === "foldedForm" ? "highlighted" : ""}
-    onclick={(): string => (viewport.view.renderStyle = "foldedForm")}>folded</button>
-</div>
+<!-- <div class="row toggle-row"> -->
+<!--   <button -->
+<!--     class={viewport.style.renderStyle === "creasePattern" ? "highlighted" : ""} -->
+<!--     onclick={(): string => (viewport.style.renderStyle = "creasePattern")}>cp</button> -->
+<!--   <button -->
+<!--     class={viewport.style.renderStyle === "foldedForm" ? "highlighted" : ""} -->
+<!--     onclick={(): string => (viewport.style.renderStyle = "foldedForm")}>folded</button> -->
+<!-- </div> -->
 
 <div class="row">
   <label for="input-fov">FOV</label>
   <input type="text" bind:value={viewport.view.fov} id="input-fov" />
 </div>
 
-<div class="row">
-  <label for="input-stroke-width-slider">stroke</label>
-  <input
-    id="input-stroke-width-slider"
-    type="range"
-    min="1"
-    max="20"
-    step="0.01"
-    bind:value={strokeWidthSlider} />
-</div>
-
 {#if isFolded}
   <div class="row">
-    <input type="color" bind:value={viewport.view.frontColor} />
-    <input type="color" bind:value={viewport.view.backColor} />
+    <input type="color" bind:value={viewport.style.frontColor} />
+    <input type="color" bind:value={viewport.style.backColor} />
     <button aria-label="swap" class="swap" onclick={swapColors}>
       <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -116,7 +61,7 @@
     <input
       type="checkbox"
       id="checkbox-show-folded-faces"
-      bind:checked={viewport.view.showFoldedFaces} /><label
+      bind:checked={viewport.style.showFoldedFaces} /><label
       for="checkbox-show-folded-faces">show face</label>
   </div>
 
@@ -124,7 +69,7 @@
     <input
       type="checkbox"
       id="checkbox-show-folded-creases"
-      bind:checked={viewport.view.showFoldedCreases} /><label
+      bind:checked={viewport.style.showFoldedCreases} /><label
       for="checkbox-show-folded-creases">show creases</label>
   </div>
 
@@ -132,26 +77,8 @@
     <input
       type="checkbox"
       id="checkbox-show-folded-face-outlines"
-      bind:checked={viewport.view.showFoldedFaceOutlines} /><label
+      bind:checked={viewport.style.showFoldedFaceOutlines} /><label
       for="checkbox-show-folded-face-outlines">show face outlines</label>
-  </div>
-
-  <div class="row">
-    <div>
-      <input
-        type="range"
-        min="1"
-        max="20"
-        step="0.01"
-        id="slider-layer-nudge"
-        bind:value={layerNudgeSlider} />
-    </div>
-    <div>
-      <input
-        type="text"
-        class="long-input"
-        bind:value={viewport.constructor.settings.layerNudge} />
-    </div>
   </div>
 {/if}
 

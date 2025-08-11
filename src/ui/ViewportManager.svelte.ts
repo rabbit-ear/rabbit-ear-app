@@ -29,7 +29,7 @@ export class ViewportManager {
     // this.terminal = new TerminalViewport();
   }
 
-  addViewport(viewport: Viewport): void {
+  addViewport(viewport: Viewport, index?: number): void {
     // this block needs to happen once viewport.domElement exists,
     // which only happens after Svelte mounts, via this callback didMount.
     viewport.didMount = () => {
@@ -38,14 +38,23 @@ export class ViewportManager {
       this.bindViewport(viewport);
       // viewport.didMount = undefined;
     }
-    this.viewports.push(viewport);
+    if (index) {
+      const validIndex = Math.max(0, Math.min(index, this.viewports.length));
+      this.viewports.splice(validIndex, 0, viewport);
+    } else {
+      this.viewports.push(viewport);
+    }
     this.ui.toolManager.viewportDidAdd(viewport);
   }
 
-  addViewportWithName(name: string): void {
+  #instanceViewportWithName(name: string): Viewport | undefined {
     const ViewportClass = Viewports[name];
     if (!ViewportClass) { return; }
-    const viewport = new ViewportClass();
+    return new ViewportClass();
+  }
+
+  addViewportWithName(name: string): void {
+    const viewport = this.#instanceViewportWithName(name);
     if (!viewport) { return; }
     this.addViewport(viewport);
   }
@@ -59,8 +68,13 @@ export class ViewportManager {
     // this.ui.toolManager.viewportDidRemove(viewport);
   }
 
-  replaceViewport(index: number, ViewportClass: Viewport) {
-    // removeViewportAtIndex(index);
+  replaceViewportWithName(spliceIndex: number, name: string) {
+    const newViewport = this.#instanceViewportWithName(name);
+    const oldViewport = this.viewports[spliceIndex];
+    if (!newViewport || !oldViewport) { return; }
+    this.unbindViewport(oldViewport);
+    this.viewports.splice(spliceIndex, 1);
+    this.addViewport(newViewport, spliceIndex);
   }
 
   // setActiveViewport(viewport: Viewport) {
@@ -105,20 +119,6 @@ export class ViewportManager {
     this.viewportEvents.set(viewport, events);
     Object.keys(events).forEach(key => viewport.domElement?.addEventListener(key, events[key]));
   }
-
-  // replace(index: number, ViewClass: ModelViewportClassTypes): void {
-  //   this.modelViewports
-  //     .splice(index, 1, new ViewClass())
-  //     .forEach((viewport) => viewport?.dealloc());
-  // }
-
-  // remove(index?: number): void {
-  //   if (index === undefined) {
-  //     this.modelViewports.pop()?.dealloc();
-  //   } else {
-  //     this.modelViewports.splice(index, 1).forEach((viewport) => viewport?.dealloc());
-  //   }
-  // }
 
   resetCameras(): void {
     this.viewports

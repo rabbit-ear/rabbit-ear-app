@@ -2,6 +2,7 @@ import type { Component } from "svelte";
 import type { UI } from "./UI.svelte.ts";
 import type { Viewport } from "./viewports/Viewport.ts";
 import AppPanels from "./panels/index.ts";
+import t from "../app/t.ts";
 
 // todo: try to replace this with a Set
 // compares their constructors with ===
@@ -30,10 +31,16 @@ export class PanelManager {
   // these are the static member property "panel"
   // all viewports currently active, but only one instance of each.
   // for example. multiple SVGViewports on screen but will only appear once
-  viewportPanels: PanelType[] = $derived.by(() => uniqueObjects(this.ui.viewportManager.viewports
+  // viewportPanels: PanelType[] = $derived.by(() => uniqueObjects(this.ui.viewportManager.viewports
+  //   .map(viewport => viewport.constructor as typeof Viewport)
+  //   .map(ViewportClass => ({ name: ViewportClass.name || "", component: ViewportClass.panel }))
+  //   // .map(ViewportClass => ({ name: t(`ui.viewports.${ViewportClass.name}`) || "", component: ViewportClass.panel }))
+  //   .filter(obj => obj.component !== undefined)));
+
+  viewportPanels: PanelType[] = $derived.by(() => this.ui.viewportManager.viewports
     .map(viewport => viewport.constructor as typeof Viewport)
     .map(ViewportClass => ({ name: ViewportClass.name || "", component: ViewportClass.panel }))
-    .filter(obj => obj.component !== undefined)));
+    .filter(obj => obj.component !== undefined));
 
   toolPanel: PanelType | undefined = $derived.by(() => this.ui.toolManager.tool?.panel
     ? ({ name: this.ui.toolManager.tool?.constructor.name, component: this.ui.toolManager.tool?.panel })

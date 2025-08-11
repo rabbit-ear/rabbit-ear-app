@@ -4,8 +4,9 @@ import {
   multiplyMatrix2Vector2,
   multiplyMatrices2,
 } from "rabbit-ear/math/matrix2.js";
-import { magnitude2, subtract2 } from "rabbit-ear/math/vector.js";
+import { magnitude2, resize3, subtract2 } from "rabbit-ear/math/vector.js";
 import {
+  identity4x4,
   invertMatrix4,
   makeMatrix4Scale,
   makeMatrix4Translate,
@@ -20,18 +21,18 @@ import {
 } from "rabbit-ear/math/quaternion.js";
 import { boundingBox } from "rabbit-ear/graph/boundary.js";
 
-/**
- *
- */
-export const graphToMatrix2 = (graph = {}, verticalUp = false): number[] => {
+type Box = {
+  min: number[],
+  max: number[],
+  span: number[],
+};
+
+const graphBox = (graph = {}): Box | undefined => {
   const box = boundingBox(graph);
   // no vertices
-  if (!box || !box.span || !box.min) {
-    return verticalUp ? [1, 0, 0, 1, 0, -1] : [...identity2x3];
-  }
+  if (!box || !box.span || !box.min) { return undefined; }
   // degenerate vertices
   const vmax = Math.max(box.span[0], box.span[1]);
-  const padding = box.span.map((s) => (s - vmax) / 2);
   if (
     vmax < 1e-6 ||
     !isFinite(box.min[0]) ||
@@ -39,13 +40,50 @@ export const graphToMatrix2 = (graph = {}, verticalUp = false): number[] => {
     !isFinite(box.span[0]) ||
     !isFinite(box.span[1])
   ) {
+    return undefined;
+  }
+  return box;
+};
+
+/**
+ *
+ */
+export const graphToMatrix2 = (graph = {}, verticalUp = false): number[] => {
+  const box = graphBox(graph);
+  if (!box) {
     return verticalUp ? [1, 0, 0, 1, 0, -1] : [...identity2x3];
   }
+  const vmax = Math.max(box.span[0], box.span[1]);
+  const padding = box.span.map((s) => (s - vmax) / 2);
   const translation = [0, 1].map((i) => box.min[i] + padding[i]);
   if (verticalUp) {
     translation[1] = -box.max[1] + padding[1];
   }
   return [vmax, 0, 0, vmax, translation[0], translation[1]];
+};
+
+export const graphToMatrix4 = (graph = {}, verticalUp = false): number[] => {
+  const box = graphBox(graph);
+  if (!box) {
+    return verticalUp
+      // ? [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, -1, 0, 1]
+      ? [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+      : [...identity4x4];
+  }
+  const span = resize3(box.span);
+  const min = resize3(box.min);
+  const max = resize3(box.max);
+  const vmax = Math.max(span[0], span[1], span[2]);
+  const padding = span.map((s) => (s - vmax) / 2);
+  const translation = [0, 1, 2].map((i) => min[i] + padding[i]);
+  if (verticalUp) {
+    translation[1] = -max[1] + padding[1];
+  }
+  return [
+    vmax, 0, 0, 0,
+    0, vmax, 0, 0,
+    0, 0, 0, vmax,
+    translation[0], translation[1], translation[2], 1];
 };
 
 /**
