@@ -9,7 +9,6 @@ import { Model as OriSimModel } from "../../simulator/simulator/Model.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
 import type { FileModel } from "../FileModel.svelte.ts";
-import type { FrameView } from "../FrameView.svelte.ts";
 
 export class SimulatorModel implements ModelInterface {
   name: string = "simulator";
@@ -64,10 +63,6 @@ export class SimulatorModel implements ModelInterface {
       edges_foldAngle: this.abstractGraph?.edges_foldAngle,
       faces_vertices: this.abstractGraph?.faces_vertices,
     };
-  }
-
-  get view(): FrameView | undefined {
-    return this.#model.frameView;
   }
 
   // this is the solver loop, attach this to requestAnimationFrame

@@ -2,7 +2,6 @@ import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 // import type { Shape } from "../geometry/shapes.ts";
 import type { FrameAttributes } from "./FrameAttributes.ts";
-import type { FrameView } from "./FrameView.svelte.ts";
 
 export interface Model {
   name: string;
@@ -14,8 +13,6 @@ export interface Model {
   graph: FOLD | undefined;
 
   attributes: FrameAttributes;
-
-  view: FrameView | undefined;
 
   // other
   // shapes: Shape[];

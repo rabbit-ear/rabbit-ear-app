@@ -75,7 +75,7 @@
 {/snippet}
 
 {#snippet gridLayer()}
-  {#if SVGViewport.settings.showGrid.value}
+  {#if SVGViewport.settings.showGrid}
     <GridLayer {viewport} />
   {/if}
 {/snippet}

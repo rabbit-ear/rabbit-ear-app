@@ -122,8 +122,8 @@ export class ViewportManager {
 
   resetCameras(): void {
     this.viewports
-      .filter(viewport => typeof viewport.resetView === "function")
-      .forEach((viewport) => viewport.resetView());
+      // .filter(viewport => typeof viewport.view.reset === "function")
+      .forEach((viewport) => viewport.view.reset());
   }
 
   // this is not really planned, but if ever the app was to completely de-initialize and

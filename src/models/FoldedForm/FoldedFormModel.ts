@@ -8,7 +8,6 @@ import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
-import type { FrameView } from "../FrameView.svelte.ts";
 
 export class FoldedFormModel implements Model {
   name: string = "foldedForm";
@@ -41,10 +40,6 @@ export class FoldedFormModel implements Model {
   get vertices_coords(): [number, number][] | [number, number, number][] {
     return this.foldedVerticesResultAndErrors.result;
   };
-
-  get view(): FrameView | undefined {
-    return this.#model.frameView;
-  }
 
   // todo
   get snapPoints(): [number, number][] {

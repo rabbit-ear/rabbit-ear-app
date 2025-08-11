@@ -1,4 +1,7 @@
-import { identity4x4 } from "rabbit-ear/math/matrix4.js";
+import { identity4x4, multiplyMatrices4 } from "rabbit-ear/math/matrix4.js";
+import type { VecLine2, VecLine3 } from "rabbit-ear/types.js";
+import type { View } from "../View";
+import { WebGLViewport } from "./WebGLViewport.svelte";
 //import { identity4x4, multiplyMatrices4 } from "rabbit-ear/math/matrix4.js";
 //import settings from "./ClassSettings.svelte.ts";
 //import {
@@ -10,11 +13,19 @@ const defaultViewMatrix: number[] = [
   1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1.866025, 1,
 ];
 
-export class View {
-  projectionMatrix: number[] = $state([...identity4x4]);
+export class WebGLView implements View {
+  canvasSize: [number, number] = $state([0, 0]);
+
+  perspective: string = $state("orthographic");
+
+  fov: number = $state(30.25);
+
+  projection: number[] = $state([...identity4x4]);
+
+  camera: number[] = [...identity4x4];
 
   // view matrix
-  viewMatrix: number[] = $state([...defaultViewMatrix]);
+  view: number[] = $state([...defaultViewMatrix]);
   //#viewMatrixPre: number[] = $state([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -5, 1]);
   //#handedMatrix: number[] = $derived(
   //  settings.rightHanded ? [...viewMatrixRightHanded] : [...viewMatrixLeftHanded],
@@ -22,37 +33,28 @@ export class View {
   //#viewMatrix: number[] = $derived(
   //  multiplyMatrices4(this.#handedMatrix, this.#viewMatrixPre),
   //);
-  //get viewMatrix(): number[] {
-  //  return this.#viewMatrix;
-  //}
-  //set viewMatrix(value: number[]) {
-  //  this.#viewMatrixPre = value;
-  //}
-
-  modelMatrix: number[] = $state([...identity4x4]);
-
-  canvasSize: [number, number] = $state([0, 0]);
-
-  perspective: string = $state("orthographic");
-  renderStyle: string = $state("creasePattern");
-  fov: number = $state(30.25);
-
-  darkMode: boolean = $state(true);
-  frontColor: string = $state("#1177FF");
-  backColor: string = $state("#ffffff");
-  outlineColor: string = $state("black");
-  opacity: number = $state(1);
-
-  //frontColor: renderStyle === RenderStyle.translucent ? "#9e9b9b" : Renderer.FrontColor,
-  //backColor: renderStyle === RenderStyle.translucent ? "#9e9b9b" : Renderer.BackColor,
-  //outlineColor: renderStyle === RenderStyle.translucent ? "white" : "black",
-  //opacity: renderStyle === RenderStyle.translucent ? 0.25 : 1,
-
-  showFoldedFaceOutlines: boolean = $state(true);
-  showFoldedCreases: boolean = $state(false);
-  showFoldedFaces: boolean = $state(true);
 
   vmax = 2;
   vmin = 2;
+
+  model: number[] = $state([...identity4x4]);
+
+  modelView: number[] = $derived(multiplyMatrices4(this.view, this.model));
+
+  uiEpsilon: number = $derived.by(() => this.vmax * WebGLViewport.settings.uiEpsilonFactor);
+
+  snapRadius: number = $derived.by(() => this.vmax * WebGLViewport.settings.snapRadiusFactor);
+
+  clipLine(line: VecLine2 | VecLine3): [[number, number], [number, number]]
+    | [[number, number, number], [number, number, number]]
+    | undefined {
+    return undefined;
+  }
+
+  reset(): void {
+    this.view = [...defaultViewMatrix];
+  }
+
+  dealloc(): void { }
 }
 

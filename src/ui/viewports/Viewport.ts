@@ -1,5 +1,6 @@
 import type { Component } from "svelte";
 import type { Model } from "../../models/Model.ts";
+import type { View } from "./View.ts";
 
 export abstract class Viewport {
   // static properties (unable to be defined here, please define them)
@@ -8,6 +9,9 @@ export abstract class Viewport {
 
   // a (reactive) reference to the model currently being displayed
   abstract model?: Model;
+
+  // rendering information, matrices, scale
+  abstract view: View;
 
   // a unique UUID for each instance
   // this is required for the Svelte {#each} loop to prevent element reuse

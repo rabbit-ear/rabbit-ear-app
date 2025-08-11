@@ -47,8 +47,7 @@ export class SVGState implements Deallocable, ToolEvents {
         //drag[1] * impliedScale * (this.viewport.view.rightHanded ? -1 : 1),
       ];
 
-      // this.viewport.view.camera = panCameraMatrix(this.cameraMatrixOnPress, translation);
-      this.viewport.modelView.camera = panCameraMatrix(this.cameraMatrixOnPress, translation);
+      this.viewport.view.camera = panCameraMatrix(this.cameraMatrixOnPress, translation);
     }
   };
 
@@ -59,8 +58,7 @@ export class SVGState implements Deallocable, ToolEvents {
     this.press = point;
     this.dragVector = [0, 0];
     this.clientPress = [clientX, clientY];
-    // this.cameraMatrixOnPress = this.viewport.view.camera;
-    this.cameraMatrixOnPress = this.viewport.modelView.camera;
+    this.cameraMatrixOnPress = this.viewport.view.camera;
   };
 
   onmouseup(viewport: Viewport, { clientX, clientY, buttons }: MouseEvent): void {

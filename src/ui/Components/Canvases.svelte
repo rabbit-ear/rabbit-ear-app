@@ -5,21 +5,14 @@
 </script>
 
 <div class="column">
-  {#if context.ui?.viewportManager?.terminal}
-    <div class="terminal">
-      <context.ui.viewportManager.terminal.component
-        viewport={context.ui.viewportManager.terminal} />
-    </div>
-  {/if}
-
   <div class="canvases row gap">
     {#each viewports as viewport, index (viewport.id)}
       <div class="canvas">
-        {#if viewport.dropdown}
-          <ViewportDropdown {index} {viewport}>
+        <ViewportDropdown {index} {viewport}>
+          {#if viewport.dropdown}
             <viewport.dropdown {viewport} />
-          </ViewportDropdown>
-        {/if}
+          {/if}
+        </ViewportDropdown>
         <viewport.component {viewport} />
       </div>
     {/each}
@@ -48,8 +41,8 @@
 
   .canvases {
     /* todo: this needs to be dynamically calculated based on */
-    /* whether or not the terminal or frames is visible */
-    /*height: calc(100vh - 6rem - 6rem);*/
+    /* whether or not other divs are above/below this */
+    /* height: calc(100vh - 6rem - 6rem); */
     /* height: calc(100vh - 6rem); */
     height: calc(100vh - 1.5rem);
   }
@@ -59,10 +52,5 @@
   .canvas {
     flex: 1 1 auto;
     position: relative;
-  }
-
-  /* hard coding the terminal viewport. could get rid of these later */
-  .terminal {
-    height: 6rem;
   }
 </style>

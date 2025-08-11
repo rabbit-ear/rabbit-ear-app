@@ -68,8 +68,7 @@ export const wheelEventZoomMatrix = (
   // console.log("screenPoint", screenPoint);
   const origin: [number, number] = screenPoint ? screenPoint : [0, 0];
   // console.log("origin", origin);
-  // viewport.view.camera = zoomCameraMatrix(viewport.view.camera, scale, origin);
-  viewport.modelView.camera = zoomCameraMatrix(viewport.modelView.camera, scale, origin);
+  viewport.view.camera = zoomCameraMatrix(viewport.view.camera, scale, origin);
 };
 
 /**
@@ -88,6 +87,6 @@ export const wheelPanMatrix = (
     deltaY * touchScale * impliedScale,
   ];
   //console.log("wheel pan", [deltaX, deltaY], translate);
-  viewport.modelView.camera = panCameraMatrix(viewport.modelView.camera, translate);
+  viewport.view.camera = panCameraMatrix(viewport.view.camera, translate);
 };
 

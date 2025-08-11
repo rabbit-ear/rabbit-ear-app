@@ -6,7 +6,6 @@ import type { FileModel } from "../FileModel.svelte.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import Panel from "./Panel.svelte";
 import { resize2 } from "rabbit-ear/math/vector.js";
-import type { FrameView } from "../FrameView.svelte.ts";
 
 export class CreasePatternModel implements Model {
   name: string = "creasePattern";
@@ -36,10 +35,6 @@ export class CreasePatternModel implements Model {
       // (not the folded form of a CP, but the CP itself)
       hasLayerOrder: true,
     };
-  }
-
-  get view(): FrameView | undefined {
-    return this.#model.frameView;
   }
 
   // get shapes(): Shape[] {

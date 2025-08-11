@@ -7,7 +7,7 @@ export class Grid {
   strokeWidth = $derived.by(() => this.viewport.view.vmax / 400);
 
   lines = $derived.by(() => {
-    switch (SVGViewport.settings.tiling.value) {
+    switch (SVGViewport.settings.tiling) {
       case "triangle":
         return makeTriangleGrid(this.viewport.view.cameraViewBox);
       case "square":

@@ -8,8 +8,6 @@ import { reassembleFramesToFOLD, makeFlatFramesFromFrames } from "../general/fol
 import { CreasePatternModel } from "./CreasePattern/CreasePatternModel.ts";
 import { FoldedFormModel } from "./FoldedForm/FoldedFormModel.ts";
 import { makeFrameAttributes } from "./FrameAttributes.ts";
-import { FrameView } from "./FrameView.svelte.ts";
-import { untrack } from "svelte";
 
 export class FileModel {
   #metadata: FOLDFileMetadata = $state({});
@@ -33,9 +31,6 @@ export class FileModel {
   framesAttributes: FrameAttributes[] = $derived.by(() => this.frames.map(makeFrameAttributes));
   frameAttributes: FrameAttributes = $derived.by(() => this.framesAttributes[this.activeFrameIndex]);
 
-  #framesView: Map<FOLD, FrameView> = new Map();
-  frameView: FrameView | undefined = $derived(this.#framesView.get(this.frame));
-
   // if models are removed, they need to call their dealloc() method
   // models: { [key: string]: Model } = $state({});
   cp: CreasePatternModel;
@@ -46,8 +41,6 @@ export class FileModel {
   get foldedForm(): Model { return this.folded; }
   // get simulator(): Model { return this.simulator; }
 
-  #effects: (() => void)[] = [];
-
   constructor(fold: FOLD) {
     this.#metadata = getFileMetadata(fold);
     this.#framesRaw = getFileFramesAsArray(fold);
@@ -56,39 +49,10 @@ export class FileModel {
     this.folded = new FoldedFormModel(this);
     // this.simulator = new SimulatorModel(this);
 
-    this.#effects = [this.#makeFrameViewEffect()];
     // console.log("+ New FileModel +");
     // console.log("metadata", $state.snapshot(this.#metadata));
     // console.log("frames", $state.snapshot(this.#framesRaw));
     // console.log("scene", this.sceneState);
-  }
-
-  #makeFrameViewEffect(): (() => void) {
-    return $effect.root(() => {
-      $effect(() => {
-        // a frame in .frames which is not (yet) in .framesView
-        // (a new frame has just been added)
-        const newFrames = this.frames
-          .filter(frame => !this.#framesView.has(frame));
-        // a frame key in .framesView that is not in .frames
-        // (a frame was removed)
-        const removedFrames: FOLD[] = [];
-        // for (const frame in this.#framesView.keys()) {
-        for (const [key] of this.#framesView.entries()) {
-          if (this.frames.indexOf(key) === -1) {
-            removedFrames.push(key);
-          }
-        }
-        untrack(() => {
-          // newFrames.forEach(frame => this.#framesView.set(frame, new FrameView(frame)));
-          newFrames.forEach(frame => this.#framesView.set(frame, new FrameView()));
-          removedFrames.forEach(frame => this.#framesView.delete(frame));
-        });
-      });
-      return () => {
-        this.#framesView.clear();
-      };
-    })
   }
 
   export(): FOLD {
@@ -112,7 +76,6 @@ export class FileModel {
   }
 
   dealloc(): void {
-    this.#effects.forEach(fn => fn());
     // this.simulator.dealloc();
     // scene state too?
   }

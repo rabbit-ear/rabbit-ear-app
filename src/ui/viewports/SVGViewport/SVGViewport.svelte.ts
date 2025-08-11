@@ -7,12 +7,11 @@ import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./Component.svelte";
 import { Settings } from "./Settings.svelte.ts";
 import { Renderer } from "./Renderer.svelte.ts";
-import { View } from "./View.svelte.ts";
+import { SVGView as View } from "./View.svelte.ts";
 import { Style } from "./Style.svelte.ts";
 import { Grid } from "./Grid.svelte.ts";
 import { Snap } from "./Snap.svelte.ts";
 import context from "../../../app/context.svelte.ts";
-import { FrameView } from "../../../models/FrameView.svelte.ts";
 
 export class SVGViewport implements Viewport {
   static name: string = "SVG Viewport";
@@ -36,8 +35,6 @@ export class SVGViewport implements Viewport {
   // modelName = $derived.by(() => this.state.model);
 
   model?: Model = $derived(context.fileManager.document?.model[this.modelName]);
-
-  modelView: FrameView = $derived.by(() => this.model?.view ?? new FrameView());
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
   // currently, this is used by the tools to draw indicator marks.
@@ -64,10 +61,6 @@ export class SVGViewport implements Viewport {
     console.log("SVGViewport unbindTool()");
     this.layer = undefined;
     this.props = undefined;
-  }
-
-  resetView(): void {
-    // this.view.resetCamera();
   }
 
   dealloc(): void {

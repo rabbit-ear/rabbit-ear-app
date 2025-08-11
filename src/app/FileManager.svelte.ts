@@ -87,7 +87,10 @@ export class FileManager {
     const document = this.#documents[index];
     if (!document) { return; }
     this.#documents.splice(index, 1);
-    this.#activeIndex = Math.min(this.#activeIndex, this.#documents.length - 1);
+    // if the current index is after the split index, move it up one
+    this.#activeIndex = this.#activeIndex > index
+      ? Math.max(0, Math.min(this.#activeIndex - 1, this.#documents.length - 1))
+      : Math.min(this.#activeIndex, this.#documents.length - 1);
     console.log("FileManager file did close", this.#activeIndex);
   }
 

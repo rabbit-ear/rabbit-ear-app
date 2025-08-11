@@ -14,8 +14,8 @@ export const defaultAppSetup = () => {
   if (context.ui) {
     context.ui.toolManager.setToolWithName("ui.tools.select");
     context.ui.viewportManager.addViewportWithName("SVGViewport");
-    context.ui.viewportManager.addViewportWithName("SVGViewport");
-    context.ui.viewportManager.viewports[1].modelName = "folded";
+    context.ui.viewportManager.addViewportWithName("WebGLViewport");
+    context.ui.viewportManager.viewports[1].modelName = "foldedForm";
   }
 
   // setup keyboard event mapping

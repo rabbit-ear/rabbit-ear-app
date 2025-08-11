@@ -2,7 +2,6 @@
   import { SVGViewport } from "./SVGViewport.svelte.ts";
   // import SVGShapes from "../../Components/SVG/SVGShapes.svelte";
   import SVGFOLD from "../../Components/SVG/SVGFOLD.svelte";
-  import context from "../../../app/context.svelte.ts";
 
   type PropsType = {
     viewport: SVGViewport;
