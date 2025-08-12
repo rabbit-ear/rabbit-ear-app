@@ -165,7 +165,7 @@ export const buildMenu = async () => {
       .map(async ([iso, name]) => await MenuItem.new({
         id: name,
         text: name,
-        action: () => context.localization.setLanguage(iso),
+        action: () => (context.localization.language = iso),
       }))),
   });
 

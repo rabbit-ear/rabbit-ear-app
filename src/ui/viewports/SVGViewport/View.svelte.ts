@@ -17,7 +17,7 @@ import context from "../../../app/context.svelte.ts";
 export class SVGView implements View {
   viewport: SVGViewport;
   // is the Y axis on top (true) or on bottom (false)?
-  rightHanded: boolean = $derived(context.ui?.settings.rightHanded.value ?? true);
+  rightHanded: boolean = $derived(context.ui.settings.rightHanded.value);
 
   perspective: string = "orthographic";
 

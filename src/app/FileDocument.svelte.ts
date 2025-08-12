@@ -76,6 +76,7 @@ export class FileDocument {
     await writeTextFile(this.#filePath, this.#dataModel.exportToText());
     // todo: catch errors, if errors, do not run the next line.
     this.#isDirty = false;
+    console.log("File saved successfully");
     return true;
   }
 
@@ -84,11 +85,17 @@ export class FileDocument {
     await this.save();
   }
 
-  async reload(): Promise<void> {
-    if (!this.#filePath) { return; }
-    const contents = await readTextFile(this.#filePath);
-    this.#dataModel.text = contents;
-    this.#isDirty = false;
+  async reload(): Promise<boolean> {
+    if (!this.#filePath) { return false; }
+    try {
+      const contents = await readTextFile(this.#filePath);
+      const data = JSON.parse(contents);
+      this.#dataModel.import(data);
+      this.#isDirty = false;
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   updateModel(mutator: (model: FileModel) => void) {

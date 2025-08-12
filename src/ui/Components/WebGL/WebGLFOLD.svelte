@@ -2,7 +2,6 @@
   //import { untrack } from "svelte";
   import earcut from "earcut";
   import type { FOLD, WebGLModel } from "rabbit-ear/types.js";
-  import type { ViewportEvents } from "../../viewport/ViewportTypes.ts";
   import { identity4x4, multiplyMatrices4 } from "rabbit-ear/math/matrix4.js";
   import { makeModelMatrix } from "rabbit-ear/webgl/general/view.js";
   import { creasePattern } from "rabbit-ear/webgl/creasePattern/models.js";
@@ -13,10 +12,10 @@
   import { deallocModel } from "rabbit-ear/webgl/general/model.js";
   import { dark, light } from "rabbit-ear/webgl/general/colors.js";
   import WebGLModelView from "./WebGLModelView.svelte";
-  import WebGLTouchCanvas from "./WebGLTouchCanvas.svelte";
+  import WebGLCanvas from "./WebGLCanvas.svelte";
   import { makeProjectionMatrix } from "../../../general/matrix.ts";
 
-  type PropsType = ViewportEvents & {
+  type PropsType = {
     graph?: FOLD;
     rightHanded?: boolean;
     perspective?: string;
@@ -53,15 +52,6 @@
     showFoldedFaceOutlines = true,
     showFoldedCreases = false,
     showFoldedFaces = true,
-    onmousemove,
-    onmousedown,
-    onmouseup,
-    onmouseleave,
-    onwheel,
-    ontouchmove,
-    ontouchstart,
-    ontouchend,
-    ontouchcancel,
     redraw = $bindable(),
   }: PropsType = $props();
 
@@ -138,21 +128,12 @@
   $effect(() => deallocModels);
 </script>
 
-<WebGLTouchCanvas
+<WebGLCanvas
   bind:gl
   bind:version
   bind:canvas
   bind:canvasSize
   bind:redraw
-  {projectionMatrix}
-  {onmousedown}
-  {onmousemove}
-  {onmouseup}
-  {onmouseleave}
-  {onwheel}
-  {ontouchstart}
-  {ontouchmove}
-  {ontouchend}
-  {ontouchcancel} />
+  {projectionMatrix} />
 
 <WebGLModelView {gl} {version} {models} {uniformOptions} />

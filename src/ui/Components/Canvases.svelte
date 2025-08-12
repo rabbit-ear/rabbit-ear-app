@@ -1,7 +1,7 @@
 <script lang="ts">
   import context from "../../app/context.svelte.ts";
   import ViewportDropdown from "../panels/ViewportDropdown.svelte";
-  const viewports = $derived(context.ui?.viewportManager?.viewports || []);
+  const viewports = $derived(context.ui.viewportManager?.viewports || []);
 </script>
 
 <div class="column">

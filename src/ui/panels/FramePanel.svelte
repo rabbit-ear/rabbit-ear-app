@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js";
+  import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.js";
   import context from "../../app/context.svelte.ts";
 
   let graphArrays: { [key: string]: [string, string] } = {
@@ -14,10 +14,10 @@
   };
 
   let attributeArrays: { [key: string]: [string] } = {
-    vertices_coords: ["coords"],
-    edges_assignment: ["assigns"],
-    edges_foldAngle: ["angles"],
-    faceOrders: ["face orders"],
+    vertices_coords: ["V•coords"],
+    edges_assignment: ["E•assigns"],
+    edges_foldAngle: ["E•angles"],
+    faceOrders: ["F•orders"],
   };
 
   let renderStyles: { [key: string]: string } = {
@@ -31,14 +31,18 @@
 
   let activeFrameIndex = $derived(context.fileManager.document?.model.activeFrameIndex);
 
-  let frame: FOLDChildFrame | undefined = $derived(
-    context.fileManager.document?.model.frame,
+  let frame: FOLD | undefined = $derived(context.fileManager.document?.model.frame);
+
+  let frameRaw: FOLDChildFrame | undefined = $derived(
+    context.fileManager.document?.model.frameRaw,
   );
 
-  let frame_parent: number = $derived(frame?.frame_parent ?? 0);
+  $effect(() => console.log(frame, frameRaw));
+
+  let frame_parent: number = $derived(frameRaw?.frame_parent ?? 0);
 
   let hasParent: boolean = $derived(
-    (frame?.frame_inherit && frame?.frame_parent != null) ?? false,
+    (frameRaw?.frame_inherit && frameRaw?.frame_parent != null) ?? false,
   );
 
   let frame_classes: string[] = $derived(frame?.frame_classes ?? []);
@@ -56,7 +60,7 @@
   let attributeBadges = $derived(
     Object.keys(attributeArrays)
       .filter((key) => frame !== undefined && frame[key] != null)
-      .map((key) => attributeArrays[key].join("•")),
+      .map((key) => attributeArrays[key]),
   );
 </script>
 
@@ -64,7 +68,7 @@
   <div class="row gap">
     <p>#{activeFrameIndex}</p>
     <p class="strong">{render_style}</p>
-    <p>[{hasParent ? `child of #${frame_parent}` : "root"}]</p>
+    <p>[{hasParent ? `inherits from #${frame_parent}` : "root"}]</p>
   </div>
 
   <div class="row">

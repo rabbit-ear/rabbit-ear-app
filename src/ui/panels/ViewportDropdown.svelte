@@ -18,12 +18,12 @@
   const modelTypeNames = { creasePattern: "cp", foldedForm: "folded", simulator: "sim" };
 
   const swapSVG = (): void =>
-    context.ui?.viewportManager.replaceViewportWithName(index, "SVGViewport");
+    context.ui.viewportManager.replaceViewportWithName(index, "SVGViewport");
   const swapWebGL = (): void =>
-    context.ui?.viewportManager.replaceViewportWithName(index, "WebGLViewport");
+    context.ui.viewportManager.replaceViewportWithName(index, "WebGLViewport");
   const removeViewport = () => {
     if (viewport) {
-      context.ui?.viewportManager.removeViewport(viewport);
+      context.ui.viewportManager.removeViewport(viewport);
     }
   };
 

@@ -2,12 +2,12 @@
   import context from "../../app/context.svelte.ts";
 
   const files = $derived(context.fileManager.documents);
-  const document = $derived(context.fileManager.document);
+  const currentFile = $derived(context.fileManager.document);
 </script>
 
 <div class="container row gap short align-start">
   {#each files as file}
-    <div class={file === document ? "row file-item selected" : "row file-item"}>
+    <div class={file === currentFile ? "row file-item selected" : "row file-item"}>
       <button
         class="short file-button"
         onclick={() => context.fileManager.switchToDocument(file)}>{file.name}</button>

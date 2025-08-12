@@ -19,7 +19,7 @@ const defaultViewMatrix: number[] = [
 export class WebGLView implements View {
   viewport: WebGLViewport;
 
-  rightHanded: boolean = $derived(context.ui?.settings.rightHanded.value ?? true);
+  rightHanded: boolean = $derived(context.ui.settings.rightHanded.value ?? true);
 
   canvasSize: [number, number] = $state([0, 0]);
 

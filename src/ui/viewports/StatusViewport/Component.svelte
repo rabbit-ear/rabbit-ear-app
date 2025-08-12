@@ -5,7 +5,7 @@
 
 <div>
   <h1>tool</h1>
-  <p>{context.ui?.toolManager.toolName}</p>
+  <p>{context.ui.toolManager.toolName}</p>
   <h1>files</h1>
   <p>index: {context.fileManager.activeIndex}/{context.fileManager.documents.length}</p>
   <ul>

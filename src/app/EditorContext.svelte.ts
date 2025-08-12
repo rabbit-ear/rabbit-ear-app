@@ -12,8 +12,7 @@ export class EditorContext {
   keyboardManager: KeyboardManager;
   localization: Localization;
   settings: Settings;
-  // UI is optional, the app is able to run without a UI.
-  ui: UI | undefined;
+  ui: UI;
 
   // the title of the application, with the currently active file,
   // and an additional asterisk if the file is modified and not yet saved
@@ -39,7 +38,7 @@ export class EditorContext {
   // re-initialize itself, we would call this method to cleanup the hanging effect.
   dealloc(): void {
     this.keyboardManager.dealloc();
-    this.ui?.dealloc();
+    this.ui.dealloc();
   }
 }
 

@@ -5,7 +5,7 @@
 
   type PanelType = { name: string; component: Component };
 
-  const panels: PanelType[] = $derived(context.ui?.panelManager.panels);
+  const panels: PanelType[] = $derived(context.ui.panelManager.panels);
 </script>
 
 <div class="column">

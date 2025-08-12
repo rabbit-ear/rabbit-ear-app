@@ -1,3 +1,4 @@
+import { LocalStorageItem } from "./LocalStorageItem.svelte";
 import ar from "../languages/ar-001.json?raw";
 import de from "../languages/de-DE.json?raw";
 import en from "../languages/en-US.json?raw";
@@ -32,23 +33,20 @@ type LanguageDictionary = { [key: string]: string };
 export class Localization {
   #languageDictionaries: { [key: string]: LanguageDictionary } = {};
 
-  #language = $state("en");
+  #language = new LocalStorageItem<string>("app/localization", "language", "en");
 
   #dictionary: LanguageDictionary = $derived(
-    this.#languageDictionaries[this.#language] ?? this.#languageDictionaries.en
+    this.#languageDictionaries[this.#language.value] ?? this.#languageDictionaries.en
   );
 
-  get language(): string { return this.#language; }
+  get language(): string { return this.#language.value; }
+  set language(code: string) { this.#language.value = code; }
 
   allLanguages(): { [key: string]: string } {
     const languages: { [key: string]: string } = {};
     Object.keys(this.#languageDictionaries)
       .forEach(key => { languages[key] = this.#languageDictionaries[key].name; });
     return languages;
-  }
-
-  setLanguage(code: string): void {
-    this.#language = code;
   }
 
   constructor() {

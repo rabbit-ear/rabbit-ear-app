@@ -10,11 +10,14 @@ import { FoldedFormModel } from "./FoldedForm/FoldedFormModel.ts";
 import { makeFrameAttributes } from "./FrameAttributes.ts";
 
 export class FileModel {
-  #metadata: FOLDFileMetadata = $state({});
+  metadata: FOLDFileMetadata = $state({});
   #framesRaw: FOLDChildFrame[] = $state.raw([]);
 
   // which frame index is currently selected by the app for rendering/modification
   activeFrameIndex: number = $state(0);
+
+  // get metadata(): FOLDFileMetadata { return this.#metadata; }
+  // set metadata(data: FOLDFileMetadata) { this.#metadata = data; }
 
   // some frames inherit from a parent and need to be "collapsed" to be render-able.
   // this is a list of all of the frames, collapsed, and in their "final form",
@@ -42,7 +45,7 @@ export class FileModel {
   // get simulator(): Model { return this.simulator; }
 
   constructor(fold: FOLD) {
-    this.#metadata = getFileMetadata(fold);
+    this.metadata = getFileMetadata(fold);
     this.#framesRaw = getFileFramesAsArray(fold);
 
     this.cp = new CreasePatternModel(this);
@@ -59,7 +62,7 @@ export class FileModel {
     return Object.assign(
       // reassembleFramesToFOLD($state.snapshot(this.#frames)),
       reassembleFramesToFOLD(this.#framesRaw),
-      this.#metadata,
+      this.metadata,
       // { shapes: this.shapes },
     );
   }
@@ -69,7 +72,7 @@ export class FileModel {
   }
 
   import(fold: FOLD): void {
-    this.#metadata = getFileMetadata(fold);
+    this.metadata = getFileMetadata(fold);
     this.#framesRaw = getFileFramesAsArray(fold);
     // todo: extended FOLD format
     //this.shapes = fold.shapes || [];
@@ -77,7 +80,6 @@ export class FileModel {
 
   dealloc(): void {
     // this.simulator.dealloc();
-    // scene state too?
   }
 }
 

@@ -5,19 +5,19 @@
   import { WebGLViewport } from "../viewports/WebGLViewport/WebGLViewport.svelte.ts";
   import t from "../../app/t.ts";
 
-  const addSVGViewport = () => context.ui?.viewportManager.addViewport(new SVGViewport());
+  const addSVGViewport = () => context.ui.viewportManager.addViewport(new SVGViewport());
   const addWebGLViewport = () =>
-    context.ui?.viewportManager.addViewport(new WebGLViewport());
+    context.ui.viewportManager.addViewport(new WebGLViewport());
 
   let strokeWidthSlider = $state(5);
   let layersNudgeSlider = $state(6);
 
   $effect(() => {
-    context.ui!.settings.strokeWidthFactor.value = Math.pow(2, strokeWidthSlider) / 1e5;
+    context.ui.settings.strokeWidthFactor.value = Math.pow(2, strokeWidthSlider) / 1e5;
   });
 
   $effect(() => {
-    context.ui!.settings.layersNudge.value = Math.pow(2, layersNudgeSlider) / 1e6;
+    context.ui.settings.layersNudge.value = Math.pow(2, layersNudgeSlider) / 1e6;
   });
 
   $effect(() => {
@@ -37,7 +37,7 @@
       strokeWidthSlider = Math.log2(strokeWidthGuess * 1e5);
       newStrokeWidth = Math.pow(2, strokeWidthSlider) / 1e5;
     });
-    context.ui!.settings.strokeWidthFactor.value = newStrokeWidth;
+    context.ui.settings.strokeWidthFactor.value = newStrokeWidth;
 
     // find a decent spacing between layers (LayerNudge)
     if (bounds && bounds.span) {
@@ -47,7 +47,7 @@
         layersNudgeSlider = Math.log2(maxSpan * 0.001 * 1e5);
         newLayerNudge = Math.pow(2, layersNudgeSlider) / 1e6;
       });
-      context.ui!.settings.layersNudge.value = newLayerNudge;
+      context.ui.settings.layersNudge.value = newLayerNudge;
     }
   });
 </script>
@@ -59,7 +59,7 @@
   </div>
 
   <div class="row">
-    <p>{context.ui?.viewportManager.viewports.length} {t("ui.viewports")}</p>
+    <p>{context.ui.viewportManager.viewports.length} {t("ui.viewports")}</p>
   </div>
 
   <hr />
@@ -68,7 +68,7 @@
     <input
       type="checkbox"
       id="right-handed"
-      bind:checked={context.ui!.settings.rightHanded.value} />
+      bind:checked={context.ui.settings.rightHanded.value} />
     <label for="right-handed">right handed</label>
   </div>
 
@@ -87,7 +87,7 @@
     <input
       type="checkbox"
       id="checkbox-show-grid"
-      bind:checked={context.ui!.settings.showGrid.value} /><label for="checkbox-show-grid"
+      bind:checked={context.ui.settings.showGrid.value} /><label for="checkbox-show-grid"
       >show grid</label>
   </div>
 
@@ -95,18 +95,18 @@
     <input
       type="checkbox"
       id="checkbox-show-axes"
-      bind:checked={context.ui!.settings.showAxes.value} /><label for="checkbox-show-axes"
+      bind:checked={context.ui.settings.showAxes.value} /><label for="checkbox-show-axes"
       >show axes</label>
   </div>
 
   <div class="row toggle-row">
     <button
-      class={context.ui!.settings.tiling.value === "triangle" ? "highlighted" : ""}
-      onclick={(): string => (context.ui!.settings.tiling.value = "triangle")}
+      class={context.ui.settings.tiling.value === "triangle" ? "highlighted" : ""}
+      onclick={(): string => (context.ui.settings.tiling.value = "triangle")}
       >triangle</button>
     <button
-      class={context.ui!.settings.tiling.value === "square" ? "highlighted" : ""}
-      onclick={(): string => (context.ui!.settings.tiling.value = "square")}>rect</button>
+      class={context.ui.settings.tiling.value === "square" ? "highlighted" : ""}
+      onclick={(): string => (context.ui.settings.tiling.value = "square")}>rect</button>
   </div>
 
   <div class="row">
@@ -123,12 +123,12 @@
       <input
         type="text"
         class="long-input"
-        bind:value={context.ui!.settings.layersNudge.value} />
+        bind:value={context.ui.settings.layersNudge.value} />
     </div>
   </div>
 
   <div class="row gap">
-    <button onclick={(): void => context.ui?.viewportManager.resetCameras()}
+    <button onclick={(): void => context.ui.viewportManager.resetCameras()}
       >reset cameras</button>
   </div>
 </div>

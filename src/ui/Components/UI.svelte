@@ -14,8 +14,8 @@
   <div class="gui horizontal">
     <div class="toolbar" role="toolbar">
       <Toolbar
-        tool={context.ui?.toolManager.toolName || ""}
-        setTool={(tool: string) => context.ui?.toolManager.setToolWithName(tool)} />
+        tool={context.ui.toolManager.toolName || ""}
+        setTool={(tool: string) => context.ui.toolManager.setToolWithName(tool)} />
     </div>
     <div class="desktop vertical">
       <div class="tabs">
