@@ -5,11 +5,11 @@
     rect: { x: number; y: number; width: number; height: number };
     viewport: SVGViewport;
   };
-  let { rect }: PropsType = $props();
+  let { rect, viewport }: PropsType = $props();
 </script>
 
 {#if rect}
-  <rect {...rect} />
+  <rect {...rect} stroke-width={viewport.style.strokeWidthFixed} />
 {/if}
 
 <style>
@@ -18,7 +18,7 @@
       stroke-dashoffset: 0;
     }
     to {
-      stroke-dashoffset: calc(500pt * var(--stroke-dash-length));
+      stroke-dashoffset: calc(300pt * var(--stroke-dash-length));
     }
   }
   rect {

@@ -4,17 +4,13 @@
   import { SVGViewport } from "../viewports/SVGViewport/SVGViewport.svelte.ts";
   import { WebGLViewport } from "../viewports/WebGLViewport/WebGLViewport.svelte.ts";
   import t from "../../app/t.ts";
+  import LogSlider from "../Components/LogSlider.svelte";
 
   const addSVGViewport = () => context.ui.viewportManager.addViewport(new SVGViewport());
   const addWebGLViewport = () =>
     context.ui.viewportManager.addViewport(new WebGLViewport());
 
-  let strokeWidthSlider = $state(5);
   let layersNudgeSlider = $state(6);
-
-  $effect(() => {
-    context.ui.settings.strokeWidthFactor.value = Math.pow(2, strokeWidthSlider) / 1e5;
-  });
 
   $effect(() => {
     context.ui.settings.layersNudge.value = Math.pow(2, layersNudgeSlider) / 1e6;
@@ -29,15 +25,6 @@
 
     // todo: hardcoded
     const bounds = { span: [1, 1] };
-    const strokeWidthGuess = 0.005;
-
-    let newStrokeWidth: number = 0;
-    untrack(() => {
-      // invert this: Math.pow(2, strokeWidthSlider) / 1e5;
-      strokeWidthSlider = Math.log2(strokeWidthGuess * 1e5);
-      newStrokeWidth = Math.pow(2, strokeWidthSlider) / 1e5;
-    });
-    context.ui.settings.strokeWidthFactor.value = newStrokeWidth;
 
     // find a decent spacing between layers (LayerNudge)
     if (bounds && bounds.span) {
@@ -72,16 +59,11 @@
     <label for="right-handed">right handed</label>
   </div>
 
-  <div class="row">
-    <label for="input-stroke-width-slider">{t("ui.viewports.stroke")}</label>
-    <input
-      id="input-stroke-width-slider"
-      type="range"
-      min="1"
-      max="20"
-      step="0.01"
-      bind:value={strokeWidthSlider} />
-  </div>
+  <label for="range-stroke-width">{t("ui.viewports.stroke")}</label>
+  <LogSlider
+    id="range-stroke-width"
+    radix={5}
+    bind:value={context.ui.settings.strokeWidthFactor.value} />
 
   <div class="row">
     <input

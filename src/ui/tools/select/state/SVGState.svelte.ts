@@ -9,7 +9,6 @@ import { SVGTouches } from "./SVGTouches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
 import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
-// import context from "../../../../app/context.svelte.ts";
 
 export class SVGState implements Deallocable, ToolEvents {
   viewport: SVGViewport;

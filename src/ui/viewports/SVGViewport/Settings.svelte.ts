@@ -17,6 +17,9 @@ export class Settings {
   strokeWidthFactor: number = $derived(context.ui.settings.strokeWidthFactor.value);
   strokeWidthAbsoluteMin: number = $derived(context.ui.settings.strokeWidthAbsoluteMin.value);
   vertexRadiusFactor: number = $derived(context.ui.settings.vertexRadiusFactor.value);
+
+  // consider putting this on the tools themselves.
+  // strange to have it watching always, even when not necessary
   radialSnap: boolean = $derived(context.keyboardManager.shift);
 };
 

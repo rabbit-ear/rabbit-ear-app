@@ -4,8 +4,6 @@ import { SVGViewport } from "./SVGViewport.svelte.ts";
 export class Grid {
   viewport: SVGViewport;
 
-  strokeWidth = $derived.by(() => this.viewport.view.vmax / 400);
-
   lines = $derived.by(() => {
     switch (SVGViewport.settings.tiling) {
       case "triangle":

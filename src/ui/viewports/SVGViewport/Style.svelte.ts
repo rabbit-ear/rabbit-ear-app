@@ -7,8 +7,12 @@ export class Style {
     this.viewport = viewport;
   }
 
-  circleRadius = $derived.by(() => this.viewport.view.vmin * SVGViewport.settings.vertexRadiusFactor);
+  // this is adjustable based on the settings property "vertex radius factor"
+  circleRadius = $derived
+    .by(() => this.viewport.view.vmin * SVGViewport.settings.vertexRadiusFactor);
 
+  // this is adjustable based on the settings property "stroke width factor"
+  // used in the rendering of the model
   strokeWidth = $derived.by(() =>
     Math.max(
       SVGViewport.settings.strokeWidthAbsoluteMin,
@@ -16,6 +20,10 @@ export class Style {
     ),
   );
 
-  strokeDashLength = $derived(this.strokeWidth * 8);
+  // this is a fixed-width and used in UI overlay elements
+  strokeWidthFixed = $derived.by(() => this.viewport.view.vmin / 500);
+
+  // do not fix this with the absolute min stroke width
+  strokeDashLength = $derived.by(() => this.viewport.view.vmin / 100);
 }
 

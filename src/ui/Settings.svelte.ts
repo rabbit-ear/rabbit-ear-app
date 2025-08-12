@@ -25,10 +25,8 @@ export class Settings {
   radialSnapOffset = new LocalStorageItem<number>("ui/viewport", "radialSnapOffset", 0);
   strokeWidthFactor = new LocalStorageItem<number>("ui/viewport", "strokeWidthFactor", 0.001);
   strokeWidthAbsoluteMin = new LocalStorageItem<number>("ui/viewport", "strokeWidthAbsoluteMin", 0.001);
-  vertexRadiusFactor = new LocalStorageItem<number>("ui/viewport", "vertexRadiusFactor", 0.00666);
-  // radialSnap: boolean = $derived(Keyboard.shift);
+  vertexRadiusFactor = new LocalStorageItem<number>("ui/viewport", "vertexRadiusFactor", 0.005);
 
-  // todo: feels like this is in the wrong place
   layersNudge = new LocalStorageItem<number>("ui/layers", "nudge", 0.01);
   layersAutoSolve = new LocalStorageItem<boolean>("ui/layers", "autoSolve", true);
 }

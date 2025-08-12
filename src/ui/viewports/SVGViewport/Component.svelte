@@ -51,6 +51,9 @@
 
   const graph = $derived(viewport.model?.graph);
 
+  const svgStyle = $derived(`--circle-radius: ${viewport.style.circleRadius};`);
+  const toolStyle = $derived(`--stroke-dash-length: ${viewport.style.strokeDashLength};`);
+
   // todo: issue-
   // creating and removing other Viewports causes a resize, but does not fire this.
   // const onresize = (): void => {
@@ -66,9 +69,7 @@
 
 {#snippet toolLayer()}
   {#if SVGToolLayer}
-    <g
-      class="tool-layer"
-      style={`--stroke-dash-length: ${viewport.style.strokeDashLength};`}>
+    <g class="tool-layer" style={toolStyle}>
       <SVGToolLayer class="hello-tool-layer" {viewport} {...svgToolLayerProps} />
     </g>
   {/if}
@@ -86,6 +87,7 @@
   stroke="white"
   viewBox={viewport.view.viewBoxString}
   stroke-width={viewport.style.strokeWidth}
+  style={svgStyle}
   {...props}>
   {#if matrix}
     <g class="wrapper" style="transform: matrix({matrix})">
