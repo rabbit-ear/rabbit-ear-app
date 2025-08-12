@@ -21,5 +21,7 @@ export class Settings {
 
   layersNudge: number = $derived(context.ui.settings.layersNudge.value);
   layersAutoSolve: boolean = $derived(context.ui.settings.layersAutoSolve.value);
+
+  scrollSensitivity: number = $derived(context.ui.settings.scrollSensitivity.value);
 }
 

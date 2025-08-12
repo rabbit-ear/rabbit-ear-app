@@ -10,6 +10,7 @@ import { WebGLView } from "./View.svelte.ts";
 import { Style } from "./Style.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import context from "../../../app/context.svelte.ts";
+import type { FOLD } from "rabbit-ear/types.js";
 
 export class WebGLViewport implements Viewport {
   static name: string = "WebGL Viewport";
@@ -19,7 +20,7 @@ export class WebGLViewport implements Viewport {
   id: string;
   component: Component;
   dropdown: Component;
-  domElement?: SVGSVGElement;
+  domElement?: HTMLCanvasElement;
   didMount?: () => void;
 
   view: View;
@@ -30,6 +31,13 @@ export class WebGLViewport implements Viewport {
 
   // layer?: unknown = $state();
   // props?: unknown = $state();
+
+  glModels: ((
+    gl: WebGLRenderingContext | WebGL2RenderingContext,
+    version: number,
+    graph: FOLD,
+    options?: object
+  ) => void)[] = $state([]);
 
   redraw?: () => void = $state();
 

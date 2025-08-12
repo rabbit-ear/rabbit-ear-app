@@ -1,13 +1,11 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport.ts";
-// import type { ViewportState } from "../../../app/ViewportState.svelte.ts";
 import type { Model } from "../../../models/Model.ts";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./Component.svelte";
 import { Settings } from "./Settings.svelte.ts";
-import { Renderer } from "./Renderer.svelte.ts";
-import { SVGView as View } from "./View.svelte.ts";
+import { SVGView } from "./View.svelte.ts";
 import { Style } from "./Style.svelte.ts";
 import { Grid } from "./Grid.svelte.ts";
 import { Snap } from "./Snap.svelte.ts";
@@ -24,11 +22,10 @@ export class SVGViewport implements Viewport {
   domElement?: SVGSVGElement;
   didMount?: () => void;
 
-  renderer: Renderer;
   grid: Grid;
   snap: Snap;
   style: Style;
-  view: View;
+  view: SVGView;
 
   // model?: Model = $state.raw();
   modelName = $state("creasePattern");
@@ -50,8 +47,7 @@ export class SVGViewport implements Viewport {
     this.id = String(Math.random());
     this.component = ViewportComponent;
     this.dropdown = Dropdown;
-    this.renderer = new Renderer(this);
-    this.view = new View(this);
+    this.view = new SVGView(this);
     this.style = new Style(this);
     this.grid = new Grid(this);
     this.snap = new Snap(this);

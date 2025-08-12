@@ -7,6 +7,10 @@ export class Style {
     this.viewport = viewport;
   }
 
+  showVertices: boolean = $derived(false);
+  showEdges: boolean = $derived(true);
+  showFaces: boolean = $derived(true);
+
   // this is adjustable based on the settings property "vertex radius factor"
   circleRadius = $derived
     .by(() => this.viewport.view.vmin * SVGViewport.settings.vertexRadiusFactor);

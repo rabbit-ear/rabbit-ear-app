@@ -29,5 +29,7 @@ export class Settings {
 
   layersNudge = new LocalStorageItem<number>("ui/layers", "nudge", 0.01);
   layersAutoSolve = new LocalStorageItem<boolean>("ui/layers", "autoSolve", true);
+
+  scrollSensitivity = new LocalStorageItem<number>("ui", "scrollSensitivity", 1 / 300);
 }
 

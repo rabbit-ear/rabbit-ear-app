@@ -5,7 +5,7 @@ import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.sve
 import type { Viewport } from "../../../viewports/Viewport.ts";
 import type { ToolEvents } from "../../ToolEvents.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
-import { SVGTouches } from "./SVGTouches.svelte.ts";
+import { Touches } from "./Touches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
 import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
@@ -13,7 +13,7 @@ import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
 export class SVGState implements Deallocable, ToolEvents {
   viewport: SVGViewport;
   globalState: GlobalState;
-  touches: SVGTouches;
+  touches: Touches;
   unsub: (() => void)[] = [];
 
   box: Box | undefined = $derived.by(() => {
@@ -42,7 +42,7 @@ export class SVGState implements Deallocable, ToolEvents {
     this.viewport = viewport;
     this.globalState = globalState;
 
-    this.touches = new SVGTouches(this.viewport);
+    this.touches = new Touches(this.viewport);
     this.unsub.push(this.doSelection());
 
     // pass data back up through the viewport: assign the SVGLayer and

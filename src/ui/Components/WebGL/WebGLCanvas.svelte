@@ -20,30 +20,43 @@
     ...rest
   }: WebGLCanvasProps = $props();
 
-  let instance = $derived(canvas ? initializeWebGL(canvas) : undefined);
+  // initialize the gl context and save the WebGL version (1 or 2)
+  let { gl: glContext, version: contextVersion } = $derived(
+    canvas ? initializeWebGL(canvas) : { gl: undefined, version: undefined },
+  );
 
-  $effect(() => {
-    gl = instance.gl;
-    version = instance.version;
-  });
-
-  $effect(() => {
-    if (!gl || !canvas) {
-      return;
-    }
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    rebuildViewport(gl, canvas);
-    canvasSize = [canvas.clientWidth, canvas.clientHeight];
-  });
-
+  // allow outside components to trigger a redraw
   redraw = (): void => {
+    console.log("WebGL redraw()");
     if (!gl || !canvas) {
       return;
     }
     rebuildViewport(gl, canvas);
     canvasSize = [canvas.clientWidth, canvas.clientHeight];
   };
+
+  // upon initialization
+  $effect(() => {
+    gl = glContext;
+    version = contextVersion;
+    gl?.enable(gl.BLEND);
+    gl?.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+  });
+
+  // todo: this seems to be unnecessary. idk why
+  // if canvas has changed, rebuild the viewport, save new canvas size
+  // $effect(() => {
+  //   if (canvas) redraw();
+  // });
+
+  // do not use. use the method above. delete when verified that we don't need this.
+  // $effect(() => {
+  //   if (!gl || !canvas) {
+  //     return;
+  //   }
+  //   rebuildViewport(gl, canvas);
+  //   canvasSize = [canvas.clientWidth, canvas.clientHeight];
+  // });
 </script>
 
 <svelte:window onresize={redraw} />

@@ -1,20 +1,16 @@
 import type { Viewport } from "./Viewport";
 import { SVGViewport } from "./SVGViewport/SVGViewport.svelte";
 import { WebGLViewport } from "./WebGLViewport/WebGLViewport.svelte";
-import { StatusViewport } from "./StatusViewport/StatusViewport.svelte";
-// import type { FileModel } from "../../app/FileModel.svelte";
 
 // the exported type is not a typeof Viewport, because Viewport
 // is an abstract class, and we will be instancing actual
 // class implementations. Otherwise typescript would yell at us
 // for trying to instance an abstract class
 type ViewportConstructor<T extends Viewport = Viewport> = new () => T;
-// type ViewportConstructor<T extends Viewport = Viewport> = new (model: FileModel) => T;
 
 const Viewports: { [key: string]: ViewportConstructor } = {
   SVGViewport,
   WebGLViewport,
-  StatusViewport,
 };
 
 export default Viewports;

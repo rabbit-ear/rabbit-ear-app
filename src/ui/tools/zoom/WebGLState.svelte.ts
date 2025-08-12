@@ -1,7 +1,12 @@
 import type { Deallocable } from "../Deallocable.ts";
+import type { Viewport } from "../../viewports/Viewport.ts";
 import type { WebGLViewport } from "../../viewports/WebGLViewport/WebGLViewport.svelte.ts";
 import type { ToolEvents } from "../ToolEvents.ts";
-import { rotateViewMatrix, zoomViewMatrix } from "../../../general/matrix.ts";
+import {
+  rotateViewMatrix,
+  vectorFromScreenLocation,
+  zoomViewMatrix,
+} from "../../../general/matrix.ts";
 
 export class WebGLState implements Deallocable, ToolEvents {
   viewport: WebGLViewport;
@@ -12,14 +17,19 @@ export class WebGLState implements Deallocable, ToolEvents {
   }
 
   onmousemove(viewport: Viewport, event: MouseEvent): void {
-    //console.log("onmousemove", this, this.viewport);
     event.preventDefault();
-    const { point } = event;
+    const point = vectorFromScreenLocation(
+      [event.clientX, event.clientY],
+      // [event.offsetX, event.offsetY],
+      viewport.view.canvasSize,
+      viewport.view.projection,
+    );
+
     const buttons = this.previousPoint ? 1 : 0;
     if (buttons && this.previousPoint && point) {
-      this.viewport.view.viewMatrix = rotateViewMatrix(
-        this.viewport.view.perspective,
-        this.viewport.view.viewMatrix,
+      viewport.view.view = rotateViewMatrix(
+        viewport.view.perspective,
+        viewport.view.view,
         point,
         this.previousPoint,
       );
@@ -29,7 +39,12 @@ export class WebGLState implements Deallocable, ToolEvents {
 
   onmousedown(viewport: Viewport, event: MouseEvent): void {
     event.preventDefault();
-    const { point } = event;
+    const point = vectorFromScreenLocation(
+      [event.clientX, event.clientY],
+      // [event.offsetX, event.offsetY],
+      viewport.view.canvasSize,
+      viewport.view.projection,
+    );
     this.previousPoint = point;
   };
 
@@ -40,14 +55,11 @@ export class WebGLState implements Deallocable, ToolEvents {
   onwheel(viewport: Viewport, event: WheelEvent): void {
     const { deltaY } = event;
     if (deltaY !== undefined) {
-      const scrollSensitivity = 1 / 100;
-      const delta = -deltaY * scrollSensitivity;
-      if (Math.abs(delta) < 1e-3) {
-        return;
-      }
-      this.viewport.view.viewMatrix = zoomViewMatrix(
-        this.viewport.view.perspective,
-        this.viewport.view.viewMatrix,
+      const delta = -deltaY * (viewport.constructor as WebGLViewport).settings.scrollSensitivity;
+      if (Math.abs(delta) < 1e-3) { return; }
+      viewport.view.view = zoomViewMatrix(
+        viewport.view.perspective,
+        viewport.view.view,
         delta,
       );
     }

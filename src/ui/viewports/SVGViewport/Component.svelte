@@ -14,45 +14,31 @@
 
   let { viewport, ...props }: PropsType = $props();
 
+  let svg: SVGSVGElement | undefined = $state();
+
+  const graph = $derived(viewport.model?.graph);
+
   // https://www.youtube.com/live/nMs4X8-L_yo?feature=shared&t=1667
   const SVGToolLayer = $derived(viewport.layer);
   const svgToolLayerProps = $derived(viewport.props || {});
 
+  const svgStyle = $derived(`--circle-radius: ${viewport.style.circleRadius};`);
+  const toolStyle = $derived(`--stroke-dash-length: ${viewport.style.strokeDashLength};`);
+
   const matrix = $derived(
     SVGViewport.settings.rightHanded ? [1, 0, 0, -1, 0, 0].join(", ") : undefined,
   );
-
-  type HasPoint = {
-    point: [number, number];
-  };
-
-  const prep = <T extends HasPoint>(event: T): T => {
-    if (!matrix) {
-      return event;
-    }
-    if (event.point) {
-      event.point[1] *= -1;
-    }
-    return event;
-  };
-
-  let svg: SVGSVGElement | undefined = $state();
 
   $effect(() => {
     viewport.domElement = svg;
   });
 
   onMount(() => {
-    console.log("SVGViewport has mounted", viewport.domElement);
+    // console.log("SVGViewport has mounted", viewport.domElement);
     if (typeof viewport.didMount === "function") {
       viewport.didMount();
     }
   });
-
-  const graph = $derived(viewport.model?.graph);
-
-  const svgStyle = $derived(`--circle-radius: ${viewport.style.circleRadius};`);
-  const toolStyle = $derived(`--stroke-dash-length: ${viewport.style.strokeDashLength};`);
 
   // todo: issue-
   // creating and removing other Viewports causes a resize, but does not fire this.
@@ -92,13 +78,13 @@
   {#if matrix}
     <g class="wrapper" style="transform: matrix({matrix})">
       {@render gridLayer()}
-      <SVGFOLD {graph} />
+      <SVGFOLD {graph} {viewport} />
       <!-- <SVGShapes shapes={viewport.model?.shapes} class="model-layer" /> -->
       {@render toolLayer()}
     </g>
   {:else}
     {@render gridLayer()}
-    <SVGFOLD {graph} />
+    <SVGFOLD {graph} {viewport} />
     <!-- <SVGShapes shapes={viewport.model?.shapes} class="model-layer" /> -->
     {@render toolLayer()}
   {/if}

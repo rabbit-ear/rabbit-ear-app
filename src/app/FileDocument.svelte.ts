@@ -76,7 +76,6 @@ export class FileDocument {
     await writeTextFile(this.#filePath, this.#dataModel.exportToText());
     // todo: catch errors, if errors, do not run the next line.
     this.#isDirty = false;
-    console.log("File saved successfully");
     return true;
   }
 

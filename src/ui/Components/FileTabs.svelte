@@ -47,6 +47,7 @@
 
   .container {
     background-color: var(--background-1);
+    overflow-x: auto;
   }
 
   .file-button {

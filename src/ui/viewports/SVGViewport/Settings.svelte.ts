@@ -21,5 +21,7 @@ export class Settings {
   // consider putting this on the tools themselves.
   // strange to have it watching always, even when not necessary
   radialSnap: boolean = $derived(context.keyboardManager.shift);
+
+  scrollSensitivity: number = $derived(context.ui.settings.scrollSensitivity.value);
 };
 

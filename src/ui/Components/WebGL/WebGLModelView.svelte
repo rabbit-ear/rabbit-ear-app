@@ -9,7 +9,7 @@
     uniformOptions?: object;
   };
 
-  let { gl, version, models = [], uniformOptions = {} }: PropsType = $props();
+  let { gl, version = 2, models = [], uniformOptions = {} }: PropsType = $props();
 
   let uniforms = $derived(models.map((model) => model.makeUniforms(uniformOptions)));
 

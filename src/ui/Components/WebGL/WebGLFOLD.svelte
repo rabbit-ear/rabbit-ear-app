@@ -7,7 +7,7 @@
   import { creasePattern } from "rabbit-ear/webgl/creasePattern/models.js";
   import { foldedForm } from "rabbit-ear/webgl/foldedForm/models.js";
   //import { makeProjectionMatrix } from "rabbit-ear/webgl/general/view.js";
-  //import { worldAxes } from "./WorldAxes/models.js";
+  import { worldAxes } from "./WorldAxes/models.js";
   // import { touchIndicators } from "rabbit-ear/webgl/touches/models.js";
   import { deallocModel } from "rabbit-ear/webgl/general/model.js";
   import { dark, light } from "rabbit-ear/webgl/general/colors.js";
@@ -17,6 +17,8 @@
 
   type PropsType = {
     graph?: FOLD;
+    canvas: HTMLCanvasElement | undefined;
+    canvasSize: [number, number];
     rightHanded?: boolean;
     perspective?: string;
     renderStyle?: string;
@@ -38,6 +40,8 @@
 
   let {
     graph = {},
+    canvas = $bindable(),
+    canvasSize = $bindable(),
     rightHanded = true,
     perspective = "orthographic",
     renderStyle = "creasePattern",
@@ -53,12 +57,13 @@
     showFoldedCreases = false,
     showFoldedFaces = true,
     redraw = $bindable(),
+    ...props
   }: PropsType = $props();
 
   let gl: WebGLRenderingContext | WebGL2RenderingContext = $state();
   let version: number = $state();
-  let canvas: HTMLCanvasElement | undefined = $state();
-  let canvasSize: [number, number] = $state([0, 0]);
+  // let canvas: HTMLCanvasElement | undefined = $state();
+  // let canvasSize: [number, number] = $state([0, 0]);
 
   let projectionMatrix = $derived(
     makeProjectionMatrix(canvasSize, perspective, fov, rightHanded),
@@ -101,12 +106,12 @@
         renderStyle === "creasePattern"
           ? [
               ...creasePattern(gl, version, graph, programOptions),
-              //...worldAxes(gl),
+              ...worldAxes(gl),
               // ...touchIndicators(gl, programOptions),
             ]
           : [
               ...foldedForm(gl, version, graph, programOptions),
-              //...worldAxes(gl),
+              ...worldAxes(gl),
               // ...touchIndicators(gl, programOptions),
             ];
       // remove the one flag that is on by default: DepthTest.
@@ -128,12 +133,6 @@
   $effect(() => deallocModels);
 </script>
 
-<WebGLCanvas
-  bind:gl
-  bind:version
-  bind:canvas
-  bind:canvasSize
-  bind:redraw
-  {projectionMatrix} />
+<WebGLCanvas bind:gl bind:version bind:canvas bind:canvasSize bind:redraw {...props} />
 
 <WebGLModelView {gl} {version} {models} {uniformOptions} />

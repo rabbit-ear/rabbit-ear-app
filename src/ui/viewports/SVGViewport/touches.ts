@@ -1,5 +1,5 @@
 import type { Viewport } from "../Viewport.ts";
-// import { SVGViewport } from "./SVGViewport.svelte.ts";
+import { SVGViewport } from "./SVGViewport.svelte.ts";
 // import { convertToViewBox, findInParents } from "./dom.ts";
 
 /**
@@ -33,7 +33,7 @@ export const getSVGViewportPoint = (viewport: Viewport, point: [number, number])
   // viewport.domElement.tagName === "svg"
   const svg = viewport.domElement as SVGSVGElement;
   const viewBoxCoords = convertToViewBox(svg, point);
-  return viewport.constructor?.settings.rightHanded
+  return SVGViewport.settings.rightHanded
     ? [viewBoxCoords[0], -viewBoxCoords[1]]
     : viewBoxCoords;
 }

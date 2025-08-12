@@ -3,7 +3,7 @@ import { identity4x4, multiplyMatrices4, multiplyMatrix4Vector3 } from "rabbit-e
 import type { VecLine2, VecLine3 } from "rabbit-ear/types.js";
 import type { View } from "../View";
 import { WebGLViewport } from "./WebGLViewport.svelte";
-import { viewBoxOrigin, graphToMatrix4 } from "../../../general/matrix.ts";
+import { graphToMatrix4 } from "../../../general/matrix.ts";
 //import { identity4x4, multiplyMatrices4 } from "rabbit-ear/math/matrix4.js";
 //import settings from "./ClassSettings.svelte.ts";
 //import {

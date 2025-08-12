@@ -170,7 +170,7 @@ export const vectorFromScreenLocation = (
   if (inverse === undefined) {
     return [0, 0];
   }
-  const [x, y] = multiplyMatrix4Vector3(inverse, [...screenVector, 1]).slice(0, 2);
+  const [x, y] = multiplyMatrix4Vector3(inverse, [...screenVector, 1]);
   return [x, y];
 };
 
@@ -253,7 +253,7 @@ export const zoomViewMatrix = (
  * @returns {number[]} a 4x4 projection matrix
  */
 export const makeProjectionMatrix = (
-  [width, height],
+  [width, height]: [number, number],
   perspective = "perspective",
   fov = 45,
   rightHanded = true,
