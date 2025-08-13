@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { SVGViewport } from "./SVGViewport.svelte.ts";
+  import { WebGLViewport } from "./WebGLViewport.svelte.ts";
   import MatrixView from "../../Components/MatrixView.svelte";
 
-  let { viewport }: { viewport: SVGViewport } = $props();
+  let { viewport }: { viewport: WebGLViewport } = $props();
 
   let modelMatrix = $derived(viewport.view.model);
   let viewMatrix = $derived(viewport.view.view);

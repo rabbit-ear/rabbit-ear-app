@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
+  import MatricesView from "./MatricesView.svelte";
 
   //let { panel, viewport }: { panel: ViewportPanel; viewport: WebGLViewport } = $props();
   let { viewport }: { viewport: WebGLViewport } = $props();
@@ -81,6 +82,8 @@
       for="checkbox-show-folded-face-outlines">show face outlines</label>
   </div>
 {/if}
+
+<MatricesView {viewport} />
 
 <style>
   .row {

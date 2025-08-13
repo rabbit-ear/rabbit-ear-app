@@ -16,7 +16,7 @@ export const makeUniforms = ({ projectionMatrix, modelViewMatrix, origin, canvas
   },
   u_resolution: {
     func: "uniform2fv",
-    value: [canvas.clientWidth, canvas.clientHeight],
+    value: canvas ? [canvas.clientWidth, canvas.clientHeight] : [0, 0],
   },
 });
 

@@ -31,6 +31,8 @@ export class Style {
 
   strokeDashLength = $derived(this.strokeWidth * 8);
 
+  layersNudge = $derived(WebGLViewport.settings.layersNudge);
+
   constructor(viewport: WebGLViewport) {
     this.viewport = viewport;
   }

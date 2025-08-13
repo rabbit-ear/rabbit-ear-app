@@ -4,7 +4,7 @@ import {
   multiplyMatrix2Vector2,
   multiplyMatrices2,
 } from "rabbit-ear/math/matrix2.js";
-import { magnitude2, resize3, subtract2 } from "rabbit-ear/math/vector.js";
+import { magnitude2, midpoint3, resize3, subtract2 } from "rabbit-ear/math/vector.js";
 import {
   identity4x4,
   invertMatrix4,
@@ -62,7 +62,7 @@ export const graphToMatrix2 = (graph = {}, verticalUp = false): number[] => {
   return [vmax, 0, 0, vmax, translation[0], translation[1]];
 };
 
-export const graphToMatrix4 = (graph = {}, verticalUp = false): number[] => {
+export const graphToMatrix4Handed = (graph = {}, verticalUp = false): number[] => {
   const box = graphBox(graph);
   if (!box) {
     return verticalUp
@@ -73,16 +73,35 @@ export const graphToMatrix4 = (graph = {}, verticalUp = false): number[] => {
   const span = resize3(box.span);
   const min = resize3(box.min);
   const max = resize3(box.max);
-  const vmax = Math.max(span[0], span[1], span[2]);
+  const vmax = Math.max(...span);
   const padding = span.map((s) => (s - vmax) / 2);
-  const translation = [0, 1, 2].map((i) => min[i] + padding[i]);
+  // const translation = [0, 1, 2].map((i) => min[i] + padding[i]);
+  const translation = [0, 1, 2].map((i) => -1 * (min[i] + max[i]) / 2);
   if (verticalUp) {
-    translation[1] = -max[1] + padding[1];
+    // translation[1] = -max[1] + padding[1];
+    translation[1] *= -1;
   }
   return [
     vmax, 0, 0, 0,
     0, vmax, 0, 0,
-    0, 0, 0, vmax,
+    0, 0, vmax, 0,
+    translation[0], translation[1], translation[2], 1];
+};
+
+export const graphToMatrix4 = (graph = {}): number[] => {
+  const box = graphBox(graph);
+  if (!box) { return [...identity4x4]; }
+  const span = resize3(box.span);
+  const min = resize3(box.min);
+  const max = resize3(box.max);
+  const center = midpoint3(min, max);
+  const vmax = Math.max(...span);
+  const scale = 1 / vmax;
+  const translation = [0, 1, 2].map((i) => -center[i] * scale);
+  return [
+    scale, 0, 0, 0,
+    0, scale, 0, 0,
+    0, 0, scale, 0,
     translation[0], translation[1], translation[2], 1];
 };
 
@@ -244,6 +263,8 @@ export const zoomViewMatrix = (
   }
 };
 
+// this is taken from Rabbit Ear core library but incorporates
+// the handedness state
 /**
  * @description Create a 4x4 projection matrix for either a
  * perspective or orthographic view.

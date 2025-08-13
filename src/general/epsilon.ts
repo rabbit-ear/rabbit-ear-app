@@ -48,10 +48,10 @@ export const cleanNumber = (num: number, precision = 7, lookup = {}): number => 
  * So for example, 0.0002458236492835 becomes 0.0002.
  */
 export const niceNumber = (num: number, digits = 1): string => {
-  if (num > 10) {
+  if (num >= 10) {
     return String(parseInt(num));
   }
-  if (num > 1) {
+  if (num >= 1) {
     return num.toFixed(digits);
   }
   let i = 1;

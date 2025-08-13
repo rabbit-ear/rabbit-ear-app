@@ -27,6 +27,11 @@ export class SVGView implements View {
 
   camera = $state([...identity2x3]);
 
+  view = $derived.by(() => {
+    const inverted = invertMatrix2(this.camera);
+    return inverted ? inverted : [...identity2x3];
+  });
+
   #model = $state([...identity2x3]);
 
   get model(): number[] {
@@ -43,11 +48,6 @@ export class SVGView implements View {
     this.camera = newCamera;
     this.#model = matrix;
   }
-
-  view = $derived.by(() => {
-    const inverted = invertMatrix2(this.camera);
-    return inverted ? inverted : [...identity2x3];
-  });
 
   modelView = $derived(multiplyMatrices2(this.model, this.view));
 

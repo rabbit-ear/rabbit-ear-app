@@ -8,7 +8,9 @@ import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
 import { WebGLView } from "./View.svelte.ts";
 import { Style } from "./Style.svelte.ts";
+import { Models } from "./Models.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
+import { deallocModel } from "rabbit-ear/webgl/general/model.js";
 import context from "../../../app/context.svelte.ts";
 import type { FOLD } from "rabbit-ear/types.js";
 
@@ -25,19 +27,16 @@ export class WebGLViewport implements Viewport {
 
   view: View;
   style: Style;
+  models: Models;
+
+  gl: WebGLRenderingContext | WebGL2RenderingContext | undefined = $state();
+  version: number = $state(2);
 
   modelName = $state("creasePattern");
   model?: Model = $derived(context.fileManager.document?.model[this.modelName]);
 
   // layer?: unknown = $state();
   // props?: unknown = $state();
-
-  glModels: ((
-    gl: WebGLRenderingContext | WebGL2RenderingContext,
-    version: number,
-    graph: FOLD,
-    options?: object
-  ) => void)[] = $state([]);
 
   redraw?: () => void = $state();
 
@@ -49,6 +48,7 @@ export class WebGLViewport implements Viewport {
     this.dropdown = Dropdown;
     this.view = new WebGLView(this);
     this.style = new Style(this);
+    this.models = new Models(this);
     this.effects = [this.makeFrameAttributesEffect()];
     // this.setModelStyle(this.model.style);
   }
@@ -62,6 +62,9 @@ export class WebGLViewport implements Viewport {
     this.style.renderStyle = modelStyle.isFoldedForm ? "foldedForm" : "creasePattern";
     this.style.opacity = modelStyle.hasLayerOrder ? 1.0 : 0.2;
     // todo: something else to tell it to draw transparent faces
+    this.style.frontColor = this.style.opacity === 1 ? this.style.frontColor : "#999";
+    this.style.backColor = this.style.opacity === 1 ? this.style.backColor : "#999";
+    this.style.outlineColor = this.style.opacity === 1 ? this.style.outlineColor : "white";
   }
 
   makeFrameAttributesEffect(): () => void {
@@ -85,6 +88,9 @@ export class WebGLViewport implements Viewport {
 
   dealloc(): void {
     this.effects.forEach((cleanup) => cleanup());
+    this.models.models.forEach((model) => {
+      if (this.gl) { deallocModel(this.gl, model); }
+    });
   }
 }
 

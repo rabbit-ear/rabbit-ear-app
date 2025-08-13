@@ -4,7 +4,7 @@
   import { rebuildViewport } from "rabbit-ear/webgl/general/view.js";
 
   type WebGLCanvasProps = {
-    gl?: WebGLRenderingContext | WebGL2RenderingContext;
+    gl?: WebGLRenderingContext | WebGL2RenderingContext | undefined;
     version?: number;
     canvas?: HTMLCanvasElement | undefined;
     canvasSize?: [number, number];
