@@ -1,23 +1,36 @@
 import { WebGLViewport } from "./WebGLViewport.svelte.ts";
+import context from "../../../app/context.svelte.ts";
+import { RenderStyle } from "../types.ts";
 
 export class Style {
   viewport: WebGLViewport;
 
-  //frontColor: renderStyle === RenderStyle.translucent ? "#9e9b9b" : Renderer.FrontColor,
-  //backColor: renderStyle === RenderStyle.translucent ? "#9e9b9b" : Renderer.BackColor,
-  //outlineColor: renderStyle === RenderStyle.translucent ? "white" : "black",
-  //opacity: renderStyle === RenderStyle.translucent ? 0.25 : 1,
+  renderStyle: RenderStyle = $state(RenderStyle.creasePattern);
 
-  renderStyle: string = $state("creasePattern");
+  darkMode: boolean = $derived(context.ui.settings.darkMode.value);
 
-  darkMode: boolean = $state(true);
-  frontColor: string = $state("#1177FF");
-  backColor: string = $state("#ffffff");
-  outlineColor: string = $state("black");
-  opacity: number = $state(1);
+  opacity: number = $derived(this.renderStyle === RenderStyle.translucent
+    ? context.ui.settings.modelOpacityTranslucent.value
+    : context.ui.settings.modelOpacityOpaque.value);
+
+  frontColor: string = $derived.by(() => this.renderStyle === RenderStyle.translucent
+    ? context.ui.settings.modelColorTranslucent.value
+    : context.ui.settings.modelColorFront.value);
+
+  backColor: string = $derived.by(() => this.renderStyle === RenderStyle.translucent
+    ? context.ui.settings.modelColorTranslucent.value
+    : context.ui.settings.modelColorBack.value);
+
+  outlineColor: string = $derived.by(() => this.renderStyle === RenderStyle.translucent
+    ? "white"
+    : context.ui.settings.modelColorOutline.value);
+
+  cpColor: string = $derived.by(() => this.viewport.style.darkMode ? "#111111" : "white");
 
   showFoldedFaceOutlines: boolean = $state(true);
+
   showFoldedCreases: boolean = $state(false);
+
   showFoldedFaces: boolean = $state(true);
 
   circleRadius = $derived.by(() => this.viewport.view.vmin * WebGLViewport.settings.vertexRadiusFactor);

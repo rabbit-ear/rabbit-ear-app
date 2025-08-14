@@ -1,41 +1,40 @@
 <script lang="ts">
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
   import MatricesView from "./MatricesView.svelte";
+  import context from "../../../app/context.svelte.ts";
+  import { RenderStyle, RenderPerspective } from "../types.ts";
 
-  //let { panel, viewport }: { panel: ViewportPanel; viewport: WebGLViewport } = $props();
   let { viewport }: { viewport: WebGLViewport } = $props();
 
-  let isFolded = $derived(viewport.style.renderStyle === "foldedForm");
+  let isFolded = $derived(viewport.style.renderStyle === RenderStyle.foldedForm);
 
   const swapColors = (): void => {
-    [viewport.style.frontColor, viewport.style.backColor] = [
-      viewport.style.backColor,
-      viewport.style.frontColor,
+    [
+      context.ui.settings.modelColorFront.value,
+      context.ui.settings.modelColorBack.value,
+    ] = [
+      context.ui.settings.modelColorBack.value,
+      context.ui.settings.modelColorFront.value,
     ];
   };
 </script>
 
 <div class="row toggle-row">
   <button
-    class={viewport.view.perspective === "orthographic" ? "highlighted" : ""}
+    class={viewport.view.perspective === RenderPerspective.orthographic
+      ? "highlighted"
+      : ""}
     onclick={(): void => {
-      viewport.view.perspective = "orthographic";
+      viewport.view.perspective = RenderPerspective.orthographic;
     }}>2D</button>
   <button
-    class={viewport.view.perspective === "perspective" ? "highlighted" : ""}
+    class={viewport.view.perspective === RenderPerspective.perspective
+      ? "highlighted"
+      : ""}
     onclick={(): void => {
-      viewport.view.perspective = "perspective";
+      viewport.view.perspective = RenderPerspective.perspective;
     }}>3D</button>
 </div>
-
-<!-- <div class="row toggle-row"> -->
-<!--   <button -->
-<!--     class={viewport.style.renderStyle === "creasePattern" ? "highlighted" : ""} -->
-<!--     onclick={(): string => (viewport.style.renderStyle = "creasePattern")}>cp</button> -->
-<!--   <button -->
-<!--     class={viewport.style.renderStyle === "foldedForm" ? "highlighted" : ""} -->
-<!--     onclick={(): string => (viewport.style.renderStyle = "foldedForm")}>folded</button> -->
-<!-- </div> -->
 
 <div class="row">
   <label for="input-fov">FOV</label>
@@ -44,8 +43,8 @@
 
 {#if isFolded}
   <div class="row">
-    <input type="color" bind:value={viewport.style.frontColor} />
-    <input type="color" bind:value={viewport.style.backColor} />
+    <input type="color" bind:value={context.ui.settings.modelColorFront.value} />
+    <input type="color" bind:value={context.ui.settings.modelColorBack.value} />
     <button aria-label="swap" class="swap" onclick={swapColors}>
       <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -101,6 +100,8 @@
     background-color: #fff3;
   }
   button.swap svg {
+    width: 100%;
+    height: 100%;
     fill: var(--bright);
   }
 </style>

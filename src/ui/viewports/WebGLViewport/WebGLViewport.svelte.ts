@@ -9,10 +9,9 @@ import ClassPanel from "./Panel.svelte";
 import { WebGLView } from "./View.svelte.ts";
 import { Style } from "./Style.svelte.ts";
 import { Models } from "./Models.svelte.ts";
+import { GLModels } from "./GLModels.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
-import { deallocModel } from "rabbit-ear/webgl/general/model.js";
 import context from "../../../app/context.svelte.ts";
-import type { FOLD } from "rabbit-ear/types.js";
 
 export class WebGLViewport implements Viewport {
   static name: string = "WebGL Viewport";
@@ -27,10 +26,18 @@ export class WebGLViewport implements Viewport {
 
   view: View;
   style: Style;
-  models: Models;
+  // models: Models;
+  glModels: GLModels;
 
-  gl: WebGLRenderingContext | WebGL2RenderingContext | undefined = $state();
+  #gl: WebGLRenderingContext | WebGL2RenderingContext | undefined = $state();
   version: number = $state(2);
+
+  get gl(): WebGLRenderingContext | WebGL2RenderingContext | undefined { return this.#gl; }
+  set gl(context: WebGLRenderingContext | WebGL2RenderingContext | undefined) {
+    // this.models.dealloc();
+    // this.glModels.dealloc();
+    this.#gl = context;
+  }
 
   modelName = $state("creasePattern");
   model?: Model = $derived(context.fileManager.document?.model[this.modelName]);
@@ -48,15 +55,14 @@ export class WebGLViewport implements Viewport {
     this.dropdown = Dropdown;
     this.view = new WebGLView(this);
     this.style = new Style(this);
-    this.models = new Models(this);
+    // this.models = new Models(this);
+    this.glModels = new GLModels(this);
     this.effects = [this.makeFrameAttributesEffect()];
     // this.setModelStyle(this.model.style);
   }
 
   setModelStyle(modelStyle: FrameAttributes): void {
-    if (!modelStyle) {
-      return;
-    }
+    if (!modelStyle) { return; }
     // set initial state using the model style
     this.view.perspective = modelStyle.dimension === 2 ? "orthographic" : "perspective";
     this.style.renderStyle = modelStyle.isFoldedForm ? "foldedForm" : "creasePattern";
@@ -74,23 +80,22 @@ export class WebGLViewport implements Viewport {
           this.setModelStyle(this.model.attributes);
         }
       });
-      return () => {
-        // empty
-      };
+      // empty
+      return () => { };
     });
   }
 
   unbindTool(): void {
     console.log("WebGLViewport unbindTool()");
+    // this.models.unbindTool();
     // this.layer = undefined;
     // this.props = undefined;
   }
 
   dealloc(): void {
     this.effects.forEach((cleanup) => cleanup());
-    this.models.models.forEach((model) => {
-      if (this.gl) { deallocModel(this.gl, model); }
-    });
+    // this.models.dealloc();
+    this.glModels.dealloc();
   }
 }
 

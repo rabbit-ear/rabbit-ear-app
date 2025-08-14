@@ -30,6 +30,15 @@ export class Settings {
   layersNudge = new LocalStorageItem<number>("ui/layers", "nudge", 0.01);
   layersAutoSolve = new LocalStorageItem<boolean>("ui/layers", "autoSolve", true);
 
-  scrollSensitivity = new LocalStorageItem<number>("ui", "scrollSensitivity", 1 / 300);
+  scrollSensitivity = new LocalStorageItem<number>("ui/input", "scrollSensitivity", 1 / 300);
+
+  darkMode = new LocalStorageItem<boolean>("ui/style", "darkMode", true);
+  modelColorFront = new LocalStorageItem<string>("ui/style", "modelColorFront", "#17F");
+  modelColorBack = new LocalStorageItem<string>("ui/style", "modelColorBack", "white");
+  modelColorOutline = new LocalStorageItem<string>("ui/style", "modelColorOutline", "black");
+  // #9e9b9b
+  modelColorTranslucent = new LocalStorageItem<string>("ui/style", "modelColorTranslucent", "#999");
+  modelOpacityOpaque = new LocalStorageItem<number>("ui/style", "modelOpacityOpaque", 1.0);
+  modelOpacityTranslucent = new LocalStorageItem<number>("ui/style", "modelOpacityTranslucent", 0.25);
 }
 

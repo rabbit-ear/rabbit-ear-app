@@ -37,8 +37,6 @@
     context.fileManager.document?.model.frameRaw,
   );
 
-  $effect(() => console.log(frame, frameRaw));
-
   let frame_parent: number = $derived(frameRaw?.frame_parent ?? 0);
 
   let hasParent: boolean = $derived(

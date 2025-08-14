@@ -64,6 +64,7 @@ export class ViewportManager {
     if (index === -1) { return; }
     this.unbindViewport(viewport);
     this.viewports.splice(index, 1);
+    viewport.dealloc();
     // todo: should this be moved above the removal and be called WillRemove?
     // this.ui.toolManager.viewportDidRemove(viewport);
   }
@@ -74,6 +75,7 @@ export class ViewportManager {
     if (!newViewport || !oldViewport) { return; }
     this.unbindViewport(oldViewport);
     this.viewports.splice(spliceIndex, 1);
+    oldViewport.dealloc();
     this.addViewport(newViewport, spliceIndex);
   }
 
@@ -130,6 +132,7 @@ export class ViewportManager {
   // re-initialize itself, we would call this method to cleanup the hanging effect.
   dealloc(): void {
     this.#effects.forEach((cleanup) => cleanup());
+    this.viewports.forEach(viewport => viewport.dealloc());
   }
 }
 

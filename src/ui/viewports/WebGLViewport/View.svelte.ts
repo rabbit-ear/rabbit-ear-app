@@ -11,13 +11,8 @@ import { WebGLViewport } from "./WebGLViewport.svelte";
 import { graphToMatrix4 } from "../../../general/matrix.ts";
 import { makeProjectionMatrix } from "../../../general/matrix.ts";
 // import { makeProjectionMatrix } from "rabbit-ear/webgl/general/view.js";
-//import { identity4x4, multiplyMatrices4 } from "rabbit-ear/math/matrix4.js";
-//import settings from "./ClassSettings.svelte.ts";
-//import {
-//  viewMatrixRightHanded,
-//  viewMatrixLeftHanded,
-//} from "../../../../general/matrix.ts";
 import context from "../../../app/context.svelte.ts";
+import { RenderPerspective } from "../types.ts";
 
 const defaultCameraMatrix: number[] = [
   1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, (Math.sqrt(3) / 2 + 1), 1,
@@ -34,7 +29,7 @@ export class WebGLView implements View {
 
   canvasSize: [number, number] = $state([0, 0]);
 
-  perspective: string = $state("orthographic");
+  perspective: RenderPerspective = $state(RenderPerspective.orthographic);
 
   fov: number = $state(30.25);
 
@@ -45,7 +40,6 @@ export class WebGLView implements View {
     this.rightHanded),
   );
 
-  // camera: number[] = $state([...identity4x4]);
   camera: number[] = $state([...defaultCameraMatrix]);
 
   // view matrix
@@ -62,6 +56,8 @@ export class WebGLView implements View {
   }
 
   set model(matrix) {
+    // // compensate in the view matrix for the two states (previous, new)
+    // // of the model matrix so that the modelView remains unchanged.
     // const old = this.#model;
     // const scale = matrix[0] / old[0];
     // const difference = [
@@ -80,6 +76,7 @@ export class WebGLView implements View {
 
   viewBox: [number, number, number, number] = $derived.by(() => {
     const m = invertMatrix4([...this.modelView]);
+    if (!m) { return [0, 0, 1, 1]; }
     // get the translation component
     const [, , , , , , , , , , , , x, y, z] = m;
     // remove the translation component
@@ -90,6 +87,7 @@ export class WebGLView implements View {
   });
 
   vmin: number = $derived(Math.min(this.viewBox[2], this.viewBox[3]));
+
   vmax: number = $derived(Math.max(this.viewBox[2], this.viewBox[3]));
 
   uiEpsilon: number = $derived.by(() => this.vmax * WebGLViewport.settings.uiEpsilonFactor);
