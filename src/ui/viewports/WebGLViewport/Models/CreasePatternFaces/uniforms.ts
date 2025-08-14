@@ -10,8 +10,7 @@ export const makeUniforms = ({
   projectionMatrix,
   modelViewMatrix,
   cpColor,
-  strokeWidth,
-}) => ({
+}: { projectionMatrix: number[], modelViewMatrix: number[], cpColor: string }) => ({
   u_matrix: {
     func: "uniformMatrix4fv",
     value: multiplyMatrices4(
@@ -19,20 +18,8 @@ export const makeUniforms = ({
       modelViewMatrix || identity4x4,
     ),
   },
-  u_projection: {
-    func: "uniformMatrix4fv",
-    value: projectionMatrix || identity4x4,
-  },
-  u_modelView: {
-    func: "uniformMatrix4fv",
-    value: modelViewMatrix || identity4x4,
-  },
   u_cpColor: {
     func: "uniform3fv",
     value: parseColorToWebGLColor(cpColor || "white"),
-  },
-  u_strokeWidth: {
-    func: "uniform1f",
-    value: strokeWidth || 0.05,
   },
 });

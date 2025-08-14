@@ -1,6 +1,7 @@
 /**
  * Rabbit Ear (c) Kraft
  */
+import type { FOLD } from "rabbit-ear/types.d.ts";
 import { triangulateConvexFacesVertices } from "rabbit-ear/graph/triangulate.js";
 import { resize2 } from "rabbit-ear/math/vector.js";
 
@@ -10,7 +11,11 @@ import { resize2 } from "rabbit-ear/math/vector.js";
  * @param {FOLD} graph a FOLD object
  * @returns {WebGLVertexArray[]}
  */
-export const makeCPFacesVertexArrays = (gl, program, graph) => {
+export const makeCPFacesVertexArrays = (
+  gl: WebGLRenderingContext | WebGL2RenderingContext,
+  program: WebGLProgram,
+  graph: FOLD = {},
+) => {
   if (!graph || !graph.vertices_coords) {
     return [];
   }
@@ -31,7 +36,11 @@ export const makeCPFacesVertexArrays = (gl, program, graph) => {
  * @param {FOLD} graph a FOLD object
  * @returns {WebGLElementArray[]}
  */
-export const makeCPFacesElementArrays = (gl, version = 1, graph = {}) => {
+export const makeCPFacesElementArrays = (
+  gl: WebGLRenderingContext | WebGL2RenderingContext,
+  version: number = 1,
+  graph: FOLD = {},
+) => {
   if (!graph || !graph.vertices_coords || !graph.faces_vertices) {
     return [];
   }

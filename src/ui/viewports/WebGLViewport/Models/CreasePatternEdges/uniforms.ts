@@ -1,5 +1,4 @@
 import { identity4x4, multiplyMatrices4 } from "rabbit-ear/math/matrix4.js";
-import { parseColorToWebGLColor } from "rabbit-ear/webgl/general/colors.js";
 
 /**
  * @description Uniforms must exist so there are protections to ensure
@@ -9,27 +8,14 @@ import { parseColorToWebGLColor } from "rabbit-ear/webgl/general/colors.js";
 export const makeUniforms = ({
   projectionMatrix,
   modelViewMatrix,
-  cpColor,
   strokeWidth,
-}) => ({
+}: { projectionMatrix: number[], modelViewMatrix: number[], strokeWidth: number }) => ({
   u_matrix: {
     func: "uniformMatrix4fv",
     value: multiplyMatrices4(
       projectionMatrix || identity4x4,
       modelViewMatrix || identity4x4,
     ),
-  },
-  u_projection: {
-    func: "uniformMatrix4fv",
-    value: projectionMatrix || identity4x4,
-  },
-  u_modelView: {
-    func: "uniformMatrix4fv",
-    value: modelViewMatrix || identity4x4,
-  },
-  u_cpColor: {
-    func: "uniform3fv",
-    value: parseColorToWebGLColor(cpColor || "white"),
   },
   u_strokeWidth: {
     func: "uniform1f",

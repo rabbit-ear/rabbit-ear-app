@@ -33,21 +33,6 @@ export interface GLModel {
   uniforms: { [key: string]: any };
 }
 
-export const deallocModel = (
-  gl: WebGLRenderingContext | WebGL2RenderingContext | undefined,
-  model: GLModel) => {
-  if (!gl || !model.program || !gl.isProgram(model.program)) { return; }
-  model.vertexArrays.forEach((vert) => gl.disableVertexAttribArray(vert.location));
-  model.vertexArrays.forEach((vert) => gl.deleteBuffer(vert.buffer));
-  model.elementArrays.forEach((elements) => gl.deleteBuffer(elements.buffer));
-  model.vertexArrays.forEach((vert) => { vert = null; });
-  model.elementArrays.forEach((elements) => { elements = null; });
-  gl.deleteProgram(model.program);
-  // gl.deleteTexture(someTexture);
-  // gl.deleteRenderbuffer(someRenderbuffer);
-  // gl.deleteFramebuffer(someFramebuffer);
-};
-
 export const drawGLModel = (
   gl: WebGLRenderingContext | WebGL2RenderingContext | undefined,
   version: number,
@@ -110,5 +95,18 @@ export const drawGLModel = (
   });
 
   model.flags.forEach((flag) => gl.disable(flag));
+};
+
+export const deallocModel = (
+  gl: WebGLRenderingContext | WebGL2RenderingContext | undefined,
+  model: GLModel) => {
+  if (!gl || !model.program || !gl.isProgram(model.program)) { return; }
+  model.vertexArrays.forEach((vert) => gl.disableVertexAttribArray(vert.location));
+  model.vertexArrays.forEach((vert) => gl.deleteBuffer(vert.buffer));
+  model.elementArrays.forEach((elements) => gl.deleteBuffer(elements.buffer));
+  gl.deleteProgram(model.program);
+  // gl.deleteTexture(someTexture);
+  // gl.deleteRenderbuffer(someRenderbuffer);
+  // gl.deleteFramebuffer(someFramebuffer);
 };
 

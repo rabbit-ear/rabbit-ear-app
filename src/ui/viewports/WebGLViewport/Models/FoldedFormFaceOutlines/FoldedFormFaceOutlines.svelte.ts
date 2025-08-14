@@ -1,19 +1,20 @@
 import earcut from "earcut";
 import type { WebGLViewport } from "../../WebGLViewport.svelte.ts";
 import type { ElementArray, GLModel, VertexArray } from "../../GLModel.ts";
+import { prepareForRendering } from "rabbit-ear/graph/rendering.js";
 import { createProgram } from "rabbit-ear/webgl/general/webgl.js";
-import { dark, light } from "rabbit-ear/webgl/general/colors.js";
 import { makeUniforms } from "./uniforms.ts";
 import {
-  makeCPEdgesVertexArrays,
-  makeCPEdgesElementArrays,
+  makeFoldedVertexArrays,
+  makeFoldedElementArrays,
 } from "./arrays.js";
-import thick_edges_100_vert from "./shaders/thick-edges-100.vert?raw";
-import thick_edges_100_frag from "./shaders/thick-edges-100.frag?raw";
-import thick_edges_300_vert from "./shaders/thick-edges-300.vert?raw";
-import thick_edges_300_frag from "./shaders/thick-edges-300.frag?raw";
+import outlined_model_100_vert from "./shaders/outlined-model-100.vert?raw";
+import outlined_model_100_frag from "./shaders/outlined-model-100.frag?raw";
+import outlined_model_300_vert from "./shaders/outlined-model-300.vert?raw";
+import outlined_model_300_frag from "./shaders/outlined-model-300.frag?raw";
+import type { FOLD } from "rabbit-ear/types.js";
 
-export class CreasePatternEdges implements GLModel {
+export class FoldedFormFaceOutlines implements GLModel {
   viewport: WebGLViewport;
 
   constructor(viewport: WebGLViewport) {
@@ -29,30 +30,36 @@ export class CreasePatternEdges implements GLModel {
     this.effects.forEach((cleanup) => cleanup());
   }
 
+  // should this be in there?
+  // showTriangulation?: boolean;
   programOptions = $derived.by(() => ({
-    ...(this.viewport.style.darkMode ? dark : light),
+    // ...(this.viewport.style.darkMode ? dark : light),
     layerNudge: this.viewport.style.layersNudge,
-    outlines: this.viewport.style.showFoldedFaceOutlines,
-    edges: this.viewport.style.showFoldedCreases,
-    faces: this.viewport.style.showFoldedFaces,
+    // outlines: this.viewport.style.showFoldedFaceOutlines,
+    // edges: this.viewport.style.showFoldedCreases,
+    // faces: this.viewport.style.showFoldedFaces,
     earcut,
   }));
+
+  showTriangulation?: boolean = $state(false);
+
+  // gotta use this one
+  // this makes an "exploded" FOLD graph
+  graph: FOLD = $derived.by(() => prepareForRendering(
+    this.viewport.model?.graph ?? {},
+    { earcut, layerNudge: this.viewport.style.layersNudge },
+  ));
+  // .by(() => prepareForRendering(this.viewport.model?.graph, this.programOptions));
 
   program: WebGLProgram | undefined = $derived.by(() => {
     if (!this.viewport.gl) { return undefined; }
     try {
       switch (this.viewport.version) {
         case 1:
-          return createProgram(
-            this.viewport.gl,
-            thick_edges_100_vert,
-            thick_edges_100_frag);
+          return createProgram(this.viewport.gl, outlined_model_100_vert, outlined_model_100_frag)
         case 2:
         default:
-          return createProgram(
-            this.viewport.gl,
-            thick_edges_300_vert,
-            thick_edges_300_frag);
+          return createProgram(this.viewport.gl, outlined_model_300_vert, outlined_model_300_frag);
       }
     } catch {
       return undefined;
@@ -60,32 +67,33 @@ export class CreasePatternEdges implements GLModel {
   });
 
   vertexArrays: VertexArray[] = $derived.by(() => this.viewport.gl && this.program
-    ? makeCPEdgesVertexArrays(
+    ? makeFoldedVertexArrays(
       this.viewport.gl,
       this.program,
-      this.viewport.model?.graph ?? {},
-      this.programOptions)
+      this.graph ?? {},
+      // this.programOptions)
+      { showTriangulation: this.showTriangulation })
     : []);
 
   elementArrays: ElementArray[] = $derived.by(() => this.viewport.gl
-    ? makeCPEdgesElementArrays(
+    ? makeFoldedElementArrays(
       this.viewport.gl,
       this.viewport.version,
-      this.viewport.model?.graph ?? {})
+      this.graph ?? {})
     : []);
 
-  // flags: [], // flags: [gl.DEPTH_TEST],
-  flags: number[] = $state([]);
-  // flags: number[] = $derived.by(() => [this.viewport.gl?.DEPTH_TEST]);
+  // flags: number[] = $state([]);
+  flags: number[] = $derived.by(() => this.viewport.gl
+    ? [this.viewport.gl.DEPTH_TEST]
+    : []);
 
   uniformInputs = $derived.by(() => ({
     projectionMatrix: this.viewport.view.projection,
     modelViewMatrix: this.viewport.view.modelView,
-    canvas: this.viewport.domElement,
+    // canvas: this.viewport.domElement,
     frontColor: this.viewport.style.frontColor,
     backColor: this.viewport.style.backColor,
     outlineColor: this.viewport.style.outlineColor,
-    cpColor: this.viewport.style.cpColor,
     strokeWidth: this.viewport.style.strokeWidth,
     opacity: this.viewport.style.opacity,
   }));
@@ -133,3 +141,4 @@ export class CreasePatternEdges implements GLModel {
     });
   }
 }
+
