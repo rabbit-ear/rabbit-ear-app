@@ -43,7 +43,6 @@ export const quitApp = async (): Promise<void> => {
 //     if (response === false) {
 //       // set quitInProgress based on the result of saveFileAs
 //       const info = await saveFileAs();
-//       console.log(info);
 //       if (info === undefined) {
 //         // save was cancelled
 //         return;

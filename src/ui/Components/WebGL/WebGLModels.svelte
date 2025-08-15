@@ -1,10 +1,8 @@
 <script lang="ts">
   import type { WebGLViewport } from "../../viewports/WebGLViewport/WebGLViewport.svelte.ts";
-  // import type { WebGLModel } from "rabbit-ear/types.js";
-  // import type { GLModel } from "../../viewports/WebGLViewport/GLModel.ts";
-  import WebGLCanvas from "./WebGLCanvas.svelte";
-  // import { drawModel } from "rabbit-ear/webgl/general/model.js";
+  import type { GLModel } from "../../viewports/WebGLViewport/GLModel.ts";
   import { drawGLModel } from "../../viewports/WebGLViewport/GLModel.ts";
+  import WebGLCanvas from "./WebGLCanvas.svelte";
 
   type PropsType = {
     viewport: WebGLViewport;
@@ -25,26 +23,14 @@
     ...props
   }: PropsType = $props();
 
-  // let models: WebGLModel[] = $derived(viewport.models.models);
-  //
-  // let uniforms = $derived(
-  //   models.map((model) => model.makeUniforms(viewport.models.uniformOptions)),
-  // );
-  //
-  // $effect(() => {
-  //   if (!gl) {
-  //     return;
-  //   }
-  //   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  //   models.forEach((model, i) => drawModel(gl, version, model, uniforms[i]));
-  // });
+  let models: GLModel[] = $derived(viewport.glModels.models);
 
   $effect(() => {
     if (!gl) {
       return;
     }
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    viewport.glModels.models.forEach((model) => drawGLModel(gl, version, model));
+    models.forEach((model) => drawGLModel(gl, version, model));
   });
 </script>
 

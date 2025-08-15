@@ -9,9 +9,7 @@ export const validateFileType = async (fileInfo?: FilePathInfo): Promise<boolean
   if (!fileInfo) { return false; }
 
   // const f = await open(selected);
-  // console.log(f);
   // const fileInfo = await f.stat();
-  // console.log(fileInfo);
   // await f.close();
   // // user selected a single file
   // if (!fileInfo.isFile) { return; }

@@ -102,7 +102,6 @@ export class WebGLView implements View {
 
   // reset model and camera matrix to aspect fit. the effect is watching:
   // - the current file frame
-  // - this.rightHanded
   #makeModelMatrixEffect(): () => void {
     return $effect.root(() => {
       $effect(() => {

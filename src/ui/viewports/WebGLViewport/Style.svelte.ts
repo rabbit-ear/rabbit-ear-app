@@ -1,6 +1,6 @@
 import { WebGLViewport } from "./WebGLViewport.svelte.ts";
-import context from "../../../app/context.svelte.ts";
 import { RenderStyle } from "../types.ts";
+import context from "../../../app/context.svelte.ts";
 
 export class Style {
   viewport: WebGLViewport;

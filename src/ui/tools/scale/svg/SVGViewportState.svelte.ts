@@ -153,7 +153,7 @@ export class SVGViewportState implements Deallocable {
         if (Math.abs(this.scale) < 1e-6) {
           return;
         }
-        console.log("scale model by", this.scale);
+        console.log("scale model by", $state.snapshot(this.scale));
         this.fixedPoint.reset();
         this.touches.reset();
       });
