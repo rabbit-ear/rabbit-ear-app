@@ -28,7 +28,7 @@ export class WebGLState implements GLModel, Deallocable, ToolEvents {
   constructor(viewport: WebGLViewport) {
     this.viewport = viewport;
     this.touches = new Touches(this.viewport);
-    this.effects = [
+    this.#effects = [
       this.#deleteProgram(),
       this.#deleteVertexArrays(),
       this.#deleteElementArrays(),
@@ -39,7 +39,7 @@ export class WebGLState implements GLModel, Deallocable, ToolEvents {
   }
 
   dealloc(): void {
-    this.effects.forEach((cleanup) => cleanup());
+    this.#effects.forEach((cleanup) => cleanup());
   }
 
   box: Box | undefined = $derived.by(() => {
@@ -102,10 +102,9 @@ export class WebGLState implements GLModel, Deallocable, ToolEvents {
 
   uniforms = $derived(makeUniforms(this.uniformInputs));
 
-  effects: (() => void)[];
+  #effects: (() => void)[];
 
   onmousemove(viewport: Viewport, event: MouseEvent): void {
-    //console.log("onmousemove", this, this.viewport);
     event.preventDefault();
     const { buttons } = event;
     const point = vectorFromScreenLocation(

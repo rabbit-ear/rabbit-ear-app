@@ -19,7 +19,7 @@ export type UniformFunctionValue = {
   // name of the binding func, like "uniformMatrix4fv" or "uniform1f"
   func: string;
   // the value to be passed into the binding function.
-  value: number | number[];
+  value: number | number[] | [number, number] | [number, number, number];
 }
 
 export interface GLModel {

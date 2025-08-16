@@ -22,7 +22,6 @@ export class WebGLViewport implements Viewport {
   component: Component;
   dropdown: Component;
   domElement?: HTMLCanvasElement;
-  didMount?: () => void;
 
   view: View;
   style: Style;
@@ -37,6 +36,8 @@ export class WebGLViewport implements Viewport {
   redraw?: () => void = $state();
 
   effects: (() => void)[];
+
+  didMount?: () => void;
 
   constructor() {
     this.id = String(Math.random());

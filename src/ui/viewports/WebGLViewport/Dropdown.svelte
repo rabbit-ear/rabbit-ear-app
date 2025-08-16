@@ -17,6 +17,10 @@
       context.ui.settings.modelColorFront.value,
     ];
   };
+
+  const modelNames: string[] = $derived(
+    viewport.glModels.models.map((model) => model.constructor.name),
+  );
 </script>
 
 <div class="row toggle-row">
@@ -82,6 +86,31 @@
   </div>
 {/if}
 
+<hr />
+
+<p>WebGL Models ({modelNames.length})</p>
+<ul>
+  {#each modelNames as name}
+    <li class="mono">{name}</li>
+  {/each}
+</ul>
+
+<hr />
+
+<ul>
+  <li>render style: <span class="mono">{viewport?.style?.renderStyle}</span></li>
+  <li>show folded faces: <span class="mono">{viewport?.style?.showFoldedFaces}</span></li>
+  <li>
+    show folded face outlines: <span class="mono"
+      >{viewport?.style?.showFoldedFaceOutlines}</span>
+  </li>
+  <li>
+    show folded creases: <span class="mono">{viewport?.style?.showFoldedCreases}</span>
+  </li>
+</ul>
+
+<hr />
+
 <MatricesView {viewport} />
 
 <style>
@@ -99,9 +128,14 @@
     border-radius: 0.5rem;
     background-color: #fff3;
   }
+
   button.swap svg {
     width: 100%;
     height: 100%;
     fill: var(--bright);
+  }
+
+  .mono {
+    font-family: monospace;
   }
 </style>

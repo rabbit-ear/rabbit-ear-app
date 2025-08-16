@@ -29,11 +29,9 @@
 
   $effect(() => {
     viewport.view.canvasSize = canvasSize;
-    console.log("setting canvas size", canvasSize);
   });
 
   onMount(() => {
-    // console.log("SVGViewport has mounted", viewport.domElement);
     if (typeof viewport.didMount === "function") {
       viewport.didMount();
     }

@@ -1,9 +1,6 @@
 <script lang="ts">
   import { WebGLViewport } from "./WebGLViewport.svelte.ts";
   import { niceNumber } from "../../../general/epsilon.ts";
-
-  // let { viewport }: { viewport: WebGLViewport } = $props();
-  //let { panel }: { panel: ClassPanel } = $props();
 </script>
 
 <div class="column gap">

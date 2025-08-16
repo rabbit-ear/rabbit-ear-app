@@ -54,7 +54,7 @@ export class TouchIndicator implements GLModel {
     modelViewMatrix: this.viewport.view.modelView,
     cursorScreen: this.touches.cursorScreen,
     cursorWorld: this.touches.cursorWorld,
-    canvas: this.viewport.domElement,
+    canvasSize: this.viewport.view.canvasSize,
   }));
 
   uniforms = $derived(makeUniforms(this.uniformInputs));
@@ -64,7 +64,7 @@ export class TouchIndicator implements GLModel {
   #deleteProgram(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const program = this.program;
+        const _ = this.program;
       });
       return () => {
         if (this.program && this.viewport.gl) {
@@ -77,7 +77,7 @@ export class TouchIndicator implements GLModel {
   #deleteVertexArrays(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const vas = this.vertexArrays;
+        const _ = this.vertexArrays;
       });
       return () => {
         if (this.viewport.gl) {
@@ -90,7 +90,7 @@ export class TouchIndicator implements GLModel {
   #deleteElementArrays(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const eas = this.elementArrays;
+        const _ = this.elementArrays;
       });
       return () => {
         if (this.viewport.gl) {

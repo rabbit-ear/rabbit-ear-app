@@ -31,6 +31,7 @@ export abstract class Viewport {
 
   // an optional callback, this will fire after the component has mounted.
   // when this triggers, you are now able to access domElement
+  // NOTE: this is being used by the ViewportManager. Do not implement!
   abstract didMount?: () => void;
 
   // the currently opened FileModel has a few different Model types available

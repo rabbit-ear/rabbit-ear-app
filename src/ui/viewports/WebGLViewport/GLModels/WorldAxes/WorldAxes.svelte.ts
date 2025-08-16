@@ -65,7 +65,6 @@ export class WorldAxes implements GLModel {
     projectionMatrix: this.viewport.view.projection,
     modelViewMatrix: this.viewport.view.modelView,
     origin: [0, 0, 0],
-    canvas: this.viewport.domElement,
   }));
 
   uniforms = $derived(makeUniforms(this.uniformInputs));

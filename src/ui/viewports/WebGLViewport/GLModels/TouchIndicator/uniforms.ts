@@ -13,13 +13,13 @@ export const makeUniforms = ({
   modelViewMatrix,
   cursorScreen,
   cursorWorld,
-  canvas,
+  canvasSize,
 }: {
   projectionMatrix: number[],
   modelViewMatrix: number[],
   cursorScreen: [number, number],
   cursorWorld: [number, number],
-  canvas: HTMLCanvasElement,
+  canvasSize: [number, number] | undefined,
 }) => ({
   u_projection: {
     func: "uniformMatrix4fv",
@@ -39,6 +39,6 @@ export const makeUniforms = ({
   },
   u_resolution: {
     func: "uniform2fv",
-    value: [canvas.clientWidth, canvas.clientHeight],
+    value: canvasSize ?? [0, 0],
   },
 });

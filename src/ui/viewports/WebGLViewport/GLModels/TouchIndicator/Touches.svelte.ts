@@ -7,10 +7,11 @@ export class Touches {
   cursorScreen: [number, number] = $state([0, 0]);
   cursorWorld: [number, number] = $state([0, 0]);
 
+  #effects: (() => void)[] = [];
+
   constructor(viewport: WebGLViewport) {
     this.viewport = viewport;
-    // todo: this needs to become some kind of behavior
-    this.viewport.domElement?.addEventListener("mousemove", this.onmousemove.bind(this));
+    this.#effects = [this.#bindToElement()];
   }
 
   onmousemove(event: MouseEvent) {
@@ -24,6 +25,17 @@ export class Touches {
   }
 
   dealloc(): void {
-    this.viewport.domElement?.removeEventListener("mousemove", this.onmousemove);
+    this.#effects.forEach(fn => fn());
+  }
+
+  #bindToElement(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        this.viewport.domElement?.addEventListener("mousemove", this.onmousemove.bind(this));
+      });
+      return () => {
+        this.viewport.domElement?.removeEventListener("mousemove", this.onmousemove);
+      };
+    });
   }
 }
