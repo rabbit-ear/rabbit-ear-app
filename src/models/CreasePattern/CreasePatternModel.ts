@@ -6,6 +6,7 @@ import type { FileModel } from "../FileModel.svelte.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import Panel from "./Panel.svelte";
 import { resize2 } from "rabbit-ear/math/vector.js";
+import type { FOLDSelection } from "../../general/types.ts";
 
 export class CreasePatternModel implements Model {
   name: string = "creasePattern";
@@ -40,6 +41,8 @@ export class CreasePatternModel implements Model {
   // get shapes(): Shape[] {
   //   return this.#model.shapes;
   // }
+
+  selection?: FOLDSelection;
 
   constructor(model: FileModel) {
     this.#model = model;

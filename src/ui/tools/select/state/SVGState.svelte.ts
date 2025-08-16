@@ -9,6 +9,8 @@ import { Touches } from "./Touches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
 import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
+import context from "../../../../app/context.svelte.ts";
+import { SelectRectCommand } from "../../../../commands/SelectRectCommand.ts";
 
 export class SVGState implements Deallocable, ToolEvents {
   viewport: SVGViewport;
@@ -17,14 +19,17 @@ export class SVGState implements Deallocable, ToolEvents {
   unsub: (() => void)[] = [];
 
   box: Box | undefined = $derived.by(() => {
-    if (!this.touches.press || !this.touches.drag) {
-      return undefined;
+    if (this.touches.press && this.touches.release) {
+      return boundingBox([
+        $state.snapshot(this.touches.press),
+        $state.snapshot(this.touches.release),
+      ]);
+    } else if (this.touches.press && this.touches.drag) {
+      return boundingBox([
+        $state.snapshot(this.touches.press),
+        $state.snapshot(this.touches.drag),
+      ]);
     }
-    const points = [
-      $state.snapshot(this.touches.press),
-      $state.snapshot(this.touches.drag),
-    ];
-    return boundingBox(points);
   });
 
   rect: { x: number; y: number; width: number; height: number } | undefined = $derived(
@@ -111,11 +116,14 @@ export class SVGState implements Deallocable, ToolEvents {
         if (!this.touches.press || !this.touches.release) {
           return;
         }
-        const points = [
-          $state.snapshot(this.touches.press),
-          $state.snapshot(this.touches.release),
-        ];
-        //app.model.selectedInsideRect(this.box);
+        // const points = [
+        //   $state.snapshot(this.touches.press),
+        //   $state.snapshot(this.touches.release),
+        // ];
+        const document = context.fileManager.document;
+        if (document && this.box) {
+          document.executeCommand(new SelectRectCommand(document, this.box))
+        }
         // app.invoker.executeJavascript(`select(${JSON.stringify([...points])})`);
         this.touches.reset();
       });

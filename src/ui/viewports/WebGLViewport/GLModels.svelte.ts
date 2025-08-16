@@ -63,6 +63,7 @@ export class GLModels {
   }
 
   clearModels(): void {
+    // todo: do not dealloc the toolModel
     this.models.forEach(model => deallocModel(this.viewport.gl, model));
     // this.models = [];
     this.models = [

@@ -5,12 +5,12 @@ import { FileModel } from "../models/FileModel.svelte.ts";
 import { getFileName } from "../system/path.ts";
 
 export class FileDocument {
-  #undoStack: Command[] = [];
-  #redoStack: Command[] = [];
+  #undoStack: Command[] = $state([]);
+  #redoStack: Command[] = $state([]);
 
   #filePath: string | undefined = $state();
   #dataModel: FileModel;
-  #isDirty: boolean;
+  #isDirty: boolean = $state(false);
 
   #fileName?: string = $derived(getFileName(this.#filePath || ""));
 
@@ -26,8 +26,8 @@ export class FileDocument {
   // all modifications should use this.updateModel so the dirty flag is set.
   // getModel(): Readonly<FileModel> { return this.dataModel; }
 
-  getUndoStack(): Readonly<Command[]> { return this.#undoStack; }
-  getRedoStack(): Readonly<Command[]> { return this.#redoStack; }
+  get undoStack(): Readonly<Command[]> { return this.#undoStack; }
+  get redoStack(): Readonly<Command[]> { return this.#redoStack; }
 
   constructor(path: string | undefined, initialData: FOLD) {
     this.#filePath = path;
@@ -36,6 +36,7 @@ export class FileDocument {
   }
 
   executeCommand(command: Command): void {
+    console.log("executing command", command);
     command.execute();
     this.#undoStack.push(command);
     this.#redoStack = [];

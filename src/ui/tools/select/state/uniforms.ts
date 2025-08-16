@@ -13,11 +13,13 @@ export const makeUniforms = ({
   modelViewMatrix,
   touchBounds,
   canvas,
+  time,
 }: {
   projectionMatrix: number[],
   modelViewMatrix: number[],
   touchBounds: [number, number, number, number],
   canvas: HTMLCanvasElement,
+  time: number,
 }) => ({
   u_projection: {
     func: "uniformMatrix4fv",
@@ -34,5 +36,9 @@ export const makeUniforms = ({
   u_resolution: {
     func: "uniform2fv",
     value: [canvas.clientWidth, canvas.clientHeight],
+  },
+  u_time: {
+    func: "uniform1f",
+    value: time,
   },
 });

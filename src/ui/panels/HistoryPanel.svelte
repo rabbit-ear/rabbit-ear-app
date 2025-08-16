@@ -1,19 +1,19 @@
 <script lang="ts">
   import context from "../../app/context.svelte.ts";
 
-  const undoStack = context.fileManager.document?.getUndoStack();
-  const redoStack = context.fileManager.document?.getRedoStack();
+  const undoStack = $derived(context.fileManager.document?.undoStack);
+  const redoStack = $derived(context.fileManager.document?.redoStack);
 </script>
 
 <div class="column gap">
   {#each undoStack as item, i}
     <div class="row gap undo">
-      <p>item.constructor.name</p>
+      <p>{item.constructor.name}</p>
     </div>
   {/each}
   {#each redoStack as item, i}
     <div class="row gap redo">
-      <p>item.constructor.name</p>
+      <p>{item.constructor.name}</p>
     </div>
   {/each}
 </div>

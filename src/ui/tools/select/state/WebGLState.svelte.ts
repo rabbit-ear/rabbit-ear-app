@@ -4,16 +4,16 @@ import type { Deallocable } from "../../Deallocable.ts";
 import type { Viewport } from "../../../viewports/Viewport.ts";
 import type { ToolEvents } from "../../ToolEvents.ts";
 import type { WebGLViewport } from "../../../viewports/WebGLViewport/WebGLViewport.svelte.ts";
-import { vectorFromScreenLocation, zoomViewMatrix } from "../../../../general/matrix.ts";
-import { createProgram } from "rabbit-ear/webgl/general/webgl.js";
-import touches_100_vert from "./shaders/touches-100.vert?raw";
-import touches_100_frag from "./shaders/touches-100.frag?raw";
-import { makeUniforms } from "./uniforms.ts";
 import type {
   ElementArray,
   GLModel,
   VertexArray,
 } from "../../../viewports/WebGLViewport/GLModel.ts";
+import { vectorFromScreenLocation, zoomViewMatrix } from "../../../../general/matrix.ts";
+import { createProgram } from "rabbit-ear/webgl/general/webgl.js";
+import draw_rect_100_vert from "./shaders/draw-rect-100.vert?raw";
+import draw_rect_100_frag from "./shaders/draw-rect-100.frag?raw";
+import { makeUniforms } from "./uniforms.ts";
 import {
   makeVertexArrays,
   makeElementArrays,
@@ -23,6 +23,7 @@ import { Touches } from "./Touches.svelte.ts";
 export class WebGLState implements GLModel, Deallocable, ToolEvents {
   viewport: WebGLViewport;
   touches: Touches;
+  zIndex?: number | undefined = 100;
 
   constructor(viewport: WebGLViewport) {
     this.viewport = viewport;
@@ -31,6 +32,7 @@ export class WebGLState implements GLModel, Deallocable, ToolEvents {
       this.#deleteProgram(),
       this.#deleteVertexArrays(),
       this.#deleteElementArrays(),
+      this.#timer(),
     ];
 
     this.viewport.glModels.toolModel = this;
@@ -69,10 +71,12 @@ export class WebGLState implements GLModel, Deallocable, ToolEvents {
       : undefined,
   );
 
+  time: number = $state(0);
+
   program: WebGLProgram | undefined = $derived.by(() => {
     try {
       if (!this.viewport.gl) { return undefined; }
-      return createProgram(this.viewport.gl, touches_100_vert, touches_100_frag);
+      return createProgram(this.viewport.gl, draw_rect_100_vert, draw_rect_100_frag);
     } catch {
       return undefined;
     }
@@ -93,6 +97,7 @@ export class WebGLState implements GLModel, Deallocable, ToolEvents {
     modelViewMatrix: this.viewport.view.modelView,
     touchBounds: this.touchBounds,
     canvas: this.viewport.domElement,
+    time: this.time,
   }));
 
   uniforms = $derived(makeUniforms(this.uniformInputs));
@@ -187,6 +192,22 @@ export class WebGLState implements GLModel, Deallocable, ToolEvents {
       return () => {
         if (this.viewport.gl) {
           this.elementArrays.forEach(e => e.buffer && this.viewport.gl?.deleteBuffer(e.buffer));
+        }
+      };
+    });
+  }
+
+  #timer(): () => void {
+    return $effect.root(() => {
+      let loop: number | undefined;
+      $effect(() => {
+        loop = setInterval(() => {
+          this.time = performance.now();
+        }, 1000 / 60);
+      });
+      return () => {
+        if (loop !== undefined) {
+          clearInterval(loop);
         }
       };
     });
