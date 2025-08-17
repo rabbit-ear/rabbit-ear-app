@@ -1,5 +1,5 @@
 import type { Component } from "svelte";
-import type { Model } from "../../models/Model.ts";
+import type { Embedding } from "../../graphs/Embedding.ts";
 import type { View } from "./View.ts";
 
 export abstract class Viewport {
@@ -7,8 +7,8 @@ export abstract class Viewport {
   static name?: string;
   static panel?: Component;
 
-  // a (reactive) reference to the model currently being displayed
-  abstract model?: Model;
+  // a (reactive) reference to the graph embedding currently being displayed
+  abstract embedding?: Embedding;
 
   // rendering information, matrices, scale
   abstract view: View;
@@ -34,9 +34,9 @@ export abstract class Viewport {
   // NOTE: this is being used by the ViewportManager. Do not implement!
   abstract didMount?: () => void;
 
-  // the currently opened FileModel has a few different Model types available
+  // the currently opened file has a few different embeddings available
   // for display. must be one of <string>: creasePattern, foldedForm, simulator
-  abstract modelName?: string;
+  abstract embeddingName?: string;
 
   // force the screen to re-calculate window bounds. used when viewports are added/removed
   // abstract redraw?: () => void;

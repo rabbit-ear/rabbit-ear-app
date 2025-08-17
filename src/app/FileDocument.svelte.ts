@@ -1,7 +1,7 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import { writeTextFile, readTextFile } from "../system/fs.ts";
 import type { Command } from "../commands/Command";
-import { FileModel } from "../models/FileModel.svelte.ts";
+import { GraphData } from "../graphs/GraphData.svelte.ts";
 import { getFileName } from "../system/path.ts";
 
 export class FileDocument {
@@ -9,8 +9,8 @@ export class FileDocument {
   #redoStack: Command[] = $state([]);
 
   #filePath: string | undefined = $state();
-  #dataModel: FileModel;
   #isDirty: boolean = $state(false);
+  #data: GraphData;
 
   #fileName?: string = $derived(getFileName(this.#filePath || ""));
 
@@ -19,24 +19,22 @@ export class FileDocument {
   get path() { return this.#filePath; }
   get dirty() { return this.#isDirty; }
   get name() { return this.#fileName; }
-  get model() { return this.#dataModel; }
 
   // this returns a Readonly copy to prevent developers from modifying
-  // the contents of the data model directly.
-  // all modifications should use this.updateModel so the dirty flag is set.
-  // getModel(): Readonly<FileModel> { return this.dataModel; }
+  // the contents of the data directly.
+  // all modifications should use this.update so the dirty flag is set.
+  get data(): Readonly<GraphData> { return this.#data; }
 
   get undoStack(): Readonly<Command[]> { return this.#undoStack; }
   get redoStack(): Readonly<Command[]> { return this.#redoStack; }
 
   constructor(path: string | undefined, initialData: FOLD) {
     this.#filePath = path;
-    this.#dataModel = new FileModel(initialData);
+    this.#data = new GraphData(initialData);
     this.#isDirty = false;
   }
 
   executeCommand(command: Command): void {
-    console.log("executing command", command);
     command.execute();
     this.#undoStack.push(command);
     this.#redoStack = [];
@@ -74,7 +72,7 @@ export class FileDocument {
     // }
     // fs.access(fileInfo.fullpath, fs.constants.F_OK)
     // fs.checkFileExistsAndWritable();
-    await writeTextFile(this.#filePath, this.#dataModel.exportToText());
+    await writeTextFile(this.#filePath, this.#data.exportToText());
     // todo: catch errors, if errors, do not run the next line.
     this.#isDirty = false;
     return true;
@@ -90,7 +88,7 @@ export class FileDocument {
     try {
       const contents = await readTextFile(this.#filePath);
       const data = JSON.parse(contents);
-      this.#dataModel.import(data);
+      this.#data.import(data);
       this.#isDirty = false;
       return true;
     } catch {
@@ -98,8 +96,8 @@ export class FileDocument {
     }
   }
 
-  updateModel(mutator: (model: FileModel) => void) {
-    mutator(this.#dataModel);
+  update(mutator: (data: GraphData) => void) {
+    mutator(this.#data);
     this.#isDirty = true;
   }
 }

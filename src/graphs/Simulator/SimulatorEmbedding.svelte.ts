@@ -1,6 +1,6 @@
 import type { Component } from "svelte";
 import type { FOLD, Box } from "rabbit-ear/types.d.ts";
-import type { Model as ModelInterface } from "../Model.ts";
+import type { Embedding } from "../Embedding.ts";
 import type { FrameAttributes } from "../FrameAttributes.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import type { SolverOptions } from "../../simulator/simulator/GPUMath.ts";
@@ -8,15 +8,15 @@ import { boundingBox } from "rabbit-ear/graph/boundary.js";
 import { Model as OriSimModel } from "../../simulator/simulator/Model.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
-import type { FileModel } from "../FileModel.svelte.ts";
+import type { GraphData } from "../GraphData.svelte.ts";
 
-export class SimulatorModel implements ModelInterface {
+export class SimulatorEmbedding implements Embedding {
   name: string = "simulator";
   abbreviation: string = "sim";
   errors: string[];
   panel: Component = Panel;
 
-  #model: FileModel;
+  #data: GraphData;
 
   model: OriSimModel;
   options: SolverOptions;
@@ -24,7 +24,7 @@ export class SimulatorModel implements ModelInterface {
 
   active: boolean = $state(false);
 
-  inputFrame: FOLD = $derived.by(() => this.#model.frameFlat);
+  inputFrame: FOLD = $derived.by(() => this.#data.frameFlat);
   abstractGraph: FOLD;
   vertices_coords: [number, number, number][] = $state.raw([]);
 
@@ -43,8 +43,8 @@ export class SimulatorModel implements ModelInterface {
     hasLayerOrder: true, // todo this is weird
   };
 
-  constructor(model: FileModel) {
-    this.#model = model;
+  constructor(data: GraphData) {
+    this.#data = data;
     this.settings = new Settings();
     this.#makeLoadEffect();
     this.#makeStartLoopEffect();

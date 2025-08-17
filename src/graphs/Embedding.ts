@@ -4,7 +4,7 @@ import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { FrameAttributes } from "./FrameAttributes.ts";
 import type { FOLDSelection } from "../general/types.ts";
 
-export interface Model {
+export interface Embedding {
   name: string;
   abbreviation: string;
   errors: string[];
@@ -23,6 +23,6 @@ export interface Model {
 
   selection?: FOLDSelection;
 
-  // the Simulator Model in particular uses this to dealloc WebGL things
+  // the Simulator Embedding in particular uses this to dealloc WebGL things
   dealloc?: () => void;
 }

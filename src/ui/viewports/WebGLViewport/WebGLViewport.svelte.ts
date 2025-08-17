@@ -1,8 +1,8 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport";
 import type { View } from "../View.ts";
-import type { FrameAttributes } from "../../../models/FrameAttributes.ts";
-import type { Model } from "../../../models/Model.ts";
+import type { FrameAttributes } from "../../../graphs/FrameAttributes.ts";
+import type { Embedding } from "../../../graphs/Embedding.ts";
 import ViewportComponent from "./Component.svelte";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
@@ -30,8 +30,8 @@ export class WebGLViewport implements Viewport {
   gl: WebGLRenderingContext | WebGL2RenderingContext | undefined = $state();
   version: number = $state(2);
 
-  modelName = $state("creasePattern");
-  model?: Model = $derived(context.fileManager.document?.model[this.modelName]);
+  embeddingName = $state("creasePattern");
+  embedding?: Embedding = $derived(context.fileManager.document?.data[this.embeddingName]);
 
   redraw?: () => void = $state();
 
@@ -69,14 +69,14 @@ export class WebGLViewport implements Viewport {
 
   #modelStyleEffect(): () => void {
     return $effect.root(() => {
-      $effect(() => { this.setModelStyle(this.model?.attributes); });
+      $effect(() => { this.setModelStyle(this.embedding?.attributes); });
       // empty
       return () => { };
     });
   }
 
   unbindTool(): void {
-    console.log("WebGLViewport unbindTool()");
+    // console.log("WebGLViewport unbindTool()");
     this.glModels.unbindTool();
   }
 

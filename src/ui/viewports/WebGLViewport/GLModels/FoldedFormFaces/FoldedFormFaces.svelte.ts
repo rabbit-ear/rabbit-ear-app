@@ -34,9 +34,9 @@ export class FoldedFormFaces implements GLModel {
 
   // gotta use this one
   // this makes an "exploded" FOLD graph
-  // graph: FOLD = $derived.by(() => this.viewport.model?.graph ?? {});
+  // graph: FOLD = $derived.by(() => this.viewport.embedding?.graph ?? {});
   graph: FOLD = $derived.by(() => prepareForRendering(
-    this.viewport.model?.graph ?? {},
+    this.viewport.embedding?.graph ?? {},
     { earcut, layerNudge: this.viewport.style.layersNudge },
   ));
 

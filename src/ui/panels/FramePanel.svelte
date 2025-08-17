@@ -29,12 +29,12 @@
   //let hasFaceOrders = $derived(frame?.faceOrders && frame?.faceOrders.length);
   //let frameStyles = $derived(app.fileManager.file?.framesStyle);
 
-  let activeFrameIndex = $derived(context.fileManager.document?.model.activeFrameIndex);
+  let activeFrameIndex = $derived(context.fileManager.document?.data.activeFrameIndex);
 
-  let frame: FOLD | undefined = $derived(context.fileManager.document?.model.frame);
+  let frame: FOLD | undefined = $derived(context.fileManager.document?.data.frame);
 
   let frameRaw: FOLDChildFrame | undefined = $derived(
-    context.fileManager.document?.model.frameRaw,
+    context.fileManager.document?.data.frameRaw,
   );
 
   let frame_parent: number = $derived(frameRaw?.frame_parent ?? 0);

@@ -2,12 +2,12 @@
   import type { SVGViewport } from "./SVGViewport.svelte.ts";
   let { viewport }: { viewport: SVGViewport } = $props();
 
-  const modelExists = $derived(!!viewport.model?.graph);
+  const embeddingExists = $derived(!!viewport.embedding?.graph);
 </script>
 
 <!-- <g class="grid-layer" stroke-width={viewport.grid.strokeWidth}> -->
 <g
-  class={modelExists ? "grid-layer" : "grid-layer no-model"}
+  class={embeddingExists ? "grid-layer" : "grid-layer no-model"}
   stroke-width={viewport.style.strokeWidthFixed}>
   {#each viewport.grid.lines as line}
     <line {...line} />

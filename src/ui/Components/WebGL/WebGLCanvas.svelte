@@ -27,7 +27,6 @@
 
   // allow outside components to trigger a redraw
   redraw = (): void => {
-    console.log("WebGL rebuildViewport(), new canvas size");
     if (!gl || !canvas) {
       return;
     }

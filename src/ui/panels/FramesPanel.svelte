@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js";
-  import type { FrameAttributes } from "../../model/FrameAttributes.ts";
+  import type { FrameAttributes } from "../../graphs/FrameAttributes.ts";
   import context from "../../app/context.svelte.ts";
   // import Rendering from "./Rendering.svelte";
 
@@ -9,9 +9,9 @@
     foldedForm: "folded form",
   };
 
-  let frames: FOLD[] = $derived(context.fileManager.document?.model.frames ?? []);
+  let frames: FOLD[] = $derived(context.fileManager.document?.data.frames ?? []);
 
-  let activeFrameIndex = $derived(context.fileManager.document?.model.activeFrameIndex);
+  let activeFrameIndex = $derived(context.fileManager.document?.data.activeFrameIndex);
 
   let framesStyle = $derived(
     frames
@@ -20,13 +20,13 @@
       .map((classes) => classes.filter((a) => a).join(" ")),
   );
 
-  let frameStyles = $derived(context.fileManager.document?.model.framesStyle);
+  let frameStyles = $derived(context.fileManager.document?.data.framesStyle);
 
   const onclick = (index: number): void => {
     if (!context.fileManager.document) {
       return;
     }
-    context.fileManager.document.model.activeFrameIndex = index;
+    context.fileManager.document.data.activeFrameIndex = index;
   };
 </script>
 

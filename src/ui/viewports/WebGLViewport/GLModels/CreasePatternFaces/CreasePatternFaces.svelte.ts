@@ -46,14 +46,14 @@ export class CreasePatternFaces implements GLModel {
     ? makeCPFacesVertexArrays(
       this.viewport.gl,
       this.program,
-      this.viewport.model?.graph ?? {})
+      this.viewport.embedding?.graph ?? {})
     : []);
 
   elementArrays: ElementArray[] = $derived.by(() => this.viewport.gl
     ? makeCPFacesElementArrays(
       this.viewport.gl,
       this.viewport.version,
-      this.viewport.model?.graph ?? {})
+      this.viewport.embedding?.graph ?? {})
     : []);
 
   flags: number[] = [];

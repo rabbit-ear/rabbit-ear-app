@@ -46,9 +46,10 @@ export class PanelManager {
     ? ({ name: this.ui.toolManager.tool?.constructor.name, component: this.ui.toolManager.tool?.panel })
     : undefined);
 
-  panels: PanelType[] = $derived(this.viewportPanels
-    .concat([this.toolPanel])
+  panels: PanelType[] = $derived(([] as PanelType[])
     .concat(AppPanels)
+    .concat([this.toolPanel])
+    .concat(this.viewportPanels)
     .filter(a => a !== undefined));
 
   // terminalViewportClass: ViewportClassTypes | undefined = $derived.by(

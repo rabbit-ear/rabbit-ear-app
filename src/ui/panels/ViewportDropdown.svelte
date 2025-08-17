@@ -10,9 +10,9 @@
     index,
     viewport,
     children,
-  }: { index: number; viewport?: Viewport; children: Snippet } = $props();
+  }: { index: number; viewport: Viewport; children: Snippet } = $props();
 
-  // these match with the Viewport.modelName property
+  // these match with the Viewport.embeddingName property
   const modelTypes = ["creasePattern", "foldedForm", "simulator"];
   // convert the above into what is shown on screen (abbreviated if necessary)
   const modelTypeNames = { creasePattern: "cp", foldedForm: "folded", simulator: "sim" };
@@ -26,6 +26,21 @@
       context.ui.viewportManager.removeViewport(viewport);
     }
   };
+
+  const isFolded = $derived(
+    context.fileManager.document?.data.frameAttributes.isFoldedForm,
+  );
+
+  const computedStatesInfo: { [key: string]: string } = $derived({
+    creasePattern: isFolded
+      ? "frame is folded, no crease pattern available"
+      : "frame is a crease pattern",
+    foldedForm: isFolded ? "frame is already folded" : "folded form has been computed",
+  });
+
+  const computedInfo: string | undefined = $derived(
+    computedStatesInfo[viewport?.embeddingName ?? ""],
+  );
 
   let pad = "0.5rem";
   // background-color: #0002;
@@ -45,13 +60,19 @@
       <div class="row toggle-row">
         {#each modelTypes as name}
           <button
-            class={viewport.modelName === name ? "highlighted" : ""}
+            class={viewport.embeddingName === name ? "highlighted" : ""}
             onclick={() => {
-              viewport.modelName = name;
+              viewport.embeddingName = name;
             }}>{modelTypeNames[name]}</button>
         {/each}
       </div>
     </div>
+
+    {#if computedInfo}
+      <div class="row">
+        <p>{computedInfo}</p>
+      </div>
+    {/if}
 
     <hr />
 

@@ -1,34 +1,34 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import type { Model } from "../Model.ts";
+import type { Embedding } from "../Embedding.ts";
 import type { FrameAttributes } from "../FrameAttributes.ts";
-import type { FileModel } from "../FileModel.svelte.ts";
+import type { GraphData } from "../GraphData.svelte.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
 
-export class FoldedFormModel implements Model {
+export class FoldedForm implements Embedding {
   name: string = "foldedForm";
   abbreviation: string = "folded";
   panel: Component = Panel;
 
-  #model: FileModel;
+  #data: GraphData;
   settings: Settings;
 
   get foldedVerticesResultAndErrors(): {
     error: Error | undefined;
     result: [number, number][] | [number, number, number][];
   } {
-    if (this.#model.frameAttributes?.isFoldedForm) {
-      return { error: undefined, result: this.#model.frame.vertices_coords ?? [] };
+    if (this.#data.frameAttributes?.isFoldedForm) {
+      return { error: undefined, result: this.#data.frame.vertices_coords ?? [] };
     }
     if (!this.settings.active) {
       return { error: new Error("automatic folding currently off"), result: [] };
     }
     try {
-      return { error: undefined, result: makeVerticesCoordsFolded(this.#model.frame) };
+      return { error: undefined, result: makeVerticesCoordsFolded(this.#data.frame) };
     } catch (err: unknown) {
       const error = err instanceof Error
         ? err
@@ -64,10 +64,10 @@ export class FoldedFormModel implements Model {
       //     !this.graph?.edges_vertices &&
       //     !this.graph?.faces_vertices) ?? false,
       isAbstract:
-        (this.#model.frame.vertices_coords &&
-          !this.#model.frame.edges_vertices &&
-          !this.#model.frame.faces_vertices) ?? false,
-      hasLayerOrder: this.#model.frame.faceOrders != null,
+        (this.#data.frame.vertices_coords &&
+          !this.#data.frame.edges_vertices &&
+          !this.#data.frame.faces_vertices) ?? false,
+      hasLayerOrder: this.#data.frame.faceOrders != null,
     };
   }
 
@@ -80,15 +80,15 @@ export class FoldedFormModel implements Model {
   get graph(): FOLD | undefined {
     return {
       //...$state.snapshot(this.graph),
-      ...this.#model.frame,
+      ...this.#data.frame,
       vertices_coords: this.vertices_coords,
       //faceOrders: this.faceOrders,
       frame_classes: ["foldedForm"],
     };
   }
 
-  constructor(model: FileModel) {
-    this.#model = model;
+  constructor(data: GraphData) {
+    this.#data = data;
     this.settings = new Settings();
   }
 }

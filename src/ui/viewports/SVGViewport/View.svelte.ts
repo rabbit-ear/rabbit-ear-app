@@ -121,8 +121,7 @@ export class SVGView implements View {
   #makeModelMatrixEffect(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        console.log("SVGViewport building new model/camera matrix");
-        const matrix = graphToMatrix2(this.viewport.model?.graph, this.rightHanded);
+        const matrix = graphToMatrix2(this.viewport.embedding?.graph, this.rightHanded);
         untrack(() => {
           this.#model = matrix;
           this.camera = [...identity2x3];
@@ -143,12 +142,6 @@ export class SVGView implements View {
     return clipLineInPolygon(line, this.viewBoxPolygon) as
       [[number, number], [number, number]] | undefined;
   }
-
-  // todo: not sure that this is ever being called.
-  // resetModel(): void {
-  //   console.log("reset model");
-  //   this.#model = [...identity2x3];
-  // }
 
   reset(): void {
     this.camera = [...identity2x3];

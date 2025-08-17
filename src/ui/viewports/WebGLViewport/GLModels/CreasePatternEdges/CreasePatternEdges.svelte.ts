@@ -53,7 +53,7 @@ export class CreasePatternEdges implements GLModel {
     ? makeCPEdgesVertexArrays(
       this.viewport.gl,
       this.program,
-      this.viewport.model?.graph ?? {},
+      this.viewport.embedding?.graph ?? {},
       this.viewport.style.darkMode ? { ...dark } : { ...light })
     : []);
 
@@ -61,7 +61,7 @@ export class CreasePatternEdges implements GLModel {
     ? makeCPEdgesElementArrays(
       this.viewport.gl,
       this.viewport.version,
-      this.viewport.model?.graph ?? {})
+      this.viewport.embedding?.graph ?? {})
     : []);
 
   flags: number[] = $state([]);

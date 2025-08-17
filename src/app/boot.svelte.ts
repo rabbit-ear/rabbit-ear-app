@@ -1,13 +1,23 @@
 import context from "./context.svelte.ts";
 import { buildMenu } from "../system/menu.ts";
+import { resourceDir, join } from "@tauri-apps/api/path";
 
 $effect.root(() => {
   $effect(async () => {
     const _ = context.localization.language;
-    console.log("rebuilding app menu");
     (await buildMenu()).setAsAppMenu();
   });
 });
+
+const loadExampleFile = async () => {
+  // console.log(await resolveResource("crane.fold"));
+  const resourcesDir = await join(await resourceDir(), "_up_/resources/");
+  const files = [
+    await join(resourcesDir, "crane.fold"),
+    await join(resourcesDir, "cube-octagon.fold"),
+  ];
+  await context.fileManager.openFiles(files);
+}
 
 export const defaultAppSetup = () => {
   // setup
@@ -15,7 +25,7 @@ export const defaultAppSetup = () => {
     context.ui.toolManager.setToolWithName("ui.tools.select");
     context.ui.viewportManager.addViewportWithName("SVGViewport");
     context.ui.viewportManager.addViewportWithName("WebGLViewport");
-    context.ui.viewportManager.viewports[1].modelName = "foldedForm";
+    context.ui.viewportManager.viewports[1].embeddingName = "foldedForm";
   }
 
   // setup keyboard event mapping
@@ -34,5 +44,7 @@ export const defaultAppSetup = () => {
   keyboard.on("editMode", "extrudeVertex", () => console.log("Extrude vertex:"));
   keyboard.setActiveKeymap("objectMode");
   // keyboard.setActiveKeymap("editMode");
+
+  loadExampleFile();
 };
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import context from "../../app/context.svelte.ts";
 
-  let metadata = $derived(context.fileManager.document?.model.metadata);
+  let metadata = $derived(context.fileManager.document?.data.metadata);
 
   // const file_classes = ["singleModel", "multiModel", "animation", "diagrams"];
 </script>

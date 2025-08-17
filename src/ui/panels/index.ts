@@ -8,11 +8,11 @@ import HistoryPanel from "./HistoryPanel.svelte";
 // import ModelsPanel from "./ModelsPanel/ModelsPanel.svelte";
 
 const Panels: { name: string, component: Component }[] = [
-  { name: "Viewports", component: ViewportsPanel },
+  { name: "File", component: FilePanel },
   { name: "Frames", component: FramesPanel },
   { name: "Frame", component: FramePanel },
-  { name: "File", component: FilePanel },
   { name: "History", component: HistoryPanel },
+  { name: "Viewports", component: ViewportsPanel },
   // { name: "View Models", component: ModelsPanel },
 ];
 

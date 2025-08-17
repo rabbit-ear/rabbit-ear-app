@@ -48,7 +48,7 @@ export class SVGState implements Deallocable, ToolEvents {
     this.globalState = globalState;
 
     this.touches = new Touches(this.viewport);
-    this.unsub.push(this.doSelection());
+    this.unsub.push(this.#doSelection());
 
     // pass data back up through the viewport: assign the SVGLayer and
     // build the props object so that data can pass from here to the component.
@@ -110,21 +110,19 @@ export class SVGState implements Deallocable, ToolEvents {
   // onkeydown?: (viewport: Viewport, event: KeyboardEvent) => void;
   // onkeyup?: (viewport: Viewport, event: KeyboardEvent) => void;
 
-  doSelection(): () => void {
+  #doSelection(): () => void {
     return $effect.root(() => {
       $effect(() => {
         if (!this.touches.press || !this.touches.release) {
           return;
         }
-        // const points = [
-        //   $state.snapshot(this.touches.press),
-        //   $state.snapshot(this.touches.release),
-        // ];
-        const document = context.fileManager.document;
-        if (document && this.box) {
-          document.executeCommand(new SelectRectCommand(document, this.box))
+        const doc = context.fileManager.document;
+        const box = $state.snapshot(this.box);
+        if (doc && box) {
+          const command = new SelectRectCommand(doc, this.viewport.embeddingName, box);
+          doc.executeCommand(command)
+          // app.invoker.executeJavascript(`select(${JSON.stringify([...points])})`);
         }
-        // app.invoker.executeJavascript(`select(${JSON.stringify([...points])})`);
         this.touches.reset();
       });
       return () => { };

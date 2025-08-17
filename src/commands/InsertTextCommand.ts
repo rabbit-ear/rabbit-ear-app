@@ -7,18 +7,18 @@ export class InsertTextCommand implements Command {
   private previousText: string = "";
 
   execute(): void {
-    this.previousText = this.document.getModel().text;
-    this.document.updateModel((model) => {
-      model.text =
-        model.text.slice(0, this.position) +
+    this.previousText = this.document.data?.text;
+    this.document.update((data) => {
+      data.text =
+        data.text.slice(0, this.position) +
         this.text +
-        model.text.slice(this.position);
+        data.text.slice(this.position);
     });
   }
 
   undo(): void {
-    this.document.updateModel((model) => {
-      model.text = this.previousText;
+    this.document.update((data) => {
+      data.text = this.previousText;
     });
   }
 }

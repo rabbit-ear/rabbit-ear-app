@@ -1,23 +1,23 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import type { Model } from "../Model.ts";
+import type { Embedding } from "../Embedding.ts";
 import type { FrameAttributes } from "../FrameAttributes.ts";
-import type { FileModel } from "../FileModel.svelte.ts";
+import type { GraphData } from "../GraphData.svelte.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import Panel from "./Panel.svelte";
 import { resize2 } from "rabbit-ear/math/vector.js";
 import type { FOLDSelection } from "../../general/types.ts";
 
-export class CreasePatternModel implements Model {
+export class CreasePattern implements Embedding {
   name: string = "creasePattern";
   abbreviation: string = "cp";
   errors: string[] = [];
   panel: Component = Panel;
-  #model: FileModel;
+  #data: GraphData;
 
   // it might be possible to "unfold" the vertices
   get graph(): FOLD | undefined {
-    return this.#model.frameAttributes?.isFoldedForm ? undefined : this.#model.frame as FOLD;
+    return this.#data.frameAttributes?.isFoldedForm ? undefined : this.#data.frame as FOLD;
   }
 
   get snapPoints(): [number, number][] {
@@ -44,7 +44,7 @@ export class CreasePatternModel implements Model {
 
   selection?: FOLDSelection;
 
-  constructor(model: FileModel) {
-    this.#model = model;
+  constructor(data: GraphData) {
+    this.#data = data;
   }
 }

@@ -19,6 +19,7 @@ export class GLModels {
 
   models: GLModel[] = $state([]);
 
+  // todo: this is getting added repeatedly
   toolModel: GLModel | undefined = $state(undefined);
 
   #foldModelNames: string[] = $derived.by(() => {

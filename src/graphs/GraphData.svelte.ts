@@ -1,15 +1,15 @@
 import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js";
-import type { Model } from "./Model.ts";
+import type { Embedding } from "./Embedding.ts";
 import type { FrameAttributes } from "./FrameAttributes.ts";
 // import { SimulatorModel } from "../model/Simulator/SimulatorModel.svelte.ts";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
 import { reassembleFramesToFOLD, makeFlatFramesFromFrames } from "../general/fold.ts";
-import { CreasePatternModel } from "./CreasePattern/CreasePatternModel.ts";
-import { FoldedFormModel } from "./FoldedForm/FoldedFormModel.ts";
+import { CreasePattern } from "./CreasePattern/CreasePattern.ts";
+import { FoldedForm } from "./FoldedForm/FoldedForm.ts";
 import { makeFrameAttributes } from "./FrameAttributes.ts";
 
-export class FileModel {
+export class GraphData {
   metadata: FOLDFileMetadata = $state({});
   #framesRaw: FOLDChildFrame[] = $state.raw([]);
 
@@ -36,20 +36,34 @@ export class FileModel {
 
   // if models are removed, they need to call their dealloc() method
   // models: { [key: string]: Model } = $state({});
-  cp: CreasePatternModel;
-  folded: FoldedFormModel;
+  cp: CreasePattern;
+  folded: FoldedForm;
   // simulator: SimulatorModel;
 
-  get creasePattern(): Model { return this.cp; }
-  get foldedForm(): Model { return this.folded; }
+  getEmbedding(name: string): Embedding | undefined {
+    switch (name) {
+      case "cp":
+      case "creasePattern":
+      case "CreasePattern":
+        return this.cp;
+      case "folded":
+      case "foldedForm":
+      case "FoldedForm":
+        return this.folded;
+      default: return undefined;
+    }
+  }
+
+  get creasePattern(): Embedding { return this.cp; }
+  get foldedForm(): Embedding { return this.folded; }
   // get simulator(): Model { return this.simulator; }
 
   constructor(fold: FOLD) {
     this.metadata = getFileMetadata(fold);
     this.#framesRaw = getFileFramesAsArray(fold);
 
-    this.cp = new CreasePatternModel(this);
-    this.folded = new FoldedFormModel(this);
+    this.cp = new CreasePattern(this);
+    this.folded = new FoldedForm(this);
     // this.simulator = new SimulatorModel(this);
   }
 

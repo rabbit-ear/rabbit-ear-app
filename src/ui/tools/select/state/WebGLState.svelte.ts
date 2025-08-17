@@ -19,6 +19,8 @@ import {
   makeElementArrays,
 } from "./arrays.ts";
 import { Touches } from "./Touches.svelte.ts";
+import context from "../../../../app/context.svelte.ts";
+import { SelectRectCommand } from "../../../../commands/SelectRectCommand.ts";
 
 export class WebGLState implements GLModel, Deallocable, ToolEvents {
   viewport: WebGLViewport;
@@ -29,6 +31,7 @@ export class WebGLState implements GLModel, Deallocable, ToolEvents {
     this.viewport = viewport;
     this.touches = new Touches(this.viewport);
     this.#effects = [
+      this.#doSelection(),
       this.#deleteProgram(),
       this.#deleteVertexArrays(),
       this.#deleteElementArrays(),
@@ -43,14 +46,17 @@ export class WebGLState implements GLModel, Deallocable, ToolEvents {
   }
 
   box: Box | undefined = $derived.by(() => {
-    if (!this.touches.press || !this.touches.drag) {
-      return undefined;
+    if (this.touches.press && this.touches.release) {
+      return boundingBox([
+        $state.snapshot(this.touches.press),
+        $state.snapshot(this.touches.release),
+      ]);
+    } else if (this.touches.press && this.touches.drag) {
+      return boundingBox([
+        $state.snapshot(this.touches.press),
+        $state.snapshot(this.touches.drag),
+      ]);
     }
-    const points = [
-      $state.snapshot(this.touches.press),
-      $state.snapshot(this.touches.drag),
-    ];
-    return boundingBox(points);
   });
 
   touchBounds: [number, number, number, number] = $derived([
@@ -156,6 +162,24 @@ export class WebGLState implements GLModel, Deallocable, ToolEvents {
       );
     }
   };
+
+  #doSelection(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        if (!this.touches.press || !this.touches.release) {
+          return;
+        }
+        const doc = context.fileManager.document;
+        const box = $state.snapshot(this.box);
+        if (doc && box) {
+          const command = new SelectRectCommand(doc, this.viewport.embeddingName, box);
+          doc.executeCommand(command)
+        }
+        this.touches.reset();
+      });
+      return () => { };
+    });
+  }
 
   #deleteProgram(): () => void {
     return $effect.root(() => {

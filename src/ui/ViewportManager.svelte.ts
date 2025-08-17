@@ -33,7 +33,7 @@ export class ViewportManager {
     // this block needs to happen once viewport.domElement exists,
     // which only happens after Svelte mounts, via this callback didMount.
     viewport.didMount = () => {
-      console.log("viewport did mount callback, mounting.");
+      // console.log("viewport did mount callback, mounting.");
       this.unbindViewport(viewport);
       this.bindViewport(viewport);
       // viewport.didMount = undefined;
@@ -87,12 +87,12 @@ export class ViewportManager {
   unbindViewport(viewport: Viewport) {
     const prevEvents = this.viewportEvents.get(viewport);
     if (prevEvents) {
-      console.log("events found", Object.keys(prevEvents));
+      // console.log("events found", Object.keys(prevEvents));
       Object.keys(prevEvents)
         .forEach(key => viewport.domElement?.removeEventListener(key, prevEvents[key]));
       this.viewportEvents.delete(viewport);
     } else {
-      console.log("  - no events found");
+      // console.log("  - no events found");
     }
   }
 

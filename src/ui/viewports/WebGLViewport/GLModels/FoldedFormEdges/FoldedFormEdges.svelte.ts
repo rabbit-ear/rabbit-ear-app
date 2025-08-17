@@ -33,7 +33,7 @@ export class FoldedFormEdges implements GLModel {
 
   // we don't need to explode the graph,
   // the original unmodified is good
-  graph: FOLD = $derived.by(() => this.viewport.model?.graph ?? {});
+  graph: FOLD = $derived.by(() => this.viewport.embedding?.graph ?? {});
 
   program: WebGLProgram | undefined = $derived.by(() => {
     if (!this.viewport.gl) { return undefined; }

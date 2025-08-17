@@ -30,7 +30,7 @@ export class Snap {
   #snapPoints: [number, number][] = $derived.by(() =>
     ([] as [number, number][])
       .concat(this.points)
-      .concat(this.viewport.model?.snapPoints.map(resize2)),
+      .concat(this.viewport.embedding?.snapPoints.map(resize2)),
   );
 
   gridSnapFunction: (

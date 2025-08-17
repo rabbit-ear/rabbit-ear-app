@@ -4,7 +4,7 @@
   import "../css/form.css";
   import "../css/colors.css";
   import Toolbar from "./Toolbar.svelte";
-  import Canvases from "./Canvases.svelte";
+  import Viewports from "./Viewports.svelte";
   import Panels from "./Panels.svelte";
   import FileTabs from "./FileTabs.svelte";
   import context from "../../app/context.svelte.ts";
@@ -22,7 +22,7 @@
         <FileTabs />
       </div>
       <div class="canvases">
-        <Canvases />
+        <Viewports />
       </div>
     </div>
     <div class="panels">
