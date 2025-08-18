@@ -1,4 +1,3 @@
-import type { Deallocable } from "../Deallocable.ts";
 import type { Viewport } from "../../viewports/Viewport.ts";
 import type { WebGLViewport } from "../../viewports/WebGLViewport/WebGLViewport.svelte.ts";
 import type { ToolEvents } from "../ToolEvents.ts";
@@ -8,7 +7,7 @@ import {
   zoomViewMatrix,
 } from "../../../general/matrix.ts";
 
-export class WebGLState implements Deallocable, ToolEvents {
+export class WebGLState implements ToolEvents {
   viewport: WebGLViewport;
   previousPoint: [number, number] | undefined;
 

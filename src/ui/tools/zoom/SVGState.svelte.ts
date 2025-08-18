@@ -1,6 +1,5 @@
 import { untrack } from "svelte";
 //import { subtract2 } from "rabbit-ear/math/vector.js";
-import type { Deallocable } from "../Deallocable.ts";
 import type { Viewport } from "../../viewports/Viewport.ts";
 import type { SVGViewport } from "../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import type { ToolEvents } from "../ToolEvents.ts";
@@ -8,7 +7,7 @@ import { scale2, subtract2 } from "rabbit-ear/math/vector.js";
 import { wheelEventZoomMatrix, wheelPanMatrix, panCameraMatrix } from "./matrix.ts";
 import { getSVGViewportPoint } from "../../viewports/SVGViewport/touches.ts";
 
-export class SVGState implements Deallocable, ToolEvents {
+export class SVGState implements ToolEvents {
   viewport: SVGViewport;
   press: [number, number] | undefined = $state();
   move: [number, number] | undefined = $state();

@@ -19,8 +19,8 @@ export class FileManager {
     this.#activeIndex = Math.max(0, Math.min(index, this.#documents.length - 1));
   }
 
-  switchToDocument(document: FileDocument): void {
-    const index = this.#documents.indexOf(document);
+  switchToDocument(doc: FileDocument): void {
+    const index = this.#documents.indexOf(doc);
     if (index === -1) { return; }
     this.#activeIndex = index;
   }
@@ -36,8 +36,8 @@ export class FileManager {
     try {
       const text = await readTextFile(filePath);
       const data = JSON.parse(text);
-      const document = new FileDocument(filePath, data);
-      this.#documents.push(document);
+      const doc = new FileDocument(filePath, data);
+      this.#documents.push(doc);
       this.#activeIndex = this.#documents.length - 1;
     } catch (err: unknown) {
       return err instanceof Error
@@ -57,8 +57,8 @@ export class FileManager {
       try {
         const text = await readTextFile(filePath);
         const data = JSON.parse(text);
-        const document = new FileDocument(filePath, data);
-        this.#documents.push(document);
+        const doc = new FileDocument(filePath, data);
+        this.#documents.push(doc);
       } catch (err: unknown) {
         const error = err instanceof Error
           ? err
@@ -78,15 +78,16 @@ export class FileManager {
 
   async newFile(): Promise<void> {
     // todo: should an empty FOLD file contain any metadata?
-    const document = new FileDocument(undefined, {});
-    this.#documents.push(document);
+    const doc = new FileDocument(undefined, {});
+    this.#documents.push(doc);
     this.#activeIndex = this.#documents.length - 1;
   }
 
   closeFile(index: number): void {
-    const document = this.#documents[index];
-    if (!document) { return; }
+    const doc = this.#documents[index];
+    if (!doc) { return; }
     this.#documents.splice(index, 1);
+    doc.dealloc();
     // if the current index is after the split index, move it up one
     this.#activeIndex = this.#activeIndex > index
       ? Math.max(0, Math.min(this.#activeIndex - 1, this.#documents.length - 1))
@@ -94,16 +95,17 @@ export class FileManager {
     console.log("FileManager file did close", this.#activeIndex);
   }
 
-  closeDocument(document: FileDocument): void {
-    return this.closeFile(this.#documents.indexOf(document));
+  closeDocument(doc: FileDocument): void {
+    return this.closeFile(this.#documents.indexOf(doc));
   }
 
   closeAll(): void {
+    this.#documents.forEach(doc => doc.dealloc());
     this.#documents = [];
     this.#activeIndex = 0;
   }
 
   getAllUnsavedDocuments(): FileDocument[] {
-    return this.#documents.filter(document => document.dirty);
+    return this.#documents.filter(doc => doc.dirty);
   }
 }

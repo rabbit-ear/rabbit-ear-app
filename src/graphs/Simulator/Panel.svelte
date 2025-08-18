@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { SimulatorModel } from "./SimulatorModel.svelte.ts";
+  import type { SimulatorEmbedding } from "./SimulatorEmbedding.svelte.ts";
 
-  const { model }: { model: SimulatorModel } = $props();
-  const settings = model.settings;
+  const { embedding }: { embedding: SimulatorEmbedding } = $props();
+  const settings = embedding.settings;
 
   let showMore = $state(false);
   const settingsDidPress = (): void => {

@@ -1,7 +1,6 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../viewports/Viewport.ts";
 import type { ToolEvents } from "./ToolEvents.ts";
-import type { Deallocable } from "./Deallocable.ts";
 
 /**
  * @description This is the currently selected UI tool, as seen on the
@@ -12,7 +11,7 @@ import type { Deallocable } from "./Deallocable.ts";
  * intended to cleanup or initialize Svelte stores which are specific
  * to each tool.
  */
-export abstract class Tool implements ToolEvents, Deallocable {
+export abstract class Tool implements ToolEvents {
   // unique UUID for this tool
   // technically, this can be any unique value, but for localization,
   // please ensure this matches up with the tool's name's key.

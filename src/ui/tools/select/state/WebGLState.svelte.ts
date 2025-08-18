@@ -1,6 +1,5 @@
 import { type Box } from "rabbit-ear/types.js";
 import { boundingBox } from "rabbit-ear/math/polygon.js";
-import type { Deallocable } from "../../Deallocable.ts";
 import type { Viewport } from "../../../viewports/Viewport.ts";
 import type { ToolEvents } from "../../ToolEvents.ts";
 import type { WebGLViewport } from "../../../viewports/WebGLViewport/WebGLViewport.svelte.ts";
@@ -22,7 +21,7 @@ import { Touches } from "./Touches.svelte.ts";
 import context from "../../../../app/context.svelte.ts";
 import { SelectRectCommand } from "../../../../commands/SelectRectCommand.ts";
 
-export class WebGLState implements GLModel, Deallocable, ToolEvents {
+export class WebGLState implements GLModel, ToolEvents {
   viewport: WebGLViewport;
   touches: Touches;
   zIndex?: number | undefined = 100;

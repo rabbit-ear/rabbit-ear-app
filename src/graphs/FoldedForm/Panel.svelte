@@ -1,12 +1,20 @@
 <script lang="ts">
-  import type { FoldedFormModel } from "./FoldedFormModel.ts";
+  import type { FoldedForm } from "./FoldedForm.ts";
 
-  const { model }: { model: FoldedFormModel } = $props();
+  const { embedding }: { embedding: FoldedForm } = $props();
 </script>
 
-<div class="row">
-  <input id="folded-form-active" type="checkbox" bind:checked={model.settings.active} />
-  <label for="folded-form-active">auto-fold</label>
+<div class="column gap">
+  <div class="row gap">
+    <p>folded form status</p>
+  </div>
+  <div class="row">
+    <input
+      id="folded-form-active"
+      type="checkbox"
+      bind:checked={embedding.settings.active} />
+    <label for="folded-form-active">auto-fold</label>
+  </div>
 </div>
 
 <style>

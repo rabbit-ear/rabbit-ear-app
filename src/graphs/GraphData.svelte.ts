@@ -67,6 +67,13 @@ export class GraphData {
     // this.simulator = new SimulatorModel(this);
   }
 
+  dealloc(): void {
+    // this.simulator.dealloc();
+    // // these don't have dealloc methods but if they do, call them here
+    // this.cp.dealloc();
+    // this.folded.dealloc();
+  }
+
   export(): FOLD {
     return Object.assign(
       // reassembleFramesToFOLD($state.snapshot(this.#frames)),
@@ -85,10 +92,6 @@ export class GraphData {
     this.#framesRaw = getFileFramesAsArray(fold);
     // todo: extended FOLD format
     //this.shapes = fold.shapes || [];
-  }
-
-  dealloc(): void {
-    // this.simulator.dealloc();
   }
 }
 

@@ -1,7 +1,6 @@
 import type { VecLine2 } from "rabbit-ear/types.js";
 import { pointsToLine2 } from "rabbit-ear/math/convert.js";
 import type { Viewport } from "../../../viewports/Viewport.ts";
-import type { Deallocable } from "../../Deallocable.ts";
 import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import type { ToolEvents } from "../../ToolEvents.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
@@ -11,7 +10,7 @@ import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
 import context from "../../../../app/context.svelte.ts";
 
-export class SVGState implements Deallocable, ToolEvents {
+export class SVGState implements ToolEvents {
   viewport: SVGViewport;
   globalState: GlobalState;
   touches: SVGTouches;

@@ -1,9 +1,6 @@
-import type { Deallocable } from "../Deallocable.ts";
-
-export class GlobalState implements Deallocable {
+export class GlobalState {
   smartSnap: boolean = $state(true);
 
-  dealloc(): void {
-    // empty
-  }
+  // empty
+  dealloc(): void { }
 }

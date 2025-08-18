@@ -5,15 +5,15 @@ import FramesPanel from "./FramesPanel.svelte";
 import FramePanel from "./FramePanel.svelte";
 import FilePanel from "./FilePanel.svelte";
 import HistoryPanel from "./HistoryPanel.svelte";
-// import ModelsPanel from "./ModelsPanel/ModelsPanel.svelte";
+import EmbeddingsPanel from "./EmbeddingsPanel.svelte";
 
 const Panels: { name: string, component: Component }[] = [
   { name: "File", component: FilePanel },
   { name: "Frames", component: FramesPanel },
   { name: "Frame", component: FramePanel },
   { name: "History", component: HistoryPanel },
+  { name: "Embeddings", component: EmbeddingsPanel },
   { name: "Viewports", component: ViewportsPanel },
-  // { name: "View Models", component: ModelsPanel },
 ];
 
 export default Panels;

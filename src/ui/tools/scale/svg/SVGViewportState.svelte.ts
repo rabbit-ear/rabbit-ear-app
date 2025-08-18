@@ -1,5 +1,4 @@
 import { distance2, magnitude2, subtract2 } from "rabbit-ear/math/vector.js";
-import type { Deallocable } from "../../Deallocable.ts";
 import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import { SVGViewportEvents } from "../events.ts";
 import { GlobalState } from "../GlobalState.svelte.ts";
@@ -81,7 +80,7 @@ export class SVGFixedPoint {
   }
 }
 
-export class SVGViewportState implements Deallocable {
+export class SVGViewportState {
   viewport: SVGViewport;
   globalState: GlobalState;
   touches: SVGTouches;

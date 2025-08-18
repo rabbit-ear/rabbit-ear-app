@@ -34,6 +34,10 @@ export class FileDocument {
     this.#isDirty = false;
   }
 
+  dealloc(): void {
+    this.#data?.dealloc();
+  }
+
   executeCommand(command: Command): void {
     command.execute();
     this.#undoStack.push(command);

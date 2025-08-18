@@ -1,6 +1,5 @@
 import { type Box } from "rabbit-ear/types.js";
 import { boundingBox } from "rabbit-ear/math/polygon.js";
-import type { Deallocable } from "../../Deallocable.ts";
 import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import type { Viewport } from "../../../viewports/Viewport.ts";
 import type { ToolEvents } from "../../ToolEvents.ts";
@@ -12,7 +11,7 @@ import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
 import context from "../../../../app/context.svelte.ts";
 import { SelectRectCommand } from "../../../../commands/SelectRectCommand.ts";
 
-export class SVGState implements Deallocable, ToolEvents {
+export class SVGState implements ToolEvents {
   viewport: SVGViewport;
   globalState: GlobalState;
   touches: Touches;
