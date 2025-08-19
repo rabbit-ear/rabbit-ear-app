@@ -5,7 +5,7 @@ import type { FrameAttributes } from "./FrameAttributes.ts";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
 import { reassembleFramesToFOLD, makeFlatFramesFromFrames } from "../general/fold.ts";
-import { CreasePattern } from "./CreasePattern/CreasePattern.ts";
+import { CreasePattern } from "./CreasePattern/CreasePattern.svelte.ts";
 import { FoldedForm } from "./FoldedForm/FoldedForm.ts";
 import { makeFrameAttributes } from "./FrameAttributes.ts";
 

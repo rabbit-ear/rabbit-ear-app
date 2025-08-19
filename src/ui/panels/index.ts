@@ -8,12 +8,12 @@ import HistoryPanel from "./HistoryPanel.svelte";
 import EmbeddingsPanel from "./EmbeddingsPanel.svelte";
 
 const Panels: { name: string, component: Component }[] = [
-  { name: "File", component: FilePanel },
-  { name: "Frames", component: FramesPanel },
-  { name: "Frame", component: FramePanel },
-  { name: "History", component: HistoryPanel },
-  { name: "Embeddings", component: EmbeddingsPanel },
   { name: "Viewports", component: ViewportsPanel },
+  { name: "Frames", component: FramesPanel },
+  { name: "History", component: HistoryPanel },
+  { name: "File", component: FilePanel },
+  { name: "Frame", component: FramePanel },
+  { name: "Embeddings", component: EmbeddingsPanel },
 ];
 
 export default Panels;

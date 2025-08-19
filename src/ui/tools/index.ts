@@ -1,5 +1,6 @@
 import type { Tool } from "../tools/Tool.ts";
 // import circle from "./circle/index.ts";
+import inspect from "./inspect/index.ts";
 import line from "./line/index.ts";
 // import rect from "./rect/index.ts";
 // import rotate from "./rotate/index.ts";
@@ -20,6 +21,7 @@ const Tools: { [key: string]: ToolConstructor } = {};
 
 [
   // circle,
+  inspect,
   line,
   // rect,
   // rotate,

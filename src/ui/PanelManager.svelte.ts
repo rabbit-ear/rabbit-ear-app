@@ -43,14 +43,16 @@ export class PanelManager {
     .filter(obj => obj.component !== undefined));
 
   toolPanel: PanelType | undefined = $derived.by(() => this.ui.toolManager.tool?.panel
-    ? ({ name: this.ui.toolManager.tool?.constructor.name, component: this.ui.toolManager.tool?.panel })
+    ? ({
+      name: this.ui.toolManager.tool?.constructor.name,
+      component: this.ui.toolManager.tool?.panel,
+    })
     : undefined);
 
   panels: PanelType[] = $derived(([] as PanelType[])
+    .concat([this.toolPanel].filter(a => a !== undefined))
     .concat(AppPanels)
-    .concat([this.toolPanel])
-    .concat(this.viewportPanels)
-    .filter(a => a !== undefined));
+    .concat(this.viewportPanels));
 
   // terminalViewportClass: ViewportClassTypes | undefined = $derived.by(
   //   () => this.ui.viewports.terminal?.constructor as ViewportClassTypes,

@@ -5,6 +5,8 @@ import type { FOLDSelection } from "../general/types.ts";
 import { getComponentsInsideRect } from "../general/overlap.ts";
 
 export class SelectRectCommand implements Command {
+  // todo: consider a static initializer which can return null
+  // if conditions are not met (box has zero volume)
   constructor(private document: FileDocument, private embeddingName: string, private box: Box) { }
 
   private previousSelection: FOLDSelection | undefined;

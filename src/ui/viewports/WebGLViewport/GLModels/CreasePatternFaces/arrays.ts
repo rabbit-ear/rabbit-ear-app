@@ -1,8 +1,9 @@
 /**
  * Rabbit Ear (c) Kraft
  */
+import earcut from "earcut";
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import { triangulateConvexFacesVertices } from "rabbit-ear/graph/triangulate.js";
+import { triangulateNonConvexFacesVertices } from "rabbit-ear/graph/triangulate.js";
 import { resize2 } from "rabbit-ear/math/vector.js";
 
 /**
@@ -33,7 +34,7 @@ export const makeCPFacesVertexArrays = (
 /**
  * @param {WebGLRenderingContext|WebGL2RenderingContext} gl WebGL context
  * @param {number} version the WebGL version
- * @param {FOLD} graph a FOLD object
+* @param {FOLD} graph a FOLD object
  * @returns {WebGLElementArray[]}
  */
 export const makeCPFacesElementArrays = (
@@ -50,8 +51,8 @@ export const makeCPFacesElementArrays = (
       buffer: gl.createBuffer(),
       data:
         version === 2
-          ? new Uint32Array(triangulateConvexFacesVertices(graph).flat())
-          : new Uint16Array(triangulateConvexFacesVertices(graph).flat()),
+          ? new Uint32Array(triangulateNonConvexFacesVertices(graph, earcut).flat())
+          : new Uint16Array(triangulateNonConvexFacesVertices(graph, earcut).flat()),
     },
   ];
 };

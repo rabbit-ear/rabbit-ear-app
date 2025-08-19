@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { CreasePattern } from "./CreasePattern.ts";
+  import type { CreasePattern } from "./CreasePattern.svelte.ts";
 
-  const { embedding }: { model: CreasePattern } = $props();
+  const { embedding }: { embedding: CreasePattern } = $props();
 </script>
 
 <div class="column gap">

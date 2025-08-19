@@ -23,6 +23,10 @@ export interface Embedding {
 
   selection?: FOLDSelection;
 
+  nearestVertex?: (point: [number, number]) => object;
+  nearestEdge?: (point: [number, number]) => object;
+  nearestFace?: (point: [number, number]) => object;
+
   // the Simulator Embedding in particular uses this to dealloc WebGL things
   dealloc?: () => void;
 }
