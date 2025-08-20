@@ -10,7 +10,8 @@
     <div class={file === currentFile ? "row file-item selected" : "row file-item"}>
       <button
         class="short file-button"
-        onclick={() => context.fileManager.switchToDocument(file)}>{file.name}</button>
+        onclick={() => context.fileManager.switchToDocument(file)}
+        >{file.dirty ? `${file.name}*` : file.name}</button>
       <button
         class="short close-button"
         onclick={() => context.fileController.requestCloseDocument(file)}>X</button>

@@ -29,7 +29,7 @@
   //let hasFaceOrders = $derived(frame?.faceOrders && frame?.faceOrders.length);
   //let frameStyles = $derived(app.fileManager.file?.framesStyle);
 
-  let activeFrameIndex = $derived(context.fileManager.document?.data.activeFrameIndex);
+  let frameIndex = $derived(context.fileManager.document?.data.frameIndex);
 
   let frame: FOLD | undefined = $derived(context.fileManager.document?.data.frame);
 
@@ -64,7 +64,7 @@
 
 <div class="column gap">
   <div class="row gap">
-    <p>#{activeFrameIndex}</p>
+    <p>#{frameIndex}</p>
     <p class="strong">{render_style}</p>
     <p>[{hasParent ? `inherits from #${frame_parent}` : "root"}]</p>
   </div>

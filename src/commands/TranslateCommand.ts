@@ -40,6 +40,9 @@ export class SelectRectCommand implements Command {
       data.frame.vertices_coords = this.previousVerticesCoords;
     });
   }
-}
 
+  tryMerge(other: Command): boolean {
+    return false;
+  }
+}
 

@@ -52,10 +52,9 @@ export class SVGState implements ToolEvents {
     // pass data back up through the viewport: assign the SVGLayer and
     // build the props object so that data can pass from here to the component.
     this.viewport.layer = SVGLayer;
-    const that = this;
     this.viewport.props = {
-      get rect(): { x: number; y: number; width: number; height: number } | undefined {
-        return that.rect;
+      getRect: (): { x: number; y: number; width: number; height: number } | undefined => {
+        return this.rect;
       },
     };
   }
@@ -120,7 +119,6 @@ export class SVGState implements ToolEvents {
         if (doc && box) {
           const command = new SelectRectCommand(doc, this.viewport.embeddingName, box);
           doc.executeCommand(command)
-          // app.invoker.executeJavascript(`select(${JSON.stringify([...points])})`);
         }
         this.touches.reset();
       });

@@ -2,10 +2,12 @@
   import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
 
   type PropsType = {
-    rect: { x: number; y: number; width: number; height: number };
+    getRect(): { x: number; y: number; width: number; height: number };
     viewport: SVGViewport;
   };
-  let { rect, viewport }: PropsType = $props();
+  let { getRect, viewport }: PropsType = $props();
+
+  const rect = $derived(getRect());
 </script>
 
 {#if rect}

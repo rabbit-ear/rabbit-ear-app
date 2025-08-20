@@ -80,7 +80,7 @@ export class FileController {
     }
 
     switch (await confirm("Save before closing?", {
-      title: "File \"${document.name}\" has unsaved changes.",
+      title: `File "${document.name}" has unsaved changes.`,
       kind: "warning",
       // kind: "question",
       // buttons: [yesString, cancelString, noString],
@@ -139,7 +139,7 @@ export class FileController {
     }
 
     switch (await confirm("Save before closing?", {
-      title: "You have \"${unsavedDocuments.length}\" unsaved files.",
+      title: `You have "${unsavedDocuments.length}" unsaved files.`,
       kind: "warning",
       // kind: "question",
       // buttons: [yesString, cancelString, noString],

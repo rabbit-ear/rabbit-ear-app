@@ -5,27 +5,31 @@ import type { FOLDSelection } from "../general/types.ts";
 import { getComponentsInsideRect } from "../general/overlap.ts";
 
 export class SelectRectCommand implements Command {
-  // todo: consider a static initializer which can return null
-  // if conditions are not met (box has zero volume)
   constructor(private document: FileDocument, private embeddingName: string, private box: Box) { }
 
   private previousSelection: FOLDSelection | undefined;
 
   execute(): void {
     this.previousSelection = this.document.data?.getEmbedding(this.embeddingName)?.selection;
-    this.document.update((data) => {
-      const embedding = data.getEmbedding(this.embeddingName);
-      if (!embedding) { return; }
+    this.document.updateClean((_, data) => {
+      const embedding = data?.getEmbedding(this.embeddingName);
+      if (!embedding) { return { modified: false }; }
       embedding.selection = getComponentsInsideRect(embedding.graph ?? {}, this.box);
+      return { modified: false };
     });
   }
 
   undo(): void {
-    this.document.update((data) => {
-      const embedding = data.getEmbedding(this.embeddingName);
-      if (!embedding) { return; }
+    this.document.updateClean((_, data) => {
+      const embedding = data?.getEmbedding(this.embeddingName);
+      if (!embedding) { return { modified: false }; }
       embedding.selection = this.previousSelection;
+      return { modified: false };
     });
+  }
+
+  tryMerge(other: Command): boolean {
+    return false;
   }
 }
 

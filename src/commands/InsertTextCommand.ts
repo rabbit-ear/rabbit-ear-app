@@ -21,5 +21,9 @@ export class InsertTextCommand implements Command {
       data.text = this.previousText;
     });
   }
+
+  tryMerge(other: Command): boolean {
+    return false;
+  }
 }
 

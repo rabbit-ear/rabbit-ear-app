@@ -6,25 +6,12 @@ import { Touches } from "./Touches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
 import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
-import context from "../../../../app/context.svelte.ts";
 
 export class SVGState implements ToolEvents {
   viewport: SVGViewport;
   globalState: GlobalState;
   touches: Touches;
   unsub: (() => void)[] = [];
-
-  // nearestVertex = $derived.by(() => this.touches.move
-  //   ? this.viewport.embedding?.nearestVertex?.(this.touches.move)
-  //   : undefined);
-  //
-  // nearestEdge = $derived.by(() => this.touches.move
-  //   ? this.viewport.embedding?.nearestEdge?.(this.touches.move)
-  //   : undefined);
-  //
-  // nearestFace = $derived.by(() => this.touches.move
-  //   ? this.viewport.embedding?.nearestFace?.(this.touches.move)
-  //   : undefined);
 
   constructor(viewport: SVGViewport, globalState: GlobalState) {
     this.viewport = viewport;
@@ -108,24 +95,4 @@ export class SVGState implements ToolEvents {
       return () => { };
     })
   }
-
-  // #doInspection(): () => void {
-  //   return $effect.root(() => {
-  //     $effect(() => {
-  //       const pointer = this.touches.move ?? this.touches.drag;
-  //       if (pointer) {
-  //
-  //
-  //       }
-  //       // const doc = context.fileManager.document;
-  //       // const box = $state.snapshot(this.box);
-  //       // if (doc && box) {
-  //       //   const command = new SelectRectCommand(doc, this.viewport.embeddingName, box);
-  //       //   doc.executeCommand(command)
-  //       // }
-  //       this.touches.reset();
-  //     });
-  //     return () => { };
-  //   });
-  // }
 }

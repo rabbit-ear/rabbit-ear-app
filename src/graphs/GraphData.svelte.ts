@@ -9,12 +9,20 @@ import { CreasePattern } from "./CreasePattern/CreasePattern.svelte.ts";
 import { FoldedForm } from "./FoldedForm/FoldedForm.ts";
 import { makeFrameAttributes } from "./FrameAttributes.ts";
 
+export type GraphUpdateEvent = {
+  modified?: boolean;
+  isomorphic?: boolean;
+};
+
 export class GraphData {
   metadata: FOLDFileMetadata = $state({});
   #framesRaw: FOLDChildFrame[] = $state.raw([]);
 
+  // the signal to subscribe to instead of subscribing to frame or framesRaw, etc
+  graphUpdate = $state<GraphUpdateEvent>({});
+
   // which frame index is currently selected by the app for rendering/modification
-  activeFrameIndex: number = $state(0);
+  frameIndex: number = $state(0);
 
   // get metadata(): FOLDFileMetadata { return this.#metadata; }
   // set metadata(data: FOLDFileMetadata) { this.#metadata = data; }
@@ -22,17 +30,18 @@ export class GraphData {
   // some frames inherit from a parent and need to be "collapsed" to be render-able.
   // this is a list of all of the frames, collapsed, and in their "final form",
   frames: FOLD[] = $derived(makeFlatFramesFromFrames(this.#framesRaw));
+  // frames: FOLD[] = $derived(makeFlatFramesFromFrames($state.snapshot(this.#framesRaw)));
 
   // which frame is currently selected by the app for rendering/modification
-  frame: FOLD = $derived.by(() => this.frames[this.activeFrameIndex]);
+  frame: FOLD = $derived.by(() => this.frames[this.frameIndex]);
 
   // which frame is currently selected by the app for rendering/modification
   // taken from the "raw" frames (not collapsed if inherits from a parent)
-  frameRaw: FOLDChildFrame = $derived.by(() => this.#framesRaw[this.activeFrameIndex]);
+  frameRaw: FOLDChildFrame = $derived.by(() => this.#framesRaw[this.frameIndex]);
 
   // style-related properties for every frame, like is it 2D, folded, etc..
   framesAttributes: FrameAttributes[] = $derived.by(() => this.frames.map(makeFrameAttributes));
-  frameAttributes: FrameAttributes = $derived.by(() => this.framesAttributes[this.activeFrameIndex]);
+  frameAttributes: FrameAttributes = $derived.by(() => this.framesAttributes[this.frameIndex]);
 
   // if models are removed, they need to call their dealloc() method
   // models: { [key: string]: Model } = $state({});
@@ -93,16 +102,20 @@ export class GraphData {
     // todo: extended FOLD format
     //this.shapes = fold.shapes || [];
   }
-}
 
-// export class FileModel {
-//   private dataText: string;
-//
-//   constructor(contents?: string) {
-//     this.dataText = contents || "";
-//   }
-//
-//   get text(): string { return this.dataText; }
-//   set text(newText: string) { this.dataText = newText; }
-// }
+  get source() { return this.#framesRaw; }
+  set source(newFrames: FOLDChildFrame[]) { this.#framesRaw = newFrames; }
+
+  // public facing method. all changes should go through here
+  mutate(mutator: (frame: FOLDChildFrame, data?: GraphData) => GraphUpdateEvent) {
+    const frame = this.#framesRaw[this.frameIndex];
+    const event = mutator(frame, this);
+    this.#framesRaw = [
+      ...this.#framesRaw.slice(0, this.frameIndex),
+      frame,
+      ...this.#framesRaw.slice(this.frameIndex + 1),
+    ];
+    this.graphUpdate = event;
+  }
+}
 

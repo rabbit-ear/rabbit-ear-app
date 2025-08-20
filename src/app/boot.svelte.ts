@@ -14,7 +14,7 @@ const loadExampleFile = async () => {
   const resourcesDir = await join(await resourceDir(), "_up_/resources/");
   const files = [
     await join(resourcesDir, "crane.fold"),
-    // await join(resourcesDir, "cube-octagon.fold"),
+    await join(resourcesDir, "cube-octagon.fold"),
   ];
   await context.fileManager.openFiles(files);
 }

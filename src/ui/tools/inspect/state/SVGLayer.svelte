@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { FOLD } from "rabbit-ear/types.d.ts";
   import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
   import type { GlobalState } from "./GlobalState.svelte.ts";
 
@@ -8,18 +9,23 @@
   };
   let { getGlobalState, viewport }: PropsType = $props();
 
+  let graph: FOLD = $derived(viewport.embedding?.graph ?? {});
+  let vertices_coords = $derived(graph.vertices_coords ?? []);
+  let edges_vertices = $derived(graph.edges_vertices ?? []);
+  let faces_vertices = $derived(graph.faces_vertices ?? []);
+
   const vertexInfo = $derived(getGlobalState().nearestVertex);
   const edgeInfo = $derived(getGlobalState().nearestEdge);
   const faceInfo = $derived(getGlobalState().nearestFace);
 
-  const vertexCoords = $derived(vertexInfo?.coords);
-  const edgeCoords = $derived(edgeInfo?.coords);
-  const faceCoords = $derived(faceInfo?.poly);
-  const facePoints = $derived((faceCoords ?? []).map(([x, y]) => `${x},${y}`).join(" "));
+  const vertex = $derived(vertexInfo?.index);
+  const edge = $derived(edgeInfo?.index);
+  const face = $derived(faceInfo?.index);
 
-  // const vertex = $derived(vertexInfo?.index);
-  // const edge = $derived(edgeInfo?.index);
-  // const face = $derived(edgeInfo?.index);
+  const vertexCoords = $derived(vertices_coords[vertex]);
+  const edgeCoords = $derived(edges_vertices[edge]?.map((v) => vertices_coords[v]));
+  const faceCoords = $derived(faces_vertices[face]?.map((v) => vertices_coords[v]));
+  const facePoints = $derived((faceCoords ?? []).map(([x, y]) => `${x},${y}`).join(" "));
 </script>
 
 {#if vertexCoords}

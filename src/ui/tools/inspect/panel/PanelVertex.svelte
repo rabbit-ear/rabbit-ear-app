@@ -1,18 +1,38 @@
 <script lang="ts">
-  const { vertexInfo } = $props();
+  import context from "../../../../app/context.svelte.ts";
+  import { ModifyVerticesCoordsCommand } from "../../../../commands/ModifyVerticesCoordsCommand.ts";
+  const { vertexInfo, graph } = $props();
 
-  const exists = $derived(vertexInfo?.coords !== undefined);
-  const index = $derived(vertexInfo?.index);
-  const coords = $derived(vertexInfo?.coords);
+  const vertex = $derived(vertexInfo?.index);
+  const exists = $derived(vertex !== undefined);
+  let coords = $state([0, 0]);
+
+  $effect(() => {
+    coords = [...(graph?.vertices_coords?.[vertex] ?? [])];
+  });
+
+  // const oninput = (index: number, event: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
+  const oninput = (index: number, event: InputEvent) => {
+    const newCoords = [...(graph?.vertices_coords?.[vertex] ?? [0, 0])];
+    newCoords[index] = parseFloat(event.target.value);
+
+    const vertex_coords: [number, number] = newCoords.map((n) =>
+      !isNaN(n) && isFinite(n) ? n : 0,
+    ) as [number, number];
+
+    const command = new ModifyVerticesCoordsCommand(context.fileManager.document, {
+      [vertex]: vertex_coords,
+    });
+    context.fileManager.document?.executeCommand(command);
+  };
 </script>
 
 {#if exists}
   <div class="flex-column gap">
-    <p class="title">vertex [{index}]</p>
+    <p class="title">vertex [{vertex}]</p>
     <div class="flex-column">
       {#each coords as value, i}
-        <!-- <input type="number" bind:value={coords[i]} /> -->
-        <input type="number" {value} />
+        <input type="number" {value} oninput={(e) => oninput(i, e)} />
       {/each}
     </div>
   </div>

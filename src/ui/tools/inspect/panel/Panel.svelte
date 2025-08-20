@@ -46,7 +46,7 @@
       <span class="strong">{fCount}</span>
     </p>
   </div>
-  <PanelVertex {vertexInfo} />
+  <PanelVertex {vertexInfo} {graph} />
   <PanelEdge {edgeInfo} {graph} />
   <PanelFace {faceInfo} {graph} />
 </div>

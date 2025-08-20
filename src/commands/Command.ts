@@ -3,4 +3,5 @@ export interface Command {
   // if conditions are not met, then it avoids being added to undo history
   execute(): void;
   undo(): void;
+  tryMerge(other: Command): boolean;
 }

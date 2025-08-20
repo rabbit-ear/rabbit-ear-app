@@ -11,7 +11,7 @@
 
   let frames: FOLD[] = $derived(context.fileManager.document?.data.frames ?? []);
 
-  let activeFrameIndex = $derived(context.fileManager.document?.data.activeFrameIndex);
+  let frameIndex = $derived(context.fileManager.document?.data.frameIndex);
 
   let framesStyle = $derived(
     frames
@@ -26,7 +26,7 @@
     if (!context.fileManager.document) {
       return;
     }
-    context.fileManager.document.data.activeFrameIndex = index;
+    context.fileManager.document.data.frameIndex = index;
   };
 </script>
 
@@ -36,9 +36,9 @@
       <hr />
     {/if}
     <button onclick={(): void => onclick(i)} class="row frame gap-lg">
-      <p>{activeFrameIndex === i ? "●" : "○"}</p>
+      <p>{frameIndex === i ? "●" : "○"}</p>
       <!-- <Rendering {graph} frameStyle={frameStyles[i]} /> -->
-      {#if activeFrameIndex === i}
+      {#if frameIndex === i}
         <p class="strong">{framesStyle[i]}</p>
       {:else}
         <p>{framesStyle[i]}</p>
