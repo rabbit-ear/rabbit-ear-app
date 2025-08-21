@@ -14,6 +14,7 @@
   <div class="gui horizontal">
     <div class="toolbar" role="toolbar">
       <Toolbar
+        tools={context.ui.toolManager.tools}
         tool={context.ui.toolManager.toolName || ""}
         setTool={(tool: string) => context.ui.toolManager.setToolWithName(tool)} />
     </div>

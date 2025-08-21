@@ -3,6 +3,8 @@ import type { Viewport } from "./viewports/Viewport.ts";
 import type { Tool } from "./tools/Tool.ts";
 import Tools from "./tools/index.ts";
 
+type ToolConstructor<T extends Tool = Tool> = new () => T;
+
 export class ToolManager {
   #ui: UI;
   #tool?: Tool = $state();
@@ -11,6 +13,13 @@ export class ToolManager {
   get tool(): Tool | undefined { return this.#tool; }
 
   toolName: string = $derived((this.#tool?.constructor as typeof Tool).key ?? "");
+
+  // tools: { [key: string]: ToolConstructor<Tool> } = $derived(Tools);
+  tools: { [key: string]: ToolConstructor<Tool> } = $derived.by(() => Object
+    .fromEntries(Object
+      .entries(Tools)
+      .filter(([_, Tool]) => Tool.modes
+        .includes(this.#ui.settings.mode))));
 
   constructor(ui: UI) {
     this.#ui = ui;

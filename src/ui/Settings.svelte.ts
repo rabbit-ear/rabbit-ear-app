@@ -1,6 +1,13 @@
 import { LocalStorageItem } from "../app/LocalStorageItem.svelte";
 
+export enum UIMode {
+  mesh,
+  ruler,
+}
+
 export class Settings {
+  mode: UIMode = $state(UIMode.mesh);
+
   // <boolean> if the X axis is to the right, is the Y axis up (right handed) or down (left).
   // <boolean> is the Y axis on top (true) or on bottom (false)?
   rightHanded = new LocalStorageItem<boolean>("ui/viewport", "rightHanded", true);

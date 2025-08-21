@@ -8,11 +8,13 @@ import { SVGViewportState } from "./svg/SVGViewportState.svelte.ts";
 import { GLViewportState } from "./GLViewportState.svelte.ts";
 import Panel from "./Panel.svelte";
 import icon from "./icon.svelte";
+import { UIMode } from "../../Settings.svelte.ts";
 
 class ScaleTool implements Tool {
   static key = "ui.tools.scale";
   static name = "scale";
   static icon = icon;
+  static modes = [UIMode.mesh, UIMode.ruler];
 
   state = new GlobalState();
   panel: Component = Panel;

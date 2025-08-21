@@ -1,19 +1,21 @@
 <script lang="ts">
-  // import type { Viewport } from "../viewports/Viewport.ts";
-  import Tools from "../tools/index.ts";
+  import type { Tool } from "../tools/Tool.ts";
   import ToolbarButton from "./ToolbarButton.svelte";
   import t from "../../app/t.ts";
 
+  type ToolConstructor<T extends Tool = Tool> = new () => T;
+
   interface PropsType {
+    tools: { [key: string]: ToolConstructor<Tool> };
     tool: string;
     setTool: (tool: string) => void;
   }
 
-  const { tool, setTool }: PropsType = $props();
+  const { tools, tool, setTool }: PropsType = $props();
 </script>
 
 <div class="grid-columns">
-  {#each Object.values(Tools) as Tool}
+  {#each Object.values(tools) as Tool}
     <ToolbarButton
       name={t(Tool.key) ?? Tool.name}
       Icon={Tool.icon}

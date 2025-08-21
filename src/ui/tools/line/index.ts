@@ -6,11 +6,13 @@ import { GlobalState } from "./state/GlobalState.svelte.ts";
 import { SVGState } from "./state/SVGState.svelte.ts";
 import { WebGLState } from "./state/WebGLState.svelte.ts";
 import icon from "./icon.svelte";
+import { UIMode } from "../../Settings.svelte.ts";
 
 class LineTool implements Tool {
   static key = "ui.tools.line";
   static name = "line";
   static icon = icon;
+  static modes = [UIMode.mesh, UIMode.ruler];
 
   state = new GlobalState();
   panel = undefined;

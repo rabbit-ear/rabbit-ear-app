@@ -7,11 +7,13 @@ import { SVGState } from "./state/SVGState.svelte.ts";
 // import { WebGLState } from "./state/WebGLState.svelte.ts";
 import Panel from "./panel/Panel.svelte";
 import icon from "./icon.svelte";
+import { UIMode } from "../../Settings.svelte.ts";
 
 class InspectTool implements Tool {
   static key = "ui.tools.inspect";
   static name = "inspect";
   static icon = icon;
+  static modes = [UIMode.mesh, UIMode.ruler];
 
   state = new GlobalState();
   panel = Panel;

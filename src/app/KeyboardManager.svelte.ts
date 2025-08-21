@@ -1,6 +1,6 @@
 type Action = string;
 type KeyCombination = string[];
-type KeyHandler = () => void;
+type KeyHandler = (event: KeyboardEvent) => void;
 
 interface Keymap {
   name: string;
@@ -62,7 +62,7 @@ export class KeyboardManager {
   #onkeydown(event: KeyboardEvent): void {
     this.#keys.add(this.#normalize(event.key));
     // this.#keyCombination = this.#stringifyKeys();
-    this.#checkActions();
+    this.#checkActions(event);
   }
 
   #onkeyup(event: KeyboardEvent): void {
@@ -73,7 +73,7 @@ export class KeyboardManager {
   //   return Array.from(this.#keys).sort().join("+");
   // }
 
-  #checkActions(): void {
+  #checkActions(event: KeyboardEvent): void {
     if (!this.#activeKeymap) return;
     // console.log(this.#keys);
     // console.log(this.#keyCombination);
@@ -83,7 +83,7 @@ export class KeyboardManager {
       const active = combo.every((k) => this.#keys.has(k));
       if (!active) { continue; }
       this.#activeKeymap.listeners.get(action)
-        ?.forEach(handler => handler());
+        ?.forEach(handler => handler(event));
     }
   }
 

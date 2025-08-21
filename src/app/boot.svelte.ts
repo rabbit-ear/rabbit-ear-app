@@ -1,6 +1,7 @@
 import context from "./context.svelte.ts";
 import { buildMenu } from "../system/menu.ts";
 import { resourceDir, join } from "@tauri-apps/api/path";
+import { UIMode } from "../ui/Settings.svelte.ts";
 
 $effect.root(() => {
   $effect(async () => {
@@ -29,20 +30,30 @@ export const defaultAppSetup = () => {
 
   // setup keyboard event mapping
   const keyboard = context.keyboardManager;
-  keyboard.createKeymap("objectMode");
-  keyboard.createKeymap("editMode");
+  keyboard.createKeymap("meshMode");
+  keyboard.createKeymap("rulerMode");
   // same key bindings in different keymaps
-  keyboard.bind("objectMode", "grabObject", ["G"]);
-  keyboard.bind("objectMode", "rotateObject", ["R"]);
-  keyboard.bind("editMode", "grabVertex", ["G"]);
-  keyboard.bind("editMode", "extrudeVertex", ["E"]);
+  keyboard.bind("meshMode", "swapMode", ["Tab"]);
+  keyboard.bind("meshMode", "grabObject", ["G"]);
+  keyboard.bind("meshMode", "rotateObject", ["R"]);
+  keyboard.bind("rulerMode", "swapMode", ["Tab"]);
+  keyboard.bind("rulerMode", "grabVertex", ["G"]);
+  keyboard.bind("rulerMode", "extrudeVertex", ["E"]);
   // define the handlers
-  keyboard.on("objectMode", "grabObject", () => console.log("Grab object:"));
-  keyboard.on("objectMode", "rotateObject", () => console.log("Rotate object:"));
-  keyboard.on("editMode", "grabVertex", () => console.log("Grab vertex:"));
-  keyboard.on("editMode", "extrudeVertex", () => console.log("Extrude vertex:"));
-  keyboard.setActiveKeymap("objectMode");
-  // keyboard.setActiveKeymap("editMode");
+  keyboard.on("meshMode", "grabObject", () => console.log("Grab object:"));
+  keyboard.on("meshMode", "rotateObject", () => console.log("Rotate object:"));
+  keyboard.on("rulerMode", "grabVertex", () => console.log("Grab vertex:"));
+  keyboard.on("rulerMode", "extrudeVertex", () => console.log("Extrude vertex:"));
+  keyboard.on("meshMode", "swapMode", (event: KeyboardEvent) => {
+    event.preventDefault();
+    context.ui.settings.mode = UIMode.ruler;
+  });
+  keyboard.on("rulerMode", "swapMode", (event: KeyboardEvent) => {
+    event.preventDefault();
+    context.ui.settings.mode = UIMode.mesh;
+  });
+  keyboard.setActiveKeymap("meshMode");
+  // keyboard.setActiveKeymap("rulerMode");
 
   loadExampleFile();
 };

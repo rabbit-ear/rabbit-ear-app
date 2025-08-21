@@ -1,6 +1,7 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../viewports/Viewport.ts";
 import type { ToolEvents } from "./ToolEvents.ts";
+import type { UIMode } from "../Settings.svelte.ts";
 
 /**
  * @description This is the currently selected UI tool, as seen on the
@@ -27,8 +28,12 @@ export abstract class Tool implements ToolEvents {
   // but the file has a .svelte extension (no <script> or <style> sections)
   static icon: Component;
 
+  // the UI can swap between different edit modes, if the tool should appear
+  // during one or more of the modes, that mode should be included here.
+  static modes: UIMode[];
+
   // an optional .svelte component, intended to contain settings for the tool
-  panel?: Component;
+  abstract panel?: Component;
 
   // A UI tool is intended for a Viewport, a tool will be instanced once per app,
   // but may need to subinstance internal state once per viewport (one app can

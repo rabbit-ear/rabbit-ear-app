@@ -5,11 +5,13 @@ import { WebGLViewport } from "../../viewports/WebGLViewport/WebGLViewport.svelt
 import { SVGState } from "./SVGState.svelte.ts";
 import { WebGLState } from "./WebGLState.svelte.ts";
 import icon from "./icon.svelte";
+import { UIMode } from "../../Settings.svelte.ts";
 
 class ZoomTool implements Tool {
   static key = "ui.tools.zoom";
   static name = "zoom";
   static icon = icon;
+  static modes = [UIMode.mesh, UIMode.ruler];
 
   panel = undefined;
 
