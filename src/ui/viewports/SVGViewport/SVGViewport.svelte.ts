@@ -10,6 +10,7 @@ import { Style } from "./Style.svelte.ts";
 import { Grid } from "./Grid.svelte.ts";
 import { Snap } from "./Snap.svelte.ts";
 import context from "../../../app/context.svelte.ts";
+import type { Shape } from "../../../shapes/Shape.ts";
 
 export class SVGViewport implements Viewport {
   static name: string = "SVG Viewport";
@@ -32,6 +33,8 @@ export class SVGViewport implements Viewport {
   // embeddingName = $derived.by(() => this.state.model);
 
   embedding?: Embedding = $derived(context.fileManager.document?.data[this.embeddingName]);
+
+  shapes?: Shape[] = $derived(context.fileManager.document?.data.shapeManager.shapes);
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
   // currently, this is used by the tools to draw indicator marks.

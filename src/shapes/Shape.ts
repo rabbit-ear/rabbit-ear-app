@@ -1,10 +1,12 @@
-export type Shape = {
-  dependencies: Shape[];
-  compute: () => void;
-} | [number, number]
+import type { Box } from "rabbit-ear/types.js";
 
-// export abstract class Shape {
-//   abstract dependencies: Shape[];
-//   abstract compute(): void;
-// }
+export type Shape = {
+  // id: number;
+  // dependencies: Shape[];
+  // dependents: Shape[];
+  defined: boolean;
+
+  makeBounds(padding: number): Box | undefined;
+  // compute: () => void;
+};
 

@@ -10,7 +10,6 @@ $effect.root(() => {
 });
 
 const loadExampleFile = async () => {
-  // console.log(await resolveResource("crane.fold"));
   const resourcesDir = await join(await resourceDir(), "_up_/resources/");
   const files = [
     await join(resourcesDir, "crane.fold"),

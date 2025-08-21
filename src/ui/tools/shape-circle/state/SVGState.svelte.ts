@@ -1,5 +1,4 @@
-import { type Box } from "rabbit-ear/types.js";
-import { boundingBox } from "rabbit-ear/math/polygon.js";
+import { distance2 } from "rabbit-ear/math/vector.js";
 import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import type { Viewport } from "../../../viewports/Viewport.ts";
 import type { ToolEvents } from "../../ToolEvents.ts";
@@ -9,7 +8,8 @@ import SVGLayer from "./SVGLayer.svelte";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
 import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
 import context from "../../../../app/context.svelte.ts";
-import { SelectRectCommand } from "../../../../commands/SelectRectCommand.ts";
+import { Circle } from "../../../../shapes/Circle.svelte.ts";
+import { Point } from "../../../../shapes/Point.svelte.ts";
 
 export class SVGState implements ToolEvents {
   viewport: SVGViewport;
@@ -17,29 +17,29 @@ export class SVGState implements ToolEvents {
   touches: Touches;
   unsub: (() => void)[] = [];
 
-  box: Box | undefined = $derived.by(() => {
+  circlePoints: [number, number][] | undefined = $derived.by(() => {
     if (this.touches.press && this.touches.release) {
-      return boundingBox([
-        $state.snapshot(this.touches.press),
-        $state.snapshot(this.touches.release),
-      ]);
+      return [this.touches.press, this.touches.release];
     } else if (this.touches.press && this.touches.drag) {
-      return boundingBox([
-        $state.snapshot(this.touches.press),
-        $state.snapshot(this.touches.drag),
-      ]);
+      return [this.touches.press, this.touches.drag];
     } else {
       return undefined;
     }
   });
 
-  rect: { x: number; y: number; width: number; height: number } | undefined = $derived(
-    this.box && this.box.span
+  circle: { radius: number, origin: [number, number] } | undefined = $derived(
+    this.circlePoints
+      ? ({
+        radius: distance2(this.circlePoints[0], this.circlePoints[1]),
+        origin: this.circlePoints[0],
+      }) : undefined);
+
+  svgCircle: { cx: number; cy: number; r: number; } | undefined = $derived(
+    this.circle
       ? {
-        x: this.box.min[0],
-        y: this.box.min[1],
-        width: this.box.span[0],
-        height: this.box.span[1],
+        cx: this.circle.origin[0],
+        cy: this.circle.origin[1],
+        r: this.circle.radius,
       }
       : undefined,
   );
@@ -55,8 +55,8 @@ export class SVGState implements ToolEvents {
     // build the props object so that data can pass from here to the component.
     this.viewport.layer = SVGLayer;
     this.viewport.props = {
-      getRect: (): { x: number; y: number; width: number; height: number } | undefined => {
-        return this.rect;
+      getSVGCircle: (): { cx: number; cy: number; r: number; } | undefined => {
+        return this.svgCircle;
       },
     };
   }
@@ -117,10 +117,16 @@ export class SVGState implements ToolEvents {
           return;
         }
         const doc = context.fileManager.document;
-        const box = $state.snapshot(this.box);
-        if (doc && box) {
-          const command = new SelectRectCommand(doc, this.viewport.embeddingName, box);
-          doc.executeCommand(command)
+        const circle = $state.snapshot(this.circle);
+        if (doc && circle) {
+          // const command = new ShapeCircleCommand(doc, this.viewport.embeddingName, box);
+          // doc.executeCommand(command)
+          const p0 = new Point(this.circlePoints![0]);
+          const p1 = new Point(this.circlePoints![1]);
+          const circleShape = new Circle(p0, p1);
+          doc.data.shapeManager.addShape(p0);
+          doc.data.shapeManager.addShape(p1);
+          doc.data.shapeManager.addShape(circleShape);
         }
         this.touches.reset();
       });

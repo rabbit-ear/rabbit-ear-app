@@ -4,7 +4,7 @@
   import SVGCanvas from "../../Components/SVG/SVGCanvas.svelte";
   import GridLayer from "./GridLayer.svelte";
   // import ModelLayer from "./ModelLayer.svelte";
-  // import SVGShapes from "../../Components/SVG/SVGShapes.svelte";
+  import SVGShapes from "../../Components/SVG/SVGShapes.svelte";
   import SVGFOLD from "../../Components/SVG/SVGFOLD.svelte";
 
   type PropsType = {
@@ -79,13 +79,13 @@
     <g class="wrapper" style="transform: matrix({matrix})">
       {@render gridLayer()}
       <SVGFOLD {graph} {viewport} />
-      <!-- <SVGShapes shapes={viewport.model?.shapes} class="model-layer" /> -->
+      <SVGShapes shapes={viewport.shapes} {viewport} class="shapes-layer" />
       {@render toolLayer()}
     </g>
   {:else}
     {@render gridLayer()}
     <SVGFOLD {graph} {viewport} />
-    <!-- <SVGShapes shapes={viewport.model?.shapes} class="model-layer" /> -->
+    <SVGShapes shapes={viewport.shapes} {viewport} class="shapes-layer" />
     {@render toolLayer()}
   {/if}
 </SVGCanvas>

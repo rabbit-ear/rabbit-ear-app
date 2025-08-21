@@ -11,7 +11,7 @@
       <button
         class="short file-button"
         onclick={() => context.fileManager.switchToDocument(file)}
-        >{file.dirty ? `${file.name}*` : file.name}</button>
+        >{file.dirty ? `${file.name} *` : file.name}</button>
       <button
         class="short close-button"
         onclick={() => context.fileController.requestCloseDocument(file)}>X</button>

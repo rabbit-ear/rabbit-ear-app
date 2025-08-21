@@ -8,6 +8,7 @@ import { reassembleFramesToFOLD, makeFlatFramesFromFrames } from "../general/fol
 import { CreasePattern } from "./CreasePattern/CreasePattern.svelte.ts";
 import { FoldedForm } from "./FoldedForm/FoldedForm.ts";
 import { makeFrameAttributes } from "./FrameAttributes.ts";
+import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
 
 export type GraphUpdateEvent = {
   modified?: boolean;
@@ -29,8 +30,8 @@ export class GraphData {
 
   // some frames inherit from a parent and need to be "collapsed" to be render-able.
   // this is a list of all of the frames, collapsed, and in their "final form",
-  frames: FOLD[] = $derived(makeFlatFramesFromFrames(this.#framesRaw));
   // frames: FOLD[] = $derived(makeFlatFramesFromFrames($state.snapshot(this.#framesRaw)));
+  frames: FOLD[] = $derived(makeFlatFramesFromFrames(this.#framesRaw));
 
   // which frame is currently selected by the app for rendering/modification
   frame: FOLD = $derived.by(() => this.frames[this.frameIndex]);
@@ -42,6 +43,8 @@ export class GraphData {
   // style-related properties for every frame, like is it 2D, folded, etc..
   framesAttributes: FrameAttributes[] = $derived.by(() => this.frames.map(makeFrameAttributes));
   frameAttributes: FrameAttributes = $derived.by(() => this.framesAttributes[this.frameIndex]);
+
+  shapeManager: ShapeManager;
 
   // if models are removed, they need to call their dealloc() method
   // models: { [key: string]: Model } = $state({});
@@ -70,6 +73,7 @@ export class GraphData {
   constructor(fold: FOLD) {
     this.metadata = getFileMetadata(fold);
     this.#framesRaw = getFileFramesAsArray(fold);
+    this.shapeManager = new ShapeManager();
 
     this.cp = new CreasePattern(this);
     this.folded = new FoldedForm(this);

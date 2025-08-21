@@ -10,6 +10,7 @@ import line from "./line/index.ts";
 import select from "./select/index.ts";
 // import translate from "./translate/index.ts";
 import zoom from "./zoom/index.ts";
+import shapeCircle from "./shape-circle/index.ts";
 
 // the exported type is not a typeof Tool, because Tool
 // is an abstract class, and we will be instancing actual
@@ -31,6 +32,7 @@ const Tools: { [key: string]: ToolConstructor } = {};
   select,
   // translate,
   zoom,
+  shapeCircle,
 ].forEach(ToolItem => { Tools[ToolItem.key] = ToolItem; });
 
 export default Tools;
