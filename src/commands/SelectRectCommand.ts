@@ -13,18 +13,18 @@ export class SelectRectCommand implements Command {
     this.previousSelection = this.document.data?.getEmbedding(this.embeddingName)?.selection;
     this.document.updateClean((_, data) => {
       const embedding = data?.getEmbedding(this.embeddingName);
-      if (!embedding) { return { modified: false }; }
+      if (!embedding) { return undefined; }
       embedding.selection = getComponentsInsideRect(embedding.graph ?? {}, this.box);
-      return { modified: false };
+      return undefined
     });
   }
 
   undo(): void {
     this.document.updateClean((_, data) => {
       const embedding = data?.getEmbedding(this.embeddingName);
-      if (!embedding) { return { modified: false }; }
+      if (!embedding) { return undefined; }
       embedding.selection = this.previousSelection;
-      return { modified: false };
+      return undefined;
     });
   }
 

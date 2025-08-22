@@ -2,6 +2,24 @@ import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { AABB } from "./BVH.ts";
 import { BVH2D } from "./BVH.ts";
 
+export type VertexBVHType = {
+  index: number,
+  coords: [number, number],
+  dist: number,
+} | undefined;
+
+export type EdgeBVHType = {
+  index: number,
+  coords: [[number, number], [number, number]],
+  dist: number,
+} | undefined;
+
+export type FaceBVHType = {
+  index: number,
+  poly: [number, number][],
+  dist: number,
+} | undefined;
+
 const distancePointToSegment = (
   e: { coords: [[number, number], [number, number]] },
   p: [number, number],

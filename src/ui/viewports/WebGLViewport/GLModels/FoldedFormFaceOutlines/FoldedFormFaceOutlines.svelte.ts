@@ -34,9 +34,14 @@ export class FoldedFormFaceOutlines implements GLModel {
 
   // gotta use this one
   // this makes an "exploded" FOLD graph
+  // graph: FOLD = $derived.by(() => prepareForRendering(
+  //   this.viewport.embedding?.graph ?? {},
+  //   { earcut, layerNudge: this.viewport.style.layersNudge },
+  // ));
   graph: FOLD = $derived.by(() => prepareForRendering(
     this.viewport.embedding?.graph ?? {},
     { earcut, layerNudge: this.viewport.style.layersNudge },
+    this.viewport.embedding?.graphUpdate,
   ));
 
   program: WebGLProgram | undefined = $derived.by(() => {
@@ -58,7 +63,7 @@ export class FoldedFormFaceOutlines implements GLModel {
     ? makeFoldedVertexArrays(
       this.viewport.gl,
       this.program,
-      this.graph ?? {},
+      this.viewport.embedding?.graphUpdate ? (this.graph ?? {}) : {},
       { showTriangulation: this.showTriangulation })
     : []);
 
@@ -66,7 +71,7 @@ export class FoldedFormFaceOutlines implements GLModel {
     ? makeFoldedElementArrays(
       this.viewport.gl,
       this.viewport.version,
-      this.graph ?? {})
+      this.viewport.embedding?.graphUpdate ? (this.graph ?? {}) : {})
     : []);
 
   flags: number[] = $derived.by(() => this.viewport.gl

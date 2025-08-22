@@ -5,22 +5,18 @@ import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
 import { reassembleFramesToFOLD, makeFlatFramesFromFrames } from "../general/fold.ts";
 import { CreasePattern } from "./CreasePattern/CreasePattern.svelte.ts";
-import { FoldedForm } from "./FoldedForm/FoldedForm.ts";
+import { FoldedForm } from "./FoldedForm/FoldedForm.svelte.ts";
 import { Simulator } from "./Simulator/Simulator.svelte.ts";
 import { makeFrameAttributes } from "./FrameAttributes.ts";
 import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
-
-export type GraphUpdateEvent = {
-  modified?: boolean;
-  isomorphic?: boolean;
-};
+import type { GraphUpdateEvent } from "./Updated.ts";
 
 export class GraphData {
   metadata: FOLDFileMetadata = $state({});
   #framesRaw: FOLDChildFrame[] = $state.raw([]);
 
   // the signal to subscribe to instead of subscribing to frame or framesRaw, etc
-  graphUpdate = $state<GraphUpdateEvent>({});
+  graphUpdate = $state<GraphUpdateEvent>({ isomorphic: false });
 
   // which frame index is currently selected by the app for rendering/modification
   frameIndex: number = $state(0);
@@ -115,7 +111,7 @@ export class GraphData {
   set source(newFrames: FOLDChildFrame[]) { this.#framesRaw = newFrames; }
 
   // public facing method. all changes should go through here
-  mutate(mutator: (frame: FOLDChildFrame, data?: GraphData) => GraphUpdateEvent) {
+  mutate(mutator: (frame: FOLDChildFrame, data?: GraphData) => (GraphUpdateEvent | undefined)) {
     const frame = this.#framesRaw[this.frameIndex];
     const event = mutator(frame, this);
     this.#framesRaw = [
@@ -123,7 +119,12 @@ export class GraphData {
       frame,
       ...this.#framesRaw.slice(this.frameIndex + 1),
     ];
-    this.graphUpdate = event;
+
+    // if mutator returns undefined, this implies that no changes were made,
+    // we should not propagate any reactive "did change" signals.
+    if (event) {
+      this.graphUpdate = event;
+    }
   }
 }
 

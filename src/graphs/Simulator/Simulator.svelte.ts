@@ -1,11 +1,12 @@
 import { type Component } from "svelte";
 import type { FOLD, Box } from "rabbit-ear/types.d.ts";
-import type { Embedding, UpdateInfo } from "../Embedding.ts";
+import type { Embedding } from "../Embedding.ts";
 import type { FrameAttributes } from "../FrameAttributes.ts";
 // import { boundingBox } from "rabbit-ear/graph/boundary.js";
 import Panel from "./Panel.svelte";
 import type { GraphData } from "../GraphData.svelte.ts";
 import context from "../../app/context.svelte.ts";
+import type { GraphUpdateEvent } from "../Updated.ts";
 
 export class Simulator implements Embedding {
   name: string = "simulator";
@@ -19,9 +20,12 @@ export class Simulator implements Embedding {
   //   return box ? Math.max(...(box.span ?? [])) : 1;
   // });
 
-  updated: UpdateInfo = $state({});
+  // for reactive updates to "graph", subscribe to this object instead
+  // updated: UpdateInfo = $state({});
 
   get graph(): FOLD | undefined { return context.simulator.graph; }
+
+  graphUpdate: GraphUpdateEvent = $derived(context.simulator.graphUpdate);
 
   #effects: (() => void)[] = [];
 

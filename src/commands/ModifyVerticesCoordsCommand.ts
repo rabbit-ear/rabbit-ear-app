@@ -1,7 +1,10 @@
 import type { Command } from "./Command.ts";
+import type { GraphUpdateEvent } from "../graphs/Updated.ts";
 import { FileDocument } from "../app/FileDocument.svelte.ts";
 
 export class ModifyVerticesCoordsCommand implements Command {
+  // please construct an array with holes for newCoords with
+  // the indices requiring changes with their corresponding values
   constructor(
     private document: FileDocument,
     private newCoords: [number, number][]) { }
@@ -9,16 +12,17 @@ export class ModifyVerticesCoordsCommand implements Command {
   previousCoords: [number, number][] | undefined;
 
   execute(): void {
-    this.document.update((frame) => {
-      if (!frame.vertices_coords) { return { modified: false }; }
+    this.document.update((frame): GraphUpdateEvent | undefined => {
+      if (!frame.vertices_coords) { return undefined; }
       this.previousCoords = [];
-      Object.keys(this.newCoords).forEach(index => {
-        this.previousCoords[index] = [...frame.vertices_coords[index]];
+      this.newCoords.forEach((coords, index) => {
+        // need to resize the input into 2 or 3 dimensions
+        this.previousCoords[index] = [...frame.vertices_coords![index]];
       });
-      Object.keys(this.newCoords).forEach(index => {
-        frame.vertices_coords[index] = this.newCoords[index];
+      this.newCoords.forEach((coords, index) => {
+        frame.vertices_coords![index] = coords;
       });
-      return { isomorphic: false, modified: true };
+      return { isomorphic: true };
     });
   }
 
@@ -37,9 +41,12 @@ export class ModifyVerticesCoordsCommand implements Command {
   // }
 
   undo(): void {
-    this.document.update((data) => {
-      if (!data.frameRaw.vertices_coords) { return; }
-      data.frameRaw.vertices_coords[this.vertexIndex] = this.previousCoords;
+    this.document.update((frame) => {
+      if (!frame.vertices_coords) { return undefined; }
+      this.previousCoords?.forEach((coords, index) => {
+        frame.vertices_coords![index] = coords;
+      })
+      return { isomorphic: true };
     });
   }
 

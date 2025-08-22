@@ -16,7 +16,11 @@
 
   let svg: SVGSVGElement | undefined = $state();
 
-  const graph = $derived(viewport.embedding?.graph);
+  const graph = $derived(
+    viewport.embedding?.graphUpdate
+      ? viewport.embedding?.graph
+      : viewport.embedding?.graph,
+  );
 
   // https://www.youtube.com/live/nMs4X8-L_yo?feature=shared&t=1667
   const SVGToolLayer = $derived(viewport.layer);

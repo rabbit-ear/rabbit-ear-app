@@ -1,4 +1,4 @@
-import type { Component } from "svelte";
+import { untrack, type Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Embedding } from "../Embedding.ts";
 import type { FrameAttributes } from "../FrameAttributes.ts";
@@ -7,7 +7,9 @@ import type { GraphData } from "../GraphData.svelte.ts";
 import Panel from "./Panel.svelte";
 import { resize2 } from "rabbit-ear/math/vector.js";
 import type { FOLDSelection } from "../../general/types.ts";
+import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../../general/BVHGraph.ts";
 import { VertexBVH, EdgeBVH, FaceBVH } from "../../general/BVHGraph.ts";
+import type { GraphUpdateEvent } from "../Updated.ts";
 
 export class CreasePattern implements Embedding {
   name: string = "creasePattern";
@@ -15,54 +17,31 @@ export class CreasePattern implements Embedding {
   errors: string[] = [];
   panel: Component = Panel;
   #data: GraphData;
+  #effects: (() => void)[];
 
   vertexBVH = $derived.by(() => VertexBVH(this.#data.frame));
   edgeBVH = $derived.by(() => EdgeBVH(this.#data.frame));
   faceBVH = $derived.by(() => FaceBVH(this.#data.frame));
 
-  nearestVertex(point: [number, number]): object {
+  nearestVertex(point: [number, number]): VertexBVHType {
     return this.vertexBVH?.nearest(point);
   }
 
-  nearestEdge(point: [number, number]): object {
+  nearestEdge(point: [number, number]): EdgeBVHType {
     return this.edgeBVH?.nearest(point);
   }
 
-  nearestFace(point: [number, number]): object {
+  nearestFace(point: [number, number]): FaceBVHType {
     return this.faceBVH?.nearest(point);
   }
 
-  // nearestVertex: any = $derived.by(() => {
-  //   try {
-  //     return this.vertexBVH?.nearest([0.25, 0.25]);
-  //   } catch (err) {
-  //     console.log(err);
-  //     return undefined;
-  //   }
-  // });
-  //
-  // nearestEdge: any = $derived.by(() => {
-  //   try {
-  //     return this.edgeBVH?.nearest([0.25, 0.25]);
-  //   } catch (err) {
-  //     console.log(err);
-  //     return undefined;
-  //   }
-  // });
-  //
-  // nearestFace: any = $derived.by(() => {
-  //   try {
-  //     return this.faceBVH?.nearest([0.25, 0.25]);
-  //   } catch (err) {
-  //     console.log(err);
-  //     return undefined;
-  //   }
-  // });
+  // get graph(): FOLD | undefined {
+  //   return this.#data.frameAttributes?.isFoldedForm ? undefined : this.#data.frame as FOLD;
+  // }
 
-  // it might be possible to "unfold" the vertices
-  get graph(): FOLD | undefined {
-    return this.#data.frameAttributes?.isFoldedForm ? undefined : this.#data.frame as FOLD;
-  }
+  graph: FOLD | undefined;
+
+  graphUpdate: GraphUpdateEvent = $state({ isomorphic: false });
 
   get snapPoints(): [number, number][] {
     return this.graph?.vertices_coords?.map(resize2) ?? [];
@@ -82,28 +61,41 @@ export class CreasePattern implements Embedding {
     };
   }
 
-  // #makeBVHEffect(): () => void {
-  //   return $effect.root(() => {
-  //     $effect(() => {
-  //       this.bvh = new MixedBVH2D(this.graph ?? {});
-  //     });
-  //     return () => { };
-  //   });
-  // }
-
   // get shapes(): Shape[] {
   //   return this.#model.shapes;
   // }
 
-  // #effects: (() => void)[] = [];
   selection?: FOLDSelection;
 
   constructor(data: GraphData) {
     this.#data = data;
-    // this.#effects = [this.#makeBVHEffect()];
+    this.#effects = [
+      this.#effectGraphUpdate(),
+    ];
   }
 
-  // dealloc() {
-  //   this.#effects.forEach(fn => fn());
-  // }
+  dealloc() {
+    this.#effects.forEach(fn => fn());
+  }
+
+  // conditions for updating the graph: 
+  // - it always updates (any changes to the source frame)
+  #effectGraphUpdate(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = this.#data.frame;
+        untrack(() => {
+          // it might be possible to "unfold" the vertices
+          this.graph = this.#data.frameAttributes?.isFoldedForm
+            ? undefined
+            : this.#data.frame as FOLD;
+          console.log("CP: graph has become", this.graph);
+        });
+        this.graphUpdate = { isomorphic: false };
+        console.log("CP: detecting #data.frame changes, triggering graphUpdate");
+      });
+      // empty
+      return () => { };
+    });
+  }
 }

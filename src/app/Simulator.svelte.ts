@@ -1,6 +1,7 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import { Model } from "../simulator/simulator/Model.ts";
 import { untrack } from "svelte";
+import type { GraphUpdateEvent } from "../graphs/Updated.ts";
 
 export class Simulator {
   #model: Model | undefined;
@@ -48,25 +49,29 @@ export class Simulator {
   // this is the solver loop, attach this to requestAnimationFrame
   computeLoopID: number | undefined;
 
-  #graph: FOLD | undefined = $derived.by(() => ({
-    vertices_coords: this.#vertices_coords,
-    edges_vertices: this.#abstractGraph?.edges_vertices,
-    edges_assignment: this.#abstractGraph?.edges_assignment,
-    edges_foldAngle: this.#abstractGraph?.edges_foldAngle,
-    faces_vertices: this.#abstractGraph?.faces_vertices,
-  }));
+  // this is the compiled graph for you to render.
+  // however, this is not reactive, you will want to subscribe
+  // to the reactive "updated" member for more fine-tuned info.
+  // #graph: FOLD | undefined = $derived.by(() => ({
+  //   vertices_coords: this.#vertices_coords,
+  //   edges_vertices: this.#abstractGraph?.edges_vertices,
+  //   edges_assignment: this.#abstractGraph?.edges_assignment,
+  //   edges_foldAngle: this.#abstractGraph?.edges_foldAngle,
+  //   faces_vertices: this.#abstractGraph?.faces_vertices,
+  // }));
 
-  get graph(): FOLD | undefined { return this.#graph; }
+  get graph(): FOLD | undefined {
+    return {
+      vertices_coords: this.#vertices_coords,
+      edges_vertices: this.#abstractGraph?.edges_vertices,
+      edges_assignment: this.#abstractGraph?.edges_assignment,
+      edges_foldAngle: this.#abstractGraph?.edges_foldAngle,
+      faces_vertices: this.#abstractGraph?.faces_vertices,
+    }
+  }
 
-  // get graph(): FOLD | undefined {
-  //   return {
-  //     vertices_coords: this.#vertices_coords,
-  //     edges_vertices: this.#abstractGraph?.edges_vertices,
-  //     edges_assignment: this.#abstractGraph?.edges_assignment,
-  //     edges_foldAngle: this.#abstractGraph?.edges_foldAngle,
-  //     faces_vertices: this.#abstractGraph?.faces_vertices,
-  //   };
-  // }
+  #graphUpdate: GraphUpdateEvent = $state({ isomorphic: false });
+  get graphUpdate(): GraphUpdateEvent { return this.#graphUpdate; }
 
   constructor() {
     this.#effects = [
@@ -85,10 +90,7 @@ export class Simulator {
     this.computeLoopID = window.requestAnimationFrame(this.computeLoop.bind(this));
     this.error = this.#model?.solve(100) ?? 0;
     this.#vertices_coords = this.#model?.vertices_coords ?? [];
-    // console.log(
-    //   "setting new vertices coords inside the solver",
-    //   this.#model?.foldAmount,
-    //   this.#vertices_coords?.[0]);
+    this.#graphUpdate = { isomorphic: true };
   }
 
   #makeStartLoopEffect(): () => void {
@@ -146,6 +148,7 @@ export class Simulator {
             faces_vertices: this.#model.fold.faces_vertices,
           };
           this.#vertices_coords = this.#model.fold.vertices_coords;
+          this.#graphUpdate = { isomorphic: false };
         } catch (error) {
           console.error(error);
         }

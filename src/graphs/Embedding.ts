@@ -3,11 +3,8 @@ import type { FOLD } from "rabbit-ear/types.d.ts";
 // import type { Shape } from "../geometry/shapes.ts";
 import type { FrameAttributes } from "./FrameAttributes.ts";
 import type { FOLDSelection } from "../general/types.ts";
-
-export type UpdateInfo = {
-  newGraph: boolean;
-  isomorphic: boolean;
-};
+import type { GraphUpdateEvent } from "./Updated.ts";
+import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../general/BVHGraph.ts";
 
 // we need a fine tuned update system
 // instead of subscribing to the graph,
@@ -19,11 +16,16 @@ export interface Embedding {
   panel?: Component;
 
   // get the (compiled if necessary) FOLD graph
+  // this graph will not be reactive, instead, watch
+  // for the graph update metadata for reactive updates.
   graph: FOLD | undefined;
 
-  // here:
-  // updated: UpdateInfo = $state();
+  // the reactive metadata which will be updated when
+  // the graph updates, and contains more fine-tuned
+  // information about how the graph just changed
+  graphUpdate: GraphUpdateEvent;
 
+  //
   attributes: FrameAttributes;
 
   // other
@@ -34,9 +36,9 @@ export interface Embedding {
 
   selection?: FOLDSelection;
 
-  nearestVertex?: (point: [number, number]) => object;
-  nearestEdge?: (point: [number, number]) => object;
-  nearestFace?: (point: [number, number]) => object;
+  nearestVertex(point: [number, number]): VertexBVHType;
+  nearestEdge(point: [number, number]): EdgeBVHType;
+  nearestFace(point: [number, number]): FaceBVHType;
 
   // the Simulator Embedding in particular uses this to dealloc WebGL things
   dealloc?: () => void;

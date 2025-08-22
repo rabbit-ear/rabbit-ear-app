@@ -1,4 +1,4 @@
-import type { Component } from "svelte";
+import { untrack, type Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Embedding } from "../Embedding.ts";
 import type { FrameAttributes } from "../FrameAttributes.ts";
@@ -8,6 +8,7 @@ import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
+import type { GraphUpdateEvent } from "../Updated.ts";
 
 export class FoldedForm implements Embedding {
   name: string = "foldedForm";
@@ -16,6 +17,7 @@ export class FoldedForm implements Embedding {
 
   #data: GraphData;
   settings: Settings;
+  #effects: (() => void)[];
 
   get foldedVerticesResultAndErrors(): {
     error: Error | undefined;
@@ -77,18 +79,51 @@ export class FoldedForm implements Embedding {
 
   //faceOrders: [number, number, number][] = $state.raw([]);
 
-  get graph(): FOLD | undefined {
-    return {
-      //...$state.snapshot(this.graph),
-      ...this.#data.frame,
-      vertices_coords: this.vertices_coords,
-      //faceOrders: this.faceOrders,
-      frame_classes: ["foldedForm"],
-    };
-  }
+  // get graph(): FOLD | undefined {
+  //   return {
+  //     //...$state.snapshot(this.graph),
+  //     ...this.#data.frame,
+  //     vertices_coords: this.vertices_coords,
+  //     //faceOrders: this.faceOrders,
+  //     frame_classes: ["foldedForm"],
+  //   };
+  // }
+
+  graph: FOLD | undefined;
+
+  graphUpdate: GraphUpdateEvent = $state({ isomorphic: false });
 
   constructor(data: GraphData) {
     this.#data = data;
     this.settings = new Settings();
+    this.#effects = [
+      this.#effectGraphUpdate(),
+    ];
+  }
+
+  dealloc(): void {
+    this.#effects.forEach(fn => fn());
+  }
+
+  // conditions for updating the graph: 
+  // - it always updates (any changes to the source frame)
+  #effectGraphUpdate(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = this.#data.frame;
+        untrack(() => {
+          this.graph = {
+            //...$state.snapshot(this.graph),
+            ...this.#data.frame,
+            vertices_coords: this.vertices_coords,
+            //faceOrders: this.faceOrders,
+            frame_classes: ["foldedForm"],
+          };
+        });
+        this.graphUpdate = { isomorphic: false };
+      });
+      // empty
+      return () => { };
+    });
   }
 }

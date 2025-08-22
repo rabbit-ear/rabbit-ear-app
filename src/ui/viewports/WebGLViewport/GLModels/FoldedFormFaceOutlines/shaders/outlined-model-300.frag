@@ -13,9 +13,11 @@ in vec3 outline_color;
 in vec3 barycentric;
 out vec4 outColor;
 
+float strokeWidth = 1.5;
+
 float edgeFactor(vec3 barycenter) {
 	vec3 d = fwidth(barycenter);
-	vec3 a3 = smoothstep(vec3(0.0), d*3.5, barycenter);
+	vec3 a3 = smoothstep(vec3(0.0), d * strokeWidth, barycenter);
 	return min(min(a3.x, a3.y), a3.z);
 }
 
