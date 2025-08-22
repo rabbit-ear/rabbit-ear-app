@@ -20,6 +20,7 @@ export class GLModels {
   models: GLModel[] = $state([]);
 
   // todo: this is getting added repeatedly
+  // temporarily commented out in the effect below
   toolModel: GLModel | undefined = $state(undefined);
 
   #foldModelNames: string[] = $derived.by(() => {
@@ -130,9 +131,9 @@ export class GLModels {
   #watchToolModel(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        if (this.toolModel) {
-          this.models.push(this.toolModel);
-        }
+        // if (this.toolModel) {
+        //   this.models.push(this.toolModel);
+        // }
       });
       // empty
       return () => { };

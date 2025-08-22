@@ -1,8 +1,5 @@
 <script lang="ts">
-  import type { SimulatorEmbedding } from "./SimulatorEmbedding.svelte.ts";
-
-  const { embedding }: { embedding: SimulatorEmbedding } = $props();
-  const settings = embedding.settings;
+  import context from "../../app/context.svelte.ts";
 
   let showMore = $state(false);
   const settingsDidPress = (): void => {
@@ -13,7 +10,7 @@
 <div class="column gap">
   <div class="row gap">
     <p>simulator active</p>
-    <input type="checkbox" bind:checked={settings.active} />
+    <input type="checkbox" bind:checked={context.simulator.active} />
   </div>
 
   <div class="row gap">
@@ -23,28 +20,29 @@
       min="0"
       max="1"
       step="0.01"
-      disabled={!settings.active}
-      bind:value={settings.foldAmount} />
+      disabled={!context.simulator.active}
+      bind:value={context.simulator.foldAmount} />
   </div>
 
   <div class="row gap">
     <p>pointer tool</p>
     <div class="toggle-row">
       <button
-        class={settings.tool === "trackball" ? "highlighted" : ""}
+        class={context.simulator.tool === "trackball" ? "highlighted" : ""}
         onclick={(): void => {
-          settings.tool = "trackball";
+          context.simulator.tool = "trackball";
         }}>trackball</button>
       <button
-        class={settings.tool === "pull" ? "highlighted" : ""}
+        class={context.simulator.tool === "pull" ? "highlighted" : ""}
         onclick={(): void => {
-          settings.tool = "pull";
+          context.simulator.tool = "pull";
         }}>pull</button>
     </div>
   </div>
 
   <div class="row gap">
-    <button disabled={!settings.active} onclick={settings.reset}>reset model</button>
+    <button disabled={!context.simulator.active} onclick={context.simulator.reset}
+      >reset model</button>
   </div>
 
   <div class="row">
@@ -60,8 +58,8 @@
         <input
           type="text"
           class="long"
-          disabled={!settings.active}
-          bind:value={settings.error} />
+          disabled={!context.simulator.active}
+          bind:value={context.simulator.error} />
       </p>
     </div>
 
@@ -69,75 +67,75 @@
       <p>integration</p>
       <div class="toggle-row">
         <button
-          class={settings.integration === "euler" ? "highlighted" : ""}
+          class={context.simulator.integration === "euler" ? "highlighted" : ""}
           onclick={(): void => {
-            settings.integration = "euler";
+            context.simulator.integration = "euler";
           }}>euler</button>
         <button
-          class={settings.integration === "verlet" ? "highlighted" : ""}
+          class={context.simulator.integration === "verlet" ? "highlighted" : ""}
           onclick={(): void => {
-            settings.integration = "verlet";
+            context.simulator.integration = "verlet";
           }}>verlet</button>
       </div>
     </div>
 
     <div class="row gap">
       <p>axial stiffness</p>
-      <input type="text" class="short" bind:value={settings.axialStiffness} />
+      <input type="text" class="short" bind:value={context.simulator.axialStiffness} />
       <input
         type="range"
         min="10"
         max="100"
         step="1"
-        bind:value={settings.axialStiffness} />
+        bind:value={context.simulator.axialStiffness} />
     </div>
 
     <div class="row gap">
       <p>face stiffness</p>
-      <input type="text" class="short" bind:value={settings.faceStiffness} />
+      <input type="text" class="short" bind:value={context.simulator.faceStiffness} />
       <input
         type="range"
         min="0"
         max="5"
         step="0.02"
-        bind:value={settings.faceStiffness} />
+        bind:value={context.simulator.faceStiffness} />
     </div>
 
     <div class="row gap">
       <p>join stiffness</p>
-      <input type="text" class="short" bind:value={settings.joinStiffness} />
+      <input type="text" class="short" bind:value={context.simulator.joinStiffness} />
       <input
         type="range"
         min="0"
         max="3"
         step="0.01"
-        bind:value={settings.joinStiffness} />
+        bind:value={context.simulator.joinStiffness} />
     </div>
 
     <div class="row gap">
       <p>
         crease stiffness
-        <input type="text" class="short" bind:value={settings.creaseStiffness} />
+        <input type="text" class="short" bind:value={context.simulator.creaseStiffness} />
       </p>
       <input
         type="range"
         min="0"
         max="3"
         step="0.01"
-        bind:value={settings.creaseStiffness} />
+        bind:value={context.simulator.creaseStiffness} />
     </div>
 
     <div class="row gap">
       <p>
         damping ratio
-        <input type="text" class="short" bind:value={settings.dampingRatio} />
+        <input type="text" class="short" bind:value={context.simulator.dampingRatio} />
       </p>
       <input
         type="range"
         min="0.01"
         max="0.5"
         step="0.01"
-        bind:value={settings.dampingRatio} />
+        bind:value={context.simulator.dampingRatio} />
     </div>
   {/if}
 </div>

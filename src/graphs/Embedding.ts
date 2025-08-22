@@ -4,6 +4,14 @@ import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { FrameAttributes } from "./FrameAttributes.ts";
 import type { FOLDSelection } from "../general/types.ts";
 
+export type UpdateInfo = {
+  newGraph: boolean;
+  isomorphic: boolean;
+};
+
+// we need a fine tuned update system
+// instead of subscribing to the graph,
+// subscribe to the update object.
 export interface Embedding {
   name: string;
   abbreviation: string;
@@ -12,6 +20,9 @@ export interface Embedding {
 
   // get the (compiled if necessary) FOLD graph
   graph: FOLD | undefined;
+
+  // here:
+  // updated: UpdateInfo = $state();
 
   attributes: FrameAttributes;
 

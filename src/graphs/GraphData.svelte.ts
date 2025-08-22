@@ -1,12 +1,12 @@
 import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js";
 import type { Embedding } from "./Embedding.ts";
 import type { FrameAttributes } from "./FrameAttributes.ts";
-// import { SimulatorModel } from "../model/Simulator/SimulatorModel.svelte.ts";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
 import { reassembleFramesToFOLD, makeFlatFramesFromFrames } from "../general/fold.ts";
 import { CreasePattern } from "./CreasePattern/CreasePattern.svelte.ts";
 import { FoldedForm } from "./FoldedForm/FoldedForm.ts";
+import { Simulator } from "./Simulator/Simulator.svelte.ts";
 import { makeFrameAttributes } from "./FrameAttributes.ts";
 import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
 
@@ -50,7 +50,7 @@ export class GraphData {
   // models: { [key: string]: Model } = $state({});
   cp: CreasePattern;
   folded: FoldedForm;
-  // simulator: SimulatorModel;
+  simulator: Simulator;
 
   getEmbedding(name: string): Embedding | undefined {
     switch (name) {
@@ -62,13 +62,17 @@ export class GraphData {
       case "foldedForm":
       case "FoldedForm":
         return this.folded;
+      case "sim":
+      case "simulator":
+      case "Simulator":
+        return this.simulator;
       default: return undefined;
     }
   }
 
   get creasePattern(): Embedding { return this.cp; }
   get foldedForm(): Embedding { return this.folded; }
-  // get simulator(): Model { return this.simulator; }
+  get sim(): Embedding { return this.simulator; }
 
   constructor(fold: FOLD) {
     this.metadata = getFileMetadata(fold);
@@ -77,11 +81,11 @@ export class GraphData {
 
     this.cp = new CreasePattern(this);
     this.folded = new FoldedForm(this);
-    // this.simulator = new SimulatorModel(this);
+    this.simulator = new Simulator(this);
   }
 
   dealloc(): void {
-    // this.simulator.dealloc();
+    this.simulator.dealloc();
     // // these don't have dealloc methods but if they do, call them here
     // this.cp.dealloc();
     // this.folded.dealloc();

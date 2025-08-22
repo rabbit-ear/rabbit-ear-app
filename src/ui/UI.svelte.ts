@@ -2,8 +2,8 @@ import { ViewportManager } from "./ViewportManager.svelte.ts";
 import { ToolManager } from "./ToolManager.svelte.ts";
 import { PanelManager } from "./PanelManager.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
-import context from "../app/context.svelte.ts";
 import { UIMode } from "./Settings.svelte.ts";
+import context from "../app/context.svelte.ts";
 
 export class UI {
   viewportManager: ViewportManager;
