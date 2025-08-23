@@ -29,6 +29,9 @@
     if (!gl) {
       return;
     }
+    if (!viewport.embedding?.graphUpdate) {
+      return;
+    }
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     models.forEach((model) => drawGLModel(gl, version, model));
   });

@@ -28,7 +28,6 @@ export const makeFoldedVertexArrays = (
     return [];
   }
   if (!faces_edges && edges_vertices && faces_vertices) {
-
     faces_edges = makeFacesEdgesFromVertices({ edges_vertices, faces_vertices });
   }
   const {

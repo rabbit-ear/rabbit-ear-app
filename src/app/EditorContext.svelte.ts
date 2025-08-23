@@ -36,7 +36,7 @@ export class EditorContext {
     this.simulator = new Simulator();
     this.ui = new UI();
     // this should go somewhere else
-    this.#setSimulatorGraph();
+    // this.#setSimulatorGraph();
   }
 
   // this is not really planned, but if ever the app was to completely de-initialize and
@@ -47,15 +47,15 @@ export class EditorContext {
     this.ui.dealloc();
   }
 
-  #setSimulatorGraph(): () => void {
-    return $effect.root(() => {
-      $effect(() => {
-        this.simulator.inputGraph = this.fileManager.document?.data.cp.graph;
-      });
-      return () => {
-        this.simulator.inputGraph = undefined;
-      };
-    });
-  }
+  // #setSimulatorGraph(): () => void {
+  //   return $effect.root(() => {
+  //     $effect(() => {
+  //       this.simulator.inputGraph = this.fileManager.document?.data.cp.graph;
+  //     });
+  //     return () => {
+  //       this.simulator.inputGraph = undefined;
+  //     };
+  //   });
+  // }
 }
 

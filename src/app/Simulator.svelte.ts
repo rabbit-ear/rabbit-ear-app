@@ -70,7 +70,7 @@ export class Simulator {
     }
   }
 
-  #graphUpdate: GraphUpdateEvent = $state({ isomorphic: false });
+  #graphUpdate: GraphUpdateEvent = $state({ isomorphic: { coords: false } });
   get graphUpdate(): GraphUpdateEvent { return this.#graphUpdate; }
 
   constructor() {
@@ -90,7 +90,7 @@ export class Simulator {
     this.computeLoopID = window.requestAnimationFrame(this.computeLoop.bind(this));
     this.error = this.#model?.solve(100) ?? 0;
     this.#vertices_coords = this.#model?.vertices_coords ?? [];
-    this.#graphUpdate = { isomorphic: true };
+    this.#graphUpdate = { isomorphic: { coords: true } };
   }
 
   #makeStartLoopEffect(): () => void {
@@ -148,7 +148,7 @@ export class Simulator {
             faces_vertices: this.#model.fold.faces_vertices,
           };
           this.#vertices_coords = this.#model.fold.vertices_coords;
-          this.#graphUpdate = { isomorphic: false };
+          this.#graphUpdate = { reset: true };
         } catch (error) {
           console.error(error);
         }

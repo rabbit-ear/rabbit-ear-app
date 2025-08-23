@@ -91,7 +91,7 @@ export class FoldedForm implements Embedding {
 
   graph: FOLD | undefined;
 
-  graphUpdate: GraphUpdateEvent = $state({ isomorphic: false });
+  graphUpdate: GraphUpdateEvent = $state({ isomorphic: { coords: false } });
 
   constructor(data: GraphData) {
     this.#data = data;
@@ -120,10 +120,11 @@ export class FoldedForm implements Embedding {
             frame_classes: ["foldedForm"],
           };
         });
-        this.graphUpdate = { isomorphic: false };
+        this.graphUpdate = { structural: true, reset: true };
       });
       // empty
       return () => { };
     });
   }
 }
+

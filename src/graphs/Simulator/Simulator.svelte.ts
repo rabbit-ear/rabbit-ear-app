@@ -13,7 +13,7 @@ export class Simulator implements Embedding {
   abbreviation: string = "sim";
   errors: string[] = [];
   panel: Component = Panel;
-  // #data: GraphData;
+  #data: GraphData;
 
   // modelSize: number = $derived.by(() => {
   //   const box: Box | undefined = boundingBox(this.#data.frame);
@@ -25,7 +25,7 @@ export class Simulator implements Embedding {
 
   get graph(): FOLD | undefined { return context.simulator.graph; }
 
-  graphUpdate: GraphUpdateEvent = $derived(context.simulator.graphUpdate);
+  get graphUpdate(): GraphUpdateEvent { return context.simulator.graphUpdate; }
 
   #effects: (() => void)[] = [];
 
@@ -38,11 +38,25 @@ export class Simulator implements Embedding {
   };
 
   constructor(data: GraphData) {
-    // this.#data = data;
+    this.#data = data;
     this.#effects = [];
+    this.#setSimulatorGraph();
   }
 
   dealloc(): void {
     this.#effects.forEach((fn) => fn());
+  }
+
+  // todo this needs to move. it's being called once for every open file.
+  #setSimulatorGraph(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        context.simulator.inputGraph = context.fileManager.document?.data.cp.graph;
+        // context.simulator.inputGraph = this.#data.cp.graph;
+      });
+      return () => {
+        context.simulator.inputGraph = undefined;
+      };
+    });
   }
 }

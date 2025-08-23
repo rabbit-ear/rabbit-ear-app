@@ -44,7 +44,7 @@ export const makeFacesVertexData = (
     faces_vertices,
     faces_edges,
   });
-  if (!options.showTriangulation) {
+  if (!options.showTriangulation && vertices_barycentric.length >= facesEdgesIsJoined.length) {
     for (let i = 0; i < facesEdgesIsJoined.length; i += 1) {
       if (facesEdgesIsJoined[i][0]) {
         vertices_barycentric[i * 3 + 0][2] = vertices_barycentric[i * 3 + 1][2] = 100;

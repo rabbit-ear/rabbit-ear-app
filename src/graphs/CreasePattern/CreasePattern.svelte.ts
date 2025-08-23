@@ -9,7 +9,7 @@ import { resize2 } from "rabbit-ear/math/vector.js";
 import type { FOLDSelection } from "../../general/types.ts";
 import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../../general/BVHGraph.ts";
 import { VertexBVH, EdgeBVH, FaceBVH } from "../../general/BVHGraph.ts";
-import type { GraphUpdateEvent } from "../Updated.ts";
+import type { GraphUpdateEvent, GraphUpdateEventNew } from "../Updated.ts";
 
 export class CreasePattern implements Embedding {
   name: string = "creasePattern";
@@ -41,7 +41,7 @@ export class CreasePattern implements Embedding {
 
   graph: FOLD | undefined;
 
-  graphUpdate: GraphUpdateEvent = $state({ isomorphic: false });
+  graphUpdate: GraphUpdateEvent = $state({ reset: true });
 
   get snapPoints(): [number, number][] {
     return this.graph?.vertices_coords?.map(resize2) ?? [];
@@ -89,10 +89,8 @@ export class CreasePattern implements Embedding {
           this.graph = this.#data.frameAttributes?.isFoldedForm
             ? undefined
             : this.#data.frame as FOLD;
-          console.log("CP: graph has become", this.graph);
         });
-        this.graphUpdate = { isomorphic: false };
-        console.log("CP: detecting #data.frame changes, triggering graphUpdate");
+        this.graphUpdate = { structural: true, reset: true };
       });
       // empty
       return () => { };

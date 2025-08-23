@@ -48,7 +48,6 @@ export class WebGLView implements View {
     return inverted ? inverted : [...identity4x4];
   });
 
-  // model = $derived(makeModelMatrix(this.graph));
   #model: number[] = $state([...identity4x4]);
 
   get model(): number[] {

@@ -3,6 +3,7 @@ import type { GLModel } from "./GLModel.ts";
 import { RenderStyle } from "../types.ts";
 import { deallocModel } from "./GLModel.ts";
 import GLModelClasses from "./GLModels/index.ts";
+import { untrack } from "svelte";
 
 const FOLD_MODEL_NAMES = [
   "CreasePatternFaces",
@@ -48,14 +49,17 @@ export class GLModels {
   foldModels = $state([]);
 
   constructor(viewport: WebGLViewport) {
+    console.log("GLModels() constructor");
     this.viewport = viewport;
     this.effects = [
       this.#swapFOLDModels(),
       this.#watchToolModel(),
+      this.#effectDebug(),
     ];
+    // todo: bring this back
     this.models = [
-      new GLModelClasses.WorldAxes(this.viewport),
-      new GLModelClasses.TouchIndicator(this.viewport),
+      // new GLModelClasses.WorldAxes(this.viewport),
+      // new GLModelClasses.TouchIndicator(this.viewport),
     ].filter(m => m !== undefined);
   }
 
@@ -120,8 +124,13 @@ export class GLModels {
   #swapFOLDModels(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        this.removeModelsWithName(...FOLD_MODEL_NAMES);
-        this.addModelsWithName(...this.#foldModelNames);
+        console.log("GLModels() swapFOLDModels");
+        const newModelNames = this.#foldModelNames;
+        untrack(() => {
+          this.removeModelsWithName(...FOLD_MODEL_NAMES);
+          // this.addModelsWithName(...this.#foldModelNames);
+          this.addModelsWithName(...newModelNames);
+        });
       });
       // empty
       return () => { };
@@ -139,5 +148,17 @@ export class GLModels {
       return () => { };
     });
   }
+
+  #effectDebug(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        console.log("YES debug is firing");
+        const style = this.viewport.style;
+      });
+      // empty
+      return () => { };
+    });
+  }
+
 }
 
