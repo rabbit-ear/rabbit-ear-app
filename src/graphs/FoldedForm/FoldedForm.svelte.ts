@@ -3,12 +3,13 @@ import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Embedding } from "../Embedding.ts";
 import type { FrameAttributes } from "../FrameAttributes.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
+import type { GraphUpdateEvent } from "../Updated.ts";
+import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHGraph.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
-import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
+import { makeGraphUpdateEvent } from "../Updated.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
-import type { GraphUpdateEvent } from "../Updated.ts";
 
 export class FoldedForm implements Embedding {
   name: string = "foldedForm";
@@ -19,18 +20,37 @@ export class FoldedForm implements Embedding {
   settings: Settings;
   #effects: (() => void)[];
 
+  graph: FOLD | undefined;
+
+  graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
+
+  setGraph(newGraph: FOLD | undefined) {
+    untrack(() => {
+      this.graph = {
+        // ...$state.snapshot(newGraph),
+        ...newGraph,
+        vertices_coords: this.vertices_coords,
+        // faceOrders: this.faceOrders,
+        frame_classes: ["foldedForm"],
+      };
+    });
+    this.graphUpdate.reset++;
+    // this.graphUpdate.structural++;
+  }
+
+  //faceOrders: [number, number, number][] = $state.raw([]);
+
   get foldedVerticesResultAndErrors(): {
     error: Error | undefined;
     result: [number, number][] | [number, number, number][];
   } {
-    if (this.#data.frameAttributes?.isFoldedForm) {
-      return { error: undefined, result: this.#data.frame.vertices_coords ?? [] };
-    }
     if (!this.settings.active) {
       return { error: new Error("automatic folding currently off"), result: [] };
     }
     try {
-      return { error: undefined, result: makeVerticesCoordsFolded(this.#data.frame) };
+      return this.#data.frameAttributes?.isFoldedForm
+        ? { error: undefined, result: this.#data.frame.vertices_coords ?? [] }
+        : { error: undefined, result: makeVerticesCoordsFolded(this.#data.frame) };
     } catch (err: unknown) {
       const error = err instanceof Error
         ? err
@@ -59,17 +79,8 @@ export class FoldedForm implements Embedding {
 
   get attributes(): FrameAttributes {
     return {
+      ...this.#data.frameAttributes,
       isFoldedForm: true,
-      dimension: getDimensionQuick({ vertices_coords: this.vertices_coords }) ?? 2,
-      // isAbstract:
-      //   (this.graph?.vertices_coords &&
-      //     !this.graph?.edges_vertices &&
-      //     !this.graph?.faces_vertices) ?? false,
-      isAbstract:
-        (this.#data.frame.vertices_coords &&
-          !this.#data.frame.edges_vertices &&
-          !this.#data.frame.faces_vertices) ?? false,
-      hasLayerOrder: this.#data.frame.faceOrders != null,
     };
   }
 
@@ -77,52 +88,36 @@ export class FoldedForm implements Embedding {
   //   return this.#models.shapes;
   // }
 
-  //faceOrders: [number, number, number][] = $state.raw([]);
-
-  // get graph(): FOLD | undefined {
-  //   return {
-  //     //...$state.snapshot(this.graph),
-  //     ...this.#data.frame,
-  //     vertices_coords: this.vertices_coords,
-  //     //faceOrders: this.faceOrders,
-  //     frame_classes: ["foldedForm"],
-  //   };
-  // }
-
-  graph: FOLD | undefined;
-
-  graphUpdate: GraphUpdateEvent = $state({ isomorphic: { coords: false } });
-
   constructor(data: GraphData) {
     this.#data = data;
     this.settings = new Settings();
     this.#effects = [
       this.#effectGraphUpdate(),
     ];
+    this.setGraph(this.#data.frame);
   }
 
   dealloc(): void {
     this.#effects.forEach(fn => fn());
   }
 
+  nearestVertex(point: [number, number]): VertexBVHType {
+    return { index: 0, coords: [0, 0], dist: 0 };
+  }
+
+  nearestEdge(point: [number, number]): EdgeBVHType {
+    return { index: 0, coords: [[0, 0], [0, 0]], dist: 0 };
+  }
+
+  nearestFace(point: [number, number]): FaceBVHType {
+    return { index: 0, poly: [[0, 0], [0, 0], [0, 0]], dist: 0 };
+  }
+
   // conditions for updating the graph: 
   // - it always updates (any changes to the source frame)
   #effectGraphUpdate(): () => void {
     return $effect.root(() => {
-      $effect(() => {
-        const _ = this.#data.frame;
-        untrack(() => {
-          this.graph = {
-            //...$state.snapshot(this.graph),
-            ...this.#data.frame,
-            vertices_coords: this.vertices_coords,
-            //faceOrders: this.faceOrders,
-            frame_classes: ["foldedForm"],
-          };
-        });
-        this.graphUpdate = { structural: true, reset: true };
-      });
-      // empty
+      $effect(() => this.setGraph(this.#data.frame));
       return () => { };
     });
   }

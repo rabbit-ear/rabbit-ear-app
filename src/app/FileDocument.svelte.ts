@@ -1,6 +1,6 @@
 import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.d.ts";
 import type { Command } from "../commands/Command";
-import type { GraphUpdateEvent } from "../graphs/Updated.ts";
+import type { GraphUpdateModifier } from "../graphs/Updated.ts";
 import { writeTextFile, readTextFile } from "../system/fs.ts";
 import { getFileName } from "../system/path.ts";
 import { GraphData } from "../graphs/GraphData.svelte.ts";
@@ -102,12 +102,12 @@ export class FileDocument {
   // todo: we have two places where the dirty flag is being set
   // (also in command execute), make sure these work together fine.
   // it seems like they do
-  update(mutator: (frame: FOLDChildFrame, data?: GraphData) => (GraphUpdateEvent | undefined)) {
-    this.#data.mutate(mutator);
+  update(mutator: (frame: FOLDChildFrame, data?: GraphData) => (GraphUpdateModifier | undefined)) {
     this.#isDirty = true;
+    return this.#data.mutate(mutator);
   }
 
-  updateClean(mutator: (frame: FOLDChildFrame, data?: GraphData) => (GraphUpdateEvent | undefined)) {
-    this.#data.mutate(mutator);
+  updateClean(mutator: (frame: FOLDChildFrame, data?: GraphData) => (GraphUpdateModifier | undefined)) {
+    return this.#data.mutate(mutator);
   }
 }

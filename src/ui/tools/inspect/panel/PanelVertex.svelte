@@ -20,9 +20,13 @@
       !isNaN(n) && isFinite(n) ? n : 0,
     ) as [number, number];
 
-    const command = new ModifyVerticesCoordsCommand(context.fileManager.document, {
-      [vertex]: vertex_coords,
-    });
+    console.log("onInput", context.fileManager);
+    const newVertexCoords = [];
+    newVertexCoords[vertex] = vertex_coords;
+    const command = new ModifyVerticesCoordsCommand(
+      context.fileManager.document,
+      newVertexCoords,
+    );
     context.fileManager.document?.executeCommand(command);
   };
 </script>

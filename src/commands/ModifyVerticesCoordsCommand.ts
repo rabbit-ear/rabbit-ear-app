@@ -1,18 +1,20 @@
 import type { Command } from "./Command.ts";
-import type { GraphUpdateEvent } from "../graphs/Updated.ts";
+import type { GraphUpdateModifier } from "../graphs/Updated.ts";
 import { FileDocument } from "../app/FileDocument.svelte.ts";
 
 export class ModifyVerticesCoordsCommand implements Command {
   // please construct an array with holes for newCoords with
   // the indices requiring changes with their corresponding values
   constructor(
-    private document: FileDocument,
-    private newCoords: [number, number][]) { }
+    private doc: FileDocument,
+    private newCoords: [number, number][]) {
+    console.log("Modify vertices constructor", this.doc, this.newCoords);
+  }
 
   previousCoords: [number, number][] | undefined;
 
   execute(): void {
-    this.document.update((frame): GraphUpdateEvent | undefined => {
+    this.doc.update((frame): GraphUpdateModifier | undefined => {
       if (!frame.vertices_coords) { return undefined; }
       this.previousCoords = [];
       this.newCoords.forEach((coords, index) => {
@@ -22,13 +24,13 @@ export class ModifyVerticesCoordsCommand implements Command {
       this.newCoords.forEach((coords, index) => {
         frame.vertices_coords![index] = coords;
       });
-      return { isomorphic: true };
+      return { isomorphic: { coords: true } };
     });
   }
 
   // execute(): void {
-  //   this.previousCoords = this.document.data?.source[this.document.data?.frameIndex].vertices_coords?.[this.vertexIndex];
-  //   this.document.update((data) => {
+  //   this.previousCoords = this.doc.data?.source[this.doc.data?.frameIndex].vertices_coords?.[this.vertexIndex];
+  //   this.doc.update((data) => {
   //     if (!data.source[data.frameIndex].vertices_coords) { return; }
   //     const frames = [...data.source];
   //     const index = data.frameIndex;
@@ -41,12 +43,12 @@ export class ModifyVerticesCoordsCommand implements Command {
   // }
 
   undo(): void {
-    this.document.update((frame) => {
+    this.doc.update((frame): GraphUpdateModifier | undefined => {
       if (!frame.vertices_coords) { return undefined; }
       this.previousCoords?.forEach((coords, index) => {
         frame.vertices_coords![index] = coords;
       })
-      return { isomorphic: true };
+      return { isomorphic: { coords: true } };
     });
   }
 

@@ -1,24 +1,20 @@
-// an isomorphic change can modify the vertex coordinates
-// or change any of the attributes associated with the edges
-type Isomorphic = {
-  isomorphic: { coords: boolean; } |
-  { assignments: boolean; } |
-  { foldAngles: boolean; };
+export type GraphUpdateEvent = {
+  // an isomorphic change can modify the vertex coordinates
+  // or change any of the attributes associated with the edges
+  isomorphic: {
+    coords: number;
+    assignments: number;
+    foldAngles: number;
+  };
+
+  // a structural change modifies the connectivity of the graph
+  structural: number;
+
+  // a reset is when an entirely new graph has been loaded
+  reset: number;
 };
 
-// a structural change modifies the connectivity of the graph
-type Structural = {
-  structural: boolean;
-}
-
-// a reset is when an entirely new graph has been loaded
-type Reset = {
-  reset: boolean;
-}
-
-// export type GraphUpdateEvent = Isomorphic | Structural | Reset;
-
-export type GraphUpdateEvent = {
+export type GraphUpdateModifier = {
   isomorphic?: {
     coords?: boolean;
     assignments?: boolean;
@@ -26,5 +22,25 @@ export type GraphUpdateEvent = {
   };
   structural?: boolean;
   reset?: boolean;
+};
+
+export const makeGraphUpdateEvent = (): GraphUpdateEvent => ({
+  isomorphic: {
+    coords: 0,
+    assignments: 0,
+    foldAngles: 0,
+  },
+  structural: 0,
+  reset: 0,
+});
+
+export const modifyGraphUpdate = (update: GraphUpdateEvent, modifier: GraphUpdateModifier): void => {
+  if (modifier.isomorphic) {
+    if (modifier.isomorphic.coords) { update.isomorphic.coords++; }
+    if (modifier.isomorphic.assignments) { update.isomorphic.assignments++; }
+    if (modifier.isomorphic.foldAngles) { update.isomorphic.foldAngles++; }
+  }
+  if (modifier.structural) { update.structural++; }
+  if (modifier.reset) { update.reset++; }
 };
 

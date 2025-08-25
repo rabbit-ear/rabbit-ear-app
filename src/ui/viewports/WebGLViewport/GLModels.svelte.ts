@@ -58,7 +58,7 @@ export class GLModels {
     ];
     // todo: bring this back
     this.models = [
-      // new GLModelClasses.WorldAxes(this.viewport),
+      new GLModelClasses.WorldAxes(this.viewport),
       // new GLModelClasses.TouchIndicator(this.viewport),
     ].filter(m => m !== undefined);
   }

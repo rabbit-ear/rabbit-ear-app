@@ -1,8 +1,7 @@
 import earcut from "earcut";
 import type { WebGLViewport } from "../../WebGLViewport.svelte.ts";
 import type { ElementArray, GLModel, VertexArray } from "../../GLModel.ts";
-// import { prepareForRendering } from "rabbit-ear/graph/rendering.js";
-import { prepareForRendering } from "../rendering.ts";
+import { prepareForRendering } from "rabbit-ear/graph/rendering.js";
 import { createProgram } from "rabbit-ear/webgl/general/webgl.js";
 import { makeUniforms } from "./uniforms.ts";
 import {
@@ -27,6 +26,10 @@ export class FoldedFormFaces implements GLModel {
 
   effects: (() => void)[];
 
+  vertexArrays: VertexArray[] = [];
+
+  elementArrays: ElementArray[] = [];
+
   program: WebGLProgram | undefined = $derived.by(() => {
     if (!this.viewport.gl) { return undefined; }
     try {
@@ -41,32 +44,6 @@ export class FoldedFormFaces implements GLModel {
     } catch {
       return undefined;
     }
-  });
-
-  vertexArrays: VertexArray[] = $derived.by(() => {
-    if (!this.viewport.gl || !this.program) { return []; }
-    // todo: i'm not sure this is actually only updating for these two
-    // it's possible that an isomorphic graphUpdate still triggers these
-    const structural = this.viewport.embedding?.graphUpdate.structural;
-    const reset = this.viewport.embedding?.graphUpdate.reset;
-    console.log("vertexArrays: deriving new vertex arrays");
-    // return this.#constructVertexArrays(this.graph ?? {});
-    return makeFoldedVertexArrays(
-      this.viewport.gl,
-      this.program,
-      this.graph ?? {},
-      { showTriangulation: this.showTriangulation })
-  });
-
-  elementArrays: ElementArray[] = $derived.by(() => {
-    if (!this.viewport.gl) { return []; }
-    const structural = this.viewport.embedding?.graphUpdate.structural;
-    const reset = this.viewport.embedding?.graphUpdate.reset;
-    console.log("elementArrays: deriving new vertex arrays");
-    return makeFoldedElementArrays(
-      this.viewport.gl,
-      this.viewport.version,
-      this.graph ?? {});
   });
 
   flags: number[] = $derived.by(() => this.viewport.gl
@@ -87,26 +64,30 @@ export class FoldedFormFaces implements GLModel {
   uniforms = $derived(makeUniforms(this.uniformInputs));
 
   // reactive update object
-  modelUpdate: object = $state({ reset: true });
+  modelUpdate: object = $state({});
 
   constructor(viewport: WebGLViewport) {
     this.viewport = viewport;
 
     if (this.viewport.embedding?.graph) {
       console.log("constructor() loading initial graph and setting vertex arrays");
-      // this.graph = this.#loadGraph(this.viewport.embedding?.graph);
-      this.graph = prepareForRendering(
-        this.viewport.embedding?.graph ?? {},
-        { earcut, layerNudge: this.viewport.style.layersNudge },
-      );
+      this.graph = this.#loadGraph(this.viewport.embedding?.graph);
+      this.vertexArrays = this.#constructVertexArrays(this.viewport.embedding?.graph);
+      this.elementArrays = this.#constructElementArrays(this.viewport.embedding?.graph);
     }
 
+    console.log("constructor() embedding graphUpdate", this.viewport.embedding?.graphUpdate);
+
     this.effects = [
-      this.#deleteVertexArrays(),
-      this.#deleteElementArrays(),
+      // this.#deleteVertexArrays(),
+      // this.#deleteElementArrays(),
       this.#deleteProgram(),
       this.#effectSetGraph(),
       this.#effectUpdateVertexBuffers(),
+      // this.#effectCreateVertexBuffers(),
+      // this.#effectCreateElementBuffers(),
+      this.#effectCreateVertexAndElementBuffers(),
+      this.#effectCreateVertexAndElementBuffersOnNewProgram(),
     ];
 
     this.modelUpdate = { reset: true };
@@ -116,12 +97,12 @@ export class FoldedFormFaces implements GLModel {
     this.effects.forEach((cleanup) => cleanup());
   }
 
-  // #loadGraph(graph: FOLD): FOLD {
-  //   return prepareForRendering(
-  //     graph,
-  //     { earcut, layerNudge: this.viewport.style.layersNudge },
-  //   );
-  // }
+  #loadGraph(graph: FOLD): FOLD {
+    return prepareForRendering(
+      graph,
+      { earcut, layerNudge: this.viewport.style.layersNudge },
+    );
+  }
 
   #constructVertexArrays(graph: FOLD): VertexArray[] {
     if (!this.viewport.gl || !this.program) { return []; }
@@ -155,27 +136,40 @@ export class FoldedFormFaces implements GLModel {
   #effectSetGraph(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const structural = this.viewport.embedding?.graphUpdate.structural;
-        const reset = this.viewport.embedding?.graphUpdate.reset;
-        console.log("effect: setting new graph");
-        // this.graph = this.#loadGraph(this.viewport.embedding?.graph ?? {});
-        this.graph = prepareForRendering(
-          this.viewport.embedding?.graph ?? {},
-          { earcut, layerNudge: this.viewport.style.layersNudge },
-        );
-        this.modelUpdate = { reset: true };
+        this.viewport.embedding?.graphUpdate;
+        untrack(() => {
+          this.graph = this.#loadGraph(this.viewport.embedding?.graph ?? {});
+        });
       });
       return () => { };
     });
   }
 
+  // #effectCreateVertexBuffers(): () => void {
+  //   return $effect.root(() => {
+  //     $effect(() => {
+  //       const proceed = this.viewport.embedding?.graphUpdate.structural
+  //         || this.viewport.embedding?.graphUpdate.reset;
+  //       // console.log("createVertexBuffers effect", proceed);
+  //       if (!proceed) { return; }
+  //       // console.log("create vertex buffer inside effect");
+  //       if (this.vertexArrays.length) { this.#deallocVertexArrays(); }
+  //       untrack(() => {
+  //         this.vertexArrays = this.#constructVertexArrays(this.graph ?? {});
+  //       });
+  //       this.modelUpdate = { vertexBuffers: true };
+  //     });
+  //     return () => { this.#deallocVertexArrays(); }
+  //   });
+  // }
+
   #effectUpdateVertexBuffers(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const watch = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+        const proceed = this.viewport.embedding?.graphUpdate.isomorphic?.coords;
+        if (!proceed) { return; }
         untrack(() => {
           const vertices_coords = this.graph.vertices_coords;
-          // const vertices_coords = this.viewport.embedding?.graph?.vertices_coords;
           if (!vertices_coords) { return; }
           const data = this.vertexArrays[0]?.data;
           if (!data) { return; }
@@ -186,7 +180,6 @@ export class FoldedFormFaces implements GLModel {
               data[i * 3 + 1] = coords[1];
               data[i * 3 + 2] = coords[2];
             });
-          // console.log("updating vertex buffer", vertices_coords.length, data[0], data[1], data[2]);
           // this.vertexArrays[0].data = new Float32Array(vertices_coords3.flat());
           // const vertices_normal = makeVerticesNormal({
           //   vertices_coords: vertices_coords3,
@@ -201,40 +194,75 @@ export class FoldedFormFaces implements GLModel {
     })
   }
 
+  // #effectCreateElementBuffers(): () => void {
+  //   return $effect.root(() => {
+  //     $effect(() => {
+  //       const proceed = this.viewport.embedding?.graphUpdate.structural
+  //         || this.viewport.embedding?.graphUpdate.reset;
+  //       if (!proceed) { return; }
+  //       // console.log("create element buffer inside effect");
+  //       if (this.elementArrays.length) { this.#deallocElementArrays(); }
+  //       untrack(() => {
+  //         this.elementArrays = this.#constructElementArrays(this.graph ?? {});
+  //       });
+  //       this.modelUpdate = { elementBuffers: true };
+  //     });
+  //     return () => { this.#deallocElementArrays(); }
+  //   });
+  // }
+
+  #effectCreateVertexAndElementBuffersOnNewProgram(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const newProgram = this.program;
+        untrack(() => {
+          // todo: for whatever reason, this is causing an error but only
+          // when the ModelAxes model is also enabled... idk why.
+          // if (this.vertexArrays.length) { this.#deallocVertexArrays(); }
+          // if (this.elementArrays.length) { this.#deallocElementArrays(); }
+          this.vertexArrays = this.#constructVertexArrays(this.graph ?? {});
+          this.elementArrays = this.#constructElementArrays(this.graph ?? {});
+        });
+        this.modelUpdate = { vertexBuffers: true, elementBuffers: true };
+      });
+      return () => {
+        this.#deallocVertexArrays();
+        this.#deallocElementArrays();
+      }
+    });
+  }
+
+  #effectCreateVertexAndElementBuffers(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const proceed = this.viewport.embedding?.graphUpdate.structural
+          || this.viewport.embedding?.graphUpdate.reset;
+        if (!proceed) { return; }
+        untrack(() => {
+          // todo: for whatever reason, this is causing an error but only
+          // when the ModelAxes model is also enabled... idk why.
+          // if (this.vertexArrays.length) { this.#deallocVertexArrays(); }
+          // if (this.elementArrays.length) { this.#deallocElementArrays(); }
+          this.vertexArrays = this.#constructVertexArrays(this.graph ?? {});
+          this.elementArrays = this.#constructElementArrays(this.graph ?? {});
+        });
+        this.modelUpdate = { vertexBuffers: true, elementBuffers: true };
+      });
+      return () => {
+        this.#deallocVertexArrays();
+        this.#deallocElementArrays();
+      }
+    });
+  }
+
   #deleteProgram(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const _ = this.program;
+        const program = this.program;
       });
       return () => {
         if (this.program && this.viewport.gl) {
           this.viewport.gl.deleteProgram(this.program);
-        }
-      };
-    });
-  }
-
-  #deleteVertexArrays(): () => void {
-    return $effect.root(() => {
-      $effect(() => {
-        const _ = this.vertexArrays;
-      });
-      return () => {
-        if (this.viewport.gl) {
-          this.vertexArrays.forEach(v => v.buffer && this.viewport.gl?.deleteBuffer(v.buffer));
-        }
-      };
-    });
-  }
-
-  #deleteElementArrays(): () => void {
-    return $effect.root(() => {
-      $effect(() => {
-        const _ = this.elementArrays;
-      });
-      return () => {
-        if (this.viewport.gl) {
-          this.elementArrays.forEach(e => e.buffer && this.viewport.gl?.deleteBuffer(e.buffer));
         }
       };
     });

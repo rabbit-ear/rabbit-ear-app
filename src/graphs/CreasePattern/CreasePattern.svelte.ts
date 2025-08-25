@@ -1,15 +1,16 @@
-import { untrack, type Component } from "svelte";
+import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Embedding } from "../Embedding.ts";
 import type { FrameAttributes } from "../FrameAttributes.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
+import type { FOLDSelection } from "../../general/types.ts";
+import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../../general/BVHGraph.ts";
+import type { GraphUpdateEvent } from "../Updated.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import Panel from "./Panel.svelte";
 import { resize2 } from "rabbit-ear/math/vector.js";
-import type { FOLDSelection } from "../../general/types.ts";
-import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../../general/BVHGraph.ts";
 import { VertexBVH, EdgeBVH, FaceBVH } from "../../general/BVHGraph.ts";
-import type { GraphUpdateEvent, GraphUpdateEventNew } from "../Updated.ts";
+import { makeGraphUpdateEvent } from "../Updated.ts";
 
 export class CreasePattern implements Embedding {
   name: string = "creasePattern";
@@ -23,6 +24,50 @@ export class CreasePattern implements Embedding {
   edgeBVH = $derived.by(() => EdgeBVH(this.#data.frame));
   faceBVH = $derived.by(() => FaceBVH(this.#data.frame));
 
+  selection?: FOLDSelection;
+
+  graph: FOLD | undefined;
+
+  graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
+
+  setGraph(newGraph: FOLD | undefined) {
+    this.graph = newGraph;
+    this.graphUpdate.reset++;
+    console.log("CP: Setting graph, triggering graph update");
+  }
+
+  get snapPoints(): [number, number][] {
+    return this.graph?.vertices_coords?.map(resize2) ?? [];
+  }
+
+  get attributes(): FrameAttributes {
+    return {
+      ...this.#data.frameAttributes,
+      isFoldedForm: false,
+      // // unclear what we should say here. a CP does not render layer orders
+      // // (not the folded form of a CP, but the CP itself)
+      // hasLayerOrder: true,
+    };
+  }
+
+  // get shapes(): Shape[] {
+  //   return this.#model.shapes;
+  // }
+
+  constructor(data: GraphData) {
+    this.#data = data;
+    this.setGraph(this.#data.frameAttributes?.isFoldedForm
+      ? undefined
+      : this.#data.frame);
+    this.#effects = [
+      this.#effectGraphUpdate(),
+    ];
+  }
+
+  dealloc() {
+    this.#effects.forEach(fn => fn());
+  }
+
   nearestVertex(point: [number, number]): VertexBVHType {
     return this.vertexBVH?.nearest(point);
   }
@@ -35,65 +80,18 @@ export class CreasePattern implements Embedding {
     return this.faceBVH?.nearest(point);
   }
 
-  // get graph(): FOLD | undefined {
-  //   return this.#data.frameAttributes?.isFoldedForm ? undefined : this.#data.frame as FOLD;
-  // }
-
-  graph: FOLD | undefined;
-
-  graphUpdate: GraphUpdateEvent = $state({ reset: true });
-
-  get snapPoints(): [number, number][] {
-    return this.graph?.vertices_coords?.map(resize2) ?? [];
-  }
-
-  get attributes(): FrameAttributes {
-    return {
-      isFoldedForm: false,
-      dimension: 2,
-      isAbstract:
-        (this.graph?.vertices_coords &&
-          !this.graph?.edges_vertices &&
-          !this.graph?.faces_vertices) ?? false,
-      // unclear what we should say here. a CP does not render layer orders
-      // (not the folded form of a CP, but the CP itself)
-      hasLayerOrder: true,
-    };
-  }
-
-  // get shapes(): Shape[] {
-  //   return this.#model.shapes;
-  // }
-
-  selection?: FOLDSelection;
-
-  constructor(data: GraphData) {
-    this.#data = data;
-    this.#effects = [
-      this.#effectGraphUpdate(),
-    ];
-  }
-
-  dealloc() {
-    this.#effects.forEach(fn => fn());
-  }
-
   // conditions for updating the graph: 
   // - it always updates (any changes to the source frame)
   #effectGraphUpdate(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const _ = this.#data.frame;
-        untrack(() => {
-          // it might be possible to "unfold" the vertices
-          this.graph = this.#data.frameAttributes?.isFoldedForm
-            ? undefined
-            : this.#data.frame as FOLD;
-        });
-        this.graphUpdate = { structural: true, reset: true };
+        this.setGraph(this.#data.frameAttributes?.isFoldedForm
+          ? undefined
+          : this.#data.frame);
       });
       // empty
       return () => { };
     });
   }
 }
+

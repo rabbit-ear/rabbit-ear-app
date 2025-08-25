@@ -1,12 +1,14 @@
 import type { FOLD } from "rabbit-ear/types.d.ts";
+import type { GraphUpdateEvent } from "../graphs/Updated.ts";
 import { Model } from "../simulator/simulator/Model.ts";
 import { untrack } from "svelte";
-import type { GraphUpdateEvent } from "../graphs/Updated.ts";
+import { makeGraphUpdateEvent } from "../graphs/Updated.ts";
 
 export class Simulator {
   #model: Model | undefined;
   #abstractGraph: FOLD | undefined;
-  #vertices_coords: [number, number, number][] = $state.raw([]);
+  // #vertices_coords: [number, number, number][] = $state.raw([]);
+  #vertices_coords: [number, number, number][] = [];
   #effects: (() => void)[] = [];
 
   // set a graph here to load it into the simulator
@@ -49,9 +51,6 @@ export class Simulator {
   // this is the solver loop, attach this to requestAnimationFrame
   computeLoopID: number | undefined;
 
-  // this is the compiled graph for you to render.
-  // however, this is not reactive, you will want to subscribe
-  // to the reactive "updated" member for more fine-tuned info.
   // #graph: FOLD | undefined = $derived.by(() => ({
   //   vertices_coords: this.#vertices_coords,
   //   edges_vertices: this.#abstractGraph?.edges_vertices,
@@ -60,6 +59,9 @@ export class Simulator {
   //   faces_vertices: this.#abstractGraph?.faces_vertices,
   // }));
 
+  // this is the compiled graph for you to render.
+  // however, this is not reactive, you will want to subscribe
+  // to the reactive "updated" member for more fine-tuned info.
   get graph(): FOLD | undefined {
     return {
       vertices_coords: this.#vertices_coords,
@@ -70,8 +72,7 @@ export class Simulator {
     }
   }
 
-  #graphUpdate: GraphUpdateEvent = $state({ isomorphic: { coords: false } });
-  get graphUpdate(): GraphUpdateEvent { return this.#graphUpdate; }
+  graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
 
   constructor() {
     this.#effects = [
@@ -90,7 +91,11 @@ export class Simulator {
     this.computeLoopID = window.requestAnimationFrame(this.computeLoop.bind(this));
     this.error = this.#model?.solve(100) ?? 0;
     this.#vertices_coords = this.#model?.vertices_coords ?? [];
-    this.#graphUpdate = { isomorphic: { coords: true } };
+    this.graphUpdate.isomorphic.coords++;
+  }
+
+  startLoop(): void {
+    this.computeLoop.bind(this)();
   }
 
   #makeStartLoopEffect(): () => void {
@@ -102,7 +107,9 @@ export class Simulator {
         }
         if (this.active) {
           console.log("starting simulator...");
-          this.computeLoop.bind(this)();
+          // this.computeLoop.bind(this)();
+          untrack(() => this.startLoop());
+          // this.startLoop();
         } else {
           console.log("stopping simulator");
         }
@@ -121,8 +128,7 @@ export class Simulator {
     return $effect.root(() => {
       $effect(() => {
         try {
-          console.log("make load effect");
-          if (this.#model) { console.log("deallocating previous simulator model"); }
+          // if (this.#model) { console.log("deallocating previous simulator model"); }
           this.#model?.dealloc();
           this.#model = undefined;
           this.exportModel = () => { };
@@ -132,7 +138,7 @@ export class Simulator {
           if (!this.activelyLoadingModels) { return; }
           if (!this.inputGraph) { return; }
           this.#model = new Model($state.snapshot(this.inputGraph));
-          console.log("Loading simulator model from", this.inputGraph);
+          // console.log("Loading simulator model from", this.inputGraph);
 
           this.exportModel = this.#model.export.bind(this.#model);
           this.reset = this.#model.reset.bind(this.#model);
@@ -148,7 +154,7 @@ export class Simulator {
             faces_vertices: this.#model.fold.faces_vertices,
           };
           this.#vertices_coords = this.#model.fold.vertices_coords;
-          this.#graphUpdate = { reset: true };
+          this.graphUpdate.reset++;
         } catch (error) {
           console.error(error);
         }

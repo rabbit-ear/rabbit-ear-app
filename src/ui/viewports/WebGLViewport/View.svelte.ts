@@ -105,7 +105,8 @@ export class WebGLView implements View {
     return $effect.root(() => {
       $effect(() => {
         // console.log("WebGLViewport building new model/camera matrix");
-        if (this.viewport.embedding?.graphUpdate.isomorphic) { return; }
+        const _ = this.viewport.embedding?.graphUpdate.structural
+          || this.viewport.embedding?.graphUpdate.reset;
         const matrix = graphToMatrix4(this.viewport.embedding?.graph);
         untrack(() => { this.model = matrix; });
       });

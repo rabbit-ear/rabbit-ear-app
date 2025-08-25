@@ -9,7 +9,17 @@
   };
   let { getGlobalState, viewport }: PropsType = $props();
 
-  let graph: FOLD = $derived(viewport.embedding?.graph ?? {});
+  // let graph: FOLD = $state(viewport.embedding?.graph ?? {});
+  let graph: FOLD = $state({});
+
+  $effect(() => {
+    viewport.embedding?.graphUpdate.isomorphic;
+    viewport.embedding?.graphUpdate.structural;
+    viewport.embedding?.graphUpdate.reset;
+    graph = viewport.embedding?.graph ?? {};
+  });
+
+  // let graph: FOLD = $derived(viewport.embedding?.graph ?? {});
   let vertices_coords = $derived(graph.vertices_coords ?? []);
   let edges_vertices = $derived(graph.edges_vertices ?? []);
   let faces_vertices = $derived(graph.faces_vertices ?? []);

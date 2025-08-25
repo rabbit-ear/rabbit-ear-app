@@ -25,13 +25,21 @@
 
   let models: GLModel[] = $derived(viewport.glModels.models);
 
+  // todo: we should separate out this singular WebGLModels for individual
+  // WebGLModel components, each one can be triggered to watch its update object
+  // ...
+  // nope. nevermind. when one model changes, the entire screen has to be redrawn
   $effect(() => {
     if (!gl) {
       return;
     }
-    if (!viewport.embedding?.graphUpdate) {
-      return;
-    }
+    viewport.embedding?.graphUpdate;
+    // if (!viewport.embedding?.graphUpdate) {
+    //   return;
+    // }
+    // todo: we need to watch this new update object
+    const updates = models.map((model) => model.modelUpdate);
+    // console.log("redrawing WebGL with updates", models);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     models.forEach((model) => drawGLModel(gl, version, model));
   });

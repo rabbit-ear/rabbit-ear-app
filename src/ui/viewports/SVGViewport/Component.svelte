@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { SVGViewport } from "./SVGViewport.svelte.ts";
-  import SVGCanvas from "../../Components/SVG/SVGCanvas.svelte";
-  import GridLayer from "./GridLayer.svelte";
+  import SVGCanvas from "./SVG/SVGCanvas.svelte";
+  import GridLayer from "./SVG/GridLayer.svelte";
   // import ModelLayer from "./ModelLayer.svelte";
-  import SVGShapes from "../../Components/SVG/SVGShapes.svelte";
-  import SVGFOLD from "../../Components/SVG/SVGFOLD.svelte";
+  import SVGShapes from "./SVG/SVGShapes.svelte";
+  import SVGFOLD from "./SVG/SVGFOLD.svelte";
 
   type PropsType = {
     viewport: SVGViewport;
@@ -16,11 +16,14 @@
 
   let svg: SVGSVGElement | undefined = $state();
 
-  const graph = $derived(
-    viewport.embedding?.graphUpdate
-      ? viewport.embedding?.graph
-      : viewport.embedding?.graph,
-  );
+  let graph = $state(viewport.embedding?.graph);
+
+  $effect(() => {
+    viewport.embedding?.graphUpdate.structural;
+    viewport.embedding?.graphUpdate.isomorphic;
+    viewport.embedding?.graphUpdate.reset;
+    graph = { ...viewport.embedding?.graph };
+  });
 
   // https://www.youtube.com/live/nMs4X8-L_yo?feature=shared&t=1667
   const SVGToolLayer = $derived(viewport.layer);

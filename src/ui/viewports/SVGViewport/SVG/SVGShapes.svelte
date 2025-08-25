@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { SVGAttributes } from "svelte/elements";
-  import type { Shape } from "../../../shapes/Shape.ts";
-  import { shapeToSVGElement } from "../../../shapes/svg.ts";
-  import type { SVGViewport } from "../../viewports/SVGViewport/SVGViewport.svelte.ts";
+  import type { Shape } from "../../../../shapes/Shape.ts";
+  import { shapeToSVGElement } from "../../../../shapes/svg.ts";
+  import type { SVGViewport } from "../SVGViewport.svelte.ts";
 
   type PropsType = {
     shapes: Shape[] | undefined;

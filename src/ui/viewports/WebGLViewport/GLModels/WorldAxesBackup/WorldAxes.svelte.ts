@@ -1,17 +1,19 @@
 import type { WebGLViewport } from "../../WebGLViewport.svelte.ts";
-import type { ElementArray, GLModel, VertexArray } from "../../GLModel.ts";
 import { createProgram } from "rabbit-ear/webgl/general/webgl.js";
 import simple_100_vert from "./shaders/simple-100.vert?raw";
 import simple_100_frag from "./shaders/simple-100.frag?raw";
 import { makeUniforms } from "./uniforms.ts";
+import type { ElementArray, GLModel, VertexArray } from "../../GLModel.ts";
 
-const makeVertexArrays = (gl: WebGLRenderingContext | WebGL2RenderingContext, program: WebGLProgram) => [{
-  location: gl.getAttribLocation(program, "v_position"),
-  buffer: gl.createBuffer(),
-  type: gl.FLOAT,
-  length: 3,
-  data: new Float32Array([1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1]),
-}];
+const makeVertexArrays = (gl: WebGLRenderingContext | WebGL2RenderingContext, program: WebGLProgram) => [
+  {
+    location: gl.getAttribLocation(program, "v_position"),
+    buffer: gl.createBuffer(),
+    type: gl.FLOAT,
+    length: 3,
+    data: new Float32Array([1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1]),
+  },
+];
 
 const makeElementArrays = (gl: WebGLRenderingContext | WebGL2RenderingContext) => [
   {
@@ -23,6 +25,19 @@ const makeElementArrays = (gl: WebGLRenderingContext | WebGL2RenderingContext) =
 
 export class WorldAxes implements GLModel {
   viewport: WebGLViewport;
+
+  constructor(viewport: WebGLViewport) {
+    this.viewport = viewport;
+    this.effects = [
+      this.#deleteProgram(),
+      this.#deleteVertexArrays(),
+      this.#deleteElementArrays(),
+    ];
+  }
+
+  dealloc(): void {
+    this.effects.forEach((cleanup) => cleanup());
+  }
 
   programOptions = {};
 
@@ -56,25 +71,10 @@ export class WorldAxes implements GLModel {
 
   effects: (() => void)[];
 
-  constructor(viewport: WebGLViewport) {
-    console.log("WorldAxes() constructor");
-    this.viewport = viewport;
-    this.effects = [
-      this.#deleteProgram(),
-      this.#deleteVertexArrays(),
-      this.#deleteElementArrays(),
-    ];
-  }
-
-  dealloc(): void {
-    console.log("WorldAxes() dealloc");
-    this.effects.forEach((cleanup) => cleanup());
-  }
-
   #deleteProgram(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const _ = this.program;
+        const program = this.program;
       });
       return () => {
         if (this.program && this.viewport.gl) {
@@ -87,7 +87,7 @@ export class WorldAxes implements GLModel {
   #deleteVertexArrays(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const _ = this.vertexArrays;
+        const vas = this.vertexArrays;
       });
       return () => {
         if (this.viewport.gl) {
@@ -100,7 +100,7 @@ export class WorldAxes implements GLModel {
   #deleteElementArrays(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const _ = this.elementArrays;
+        const eas = this.elementArrays;
       });
       return () => {
         if (this.viewport.gl) {

@@ -88,6 +88,15 @@ export const drawGLModel = (
     }
   }
 
+  // console.log(model.vertexArrays[0]?.data.length, model.vertexArrays, model.elementArrays[0]?.data.length, model.elementArrays);
+  // const numAttribs = gl.getProgramParameter(model.program, gl.ACTIVE_ATTRIBUTES);
+  // for (let ii = 0; ii < numAttribs; ++ii) {
+  //   const attribInfo = gl.getActiveAttrib(model.program, ii);
+  //   if (!attribInfo) continue;
+  //   const index = gl.getAttribLocation(model.program, attribInfo.name);
+  //   console.log(index, attribInfo.name);
+  // }
+
   // set vertex arrays
   model.vertexArrays.forEach((el) => {
     gl.bindBuffer(gl.ARRAY_BUFFER, el.buffer);

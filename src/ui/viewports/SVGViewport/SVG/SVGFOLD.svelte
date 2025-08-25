@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { FOLD } from "rabbit-ear/types.js";
   import type { SVGAttributes } from "svelte/elements";
-  import type { SVGViewport } from "../../viewports/SVGViewport/SVGViewport.svelte";
+  import type { SVGViewport } from "../SVGViewport.svelte.ts";
   import SVGFOLDVertices from "./SVGFOLDVertices.svelte";
   import SVGFOLDEdges from "./SVGFOLDEdges.svelte";
   import SVGFOLDFaces from "./SVGFOLDFaces.svelte";

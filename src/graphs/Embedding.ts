@@ -25,7 +25,7 @@ export interface Embedding {
   // information about how the graph just changed
   graphUpdate: GraphUpdateEvent;
 
-  //
+  // reactive.
   attributes: FrameAttributes;
 
   // other
