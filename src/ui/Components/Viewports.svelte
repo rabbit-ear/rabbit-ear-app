@@ -4,30 +4,23 @@
   const viewports = $derived(context.ui.viewportManager?.viewports || []);
 </script>
 
-<div class="column">
-  <div class="canvases row gap">
-    {#each viewports as viewport, index (viewport.id)}
-      <div class="canvas">
-        <ViewportDropdown {index} {viewport}>
-          {#if viewport.dropdown}
-            <viewport.dropdown {viewport} />
-          {/if}
-        </ViewportDropdown>
-        <viewport.component {viewport} />
-      </div>
-    {/each}
-  </div>
+<div class="viewports row gap">
+  {#each viewports as viewport, index (viewport.id)}
+    <div class="viewport">
+      <ViewportDropdown {index} {viewport}>
+        {#if viewport.dropdown}
+          <viewport.dropdown {viewport} />
+        {/if}
+      </ViewportDropdown>
+      <viewport.component {viewport} />
+    </div>
+  {/each}
 </div>
 
 <style>
   div {
     width: 100%;
     height: 100%;
-  }
-
-  .column {
-    display: flex;
-    flex-direction: column;
   }
 
   .row {
@@ -39,7 +32,8 @@
     gap: var(--form-gap);
   }
 
-  .canvases {
+  .viewports {
+    flex: 1 1 auto;
     /* todo: this needs to be dynamically calculated based on */
     /* whether or not other divs are above/below this */
     /* height: calc(100vh - 6rem - 6rem); */
@@ -49,7 +43,7 @@
 
   /*component wrapper is required because svg and canvas elements have*/
   /*strange competing sizing rules when inside the same flexbox container*/
-  .canvas {
+  .viewport {
     flex: 1 1 auto;
     position: relative;
   }

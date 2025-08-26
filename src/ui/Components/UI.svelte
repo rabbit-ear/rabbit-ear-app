@@ -19,12 +19,8 @@
         setTool={(tool: string) => context.ui.toolManager.setToolWithName(tool)} />
     </div>
     <div class="desktop vertical">
-      <div class="tabs">
-        <FileTabs />
-      </div>
-      <div class="canvases">
-        <Viewports />
-      </div>
+      <FileTabs />
+      <Viewports />
     </div>
     <div class="panels">
       <Panels />
@@ -81,18 +77,6 @@
     flex: 0 0 auto;
     overflow-x: hidden;
     overflow-y: auto;
-  }
-
-  .tabs {
-    width: 100%;
-    /* height: 2rem; */
-    flex: 0 0 auto;
-  }
-
-  .canvases {
-    width: 100%;
-    height: 100%;
-    flex: 1 1 auto;
   }
 
   /* colors */

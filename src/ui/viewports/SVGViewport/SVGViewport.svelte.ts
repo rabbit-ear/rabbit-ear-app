@@ -2,7 +2,7 @@ import type { Component } from "svelte";
 import type { Viewport } from "../Viewport.ts";
 import type { Embedding } from "../../../graphs/Embedding.ts";
 import Dropdown from "./Dropdown.svelte";
-import ClassPanel from "./Panel.svelte";
+// import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./Component.svelte";
 import { Settings } from "./Settings.svelte.ts";
 import { SVGView } from "./View.svelte.ts";
@@ -15,7 +15,7 @@ import type { Shape } from "../../../shapes/Shape.ts";
 export class SVGViewport implements Viewport {
   static name: string = "SVG Viewport";
   static settings: Settings = new Settings();
-  static panel: Component = ClassPanel;
+  // static panel: Component = ClassPanel;
 
   id: string;
   component: Component;

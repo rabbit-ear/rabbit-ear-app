@@ -17,9 +17,9 @@ export const makeIntervals = (
   while (size / spacing > max) {
     spacing *= 2;
   }
-  const count = Math.floor(size / spacing);
+  // ensure this is both an integer and positive
+  const count = Math.max(0, Math.floor(size / spacing));
   const offset = Math.ceil(start / spacing) * spacing;
-  // todo: got an "invalid array length" error.
   try {
     return Array.from(Array(count + 1)).map((_, i) => offset + spacing * i);
   } catch {

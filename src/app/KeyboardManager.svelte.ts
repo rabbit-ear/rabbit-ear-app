@@ -9,14 +9,19 @@ interface Keymap {
 }
 
 export class KeyboardManager {
-  #keys: Set<string> = $state(new Set<string>());
+  // #keys: Set<string> = $state(new Set<string>());
+  #keys: { [key: string]: boolean } = $state({});
   #keymaps = new Map<string, Keymap>();
   #activeKeymap: Keymap | undefined;
 
-  shift: boolean = $derived(this.#keys.has("Shift"));
-  alt: boolean = $derived(this.#keys.has("Alt"));
-  control: boolean = $derived(this.#keys.has("Control"));
-  command: boolean = $derived(this.#keys.has("Meta"));
+  // shift: boolean = $derived(this.#keys.has("Shift"));
+  // alt: boolean = $derived(this.#keys.has("Alt"));
+  // control: boolean = $derived(this.#keys.has("Control"));
+  // command: boolean = $derived(this.#keys.has("Meta"));
+  shift: boolean = $derived(this.#keys["Shift"]);
+  alt: boolean = $derived(this.#keys["Alt"]);
+  control: boolean = $derived(this.#keys["Control"]);
+  command: boolean = $derived(this.#keys["Meta"]);
 
   // not currently used but possible to setup a system
   // that runs O(1), but idk let's see. This system has
@@ -60,13 +65,15 @@ export class KeyboardManager {
   }
 
   #onkeydown(event: KeyboardEvent): void {
-    this.#keys.add(this.#normalize(event.key));
+    // this.#keys.add(this.#normalize(event.key));
+    this.#keys[this.#normalize(event.key)] = true;
     // this.#keyCombination = this.#stringifyKeys();
     this.#checkActions(event);
   }
 
   #onkeyup(event: KeyboardEvent): void {
-    this.#keys.delete(this.#normalize(event.key));
+    // this.#keys.delete(this.#normalize(event.key));
+    delete this.#keys[this.#normalize(event.key)];
   }
 
   // #stringifyKeys(): string {
@@ -80,7 +87,8 @@ export class KeyboardManager {
     // const actions = this.activeKeymap.comboMap.get(this.#keyCombination);
     // if (actions) actions.forEach(handler => handler());
     for (const [action, combo] of this.#activeKeymap.bindings.entries()) {
-      const active = combo.every((k) => this.#keys.has(k));
+      // const active = combo.every((k) => this.#keys.has(k));
+      const active = combo.every((k) => this.#keys[k]);
       if (!active) { continue; }
       this.#activeKeymap.listeners.get(action)
         ?.forEach(handler => handler(event));

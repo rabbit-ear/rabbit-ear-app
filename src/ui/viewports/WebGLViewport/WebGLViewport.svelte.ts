@@ -5,7 +5,7 @@ import type { FrameAttributes } from "../../../graphs/FrameAttributes.ts";
 import type { Embedding } from "../../../graphs/Embedding.ts";
 import ViewportComponent from "./Component.svelte";
 import Dropdown from "./Dropdown.svelte";
-import ClassPanel from "./Panel.svelte";
+// import ClassPanel from "./Panel.svelte";
 import { WebGLView } from "./View.svelte.ts";
 import { Style } from "./Style.svelte.ts";
 import { GLModels } from "./GLModels.svelte.ts";
@@ -16,7 +16,7 @@ import context from "../../../app/context.svelte.ts";
 export class WebGLViewport implements Viewport {
   static name: string = "WebGL Viewport";
   static settings: Settings = new Settings();
-  static panel: Component = ClassPanel;
+  // static panel: Component = ClassPanel;
 
   id: string;
   component: Component;

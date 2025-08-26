@@ -7,7 +7,7 @@ import { GlobalState } from "./GlobalState.svelte.ts";
 import { Touches } from "./Touches.svelte.ts";
 import SVGLayer from "./SVGLayer.svelte";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
-import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
+import { wheelEventZoomMatrix, wheelPanMatrix } from "../../zoom/matrix.ts";
 import context from "../../../../app/context.svelte.ts";
 import { SelectRectCommand } from "../../../../commands/SelectRectCommand.ts";
 
@@ -90,16 +90,15 @@ export class SVGState implements ToolEvents {
     this.touches.release = point;
   }
 
-  // new plan for onwheel
-  // all tools must implement the "zoomTool.onwheel?.(event);" behavior.
-  // there is no longer an app-wide fallthrough that executes that method
-  // if no tool wheel event exists. the tool must specify the behavior explicitly.
-  onwheel(viewport: Viewport, { clientX, clientY, deltaY }: WheelEvent): void {
+  onwheel(viewport: Viewport, { clientX, clientY, deltaX, deltaY }: WheelEvent): void {
     const point = getSVGViewportPoint(viewport, [clientX, clientY]);
-    wheelEventZoomMatrix(this.viewport, { point, deltaY });
     // const panel = (this.viewport.constructor as typeof SVGViewport).settings;
     // panel.cursor = point;
+    return context.keyboardManager.shift
+      ? wheelEventZoomMatrix(this.viewport, { point, deltaY })
+      : wheelPanMatrix(this.viewport, { deltaX, deltaY });
   };
+
 
   // // touch screen events
   // ontouchstart?: (viewport: Viewport, event: TouchEvent) => void;

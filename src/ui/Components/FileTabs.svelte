@@ -5,7 +5,7 @@
   const currentFile = $derived(context.fileManager.document);
 </script>
 
-<div class="container row gap short align-start">
+<div class="tabs row gap short align-start">
   {#each files as file}
     <div class={file === currentFile ? "row file-item selected" : "row file-item"}>
       <button
@@ -46,7 +46,8 @@
     gap: var(--form-gap);
   }
 
-  .container {
+  .tabs {
+    flex: 0 0 auto;
     background-color: var(--background-1);
     overflow-x: auto;
   }
