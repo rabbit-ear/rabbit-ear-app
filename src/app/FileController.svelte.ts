@@ -11,27 +11,31 @@ const defaultFileDialogFilter = () => ({
 });
 
 export class FileController {
-  constructor(private fileManager: FileManager) {
+  fileManager: FileManager;
+
+  constructor(fileManager: FileManager) {
     this.fileManager = fileManager;
+  }
+
+  async openFilesWithPaths(filePaths: string[]): Promise<void> {
+    const errors = await this.fileManager.openFiles(filePaths);
+    if (errors.length) {
+      const errorString = errors
+        .map(({ path, error }) => `${path}:\n${error}`)
+        .join("\n\n");
+      window.alert(`Error opening file(s):\n${errorString}`);
+    } else {
+      return;
+    }
   }
 
   async openFilesWithDialog(): Promise<void> {
     const filters = [defaultFileDialogFilter()];
     const result = await open({ multiple: true, filters });
-    if (Array.isArray(result)) {
-      const errors = await this.fileManager.openFiles(result);
-      if (errors.length) {
-        const errorString = errors.join("\n\n");
-        window.alert(`Error opening ${errors.length} files\n\n${errorString}`)
-      }
-    } else if (result !== null && typeof result === "string") {
-      const error = await this.fileManager.openFile(result);
-      if (error) {
-        window.alert(`Error opening file\n\n${error}`)
-      }
-    } else {
-      return;
-    }
+    const filePaths = Array.isArray(result)
+      ? result
+      : [result].filter(a => a != null);
+    return this.openFilesWithPaths(filePaths);
   }
 
   async saveDocumentWithSaveAsDialog(document: FileDocument): Promise<boolean> {
@@ -146,9 +150,8 @@ export class FileController {
     })) {
       // "Yes": 
       case true:
-        // todo: need to trigger the view to show the file
-        // which is attempting to be saved at each step
         for (const document of unsavedDocuments) {
+          this.fileManager.switchToDocument(document);
           const success = await this.saveDocument(document);
           // if the user cancels a file save, consider it to be
           // intended to cancel the rest of the file saves too.

@@ -16,7 +16,7 @@ const loadExampleFile = async () => {
     await join(resourcesDir, "crane.fold"),
     await join(resourcesDir, "cube-octagon.fold"),
   ];
-  await context.fileManager.openFiles(files);
+  await context.fileController.openFilesWithPaths(files);
 }
 
 export const defaultAppSetup = () => {

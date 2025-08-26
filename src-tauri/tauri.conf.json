@@ -34,5 +34,10 @@
     "resources": [
       "../resources/**/*"
     ]
+  },
+  "plugins": {
+    "fs": {
+      "requireLiteralLeadingDot": false 
+    }
   }
 }

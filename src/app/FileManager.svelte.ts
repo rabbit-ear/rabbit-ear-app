@@ -47,12 +47,12 @@ export class FileManager {
   }
 
   // throws
-  async openFiles(filePaths: string[]): Promise<Error[]> {
+  async openFiles(filePaths: string[]): Promise<{ path: string, error: Error }[]> {
     // check if any of them are already open
     const unopenedFilePaths = filePaths
       .filter(path => this.#documents.findIndex(doc => doc.path === path) === -1);
     if (!unopenedFilePaths.length) { return []; }
-    const errors: Error[] = [];
+    const errors: { path: string, error: Error }[] = [];
     await Promise.all(unopenedFilePaths.map(async filePath => {
       try {
         const text = await readTextFile(filePath);
@@ -63,7 +63,7 @@ export class FileManager {
         const error = err instanceof Error
           ? err
           : new Error(String(err));
-        errors.push(error);
+        errors.push({ path: filePath, error });
       }
     }));
     // same as openFile(), if a document is already opened, make it active
