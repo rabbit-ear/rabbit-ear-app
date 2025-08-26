@@ -7,7 +7,6 @@ import { makeGraphUpdateEvent } from "../graphs/Updated.ts";
 export class Simulator {
   #model: Model | undefined;
   #abstractGraph: FOLD | undefined;
-  // #vertices_coords: [number, number, number][] = $state.raw([]);
   #vertices_coords: [number, number, number][] = [];
   #effects: (() => void)[] = [];
 
@@ -51,17 +50,9 @@ export class Simulator {
   // this is the solver loop, attach this to requestAnimationFrame
   computeLoopID: number | undefined;
 
-  // #graph: FOLD | undefined = $derived.by(() => ({
-  //   vertices_coords: this.#vertices_coords,
-  //   edges_vertices: this.#abstractGraph?.edges_vertices,
-  //   edges_assignment: this.#abstractGraph?.edges_assignment,
-  //   edges_foldAngle: this.#abstractGraph?.edges_foldAngle,
-  //   faces_vertices: this.#abstractGraph?.faces_vertices,
-  // }));
-
-  // this is the compiled graph for you to render.
-  // however, this is not reactive, you will want to subscribe
-  // to the reactive "updated" member for more fine-tuned info.
+  // this is the compiled graph that incorporates the changes
+  // to the vertices_coords from the simulator.
+  // this is non-reactive (see graphUpdate)
   get graph(): FOLD | undefined {
     return {
       vertices_coords: this.#vertices_coords,
@@ -72,14 +63,16 @@ export class Simulator {
     }
   }
 
+  // reactive object
+  // subscribe to this to watch for changes to the simulator's graph
   graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
 
   constructor() {
     this.#effects = [
-      this.#makeLoadEffect(),
-      this.#makeStartLoopEffect(),
-      this.#makeFoldAmountEffect(),
-      this.#makeStrainEffect(),
+      this.#effectLoadGraph(),
+      this.#effectStartLoop(),
+      this.#effectFoldAmount(),
+      this.#effectStrain(),
     ];
   }
 
@@ -98,7 +91,7 @@ export class Simulator {
     this.computeLoop.bind(this)();
   }
 
-  #makeStartLoopEffect(): () => void {
+  #effectStartLoop(): () => void {
     return $effect.root(() => {
       $effect(() => {
         if (this.computeLoopID) {
@@ -124,7 +117,7 @@ export class Simulator {
     });
   }
 
-  #makeLoadEffect(): () => void {
+  #effectLoadGraph(): () => void {
     return $effect.root(() => {
       $effect(() => {
         try {
@@ -169,7 +162,7 @@ export class Simulator {
     });
   }
 
-  #makeFoldAmountEffect(): () => void {
+  #effectFoldAmount(): () => void {
     return $effect.root(() => {
       $effect(() => {
         const _ = this.foldAmount;
@@ -183,7 +176,7 @@ export class Simulator {
     });
   }
 
-  #makeStrainEffect(): () => void {
+  #effectStrain(): () => void {
     return $effect.root(() => {
       $effect(() => {
         const _ = this.strain;

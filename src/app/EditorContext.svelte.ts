@@ -50,6 +50,7 @@ export class EditorContext {
   #setSimulatorGraph(): () => void {
     return $effect.root(() => {
       $effect(() => {
+        const _ = this.fileManager.document?.data.cp.graphUpdate.reset;
         this.simulator.inputGraph = this.fileManager.document?.data.cp.graph;
       });
       return () => {

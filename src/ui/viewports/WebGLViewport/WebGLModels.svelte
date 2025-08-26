@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { WebGLViewport } from "../../viewports/WebGLViewport/WebGLViewport.svelte.ts";
-  import type { GLModel } from "../../viewports/WebGLViewport/GLModel.ts";
   import { drawGLModel } from "../../viewports/WebGLViewport/GLModel.ts";
   import WebGLCanvas from "./WebGLCanvas.svelte";
 
@@ -23,25 +22,16 @@
     ...props
   }: PropsType = $props();
 
-  let models: GLModel[] = $derived(viewport.glModels.models);
-
-  // todo: we should separate out this singular WebGLModels for individual
-  // WebGLModel components, each one can be triggered to watch its update object
-  // ...
-  // nope. nevermind. when one model changes, the entire screen has to be redrawn
   $effect(() => {
     if (!gl) {
       return;
     }
-    viewport.embedding?.graphUpdate;
-    // if (!viewport.embedding?.graphUpdate) {
-    //   return;
-    // }
-    // todo: we need to watch this new update object
-    const updates = models.map((model) => model.modelUpdate);
-    // console.log("redrawing WebGL with updates", models);
+    viewport.embedding;
+    viewport.embedding?.graphUpdate.reset;
+    viewport.embedding?.graphUpdate.structural;
+    // console.log("Component: WebGLModels: redraw");
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    models.forEach((model) => drawGLModel(gl, version, model));
+    viewport.glModels.models.forEach((model) => drawGLModel(gl, version, model));
   });
 </script>
 

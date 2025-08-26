@@ -49,17 +49,16 @@ export class GLModels {
   foldModels = $state([]);
 
   constructor(viewport: WebGLViewport) {
-    console.log("GLModels() constructor");
+    // console.log("GLModels() constructor");
     this.viewport = viewport;
     this.effects = [
       this.#swapFOLDModels(),
       this.#watchToolModel(),
       this.#effectDebug(),
     ];
-    // todo: bring this back
     this.models = [
       new GLModelClasses.WorldAxes(this.viewport),
-      // new GLModelClasses.TouchIndicator(this.viewport),
+      new GLModelClasses.TouchIndicator(this.viewport),
     ].filter(m => m !== undefined);
   }
 
@@ -124,7 +123,7 @@ export class GLModels {
   #swapFOLDModels(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        console.log("GLModels() swapFOLDModels");
+        // console.log("GLModels() swapFOLDModels");
         const newModelNames = this.#foldModelNames;
         untrack(() => {
           this.removeModelsWithName(...FOLD_MODEL_NAMES);
@@ -152,13 +151,12 @@ export class GLModels {
   #effectDebug(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        console.log("YES debug is firing");
+        // console.log("YES debug is firing");
         const style = this.viewport.style;
       });
       // empty
       return () => { };
     });
   }
-
 }
 

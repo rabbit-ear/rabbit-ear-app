@@ -57,7 +57,7 @@ export class WorldAxes implements GLModel {
   effects: (() => void)[];
 
   constructor(viewport: WebGLViewport) {
-    console.log("WorldAxes() constructor");
+    // console.log("WorldAxes() constructor");
     this.viewport = viewport;
     this.effects = [
       this.#deleteProgram(),
@@ -67,7 +67,7 @@ export class WorldAxes implements GLModel {
   }
 
   dealloc(): void {
-    console.log("WorldAxes() dealloc");
+    // console.log("WorldAxes() dealloc");
     this.effects.forEach((cleanup) => cleanup());
   }
 

@@ -29,9 +29,8 @@ export class SVGViewport implements Viewport {
   view: SVGView;
 
   // model?: Model = $state.raw();
-  embeddingName = $state("creasePattern");
   // embeddingName = $derived.by(() => this.state.model);
-
+  embeddingName = $state("creasePattern");
   embedding?: Embedding = $derived(context.fileManager.document?.data[this.embeddingName]);
 
   shapes?: Shape[] = $derived(context.fileManager.document?.data.shapeManager.shapes);
@@ -62,8 +61,7 @@ export class SVGViewport implements Viewport {
     this.props = undefined;
   }
 
-  dealloc(): void {
-    // empty
-  }
+  // empty
+  dealloc(): void { }
 }
 

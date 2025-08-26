@@ -27,31 +27,47 @@ export const explodeFaces = ({
   edges_foldAngle,
   faces_vertices,
   faces_edges,
-}: FOLD) => {
+}: FOLD): { graph: FOLD, vertices_map: number[] } => {
   if (!faces_vertices) {
     if (edges_vertices) {
-      return clone({
-        vertices_coords,
-        edges_vertices,
-        edges_assignment,
-        edges_foldAngle,
-      });
+      return {
+        graph: clone({
+          vertices_coords,
+          edges_vertices,
+          edges_assignment,
+          edges_foldAngle,
+        }),
+        vertices_map: (vertices_coords ?? []).map((_, i) => i),
+      };
     }
-    return vertices_coords ? clone({ vertices_coords }) : {};
+    return vertices_coords
+      ? {
+        graph: clone({ vertices_coords }),
+        vertices_map: vertices_coords.map((_, i) => i),
+      }
+      : { graph: {}, vertices_map: [] };
   }
 
   let f = 0;
+  // this will look something like this, ordered incrementally, with no face
+  // sharing any vertices: [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11], ...]
   const faces_verticesNew = faces_vertices.map((face) => face.map(() => f++));
 
   // if vertices exist, add vertices
   if (!vertices_coords) {
-    return { faces_vertices: faces_verticesNew };
+    return {
+      graph: {
+        faces_vertices: faces_verticesNew,
+      },
+      vertices_map: [],
+    };
   }
 
   // typescript ensure vertices_coords is in the correct form
   const dimensions = getDimensionQuick({ vertices_coords });
+  const vertices_map = faces_vertices.flat();
   const vertices_coordsFlat = clone(
-    faces_vertices.flatMap((face) => face.map((v) => vertices_coords[v])),
+    vertices_map.map((v) => vertices_coords[v]),
   );
   /** @type {[number, number][] | [number, number, number][]} */
   const vertices_coordsNew =
@@ -62,14 +78,16 @@ export const explodeFaces = ({
   // if no edges exist, return the vertex-face graph.
   if (!edges_vertices) {
     return {
-      vertices_coords: vertices_coordsNew,
-      faces_vertices: faces_verticesNew,
+      graph: {
+        vertices_coords: vertices_coordsNew,
+        faces_vertices: faces_verticesNew,
+      },
+      vertices_map,
     };
   }
 
   // get faces_edges from the old graph data
   if (!faces_edges) {
-     
     faces_edges = makeFacesEdgesFromVertices({ edges_vertices, faces_vertices });
   }
 
@@ -94,7 +112,11 @@ export const explodeFaces = ({
   if (edges_foldAngle) {
     result.edges_foldAngle = edgesMap.map((i) => edges_foldAngle[i]);
   }
-  return result;
+  console.log("EXPLODE", result);
+  return {
+    graph: result,
+    vertices_map: faces_vertices.flat(),
+  };
 };
 
 /**

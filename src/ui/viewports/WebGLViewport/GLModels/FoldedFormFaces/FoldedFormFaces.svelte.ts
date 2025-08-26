@@ -1,7 +1,6 @@
 import earcut from "earcut";
 import type { WebGLViewport } from "../../WebGLViewport.svelte.ts";
 import type { ElementArray, GLModel, VertexArray } from "../../GLModel.ts";
-// import { prepareForRendering } from "rabbit-ear/graph/rendering.js";
 import { prepareForRendering } from "../rendering.ts";
 import { createProgram } from "rabbit-ear/webgl/general/webgl.js";
 import { makeUniforms } from "./uniforms.ts";
@@ -15,22 +14,33 @@ import model_300_vert from "./shaders/model-300.vert?raw";
 import model_300_frag from "./shaders/model-300.frag?raw";
 import type { FOLD } from "rabbit-ear/types.js";
 import { untrack } from "svelte";
+import { makeVerticesNormal } from "rabbit-ear/graph/normals.js";
 
 export class FoldedFormFaces implements GLModel {
   viewport: WebGLViewport;
 
   showTriangulation?: boolean = $state(false);
 
-  // ensure this is always set to the result of prepareForRendering
-  // as this is an exploded graph (faces are triangulated and not isomorphic).
-  graph: FOLD = {};
+  // the source graph on the embedding will be processed before being set to here.
+  // these two graphs are not isomorphic (source and this one for rendering).
+  // (faces will be triangulated and exploded and cuts will be processed)
+  #graph: FOLD = {};
 
-  effects: (() => void)[];
+  // used internally. when a new graph is loaded this will trigger
+  // the vertex and element arrays to be rebuilt
+  #graphDidLoad: number = $state(0);
+
+  // this graph for rendering and the source graph are not isomorphic,
+  // this maps this graph's vertices (index) to the vertex index from
+  // the source graph (value).
+  #vertices_map: number[] = [];
+
+  #effects: (() => void)[];
 
   program: WebGLProgram | undefined = $derived.by(() => {
     if (!this.viewport.gl) { return undefined; }
     try {
-      console.log("FoldedFormFaces create new program");
+      // console.log("FoldedFormFaces create new program");
       switch (this.viewport.version) {
         case 1:
           return createProgram(this.viewport.gl, model_100_vert, model_100_frag);
@@ -45,35 +55,38 @@ export class FoldedFormFaces implements GLModel {
 
   vertexArrays: VertexArray[] = $derived.by(() => {
     if (!this.viewport.gl || !this.program) { return []; }
-    // todo: i'm not sure this is actually only updating for these two
-    // it's possible that an isomorphic graphUpdate still triggers these
-    const structural = this.viewport.embedding?.graphUpdate.structural;
+    const internalUpdate = this.#graphDidLoad;
     const reset = this.viewport.embedding?.graphUpdate.reset;
-    console.log("vertexArrays: deriving new vertex arrays");
-    // return this.#constructVertexArrays(this.graph ?? {});
+    const structural = this.viewport.embedding?.graphUpdate.structural;
+    // console.log("FOLDED_FORM_FACES: vertexArrays: deriving new vertex arrays");
     return makeFoldedVertexArrays(
       this.viewport.gl,
       this.program,
-      this.graph ?? {},
+      this.#graph ?? {},
       { showTriangulation: this.showTriangulation })
   });
 
   elementArrays: ElementArray[] = $derived.by(() => {
     if (!this.viewport.gl) { return []; }
-    const structural = this.viewport.embedding?.graphUpdate.structural;
+    const internalUpdate = this.#graphDidLoad;
     const reset = this.viewport.embedding?.graphUpdate.reset;
-    console.log("elementArrays: deriving new vertex arrays");
+    const structural = this.viewport.embedding?.graphUpdate.structural;
+    // console.log("FOLDED_FORM_FACES: elementArrays: deriving new vertex arrays");
     return makeFoldedElementArrays(
       this.viewport.gl,
       this.viewport.version,
-      this.graph ?? {});
+      this.#graph ?? {});
   });
 
-  flags: number[] = $derived.by(() => this.viewport.gl
-    ? [this.viewport.gl.DEPTH_TEST]
-    : []);
+  // enable DEPTH_TEST only if embedding has a layer order
+  flags: number[] = $derived.by(() => {
+    if (!this.viewport.gl) { return []; }
+    return this.viewport.embedding?.attributes.hasLayerOrder
+      ? [this.viewport.gl.DEPTH_TEST]
+      : [];
+  });
 
-  uniformInputs = $derived.by(() => ({
+  #uniformInputs = $derived.by(() => ({
     projectionMatrix: this.viewport.view.projection,
     modelViewMatrix: this.viewport.view.modelView,
     frontColor: this.viewport.style.frontColor,
@@ -84,86 +97,40 @@ export class FoldedFormFaces implements GLModel {
     // canvas: this.viewport.domElement,
   }));
 
-  uniforms = $derived(makeUniforms(this.uniformInputs));
-
-  // reactive update object
-  modelUpdate: object = $state({ reset: true });
+  uniforms = $derived(makeUniforms(this.#uniformInputs));
 
   constructor(viewport: WebGLViewport) {
     this.viewport = viewport;
-
-    if (this.viewport.embedding?.graph) {
-      console.log("constructor() loading initial graph and setting vertex arrays");
-      // this.graph = this.#loadGraph(this.viewport.embedding?.graph);
-      this.graph = prepareForRendering(
-        this.viewport.embedding?.graph ?? {},
-        { earcut, layerNudge: this.viewport.style.layersNudge },
-      );
-    }
-
-    this.effects = [
+    this.#effects = [
       this.#deleteVertexArrays(),
       this.#deleteElementArrays(),
       this.#deleteProgram(),
-      this.#effectSetGraph(),
+      this.#effectLoadGraph(),
       this.#effectUpdateVertexBuffers(),
     ];
-
-    this.modelUpdate = { reset: true };
   }
 
   dealloc(): void {
-    this.effects.forEach((cleanup) => cleanup());
+    this.#effects.forEach((cleanup) => cleanup());
   }
 
-  // #loadGraph(graph: FOLD): FOLD {
-  //   return prepareForRendering(
-  //     graph,
-  //     { earcut, layerNudge: this.viewport.style.layersNudge },
-  //   );
-  // }
-
-  #constructVertexArrays(graph: FOLD): VertexArray[] {
-    if (!this.viewport.gl || !this.program) { return []; }
-    return makeFoldedVertexArrays(
-      this.viewport.gl,
-      this.program,
-      graph,
-      { showTriangulation: this.showTriangulation });
-  }
-
-  #deallocVertexArrays(): void {
-    if (!this.viewport.gl || !this.vertexArrays) { return; }
-    this.vertexArrays.forEach(v => v.buffer && this.viewport.gl?.deleteBuffer(v.buffer));
-    this.vertexArrays = [];
-  }
-
-  #constructElementArrays(graph: FOLD): ElementArray[] {
-    if (!this.viewport.gl) { return []; }
-    return makeFoldedElementArrays(
-      this.viewport.gl,
-      this.viewport.version,
-      graph);
-  }
-
-  #deallocElementArrays(): void {
-    if (!this.viewport.gl) { return; }
-    this.elementArrays.forEach(e => e.buffer && this.viewport.gl?.deleteBuffer(e.buffer));
-    this.elementArrays = [];
-  }
-
-  #effectSetGraph(): () => void {
+  // triggered by:
+  // - some of the graph updates
+  // - this.viewport.embedding?.graph ($derived)
+  // - this.viewport.style.layersNudge
+  #effectLoadGraph(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const structural = this.viewport.embedding?.graphUpdate.structural;
+        // console.log("FoldedFormFaces: effectLoadGraph()")
         const reset = this.viewport.embedding?.graphUpdate.reset;
-        console.log("effect: setting new graph");
-        // this.graph = this.#loadGraph(this.viewport.embedding?.graph ?? {});
-        this.graph = prepareForRendering(
+        const structural = this.viewport.embedding?.graphUpdate.structural;
+        const { graph, vertices_map } = prepareForRendering(
           this.viewport.embedding?.graph ?? {},
           { earcut, layerNudge: this.viewport.style.layersNudge },
         );
-        this.modelUpdate = { reset: true };
+        this.#vertices_map = vertices_map;
+        this.#graph = graph;
+        this.#graphDidLoad++;
       });
       return () => { };
     });
@@ -174,27 +141,49 @@ export class FoldedFormFaces implements GLModel {
       $effect(() => {
         const watch = this.viewport.embedding?.graphUpdate.isomorphic.coords;
         untrack(() => {
-          const vertices_coords = this.graph.vertices_coords;
-          // const vertices_coords = this.viewport.embedding?.graph?.vertices_coords;
-          if (!vertices_coords) { return; }
-          const data = this.vertexArrays[0]?.data;
-          if (!data) { return; }
-          vertices_coords
-            .map((coord) => [coord[0] ?? 0, coord[1] ?? 0, coord[2] ?? 0])
-            .forEach((coords, i) => {
-              data[i * 3 + 0] = coords[0];
-              data[i * 3 + 1] = coords[1];
-              data[i * 3 + 2] = coords[2];
+          // this follows a similar formula to the "set graph effect",
+          // we grab the graph from the embedding (not from the local copy),
+          // using the translation maps that were created when the graph was
+          // prepared for rendering, update the (rendered) graph's coordinates
+          // referencing the corresponding indices in the source graph via the maps.
+
+          const graph = this.viewport.embedding?.graph ?? {};
+          const positions = this.vertexArrays[0]?.data;
+          const normals = this.vertexArrays[1]?.data;
+          const dimension = this.vertexArrays[0]?.length ?? 3;
+          if (!positions || !graph.vertices_coords) { return; }
+
+          // either [0, 1] or [0, 1, 2] for 2D or 3D
+          const indices = Array.from(Array(dimension)).map((_, i) => i);
+
+          // ensure vertices coords are 2D or 3D, fill with 0 if needed
+          const vertices_coords = graph.vertices_coords
+            .map((coord) => indices.map(i => coord[i] ?? 0));
+
+          this.#vertices_map.forEach((oldI, newI) => {
+            indices.forEach(i => {
+              positions[newI * dimension + i] = vertices_coords[oldI][i];
             });
-          // console.log("updating vertex buffer", vertices_coords.length, data[0], data[1], data[2]);
-          // this.vertexArrays[0].data = new Float32Array(vertices_coords3.flat());
-          // const vertices_normal = makeVerticesNormal({
-          //   vertices_coords: vertices_coords3,
-          //   faces_vertices: this.graph.faces_vertices,
-          //   faces_normal,
-          // });
+          });
+
+          const vertices_coords3 = dimension === 3
+            ? vertices_coords
+            : vertices_coords.map(([x, y]) => [x, y, 0]);
+
+          const vertices_normal = makeVerticesNormal({
+            vertices_coords: vertices_coords3,
+            faces_vertices: graph.faces_vertices,
+          });
+
+          this.#vertices_map.forEach((oldI, newI) => {
+            indices.forEach(i => {
+              normals[newI * dimension + i] = vertices_normal[oldI][i];
+            });
+          });
         });
-        this.modelUpdate = { vertexBuffers: true };
+        // this will trigger a re-draw
+        // this is the reactive object which the draw method is watching
+        this.vertexArrays = [...this.vertexArrays];
       });
       // empty
       return () => { };

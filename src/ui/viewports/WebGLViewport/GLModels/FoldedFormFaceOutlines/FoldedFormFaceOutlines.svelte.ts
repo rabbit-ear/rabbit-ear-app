@@ -17,32 +17,17 @@ import type { FOLD } from "rabbit-ear/types.js";
 export class FoldedFormFaceOutlines implements GLModel {
   viewport: WebGLViewport;
 
-  constructor(viewport: WebGLViewport) {
-    this.viewport = viewport;
-    this.effects = [
-      this.#deleteProgram(),
-      this.#deleteVertexArrays(),
-      this.#deleteElementArrays(),
-    ];
-  }
-
-  dealloc(): void {
-    this.effects.forEach((cleanup) => cleanup());
-  }
-
   showTriangulation?: boolean = $state(false);
 
-  // gotta use this one
-  // this makes an "exploded" FOLD graph
-  // graph: FOLD = $derived.by(() => prepareForRendering(
-  //   this.viewport.embedding?.graph ?? {},
-  //   { earcut, layerNudge: this.viewport.style.layersNudge },
-  // ));
-  graph: FOLD = $derived.by(() => prepareForRendering(
-    this.viewport.embedding?.graph ?? {},
-    { earcut, layerNudge: this.viewport.style.layersNudge },
-    this.viewport.embedding?.graphUpdate,
-  ));
+  // the source graph on the embedding will be processed before being set to here.
+  // these two graphs are not isomorphic (source and this one for rendering).
+  // (faces will be triangulated and exploded and cuts will be processed)
+  #graph: FOLD = {};
+
+  // used internally to this class only.
+  // when this.graph has been updated, this will increment.
+  // the arrays (vertex, element) will rebuild if this changes
+  #graphDidLoad: number = $state(0);
 
   program: WebGLProgram | undefined = $derived.by(() => {
     if (!this.viewport.gl) { return undefined; }
@@ -59,26 +44,40 @@ export class FoldedFormFaceOutlines implements GLModel {
     }
   });
 
-  vertexArrays: VertexArray[] = $derived.by(() => this.viewport.gl && this.program
-    ? makeFoldedVertexArrays(
+  vertexArrays: VertexArray[] = $derived.by(() => {
+    if (!this.viewport.gl || !this.program) { return []; }
+    const internalUpdate = this.#graphDidLoad;
+    const reset = this.viewport.embedding?.graphUpdate.reset;
+    const structural = this.viewport.embedding?.graphUpdate.structural;
+    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    return makeFoldedVertexArrays(
       this.viewport.gl,
       this.program,
-      this.viewport.embedding?.graphUpdate ? (this.graph ?? {}) : {},
+      this.#graph ?? {},
       { showTriangulation: this.showTriangulation })
-    : []);
+  });
 
-  elementArrays: ElementArray[] = $derived.by(() => this.viewport.gl
-    ? makeFoldedElementArrays(
+  elementArrays: ElementArray[] = $derived.by(() => {
+    if (!this.viewport.gl) { return []; }
+    const internalUpdate = this.#graphDidLoad;
+    const reset = this.viewport.embedding?.graphUpdate.reset;
+    const structural = this.viewport.embedding?.graphUpdate.structural;
+    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    return makeFoldedElementArrays(
       this.viewport.gl,
       this.viewport.version,
-      this.viewport.embedding?.graphUpdate ? (this.graph ?? {}) : {})
-    : []);
+      this.#graph ?? {});
+  });
 
-  flags: number[] = $derived.by(() => this.viewport.gl
-    ? [this.viewport.gl.DEPTH_TEST]
-    : []);
+  // enable DEPTH_TEST only if embedding has a layer order
+  flags: number[] = $derived.by(() => {
+    if (!this.viewport.gl) { return []; }
+    return this.viewport.embedding?.attributes.hasLayerOrder
+      ? [this.viewport.gl.DEPTH_TEST]
+      : [];
+  });
 
-  uniformInputs = $derived.by(() => ({
+  #uniformInputs = $derived.by(() => ({
     projectionMatrix: this.viewport.view.projection,
     modelViewMatrix: this.viewport.view.modelView,
     frontColor: this.viewport.style.frontColor,
@@ -89,14 +88,48 @@ export class FoldedFormFaceOutlines implements GLModel {
     // canvas: this.viewport.domElement,
   }));
 
-  uniforms = $derived(makeUniforms(this.uniformInputs));
+  uniforms = $derived(makeUniforms(this.#uniformInputs));
 
-  effects: (() => void)[];
+  #effects: (() => void)[];
+
+  constructor(viewport: WebGLViewport) {
+    this.viewport = viewport;
+    this.#effects = [
+      this.#deleteProgram(),
+      this.#deleteVertexArrays(),
+      this.#deleteElementArrays(),
+      this.#effectLoadGraph(),
+    ];
+  }
+
+  dealloc(): void {
+    this.#effects.forEach((cleanup) => cleanup());
+  }
+
+  // triggered by:
+  // - any of the graph updates
+  // - this.viewport.embedding?.graph ($derived)
+  // - this.viewport.style.layersNudge
+  #effectLoadGraph(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const reset = this.viewport.embedding?.graphUpdate.reset;
+        const structural = this.viewport.embedding?.graphUpdate.structural;
+        const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+        this.#graph = prepareForRendering(
+          this.viewport.embedding?.graph ?? {},
+          { earcut, layerNudge: this.viewport.style.layersNudge },
+        );
+        this.#graphDidLoad++;
+      });
+      return () => { };
+    });
+  }
 
   #deleteProgram(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const program = this.program;
+        const _ = this.program;
       });
       return () => {
         if (this.program && this.viewport.gl) {
@@ -109,7 +142,7 @@ export class FoldedFormFaceOutlines implements GLModel {
   #deleteVertexArrays(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const vas = this.vertexArrays;
+        const _ = this.vertexArrays;
       });
       return () => {
         if (this.viewport.gl) {
@@ -122,7 +155,7 @@ export class FoldedFormFaceOutlines implements GLModel {
   #deleteElementArrays(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const eas = this.elementArrays;
+        const _ = this.elementArrays;
       });
       return () => {
         if (this.viewport.gl) {

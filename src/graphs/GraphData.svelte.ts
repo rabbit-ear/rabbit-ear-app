@@ -75,6 +75,8 @@ export class GraphData {
   get foldedForm(): Embedding { return this.folded; }
   get sim(): Embedding { return this.simulator; }
 
+  #effects: (() => void)[] = [];
+
   constructor(fold: FOLD) {
     this.metadata = getFileMetadata(fold);
     this.#source = getFileFramesAsArray(fold);
@@ -83,12 +85,15 @@ export class GraphData {
     this.cp = new CreasePattern(this);
     this.folded = new FoldedForm(this);
     this.simulator = new Simulator(this);
+
+    this.#effects = [];
   }
 
   dealloc(): void {
     this.cp.dealloc();
     this.folded.dealloc();
     this.simulator.dealloc();
+    this.#effects.forEach(fn => fn());
   }
 
   export(): FOLD {

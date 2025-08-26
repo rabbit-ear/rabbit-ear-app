@@ -1,12 +1,16 @@
 <script lang="ts">
-  const { edgeInfo, graph } = $props();
+  import type { FOLD } from "rabbit-ear/types.js";
+
+  const { edgeInfo, graph }: { edgeInfo: any; graph: FOLD } = $props();
 
   const exists = $derived(edgeInfo?.index !== undefined);
   const edge = $derived(edgeInfo?.index);
-  const coords = $derived(edgeInfo?.coords);
+  // const coords = $derived(edgeInfo?.coords);
   const vertices = $derived(graph?.edges_vertices?.[edge]);
   const assignment = $derived(graph?.edges_assignment?.[edge]);
-  const foldAngle = $derived(graph?.foldAngle?.[edge]);
+  const foldAngle = $derived(graph?.edges_foldAngle?.[edge]);
+
+  const verticesString = $derived((vertices ?? []).join(", "));
 </script>
 
 {#if exists}
@@ -23,7 +27,7 @@
       <input type="number" value={foldAngle} />
     </div>
     <div class="flex-row gap">
-      <p>vertices: <span class="strong">{vertices.join(", ")}</span></p>
+      <p>vertices: <span class="strong">{verticesString}</span></p>
     </div>
   </div>
 {/if}

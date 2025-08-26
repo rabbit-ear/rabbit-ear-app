@@ -46,13 +46,15 @@ export class WebGLViewport implements Viewport {
     this.view = new WebGLView(this);
     this.style = new Style(this);
     this.glModels = new GLModels(this);
-    this.effects = [this.#modelStyleEffect()];
+    this.effects = [
+      this.#modelStyleEffect(),
+    ];
     // this.setModelStyle(this.model.style);
   }
 
   setModelStyle(modelStyle: FrameAttributes | undefined): void {
     if (!modelStyle) { return; }
-    console.log("WebGLViewport() setModelStyle");
+    // console.log("WebGLViewport() setModelStyle");
 
     // render style is either: creasePattern, foldedForm, translucent
     if (modelStyle.isFoldedForm) {
@@ -70,7 +72,7 @@ export class WebGLViewport implements Viewport {
 
   #modelStyleEffect(): () => void {
     return $effect.root(() => {
-      console.log("WebGLViewport() setModelStyle $effect");
+      // console.log("WebGLViewport() setModelStyle $effect");
       $effect(() => { this.setModelStyle(this.embedding?.attributes); });
       // empty
       return () => { };

@@ -33,7 +33,6 @@ export class CreasePattern implements Embedding {
   setGraph(newGraph: FOLD | undefined) {
     this.graph = newGraph;
     this.graphUpdate.reset++;
-    console.log("CP: Setting graph, triggering graph update");
   }
 
   get snapPoints(): [number, number][] {

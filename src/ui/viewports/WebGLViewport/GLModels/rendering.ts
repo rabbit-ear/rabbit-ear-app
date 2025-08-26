@@ -1,3 +1,4 @@
+import type { FOLD } from "rabbit-ear/types.js";
 import { scale3, add3, resize3 } from "rabbit-ear/math/vector.js";
 import { invertMatrix4, multiplyMatrix4Vector3 } from "rabbit-ear/math/matrix4.js";
 import { clone } from "rabbit-ear/general/clone.js";
@@ -27,9 +28,9 @@ const LAYER_NUDGE = 5e-6;
  * @returns {FOLD} a copy of the input FOLD graph, with exploded faces
  */
 export const prepareForRenderingWithCycles = (
-  inputGraph,
-  { earcut, layerNudge } = {},
-) => {
+  inputGraph: FOLD,
+  { earcut, layerNudge }: { earcut?: any, layerNudge?: number } = {},
+): { graph: FOLD, vertices_map: number[] } => {
   const graph = clone(inputGraph);
   const {
     // planes,
@@ -39,7 +40,10 @@ export const prepareForRenderingWithCycles = (
     // faces_winding,
   } = getFacesPlane(graph);
   if (!graph.faceOrders) {
-    return triangulate(graph, earcut).result;
+    return {
+      graph: triangulate(graph, earcut).result,
+      vertices_map: (graph.vertices_coords ?? []).map((_, i) => i),
+    };
   }
   const planes_inverseTransform = planes_transform.map(invertMatrix4);
 
@@ -87,7 +91,8 @@ export const prepareForRenderingWithCycles = (
 
   const planes_graphExploded = planes_triangulatedVerbose
     .map(({ result }) => result)
-    .map(explodeFaces);
+    .map(explodeFaces)
+    .map(res => res.graph);
 
   planes_triangulatedVerbose.forEach(({ changes }, p) => {
     const backmap = invertArrayToFlatMap(changes.faces.map);
@@ -122,13 +127,17 @@ export const prepareForRenderingWithCycles = (
     });
   }
 
-  return planes_graphExploded[0];
+  return {
+    graph: planes_graphExploded[0],
+    // todo: needs vertices_map
+    vertices_map: [],
+  };
 };
 
 export const prepareForRendering = (
   inputGraph: FOLD,
   { earcut, layerNudge = LAYER_NUDGE } = {},
-) => {
+): { graph: FOLD, vertices_map: number[] } => {
   // todo: remove the structured clone as long as everything is working.
   // update: shallow copy is not working. the input parameter is still modified.
   const graph = clone(inputGraph);
@@ -147,7 +156,11 @@ export const prepareForRendering = (
   // if no faceOrders exist, all we need to do is triangulate the graph
   // and return the modified copy.
   if (!graph.faceOrders) {
-    return explodeFaces(triangulate(graph, earcut).result);
+    const { graph: result, vertices_map } = explodeFaces(triangulate(graph, earcut).result);
+    return {
+      graph: result,
+      vertices_map,
+    };
   }
 
   // figure out as soon as possible whether or not this graph contains cycles
@@ -163,9 +176,11 @@ export const prepareForRendering = (
   // use face information to match data.
   const { changes, result: triangulated } = triangulate(graph, earcut);
 
+  console.log("Rendering changes, due to triangulation", changes);
+
   // explode will modify edges and vertices.
   // we don't need the return information for anything just yet.
-  const exploded = explodeFaces(triangulated);
+  const exploded = explodeFaces(triangulated).graph;
   // Object.assign(changes, change2);
 
   if (changes.faces) {
@@ -182,6 +197,6 @@ export const prepareForRendering = (
     });
   }
 
-  return exploded;
+  return { graph: exploded, vertices_map: [] };
 };
 
