@@ -82,21 +82,23 @@ export class KeyboardManager {
 
   #checkActions(event: KeyboardEvent): void {
     if (!this.#activeKeymap) return;
-    // console.log(this.#keys);
-    // console.log(this.#keyCombination);
-    // const actions = this.activeKeymap.comboMap.get(this.#keyCombination);
-    // if (actions) actions.forEach(handler => handler());
-    for (const [action, combo] of this.#activeKeymap.bindings.entries()) {
-      // const active = combo.every((k) => this.#keys.has(k));
-      const active = combo.every((k) => this.#keys[k]);
-      if (!active) { continue; }
-      this.#activeKeymap.listeners.get(action)
-        ?.forEach(handler => handler(event));
+    // this will potentially match with multiple definitions.
+    // pressing CMD+SHIFT+Z (redo) will still also match with CMD+Z (undo)
+    // we want the one with the longest sequence of keys.
+    const match = Array.from(this.#activeKeymap.bindings.entries())
+      .map(([action, combo]) => ({ action, combo }))
+      .filter(({ combo }) => combo.every(k => this.#keys[k]))
+      .sort((a, b) => a.combo.length - b.combo.length)
+      .pop();
+
+    if (match) {
+      this.#activeKeymap.listeners.get(match.action)?.forEach(handler => handler(event));
     }
   }
 
   #normalize(key: string): string {
     if (key === " ") return "Space";
+    if (key === "Meta") return "Command";
     if (key.length === 1) return key.toUpperCase();
     return key;
   }

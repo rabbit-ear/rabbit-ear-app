@@ -32,24 +32,49 @@ export const defaultAppSetup = () => {
   const keyboard = context.keyboardManager;
   keyboard.createKeymap("meshMode");
   keyboard.createKeymap("rulerMode");
+
   // same key bindings in different keymaps
+  keyboard.bind("meshMode", "undo", ["Command", "Z"]);
+  keyboard.bind("meshMode", "redo", ["Command", "Shift", "Z"]);
   keyboard.bind("meshMode", "swapMode", ["Tab"]);
   keyboard.bind("meshMode", "grabObject", ["G"]);
   keyboard.bind("meshMode", "rotateObject", ["R"]);
+
+  keyboard.bind("rulerMode", "undo", ["Command", "Z"]);
+  keyboard.bind("rulerMode", "redo", ["Command", "Shift", "Z"]);
   keyboard.bind("rulerMode", "swapMode", ["Tab"]);
   keyboard.bind("rulerMode", "grabVertex", ["G"]);
   keyboard.bind("rulerMode", "extrudeVertex", ["E"]);
+
   // define the handlers
+  keyboard.on("meshMode", "undo", (e?: KeyboardEvent) => {
+    e?.preventDefault();
+    context.fileManager.document?.undo();
+  });
+  keyboard.on("meshMode", "redo", (e?: KeyboardEvent) => {
+    e?.preventDefault();
+    context.fileManager.document?.redo();
+  });
   keyboard.on("meshMode", "grabObject", () => console.log("Grab object:"));
   keyboard.on("meshMode", "rotateObject", () => console.log("Rotate object:"));
+
+  keyboard.on("rulerMode", "undo", (e?: KeyboardEvent) => {
+    e?.preventDefault();
+    context.fileManager.document?.undo();
+  });
+  keyboard.on("rulerMode", "redo", (e?: KeyboardEvent) => {
+    e?.preventDefault();
+    context.fileManager.document?.redo();
+  });
   keyboard.on("rulerMode", "grabVertex", () => console.log("Grab vertex:"));
   keyboard.on("rulerMode", "extrudeVertex", () => console.log("Extrude vertex:"));
-  keyboard.on("meshMode", "swapMode", (event: KeyboardEvent) => {
-    event.preventDefault();
+
+  keyboard.on("meshMode", "swapMode", (event?: KeyboardEvent) => {
+    event?.preventDefault();
     context.ui.settings.mode = UIMode.ruler;
   });
-  keyboard.on("rulerMode", "swapMode", (event: KeyboardEvent) => {
-    event.preventDefault();
+  keyboard.on("rulerMode", "swapMode", (event?: KeyboardEvent) => {
+    event?.preventDefault();
     context.ui.settings.mode = UIMode.mesh;
   });
   keyboard.setActiveKeymap("meshMode");

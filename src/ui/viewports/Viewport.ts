@@ -39,7 +39,8 @@ export abstract class Viewport {
   abstract embeddingName?: string;
 
   // force the screen to re-calculate window bounds. used when viewports are added/removed
-  // abstract redraw?: () => void;
+  // this is currently used (and necessary) in the WebGL but not SVG viewports.
+  abstract redraw?: () => void;
 
   // called when removed from the screen
   abstract dealloc: () => void;

@@ -94,9 +94,9 @@ export class SVGState implements ToolEvents {
     const point = getSVGViewportPoint(viewport, [clientX, clientY]);
     // const panel = (this.viewport.constructor as typeof SVGViewport).settings;
     // panel.cursor = point;
-    return context.keyboardManager.shift
-      ? wheelEventZoomMatrix(this.viewport, { point, deltaY })
-      : wheelPanMatrix(this.viewport, { deltaX, deltaY });
+    return context.keyboardManager.command || context.keyboardManager.control
+      ? wheelPanMatrix(this.viewport, { deltaX, deltaY })
+      : wheelEventZoomMatrix(this.viewport, { point, deltaY });
   };
 
 

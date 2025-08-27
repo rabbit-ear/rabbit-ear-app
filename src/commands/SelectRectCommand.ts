@@ -12,21 +12,21 @@ export class SelectRectCommand implements Command {
 
   execute(): void {
     this.previousSelection = this.document.data?.getEmbedding(this.embeddingName)?.selection;
-    this.document.updateClean((_, data): GraphUpdateModifier | undefined => {
+    this.document.updateSource((data): GraphUpdateModifier | undefined => {
       const embedding = data?.getEmbedding(this.embeddingName);
       if (!embedding) { return undefined; }
       embedding.selection = getComponentsInsideRect(embedding.graph ?? {}, this.box);
       return undefined
-    });
+    }, false);
   }
 
   undo(): void {
-    this.document.updateClean((_, data): GraphUpdateModifier | undefined => {
+    this.document.updateSource((data): GraphUpdateModifier | undefined => {
       const embedding = data?.getEmbedding(this.embeddingName);
       if (!embedding) { return undefined; }
       embedding.selection = this.previousSelection;
       return undefined;
-    });
+    }, false);
   }
 
   tryMerge(other: Command): boolean {

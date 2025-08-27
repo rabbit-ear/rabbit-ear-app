@@ -40,10 +40,6 @@ export class FileDocument {
   }
 
   executeCommand(command: Command): void {
-    // if dirty flag is false and command fails to execute,
-    // leave the flag as false, otherwise set to the result of the command;
-    // const result = this.#history.executeCommand(command);
-    // this.#isDirty ||= result;
     this.#history.executeCommand(command);
   }
 
@@ -99,15 +95,13 @@ export class FileDocument {
     }
   }
 
-  // todo: we have two places where the dirty flag is being set
-  // (also in command execute), make sure these work together fine.
-  // it seems like they do
-  update(mutator: (frame: FOLDChildFrame, data?: GraphData) => (GraphUpdateModifier | undefined)) {
-    this.#isDirty = true;
-    return this.#data.mutate(mutator);
+  updateFrame(mutator: (frame: FOLDChildFrame) => (GraphUpdateModifier | undefined), dirty?: boolean) {
+    if (dirty !== false) { this.#isDirty = true; }
+    return this.#data.mutateFrame(mutator);
   }
 
-  updateClean(mutator: (frame: FOLDChildFrame, data?: GraphData) => (GraphUpdateModifier | undefined)) {
-    return this.#data.mutate(mutator);
+  updateSource(mutator: (data: GraphData) => (GraphUpdateModifier | undefined), dirty?: boolean) {
+    if (dirty !== false) { this.#isDirty = true; }
+    return this.#data.mutateSource(mutator);
   }
 }

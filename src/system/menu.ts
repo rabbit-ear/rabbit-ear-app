@@ -6,42 +6,42 @@ import t from "../app/t.ts";
 export const buildMenu = async () => {
   // Will become the application submenu on MacOS
   const aboutSubmenu = await Submenu.new({
-    text: 'About',
+    text: "About",
     items: [
 
       await MenuItem.new({
-        id: 'About',
+        id: "About",
         text: t("menu.About"),
         action: () => { },
       }),
 
       await PredefinedMenuItem.new({
-        text: 'separator-text',
-        item: 'Separator',
+        text: "separator-text",
+        item: "Separator",
       }),
 
       await PredefinedMenuItem.new({
-        text: 'Hide',
-        item: 'Hide',
+        text: "Hide",
+        item: "Hide",
       }),
 
       await PredefinedMenuItem.new({
-        text: 'Separator',
-        item: 'Separator',
+        text: "Separator",
+        item: "Separator",
       }),
 
       await PredefinedMenuItem.new({
-        text: 'Services',
-        item: 'Services',
+        text: "Services",
+        item: "Services",
       }),
 
       await PredefinedMenuItem.new({
-        text: 'separator-text',
-        item: 'Separator',
+        text: "separator-text",
+        item: "Separator",
       }),
 
       await MenuItem.new({
-        id: 'quit',
+        id: "quit",
         text: t("menu.File.Quit"),
         action: quitApp,
         accelerator: "CmdOrCtrl+Q",
@@ -53,7 +53,7 @@ export const buildMenu = async () => {
     text: t("menu.File"),
     items: [
       await MenuItem.new({
-        id: 'new',
+        id: "new",
         text: t("menu.File.New"),
         // action: newFile,
         action: () => context.fileController.newFile(),
@@ -61,7 +61,7 @@ export const buildMenu = async () => {
       }),
 
       await MenuItem.new({
-        id: 'open',
+        id: "open",
         text: t("menu.File.Open"),
         // action: openFile,
         action: () => context.fileController.openFilesWithDialog(),
@@ -69,12 +69,12 @@ export const buildMenu = async () => {
       }),
 
       await PredefinedMenuItem.new({
-        text: 'separator-text',
-        item: 'Separator',
+        text: "separator-text",
+        item: "Separator",
       }),
 
       await MenuItem.new({
-        id: 'save',
+        id: "save",
         text: t("menu.File.Save"),
         // action: saveFile,
         action: () => context.fileController.saveActiveDocument(),
@@ -82,7 +82,7 @@ export const buildMenu = async () => {
       }),
 
       await MenuItem.new({
-        id: 'save_as',
+        id: "save_as",
         text: t("menu.File.SaveAs"),
         // action: saveFileAs,
         action: () => context.fileController.saveActiveDocumentWithSaveAsDialog(),
@@ -94,57 +94,71 @@ export const buildMenu = async () => {
   const editSubmenu = await Submenu.new({
     text: t("menu.Edit"),
     items: [
-      await PredefinedMenuItem.new({
+      // await PredefinedMenuItem.new({
+      //   text: t("menu.Edit.Undo"),
+      //   item: "Undo",
+      // }),
+      //
+      // await PredefinedMenuItem.new({
+      //   text: t("menu.Edit.Redo"),
+      //   item: "Redo",
+      // }),
+
+      await MenuItem.new({
+        id: "undo",
         text: t("menu.Edit.Undo"),
-        item: 'Undo',
+        action: () => context.fileManager.document?.undo(),
+        accelerator: "CmdOrCtrl+Z",
       }),
 
-      await PredefinedMenuItem.new({
+      await MenuItem.new({
+        id: "redo",
         text: t("menu.Edit.Redo"),
-        item: 'Redo',
+        action: () => context.fileManager.document?.redo(),
+        accelerator: "CmdOrCtrl+Shift+Z",
       }),
 
       // await MenuItem.new({
-      //   id: 'undo',
-      //   text: 'Undo',
+      //   id: "undo",
+      //   text: "Undo",
       //   action: () => {
-      //     console.log('Undo clicked');
+      //     console.log("Undo clicked");
       //   },
       //   accelerator: "CmdOrCtrl+Z",
       // }),
 
       // await MenuItem.new({
-      //   id: 'redo',
-      //   text: 'Redo',
+      //   id: "redo",
+      //   text: "Redo",
       //   action: () => {
-      //     console.log('Redo clicked');
+      //     console.log("Redo clicked");
       //   },
       //   accelerator: "CmdOrCtrl+Shift+Z",
       // }),
 
       await PredefinedMenuItem.new({
-        text: 'separator-text',
-        item: 'Separator',
+        text: "separator-text",
+        item: "Separator",
       }),
 
       await PredefinedMenuItem.new({
         text: t("menu.Edit.Cut"),
-        item: 'Cut',
+        item: "Cut",
       }),
 
       await PredefinedMenuItem.new({
         text: t("menu.Edit.Copy"),
-        item: 'Copy',
+        item: "Copy",
       }),
 
       await PredefinedMenuItem.new({
         text: t("menu.Edit.Paste"),
-        item: 'Paste',
+        item: "Paste",
       }),
 
       await PredefinedMenuItem.new({
         text: t("menu.Edit.SelectAll"),
-        item: 'SelectAll',
+        item: "SelectAll",
       }),
     ],
   });

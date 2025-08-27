@@ -22,6 +22,8 @@
 
   let frameStyles = $derived(context.fileManager.document?.data.framesStyle);
 
+  const makeNewFrame = (): void => context.ui.dialogManager.dialogNewFrame?.showModal();
+
   const onclick = (index: number): void => {
     if (!context.fileManager.document) {
       return;
@@ -45,9 +47,19 @@
       {/if}
     </button>
   {/each}
+  <hr />
+  <!-- the new frame button -->
+  <button onclick={makeNewFrame} class="row frame gap-lg">
+    <p class="dim">+</p>
+    <p class="dim">new frame</p>
+  </button>
 </div>
 
 <style>
+  hr {
+    flex: 1 0 auto;
+  }
+
   button {
     all: unset;
     cursor: pointer;
@@ -63,6 +75,14 @@
 
   .strong {
     font-weight: bold;
+  }
+
+  .dim {
+    color: var(--dim);
+  }
+
+  button:hover .dim {
+    color: var(--text);
   }
 
   .gap-sm {
@@ -90,7 +110,8 @@
   }
 
   .frame {
-    height: 2rem;
+    flex: 1 0 auto;
+    height: 1.25rem;
     align-items: center;
     justify-content: start;
     padding: 0.25rem;

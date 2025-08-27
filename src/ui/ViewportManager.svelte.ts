@@ -9,7 +9,7 @@ import Viewports from "./viewports/index.ts";
 type EH = (e: Event) => void;
 
 export class ViewportManager {
-  ui: UI;
+  #ui: UI;
   #effects: (() => void)[] = [];
   viewports: Viewport[] = $state([]);
   viewportEvents: Map<Viewport, { [key: string]: EH }> = new Map();
@@ -24,7 +24,7 @@ export class ViewportManager {
     });
 
   constructor(ui: UI) {
-    this.ui = ui;
+    this.#ui = ui;
     this.#effects = [this.#triggerViewportRedraw()];
     // this.terminal = new TerminalViewport();
   }
@@ -44,7 +44,7 @@ export class ViewportManager {
     } else {
       this.viewports.push(viewport);
     }
-    this.ui.toolManager.viewportDidAdd(viewport);
+    this.#ui.toolManager.viewportDidAdd(viewport);
   }
 
   #instanceViewportWithName(name: string): Viewport | undefined {
@@ -105,17 +105,17 @@ export class ViewportManager {
     this.unbindViewport(viewport);
 
     const events: { [key: string]: EH } = {
-      mousemove: ((e: MouseEvent) => this.ui.toolManager.tool?.onmousemove?.(viewport, e)) as EH,
-      mousedown: ((e: MouseEvent) => this.ui.toolManager.tool?.onmousedown?.(viewport, e)) as EH,
-      mouseup: ((e: MouseEvent) => this.ui.toolManager.tool?.onmouseup?.(viewport, e)) as EH,
-      mouseleave: ((e: MouseEvent) => this.ui.toolManager.tool?.onmouseleave?.(viewport, e)) as EH,
-      wheel: ((e: WheelEvent) => this.ui.toolManager.tool?.onwheel?.(viewport, e)) as EH,
-      touchstart: ((e: TouchEvent) => this.ui.toolManager.tool?.ontouchstart?.(viewport, e)) as EH,
-      touchend: ((e: TouchEvent) => this.ui.toolManager.tool?.ontouchend?.(viewport, e)) as EH,
-      touchmove: ((e: TouchEvent) => this.ui.toolManager.tool?.ontouchmove?.(viewport, e)) as EH,
-      touchcancel: ((e: TouchEvent) => this.ui.toolManager.tool?.ontouchcancel?.(viewport, e)) as EH,
-      keydown: ((e: KeyboardEvent) => this.ui.toolManager.tool?.onkeydown?.(viewport, e)) as EH,
-      keyup: ((e: KeyboardEvent) => this.ui.toolManager.tool?.onkeyup?.(viewport, e)) as EH,
+      mousemove: ((e: MouseEvent) => this.#ui.toolManager.tool?.onmousemove?.(viewport, e)) as EH,
+      mousedown: ((e: MouseEvent) => this.#ui.toolManager.tool?.onmousedown?.(viewport, e)) as EH,
+      mouseup: ((e: MouseEvent) => this.#ui.toolManager.tool?.onmouseup?.(viewport, e)) as EH,
+      mouseleave: ((e: MouseEvent) => this.#ui.toolManager.tool?.onmouseleave?.(viewport, e)) as EH,
+      wheel: ((e: WheelEvent) => this.#ui.toolManager.tool?.onwheel?.(viewport, e)) as EH,
+      touchstart: ((e: TouchEvent) => this.#ui.toolManager.tool?.ontouchstart?.(viewport, e)) as EH,
+      touchend: ((e: TouchEvent) => this.#ui.toolManager.tool?.ontouchend?.(viewport, e)) as EH,
+      touchmove: ((e: TouchEvent) => this.#ui.toolManager.tool?.ontouchmove?.(viewport, e)) as EH,
+      touchcancel: ((e: TouchEvent) => this.#ui.toolManager.tool?.ontouchcancel?.(viewport, e)) as EH,
+      keydown: ((e: KeyboardEvent) => this.#ui.toolManager.tool?.onkeydown?.(viewport, e)) as EH,
+      keyup: ((e: KeyboardEvent) => this.#ui.toolManager.tool?.onkeyup?.(viewport, e)) as EH,
     };
 
     this.viewportEvents.set(viewport, events);

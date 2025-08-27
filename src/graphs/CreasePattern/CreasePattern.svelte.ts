@@ -20,9 +20,9 @@ export class CreasePattern implements Embedding {
   #data: GraphData;
   #effects: (() => void)[];
 
-  vertexBVH = $derived.by(() => VertexBVH(this.#data.frame));
-  edgeBVH = $derived.by(() => EdgeBVH(this.#data.frame));
-  faceBVH = $derived.by(() => FaceBVH(this.#data.frame));
+  #vertexBVH = $derived.by(() => VertexBVH(this.#data.frame));
+  #edgeBVH = $derived.by(() => EdgeBVH(this.#data.frame));
+  #faceBVH = $derived.by(() => FaceBVH(this.#data.frame));
 
   selection?: FOLDSelection;
 
@@ -68,15 +68,15 @@ export class CreasePattern implements Embedding {
   }
 
   nearestVertex(point: [number, number]): VertexBVHType {
-    return this.vertexBVH?.nearest(point);
+    return this.#vertexBVH?.nearest(point);
   }
 
   nearestEdge(point: [number, number]): EdgeBVHType {
-    return this.edgeBVH?.nearest(point);
+    return this.#edgeBVH?.nearest(point);
   }
 
   nearestFace(point: [number, number]): FaceBVHType {
-    return this.faceBVH?.nearest(point);
+    return this.#faceBVH?.nearest(point);
   }
 
   // conditions for updating the graph: 

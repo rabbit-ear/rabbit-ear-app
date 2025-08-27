@@ -14,19 +14,6 @@ import cp_300_frag from "./shaders/cp-300.frag?raw";
 export class CreasePatternFaces implements GLModel {
   viewport: WebGLViewport;
 
-  constructor(viewport: WebGLViewport) {
-    this.viewport = viewport;
-    this.effects = [
-      this.#deleteProgram(),
-      this.#deleteVertexArrays(),
-      this.#deleteElementArrays(),
-    ];
-  }
-
-  dealloc(): void {
-    this.effects.forEach((cleanup) => cleanup());
-  }
-
   program: WebGLProgram | undefined = $derived.by(() => {
     if (!this.viewport.gl) { return undefined; }
     try {
@@ -58,21 +45,34 @@ export class CreasePatternFaces implements GLModel {
 
   flags: number[] = [];
 
-  uniformInputs = $derived.by(() => ({
+  #uniformInputs = $derived.by(() => ({
     projectionMatrix: this.viewport.view.projection,
     modelViewMatrix: this.viewport.view.modelView,
     cpColor: this.viewport.style.cpColor,
     // canvas: this.viewport.domElement,
   }));
 
-  uniforms = $derived(makeUniforms(this.uniformInputs));
+  uniforms = $derived(makeUniforms(this.#uniformInputs));
 
-  effects: (() => void)[];
+  #effects: (() => void)[];
+
+  constructor(viewport: WebGLViewport) {
+    this.viewport = viewport;
+    this.#effects = [
+      this.#deleteProgram(),
+      this.#deleteVertexArrays(),
+      this.#deleteElementArrays(),
+    ];
+  }
+
+  dealloc(): void {
+    this.#effects.forEach((cleanup) => cleanup());
+  }
 
   #deleteProgram(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const program = this.program;
+        const _ = this.program;
       });
       return () => {
         if (this.program && this.viewport.gl) {
@@ -85,7 +85,7 @@ export class CreasePatternFaces implements GLModel {
   #deleteVertexArrays(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const vas = this.vertexArrays;
+        const _ = this.vertexArrays;
       });
       return () => {
         if (this.viewport.gl) {
@@ -98,7 +98,7 @@ export class CreasePatternFaces implements GLModel {
   #deleteElementArrays(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const eas = this.elementArrays;
+        const _ = this.elementArrays;
       });
       return () => {
         if (this.viewport.gl) {

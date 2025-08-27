@@ -4,21 +4,6 @@ import type { Viewport } from "./viewports/Viewport.ts";
 import AppPanels from "./panels/index.ts";
 import t from "../app/t.ts";
 
-// todo: try to replace this with a Set
-// compares their constructors with ===
-export const uniqueObjects = <T>(objs: T[]): T[] => {
-  const result: T[] = [];
-  objs.forEach((view, a) => {
-    for (let b = 0; b < a; b += 1) {
-      if (view.constructor === objs[b].constructor) {
-        return;
-      }
-    }
-    result.push(view);
-  });
-  return result;
-};
-
 type PanelType = { name: string; component: Component; };
 
 export class PanelManager {
@@ -31,16 +16,11 @@ export class PanelManager {
   // these are the static member property "panel"
   // all viewports currently active, but only one instance of each.
   // for example. multiple SVGViewports on screen but will only appear once
-  // viewportPanels: PanelType[] = $derived.by(() => uniqueObjects(this.ui.viewportManager.viewports
-  //   .map(viewport => viewport.constructor as typeof Viewport)
-  //   .map(ViewportClass => ({ name: ViewportClass.name || "", component: ViewportClass.panel }))
-  //   // .map(ViewportClass => ({ name: t(`ui.viewports.${ViewportClass.name}`) || "", component: ViewportClass.panel }))
-  //   .filter(obj => obj.component !== undefined)));
-
-  viewportPanels: PanelType[] = $derived.by(() => this.ui.viewportManager.viewports
-    .map(viewport => viewport.constructor as typeof Viewport)
-    .map(ViewportClass => ({ name: ViewportClass.name || "", component: ViewportClass.panel }))
-    .filter(obj => obj.component !== undefined));
+  viewportPanels: PanelType[] = $derived
+    .by(() => Array.from(new Set(this.ui.viewportManager.viewports
+      .map(viewport => viewport.constructor as typeof Viewport)))
+      .map(ViewportClass => ({ name: ViewportClass.name || "", component: ViewportClass.panel }))
+      .filter(obj => obj.component !== undefined));
 
   toolPanel: PanelType | undefined = $derived.by(() => this.ui.toolManager.tool?.panel
     ? ({
@@ -57,13 +37,12 @@ export class PanelManager {
   // terminalViewportClass: ViewportClassTypes | undefined = $derived.by(
   //   () => this.ui.viewports.terminal?.constructor as ViewportClassTypes,
   // );
-  //
+
   // builtinViewportClasses: ViewportClassTypes[] = $derived.by(() =>
   //   [this.terminalViewportClass].filter((a) => a !== undefined),
   // );
 
-  dealloc(): void {
-    // empty
-  }
+  // empty
+  dealloc(): void { }
 }
 

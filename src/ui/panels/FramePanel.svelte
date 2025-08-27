@@ -51,13 +51,13 @@
 
   let graphBadges = $derived(
     Object.keys(graphArrays)
-      .filter((key) => frame !== undefined && frame[key] != null)
+      .filter((key) => frameRaw !== undefined && frameRaw[key] != null)
       .map((key) => graphArrays[key].map((s: string) => s.toUpperCase()).join("•")),
   );
 
   let attributeBadges = $derived(
     Object.keys(attributeArrays)
-      .filter((key) => frame !== undefined && frame[key] != null)
+      .filter((key) => frameRaw !== undefined && frameRaw[key] != null)
       .map((key) => attributeArrays[key]),
   );
 </script>

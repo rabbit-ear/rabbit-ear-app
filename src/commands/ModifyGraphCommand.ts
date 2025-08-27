@@ -10,19 +10,19 @@ export class ModifyGraphCommand implements Command {
   #previousEntries: FOLD | undefined;
 
   execute(): void {
-    this.document.update((frame) => {
+    this.document.updateFrame((frame) => {
       console.log("inside update function, what is this", this);
-      if (!frame.vertices_coords) { return { modified: false }; }
+      if (!frame.vertices_coords) { return undefined; }
       // this.#previousEntries = ;
-      return { isomorphic: false };
+      return { isomorphic: { coords: true } };
     });
   }
 
   undo(): void {
-    this.document.update((frame) => {
+    this.document.updateFrame((frame) => {
       if (!frame.vertices_coords) { return {}; }
       // frame.vertices_coords[this.vertexIndex] = this.previousCoords;
-      return {};
+      return { isomorphic: { coords: true } };
     });
   }
 

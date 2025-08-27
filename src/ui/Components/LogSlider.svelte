@@ -11,7 +11,7 @@
   let scale = $derived(Math.pow(10, radix));
 
   // ignore any warnings here
-  let sliderValue = $state(Math.log2(value * scale));
+  let sliderValue = $state(Math.log2(value * Math.pow(10, radix)));
 
   $effect(() => {
     value = Math.pow(2, sliderValue) / scale;

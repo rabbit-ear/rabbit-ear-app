@@ -120,20 +120,25 @@ export class GraphData {
   set source(newFrames: FOLDChildFrame[]) { this.#source = newFrames; }
 
   // public facing method. all changes should go through here
-  mutate(mutator: (frame: FOLDChildFrame, data?: GraphData) => (GraphUpdateModifier | undefined)) {
+  // if mutator returns undefined, this implies that no changes were made,
+  // we should not propagate any reactive "did change" signals.
+  mutateFrame(mutator: (frame: FOLDChildFrame) => (GraphUpdateModifier | undefined)) {
     const frame = this.#source[this.frameIndex];
-    const updateModifier = mutator(frame, this);
+    const updateModifier = mutator(frame);
     if (updateModifier) {
       this.#source = [
         ...this.#source.slice(0, this.frameIndex),
         frame,
         ...this.#source.slice(this.frameIndex + 1),
       ];
+      modifyGraphUpdate(this.graphUpdate, updateModifier);
     }
+  }
 
-    // if mutator returns undefined, this implies that no changes were made,
-    // we should not propagate any reactive "did change" signals.
+  mutateSource(mutator: (data: GraphData) => (GraphUpdateModifier | undefined)) {
+    const updateModifier = mutator(this);
     if (updateModifier) {
+      this.#source = [...this.#source];
       modifyGraphUpdate(this.graphUpdate, updateModifier);
     }
   }

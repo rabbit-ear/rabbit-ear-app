@@ -16,24 +16,17 @@ import type { FOLD } from "rabbit-ear/types.js";
 export class FoldedFormEdges implements GLModel {
   viewport: WebGLViewport;
 
-  constructor(viewport: WebGLViewport) {
-    this.viewport = viewport;
-    this.effects = [
-      this.#deleteProgram(),
-      this.#deleteVertexArrays(),
-      this.#deleteElementArrays(),
-    ];
-  }
-
-  dealloc(): void {
-    this.effects.forEach((cleanup) => cleanup());
-  }
-
   showTriangulation?: boolean = $state(false);
 
   // we don't need to explode the graph,
   // the original unmodified is good
-  graph: FOLD = $derived.by(() => this.viewport.embedding?.graph ?? {});
+  // #graph: FOLD = $derived.by(() => this.viewport.embedding?.graph ?? {});
+  #graph: FOLD = {};
+
+  // used internally to this class only.
+  // when this.graph has been updated, this will increment.
+  // the arrays (vertex, element) will rebuild if this changes
+  #graphDidLoad: number = $state(0);
 
   program: WebGLProgram | undefined = $derived.by(() => {
     if (!this.viewport.gl) { return undefined; }
@@ -50,26 +43,36 @@ export class FoldedFormEdges implements GLModel {
     }
   });
 
-  vertexArrays: VertexArray[] = $derived.by(() => this.viewport.gl && this.program
-    ? makeThickEdgesVertexArrays(
+  vertexArrays: VertexArray[] = $derived.by(() => {
+    if (!this.viewport.gl || !this.program) { return []; }
+    const internalUpdate = this.#graphDidLoad;
+    const reset = this.viewport.embedding?.graphUpdate.reset;
+    const structural = this.viewport.embedding?.graphUpdate.structural;
+    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    return makeThickEdgesVertexArrays(
       this.viewport.gl,
       this.program,
-      this.graph ?? {},
-      { assignment_color: this.viewport.style.darkMode ? { ...dark } : { ...light } })
-    : []);
+      this.#graph ?? {},
+      { assignment_color: this.viewport.style.darkMode ? { ...dark } : { ...light } });
+  });
 
-  elementArrays: ElementArray[] = $derived.by(() => this.viewport.gl
-    ? makeThickEdgesElementArrays(
+  elementArrays: ElementArray[] = $derived.by(() => {
+    if (!this.viewport.gl) { return []; }
+    const internalUpdate = this.#graphDidLoad;
+    const reset = this.viewport.embedding?.graphUpdate.reset;
+    const structural = this.viewport.embedding?.graphUpdate.structural;
+    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    return makeThickEdgesElementArrays(
       this.viewport.gl,
       this.viewport.version,
-      this.graph ?? {})
-    : []);
+      this.#graph ?? {});
+  });
 
   flags: number[] = $derived.by(() => this.viewport.gl
     ? [this.viewport.gl.DEPTH_TEST]
     : []);
 
-  uniformInputs = $derived.by(() => ({
+  #uniformInputs = $derived.by(() => ({
     projectionMatrix: this.viewport.view.projection,
     modelViewMatrix: this.viewport.view.modelView,
     frontColor: this.viewport.style.frontColor,
@@ -80,14 +83,45 @@ export class FoldedFormEdges implements GLModel {
     // canvas: this.viewport.domElement,
   }));
 
-  uniforms = $derived(makeUniforms(this.uniformInputs));
+  uniforms = $derived(makeUniforms(this.#uniformInputs));
 
-  effects: (() => void)[];
+  #effects: (() => void)[];
+
+  constructor(viewport: WebGLViewport) {
+    this.viewport = viewport;
+    this.#effects = [
+      this.#deleteProgram(),
+      this.#deleteVertexArrays(),
+      this.#deleteElementArrays(),
+      this.#effectLoadGraph(),
+    ];
+  }
+
+  dealloc(): void {
+    this.#effects.forEach((cleanup) => cleanup());
+  }
+
+  // triggered by:
+  // - any of the graph updates
+  // - this.viewport.embedding?.graph ($derived)
+  // - this.viewport.style.layersNudge
+  #effectLoadGraph(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const reset = this.viewport.embedding?.graphUpdate.reset;
+        const structural = this.viewport.embedding?.graphUpdate.structural;
+        const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+        this.#graph = this.viewport.embedding?.graph ?? {};
+        this.#graphDidLoad++;
+      });
+      return () => { };
+    });
+  }
 
   #deleteProgram(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const program = this.program;
+        const _ = this.program;
       });
       return () => {
         if (this.program && this.viewport.gl) {
@@ -100,7 +134,7 @@ export class FoldedFormEdges implements GLModel {
   #deleteVertexArrays(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const vas = this.vertexArrays;
+        const _ = this.vertexArrays;
       });
       return () => {
         if (this.viewport.gl) {
@@ -113,7 +147,7 @@ export class FoldedFormEdges implements GLModel {
   #deleteElementArrays(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const eas = this.elementArrays;
+        const _ = this.elementArrays;
       });
       return () => {
         if (this.viewport.gl) {

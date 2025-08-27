@@ -1,4 +1,5 @@
 import { ViewportManager } from "./ViewportManager.svelte.ts";
+import { DialogManager } from "./DialogManager.svelte.ts";
 import { ToolManager } from "./ToolManager.svelte.ts";
 import { PanelManager } from "./PanelManager.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
@@ -7,6 +8,7 @@ import context from "../app/context.svelte.ts";
 
 export class UI {
   viewportManager: ViewportManager;
+  dialogManager: DialogManager;
   toolManager: ToolManager;
   panelManager: PanelManager;
   settings: Settings;
@@ -15,6 +17,7 @@ export class UI {
 
   constructor() {
     this.viewportManager = new ViewportManager(this);
+    this.dialogManager = new DialogManager();
     this.toolManager = new ToolManager(this);
     this.panelManager = new PanelManager(this);
     this.settings = new Settings();
@@ -25,6 +28,7 @@ export class UI {
   // re-initialize itself, we would call this method to cleanup the hanging effect.
   dealloc(): void {
     this.viewportManager.dealloc();
+    // this.dialogManager.dealloc();
     this.panelManager.dealloc();
     this.toolManager.dealloc();
     this.#effects.forEach(fn => fn());

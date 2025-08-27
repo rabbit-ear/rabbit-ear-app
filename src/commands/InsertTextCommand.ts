@@ -8,17 +8,17 @@ export class InsertTextCommand implements Command {
 
   execute(): void {
     this.previousText = this.document.data?.text;
-    this.document.update((data) => {
-      data.text =
-        data.text.slice(0, this.position) +
+    this.document.updateFrame((frame) => {
+      frame.text =
+        frame.text.slice(0, this.position) +
         this.text +
-        data.text.slice(this.position);
+        frame.text.slice(this.position);
     });
   }
 
   undo(): void {
-    this.document.update((data) => {
-      data.text = this.previousText;
+    this.document.updateFrame((frame) => {
+      frame.text = this.previousText;
     });
   }
 

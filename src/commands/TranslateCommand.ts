@@ -15,29 +15,32 @@ export class SelectRectCommand implements Command {
   execute(): void {
     // this.previousVerticesCoords = this.document.data?.getEmbedding(this.embeddingName)?.graph?.vertices_coords;
     this.previousVerticesCoords = this.document.data?.frame.vertices_coords;
-    this.document.update((data) => {
+    this.document.updateFrame((frame) => {
       // const embedding = data.getEmbedding(this.embeddingName);
       // if (!embedding) { return; }
       const translation3 = resize3(this.translation);
-      if (!data.frame.vertices_coords) { return; }
-      switch (data.frameAttributes.dimension) {
+      if (!frame.vertices_coords) { return undefined; }
+      const dimension = data?.frameAttributes.dimension ?? frame.vertices_coords[0]?.length;
+      switch (dimension) {
         case 2:
-          data.frame.vertices_coords = data.frame.vertices_coords
+          frame.vertices_coords = frame.vertices_coords
             .map(coords => add2(coords, this.translation));
           break;
         case 3:
-          data.frame.vertices_coords = data.frame.vertices_coords
+          frame.vertices_coords = frame.vertices_coords
             .map(coords => add3(coords as [number, number, number], translation3));
           break;
       }
+      return { isomorphic: { coords: true } };
     });
   }
 
   undo(): void {
-    this.document.update((data) => {
+    this.document.updateFrame((frame) => {
       // const embedding = data.getEmbedding(this.embeddingName);
       // if (!embedding) { return; }
-      data.frame.vertices_coords = this.previousVerticesCoords;
+      frame.vertices_coords = this.previousVerticesCoords;
+      return { isomorphic: { coords: true } };
     });
   }
 
