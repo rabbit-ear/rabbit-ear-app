@@ -5,12 +5,17 @@ import type { GraphUpdateEvent, GraphUpdateModifier } from "./Updated.ts";
 import { makeGraphUpdateEvent, modifyGraphUpdate } from "./Updated.ts";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
-import { reassembleFramesToFOLD, makeFlatFramesFromFrames } from "../general/fold.ts";
+import {
+  reassembleFramesToFOLD,
+  makeFlatFramesFromFrames,
+  prepareFOLDNonSpecData,
+} from "../general/fold.ts";
 import { makeFrameAttributes } from "./FrameAttributes.ts";
 import { CreasePattern } from "./CreasePattern/CreasePattern.svelte.ts";
 import { FoldedForm } from "./FoldedForm/FoldedForm.svelte.ts";
 import { Simulator } from "./Simulator/Simulator.svelte.ts";
 import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
+import { Frame } from "./Frame.ts";
 
 export class GraphData {
   metadata: FOLDFileMetadata = $state({});
@@ -25,21 +30,28 @@ export class GraphData {
   // get metadata(): FOLDFileMetadata { return this.#metadata; }
   // set metadata(data: FOLDFileMetadata) { this.#metadata = data; }
 
+  Frame: Frame = $derived.by(() => new Frame(this.#source, this.frameIndex));
+  // Frames: Frame[] = $derived.by(() => this.#source
+  //   .map((_, i, array) => new Frame(array, i)));
+
   // some frames inherit from a parent and need to be "collapsed" to be render-able.
   // this is a list of all of the frames, collapsed, and in their "final form",
   // frames: FOLD[] = $derived(makeFlatFramesFromFrames($state.snapshot(this.#source)));
-  frames: FOLD[] = $derived(makeFlatFramesFromFrames(this.#source));
+  // #frames: FOLD[] = $derived(makeFlatFramesFromFrames(this.#source));
 
   // which frame is currently selected by the app for rendering/modification
-  frame: FOLD = $derived.by(() => this.frames[this.frameIndex]);
+  // frame: FOLD = $derived.by(() => this.#frames[this.frameIndex]);
+  get frame(): FOLD { return this.Frame.baked; }
 
   // which frame is currently selected by the app for rendering/modification
   // taken from the "raw" frames (not collapsed if inherits from a parent)
   frameRaw: FOLDChildFrame = $derived.by(() => this.#source[this.frameIndex]);
 
   // style-related properties for every frame, like is it 2D, folded, etc..
-  framesAttributes: FrameAttributes[] = $derived.by(() => this.frames.map(makeFrameAttributes));
-  frameAttributes: FrameAttributes = $derived.by(() => this.framesAttributes[this.frameIndex]);
+  // #framesAttributes: FrameAttributes[] = $derived.by(() => this.#frames.map(makeFrameAttributes));
+  // frameAttributes: FrameAttributes = $derived.by(() => this.#framesAttributes[this.frameIndex]);
+
+  get frameAttributes(): FrameAttributes { return this.Frame.attributes; }
 
   shapeManager: ShapeManager;
 
@@ -78,15 +90,25 @@ export class GraphData {
   #effects: (() => void)[] = [];
 
   constructor(fold: FOLD) {
+    const frames = getFileFramesAsArray(fold);
+    this.#source = prepareFOLDNonSpecData(frames);
     this.metadata = getFileMetadata(fold);
-    this.#source = getFileFramesAsArray(fold);
     this.shapeManager = new ShapeManager();
 
     this.cp = new CreasePattern(this);
     this.folded = new FoldedForm(this);
     this.simulator = new Simulator(this);
 
-    this.#effects = [];
+    this.#effects = [this.#debug()];
+  }
+
+  #debug() {
+    return $effect.root(() => {
+      $effect(() => {
+        console.log(this.Frame);
+      });
+      return () => { };
+    })
   }
 
   dealloc(): void {

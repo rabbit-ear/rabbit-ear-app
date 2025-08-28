@@ -9,11 +9,11 @@ import EmbeddingsPanel from "./EmbeddingsPanel.svelte";
 
 const Panels: { name: string, component: Component }[] = [
   { name: "Viewports", component: ViewportsPanel },
+  { name: "Embeddings", component: EmbeddingsPanel },
   { name: "Frames", component: FramesPanel },
   { name: "History", component: HistoryPanel },
   { name: "File", component: FilePanel },
   { name: "Frame", component: FramePanel },
-  { name: "Embeddings", component: EmbeddingsPanel },
 ];
 
 export default Panels;

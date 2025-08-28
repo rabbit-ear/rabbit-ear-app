@@ -15,6 +15,7 @@ import { makeGraphUpdateEvent } from "../Updated.ts";
 export class CreasePattern implements Embedding {
   name: string = "creasePattern";
   abbreviation: string = "cp";
+  warnings: string[] = [];
   errors: string[] = [];
   panel: Component = Panel;
   #data: GraphData;
@@ -29,6 +30,12 @@ export class CreasePattern implements Embedding {
   graph: FOLD | undefined;
 
   graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
+
+  sourceIsCreasePattern: boolean = $derived
+    .by(() => !this.#data.frameAttributes.isFoldedForm);
+
+  isEditable: boolean = $derived
+    .by(() => !this.#data.frameAttributes.isFoldedForm);
 
   setGraph(newGraph: FOLD | undefined) {
     this.graph = newGraph;

@@ -9,7 +9,10 @@
     foldedForm: "folded form",
   };
 
-  let frames: FOLD[] = $derived(context.fileManager.document?.data.frames ?? []);
+  // todo: bring this back, or at least, consider which of the two frames to use,
+  // the source or the baked
+  // let frames: FOLD[] = $derived(context.fileManager.document?.data.frames ?? []);
+  let frames: FOLD[] = $derived(context.fileManager.document?.data.source ?? []);
 
   let frameIndex = $derived(context.fileManager.document?.data.frameIndex);
 

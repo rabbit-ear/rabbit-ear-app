@@ -9,33 +9,18 @@
 </script>
 
 <div class="column gap">
-  <div class="row">
-    <p>embeddings: {embeddings.length}</p>
-  </div>
-  <div class="left-border">
-    {#each embeddings as embedding}
-      {#if embedding.panel}
-        {#if embedding.errors?.length}
-          {#each embedding.errors as error}
-            <span class="error">{error}</span>
-          {/each}
-        {/if}
+  {#each embeddings as embedding}
+    {#if embedding.panel}
+      <div class="row">
         <embedding.panel {embedding} />
-      {/if}
-    {/each}
-  </div>
+      </div>
+    {/if}
+  {/each}
 </div>
 
 <style>
-  p {
-    pointer-events: none;
-  }
   .gap {
     gap: var(--form-gap);
-  }
-
-  .error {
-    color: #e53;
   }
 
   .column {
@@ -46,9 +31,5 @@
   .row {
     display: flex;
     flex-direction: row;
-  }
-
-  .left-border {
-    border-left: 2px solid var(--background-4);
   }
 </style>

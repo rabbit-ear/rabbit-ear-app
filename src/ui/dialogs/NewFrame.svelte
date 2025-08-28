@@ -22,9 +22,10 @@
 
   const invertVertical = $derived(context.ui.settings.rightHanded);
 
-  const canDuplicate = $derived(
-    (context.fileManager.document?.data.frames.length ?? 0) > 0,
-  );
+  const canDuplicate = false;
+  // const canDuplicate = $derived(
+  //   (context.fileManager.document?.data.frames.length ?? 0) > 0,
+  // );
 
   // $: graphSquare = square();
   // $: graphRectangle = rectangle(
