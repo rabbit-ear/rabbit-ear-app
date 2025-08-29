@@ -1,7 +1,7 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport";
 import type { View } from "../View.ts";
-import type { Embedding, EmbeddingAttributes } from "../../../graphs/Embedding.ts";
+import type { Embedding } from "../../../graphs/Embedding.ts";
 import ViewportComponent from "./Component.svelte";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
@@ -10,8 +10,10 @@ import { Style } from "./Style.svelte.ts";
 import { GLModels } from "./GLModels.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import { RenderPerspective, RenderStyle } from "../types.ts";
-import { FrameClass } from "../../../graphs/Embedding.ts";
 import context from "../../../app/context.svelte.ts";
+import { CreasePattern } from "../../../graphs/CreasePattern/CreasePattern.svelte.ts";
+import { FoldedForm } from "../../../graphs/FoldedForm/FoldedForm.svelte.ts";
+import { Simulator } from "../../../graphs/Simulator/Simulator.svelte.ts";
 
 export class WebGLViewport implements Viewport {
   static name: string = "WebGL Viewport";
@@ -54,23 +56,26 @@ export class WebGLViewport implements Viewport {
     // this.setModelStyle(this.model.style);
   }
 
-  setModelStyle(attributes: EmbeddingAttributes | undefined): void {
-    if (!attributes) { return; }
+  setModelStyle(embedding: Embedding | undefined): void {
+    if (!embedding) { return; }
     // console.log("WebGLViewport() setModelStyle");
 
-    // render style is either: creasePattern, foldedForm, translucent
-    switch (attributes.frameClass) {
-      case FrameClass.creasePattern:
+    switch (this.embedding?.constructor) {
+      case CreasePattern:
         this.style.renderStyle = RenderStyle.creasePattern;
         break;
-      case FrameClass.foldedForm:
-        this.style.renderStyle = attributes.layerOrder
+      case Simulator:
+        this.style.renderStyle = RenderStyle.foldedForm;
+        break;
+      case FoldedForm:
+      default:
+        this.style.renderStyle = this.embedding?.attributes.hasLayerOrder
           ? RenderStyle.foldedForm
           : RenderStyle.translucent;
         break;
     }
 
-    this.view.perspective = attributes.dimension === 2
+    this.view.perspective = this.embedding?.attributes.dimension === 2
       ? RenderPerspective.orthographic
       : RenderPerspective.perspective;
   }
@@ -78,7 +83,7 @@ export class WebGLViewport implements Viewport {
   #modelStyleEffect(): () => void {
     return $effect.root(() => {
       // console.log("WebGLViewport() setModelStyle $effect");
-      $effect(() => { this.setModelStyle(this.embedding?.attributes); });
+      $effect(() => { this.setModelStyle(this.embedding); });
       // empty
       return () => { };
     });

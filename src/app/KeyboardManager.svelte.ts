@@ -98,7 +98,6 @@ export class KeyboardManager {
 
   #normalize(key: string): string {
     if (key === " ") return "Space";
-    if (key === "Meta") return "Command";
     if (key.length === 1) return key.toUpperCase();
     return key;
   }

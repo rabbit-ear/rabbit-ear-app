@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.js";
+  import type { FOLDChildFrame } from "rabbit-ear/types.js";
   import context from "../../app/context.svelte.ts";
+  import type { FrameAttributes } from "../../graphs/FrameAttributes.ts";
 
-  let graphArrays: { [key: string]: [string, string] } = {
+  const graphArrays: { [key: string]: [string, string] } = {
     vertices_vertices: ["v", "v"],
     vertices_edges: ["v", "e"],
     vertices_faces: ["v", "f"],
@@ -13,14 +14,14 @@
     faces_faces: ["f", "f"],
   };
 
-  let attributeArrays: { [key: string]: [string] } = {
+  const attributeArrays: { [key: string]: [string] } = {
     vertices_coords: ["V•coords"],
     edges_assignment: ["E•assigns"],
     edges_foldAngle: ["E•angles"],
     faceOrders: ["F•orders"],
   };
 
-  let renderStyles: { [key: string]: string } = {
+  const renderStyles: { [key: string]: string } = {
     creasePattern: "crease pattern",
     foldedForm: "folded form",
   };
@@ -29,33 +30,31 @@
   //let hasFaceOrders = $derived(frame?.faceOrders && frame?.faceOrders.length);
   //let frameStyles = $derived(app.fileManager.file?.framesStyle);
 
-  let frameIndex = $derived(context.fileManager.document?.data.frameIndex);
-
-  let source: FOLDChildFrame | undefined = $derived(
+  const source: FOLDChildFrame | undefined = $derived(
     context.fileManager.document?.data.frame.source,
   );
 
-  let baked: FOLD | undefined = $derived(context.fileManager.document?.data.frame.baked);
-
-  let frame_parent: number = $derived(source?.frame_parent ?? 0);
-
-  let hasParent: boolean = $derived(
-    (source?.frame_inherit && source?.frame_parent != null) ?? false,
+  const attributes: FrameAttributes | undefined = $derived(
+    context.fileManager.document?.data.frame.attributes,
   );
 
-  let frame_classes: string[] = $derived(baked?.frame_classes ?? []);
+  const frameIndex = $derived(context.fileManager.document?.data.frameIndex);
 
-  let render_style = $derived(
-    frame_classes.filter((cl) => renderStyles[cl]).map((cl) => renderStyles[cl]),
+  const frame_parent: number = $derived(source?.frame_parent ?? 0);
+
+  const hasParent: boolean = $derived(attributes?.hasParent ?? false);
+
+  const render_style = $derived(
+    attributes?.class ? renderStyles[attributes.class] : "creasePattern",
   );
 
-  let graphBadges = $derived(
+  const graphBadges = $derived(
     Object.keys(graphArrays)
       .filter((key) => source !== undefined && source[key] != null)
       .map((key) => graphArrays[key].map((s: string) => s.toUpperCase()).join("•")),
   );
 
-  let attributeBadges = $derived(
+  const attributeBadges = $derived(
     Object.keys(attributeArrays)
       .filter((key) => source !== undefined && source[key] != null)
       .map((key) => attributeArrays[key]),

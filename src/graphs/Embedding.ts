@@ -4,17 +4,7 @@ import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { FOLDSelection } from "../general/types.ts";
 import type { GraphUpdateEvent } from "./Updated.ts";
 import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../general/BVHGraph.ts";
-
-export enum FrameClass {
-  foldedForm,
-  creasePattern,
-};
-
-export type EmbeddingAttributes = {
-  frameClass: FrameClass;
-  dimension: number;
-  layerOrder: boolean;
-}
+import type { FrameAttributes } from "./FrameAttributes.ts";
 
 // we need a fine tuned update system
 // instead of subscribing to the graph,
@@ -35,9 +25,7 @@ export interface Embedding {
   // information about how the graph just changed
   graphUpdate: GraphUpdateEvent;
 
-  // // reactive.
-  // attributes: FrameAttributes;
-  attributes: EmbeddingAttributes;
+  attributes: FrameAttributes;
 
   // other
   // shapes: Shape[];

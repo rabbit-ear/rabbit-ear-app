@@ -11,9 +11,9 @@ const Panels: { name: string, component: Component }[] = [
   { name: "Viewports", component: ViewportsPanel },
   { name: "Embeddings", component: EmbeddingsPanel },
   { name: "Frames", component: FramesPanel },
-  { name: "History", component: HistoryPanel },
-  { name: "File", component: FilePanel },
   { name: "Frame", component: FramePanel },
+  { name: "File", component: FilePanel },
+  { name: "History", component: HistoryPanel },
 ];
 
 export default Panels;

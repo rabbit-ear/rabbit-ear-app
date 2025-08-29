@@ -1,6 +1,6 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import { FrameClass, type Embedding } from "../Embedding.ts";
+import type { Embedding } from "../Embedding.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
 import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHGraph.ts";
@@ -22,11 +22,7 @@ export class Simulator implements Embedding {
 
   #effects: (() => void)[] = [];
 
-  attributes = {
-    frameClass: FrameClass.foldedForm,
-    dimension: 3,
-    layerOrder: true,
-  };
+  get attributes() { return this.#data.frame.attributes; }
 
   constructor(data: GraphData) {
     this.#data = data;

@@ -10,9 +10,13 @@
 
 <Wrapper title="Simulator">
   <div class="column gap">
-    <div class="row gap">
-      <p>simulator active</p>
-      <input type="checkbox" bind:checked={context.simulator.active} />
+    <div class="row gap spaced">
+      <div class="row gap">
+        <p>active</p>
+        <input type="checkbox" bind:checked={context.simulator.active} />
+      </div>
+      <button disabled={!context.simulator.active} onclick={context.simulator.reset}
+        >reset model</button>
     </div>
 
     <div class="row gap">
@@ -26,26 +30,21 @@
         bind:value={context.simulator.foldAmount} />
     </div>
 
-    <div class="row gap">
-      <p>pointer tool</p>
-      <div class="toggle-row">
-        <button
-          class={context.simulator.tool === "trackball" ? "highlighted" : ""}
-          onclick={(): void => {
-            context.simulator.tool = "trackball";
-          }}>trackball</button>
-        <button
-          class={context.simulator.tool === "pull" ? "highlighted" : ""}
-          onclick={(): void => {
-            context.simulator.tool = "pull";
-          }}>pull</button>
-      </div>
-    </div>
-
-    <div class="row gap">
-      <button disabled={!context.simulator.active} onclick={context.simulator.reset}
-        >reset model</button>
-    </div>
+    <!-- <div class="row gap"> -->
+    <!--   <p>pointer tool</p> -->
+    <!--   <div class="toggle-row"> -->
+    <!--     <button -->
+    <!--       class={context.simulator.tool === "trackball" ? "highlighted" : ""} -->
+    <!--       onclick={(): void => { -->
+    <!--         context.simulator.tool = "trackball"; -->
+    <!--       }}>trackball</button> -->
+    <!--     <button -->
+    <!--       class={context.simulator.tool === "pull" ? "highlighted" : ""} -->
+    <!--       onclick={(): void => { -->
+    <!--         context.simulator.tool = "pull"; -->
+    <!--       }}>pull</button> -->
+    <!--   </div> -->
+    <!-- </div> -->
 
     <div class="row">
       <hr />
@@ -161,6 +160,9 @@
   }
   .gap {
     gap: var(--form-gap);
+  }
+  .spaced {
+    justify-content: space-between;
   }
   .long {
     width: 8rem;

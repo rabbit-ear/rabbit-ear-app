@@ -1,13 +1,14 @@
 import { untrack, type Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import { FrameClass, type Embedding } from "../Embedding.ts";
-import type { FrameAttributes } from "../FrameAttributes.ts";
+import type { Embedding } from "../Embedding.ts";
+import { FrameClass, type FrameAttributes } from "../FrameAttributes.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
 import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHGraph.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
-import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
 import { makeGraphUpdateEvent } from "../Updated.ts";
+import { Folded } from "./Folded.svelte.ts";
+import { LayerOrder } from "./LayerOrder.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
 
@@ -17,6 +18,8 @@ export class FoldedForm implements Embedding {
   panel: Component = Panel;
 
   #data: GraphData;
+  folded: Folded;
+  orders: LayerOrder;
   settings: Settings;
   #effects: (() => void)[];
 
@@ -24,46 +27,37 @@ export class FoldedForm implements Embedding {
 
   graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
 
-  sourceIsFoldedForm: boolean = $derived.by(() => this.#data.frame.attributes.isFoldedForm);
+  sourceIsFoldedForm: boolean = $derived
+    .by(() => this.#data.frame.attributes.class === FrameClass.foldedForm);
+
+  // computed face orders
+  hasLayerOrder: boolean = $state(false);
+
+  // get attributes() { return this.#data.frame.attributes; }
+  // attributes = $derived.by(() => this.#data.frame.attributes);
+  attributes: FrameAttributes = $derived.by(() => {
+    return !this.hasLayerOrder
+      ? this.#data.frame.attributes
+      : {
+        ...this.#data.frame.attributes,
+        hasLayerOrder: this.hasLayerOrder,
+      };
+  });
 
   setGraph(newGraph: FOLD | undefined) {
     untrack(() => {
       this.graph = {
         // ...$state.snapshot(newGraph),
         ...newGraph,
-        vertices_coords: this.vertices_coords,
-        // faceOrders: this.faceOrders,
+        vertices_coords: this.folded.vertices_coords,
+        faceOrders: this.orders.faceOrders,
         frame_classes: ["foldedForm"],
       };
     });
+    this.hasLayerOrder = (this.graph?.faceOrders && this.graph?.faceOrders.length > 0) ?? false;
     this.graphUpdate.reset++;
     // this.graphUpdate.structural++;
   }
-
-  //faceOrders: [number, number, number][] = $state.raw([]);
-
-  get foldedVerticesResultAndErrors(): {
-    error: Error | undefined;
-    result: [number, number][] | [number, number, number][];
-  } {
-    if (!this.settings.active) {
-      return { error: new Error("automatic folding currently off"), result: [] };
-    }
-    try {
-      return this.#data.frame.attributes.isFoldedForm
-        ? { error: undefined, result: this.#data.frame.baked.vertices_coords ?? [] }
-        : { error: undefined, result: makeVerticesCoordsFolded(this.#data.frame.baked) };
-    } catch (err: unknown) {
-      const error = err instanceof Error
-        ? err
-        : new Error(String(err));
-      return { error, result: [] };
-    }
-  }
-
-  get vertices_coords(): [number, number][] | [number, number, number][] {
-    return this.foldedVerticesResultAndErrors.result;
-  };
 
   // todo
   get snapPoints(): [number, number][] {
@@ -71,19 +65,11 @@ export class FoldedForm implements Embedding {
     // return this.#model.frame.vertices_coords?.map(resize3) ?? [];
   }
 
-  //#layerOrderErrors: string[] = $state([]);
-
   get errors(): string[] {
-    return this.foldedVerticesResultAndErrors.error
-      ? [`${this.foldedVerticesResultAndErrors.error}`]
-      : [];
+    return [this.folded.error, this.orders.error]
+      .filter(a => a !== undefined)
+      .map(error => String(error));
   }
-
-  attributes = $derived.by(() => ({
-    frameClass: FrameClass.foldedForm,
-    dimension: this.#data.frame.attributes.dimension,
-    layerOrder: this.#data.frame.attributes.hasLayerOrder,
-  }));
 
   // get shapes(): Shape[] {
   //   return this.#models.shapes;
@@ -91,6 +77,8 @@ export class FoldedForm implements Embedding {
 
   constructor(data: GraphData) {
     this.#data = data;
+    this.folded = new Folded(this.#data);
+    this.orders = new LayerOrder(this.#data, this.folded);
     this.settings = new Settings();
     this.#effects = [
       this.#effectGraphUpdate(),

@@ -1,16 +1,14 @@
 <script lang="ts">
-  import Wrapper from "../Wrapper.svelte";
   import type { CreasePattern } from "./CreasePattern.svelte.ts";
-  import { FrameClass } from "../Embedding.ts";
+  import Wrapper from "../Wrapper.svelte";
+  import { FrameClass } from "../FrameAttributes.ts";
 
   const { embedding }: { embedding: CreasePattern } = $props();
 
   // embedding.userLocked;
   // embedding.attributeLocked;
   // embedding.locked;
-  // const isCP = $derived(embedding.sourceIsCreasePattern);
-
-  const frameClass = $derived(embedding.attributes.frameClass);
+  const isCP = $derived(embedding.attributes.class === FrameClass.creasePattern);
   const editable = $derived(embedding.editable);
   const frameLinked = $derived(embedding.frameLinked);
 
@@ -23,7 +21,7 @@
 {#snippet linked()}
   {#if frameLinked}
     <div class="row">
-      <p>frame inherits or another inherits from it</p>
+      <p class="warning">linked</p>
       <!-- {#if isParent && isChild} -->
       <!--   <p>frame is a parent and inherits from another</p> -->
       <!-- {:else if isParent} -->
@@ -38,13 +36,11 @@
 <Wrapper title="Crease Pattern">
   <div class="column gap">
     {@render linked()}
-    <div class="row gap">
-      {#if frameClass === FrameClass.creasePattern}
-        <p>frame is a crease pattern</p>
-      {:else}
+    {#if !isCP}
+      <div class="row gap">
         <p class="warning">frame is not a crease pattern</p>
-      {/if}
-    </div>
+      </div>
+    {/if}
     {#each errors as error}
       <span class="error">{error}</span>
     {/each}
@@ -72,7 +68,7 @@
   }
 
   .error {
-    color: #e53;
+    color: var(--red);
   }
 
   .warning {

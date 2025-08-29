@@ -13,6 +13,7 @@ import outlined_model_100_frag from "./shaders/outlined-model-100.frag?raw";
 import outlined_model_300_vert from "./shaders/outlined-model-300.vert?raw";
 import outlined_model_300_frag from "./shaders/outlined-model-300.frag?raw";
 import type { FOLD } from "rabbit-ear/types.js";
+import { RenderStyle } from "../../../types.ts";
 
 export class FoldedFormFaceOutlines implements GLModel {
   viewport: WebGLViewport;
@@ -72,9 +73,9 @@ export class FoldedFormFaceOutlines implements GLModel {
   // enable DEPTH_TEST only if embedding has a layer order
   flags: number[] = $derived.by(() => {
     if (!this.viewport.gl) { return []; }
-    return this.viewport.embedding?.attributes.layerOrder
-      ? [this.viewport.gl.DEPTH_TEST]
-      : [];
+    return this.viewport.style.renderStyle === RenderStyle.translucent
+      ? []
+      : [this.viewport.gl.DEPTH_TEST];
   });
 
   #uniformInputs = $derived.by(() => ({

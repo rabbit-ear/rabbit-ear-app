@@ -20,7 +20,7 @@ export class SelectRectCommand implements Command {
       // if (!embedding) { return; }
       const translation3 = resize3(this.translation);
       if (!frame.vertices_coords) { return undefined; }
-      const dimension = data?.frameAttributes.dimension ?? frame.vertices_coords[0]?.length;
+      const dimension = data?.attributes.dimension ?? frame.vertices_coords[0]?.length;
       switch (dimension) {
         case 2:
           frame.vertices_coords = frame.vertices_coords

@@ -15,6 +15,7 @@ import model_300_frag from "./shaders/model-300.frag?raw";
 import type { FOLD } from "rabbit-ear/types.js";
 import { untrack } from "svelte";
 import { makeVerticesNormal } from "rabbit-ear/graph/normals.js";
+import { RenderStyle } from "../../../types.ts";
 
 export class FoldedFormFaces implements GLModel {
   viewport: WebGLViewport;
@@ -81,9 +82,9 @@ export class FoldedFormFaces implements GLModel {
   // enable DEPTH_TEST only if embedding has a layer order
   flags: number[] = $derived.by(() => {
     if (!this.viewport.gl) { return []; }
-    return this.viewport.embedding?.attributes.layerOrder
-      ? [this.viewport.gl.DEPTH_TEST]
-      : [];
+    return this.viewport.style.renderStyle === RenderStyle.translucent
+      ? []
+      : [this.viewport.gl.DEPTH_TEST];
   });
 
   #uniformInputs = $derived.by(() => ({

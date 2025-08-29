@@ -1,10 +1,13 @@
 <script lang="ts">
-  import Wrapper from "../Wrapper.svelte";
   import type { FoldedForm } from "./FoldedForm.svelte.ts";
+  import Wrapper from "../Wrapper.svelte";
+  import { FrameClass } from "../FrameAttributes.ts";
 
   const { embedding }: { embedding: FoldedForm } = $props();
 
-  const isFoldedForm = $derived(embedding.sourceIsFoldedForm);
+  const isFoldedForm = $derived(embedding.attributes.class === FrameClass.foldedForm);
+
+  const errors: string[] = $derived(embedding.errors ?? []);
 </script>
 
 <Wrapper title="Folded Form">
@@ -23,6 +26,11 @@
         bind:checked={embedding.settings.active} />
       <label for="folded-form-active">auto-fold</label>
     </div>
+  </div>
+  <div class="row">
+    {#each errors as error}
+      <span class="error">{error}</span>
+    {/each}
   </div>
 </Wrapper>
 
@@ -44,5 +52,13 @@
 
   .gap {
     gap: var(--form-gap);
+  }
+
+  .error {
+    color: var(--red);
+  }
+
+  .warning {
+    color: var(--yellow);
   }
 </style>

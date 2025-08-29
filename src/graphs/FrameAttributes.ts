@@ -5,32 +5,39 @@ import {
   edgesFoldAngleAreAllFlat,
 } from "rabbit-ear/fold/spec.js";
 
+export enum FrameClass {
+  foldedForm = "foldedForm",
+  creasePattern = "creasePattern",
+};
+
 // FrameAttributes
 export type FrameAttributes = {
   // as best as we can tell quickly, is the graph a folded form?
-  isFoldedForm: boolean;
-
-  // as best as we can tell quickly, is the graph a crease pattern?
-  isCreasePattern: boolean;
+  class: FrameClass;
 
   // what dimension (2D or 3D) are the vertices?
-  dimension: number;
+  dimension: 2 | 3;
 
-  // // when folded (this may still be a crease pattern), is the model flat?
+  // are the creases all flat (180deg) implying that the folded state should
+  // also be flat? this does not imply that it is successfully flat-foldable.
   // edgesAreFlat: boolean;
 
   // does the graph have vertices but no edges and no faces?
   isAbstract: boolean;
 
-  // does the graph contain faceOrders (layer information between faces)
+  // does the graph contain faceOrders (layer information between faces)?
+  // if the layer order is defined but empty, this counts as non-existent.
   hasLayerOrder: boolean;
 
   // is this frame a parent to any other frames in the FOLD file?-
   // child frames which inherit from this parent frame?
+  // isParent: number[];
   isParent: boolean;
 
+  hasParent: boolean;
+
   // is this a child frame which inherits from some other frame in this file?
-  isChild: boolean;
+  isChild: number | undefined;
 };
 
 // export const makeFrameAttributes = (graph: FOLDChildFrame): FrameAttributes => {
@@ -54,20 +61,22 @@ export type FrameAttributes = {
 
 export const makeFrameAttributes = (source: FOLDChildFrame, baked: FOLD): FrameAttributes => {
   const isFoldedForm = IsFoldedForm(baked);
-  const dimension = getDimensionQuick(baked) ?? 2;
+  const frameClass = isFoldedForm ? FrameClass.foldedForm : FrameClass.creasePattern;
+  const dimension = getDimensionQuick(baked) as (2 | 3) ?? 2;
   // const edgesAreFlat = edgesFoldAngleAreAllFlat(graph);
   const isAbstract = (baked?.vertices_coords
     && !baked?.edges_vertices
     && !baked?.faces_vertices) ?? false;
+  const hasLayerOrder = baked.faceOrders != null && baked.faceOrders.length !== 0;
   return {
-    isFoldedForm,
-    isCreasePattern: !isFoldedForm,
+    class: frameClass,
     dimension,
     // edgesAreFlat,
     isAbstract,
-    hasLayerOrder: baked.faceOrders != null,
+    hasLayerOrder,
     isParent: source["ear:isParent"] != null,
-    isChild: source.frame_inherit != null,
+    hasParent: (source.frame_inherit && source.frame_parent != null) ?? false,
+    isChild: source.frame_parent == null ? undefined : source.frame_parent,
   };
 };
 

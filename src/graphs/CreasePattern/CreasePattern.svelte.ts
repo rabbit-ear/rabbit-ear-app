@@ -1,7 +1,7 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import { FrameClass, type Embedding } from "../Embedding.ts";
-// import type { FrameAttributes } from "../FrameAttributes.ts";
+import type { Embedding } from "../Embedding.ts";
+import { FrameClass, type FrameAttributes } from "../FrameAttributes.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { FOLDSelection } from "../../general/types.ts";
 import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../../general/BVHGraph.ts";
@@ -34,14 +34,10 @@ export class CreasePattern implements Embedding {
   frameLinked = $derived.by(() => this.#data.frame.attributes.isParent
     || this.#data.frame.attributes.isChild);
 
-  editable: boolean = $derived.by(() => this.#data.frame.attributes.isCreasePattern
-    && !this.frameLinked);
+  editable: boolean = $derived.by(() => !this.frameLinked
+    && this.#data.frame.attributes.class === FrameClass.creasePattern);
 
-  attributes = {
-    frameClass: FrameClass.creasePattern,
-    dimension: 2,
-    layerOrder: false,
-  };
+  get attributes(): FrameAttributes { return this.#data.frame.attributes; }
 
   // userLocked: boolean | undefined = $state(undefined);
   // sourceIsCreasePattern: boolean = $derived.by(() => this.#data.frameAttributes.isCreasePattern);
@@ -75,9 +71,9 @@ export class CreasePattern implements Embedding {
 
   constructor(data: GraphData) {
     this.#data = data;
-    this.setGraph(this.#data.frame.attributes.isFoldedForm
-      ? undefined
-      : this.#data.frame.baked);
+    this.setGraph(this.#data.frame.attributes.class === FrameClass.creasePattern
+      ? this.#data.frame.baked
+      : undefined);
     this.#effects = [
       this.#effectGraphUpdate(),
     ];
@@ -104,9 +100,9 @@ export class CreasePattern implements Embedding {
   #effectGraphUpdate(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        this.setGraph(this.#data.frame.attributes.isFoldedForm
-          ? undefined
-          : this.#data.frame.baked);
+        this.setGraph(this.#data.frame.attributes.class === FrameClass.creasePattern
+          ? this.#data.frame.baked
+          : undefined);
       });
       // empty
       return () => { };

@@ -1,6 +1,5 @@
 import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js";
 import type { Embedding } from "./Embedding.ts";
-import type { FrameAttributes } from "./FrameAttributes.ts";
 import type { GraphUpdateEvent, GraphUpdateModifier } from "./Updated.ts";
 import { makeGraphUpdateEvent, modifyGraphUpdate } from "./Updated.ts";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";

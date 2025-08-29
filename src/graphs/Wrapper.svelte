@@ -53,6 +53,10 @@
     outline-offset: 2px;
   }
 
+  button:hover {
+    background-color: var(--background-3);
+  }
+
   .title span {
     pointer-events: none;
   }
