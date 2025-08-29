@@ -21,10 +21,17 @@
     </div>
     <div class="row">
       <input
-        id="folded-form-active"
+        id="fold-vertices-coords"
         type="checkbox"
-        bind:checked={embedding.settings.active} />
-      <label for="folded-form-active">auto-fold</label>
+        bind:checked={embedding.settings.foldVerticesCoords} />
+      <label for="fold-vertices-coords">fold vertices</label>
+    </div>
+    <div class="row">
+      <input
+        id="solve-face-orders"
+        type="checkbox"
+        bind:checked={embedding.settings.solveFaceOrders} />
+      <label for="solve-face-orders">solve layer order</label>
     </div>
   </div>
   <div class="row">

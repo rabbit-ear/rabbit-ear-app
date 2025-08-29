@@ -1,11 +1,11 @@
 import type { GraphData } from "../GraphData.svelte";
 // import { FrameClass } from "../FrameAttributes";
 import { layer, layer3D } from "rabbit-ear/layer/layer.js";
-import type { Folded } from "./Folded.svelte";
+import type { FoldedForm } from "./FoldedForm.svelte";
 
 export class LayerOrder {
+  #foldedForm: FoldedForm
   #data: GraphData;
-  #folded: Folded;
 
   faceOrdersAndError: {
     error: Error | undefined;
@@ -13,11 +13,11 @@ export class LayerOrder {
   } = $derived.by(() => {
     try {
       if (this.#data.frame.attributes.hasLayerOrder) {
-        return { error: undefined, result: this.#data.frame.baked.faceOrders ?? [] };
+        return { error: undefined, result: this.#data.frame.baked.faceOrders };
       }
       const graph = {
         ...this.#data.frame.baked,
-        vertices_coords: this.#folded.vertices_coords,
+        vertices_coords: this.#foldedForm.folded.vertices_coords,
       };
       console.log("computing face orders");
       return { error: undefined, result: layer3D(graph).faceOrders() };
@@ -33,9 +33,9 @@ export class LayerOrder {
 
   error: Error | undefined = $derived(this.faceOrdersAndError.error);
 
-  constructor(data: GraphData, folded: Folded) {
+  constructor(foldedForm: FoldedForm, data: GraphData) {
+    this.#foldedForm = foldedForm;
     this.#data = data;
-    this.#folded = folded;
   }
 }
 

@@ -7,7 +7,7 @@ import type { GraphUpdateEvent } from "../Updated.ts";
 import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHGraph.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import { makeGraphUpdateEvent } from "../Updated.ts";
-import { Folded } from "./Folded.svelte.ts";
+import { FoldedVertices } from "./FoldedVertices.svelte.ts";
 import { LayerOrder } from "./LayerOrder.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
@@ -18,7 +18,7 @@ export class FoldedForm implements Embedding {
   panel: Component = Panel;
 
   #data: GraphData;
-  folded: Folded;
+  folded: FoldedVertices;
   orders: LayerOrder;
   settings: Settings;
   #effects: (() => void)[];
@@ -35,22 +35,22 @@ export class FoldedForm implements Embedding {
 
   // get attributes() { return this.#data.frame.attributes; }
   // attributes = $derived.by(() => this.#data.frame.attributes);
-  attributes: FrameAttributes = $derived.by(() => {
-    return !this.hasLayerOrder
-      ? this.#data.frame.attributes
-      : {
-        ...this.#data.frame.attributes,
-        hasLayerOrder: this.hasLayerOrder,
-      };
-  });
+  attributes: FrameAttributes = $derived.by(() => ({
+    ...this.#data.frame.attributes,
+    hasLayerOrder: this.hasLayerOrder,
+  }));
 
   setGraph(newGraph: FOLD | undefined) {
     untrack(() => {
       this.graph = {
         // ...$state.snapshot(newGraph),
         ...newGraph,
-        vertices_coords: this.folded.vertices_coords,
-        faceOrders: this.orders.faceOrders,
+        vertices_coords: this.settings.foldVerticesCoords
+          ? this.folded.vertices_coords
+          : newGraph?.vertices_coords,
+        faceOrders: this.settings.solveFaceOrders
+          ? this.orders.faceOrders
+          : newGraph?.faceOrders,
         frame_classes: ["foldedForm"],
       };
     });
@@ -77,8 +77,8 @@ export class FoldedForm implements Embedding {
 
   constructor(data: GraphData) {
     this.#data = data;
-    this.folded = new Folded(this.#data);
-    this.orders = new LayerOrder(this.#data, this.folded);
+    this.folded = new FoldedVertices(this, data);
+    this.orders = new LayerOrder(this, data);
     this.settings = new Settings();
     this.#effects = [
       this.#effectGraphUpdate(),
@@ -106,7 +106,11 @@ export class FoldedForm implements Embedding {
   // - it always updates (any changes to the source frame)
   #effectGraphUpdate(): () => void {
     return $effect.root(() => {
-      $effect(() => this.setGraph(this.#data.frame.baked));
+      $effect(() => {
+        const _ = this.settings.solveFaceOrders;
+        const __ = this.settings.foldVerticesCoords;
+        this.setGraph(this.#data.frame.baked);
+      });
       return () => { };
     });
   }

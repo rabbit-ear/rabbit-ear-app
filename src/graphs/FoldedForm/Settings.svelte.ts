@@ -1,3 +1,4 @@
 export class Settings {
-  active: boolean = $state(true);
+  foldVerticesCoords: boolean = $state(true);
+  solveFaceOrders: boolean = $state(true);
 }
