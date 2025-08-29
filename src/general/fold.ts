@@ -1,6 +1,5 @@
 import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.d.ts";
 import { flattenFrame } from "rabbit-ear/fold/frames.js";
-import { filterKeysWithPrefix } from "rabbit-ear/fold/spec.js";
 import { clone } from "rabbit-ear/general/clone.js";
 
 // modifies input list in place
@@ -90,9 +89,11 @@ export const flattenFrameInArray = (frames: FOLDChildFrame[], frameNumber = 0): 
     .map((frameNum: number) => frames[frameNum])
     .reduce((a, b) => ({ ...a, ...b }));
 
+  // todo: make sure if we don't clone, make sure nowhere is modifying.
+  // or rather, make sure we're modifying the proper source.
   // this is optional, but this ensures that this method can be treated
   // "functionally" and using this method will not cause any side effects
-  return clone(flattened);
-  // return flattened;
+  // return clone(flattened);
+  return flattened;
 };
 

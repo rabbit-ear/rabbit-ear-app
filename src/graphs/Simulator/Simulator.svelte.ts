@@ -1,12 +1,11 @@
-import { type Component } from "svelte";
+import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import type { Embedding } from "../Embedding.ts";
-import type { FrameAttributes } from "../FrameAttributes.ts";
-import Panel from "./Panel.svelte";
+import { FrameClass, type Embedding } from "../Embedding.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
-import context from "../../app/context.svelte.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
 import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHGraph.ts";
+import Panel from "./Panel.svelte";
+import context from "../../app/context.svelte.ts";
 
 export class Simulator implements Embedding {
   name: string = "simulator";
@@ -21,14 +20,13 @@ export class Simulator implements Embedding {
   // reactive. subscribe to this to watch the graph
   get graphUpdate(): GraphUpdateEvent { return context.simulator.graphUpdate; }
 
-  attributes: FrameAttributes = {
-    isFoldedForm: true,
-    dimension: 3,
-    isAbstract: false,
-    hasLayerOrder: true, // todo this is weird
-  };
-
   #effects: (() => void)[] = [];
+
+  attributes = {
+    frameClass: FrameClass.foldedForm,
+    dimension: 3,
+    layerOrder: true,
+  };
 
   constructor(data: GraphData) {
     this.#data = data;
@@ -65,3 +63,4 @@ export class Simulator implements Embedding {
   //   });
   // }
 }
+

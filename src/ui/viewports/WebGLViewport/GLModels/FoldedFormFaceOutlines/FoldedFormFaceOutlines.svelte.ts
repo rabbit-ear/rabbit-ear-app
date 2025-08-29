@@ -72,7 +72,7 @@ export class FoldedFormFaceOutlines implements GLModel {
   // enable DEPTH_TEST only if embedding has a layer order
   flags: number[] = $derived.by(() => {
     if (!this.viewport.gl) { return []; }
-    return this.viewport.embedding?.attributes.hasLayerOrder
+    return this.viewport.embedding?.attributes.layerOrder
       ? [this.viewport.gl.DEPTH_TEST]
       : [];
   });

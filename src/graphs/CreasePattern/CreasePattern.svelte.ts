@@ -1,7 +1,7 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import type { Embedding } from "../Embedding.ts";
-import type { FrameAttributes } from "../FrameAttributes.ts";
+import { FrameClass, type Embedding } from "../Embedding.ts";
+// import type { FrameAttributes } from "../FrameAttributes.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { FOLDSelection } from "../../general/types.ts";
 import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../../general/BVHGraph.ts";
@@ -21,9 +21,9 @@ export class CreasePattern implements Embedding {
   #data: GraphData;
   #effects: (() => void)[];
 
-  #vertexBVH = $derived.by(() => VertexBVH(this.#data.frame));
-  #edgeBVH = $derived.by(() => EdgeBVH(this.#data.frame));
-  #faceBVH = $derived.by(() => FaceBVH(this.#data.frame));
+  #vertexBVH = $derived.by(() => VertexBVH(this.#data.frame.baked));
+  #edgeBVH = $derived.by(() => EdgeBVH(this.#data.frame.baked));
+  #faceBVH = $derived.by(() => FaceBVH(this.#data.frame.baked));
 
   selection?: FOLDSelection;
 
@@ -31,11 +31,24 @@ export class CreasePattern implements Embedding {
 
   graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
 
-  sourceIsCreasePattern: boolean = $derived
-    .by(() => !this.#data.frameAttributes.isFoldedForm);
+  frameLinked = $derived.by(() => this.#data.frame.attributes.isParent
+    || this.#data.frame.attributes.isChild);
 
-  isEditable: boolean = $derived
-    .by(() => !this.#data.frameAttributes.isFoldedForm);
+  editable: boolean = $derived.by(() => this.#data.frame.attributes.isCreasePattern
+    && !this.frameLinked);
+
+  attributes = {
+    frameClass: FrameClass.creasePattern,
+    dimension: 2,
+    layerOrder: false,
+  };
+
+  // userLocked: boolean | undefined = $state(undefined);
+  // sourceIsCreasePattern: boolean = $derived.by(() => this.#data.frameAttributes.isCreasePattern);
+  // attributeLocked: boolean = $derived.by(() => !this.#data.frameAttributes.isCreasePattern);
+  // locked: boolean = $derived(this.userLocked !== undefined
+  //   ? this.userLocked
+  //   : this.attributeLocked);
 
   setGraph(newGraph: FOLD | undefined) {
     this.graph = newGraph;
@@ -46,15 +59,15 @@ export class CreasePattern implements Embedding {
     return this.graph?.vertices_coords?.map(resize2) ?? [];
   }
 
-  get attributes(): FrameAttributes {
-    return {
-      ...this.#data.frameAttributes,
-      isFoldedForm: false,
-      // // unclear what we should say here. a CP does not render layer orders
-      // // (not the folded form of a CP, but the CP itself)
-      // hasLayerOrder: true,
-    };
-  }
+  // get attributes(): FrameAttributes {
+  //   return {
+  //     ...this.#data.frameAttributes,
+  //     isFoldedForm: false,
+  //     // // unclear what we should say here. a CP does not render layer orders
+  //     // // (not the folded form of a CP, but the CP itself)
+  //     // hasLayerOrder: true,
+  //   };
+  // }
 
   // get shapes(): Shape[] {
   //   return this.#model.shapes;
@@ -62,9 +75,9 @@ export class CreasePattern implements Embedding {
 
   constructor(data: GraphData) {
     this.#data = data;
-    this.setGraph(this.#data.frameAttributes?.isFoldedForm
+    this.setGraph(this.#data.frame.attributes.isFoldedForm
       ? undefined
-      : this.#data.frame);
+      : this.#data.frame.baked);
     this.#effects = [
       this.#effectGraphUpdate(),
     ];
@@ -91,9 +104,9 @@ export class CreasePattern implements Embedding {
   #effectGraphUpdate(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        this.setGraph(this.#data.frameAttributes?.isFoldedForm
+        this.setGraph(this.#data.frame.attributes.isFoldedForm
           ? undefined
-          : this.#data.frame);
+          : this.#data.frame.baked);
       });
       // empty
       return () => { };

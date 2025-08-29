@@ -7,10 +7,8 @@ import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
 import {
   reassembleFramesToFOLD,
-  makeFlatFramesFromFrames,
   prepareFOLDNonSpecData,
 } from "../general/fold.ts";
-import { makeFrameAttributes } from "./FrameAttributes.ts";
 import { CreasePattern } from "./CreasePattern/CreasePattern.svelte.ts";
 import { FoldedForm } from "./FoldedForm/FoldedForm.svelte.ts";
 import { Simulator } from "./Simulator/Simulator.svelte.ts";
@@ -27,38 +25,18 @@ export class GraphData {
   // which frame index is currently selected by the app for rendering/modification
   frameIndex: number = $state(0);
 
-  // get metadata(): FOLDFileMetadata { return this.#metadata; }
-  // set metadata(data: FOLDFileMetadata) { this.#metadata = data; }
-
-  Frame: Frame = $derived.by(() => new Frame(this.#source, this.frameIndex));
-  // Frames: Frame[] = $derived.by(() => this.#source
-  //   .map((_, i, array) => new Frame(array, i)));
-
-  // some frames inherit from a parent and need to be "collapsed" to be render-able.
-  // this is a list of all of the frames, collapsed, and in their "final form",
-  // frames: FOLD[] = $derived(makeFlatFramesFromFrames($state.snapshot(this.#source)));
-  // #frames: FOLD[] = $derived(makeFlatFramesFromFrames(this.#source));
-
-  // which frame is currently selected by the app for rendering/modification
-  // frame: FOLD = $derived.by(() => this.#frames[this.frameIndex]);
-  get frame(): FOLD { return this.Frame.baked; }
-
-  // which frame is currently selected by the app for rendering/modification
-  // taken from the "raw" frames (not collapsed if inherits from a parent)
-  frameRaw: FOLDChildFrame = $derived.by(() => this.#source[this.frameIndex]);
+  frame: Frame = $derived.by(() => new Frame(this.#source, this.frameIndex));
 
   // style-related properties for every frame, like is it 2D, folded, etc..
-  // #framesAttributes: FrameAttributes[] = $derived.by(() => this.#frames.map(makeFrameAttributes));
-  // frameAttributes: FrameAttributes = $derived.by(() => this.#framesAttributes[this.frameIndex]);
-
-  get frameAttributes(): FrameAttributes { return this.Frame.attributes; }
+  // frameAttributes: FrameAttributes = $derived.by(() => this.frame.sourceAttributes);
+  // get frameAttributes(): FrameAttributes { return this.frame.attributes; }
 
   shapeManager: ShapeManager;
 
   // it might be possible to "unfold" the vertices
-  cpFOLD: FOLD | undefined = $derived(this.frameAttributes?.isFoldedForm
-    ? undefined
-    : this.frame);
+  // cpFOLD: FOLD | undefined = $derived(this.frameAttributes?.isFoldedForm
+  //   ? undefined
+  //   : this.frame);
 
   // models: { [key: string]: Model } = $state({});
   cp: CreasePattern;
@@ -99,17 +77,19 @@ export class GraphData {
     this.folded = new FoldedForm(this);
     this.simulator = new Simulator(this);
 
-    this.#effects = [this.#debug()];
+    this.#effects = [
+      // this.#debug(),
+    ];
   }
 
-  #debug() {
-    return $effect.root(() => {
-      $effect(() => {
-        console.log(this.Frame);
-      });
-      return () => { };
-    })
-  }
+  // #debug() {
+  //   return $effect.root(() => {
+  //     $effect(() => {
+  //       console.log(this.Frame);
+  //     });
+  //     return () => { };
+  //   })
+  // }
 
   dealloc(): void {
     this.cp.dealloc();

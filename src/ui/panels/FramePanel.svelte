@@ -31,19 +31,19 @@
 
   let frameIndex = $derived(context.fileManager.document?.data.frameIndex);
 
-  let frame: FOLD | undefined = $derived(context.fileManager.document?.data.frame);
-
-  let frameRaw: FOLDChildFrame | undefined = $derived(
-    context.fileManager.document?.data.frameRaw,
+  let source: FOLDChildFrame | undefined = $derived(
+    context.fileManager.document?.data.frame.source,
   );
 
-  let frame_parent: number = $derived(frameRaw?.frame_parent ?? 0);
+  let baked: FOLD | undefined = $derived(context.fileManager.document?.data.frame.baked);
+
+  let frame_parent: number = $derived(source?.frame_parent ?? 0);
 
   let hasParent: boolean = $derived(
-    (frameRaw?.frame_inherit && frameRaw?.frame_parent != null) ?? false,
+    (source?.frame_inherit && source?.frame_parent != null) ?? false,
   );
 
-  let frame_classes: string[] = $derived(frame?.frame_classes ?? []);
+  let frame_classes: string[] = $derived(baked?.frame_classes ?? []);
 
   let render_style = $derived(
     frame_classes.filter((cl) => renderStyles[cl]).map((cl) => renderStyles[cl]),
@@ -51,13 +51,13 @@
 
   let graphBadges = $derived(
     Object.keys(graphArrays)
-      .filter((key) => frameRaw !== undefined && frameRaw[key] != null)
+      .filter((key) => source !== undefined && source[key] != null)
       .map((key) => graphArrays[key].map((s: string) => s.toUpperCase()).join("•")),
   );
 
   let attributeBadges = $derived(
     Object.keys(attributeArrays)
-      .filter((key) => frameRaw !== undefined && frameRaw[key] != null)
+      .filter((key) => source !== undefined && source[key] != null)
       .map((key) => attributeArrays[key]),
   );
 </script>

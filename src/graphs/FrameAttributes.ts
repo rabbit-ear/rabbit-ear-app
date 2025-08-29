@@ -1,4 +1,4 @@
-import type { FOLDChildFrame } from "rabbit-ear/types.d.ts";
+import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.d.ts";
 import {
   getDimensionQuick,
   isFoldedForm as IsFoldedForm,
@@ -30,30 +30,30 @@ export type FrameAttributes = {
   isParent: boolean;
 
   // is this a child frame which inherits from some other frame in this file?
-  inherits: boolean;
+  isChild: boolean;
 };
 
-export const makeFrameAttributes = (graph: FOLDChildFrame): FrameAttributes => {
-  const isFoldedForm = IsFoldedForm(graph);
-  const dimension = getDimensionQuick(graph) ?? 2;
-  // const edgesAreFlat = edgesFoldAngleAreAllFlat(graph);
-  const isAbstract = (graph?.vertices_coords
-    && !graph?.edges_vertices
-    && !graph?.faces_vertices) ?? false;
-  return {
-    isFoldedForm,
-    isCreasePattern: !isFoldedForm,
-    dimension,
-    // edgesAreFlat,
-    isAbstract,
-    hasLayerOrder: graph.faceOrders != null,
-    isParent: graph["ear:isParent"] != null,
-    inherits: graph.frame_inherit != null,
-  };
-};
+// export const makeFrameAttributes = (graph: FOLDChildFrame): FrameAttributes => {
+//   const isFoldedForm = IsFoldedForm(graph);
+//   const dimension = getDimensionQuick(graph) ?? 2;
+//   // const edgesAreFlat = edgesFoldAngleAreAllFlat(graph);
+//   const isAbstract = (graph?.vertices_coords
+//     && !graph?.edges_vertices
+//     && !graph?.faces_vertices) ?? false;
+//   return {
+//     isFoldedForm,
+//     isCreasePattern: !isFoldedForm,
+//     dimension,
+//     // edgesAreFlat,
+//     isAbstract,
+//     hasLayerOrder: graph.faceOrders != null,
+//     isParent: graph["ear:isParent"] != null,
+//     isChild: graph.frame_inherit != null,
+//   };
+// };
 
-export const makeFrameAttributes2 = (source: FOLDChildFrame, baked: FOLD): FrameAttributes => {
-  const isFoldedForm = IsFoldedForm(source);
+export const makeFrameAttributes = (source: FOLDChildFrame, baked: FOLD): FrameAttributes => {
+  const isFoldedForm = IsFoldedForm(baked);
   const dimension = getDimensionQuick(baked) ?? 2;
   // const edgesAreFlat = edgesFoldAngleAreAllFlat(graph);
   const isAbstract = (baked?.vertices_coords
@@ -66,8 +66,8 @@ export const makeFrameAttributes2 = (source: FOLDChildFrame, baked: FOLD): Frame
     // edgesAreFlat,
     isAbstract,
     hasLayerOrder: baked.faceOrders != null,
-    isParent: baked["ear:isParent"] != null,
-    inherits: baked.frame_inherit != null,
+    isParent: source["ear:isParent"] != null,
+    isChild: source.frame_inherit != null,
   };
 };
 

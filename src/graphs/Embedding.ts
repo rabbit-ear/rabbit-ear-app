@@ -1,10 +1,20 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 // import type { Shape } from "../geometry/shapes.ts";
-import type { FrameAttributes } from "./FrameAttributes.ts";
 import type { FOLDSelection } from "../general/types.ts";
 import type { GraphUpdateEvent } from "./Updated.ts";
 import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../general/BVHGraph.ts";
+
+export enum FrameClass {
+  foldedForm,
+  creasePattern,
+};
+
+export type EmbeddingAttributes = {
+  frameClass: FrameClass;
+  dimension: number;
+  layerOrder: boolean;
+}
 
 // we need a fine tuned update system
 // instead of subscribing to the graph,
@@ -25,8 +35,9 @@ export interface Embedding {
   // information about how the graph just changed
   graphUpdate: GraphUpdateEvent;
 
-  // reactive.
-  attributes: FrameAttributes;
+  // // reactive.
+  // attributes: FrameAttributes;
+  attributes: EmbeddingAttributes;
 
   // other
   // shapes: Shape[];
@@ -43,3 +54,4 @@ export interface Embedding {
   // the Simulator Embedding in particular uses this to dealloc WebGL things
   dealloc?: () => void;
 }
+

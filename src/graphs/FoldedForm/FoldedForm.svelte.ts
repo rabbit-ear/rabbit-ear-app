@@ -1,6 +1,6 @@
 import { untrack, type Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
-import type { Embedding } from "../Embedding.ts";
+import { FrameClass, type Embedding } from "../Embedding.ts";
 import type { FrameAttributes } from "../FrameAttributes.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
@@ -23,6 +23,8 @@ export class FoldedForm implements Embedding {
   graph: FOLD | undefined;
 
   graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
+
+  sourceIsFoldedForm: boolean = $derived.by(() => this.#data.frame.attributes.isFoldedForm);
 
   setGraph(newGraph: FOLD | undefined) {
     untrack(() => {
@@ -48,9 +50,9 @@ export class FoldedForm implements Embedding {
       return { error: new Error("automatic folding currently off"), result: [] };
     }
     try {
-      return this.#data.frameAttributes?.isFoldedForm
-        ? { error: undefined, result: this.#data.frame.vertices_coords ?? [] }
-        : { error: undefined, result: makeVerticesCoordsFolded(this.#data.frame) };
+      return this.#data.frame.attributes.isFoldedForm
+        ? { error: undefined, result: this.#data.frame.baked.vertices_coords ?? [] }
+        : { error: undefined, result: makeVerticesCoordsFolded(this.#data.frame.baked) };
     } catch (err: unknown) {
       const error = err instanceof Error
         ? err
@@ -77,12 +79,11 @@ export class FoldedForm implements Embedding {
       : [];
   }
 
-  get attributes(): FrameAttributes {
-    return {
-      ...this.#data.frameAttributes,
-      isFoldedForm: true,
-    };
-  }
+  attributes = $derived.by(() => ({
+    frameClass: FrameClass.foldedForm,
+    dimension: this.#data.frame.attributes.dimension,
+    layerOrder: this.#data.frame.attributes.hasLayerOrder,
+  }));
 
   // get shapes(): Shape[] {
   //   return this.#models.shapes;
@@ -94,7 +95,7 @@ export class FoldedForm implements Embedding {
     this.#effects = [
       this.#effectGraphUpdate(),
     ];
-    this.setGraph(this.#data.frame);
+    this.setGraph(this.#data.frame.baked);
   }
 
   dealloc(): void {
@@ -117,7 +118,7 @@ export class FoldedForm implements Embedding {
   // - it always updates (any changes to the source frame)
   #effectGraphUpdate(): () => void {
     return $effect.root(() => {
-      $effect(() => this.setGraph(this.#data.frame));
+      $effect(() => this.setGraph(this.#data.frame.baked));
       return () => { };
     });
   }

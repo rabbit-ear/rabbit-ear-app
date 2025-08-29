@@ -148,8 +148,9 @@ export class Simulator {
           };
           this.#vertices_coords = this.#model.fold.vertices_coords;
           this.graphUpdate.reset++;
-        } catch (error) {
-          console.error(error);
+        } catch {
+          // } catch (error) {
+          // console.error(error);
         }
       });
       return (): void => {

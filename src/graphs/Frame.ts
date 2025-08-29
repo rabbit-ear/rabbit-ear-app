@@ -5,18 +5,15 @@ import { makeFrameAttributes } from "./FrameAttributes.ts";
 import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
 
 export class Frame {
-  // which frame is currently selected by the app for rendering/modification
   // taken from the "raw" frames (not collapsed if inherits from a parent)
-  // source: FOLDChildFrame = $state({});
   source: FOLDChildFrame = {};
 
-  // which frame is currently selected by the app for rendering/modification
-  // baked: FOLD = $state({});
+  // some frames inherit from a parent and need to be "collapsed" to be complete.
+  // this frame is either identical to "source", or if this frame inherits
+  // from another, then this frame will be fully realized and self-contained.
   baked: FOLD = {};
 
   // style-related properties for every frame, like is it 2D, folded, etc..
-  // attributes: FrameAttributes = $derived
-  //   .by(() => makeFrameAttributes(this.baked));
   attributes: FrameAttributes;
 
   shapeManager: ShapeManager;
@@ -24,8 +21,8 @@ export class Frame {
   constructor(frames: FOLDChildFrame[], index: number) {
     this.source = frames[index];
     this.baked = flattenFrameInArray(frames, index);
-    this.attributes = makeFrameAttributes(this.baked);
-    this.shapeManager = new ShapeManager();
+    this.attributes = makeFrameAttributes(this.source, this.baked);
+    this.shapeManager = new ShapeManager(); // this.source);
   }
 }
 

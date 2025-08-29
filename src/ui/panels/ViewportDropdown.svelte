@@ -13,9 +13,13 @@
   }: { index: number; viewport: Viewport; children: Snippet } = $props();
 
   // these match with the Viewport.embeddingName property
-  const modelTypes = ["creasePattern", "foldedForm", "simulator"];
+  const embeddingNames = ["creasePattern", "foldedForm", "simulator"];
   // convert the above into what is shown on screen (abbreviated if necessary)
-  const modelTypeNames = { creasePattern: "cp", foldedForm: "folded", simulator: "sim" };
+  const embeddingNameReadable: { [key: string]: string } = {
+    creasePattern: "cp",
+    foldedForm: "folded",
+    simulator: "sim",
+  };
 
   const swapSVG = (): void =>
     context.ui.viewportManager.replaceViewportWithName(index, "SVGViewport");
@@ -27,21 +31,6 @@
     }
   };
 
-  const isFolded = $derived(
-    context.fileManager.document?.data.frameAttributes.isFoldedForm,
-  );
-
-  const computedStatesInfo: { [key: string]: string } = $derived({
-    creasePattern: isFolded
-      ? "frame is folded, no crease pattern available"
-      : "frame is a crease pattern",
-    foldedForm: isFolded ? "frame is already folded" : "folded form has been computed",
-  });
-
-  const computedInfo: string | undefined = $derived(
-    computedStatesInfo[viewport?.embeddingName ?? ""],
-  );
-
   let pad = "0.5rem";
   // background-color: #0002;
   let style = $derived(`position: absolute; top: ${pad}; right: ${pad};`);
@@ -49,35 +38,29 @@
 
 <Wrapper title={"▼"} {style} expanded={false}>
   <div class="column gap">
-    <div class="row">
+    <div class="row right">
       <button onclick={removeViewport}>- Remove</button>
     </div>
 
-    <hr />
-
     <div class="row gap">
-      <p>View Model</p>
+      <p>Embedding</p>
+    </div>
+    <div class="row gap">
       <div class="row toggle-row">
-        {#each modelTypes as name}
+        {#each embeddingNames as name}
           <button
             class={viewport.embeddingName === name ? "highlighted" : ""}
             onclick={() => {
               viewport.embeddingName = name;
-            }}>{modelTypeNames[name]}</button>
+            }}>{embeddingNameReadable[name]}</button>
         {/each}
       </div>
     </div>
 
-    {#if computedInfo}
-      <div class="row">
-        <p>{computedInfo}</p>
-      </div>
-    {/if}
-
-    <hr />
-
     <div class="row gap">
       <p>Renderer</p>
+    </div>
+    <div class="row gap">
       <div class="row toggle-row">
         <button
           class={viewport?.constructor === SVGViewport ? "highlighted" : ""}
@@ -87,7 +70,6 @@
           onclick={swapWebGL}>WebGL</button>
       </div>
     </div>
-    <hr />
     {@render children?.()}
   </div>
 </Wrapper>
@@ -104,5 +86,8 @@
   }
   .gap {
     gap: var(--form-gap);
+  }
+  .right {
+    justify-content: end;
   }
 </style>

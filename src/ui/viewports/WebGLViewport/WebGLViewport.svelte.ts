@@ -1,8 +1,7 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport";
 import type { View } from "../View.ts";
-import type { FrameAttributes } from "../../../graphs/FrameAttributes.ts";
-import type { Embedding } from "../../../graphs/Embedding.ts";
+import type { Embedding, EmbeddingAttributes } from "../../../graphs/Embedding.ts";
 import ViewportComponent from "./Component.svelte";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
@@ -11,6 +10,7 @@ import { Style } from "./Style.svelte.ts";
 import { GLModels } from "./GLModels.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import { RenderPerspective, RenderStyle } from "../types.ts";
+import { FrameClass } from "../../../graphs/Embedding.ts";
 import context from "../../../app/context.svelte.ts";
 
 export class WebGLViewport implements Viewport {
@@ -54,20 +54,23 @@ export class WebGLViewport implements Viewport {
     // this.setModelStyle(this.model.style);
   }
 
-  setModelStyle(modelStyle: FrameAttributes | undefined): void {
-    if (!modelStyle) { return; }
+  setModelStyle(attributes: EmbeddingAttributes | undefined): void {
+    if (!attributes) { return; }
     // console.log("WebGLViewport() setModelStyle");
 
     // render style is either: creasePattern, foldedForm, translucent
-    if (modelStyle.isFoldedForm) {
-      this.style.renderStyle = modelStyle.hasLayerOrder
-        ? RenderStyle.foldedForm
-        : RenderStyle.translucent;
-    } else {
-      this.style.renderStyle = RenderStyle.creasePattern;
+    switch (attributes.frameClass) {
+      case FrameClass.creasePattern:
+        this.style.renderStyle = RenderStyle.creasePattern;
+        break;
+      case FrameClass.foldedForm:
+        this.style.renderStyle = attributes.layerOrder
+          ? RenderStyle.foldedForm
+          : RenderStyle.translucent;
+        break;
     }
 
-    this.view.perspective = modelStyle.dimension === 2
+    this.view.perspective = attributes.dimension === 2
       ? RenderPerspective.orthographic
       : RenderPerspective.perspective;
   }
