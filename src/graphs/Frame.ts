@@ -3,8 +3,11 @@ import type { FrameAttributes } from "./FrameAttributes.ts";
 import { flattenFrameInArray } from "../general/fold.ts";
 import { makeFrameAttributes } from "./FrameAttributes.ts";
 import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
+import { makeUUID } from "../general/uuid.ts";
 
 export class Frame {
+  uuid: string;
+
   // taken from the "raw" frames (not collapsed if inherits from a parent)
   source: FOLDChildFrame = {};
 
@@ -19,6 +22,7 @@ export class Frame {
   shapeManager: ShapeManager;
 
   constructor(frames: FOLDChildFrame[], index: number) {
+    this.uuid = makeUUID();
     this.source = frames[index];
     this.baked = flattenFrameInArray(frames, index);
     this.attributes = makeFrameAttributes(this.source, this.baked);

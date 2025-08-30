@@ -1,14 +1,13 @@
-import { untrack, type Component } from "svelte";
+import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Embedding } from "../Embedding.ts";
-import { FrameClass, type FrameAttributes } from "../FrameAttributes.ts";
+import type { FrameAttributes } from "../FrameAttributes.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
 import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHGraph.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import { makeGraphUpdateEvent } from "../Updated.ts";
 import { FoldedVertices } from "./FoldedVertices.svelte.ts";
-import { LayerOrder } from "./LayerOrder.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
 
@@ -19,7 +18,6 @@ export class FoldedForm implements Embedding {
 
   #data: GraphData;
   folded: FoldedVertices;
-  orders: LayerOrder;
   settings: Settings;
   #effects: (() => void)[];
 
@@ -27,37 +25,21 @@ export class FoldedForm implements Embedding {
 
   graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
 
-  sourceIsFoldedForm: boolean = $derived
-    .by(() => this.#data.frame.attributes.class === FrameClass.foldedForm);
+  faceOrdersResult: { uuid: string, result: [number, number, number][] } | undefined = $state();
 
-  // computed face orders
-  hasLayerOrder: boolean = $state(false);
+  faceOrdersError: { uuid: string, error: Error } | undefined = $state();
+
+  #attributeHasLayerOrder: boolean = $state(false);
 
   // get attributes() { return this.#data.frame.attributes; }
   // attributes = $derived.by(() => this.#data.frame.attributes);
   attributes: FrameAttributes = $derived.by(() => ({
     ...this.#data.frame.attributes,
-    hasLayerOrder: this.hasLayerOrder,
+    hasLayerOrder: this.#attributeHasLayerOrder,
+    // hasLayerOrder: true,
   }));
 
-  setGraph(newGraph: FOLD | undefined) {
-    untrack(() => {
-      this.graph = {
-        // ...$state.snapshot(newGraph),
-        ...newGraph,
-        vertices_coords: this.settings.foldVerticesCoords
-          ? this.folded.vertices_coords
-          : newGraph?.vertices_coords,
-        faceOrders: this.settings.solveFaceOrders
-          ? this.orders.faceOrders
-          : newGraph?.faceOrders,
-        frame_classes: ["foldedForm"],
-      };
-    });
-    this.hasLayerOrder = (this.graph?.faceOrders && this.graph?.faceOrders.length > 0) ?? false;
-    this.graphUpdate.reset++;
-    // this.graphUpdate.structural++;
-  }
+  faceOrdersWorker: Worker;
 
   // todo
   get snapPoints(): [number, number][] {
@@ -66,28 +48,46 @@ export class FoldedForm implements Embedding {
   }
 
   get errors(): string[] {
-    return [this.folded.error, this.orders.error]
+    return [this.folded.error, this.faceOrdersError?.error]
       .filter(a => a !== undefined)
       .map(error => String(error));
   }
 
-  // get shapes(): Shape[] {
-  //   return this.#models.shapes;
-  // }
-
   constructor(data: GraphData) {
     this.#data = data;
     this.folded = new FoldedVertices(this, data);
-    this.orders = new LayerOrder(this, data);
     this.settings = new Settings();
     this.#effects = [
-      this.#effectGraphUpdate(),
+      this.#effectSetGraph(),
+      this.#effectFoldedVertices(),
     ];
-    this.setGraph(this.#data.frame.baked);
+    // console.log("FoldedForm: constructor()", context.workerManager.faceOrders);
+    this.faceOrdersWorker = new Worker(
+      new URL("../../workers/dispatch.worker.js", import.meta.url),
+      { type: "module", name: "layer-solver-manager" },
+    );
+    this.faceOrdersWorker.addEventListener("message", this.onFaceOrdersMessage.bind(this));
+    this.faceOrdersWorker.addEventListener("error", this.onFaceOrdersError.bind(this));
   }
 
   dealloc(): void {
     this.#effects.forEach(fn => fn());
+    this.faceOrdersWorker.removeEventListener("message", this.onFaceOrdersMessage);
+    this.faceOrdersWorker.removeEventListener("error", this.onFaceOrdersError);
+    // console.log("FoldedForm: dealloc()", context.workerManager.faceOrders);
+  }
+
+  onFaceOrdersMessage({ data }: MessageEvent) {
+    // console.log("LayerOrder worker responded with a message", data.result);
+    this.faceOrdersError = undefined;
+    this.faceOrdersResult = { uuid: data.uuid, result: data.result };
+  }
+
+  onFaceOrdersError(error: ErrorEvent) {
+    console.log("LayerOrder worker responded with an error", error);
+    this.faceOrdersResult = undefined;
+    // this.faceOrdersError = { uuid: error.uuid, error: error.error };
+    this.faceOrdersError = { uuid: "", error: error.error };
   }
 
   nearestVertex(point: [number, number]): VertexBVHType {
@@ -104,12 +104,41 @@ export class FoldedForm implements Embedding {
 
   // conditions for updating the graph: 
   // - it always updates (any changes to the source frame)
-  #effectGraphUpdate(): () => void {
+  #effectSetGraph(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const _ = this.settings.solveFaceOrders;
-        const __ = this.settings.foldVerticesCoords;
-        this.setGraph(this.#data.frame.baked);
+        // console.log("$effect: set graph");
+        const newGraph = { ...this.#data.frame.baked };
+        newGraph.frame_classes = ["foldedForm"];
+        if (this.settings.foldVerticesCoords && this.folded.vertices_coords !== undefined) {
+          newGraph.vertices_coords = this.folded.vertices_coords;
+        }
+        if (this.faceOrdersResult && this.faceOrdersResult.uuid === this.#data.frame.uuid) {
+          newGraph.faceOrders = $state
+            .snapshot(this.faceOrdersResult.result) as [number, number, number][];
+        }
+        this.graph = newGraph;
+        this.#attributeHasLayerOrder = newGraph.faceOrders != null && newGraph.faceOrders.length > 0;
+        this.attributes.hasLayerOrder = this.#attributeHasLayerOrder;
+        this.graphUpdate.reset++;
+      });
+      return () => { };
+    });
+  }
+
+  #effectFoldedVertices(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        // console.log("$effect: posting message to worker...", this.settings.solveFaceOrders);
+        if (!this.settings.solveFaceOrders) {
+          this.faceOrdersResult = undefined;
+          return;
+        }
+        if (this.folded.vertices_coords === undefined) { return; }
+        if (!this.settings.foldVerticesCoords) { return; }
+        const graph = this.graph;
+        const uuid = this.#data.frame.uuid;
+        this.faceOrdersWorker.postMessage({ uuid, graph });
       });
       return () => { };
     });

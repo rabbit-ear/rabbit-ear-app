@@ -3,6 +3,7 @@ import { APP_NAME } from "../system/constants.ts";
 import { FileManager } from "./FileManager.svelte.ts";
 import { FileController } from "./FileController.svelte.ts";
 import { KeyboardManager } from "./KeyboardManager.svelte.ts";
+import { WorkerManager } from "./WorkerManager.svelte.ts";
 import { Localization } from "./Localization.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import { Simulator } from "./Simulator.svelte.ts";
@@ -11,6 +12,7 @@ export class EditorContext {
   fileManager: FileManager;
   fileController: FileController;
   keyboardManager: KeyboardManager;
+  workerManager: WorkerManager;
   localization: Localization;
   settings: Settings;
   simulator: Simulator;
@@ -31,6 +33,7 @@ export class EditorContext {
     this.fileManager = new FileManager();
     this.fileController = new FileController(this.fileManager);
     this.keyboardManager = new KeyboardManager();
+    this.workerManager = new WorkerManager();
     this.localization = new Localization();
     this.settings = new Settings();
     this.simulator = new Simulator();
