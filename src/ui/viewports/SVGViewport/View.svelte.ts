@@ -112,7 +112,8 @@ export class SVGView implements View {
   // is zoom-level dependent. Use this variable to get an appropriate error-
   // correcting value.
   uiEpsilon: number = $derived
-    .by(() => this.vmax * this.viewport.constructor.settings.uiEpsilonFactor.value);
+    .by(() => this.vmax * this.viewport.constructor.settings.uiEpsilonFactor);
+  // .by(() => this.vmax * SVGViewport.settings.uiEpsilonFactor);
 
   // todo: this is O(n), would be nice if it was O(1)
   // reset model and camera matrix to aspect fit. the effect is watching:

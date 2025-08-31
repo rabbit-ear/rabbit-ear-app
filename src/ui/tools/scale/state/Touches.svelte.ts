@@ -28,24 +28,28 @@ export class Touches {
 
   set move(v: [number, number, number] | [number, number] | undefined) {
     this.#move = v;
+    this.snapMove = this.#move;
     // this.snapMove = this.#move
     //   ? this.viewport.snap.snapToPoint(this.#move).coords
     //   : undefined;
   }
   set drag(v: [number, number, number] | [number, number] | undefined) {
     this.#drag = v;
+    this.snapDrag = this.#drag;
     // this.snapDrag = this.#drag
     //   ? this.viewport.snap.snapToPoint(this.#drag).coords
     //   : undefined;
   }
   set press(v: [number, number, number] | [number, number] | undefined) {
     this.#press = v;
+    this.snapPress = this.#press;
     // this.snapPress = this.#press
     //   ? this.viewport.snap.snapToPoint(this.#press).coords
     //   : undefined;
   }
   set release(v: [number, number, number] | [number, number] | undefined) {
     this.#release = v;
+    this.snapRelease = this.#release;
     // this.snapRelease = this.#release
     //   ? this.viewport.snap.snapToPoint(this.#release).coords
     //   : undefined;
@@ -60,9 +64,9 @@ export class Touches {
     this.drag = undefined;
     this.press = undefined;
     this.release = undefined;
-    // this.snapMove = undefined;
-    // this.snapDrag = undefined;
-    // this.snapPress = undefined;
-    // this.snapRelease = undefined;
+    this.snapMove = undefined;
+    this.snapDrag = undefined;
+    this.snapPress = undefined;
+    this.snapRelease = undefined;
   }
 }

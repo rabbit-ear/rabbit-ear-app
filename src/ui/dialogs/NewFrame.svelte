@@ -16,25 +16,29 @@
   let dialog: HTMLDialogElement | undefined = $state();
   let panel = $state("");
   let squareSize = $state(16);
-  let rectangleWidth = $state(2);
-  let rectangleHeight = $state(1);
+  let rectangleWidth: number | string = $state(2);
+  let rectangleHeight: number | string = $state(1);
   let polygonSides = $state(6);
 
-  const invertVertical = $derived(context.ui.settings.rightHanded);
+  const rightHanded = $derived(context.ui.settings.rightHanded);
 
   const canDuplicate = false;
   // const canDuplicate = $derived(
   //   (context.fileManager.document?.data.frames.length ?? 0) > 0,
   // );
 
-  // $: graphSquare = square();
-  // $: graphRectangle = rectangle(
-  //   ...[rectangleWidth, rectangleHeight]
-  //     .map(parseFloat)
-  //     .map((n) => (isNaN(n) || !isFinite(n) ? 0 : n)),
-  // );
-  // $: graphPolygon = polygon(polygonSides);
-  // $: graphCurrentFrame = $CreasePattern ? $CreasePattern : {};
+  const graphSquare = square();
+  const graphRectangle = $derived(
+    rectangle(
+      ...[rectangleWidth, rectangleHeight]
+        .map(parseFloat)
+        .map((n) => (isNaN(n) || !isFinite(n) ? 0 : n)),
+    ),
+  );
+  const graphPolygon = $derived(polygon(polygonSides));
+
+  // const graphCurrentFrame = $CreasePattern ? $CreasePattern : {};
+  const graphCurrentFrame = $state({});
 
   const chooseFOLD = (fold: FOLD): void => {
     const doc = context.fileManager.document;
@@ -52,13 +56,17 @@
     dialog?.close();
   };
 
-  const patternsRow1: { graph: FOLD; name: string; onclick: () => void }[] = [
+  const patternsRow1: { graph: FOLD; name: string; onclick: () => void }[] = $derived([
     { graph: {}, name: "empty", onclick: () => chooseFOLD({}) },
-    // { graph: graphSquare, name: "square", onclick: () => chooseFOLD(square()) },
-    // { graph: graphSquare, name: "NxN square", onclick: () => (panel = "nxnSquare") },
-    // { graph: graphRectangle, name: "rectangle", onclick: () => (panel = "rectangle") },
-    // { graph: graphPolygon, name: "regular polygon", onclick: () => (panel = "polygon") },
-  ];
+    { graph: graphSquare, name: "square", onclick: () => chooseFOLD(square()) },
+    { graph: graphSquare, name: "NxN square...", onclick: () => (panel = "nxnSquare") },
+    { graph: graphRectangle, name: "rectangle...", onclick: () => (panel = "rectangle") },
+    {
+      graph: graphPolygon,
+      name: "regular polygon...",
+      onclick: () => (panel = "polygon"),
+    },
+  ]);
 
   const patternsRow2: { graph: FOLD; name: string; onclick: () => void }[] = [
     [fish(), "fish"],
@@ -98,43 +106,35 @@
   });
 </script>
 
+{#snippet CPButton(graph: FOLD, onclick: () => void, name?: string)}
+  <div class="flex-column">
+    <button class="svg-button crease-pattern" {onclick}>
+      <!-- <SVGFOLDCanvas {graph} {rightHanded} /> -->
+    </button>
+    {#if name}
+      <p>{name}</p>
+    {/if}
+  </div>
+{/snippet}
+
 <Dialog bind:dialog>
   <h1>New Frame</h1>
   <div>
     {#if canDuplicate}
       <div class="flex-row gap">
-        <div class="flex-column">
-          <button class="svg-button crease-pattern" onclick={duplicate}>
-            <!-- <SVGFOLDCanvas graph={graphCurrentFrame} {invertVertical} /> -->
-          </button>
-          <p>duplicate current frame</p>
-        </div>
+        {@render CPButton(graphCurrentFrame, duplicate, "duplicate current frame")}
       </div>
     {/if}
 
     <div class="flex-row gap">
       {#each patternsRow1 as pattern}
-        <div class="flex-column">
-          <button class="svg-button crease-pattern" onclick={pattern.onclick}>
-            <!--   <SVGFOLDCanvas graph={pattern.graph} {invertVertical} /> -->
-          </button>
-          {#if pattern.name}
-            <p>{pattern.name}</p>
-          {/if}
-        </div>
+        {@render CPButton(pattern.graph, pattern.onclick, pattern.name)}
       {/each}
     </div>
 
     <div class="flex-row gap">
       {#each patternsRow2 as pattern}
-        <div class="flex-column">
-          <button class="svg-button crease-pattern" onclick={pattern.onclick}>
-            <!-- <SVGFOLDCanvas graph={pattern.graph} {invertVertical} /> -->
-          </button>
-          {#if pattern.name}
-            <p>{pattern.name}</p>
-          {/if}
-        </div>
+        {@render CPButton(pattern.graph, pattern.onclick, pattern.name)}
       {/each}
     </div>
 

@@ -22,7 +22,7 @@ export class FoldedVertices {
       const error = err instanceof Error
         ? err
         : new Error(String(err));
-      return { error, result: [] };
+      return { error, result: undefined };
     }
   });
 

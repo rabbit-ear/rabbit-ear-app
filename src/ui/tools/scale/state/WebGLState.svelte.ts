@@ -1,6 +1,6 @@
-import type { WebGLViewport } from "../../viewports/WebGLViewport/WebGLViewport.svelte.ts";
+import type { WebGLViewport } from "../../../viewports/WebGLViewport/WebGLViewport.svelte.ts";
 
-export class GLViewportState {
+export class WebGLState {
   viewport: WebGLViewport;
   constructor(viewport: WebGLViewport) {
     this.viewport = viewport;
