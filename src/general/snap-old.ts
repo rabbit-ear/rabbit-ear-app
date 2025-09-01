@@ -3,12 +3,7 @@ import { distance2 } from "rabbit-ear/math/vector.js";
 import { nearestPointOnLine } from "rabbit-ear/math/nearest.js";
 import { overlapLinePoint } from "rabbit-ear/math/overlap.js";
 
-export type SnapResultNew = {
-  coords: [number, number] | undefined;
-  dist: number;
-};
-
-export type SnapResult = {
+export type SnapResultOld = {
   coords: [number, number] | undefined;
   snap: boolean;
 };
@@ -34,7 +29,7 @@ export const snapToPointOrGrid = (
   snapRadius: number,
   points: [number, number][],
   gridSnapFunction: (p: [number, number], r: number) => [number, number] | undefined,
-): SnapResult => {
+): SnapResultOld => {
   // console.log("snapToPoint", point, points, snapRadius);
   if (!point) {
     return { coords: undefined, snap: false };
@@ -78,7 +73,7 @@ export const snapToLineOrPointOrGrid = (
   lines: LineType[],
   points: [number, number][],
   gridSnapFunction: (p: [number, number], r: number) => [number, number] | undefined,
-): SnapResult => {
+): SnapResultOld => {
   // for a line:
   // clamp: a => a,
   // domain: () => true,

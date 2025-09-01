@@ -32,7 +32,7 @@ export class Touches {
     const snapPoint = this.#move
       ? this.viewport.snap.snapToPoint(this.#move)
       : undefined;
-    this.snapMove = snapPoint && snapPoint.dist < this.viewport.view.uiEpsilon
+    this.snapMove = snapPoint && snapPoint.dist < this.viewport.snap.snapRadius
       ? snapPoint.coords
       : this.#move;
     // : undefined;
@@ -44,7 +44,7 @@ export class Touches {
     const snapPoint = this.#drag
       ? this.viewport.snap.snapToPoint(this.#drag)
       : undefined;
-    this.snapDrag = snapPoint && snapPoint.dist < this.viewport.view.uiEpsilon
+    this.snapDrag = snapPoint && snapPoint.dist < this.viewport.snap.snapRadius
       ? snapPoint.coords
       : this.#drag;
     // : undefined;
@@ -56,7 +56,7 @@ export class Touches {
     const snapPoint = this.#press
       ? this.viewport.snap.snapToPoint(this.#press)
       : undefined;
-    this.snapPress = snapPoint && snapPoint.dist < this.viewport.view.uiEpsilon
+    this.snapPress = snapPoint && snapPoint.dist < this.viewport.snap.snapRadius
       ? snapPoint.coords
       : this.#press;
     // : undefined;
@@ -68,7 +68,7 @@ export class Touches {
     const snapPoint = this.#release
       ? this.viewport.snap.snapToPoint(this.#release)
       : undefined;
-    this.snapRelease = snapPoint && snapPoint.dist < this.viewport.view.uiEpsilon
+    this.snapRelease = snapPoint && snapPoint.dist < this.viewport.snap.snapRadius
       ? snapPoint.coords
       : this.#release;
     // : undefined;

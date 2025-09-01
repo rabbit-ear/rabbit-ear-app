@@ -20,7 +20,7 @@ export class Anchor {
   selected: boolean = $state(false);
 
   equivalent = (point1: [number, number], point2: [number, number]): boolean =>
-    distance2(point1, point2) < this.viewport.view.uiEpsilon;
+    distance2(point1, point2) < this.viewport.snap.snapRadius;
 
   highlighted: boolean = $derived.by(() => {
     if (this.touches.snapDrag) {

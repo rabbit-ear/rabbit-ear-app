@@ -10,7 +10,6 @@ export class Settings {
   tiling: string = $derived(context.ui.settings.tiling.value);
   showGrid: boolean = $derived(context.ui.settings.showGrid.value);
   showAxes: boolean = $derived(context.ui.settings.showAxes.value);
-  uiEpsilonFactor: number = $derived(context.ui.settings.uiEpsilonFactor.value);
   snapRadiusFactor: number = $derived(context.ui.settings.snapRadiusFactor.value);
   radialSnapDegrees: number = $derived(context.ui.settings.radialSnapDegrees.value);
   radialSnapOffset: number = $derived(context.ui.settings.radialSnapOffset.value);

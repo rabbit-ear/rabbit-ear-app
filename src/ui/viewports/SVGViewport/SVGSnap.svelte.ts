@@ -1,32 +1,19 @@
+import type { Snap } from "../Snap.ts";
+import type { SnapResult, LineType } from "../Snap.ts";
 import { distance2, resize2 } from "rabbit-ear/math/vector.js";
-import type { SnapResult, LineType, SnapResultNew } from "./snap.ts";
 import { SVGViewport } from "./SVGViewport.svelte.ts";
-import {
-  snapToPointOrGrid,
-  snapToLineOrPointOrGrid,
-} from "./snap.ts";
 import {
   triangleGridSnapFunction,
   squareGridSnapFunction,
   emptySnapFunction,
-} from "./gridSnap.ts";
+} from "../../../general/gridSnap.ts";
 
-export class Snap {
+export class SVGSnap implements Snap {
   viewport: SVGViewport;
 
-  // This is the radius of the snapping range to the
-  // nearest snappable point, it is dependent upon the current view zoom.
   snapRadius: number = $derived
     .by(() => this.viewport.view.vmax * SVGViewport.settings.snapRadiusFactor);
-
-  points: [number, number][] = $state([]);
-
-  // todo: get rid of resize2
-  #snapPoints: [number, number][] = $derived.by(() =>
-    ([] as [number, number][])
-      .concat(this.points)
-      .concat(this.viewport.embedding?.snapPoints.map(resize2)),
-  );
+  // .by(() => this.viewport.view.vmax * this.viewport.constructor.settings.snapRadiusFactor);
 
   gridSnapFunction: (
     point: [number, number],
@@ -42,7 +29,7 @@ export class Snap {
     }
   });
 
-  snapToPoint(point: [number, number]): SnapResultNew | undefined {
+  snapToPoint(point: [number, number]): SnapResult | undefined {
     const graphPoint = this.viewport.embedding?.nearestSnapPoint(point);
     const gridSnapCoords = this.gridSnapFunction(point, this.snapRadius);
     const gridPoint = gridSnapCoords
@@ -54,7 +41,11 @@ export class Snap {
       .pop();
   }
 
-  // snapToPoint(point: [number, number]): SnapResult {
+  snapToLine(point: [number, number], lines: LineType[]): SnapResult | undefined {
+    return undefined;
+  }
+
+  // snapToPoint(point: [number, number]): SnapResultOld {
   //   return snapToPointOrGrid(
   //     point,
   //     this.snapRadius,
@@ -63,15 +54,15 @@ export class Snap {
   //   );
   // }
 
-  snapToLine(point: [number, number], lines: LineType[]): SnapResult {
-    return snapToLineOrPointOrGrid(
-      point,
-      this.snapRadius,
-      lines,
-      this.#snapPoints,
-      this.gridSnapFunction,
-    );
-  }
+  // snapToLine(point: [number, number], lines: LineType[]): SnapResultOld {
+  //   return snapToLineOrPointOrGrid(
+  //     point,
+  //     this.snapRadius,
+  //     lines,
+  //     this.#snapPoints,
+  //     this.gridSnapFunction,
+  //   );
+  // }
 
   constructor(viewport: SVGViewport) {
     this.viewport = viewport;

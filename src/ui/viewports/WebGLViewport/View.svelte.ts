@@ -89,8 +89,6 @@ export class WebGLView implements View {
 
   vmax: number = $derived(Math.max(this.viewBox[2], this.viewBox[3]));
 
-  uiEpsilon: number = $derived.by(() => this.vmax * WebGLViewport.settings.uiEpsilonFactor);
-
   snapRadius: number = $derived.by(() => this.vmax * WebGLViewport.settings.snapRadiusFactor);
 
   clipLine(line: VecLine2 | VecLine3): [[number, number], [number, number]]

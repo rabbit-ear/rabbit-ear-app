@@ -57,11 +57,6 @@ export interface View {
   //   [number, number]
   // ];
 
-  // a UI touch event, coming from a pointer device, will have some built-in
-  // error correcting (like snapping, for example), and this behavior is zoom-level
-  // dependent. Use this variable to get an appropriate error-correcting value.
-  uiEpsilon: number;
-
   clipLine(line: VecLine2 | VecLine3): [[number, number], [number, number]]
     | [[number, number, number], [number, number, number]]
     | undefined;

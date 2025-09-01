@@ -1,6 +1,7 @@
 import type { Component } from "svelte";
 import type { Embedding } from "../../graphs/Embedding.ts";
 import type { View } from "./View.ts";
+import type { Snap } from "./Snap.ts";
 
 export abstract class Viewport {
   // static properties (unable to be defined here, please define them)
@@ -13,9 +14,9 @@ export abstract class Viewport {
   // rendering information, matrices, scale
   abstract view: View;
 
-  abstract snap: {
-    snapToPoint(point: [number, number]): { coords: [number, number], dist: number } | undefined;
-  }
+  // snapping the UI to nearest points or lines, viewport dependent as
+  // zoom levels are dynamic which affects the snappable range.
+  abstract snap: Snap;
 
   // a unique UUID for each instance
   // this is required for the Svelte {#each} loop to prevent element reuse

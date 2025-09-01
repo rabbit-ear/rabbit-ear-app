@@ -1,16 +1,16 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport.ts";
 import type { Embedding } from "../../../graphs/Embedding.ts";
+import type { Shape } from "../../../shapes/Shape.ts";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./Component.svelte";
 import { Settings } from "./Settings.svelte.ts";
-import { SVGView } from "./View.svelte.ts";
+import { SVGView } from "./SVGView.svelte.ts";
 import { Style } from "./Style.svelte.ts";
 import { Grid } from "./Grid.svelte.ts";
-import { Snap } from "./Snap.svelte.ts";
+import { SVGSnap } from "./SVGSnap.svelte.ts";
 import context from "../../../app/context.svelte.ts";
-import type { Shape } from "../../../shapes/Shape.ts";
 
 export class SVGViewport implements Viewport {
   static name: string = "SVG Viewport";
@@ -24,8 +24,8 @@ export class SVGViewport implements Viewport {
   didMount?: () => void;
 
   grid: Grid;
-  snap: Snap;
   style: Style;
+  snap: SVGSnap;
   view: SVGView;
 
   // model?: Model = $state.raw();
@@ -50,7 +50,7 @@ export class SVGViewport implements Viewport {
     this.view = new SVGView(this);
     this.style = new Style(this);
     this.grid = new Grid(this);
-    this.snap = new Snap(this);
+    this.snap = new SVGSnap(this);
   }
 
   unbindTool(): void {
