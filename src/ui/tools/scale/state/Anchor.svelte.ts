@@ -1,13 +1,22 @@
-import { distance2 } from "rabbit-ear/math/vector.js";
+import { distance2, resize3 } from "rabbit-ear/math/vector.js";
 import type { Viewport } from "../../../viewports/Viewport.ts";
 import { Touches } from "./Touches.svelte.ts";
+import { GlobalState } from "./GlobalState.svelte.ts";
 
-export class FixedPoint {
+export class Anchor {
   touches: Touches;
   viewport: Viewport;
+  globalState: GlobalState;
   #effects: (() => void)[] = [];
 
-  origin: [number, number] | [number, number, number] = $state([0, 0]);
+  // origin: [number, number] | [number, number, number] = $state([0, 0]);
+  parsed: [number, number] | [number, number, number] = $derived
+    .by(() => this.globalState.toolOrigin.map(Number));
+  origin: [number, number] | [number, number, number] = $derived([
+    !isNaN(this.parsed[0]) && isFinite(this.parsed[0]) ? this.parsed[0] : 0,
+    !isNaN(this.parsed[1]) && isFinite(this.parsed[1]) ? this.parsed[1] : 0,
+  ]);
+
   selected: boolean = $state(false);
 
   equivalent = (point1: [number, number], point2: [number, number]): boolean =>
@@ -24,7 +33,8 @@ export class FixedPoint {
   });
 
   reset(): void {
-    this.origin = [0, 0];
+    // this.origin = [0, 0];
+    this.globalState.toolOrigin = [0, 0, 0];
     this.selected = false;
   }
 
@@ -58,13 +68,15 @@ export class FixedPoint {
           return;
         }
         if (this.touches.snapPress && this.touches.snapRelease) {
-          this.origin = this.touches.snapRelease;
+          // this.origin = this.touches.snapRelease;
+          this.globalState.toolOrigin = resize3(this.touches.snapRelease);
           // console.log("fixed point: set origin position, reset()");
           // this.reset();
           return;
         }
         if (this.touches.snapDrag) {
-          this.origin = this.touches.snapDrag;
+          // this.origin = this.touches.snapDrag;
+          this.globalState.toolOrigin = resize3(this.touches.snapDrag);
           return;
         }
       });
@@ -72,9 +84,10 @@ export class FixedPoint {
     });
   }
 
-  constructor(viewport: Viewport, touches: Touches) {
+  constructor(viewport: Viewport, touches: Touches, globalState: GlobalState) {
     this.viewport = viewport;
     this.touches = touches;
+    this.globalState = globalState;
     this.#effects = [
       this.#update(),
       this.#updateSelected(),

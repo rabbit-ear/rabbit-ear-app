@@ -1,28 +1,23 @@
-import { resize2 } from "rabbit-ear/math/vector.js";
-import type { SnapResult, LineType } from "./snap.ts";
+import { distance2, resize2 } from "rabbit-ear/math/vector.js";
+import type { SnapResult, LineType, SnapResultNew } from "./snap.ts";
 import { SVGViewport } from "./SVGViewport.svelte.ts";
 import {
   snapToPointOrGrid,
   snapToLineOrPointOrGrid,
+} from "./snap.ts";
+import {
   triangleGridSnapFunction,
   squareGridSnapFunction,
-} from "./snap.ts";
-
-const emptySnapFunction = (
-  point: [number, number],
-  snapRadius: number,
-): [number, number] | undefined => {
-  point;
-  snapRadius;
-  return undefined;
-};
+  emptySnapFunction,
+} from "./gridSnap.ts";
 
 export class Snap {
   viewport: SVGViewport;
 
   // This is the radius of the snapping range to the
   // nearest snappable point, it is dependent upon the current view zoom.
-  snapRadius: number = $derived.by(() => this.viewport.view.vmax * SVGViewport.settings.snapRadiusFactor.value);
+  snapRadius: number = $derived
+    .by(() => this.viewport.view.vmax * SVGViewport.settings.snapRadiusFactor);
 
   points: [number, number][] = $state([]);
 
@@ -37,7 +32,7 @@ export class Snap {
     point: [number, number],
     snapRadius: number,
   ) => [number, number] | undefined = $derived.by(() => {
-    switch (SVGViewport.settings.tiling.value) {
+    switch (SVGViewport.settings.tiling) {
       case "triangle":
         return triangleGridSnapFunction;
       case "square":
@@ -47,14 +42,26 @@ export class Snap {
     }
   });
 
-  snapToPoint(point: [number, number]): SnapResult {
-    return snapToPointOrGrid(
-      point,
-      this.snapRadius,
-      this.#snapPoints,
-      this.gridSnapFunction,
-    );
+  snapToPoint(point: [number, number]): SnapResultNew | undefined {
+    const graphPoint = this.viewport.embedding?.nearestSnapPoint(point);
+    const gridSnapCoords = this.gridSnapFunction(point, this.snapRadius);
+    const gridPoint = gridSnapCoords
+      ? { coords: gridSnapCoords, dist: distance2(point, gridSnapCoords) }
+      : undefined;
+    return [graphPoint, gridPoint]
+      .filter(a => a !== undefined)
+      .sort((a, b) => b.dist - a.dist)
+      .pop();
   }
+
+  // snapToPoint(point: [number, number]): SnapResult {
+  //   return snapToPointOrGrid(
+  //     point,
+  //     this.snapRadius,
+  //     this.#snapPoints,
+  //     this.gridSnapFunction,
+  //   );
+  // }
 
   snapToLine(point: [number, number], lines: LineType[]): SnapResult {
     return snapToLineOrPointOrGrid(

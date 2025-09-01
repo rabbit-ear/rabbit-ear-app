@@ -28,31 +28,50 @@ export class Touches {
 
   set move(v: [number, number, number] | [number, number] | undefined) {
     this.#move = v;
-    this.snapMove = this.#move;
-    // this.snapMove = this.#move
-    //   ? this.viewport.snap.snapToPoint(this.#move).coords
-    //   : undefined;
+    // this.snapMove = this.#move;
+    const snapPoint = this.#move
+      ? this.viewport.snap.snapToPoint(this.#move)
+      : undefined;
+    this.snapMove = snapPoint && snapPoint.dist < this.viewport.view.uiEpsilon
+      ? snapPoint.coords
+      : this.#move;
+    // : undefined;
   }
+
   set drag(v: [number, number, number] | [number, number] | undefined) {
     this.#drag = v;
-    this.snapDrag = this.#drag;
-    // this.snapDrag = this.#drag
-    //   ? this.viewport.snap.snapToPoint(this.#drag).coords
-    //   : undefined;
+    // this.snapDrag = this.#drag;
+    const snapPoint = this.#drag
+      ? this.viewport.snap.snapToPoint(this.#drag)
+      : undefined;
+    this.snapDrag = snapPoint && snapPoint.dist < this.viewport.view.uiEpsilon
+      ? snapPoint.coords
+      : this.#drag;
+    // : undefined;
   }
+
   set press(v: [number, number, number] | [number, number] | undefined) {
     this.#press = v;
-    this.snapPress = this.#press;
-    // this.snapPress = this.#press
-    //   ? this.viewport.snap.snapToPoint(this.#press).coords
-    //   : undefined;
+    // this.snapPress = this.#press;
+    const snapPoint = this.#press
+      ? this.viewport.snap.snapToPoint(this.#press)
+      : undefined;
+    this.snapPress = snapPoint && snapPoint.dist < this.viewport.view.uiEpsilon
+      ? snapPoint.coords
+      : this.#press;
+    // : undefined;
   }
+
   set release(v: [number, number, number] | [number, number] | undefined) {
     this.#release = v;
-    this.snapRelease = this.#release;
-    // this.snapRelease = this.#release
-    //   ? this.viewport.snap.snapToPoint(this.#release).coords
-    //   : undefined;
+    // this.snapRelease = this.#release;
+    const snapPoint = this.#release
+      ? this.viewport.snap.snapToPoint(this.#release)
+      : undefined;
+    this.snapRelease = snapPoint && snapPoint.dist < this.viewport.view.uiEpsilon
+      ? snapPoint.coords
+      : this.#release;
+    // : undefined;
   }
 
   constructor(viewport: Viewport) {
@@ -70,3 +89,4 @@ export class Touches {
     this.snapRelease = undefined;
   }
 }
+

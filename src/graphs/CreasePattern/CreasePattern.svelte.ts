@@ -95,6 +95,18 @@ export class CreasePattern implements Embedding {
     return this.#faceBVH?.nearest(point);
   }
 
+  nearestSnapPoint(point: [number, number]): {
+    coords: [number, number] | [number, number, number],
+    dist: number,
+  } | undefined {
+    const vertex = this.nearestVertex(point);
+    if (!vertex) { return undefined; }
+    return {
+      coords: vertex.coords,
+      dist: vertex.dist,
+    };
+  }
+
   // conditions for updating the graph: 
   // - it always updates (any changes to the source frame)
   #effectGraphUpdate(): () => void {

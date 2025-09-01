@@ -39,6 +39,11 @@ export interface Embedding {
   nearestEdge(point: [number, number]): EdgeBVHType;
   nearestFace(point: [number, number]): FaceBVHType;
 
+  nearestSnapPoint(point: [number, number]): {
+    coords: [number, number] | [number, number, number],
+    dist: number,
+  } | undefined;
+
   // the Simulator Embedding in particular uses this to dealloc WebGL things
   dealloc?: () => void;
 }

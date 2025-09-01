@@ -13,6 +13,10 @@ export abstract class Viewport {
   // rendering information, matrices, scale
   abstract view: View;
 
+  abstract snap: {
+    snapToPoint(point: [number, number]): { coords: [number, number], dist: number } | undefined;
+  }
+
   // a unique UUID for each instance
   // this is required for the Svelte {#each} loop to prevent element reuse
   abstract id: string;

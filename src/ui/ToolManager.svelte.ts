@@ -7,12 +7,14 @@ type ToolConstructor<T extends Tool = Tool> = new () => T;
 
 export class ToolManager {
   #ui: UI;
-  #tool?: Tool = $state();
+  // #tool: Tool | undefined = $state();
+  tool: Tool | undefined = $state();
   #unbindFromViewports: Map<Viewport, () => void> = new Map();
 
-  get tool(): Tool | undefined { return this.#tool; }
+  // get tool(): Tool | undefined { return this.#tool; }
 
-  toolName: string = $derived((this.#tool?.constructor as typeof Tool).key ?? "");
+  // toolName: string = $derived((this.#tool?.constructor as typeof Tool).key ?? "");
+  toolName: string = $derived((this.tool?.constructor as typeof Tool).key ?? "");
 
   // tools: { [key: string]: ToolConstructor<Tool> } = $derived(Tools);
   tools: { [key: string]: ToolConstructor<Tool> } = $derived.by(() => Object
@@ -30,7 +32,8 @@ export class ToolManager {
   }
 
   unbindTool(): void {
-    this.#tool?.dealloc?.();
+    // this.#tool?.dealloc?.();
+    this.tool?.dealloc?.();
     this.#unbindFromViewports.forEach(unbind => unbind());
     this.#unbindFromViewports.clear();
   }
@@ -44,10 +47,12 @@ export class ToolManager {
       console.warn(`no tool with the name ${name}`);
       return;
     }
-    this.#tool = new tool();
+    // this.#tool = new tool();
+    this.tool = new tool();
     // console.log(this.tool);
     this.#ui.viewportManager.viewports.forEach(viewport => {
-      const unbind = this.#tool?.bindTo(viewport);
+      // const unbind = this.#tool?.bindTo(viewport);
+      const unbind = this.tool?.bindTo(viewport);
       if (!unbind) { return; }
       this.#unbindFromViewports.set(viewport, unbind);
     });
@@ -55,7 +60,8 @@ export class ToolManager {
 
   viewportDidAdd(viewport: Viewport): void {
     this.viewportDidRemove(viewport);
-    const unbind = this.#tool?.bindTo(viewport);
+    // const unbind = this.#tool?.bindTo(viewport);
+    const unbind = this.tool?.bindTo(viewport);
     if (!unbind) { return; }
     this.#unbindFromViewports.set(viewport, unbind);
   }

@@ -3,7 +3,7 @@ import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.sve
 import type { Viewport } from "../../../viewports/Viewport.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
 import { Touches } from "./Touches.svelte.ts";
-import { FixedPoint } from "./FixedPoint.svelte.ts";
+import { Anchor } from "./Anchor.svelte.ts";
 import SVGLayer from "../svg/SVGLayer.svelte";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
 import { wheelEventZoomMatrix, wheelPanMatrix } from "../../zoom/matrix.ts";
@@ -15,21 +15,21 @@ export class SVGState {
   viewport: SVGViewport;
   globalState: GlobalState;
   touches: Touches;
-  fixedPoint: FixedPoint;
+  anchor: Anchor;
   #effects: (() => void)[] = [];
 
   startVector: [number, number] | undefined = $derived.by(() => {
     return this.touches && this.touches.snapPress
-      ? subtract2(this.touches.snapPress, this.fixedPoint.origin)
+      ? subtract2(this.touches.snapPress, this.anchor.origin)
       : undefined;
   });
 
   endVector: [number, number] | undefined = $derived.by(() => {
     if (this.touches.snapRelease) {
-      return subtract2(this.touches.snapRelease, this.fixedPoint.origin);
+      return subtract2(this.touches.snapRelease, this.anchor.origin);
     }
     if (this.touches.snapDrag) {
-      return subtract2(this.touches.snapDrag, this.fixedPoint.origin);
+      return subtract2(this.touches.snapDrag, this.anchor.origin);
     }
     return undefined;
   });
@@ -45,7 +45,7 @@ export class SVGState {
     this.globalState = globalState;
 
     this.touches = new Touches(this.viewport);
-    this.fixedPoint = new FixedPoint(this.viewport, this.touches);
+    this.anchor = new Anchor(this.viewport, this.touches, this.globalState);
     this.#effects = [
       this.#update(),
       this.#resetToolOrigin(),
@@ -55,14 +55,19 @@ export class SVGState {
     // build the props object so that data can pass from here to the component.
     this.viewport.layer = SVGLayer;
     this.viewport.props = {
-      getFixedPoint: (): FixedPoint => { return this.fixedPoint; },
+      getStartVector: (): [number, number] | undefined => { return this.startVector; },
+      getEndVector: (): [number, number] | undefined => { return this.endVector; },
+      getAnchor: (): Anchor => { return this.anchor; },
+      getIsPressed: (): boolean => { return this.touches.snapPress !== undefined; },
+      // todo: see if we can pass this off to the Panel somehow
+      getGlobalState: (): GlobalState => { return this.globalState; }
     };
   }
 
   dealloc(): void {
     this.#effects.forEach((u) => u());
     this.#effects = [];
-    this.fixedPoint.dealloc();
+    this.anchor.dealloc();
     this.touches.reset();
   }
 
@@ -113,22 +118,23 @@ export class SVGState {
     return $effect.root(() => {
       $effect(() => {
         // console.log("tool.update()", this.touches.snapPress, this.touches.snapRelease);
-        if (this.fixedPoint.selected) {
+        if (this.anchor.selected) {
           return;
         }
         if (!this.touches.snapPress || !this.touches.snapRelease) {
           return;
         }
         if (Math.abs(this.scale) < 1e-6) {
+          this.touches.reset();
           return;
         }
         console.log("scale model by", $state.snapshot(this.scale));
         const doc = context.fileManager.document;
         if (doc) {
-          const command = new AffineScaleCommand(doc, this.scale, this.fixedPoint.origin);
+          const command = new AffineScaleCommand(doc, this.scale, this.anchor.origin);
           doc.executeCommand(command)
         }
-        // this.fixedPoint.reset();
+        // this.anchor.reset();
         this.touches.reset();
       });
       return () => { };
@@ -140,7 +146,7 @@ export class SVGState {
       $effect(() => {
         const _ = context.fileManager.document?.data.frame;
         untrack(() => {
-          this.fixedPoint.reset();
+          this.anchor.reset();
           this.touches.reset();
         });
       });

@@ -10,15 +10,19 @@ import Panel from "./Panel.svelte";
 import icon from "./icon.svelte";
 import { UIMode } from "../../Settings.svelte.ts";
 
+// todo: I found an issue by moving the focus origin,
+// then typing in the coordinates for the focus in the panel,
+// it triggered the scale operation (i think due to the last known
+// coordinate not matching with the current focus coordinate)
 class ScaleTool implements Tool {
   static key = "ui.tools.scale";
   static name = "scale";
   static icon = icon;
   static modes = [UIMode.mesh, UIMode.ruler];
 
-  state = new GlobalState();
   panel: Component = Panel;
 
+  state = new GlobalState();
   states = new Map<Viewport, (SVGState | WebGLState)>();
 
   private viewportState(viewport: Viewport) {

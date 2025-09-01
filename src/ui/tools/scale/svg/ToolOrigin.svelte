@@ -1,56 +1,61 @@
 <script lang="ts">
   import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
-  import type { FixedPoint } from "../state/FixedPoint.svelte.ts";
+  import type { Anchor } from "../state/Anchor.svelte.ts";
 
   type PropsType = {
     viewport: SVGViewport;
-    getFixedPoint: () => FixedPoint;
+    getAnchor: () => Anchor;
   };
-  let { viewport, getFixedPoint }: PropsType = $props();
+  let { viewport, getAnchor }: PropsType = $props();
 
-  const highlighted = $derived(getFixedPoint().highlighted);
+  const highlighted = $derived(getAnchor().highlighted);
   const className = $derived(highlighted ? "highlighted" : "");
-  const origin = $derived(getFixedPoint().origin);
+  const fixedOrigin = $derived(getAnchor().origin);
+  const origin = $derived([
+    !isNaN(fixedOrigin[0]) && isFinite(fixedOrigin[0]) ? fixedOrigin[0] : 0,
+    !isNaN(fixedOrigin[1]) && isFinite(fixedOrigin[1]) ? fixedOrigin[1] : 0,
+  ]);
 
-  const smallR = 1.5 * 2;
-  const bigR = 3 * 2;
+  const smallR = 1.5;
+  const bigR = 3;
 
-  // svg elements
   const originCircle1 = $derived({
     cx: origin[0],
     cy: origin[1],
     r: viewport.style.circleRadius * smallR,
   });
+
   const originCircle2 = $derived({
     cx: origin[0],
     cy: origin[1],
     r: viewport.style.circleRadius * smallR,
   });
-  const originLine1 = $derived({
-    x1: origin[0],
-    y1: origin[1] - viewport.style.circleRadius * bigR,
-    x2: origin[0],
-    y2: origin[1] + viewport.style.circleRadius * bigR,
-  });
-  const originLine2 = $derived({
-    x1: origin[0] - viewport.style.circleRadius * bigR,
-    y1: origin[1],
-    x2: origin[0] + viewport.style.circleRadius * bigR,
-    y2: origin[1],
+
+  const vLine = $derived([
+    [origin[0], origin[1] - viewport.style.circleRadius * bigR],
+    [origin[0], origin[1] + viewport.style.circleRadius * bigR],
+  ]);
+
+  const hLine = $derived([
+    [origin[0] - viewport.style.circleRadius * bigR, origin[1]],
+    [origin[0] + viewport.style.circleRadius * bigR, origin[1]],
+  ]);
+
+  const path = $derived({
+    d: `M${vLine[0].join(",")}L${vLine[1].join(",")}M${hLine[0].join(",")}L${hLine[1].join(",")}`,
   });
 </script>
 
 <circle {...originCircle1} class={className} />
 <circle {...originCircle2} class={className} />
-<line {...originLine1} class={className} />
-<line {...originLine2} class={className} />
+<path {...path} class={className} />
 
 <style>
   circle {
     fill: none;
     stroke: var(--text);
   }
-  line {
+  path {
     fill: none;
     stroke: var(--text);
   }

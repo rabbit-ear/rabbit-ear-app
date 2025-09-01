@@ -102,6 +102,13 @@ export class FoldedForm implements Embedding {
     return { index: 0, poly: [[0, 0], [0, 0], [0, 0]], dist: 0 };
   }
 
+  nearestSnapPoint(point: [number, number]): {
+    coords: [number, number] | [number, number, number],
+    dist: number,
+  } | undefined {
+    return undefined;
+  }
+
   // conditions for updating the graph: 
   // - it always updates (any changes to the source frame)
   #effectSetGraph(): () => void {
