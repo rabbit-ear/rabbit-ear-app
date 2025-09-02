@@ -53,6 +53,16 @@ export class FileDocument {
     this.#isDirty ||= result;
   }
 
+  undoUntilIndex(index: number): void {
+    const result = this.#history.undoUntilIndex(index);
+    this.#isDirty ||= result;
+  }
+
+  redoUntilIndex(index: number): void {
+    const result = this.#history.redoUntilIndex(index);
+    this.#isDirty ||= result;
+  }
+
   // This will return false if the save was not possible due to
   // the filePath not existing. Typically this means the UI should
   // trigger a "Save As..." dialog as the file has not yet been saved.

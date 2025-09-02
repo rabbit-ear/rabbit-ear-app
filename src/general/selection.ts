@@ -1,6 +1,13 @@
 import type { Box, FOLD } from "rabbit-ear/types.js";
 import { includeS } from "rabbit-ear/math/compare.js";
 import { intersectLineLine } from "rabbit-ear/math/intersect.js";
+import { subgraph, subgraphExclusive } from "rabbit-ear/graph/subgraph.js";
+
+export type FOLDSelection = {
+  vertices?: number[];
+  edges?: number[];
+  faces?: number[];
+};
 
 const pointInRect = (p: [number, number], rect: Box) =>
   p[0] > rect.min[0] &&
@@ -41,7 +48,7 @@ const segmentBoxOverlap = (segment: [[number, number], [number, number]], box: B
   return ptInside;
 };
 
-export const getComponentsInsideRect = (graph: FOLD, rect: Box) => {
+export const getComponentsInsideRect = (graph: FOLD, rect: Box): FOLDSelection => {
   if (!graph || !rect) {
     return { vertices: [], edges: [], faces: [] };
   }
@@ -75,5 +82,14 @@ export const getComponentsInsideRect = (graph: FOLD, rect: Box) => {
       .map((sel, i) => (sel ? i : undefined))
       .filter((a) => a !== undefined);
   return { vertices, edges, faces };
+};
+
+export const getSubgraph = (graph: FOLD, selection: FOLDSelection): FOLD => {
+  try {
+    return subgraph(graph, selection);
+    // return subgraphExclusive(graph, selection);
+  } catch {
+    return {};
+  }
 };
 

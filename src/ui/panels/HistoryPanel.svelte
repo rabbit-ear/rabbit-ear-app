@@ -3,31 +3,31 @@
 
   const undoStack = $derived(context.fileManager.document?.undoStack);
   const redoStack = $derived(context.fileManager.document?.redoStack);
+
+  const undoUntilIndex = (index: number) =>
+    context.fileManager.document?.undoUntilIndex(index);
+  const redoUntilIndex = (index: number) =>
+    context.fileManager.document?.redoUntilIndex(index);
 </script>
 
-<div class="column gap">
+<div class="scrollable column gap">
   {#each undoStack as item, i}
     <div class="row gap undo">
-      <p>{item.constructor.name}</p>
+      <button onclick={() => undoUntilIndex(i)}>{item.constructor.name}</button>
     </div>
   {/each}
   {#each redoStack as item, i}
     <div class="row gap redo">
-      <p>{item.constructor.name}</p>
+      <button onclick={() => redoUntilIndex(i)}>{item.constructor.name}</button>
     </div>
   {/each}
 </div>
 
 <style>
-  p {
-    pointer-events: none;
+  .scrollable {
+    max-height: 10rem;
+    overflow-y: auto;
   }
-  .gap {
-    gap: var(--form-gap);
-  }
-  /*.sm-gap {*/
-  /*  gap: 3px;*/
-  /*}*/
 
   .column {
     display: flex;
@@ -42,5 +42,22 @@
 
   .redo {
     color: var(--dim);
+  }
+
+  button {
+    all: unset;
+    cursor: pointer;
+    font-size: 0.75rem;
+  }
+
+  button:hover {
+    all: unset;
+    cursor: pointer;
+    color: var(--bright);
+    font-size: 0.75rem;
+  }
+
+  .gap {
+    gap: var(--form-gap);
   }
 </style>

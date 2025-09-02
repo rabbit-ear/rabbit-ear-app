@@ -10,6 +10,7 @@ import { makeGraphUpdateEvent } from "../Updated.ts";
 import { FoldedVertices } from "./FoldedVertices.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
+import type { FOLDSelection } from "../../general/selection.ts";
 
 export class FoldedForm implements Embedding {
   name: string = "foldedForm";
@@ -38,6 +39,8 @@ export class FoldedForm implements Embedding {
     hasLayerOrder: this.#attributeHasLayerOrder,
     // hasLayerOrder: true,
   }));
+
+  get selection(): FOLDSelection | undefined { return this.#data.selection; }
 
   faceOrdersWorker: Worker;
 

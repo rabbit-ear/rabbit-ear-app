@@ -35,17 +35,27 @@
     stroke: none;
     fill: #fff1;
   }
+
   :global(.foldedForm) {
     polygon {
       stroke: none;
       fill: #fff1;
     }
   }
+
   :global(.creasePattern) {
     polygon {
       stroke: none;
       /*fill: #fff1;*/
       fill: #111;
     }
+  }
+
+  :global(.selection) polygon,
+  :global(.selection .foldedForm) polygon,
+  :global(.selection .creasePattern) polygon {
+    stroke: none;
+    fill: var(--yellow);
+    opacity: 0.25;
   }
 </style>

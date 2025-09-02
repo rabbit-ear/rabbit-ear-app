@@ -104,4 +104,22 @@
   .u {
     stroke: orchid;
   }
+
+  :global(.selection),
+  :global(.selection) .B,
+  :global(.selection) .b,
+  :global(.selection) .M,
+  :global(.selection) .m,
+  :global(.selection) .V,
+  :global(.selection) .v,
+  :global(.selection) .F,
+  :global(.selection) .f,
+  :global(.selection) .J,
+  :global(.selection) .j,
+  :global(.selection) .C,
+  :global(.selection) .c,
+  :global(.selection) .U,
+  :global(.selection) .u {
+    stroke: var(--yellow);
+  }
 </style>

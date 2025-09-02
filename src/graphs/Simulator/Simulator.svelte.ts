@@ -6,6 +6,7 @@ import type { GraphUpdateEvent } from "../Updated.ts";
 import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHGraph.ts";
 import Panel from "./Panel.svelte";
 import context from "../../app/context.svelte.ts";
+import type { FOLDSelection } from "../../general/selection.ts";
 
 export class Simulator implements Embedding {
   name: string = "simulator";
@@ -23,6 +24,8 @@ export class Simulator implements Embedding {
   #effects: (() => void)[] = [];
 
   get attributes() { return this.#data.frame.attributes; }
+
+  get selection(): FOLDSelection | undefined { return this.#data.selection; }
 
   constructor(data: GraphData) {
     this.#data = data;

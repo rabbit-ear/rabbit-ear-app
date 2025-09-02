@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { getSubgraph } from "../../../general/selection.ts";
   import { SVGViewport } from "./SVGViewport.svelte.ts";
   import SVGCanvas from "./SVG/SVGCanvas.svelte";
   import GridLayer from "./SVG/GridLayer.svelte";
@@ -17,6 +18,8 @@
   let svg: SVGSVGElement | undefined = $state();
 
   let graph = $state(viewport.embedding?.graph);
+
+  let selection = $derived(getSubgraph(graph, viewport.embedding?.selection));
 
   $effect(() => {
     viewport.embedding?.graphUpdate.structural;
@@ -74,6 +77,14 @@
   {/if}
 {/snippet}
 
+{#snippet everything()}
+  {@render gridLayer()}
+  <SVGFOLD {graph} {viewport} />
+  <SVGFOLD graph={selection} {viewport} class="selection" />
+  <SVGShapes shapes={viewport.shapes} {viewport} class="shapes-layer" />
+  {@render toolLayer()}
+{/snippet}
+
 <SVGCanvas
   bind:svg
   fill="none"
@@ -84,15 +95,9 @@
   {...props}>
   {#if matrix}
     <g class="wrapper" style="transform: matrix({matrix})">
-      {@render gridLayer()}
-      <SVGFOLD {graph} {viewport} />
-      <SVGShapes shapes={viewport.shapes} {viewport} class="shapes-layer" />
-      {@render toolLayer()}
+      {@render everything()}
     </g>
   {:else}
-    {@render gridLayer()}
-    <SVGFOLD {graph} {viewport} />
-    <SVGShapes shapes={viewport.shapes} {viewport} class="shapes-layer" />
-    {@render toolLayer()}
+    {@render everything()}
   {/if}
 </SVGCanvas>

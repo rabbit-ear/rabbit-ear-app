@@ -3,7 +3,6 @@ import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Embedding } from "../Embedding.ts";
 import { FrameClass, type FrameAttributes } from "../FrameAttributes.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
-import type { FOLDSelection } from "../../general/types.ts";
 import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../../general/BVHGraph.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
@@ -11,6 +10,7 @@ import Panel from "./Panel.svelte";
 import { resize2 } from "rabbit-ear/math/vector.js";
 import { VertexBVH, EdgeBVH, FaceBVH } from "../../general/BVHGraph.ts";
 import { makeGraphUpdateEvent } from "../Updated.ts";
+import type { FOLDSelection } from "../../general/selection.ts";
 
 export class CreasePattern implements Embedding {
   name: string = "creasePattern";
@@ -25,8 +25,6 @@ export class CreasePattern implements Embedding {
   #edgeBVH = $derived.by(() => EdgeBVH(this.#data.frame.baked));
   #faceBVH = $derived.by(() => FaceBVH(this.#data.frame.baked));
 
-  selection?: FOLDSelection;
-
   graph: FOLD | undefined;
 
   graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
@@ -38,6 +36,8 @@ export class CreasePattern implements Embedding {
     && this.#data.frame.attributes.class === FrameClass.creasePattern);
 
   get attributes(): FrameAttributes { return this.#data.frame.attributes; }
+
+  get selection(): FOLDSelection | undefined { return this.#data.selection; }
 
   // userLocked: boolean | undefined = $state(undefined);
   // sourceIsCreasePattern: boolean = $derived.by(() => this.#data.frameAttributes.isCreasePattern);

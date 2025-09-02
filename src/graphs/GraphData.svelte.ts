@@ -1,6 +1,7 @@
 import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js";
 import type { Embedding } from "./Embedding.ts";
 import type { GraphUpdateEvent, GraphUpdateModifier } from "./Updated.ts";
+import type { FOLDSelection } from "../general/selection.ts";
 import { makeGraphUpdateEvent, modifyGraphUpdate } from "./Updated.ts";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
@@ -29,6 +30,8 @@ export class GraphData {
   // style-related properties for every frame, like is it 2D, folded, etc..
   // frameAttributes: FrameAttributes = $derived.by(() => this.frame.sourceAttributes);
   // get frameAttributes(): FrameAttributes { return this.frame.attributes; }
+
+  selection?: FOLDSelection = $state();
 
   shapeManager: ShapeManager;
 
@@ -120,6 +123,14 @@ export class GraphData {
   get source() { return this.#source; }
   set source(newFrames: FOLDChildFrame[]) { this.#source = newFrames; }
 
+  // when a user runs a modification function, this will get called near the end
+  // any additional updates will be handled
+  #didUpdate(updateModifier: GraphUpdateModifier) {
+    if (updateModifier.reset || updateModifier.structural) {
+      this.selection = undefined;
+    }
+  }
+
   // public facing method. all changes should go through here
   // if mutator returns undefined, this implies that no changes were made,
   // we should not propagate any reactive "did change" signals.
@@ -132,6 +143,7 @@ export class GraphData {
         frame,
         ...this.#source.slice(this.frameIndex + 1),
       ];
+      this.#didUpdate(updateModifier);
       modifyGraphUpdate(this.graphUpdate, updateModifier);
     }
   }
@@ -140,6 +152,7 @@ export class GraphData {
     const updateModifier = mutator(this);
     if (updateModifier) {
       this.#source = [...this.#source];
+      this.#didUpdate(updateModifier);
       modifyGraphUpdate(this.graphUpdate, updateModifier);
     }
   }

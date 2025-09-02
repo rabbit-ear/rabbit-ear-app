@@ -1,10 +1,10 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 // import type { Shape } from "../geometry/shapes.ts";
-import type { FOLDSelection } from "../general/types.ts";
 import type { GraphUpdateEvent } from "./Updated.ts";
 import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../general/BVHGraph.ts";
 import type { FrameAttributes } from "./FrameAttributes.ts";
+import type { FOLDSelection } from "../general/selection.ts";
 
 // we need a fine tuned update system
 // instead of subscribing to the graph,
@@ -27,13 +27,15 @@ export interface Embedding {
 
   attributes: FrameAttributes;
 
+  // selection is stored on the GraphData.
+  // this is here for convenience, should reference the GraphData.
+  selection: FOLDSelection | undefined;
+
   // other
   // shapes: Shape[];
 
   // some optional properties that might exist
   snapPoints?: [number, number][] | [number, number, number][];
-
-  selection?: FOLDSelection;
 
   nearestVertex(point: [number, number]): VertexBVHType;
   nearestEdge(point: [number, number]): EdgeBVHType;
