@@ -38,7 +38,7 @@ export class ViewportManager {
       this.bindViewport(viewport);
       // viewport.didMount = undefined;
     }
-    if (index) {
+    if (index !== undefined) {
       const validIndex = Math.max(0, Math.min(index, this.viewports.length));
       this.viewports.splice(validIndex, 0, viewport);
     } else {
@@ -73,6 +73,11 @@ export class ViewportManager {
     const newViewport = this.#instanceViewportWithName(name);
     const oldViewport = this.viewports[spliceIndex];
     if (!newViewport || !oldViewport) { return; }
+
+    // carry over as many settings as we can
+    newViewport.embeddingName = oldViewport.embeddingName;
+    // todo: try to default "open" the dropdown panel
+
     this.unbindViewport(oldViewport);
     this.viewports.splice(spliceIndex, 1);
     oldViewport.dealloc();

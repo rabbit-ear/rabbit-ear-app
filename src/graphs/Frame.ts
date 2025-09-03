@@ -1,9 +1,9 @@
 import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.js";
 import type { FrameAttributes } from "./FrameAttributes.ts";
-import { flattenFrameInArray } from "../general/fold.ts";
-import { makeFrameAttributes } from "./FrameAttributes.ts";
 import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
+import { flattenFrameInArray } from "../general/fold.ts";
 import { makeUUID } from "../general/uuid.ts";
+import { makeFrameAttributes } from "./FrameAttributes.ts";
 
 export class Frame {
   uuid: string;

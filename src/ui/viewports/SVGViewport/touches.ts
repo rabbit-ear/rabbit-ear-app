@@ -1,6 +1,5 @@
 import type { Viewport } from "../Viewport.ts";
 import { SVGViewport } from "./SVGViewport.svelte.ts";
-// import { convertToViewBox, findInParents } from "./dom.ts";
 
 /**
  * @description Convert a 2D point coordinates from screen/canvas/
@@ -11,10 +10,10 @@ export const convertToViewBox = (
   [x, y]: [number, number],
 ): [number, number] => {
   const pt = svg.createSVGPoint();
-  // transform: matrix(1, 0, 0, -1, 0, 1);
   pt.x = x;
   pt.y = y;
-  const domMatrix = svg.getScreenCTM();
+  // use offsetX/Y for getCTM, use clientX/Y for getScreenCTM()
+  const domMatrix = svg.getCTM();
   if (!domMatrix) {
     return [0, 0];
   }

@@ -1,16 +1,16 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Embedding } from "../Embedding.ts";
-import { FrameClass, type FrameAttributes } from "../FrameAttributes.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../../general/BVHGraph.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
+import type { FOLDSelection } from "../../general/selection.ts";
+import { FrameClass, type FrameAttributes } from "../FrameAttributes.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import Panel from "./Panel.svelte";
-import { resize2 } from "rabbit-ear/math/vector.js";
 import { VertexBVH, EdgeBVH, FaceBVH } from "../../general/BVHGraph.ts";
+import { resize2 } from "rabbit-ear/math/vector.js";
 import { makeGraphUpdateEvent } from "../Updated.ts";
-import type { FOLDSelection } from "../../general/selection.ts";
 
 export class CreasePattern implements Embedding {
   name: string = "creasePattern";
@@ -35,6 +35,15 @@ export class CreasePattern implements Embedding {
   editable: boolean = $derived.by(() => !this.frameLinked
     && this.#data.frame.attributes.class === FrameClass.creasePattern);
 
+  // get attributes(): FrameAttributes {
+  //   return {
+  //     ...this.#data.frameAttributes,
+  //     isFoldedForm: false,
+  //     // // unclear what we should say here. a CP does not render layer orders
+  //     // // (not the folded form of a CP, but the CP itself)
+  //     // hasLayerOrder: true,
+  //   };
+  // }
   get attributes(): FrameAttributes { return this.#data.frame.attributes; }
 
   get selection(): FOLDSelection | undefined { return this.#data.selection; }
@@ -54,16 +63,6 @@ export class CreasePattern implements Embedding {
   get snapPoints(): [number, number][] {
     return this.graph?.vertices_coords?.map(resize2) ?? [];
   }
-
-  // get attributes(): FrameAttributes {
-  //   return {
-  //     ...this.#data.frameAttributes,
-  //     isFoldedForm: false,
-  //     // // unclear what we should say here. a CP does not render layer orders
-  //     // // (not the folded form of a CP, but the CP itself)
-  //     // hasLayerOrder: true,
-  //   };
-  // }
 
   // get shapes(): Shape[] {
   //   return this.#model.shapes;

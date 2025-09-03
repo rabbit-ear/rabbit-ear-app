@@ -12,6 +12,9 @@ export class Settings {
   // <boolean> is the Y axis on top (true) or on bottom (false)?
   rightHanded = new LocalStorageItem<boolean>("ui/viewport", "rightHanded", true);
 
+  // boundary handling during operations on a selection
+  selectionHandling = new LocalStorageItem<string>("ui/viewport", "selectionHandling", "detach");
+
   // newEdgeAssignment = new LocalStorageItem<string>("ui", "newEdgeAssignment", "F");
 
   // <string> the unit grid that contributes to snap points ("square" or "triangle")

@@ -18,8 +18,7 @@ export class WebGLState implements ToolEvents {
   onmousemove(viewport: Viewport, event: MouseEvent): void {
     event.preventDefault();
     const point = vectorFromScreenLocation(
-      [event.clientX, event.clientY],
-      // [event.offsetX, event.offsetY],
+      [event.offsetX, event.offsetY],
       viewport.view.canvasSize,
       viewport.view.projection,
     );
@@ -39,8 +38,7 @@ export class WebGLState implements ToolEvents {
   onmousedown(viewport: Viewport, event: MouseEvent): void {
     event.preventDefault();
     const point = vectorFromScreenLocation(
-      [event.clientX, event.clientY],
-      // [event.offsetX, event.offsetY],
+      [event.offsetX, event.offsetY],
       viewport.view.canvasSize,
       viewport.view.projection,
     );

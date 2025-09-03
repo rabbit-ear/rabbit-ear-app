@@ -11,6 +11,7 @@ import { FoldedVertices } from "./FoldedVertices.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
 import type { FOLDSelection } from "../../general/selection.ts";
+import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 
 export class FoldedForm implements Embedding {
   name: string = "foldedForm";
@@ -30,6 +31,7 @@ export class FoldedForm implements Embedding {
 
   faceOrdersError: { uuid: string, error: Error } | undefined = $state();
 
+  #attributeDimension: number = $state(3);
   #attributeHasLayerOrder: boolean = $state(false);
 
   // get attributes() { return this.#data.frame.attributes; }
@@ -37,6 +39,7 @@ export class FoldedForm implements Embedding {
   attributes: FrameAttributes = $derived.by(() => ({
     ...this.#data.frame.attributes,
     hasLayerOrder: this.#attributeHasLayerOrder,
+    dimension: this.#attributeDimension,
     // hasLayerOrder: true,
   }));
 
@@ -128,6 +131,7 @@ export class FoldedForm implements Embedding {
             .snapshot(this.faceOrdersResult.result) as [number, number, number][];
         }
         this.graph = newGraph;
+        this.#attributeDimension = getDimensionQuick(newGraph) ?? 3;
         this.#attributeHasLayerOrder = newGraph.faceOrders != null && newGraph.faceOrders.length > 0;
         this.attributes.hasLayerOrder = this.#attributeHasLayerOrder;
         this.graphUpdate.reset++;

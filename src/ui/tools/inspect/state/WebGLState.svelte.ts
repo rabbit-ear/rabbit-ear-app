@@ -113,7 +113,6 @@ export class WebGLState implements GLModel, ToolEvents {
     event.preventDefault();
     const { buttons } = event;
     const point = vectorFromScreenLocation(
-      // [event.clientX, event.clientY],
       [event.offsetX, event.offsetY],
       viewport.view.canvasSize,
       viewport.view.projection,
@@ -126,7 +125,6 @@ export class WebGLState implements GLModel, ToolEvents {
     event.preventDefault();
     const { buttons } = event;
     const point = vectorFromScreenLocation(
-      // [event.clientX, event.clientY],
       [event.offsetX, event.offsetY],
       viewport.view.canvasSize,
       viewport.view.projection,
@@ -139,7 +137,6 @@ export class WebGLState implements GLModel, ToolEvents {
   onmouseup(viewport: Viewport, event: MouseEvent): void {
     const { buttons } = event;
     const point = vectorFromScreenLocation(
-      // [event.clientX, event.clientY],
       [event.offsetX, event.offsetY],
       viewport.view.canvasSize,
       viewport.view.projection,

@@ -10,15 +10,6 @@
   );
   const globalState = $derived(scaleTool?.state);
 
-  $effect(() => {
-    console.log(
-      "TOOL INFO (in panel)",
-      scaleTool,
-      globalState,
-      context.ui.toolManager.tool,
-    );
-  });
-
   let scaleAmount: number = $state(1.0);
 
   const doScale = () => {

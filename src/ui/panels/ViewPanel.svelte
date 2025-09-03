@@ -1,16 +1,17 @@
 <script lang="ts">
   import { untrack } from "svelte";
   import context from "../../app/context.svelte.ts";
-  import { SVGViewport } from "../viewports/SVGViewport/SVGViewport.svelte.ts";
-  import { WebGLViewport } from "../viewports/WebGLViewport/WebGLViewport.svelte.ts";
   import t from "../../app/t.ts";
   import LogSlider from "../Components/LogSlider.svelte";
 
-  const addSVGViewport = () => context.ui.viewportManager.addViewport(new SVGViewport());
-  const addWebGLViewport = () =>
-    context.ui.viewportManager.addViewport(new WebGLViewport());
-
   let layersNudgeSlider = $state(6);
+
+  const sel = $derived(context.fileManager.document?.data.selection);
+  const selection = $derived(
+    sel
+      ? `V ${sel.vertices?.length ?? 0} / E ${sel.edges?.length ?? 0} / F ${sel.faces?.length ?? 0}`
+      : undefined,
+  );
 
   $effect(() => {
     context.ui.settings.layersNudge.value = Math.pow(2, layersNudgeSlider) / 1e6;
@@ -40,14 +41,27 @@
 </script>
 
 <div class="column gap">
-  <div class="row gap">
-    <button onclick={addSVGViewport}>+ {t("ui.viewports.SVG")}</button>
-    <button onclick={addWebGLViewport}>+ {t("ui.viewports.WebGL")}</button>
+  <div class="row toggle-row">
+    <p class="gap-after">selection</p>
+    <button
+      class={context.ui.settings.selectionHandling.value === "detach"
+        ? "highlighted"
+        : ""}
+      onclick={(): string => (context.ui.settings.selectionHandling.value = "detach")}
+      >detach</button>
+    <button
+      class={context.ui.settings.selectionHandling.value === "stretch"
+        ? "highlighted"
+        : ""}
+      onclick={(): string => (context.ui.settings.selectionHandling.value = "stretch")}
+      >stretch</button>
   </div>
 
-  <div class="row">
-    <p>{context.ui.viewportManager.viewports.length} {t("ui.viewports")}</p>
-  </div>
+  {#if selection}
+    <div class="row">
+      <p>{selection}</p>
+    </div>
+  {/if}
 
   <hr />
 
@@ -59,11 +73,13 @@
     <label for="right-handed">right handed</label>
   </div>
 
-  <label for="range-stroke-width">{t("ui.viewports.stroke")}</label>
-  <LogSlider
-    id="range-stroke-width"
-    radix={5}
-    bind:value={context.ui.settings.strokeWidthFactor.value} />
+  <div class="row gap">
+    <label for="range-stroke-width">{t("ui.viewports.stroke")}</label>
+    <LogSlider
+      id="range-stroke-width"
+      radix={5}
+      bind:value={context.ui.settings.strokeWidthFactor.value} />
+  </div>
 
   <div class="row">
     <input
@@ -82,6 +98,7 @@
   </div>
 
   <div class="row toggle-row">
+    <p class="gap-after">grid</p>
     <button
       class={context.ui.settings.tiling.value === "triangle" ? "highlighted" : ""}
       onclick={(): string => (context.ui.settings.tiling.value = "triangle")}
@@ -129,5 +146,17 @@
 
   .gap {
     gap: var(--form-gap);
+  }
+
+  .gap-after {
+    margin-right: var(--form-gap);
+  }
+
+  .justify {
+    justify-content: space-between;
+  }
+
+  .wide {
+    width: 100%;
   }
 </style>

@@ -17,15 +17,15 @@ export class SVGState implements ToolEvents {
     this.viewport = viewport;
   }
 
-  onmousemove(viewport: Viewport, { clientX, clientY, buttons }: MouseEvent): void {
+  onmousemove(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
     // we have 2 ways of accomplishing this:
     // - make small incremental changes given the relative movement each frame,
     // - capture starting state, re-calculate absolute change from starting state
     // the second, we can't base the "drag vector" on a viewport-point
     // because the viewport is constantly changing underneath us, rather,
-    // we need to base it off of the unchanging clientX and clientY.
+    // we need to base it off of the unchanging offsetX and offsetY.
     // This is currently implementing the first approach.
-    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     this.move = buttons ? undefined : point;
     this.drag = buttons ? point : undefined;
     this.dragVector =
@@ -43,16 +43,16 @@ export class SVGState implements ToolEvents {
     }
   };
 
-  onmousedown(viewport: Viewport, { clientX, clientY, buttons }: MouseEvent): void {
-    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
+  onmousedown(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     this.move = buttons ? undefined : point;
     this.drag = buttons ? point : undefined;
     this.press = point;
     this.dragVector = [0, 0];
   };
 
-  onmouseup(viewport: Viewport, { clientX, clientY, buttons }: MouseEvent): void {
-    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
+  onmouseup(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     this.move = buttons ? undefined : point;
     this.drag = buttons ? point : undefined;
     this.dragVector = [0, 0];
@@ -63,8 +63,8 @@ export class SVGState implements ToolEvents {
   // 	this.tool.reset();
   // };
 
-  onwheel(viewport: Viewport, { clientX, clientY, deltaX, deltaY }: WheelEvent): void {
-    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
+  onwheel(viewport: Viewport, { offsetX, offsetY, deltaX, deltaY }: WheelEvent): void {
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     return context.keyboardManager.command || context.keyboardManager.control
       ? wheelPanMatrix(this.viewport, { deltaX, deltaY })
       : wheelEventZoomMatrix(this.viewport, { point, deltaY });

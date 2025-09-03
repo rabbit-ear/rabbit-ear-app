@@ -8,11 +8,11 @@ import {
 import type { VecLine2, VecLine3 } from "rabbit-ear/types.js";
 import type { View } from "../View";
 import { WebGLViewport } from "./WebGLViewport.svelte";
+import { RenderPerspective } from "../types.ts";
 import { graphToMatrix4 } from "../../../general/matrix.ts";
 import { makeProjectionMatrix } from "../../../general/matrix.ts";
 // import { makeProjectionMatrix } from "rabbit-ear/webgl/general/view.js";
 import context from "../../../app/context.svelte.ts";
-import { RenderPerspective } from "../types.ts";
 
 const defaultCameraMatrix: number[] = [
   1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, (Math.sqrt(3) / 2 + 1), 1,
@@ -29,7 +29,7 @@ export class WebGLView implements View {
 
   canvasSize: [number, number] = $state([0, 0]);
 
-  perspective: RenderPerspective = $state(RenderPerspective.orthographic);
+  perspective: RenderPerspective = $state(RenderPerspective.perspective);
 
   fov: number = $state(30.25);
 

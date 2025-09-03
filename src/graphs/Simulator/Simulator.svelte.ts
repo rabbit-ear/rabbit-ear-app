@@ -23,7 +23,13 @@ export class Simulator implements Embedding {
 
   #effects: (() => void)[] = [];
 
-  get attributes() { return this.#data.frame.attributes; }
+  // get attributes() { return this.#data.frame.attributes; }
+  get attributes() {
+    return {
+      ...this.#data.frame.attributes,
+      dimension: 3,
+    };
+  }
 
   get selection(): FOLDSelection | undefined { return this.#data.selection; }
 

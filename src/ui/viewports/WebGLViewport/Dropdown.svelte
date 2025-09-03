@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
   import MatricesView from "./MatricesView.svelte";
-  import context from "../../../app/context.svelte.ts";
   import { RenderStyle, RenderPerspective } from "../types.ts";
+  import context from "../../../app/context.svelte.ts";
 
   let { viewport }: { viewport: WebGLViewport } = $props();
 

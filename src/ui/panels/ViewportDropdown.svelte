@@ -12,6 +12,11 @@
     children,
   }: { index: number; viewport: Viewport; children: Snippet } = $props();
 
+  const newViewportLeft = () =>
+    context.ui.viewportManager.addViewport(new SVGViewport(), index);
+  const newViewportRight = () =>
+    context.ui.viewportManager.addViewport(new SVGViewport(), index + 1);
+
   // these match with the Viewport.embeddingName property
   const embeddingNames = ["creasePattern", "foldedForm", "simulator"];
   // convert the above into what is shown on screen (abbreviated if necessary)
@@ -38,8 +43,10 @@
 
 <Wrapper title={"▼"} {style} expanded={false}>
   <div class="column gap">
-    <div class="row right">
+    <div class="row gap">
+      <button onclick={newViewportLeft}>&#x2190 New</button>
       <button onclick={removeViewport}>- Remove</button>
+      <button onclick={newViewportRight}>New &#x2192</button>
     </div>
 
     <div class="row gap">
@@ -79,15 +86,14 @@
     display: flex;
     flex-direction: column;
   }
+
   .row {
     display: flex;
     flex-direction: row;
     align-items: center;
   }
+
   .gap {
     gap: var(--form-gap);
-  }
-  .right {
-    justify-content: end;
   }
 </style>

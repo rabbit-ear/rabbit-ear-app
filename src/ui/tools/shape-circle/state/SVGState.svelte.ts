@@ -67,23 +67,23 @@ export class SVGState implements ToolEvents {
     this.touches.reset();
   }
 
-  onmousemove(viewport: Viewport, { clientX, clientY, buttons }: MouseEvent): void {
-    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
+  onmousemove(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     // console.log("mousemove", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
   }
 
-  onmousedown(viewport: Viewport, { clientX, clientY, buttons }: MouseEvent): void {
-    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
+  onmousedown(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     // console.log("mousedown", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.press = point;
   }
 
-  onmouseup(viewport: Viewport, { clientX, clientY, buttons }: MouseEvent): void {
-    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
+  onmouseup(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     // console.log("mouseup", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
@@ -94,8 +94,8 @@ export class SVGState implements ToolEvents {
   // all tools must implement the "zoomTool.onwheel?.(event);" behavior.
   // there is no longer an app-wide fallthrough that executes that method
   // if no tool wheel event exists. the tool must specify the behavior explicitly.
-  onwheel(viewport: Viewport, { clientX, clientY, deltaY }: WheelEvent): void {
-    const point = getSVGViewportPoint(viewport, [clientX, clientY]);
+  onwheel(viewport: Viewport, { offsetX, offsetY, deltaY }: WheelEvent): void {
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     wheelEventZoomMatrix(this.viewport, { point, deltaY });
     // const panel = (this.viewport.constructor as typeof SVGViewport).settings;
     // panel.cursor = point;
