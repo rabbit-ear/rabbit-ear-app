@@ -31,7 +31,12 @@ export const prepareForRenderingWithCycles = (
   inputGraph: FOLD,
   { earcut, layerNudge }: { earcut?: any, layerNudge?: number } = {},
 ): { graph: FOLD, vertices_map: number[] } => {
-  const graph = clone(inputGraph);
+  let graph = {};
+  try {
+    graph = clone(inputGraph);
+  } catch (err) {
+    console.log(err);
+  }
   const {
     // planes,
     planes_faces,
@@ -140,7 +145,12 @@ export const prepareForRendering = (
 ): { graph: FOLD, vertices_map: number[] } => {
   // todo: remove the structured clone as long as everything is working.
   // update: shallow copy is not working. the input parameter is still modified.
-  const graph = clone(inputGraph);
+  let graph = {};
+  try {
+    graph = clone(inputGraph);
+  } catch (err) {
+    console.log(err);
+  }
   // const copy = { ...graph };
 
   // we render "J" joined edges differently from all others. if edges_assignment

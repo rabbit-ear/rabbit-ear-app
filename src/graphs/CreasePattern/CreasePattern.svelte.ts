@@ -70,6 +70,8 @@ export class CreasePattern implements Embedding {
 
   constructor(data: GraphData) {
     this.#data = data;
+
+    // todo: it might be possible to "unfold" the vertices
     this.setGraph(this.#data.frame.attributes.class === FrameClass.creasePattern
       ? this.#data.frame.baked
       : undefined);

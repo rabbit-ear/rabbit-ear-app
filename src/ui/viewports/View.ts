@@ -34,10 +34,15 @@ export interface View {
   modelView: number[];
 
   // of the two axis-aligned side lengths, the smaller of the two
+  // taken from the model-view matrix
   vmin: number;
 
   // of the two axis-aligned side lengths, the larger of the two
+  // taken from the model-view matrix
   vmax: number;
+
+  // the (implied) zoom level as taken from the model-view matrix
+  zoom: number;
 
   // // for SVGs, the viewBox of the model-view matrix, as a list of numbers
   // viewBox: [number, number, number, number];

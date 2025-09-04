@@ -27,6 +27,9 @@ export class GraphData {
 
   frame: Frame = $derived.by(() => new Frame(this.#source, this.frameIndex));
 
+  // frames: Frame[] = $derived
+  //   .by(() => this.#source.map((source, i) => new NewFrame(source, i)));
+
   // style-related properties for every frame, like is it 2D, folded, etc..
   // frameAttributes: FrameAttributes = $derived.by(() => this.frame.sourceAttributes);
   // get frameAttributes(): FrameAttributes { return this.frame.attributes; }
@@ -35,15 +38,10 @@ export class GraphData {
 
   shapeManager: ShapeManager;
 
-  // it might be possible to "unfold" the vertices
-  // cpFOLD: FOLD | undefined = $derived(this.frameAttributes?.isFoldedForm
-  //   ? undefined
-  //   : this.frame);
-
   // models: { [key: string]: Model } = $state({});
   cp: CreasePattern;
   folded: FoldedForm;
-  simulator: Simulator;
+  sim: Simulator;
 
   getEmbedding(name: string): Embedding | undefined {
     switch (name) {
@@ -58,14 +56,14 @@ export class GraphData {
       case "sim":
       case "simulator":
       case "Simulator":
-        return this.simulator;
+        return this.sim;
       default: return undefined;
     }
   }
 
   get creasePattern(): Embedding { return this.cp; }
   get foldedForm(): Embedding { return this.folded; }
-  get sim(): Embedding { return this.simulator; }
+  get simulator(): Embedding { return this.simulator; }
 
   #effects: (() => void)[] = [];
 
@@ -77,26 +75,18 @@ export class GraphData {
 
     this.cp = new CreasePattern(this);
     this.folded = new FoldedForm(this);
-    this.simulator = new Simulator(this);
+    this.sim = new Simulator(this);
 
     this.#effects = [
+      this.#effectFrameChange(),
       // this.#debug(),
     ];
   }
 
-  // #debug() {
-  //   return $effect.root(() => {
-  //     $effect(() => {
-  //       console.log(this.Frame);
-  //     });
-  //     return () => { };
-  //   })
-  // }
-
   dealloc(): void {
     this.cp.dealloc();
     this.folded.dealloc();
-    this.simulator.dealloc();
+    this.sim.dealloc();
     this.#effects.forEach(fn => fn());
   }
 
@@ -143,6 +133,7 @@ export class GraphData {
         frame,
         ...this.#source.slice(this.frameIndex + 1),
       ];
+      // this.#source[this.frameIndex] = frame;
       this.#didUpdate(updateModifier);
       modifyGraphUpdate(this.graphUpdate, updateModifier);
     }
@@ -155,6 +146,25 @@ export class GraphData {
       this.#didUpdate(updateModifier);
       modifyGraphUpdate(this.graphUpdate, updateModifier);
     }
+  }
+
+  #effectFrameChange() {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = this.frameIndex;
+        this.selection = undefined;
+      });
+      return () => { };
+    });
+  }
+
+  #debug() {
+    return $effect.root(() => {
+      $effect(() => {
+        // console.log("frames", this.frames.length);
+      });
+      return () => { };
+    })
   }
 }
 

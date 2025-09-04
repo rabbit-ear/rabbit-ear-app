@@ -29,7 +29,7 @@
     viewport.embedding;
     viewport.embedding?.graphUpdate.reset;
     viewport.embedding?.graphUpdate.structural;
-    // console.log("Component: WebGLModels: redraw");
+    // console.log("Component: WebGLModels: redraw", viewport.embeddingName);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     viewport.glModels.models.forEach((model) => drawGLModel(gl, version, model));
   });

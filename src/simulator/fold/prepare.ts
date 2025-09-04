@@ -164,7 +164,20 @@ export const prepare = (inputFOLD: FOLD, epsilon?: number): FOLDMesh => {
   }
 
   // deep copy fields which we are able to import
-  const foldClone: FOLDImportable = structuredClone(getImportableArrays(inputFOLD));
+  let foldClone: FOLDImportable = {
+    vertices_coords: [],
+    vertices_coordsInitial: [],
+    edges_vertices: [],
+    edges_assignment: [],
+    edges_foldAngle: [],
+    faces_vertices: [],
+  };
+  try {
+    foldClone = structuredClone(getImportableArrays(inputFOLD));
+  } catch (err) {
+    console.log("simulator clone error");
+    console.log(err);
+  }
   const { vertices_coordsInitial } = foldClone;
 
   //const {

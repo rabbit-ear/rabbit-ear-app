@@ -7,6 +7,14 @@ import { clone } from "rabbit-ear/general/clone.js";
 import { makeFacesEdgesFromVertices } from "rabbit-ear/graph/make/facesEdges.js";
 import type { FOLD } from "rabbit-ear/types.js";
 
+const cloneType = (data, ifFailed) => {
+  try {
+    return clone(data);
+  } catch {
+    return ifFailed;
+  }
+}
+
 /**
  * @description Create a modified graph which contains vertices, edges,
  * and faces, but that for every face, all of its vertices and edges
@@ -31,18 +39,18 @@ export const explodeFaces = ({
   if (!faces_vertices) {
     if (edges_vertices) {
       return {
-        graph: clone({
+        graph: cloneType({
           vertices_coords,
           edges_vertices,
           edges_assignment,
           edges_foldAngle,
-        }),
+        }, {}),
         vertices_map: (vertices_coords ?? []).map((_, i) => i),
       };
     }
     return vertices_coords
       ? {
-        graph: clone({ vertices_coords }),
+        graph: cloneType({ vertices_coords }, {}),
         vertices_map: vertices_coords.map((_, i) => i),
       }
       : { graph: {}, vertices_map: [] };
@@ -66,8 +74,9 @@ export const explodeFaces = ({
   // typescript ensure vertices_coords is in the correct form
   const dimensions = getDimensionQuick({ vertices_coords });
   const vertices_map = faces_vertices.flat();
-  const vertices_coordsFlat = clone(
+  const vertices_coordsFlat = cloneType(
     vertices_map.map((v) => vertices_coords[v]),
+    [],
   );
   /** @type {[number, number][] | [number, number, number][]} */
   const vertices_coordsNew =
@@ -151,8 +160,9 @@ export const explodeEdges = ({
     result.edges_foldAngle = edges_foldAngle;
   }
   if (vertices_coords) {
-    result.vertices_coords = structuredClone(
+    result.vertices_coords = cloneType(
       edges_vertices.flatMap((edge) => edge.map((v) => vertices_coords[v])),
+      [],
     );
   }
   return result;

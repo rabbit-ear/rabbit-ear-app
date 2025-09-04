@@ -4,9 +4,10 @@ import type { Embedding } from "../Embedding.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
 import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHGraph.ts";
+import type { FOLDSelection } from "../../general/selection.ts";
+import type { FrameAttributes } from "../FrameAttributes.ts";
 import Panel from "./Panel.svelte";
 import context from "../../app/context.svelte.ts";
-import type { FOLDSelection } from "../../general/selection.ts";
 
 export class Simulator implements Embedding {
   name: string = "simulator";
@@ -28,7 +29,7 @@ export class Simulator implements Embedding {
     return {
       ...this.#data.frame.attributes,
       dimension: 3,
-    };
+    } as FrameAttributes;
   }
 
   get selection(): FOLDSelection | undefined { return this.#data.selection; }

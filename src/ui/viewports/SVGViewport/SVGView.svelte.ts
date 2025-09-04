@@ -65,6 +65,8 @@ export class SVGView implements View {
   vmin: number = $derived(Math.min(this.viewBox[2], this.viewBox[3]));
   vmax: number = $derived(Math.max(this.viewBox[2], this.viewBox[3]));
 
+  zoom: number = $derived((this.modelView[0] + this.modelView[3]) / 2);
+
   viewBoxString = $derived(this.viewBox.join(" "));
 
   #cameraOrigin = $derived.by(() => viewBoxOrigin(this.viewBox, this.rightHanded));

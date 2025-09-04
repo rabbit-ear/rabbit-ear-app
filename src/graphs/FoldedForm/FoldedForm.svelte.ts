@@ -5,13 +5,13 @@ import type { FrameAttributes } from "../FrameAttributes.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
 import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHGraph.ts";
+import type { FOLDSelection } from "../../general/selection.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
+import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 import { makeGraphUpdateEvent } from "../Updated.ts";
 import { FoldedVertices } from "./FoldedVertices.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
-import type { FOLDSelection } from "../../general/selection.ts";
-import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 
 export class FoldedForm implements Embedding {
   name: string = "foldedForm";

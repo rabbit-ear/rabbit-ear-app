@@ -1,5 +1,6 @@
 :root {
-  --form-gap: 0.5rem;
+  /* --form-gap: 0.5rem; */
+  --form-gap: 0.333rem;
 }
 
 /* text input fields */
@@ -156,15 +157,15 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  margin-top: calc(-0.75rem + 2px); /* Centers thumb on the track */
-  width: 1.5rem;
-  height: 1.5rem;
+  margin-top: calc(-1.25rem * 0.5 + 2px); /* Centers thumb on the track */
+  width: 1.25rem;
+  height: 1.25rem;
   border-radius: 0.25rem;
 }
 
 input[type="range"]::-moz-range-thumb {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
   border: none; /*Removes extra border that FF applies*/
   border-radius: 0.25rem;
 }

@@ -76,7 +76,12 @@ export class Model {
       y - center[1],
       z - center[2],
     ]);
-    this.fold.vertices_coordsInitial = structuredClone(this.fold.vertices_coords);
+    try {
+      this.fold.vertices_coordsInitial = structuredClone(this.fold.vertices_coords);
+    } catch (err) {
+      console.log("simulator Model() clone error");
+      console.log(err);
+    }
 
     this.#axialStiffness = 20;
     this.#joinStiffness = 0.7;

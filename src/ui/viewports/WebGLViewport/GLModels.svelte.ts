@@ -46,8 +46,6 @@ export class GLModels {
     ].filter(a => a !== undefined);
   });
 
-  foldModels = $state([]);
-
   constructor(viewport: WebGLViewport) {
     // console.log("GLModels() constructor");
     this.viewport = viewport;

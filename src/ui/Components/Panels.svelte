@@ -8,7 +8,7 @@
   const panels: PanelType[] = $derived(context.ui.panelManager.panels);
 </script>
 
-<div class="column">
+<div class="panels column">
   {#each panels as panel}
     <Wrapper title={panel.name}>
       <panel.component />
@@ -25,8 +25,17 @@
   .column {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.25rem;
+    gap: var(--form-gap);
+    padding: var(--form-gap);
+  }
+
+  .panels :global(p),
+  .panels :global(span),
+  .panels :global(label),
+  .panels :global(ul),
+  .panels :global(ol),
+  .panels :global(li) {
+    font-size: 0.866rem;
   }
 
   /*gap is accomplished by each Wrapper's margin, this also gives margin at the top*/

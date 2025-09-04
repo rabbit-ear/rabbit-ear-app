@@ -89,6 +89,13 @@ export class WebGLView implements View {
 
   vmax: number = $derived(Math.max(this.viewBox[2], this.viewBox[3]));
 
+  // todo: i this doesn't match the SVG zoom,
+  // also this does not work for perspective projections,
+  // we need to find some consistency between the two if possible
+  // otherwise we branch it based on the perspective
+  zoomInv: number = $derived((this.modelView[0] + this.modelView[5] + this.modelView[10]) / 3);
+  zoom: number = $derived(1 / this.zoomInv);
+
   snapRadius: number = $derived.by(() => this.vmax * WebGLViewport.settings.snapRadiusFactor);
 
   clipLine(line: VecLine2 | VecLine3): [[number, number], [number, number]]

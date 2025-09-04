@@ -1,11 +1,11 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport";
-import type { View } from "../View.ts";
 import type { Embedding } from "../../../graphs/Embedding.ts";
 import ViewportComponent from "./Component.svelte";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
-import { WebGLView } from "./View.svelte.ts";
+import { WebGLView } from "./WebGLView.svelte.ts";
+import { WebGLSnap } from "./WebGLSnap.svelte.ts";
 import { Style } from "./Style.svelte.ts";
 import { GLModels } from "./GLModels.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
@@ -25,7 +25,8 @@ export class WebGLViewport implements Viewport {
   dropdown: Component;
   domElement?: HTMLCanvasElement;
 
-  view: View;
+  view: WebGLView;
+  snap: WebGLSnap; // todo
   style: Style;
   glModels: GLModels;
 
@@ -48,6 +49,7 @@ export class WebGLViewport implements Viewport {
     this.component = ViewportComponent;
     this.dropdown = Dropdown;
     this.view = new WebGLView(this);
+    this.snap = new WebGLSnap(this);
     this.style = new Style(this);
     this.glModels = new GLModels(this);
     this.effects = [
