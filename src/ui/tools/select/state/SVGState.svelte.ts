@@ -118,7 +118,11 @@ export class SVGState implements ToolEvents {
         const doc = context.fileManager.document;
         const box = $state.snapshot(this.box);
         if (doc && box) {
-          const command = new SelectRectCommand(doc, this.viewport.embeddingName, box);
+          const command = new SelectRectCommand(
+            doc,
+            this.viewport.embeddingName,
+            box,
+            context.ui.settings.selectionFilterObject);
           doc.executeCommand(command)
         }
         this.touches.reset();

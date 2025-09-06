@@ -34,6 +34,8 @@ export class Simulator implements Embedding {
 
   get selection(): FOLDSelection | undefined { return this.#data.selection; }
 
+  get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
+
   constructor(data: GraphData) {
     this.#data = data;
     this.#effects = [];

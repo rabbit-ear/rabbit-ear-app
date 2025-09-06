@@ -4,9 +4,10 @@ an svg tool layer will remain even when switching to another tool if that tool d
 
 ### selection
 
-Viewport layout: WebGL CP, WebGL Folded. show a CP frame, switch to a folded frame, the CP still remains because the GLModel was not rebuilt, it still has the arrays/buffers from the previous frame rendering.
+snap points are chosen by shortest distance.
+if two snap points are within an epsilon of each other, choose the "more true" of the two, for example choose a grid snap point over a graph vertex, this will uphold better precision.
 
-Needs rework for the flow of data. #source to frame via frameIndex. I think we need to build all frames on load, this way each Frame can cache its own selection and various metadata.
+Needs rework for the flow of data. #source to frame via frameIndex. I think we need to build all frames on load, this way each Frame can cache its own selection and view matrix (much needed) and any various other metadata.
 
 selection command must be able to join to other selection commands. perhaps selection command stores a list of boxes, each marked "union" "subtract" etc, so that commands can be joined simply by concat-ing lists. the selection region becomes a set of potentially non-convex polygons which then gets compared against the graph. alternatively, since bounding box comparison is fast each bounding box is compared (union/subtract) in series on the graph or the subgraph from the previous comparison, but that sounds slower.
 

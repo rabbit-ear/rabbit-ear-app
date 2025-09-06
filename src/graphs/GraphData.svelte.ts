@@ -1,7 +1,7 @@
 import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js";
 import type { Embedding } from "./Embedding.ts";
 import type { GraphUpdateEvent, GraphUpdateModifier } from "./Updated.ts";
-import type { FOLDSelection } from "../general/selection.ts";
+import { getSubgraph, simpleSubgraph, type FOLDSelection } from "../general/selection.ts";
 import { makeGraphUpdateEvent, modifyGraphUpdate } from "./Updated.ts";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
@@ -36,34 +36,38 @@ export class GraphData {
 
   selection?: FOLDSelection = $state();
 
+  // adding this, unsure if it should be reactive or not
+  // selectionGraph: FOLD | undefined = $derived(getSubgraph(this.frame.baked, this.selection ?? {}));
+  selectionGraph: FOLD | undefined = $derived(simpleSubgraph(this.frame.baked, this.selection ?? {}));
+
   shapeManager: ShapeManager;
 
   // models: { [key: string]: Model } = $state({});
-  cp: CreasePattern;
-  folded: FoldedForm;
-  sim: Simulator;
+  creasePattern: CreasePattern;
+  foldedForm: FoldedForm;
+  simulator: Simulator;
+
+  get cp(): Embedding { return this.creasePattern; }
+  get folded(): Embedding { return this.foldedForm; }
+  get sim(): Embedding { return this.simulator; }
 
   getEmbedding(name: string): Embedding | undefined {
     switch (name) {
       case "cp":
       case "creasePattern":
       case "CreasePattern":
-        return this.cp;
+        return this.creasePattern;
       case "folded":
       case "foldedForm":
       case "FoldedForm":
-        return this.folded;
+        return this.foldedForm;
       case "sim":
       case "simulator":
       case "Simulator":
-        return this.sim;
+        return this.simulator;
       default: return undefined;
     }
   }
-
-  get creasePattern(): Embedding { return this.cp; }
-  get foldedForm(): Embedding { return this.folded; }
-  get simulator(): Embedding { return this.simulator; }
 
   #effects: (() => void)[] = [];
 
@@ -73,9 +77,9 @@ export class GraphData {
     this.metadata = getFileMetadata(fold);
     this.shapeManager = new ShapeManager();
 
-    this.cp = new CreasePattern(this);
-    this.folded = new FoldedForm(this);
-    this.sim = new Simulator(this);
+    this.creasePattern = new CreasePattern(this);
+    this.foldedForm = new FoldedForm(this);
+    this.simulator = new Simulator(this);
 
     this.#effects = [
       this.#effectFrameChange(),
@@ -84,9 +88,9 @@ export class GraphData {
   }
 
   dealloc(): void {
-    this.cp.dealloc();
-    this.folded.dealloc();
-    this.sim.dealloc();
+    this.creasePattern.dealloc();
+    this.foldedForm.dealloc();
+    this.simulator.dealloc();
     this.#effects.forEach(fn => fn());
   }
 

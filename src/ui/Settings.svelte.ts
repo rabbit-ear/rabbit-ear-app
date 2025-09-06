@@ -8,12 +8,24 @@ export enum UIMode {
 export class Settings {
   mode: UIMode = $state(UIMode.mesh);
 
+  // boundary handling during operations on a selection
+  selectionHandling = new LocalStorageItem<string>("ui/selection", "selectionHandling", "detach");
+  selectionFilter = {
+    vertices: new LocalStorageItem<boolean>("ui/selection", "selectionFilterVertices", true),
+    edges: new LocalStorageItem<boolean>("ui/selection", "selectionFilterEdges", true),
+    faces: new LocalStorageItem<boolean>("ui/selection", "selectionFilterFaces", true),
+  };
+  get selectionFilterObject() {
+    return {
+      vertices: this.selectionFilter.vertices.value,
+      edges: this.selectionFilter.edges.value,
+      faces: this.selectionFilter.faces.value,
+    };
+  }
+
   // <boolean> if the X axis is to the right, is the Y axis up (right handed) or down (left).
   // <boolean> is the Y axis on top (true) or on bottom (false)?
   rightHanded = new LocalStorageItem<boolean>("ui/viewport", "rightHanded", true);
-
-  // boundary handling during operations on a selection
-  selectionHandling = new LocalStorageItem<string>("ui/viewport", "selectionHandling", "detach");
 
   // newEdgeAssignment = new LocalStorageItem<string>("ui", "newEdgeAssignment", "F");
 

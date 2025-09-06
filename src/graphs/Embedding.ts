@@ -31,6 +31,8 @@ export interface Embedding {
   // this is here for convenience, should reference the GraphData.
   selection: FOLDSelection | undefined;
 
+  selectionGraph: FOLD | undefined;
+
   // other
   // shapes: Shape[];
 

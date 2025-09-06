@@ -3,11 +3,14 @@
   import context from "../../app/context.svelte.ts";
   import t from "../../app/t.ts";
   import LogSlider from "../Components/LogSlider.svelte";
-  import IconDetach from "../icons/selection-detach.svelte";
-  import IconStretch from "../icons/selection-stretch.svelte";
+  import IconDetach from "../icons/select-detach.svelte";
+  import IconStretch from "../icons/select-stretch.svelte";
   import IconPointer from "../icons/cursor-pointer.svelte";
   import IconPointerSnap from "../icons/cursor-pointer-snap.svelte";
   import IconHand from "../icons/cursor-hand.svelte";
+  import IconSelectVertices from "../icons/select-vertices.svelte";
+  import IconSelectEdges from "../icons/select-edges.svelte";
+  import IconSelectFaces from "../icons/select-faces.svelte";
 
   const formatNumber = (n: number) => {
     if (n === undefined) {
@@ -40,6 +43,39 @@
       ? `V ${sel.vertices?.length ?? 0} / E ${sel.edges?.length ?? 0} / F ${sel.faces?.length ?? 0}`
       : undefined,
   );
+
+  const selectVertices = $derived(context.ui.settings.selectionFilter.vertices.value);
+  const selectEdges = $derived(context.ui.settings.selectionFilter.edges.value);
+  const selectFaces = $derived(context.ui.settings.selectionFilter.faces.value);
+  const selectComponent = $derived(
+    [
+      selectVertices ? "vertices" : undefined,
+      selectEdges ? "edges" : undefined,
+      selectFaces ? "faces" : undefined,
+    ]
+      .filter((a) => a !== undefined)
+      .join(", "),
+  );
+
+  const toggleSelectionFilter = (component: string) => {
+    const filter = context.ui.settings.selectionFilter;
+    switch (component) {
+      case "vertices":
+        filter.vertices.value =
+          !filter.edges.value && !filter.faces.value ? true : !filter.vertices.value;
+        break;
+      case "edges":
+        filter.edges.value =
+          !filter.vertices.value && !filter.faces.value ? true : !filter.edges.value;
+        break;
+      case "faces":
+        filter.faces.value =
+          !filter.vertices.value && !filter.edges.value ? true : !filter.faces.value;
+        break;
+      default:
+        break;
+    }
+  };
 
   $effect(() => {
     context.ui.settings.layersNudge.value = Math.pow(2, layersNudgeSlider) / 1e6;
@@ -81,7 +117,7 @@
     </div>
   {/if}
   <div class="flex-row gap">
-    <button class="text-button flex-row gap" onclick={resetZoom}>
+    <button class="invisible flex-row gap" onclick={resetZoom}>
       <span class="svg-icon"><IconHand /></span>
       <span class="number">{zooms}</span>
     </button>
@@ -89,7 +125,31 @@
 
   <hr />
 
+  <div class="row">
+    <p>select <span class="bold">{selectComponent}</span></p>
+  </div>
+
+  <div class="row center">
+    <button
+      class={[
+        "invisible svg-icon large",
+        selectVertices ? "highlighted" : undefined,
+      ].join(" ")}
+      onclick={() => toggleSelectionFilter("vertices")}><IconSelectVertices /></button>
+    <button
+      class={["invisible svg-icon large", selectEdges ? "highlighted" : undefined].join(
+        " ",
+      )}
+      onclick={() => toggleSelectionFilter("edges")}><IconSelectEdges /></button>
+    <button
+      class={["invisible svg-icon large", selectFaces ? "highlighted" : undefined].join(
+        " ",
+      )}
+      onclick={() => toggleSelectionFilter("faces")}><IconSelectFaces /></button>
+  </div>
+
   <div class="row toggle-row">
+    <p class="gap-after">transform</p>
     <button
       class={context.ui.settings.selectionHandling.value === "detach"
         ? "svg-icon highlighted"
@@ -184,6 +244,10 @@
     align-items: center;
   }
 
+  .center {
+    justify-content: center;
+  }
+
   .gap {
     gap: var(--form-gap);
   }
@@ -204,7 +268,7 @@
     width: 100%;
   }
 
-  button.text-button {
+  .invisible {
     all: unset;
     cursor: pointer;
     display: flex;
@@ -212,16 +276,20 @@
     font-weight: bold;
   }
 
-  button.text-button:hover {
+  .bold {
+    font-weight: bold;
+  }
+
+  .invisible:hover {
     color: var(--highlight);
   }
 
-  button.text-button:focus {
+  .invisible:focus {
     outline-offset: 2px;
     outline: 2px solid var(--ui-blue);
   }
 
-  button.text-button > * {
+  .invisible > * {
     pointer-events: none;
   }
 
@@ -235,8 +303,27 @@
     fill: var(--text);
   }
 
+  .svg-icon.large {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+
   .svg-icon:hover {
     stroke: var(--bright);
     fill: var(--bright);
+  }
+
+  .svg-icon :global(.highlightable) {
+    fill: var(--dim);
+    stroke: var(--dim);
+  }
+
+  .svg-icon.highlighted :global(.highlightable) {
+    /* fill: var(--highlight); */
+    /* stroke: var(--highlight); */
+    /* fill: var(--ui-blue); */
+    /* stroke: var(--ui-blue); */
+    fill: var(--bright);
+    stroke: var(--bright);
   }
 </style>

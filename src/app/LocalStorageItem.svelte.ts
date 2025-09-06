@@ -14,7 +14,15 @@ export class LocalStorageItem<T> {
     if (current != null) { this.value = this.deserialize(current); }
 
     $effect.root(() => {
-      $effect(() => localStorage.setItem(this.key, String(this.value)));
+      $effect(() => {
+        let str: string;
+        try {
+          str = JSON.stringify(this.value);
+        } catch {
+          str = String(this.value);
+        }
+        localStorage.setItem(this.key, str);
+      });
       return () => { };
     });
 

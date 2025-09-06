@@ -29,19 +29,27 @@ export class CreasePatternFaces implements GLModel {
     }
   });
 
-  vertexArrays: VertexArray[] = $derived.by(() => this.viewport.gl && this.program
-    ? makeCPFacesVertexArrays(
+  vertexArrays: VertexArray[] = $derived.by(() => {
+    if (!this.viewport.gl || !this.program) { return []; }
+    const reset = this.viewport.embedding?.graphUpdate.reset;
+    const structural = this.viewport.embedding?.graphUpdate.structural;
+    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    return makeCPFacesVertexArrays(
       this.viewport.gl,
       this.program,
       this.viewport.embedding?.graph ?? {})
-    : []);
+  });
 
-  elementArrays: ElementArray[] = $derived.by(() => this.viewport.gl
-    ? makeCPFacesElementArrays(
+  elementArrays: ElementArray[] = $derived.by(() => {
+    if (!this.viewport.gl) { return []; }
+    const reset = this.viewport.embedding?.graphUpdate.reset;
+    const structural = this.viewport.embedding?.graphUpdate.structural;
+    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    return makeCPFacesElementArrays(
       this.viewport.gl,
       this.viewport.version,
       this.viewport.embedding?.graph ?? {})
-    : []);
+  });
 
   flags: number[] = [];
 

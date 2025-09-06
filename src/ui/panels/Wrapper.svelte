@@ -50,6 +50,10 @@
     outline-offset: 2px;
   }
 
+  button > * {
+    pointer-events: none;
+  }
+
   .title {
     padding: 0.2rem 0.5rem;
     /* background-color: var(--ui-blue); */
@@ -65,6 +69,7 @@
   .title:hover {
     /* background-color: var(--ui-dark-blue); */
     background-color: var(--background-4);
+    color: var(--bright);
   }
 
   .body {

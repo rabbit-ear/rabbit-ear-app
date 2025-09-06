@@ -48,6 +48,8 @@ export class CreasePattern implements Embedding {
 
   get selection(): FOLDSelection | undefined { return this.#data.selection; }
 
+  get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
+
   // userLocked: boolean | undefined = $state(undefined);
   // sourceIsCreasePattern: boolean = $derived.by(() => this.#data.frameAttributes.isCreasePattern);
   // attributeLocked: boolean = $derived.by(() => !this.#data.frameAttributes.isCreasePattern);

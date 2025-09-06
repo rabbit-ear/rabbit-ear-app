@@ -36,20 +36,28 @@ export class CreasePatternEdges implements GLModel {
     }
   });
 
-  vertexArrays: VertexArray[] = $derived.by(() => this.viewport.gl && this.program
-    ? makeCPEdgesVertexArrays(
+  vertexArrays: VertexArray[] = $derived.by(() => {
+    if (!this.viewport.gl || !this.program) { return []; }
+    const reset = this.viewport.embedding?.graphUpdate.reset;
+    const structural = this.viewport.embedding?.graphUpdate.structural;
+    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    return makeCPEdgesVertexArrays(
       this.viewport.gl,
       this.program,
       this.viewport.embedding?.graph ?? {},
       this.viewport.style.darkMode ? { ...dark } : { ...light })
-    : []);
+  });
 
-  elementArrays: ElementArray[] = $derived.by(() => this.viewport.gl
-    ? makeCPEdgesElementArrays(
+  elementArrays: ElementArray[] = $derived.by(() => {
+    if (!this.viewport.gl) { return []; }
+    const reset = this.viewport.embedding?.graphUpdate.reset;
+    const structural = this.viewport.embedding?.graphUpdate.structural;
+    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    return makeCPEdgesElementArrays(
       this.viewport.gl,
       this.viewport.version,
       this.viewport.embedding?.graph ?? {})
-    : []);
+  });
 
   flags: number[] = $state([]);
 

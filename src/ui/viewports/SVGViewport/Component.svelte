@@ -19,7 +19,7 @@
 
   let graph = $state(viewport.embedding?.graph);
 
-  let selection = $derived(getSubgraph(graph, viewport.embedding?.selection));
+  const selection = $derived(viewport.embedding?.selectionGraph);
 
   $effect(() => {
     viewport.embedding?.graphUpdate.structural;
@@ -80,7 +80,9 @@
 {#snippet everything()}
   {@render gridLayer()}
   <SVGFOLD {graph} {viewport} />
-  <SVGFOLD graph={selection} {viewport} class="selection" />
+  {#if selection}
+    <SVGFOLD graph={selection} {viewport} class="selection" />
+  {/if}
   <SVGShapes shapes={viewport.shapes} {viewport} class="shapes-layer" />
   {@render toolLayer()}
 {/snippet}
