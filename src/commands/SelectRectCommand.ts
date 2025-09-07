@@ -27,7 +27,9 @@ export class SelectRectCommand implements Command {
     private document: FileDocument,
     private embeddingName: string,
     private box: Box,
-    private components: VEFBoolean) { }
+    private components: VEFBoolean,
+    // todo: strict or loose
+    private strictSelect?: boolean) { }
 
   private previousSelection: FOLDSelection | undefined;
 
@@ -36,6 +38,7 @@ export class SelectRectCommand implements Command {
     this.document.updateSource((data): GraphUpdateModifier | undefined => {
       const embedding = data?.getEmbedding(this.embeddingName);
       if (!embedding) { return undefined; }
+      // todo: if strict or loose, do a different selection
       // const selection = getComponentsInsideRect(embedding.graph ?? {}, this.box);
       const selection = strictSelectComponents(embedding.graph ?? {}, this.box);
       data.selection = filterSelection(selection, this.components);

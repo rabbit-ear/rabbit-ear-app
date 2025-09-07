@@ -41,11 +41,40 @@ export class FoldedForm implements Embedding {
     hasLayerOrder: this.#attributeHasLayerOrder,
     dimension: this.#attributeDimension,
     // hasLayerOrder: true,
-  }));
+  }) as FrameAttributes);
 
   get selection(): FOLDSelection | undefined { return this.#data.selection; }
 
-  get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
+  // get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
+  // get selectionFaceGraph(): FOLD | undefined { return this.#data.selectionFaceGraph; }
+  // get selectionEdgeGraph(): FOLD | undefined { return this.#data.selectionEdgeGraph; }
+  // get selectionVertexGraph(): FOLD | undefined { return this.#data.selectionVertexGraph; }
+  selectionFaceGraph: FOLD | undefined = $derived.by(() => {
+    const graph = this.#data.selectionFaceGraph;
+    if (graph && graph.vertices_coords && this.folded.vertices_coords) {
+      graph.vertices_coords = graph.vertices_coords
+        .map((_, i) => this.folded.vertices_coords![i]);
+    }
+    return graph;
+  });
+
+  selectionEdgeGraph: FOLD | undefined = $derived.by(() => {
+    const graph = this.#data.selectionEdgeGraph;
+    if (graph && graph.vertices_coords && this.folded.vertices_coords) {
+      graph.vertices_coords = graph.vertices_coords
+        .map((_, i) => this.folded.vertices_coords![i]);
+    }
+    return graph;
+  });
+
+  selectionVertexGraph: FOLD | undefined = $derived.by(() => {
+    const graph = this.#data.selectionVertexGraph;
+    if (graph && graph.vertices_coords && this.folded.vertices_coords) {
+      graph.vertices_coords = graph.vertices_coords
+        .map((_, i) => this.folded.vertices_coords![i]);
+    }
+    return graph;
+  });
 
   faceOrdersWorker: Worker;
 

@@ -30,8 +30,10 @@ export interface Embedding {
   // selection is stored on the GraphData.
   // this is here for convenience, should reference the GraphData.
   selection: FOLDSelection | undefined;
-
-  selectionGraph: FOLD | undefined;
+  // selectionGraph: FOLD | undefined;
+  selectionFaceGraph: FOLD | undefined;
+  selectionEdgeGraph: FOLD | undefined;
+  selectionVertexGraph: FOLD | undefined;
 
   // other
   // shapes: Shape[];

@@ -32,6 +32,7 @@ export class CreasePattern implements Embedding {
   frameLinked = $derived.by(() => this.#data.frame.attributes.isParent
     || this.#data.frame.attributes.isChild);
 
+  // todo: this should not be here. this is tool-dependent.
   editable: boolean = $derived.by(() => !this.frameLinked
     && this.#data.frame.attributes.class === FrameClass.creasePattern);
 
@@ -48,7 +49,10 @@ export class CreasePattern implements Embedding {
 
   get selection(): FOLDSelection | undefined { return this.#data.selection; }
 
-  get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
+  // get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
+  get selectionFaceGraph(): FOLD | undefined { return this.#data.selectionFaceGraph; }
+  get selectionEdgeGraph(): FOLD | undefined { return this.#data.selectionEdgeGraph; }
+  get selectionVertexGraph(): FOLD | undefined { return this.#data.selectionVertexGraph; }
 
   // userLocked: boolean | undefined = $state(undefined);
   // sourceIsCreasePattern: boolean = $derived.by(() => this.#data.frameAttributes.isCreasePattern);

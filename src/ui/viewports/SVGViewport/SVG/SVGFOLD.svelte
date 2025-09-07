@@ -9,11 +9,17 @@
   type PropsType = {
     viewport?: SVGViewport;
     graph?: FOLD;
+    faceGraph?: FOLD;
+    edgeGraph?: FOLD;
+    vertexGraph?: FOLD;
   };
 
   const {
     viewport,
     graph = {},
+    faceGraph,
+    edgeGraph,
+    vertexGraph,
     ...props
   }: PropsType & SVGAttributes<SVGGElement> = $props();
 
@@ -29,17 +35,17 @@
 <g class={className} {...props}>
   {#if showFaces}
     <g class="faces">
-      <SVGFOLDFaces {graph} />
+      <SVGFOLDFaces graph={faceGraph ?? graph} />
     </g>
   {/if}
   {#if showEdges}
     <g class="edges">
-      <SVGFOLDEdges {graph} />
+      <SVGFOLDEdges graph={edgeGraph ?? graph} />
     </g>
   {/if}
   {#if showVertices}
     <g class="vertices">
-      <SVGFOLDVertices {graph} />
+      <SVGFOLDVertices graph={vertexGraph ?? graph} />
     </g>
   {/if}
 </g>

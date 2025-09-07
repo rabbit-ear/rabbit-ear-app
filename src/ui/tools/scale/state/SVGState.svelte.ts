@@ -131,7 +131,11 @@ export class SVGState {
         console.log("scale model by", $state.snapshot(this.scale));
         const doc = context.fileManager.document;
         if (doc) {
-          const command = new AffineScaleCommand(doc, this.scale, this.anchor.origin);
+          const command = new AffineScaleCommand(
+            doc,
+            this.scale,
+            this.anchor.origin,
+            context.fileManager.document?.data.selection);
           doc.executeCommand(command)
         }
         // this.anchor.reset();

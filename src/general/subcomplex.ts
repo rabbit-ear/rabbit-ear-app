@@ -3,12 +3,7 @@ import { includeS } from "rabbit-ear/math/compare.js";
 import { intersectLineLine } from "rabbit-ear/math/intersect.js";
 import { filterKeysWithPrefix, filterKeysWithSuffix, getDimensionQuick } from "rabbit-ear/fold/spec.js";
 import { subgraphExclusive } from "rabbit-ear/graph/subgraph.js";
-
-export type FOLDSelection = {
-  vertices?: number[];
-  edges?: number[];
-  faces?: number[];
-};
+import type { FOLDSelection } from "./selection.ts";
 
 const pointInRect2 = (p: [number, number], rect: Box) =>
   p[0] > rect.min[0] &&
@@ -32,37 +27,32 @@ export const strictSelectComponents = (graph: FOLD, rect: Box): FOLDSelection =>
     ? graph.vertices_coords?.map((p) => pointInRect3(p as [number, number, number], rect))
     : graph.vertices_coords?.map((p) => pointInRect2(p as [number, number], rect))
   if (!verticesLookup) { return {}; }
-  const vertices = (verticesLookup ?? [])
+  const vertices = new Set((verticesLookup ?? [])
     .map((sel, i) => (sel ? i : undefined))
-    .filter((a) => a !== undefined);
+    .filter((a) => a !== undefined));
   const edgesLookup = (graph.edges_vertices ?? [])
     .map(vertices => vertices
       .map(v => verticesLookup[v])
       .reduce((a, b) => a && b, true));
-  const edges = (edgesLookup ?? [])
+  const edges = new Set((edgesLookup ?? [])
     .map((sel, i) => (sel ? i : undefined))
-    .filter((a) => a !== undefined);
+    .filter((a) => a !== undefined));
   const facesLookup = (graph.faces_vertices ?? [])
     .map(vertices => vertices
       .map(v => verticesLookup[v])
       .reduce((a, b) => a && b, true));
-  const faces = (facesLookup ?? [])
+  const faces = new Set((facesLookup ?? [])
     .map((sel, i) => (sel ? i : undefined))
-    .filter((a) => a !== undefined);
+    .filter((a) => a !== undefined));
   return { vertices, edges, faces };
 };
 
 const closedSubcomplex = (graph: FOLD, selection: FOLDSelection): FOLDSelection => {
   const lookup: {
-    // vertices: { [key: string]: boolean },
-    // edges: { [key: string]: boolean },
-    // faces: { [key: string]: boolean },
     vertices: boolean[],
     edges: boolean[],
     faces: boolean[],
   } = { vertices: [], edges: [], faces: [] };
-  // add vertices to the lookup table, all vertices from
-  // vertices, edges' edges_vertices, and faces' faces_vertices.
   selection.faces?.forEach((f) => {
     lookup.faces[f] = true;
   });
@@ -93,23 +83,58 @@ const closedSubcomplex = (graph: FOLD, selection: FOLDSelection): FOLDSelection 
     lookup.vertices[v] = true;
   });
 
-  const vertices = (lookup.vertices ?? [])
+  const vertices = new Set((lookup.vertices ?? [])
     .map((sel, i) => (sel ? i : undefined))
-    .filter((a) => a !== undefined);
-  const edges = (lookup.edges ?? [])
+    .filter((a) => a !== undefined));
+  const edges = new Set((lookup.edges ?? [])
     .map((sel, i) => (sel ? i : undefined))
-    .filter((a) => a !== undefined);
-  const faces = (lookup.faces ?? [])
+    .filter((a) => a !== undefined));
+  const faces = new Set((lookup.faces ?? [])
     .map((sel, i) => (sel ? i : undefined))
-    .filter((a) => a !== undefined);
+    .filter((a) => a !== undefined));
   return { vertices, edges, faces };
+};
+
+const closedSubgraph = (graph: FOLD, selection: FOLDSelection): FOLDSelection => {
+  const lookup: {
+    vertices: boolean[],
+    edges: boolean[],
+  } = { vertices: [], edges: [] };
+  selection.edges?.forEach((e) => {
+    lookup.edges[e] = true;
+  });
+  if (graph.edges_vertices) {
+    selection.edges?.forEach((edge) =>
+      graph.edges_vertices![edge]?.forEach((v) => {
+        lookup.vertices[v] = true;
+      }));
+  }
+
+  selection.vertices?.forEach((v) => {
+    lookup.vertices[v] = true;
+  });
+
+  const vertices = new Set((lookup.vertices ?? [])
+    .map((sel, i) => (sel ? i : undefined))
+    .filter((a) => a !== undefined));
+  const edges = new Set((lookup.edges ?? [])
+    .map((sel, i) => (sel ? i : undefined))
+    .filter((a) => a !== undefined));
+  return { vertices, edges };
 };
 
 export const strictSubcomplex = (graph: FOLD, selection: FOLDSelection): FOLD => {
   const closedSelection = closedSubcomplex(graph, selection);
+  return subgraphExclusive(graph, closedSelection);
+};
 
-  console.log(closedSelection);
+export const strictSubgraph = (graph: FOLD, selection: FOLDSelection): FOLD => {
+  const closedSelection = closedSubgraph(graph, selection);
+  return subgraphExclusive(graph, closedSelection);
+};
 
+export const vertexSubgraph = (graph: FOLD, selection: FOLDSelection): FOLD => {
+  const closedSelection = { vertices: selection.vertices ?? [] };
   return subgraphExclusive(graph, closedSelection);
 };
 

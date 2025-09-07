@@ -8,7 +8,9 @@
 
   const { graph }: PropsType & SVGAttributes<SVGGElement> = $props();
 
-  const vertices_coords = $derived(graph.vertices_coords || []);
+  const vertices_coords = $derived(
+    (graph.vertices_coords ?? []).filter((a) => a !== undefined),
+  );
 </script>
 
 {#each vertices_coords as [cx, cy]}
@@ -17,7 +19,11 @@
 
 <style>
   circle {
-    fill: var(--text);
+    fill: var(--dim);
     stroke: none;
+  }
+
+  :global(.selection) circle {
+    fill: var(--yellow);
   }
 </style>

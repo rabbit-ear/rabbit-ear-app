@@ -2,6 +2,7 @@
   import { untrack } from "svelte";
   import context from "../../app/context.svelte.ts";
   import t from "../../app/t.ts";
+  import { formatPoint, formatNumber } from "../../system/format.ts";
   import LogSlider from "../Components/LogSlider.svelte";
   import IconDetach from "../icons/select-detach.svelte";
   import IconStretch from "../icons/select-stretch.svelte";
@@ -12,17 +13,17 @@
   import IconSelectEdges from "../icons/select-edges.svelte";
   import IconSelectFaces from "../icons/select-faces.svelte";
 
-  const formatNumber = (n: number) => {
-    if (n === undefined) {
-      return "";
-    }
-    const integer = Math.floor(n);
-    return integer === n ? n : n.toFixed(2);
-  };
+  const VEFSingular = $derived([
+    t("math.graph.vertex"),
+    t("math.graph.edge"),
+    t("math.graph.face"),
+  ]);
 
-  const formatPoint = (p: number[]) => p.map(formatNumber).join(", ");
-
-  let layersNudgeSlider = $state(6);
+  const VEFPlural = $derived([
+    t("math.graph.vertices"),
+    t("math.graph.edges"),
+    t("math.graph.faces"),
+  ]);
 
   const viewportViews = $derived(
     context.ui.viewportManager.viewports.map((vp) => vp.view),
@@ -37,11 +38,22 @@
 
   const resetZoom = (): void => context.ui.viewportManager.resetCameras();
 
-  const sel = $derived(context.fileManager.document?.data.selection);
   const selection = $derived(
-    sel
-      ? `V ${sel.vertices?.length ?? 0} / E ${sel.edges?.length ?? 0} / F ${sel.faces?.length ?? 0}`
-      : undefined,
+    !context.fileManager.document?.data.selection
+      ? undefined
+      : [
+          context.fileManager.document?.data.selection.vertices?.length,
+          context.fileManager.document?.data.selection.edges?.length,
+          context.fileManager.document?.data.selection.faces?.length,
+        ]
+          .map((count, i) => ({ count, i }))
+          .filter((el) => el.count !== undefined && el.count !== 0)
+          .map(({ count, i }) => ({
+            count,
+            name: count! > 1 ? VEFPlural[i] : VEFSingular[i],
+          }))
+          .map(({ count, name }) => `${count} ${name}`)
+          .join(", "),
   );
 
   const selectVertices = $derived(context.ui.settings.selectionFilter.vertices.value);
@@ -49,9 +61,9 @@
   const selectFaces = $derived(context.ui.settings.selectionFilter.faces.value);
   const selectComponent = $derived(
     [
-      selectVertices ? "vertices" : undefined,
-      selectEdges ? "edges" : undefined,
-      selectFaces ? "faces" : undefined,
+      selectVertices ? VEFPlural[0] : undefined,
+      selectEdges ? VEFPlural[1] : undefined,
+      selectFaces ? VEFPlural[2] : undefined,
     ]
       .filter((a) => a !== undefined)
       .join(", "),
@@ -76,32 +88,6 @@
         break;
     }
   };
-
-  $effect(() => {
-    context.ui.settings.layersNudge.value = Math.pow(2, layersNudgeSlider) / 1e6;
-  });
-
-  $effect(() => {
-    //const bounds = boundingBox(Frame.value);
-    //const strokeWidthGuess =
-    //  bounds && bounds.span
-    //    ? getStrokeWidth(Frame.value, Math.max(...bounds.span))
-    //    : getStrokeWidth(Frame.value);
-
-    // todo: hardcoded
-    const bounds = { span: [1, 1] };
-
-    // find a decent spacing between layers (LayerNudge)
-    if (bounds && bounds.span) {
-      const maxSpan = Math.max(...bounds.span);
-      let newLayerNudge: number = 0;
-      untrack(() => {
-        layersNudgeSlider = Math.log2(maxSpan * 0.001 * 1e5);
-        newLayerNudge = Math.pow(2, layersNudgeSlider) / 1e6;
-      });
-      context.ui.settings.layersNudge.value = newLayerNudge;
-    }
-  });
 </script>
 
 <div class="column gap">
@@ -233,14 +219,19 @@
   </div>
 
   <div class="row gap">
-    <p>gap</p>
     <input
-      type="range"
-      min="1"
-      max="20"
-      step="0.01"
-      id="slider-layer-nudge"
-      bind:value={layersNudgeSlider} />
+      type="checkbox"
+      id="show-vertices"
+      bind:checked={context.ui.settings.showVertices.value} />
+    <label for="show-vertices">show {t("math.graph.vertices")}</label>
+  </div>
+
+  <div class="row gap">
+    <p>gap</p>
+    <LogSlider
+      id="range-layer-nudge"
+      radix={6}
+      bind:value={context.ui.settings.layersNudge.value} />
     <!-- <input -->
     <!--   type="text" -->
     <!--   class="long-input" -->

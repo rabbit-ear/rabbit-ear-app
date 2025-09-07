@@ -1,5 +1,6 @@
 import type { Command } from "./Command.ts";
 import type { GraphUpdateModifier } from "../graphs/Updated.ts";
+import type { FOLDSelection } from "../general/selection.ts";
 import { FileDocument } from "../app/FileDocument.svelte.ts";
 import {
   add2,
@@ -19,8 +20,8 @@ export class AffineScaleCommand implements Command {
   constructor(
     private doc: FileDocument,
     private scaleAmount: number,
-    private origin: [number, number] | [number, number, number]) {
-  }
+    private origin: [number, number] | [number, number, number],
+    private selection: FOLDSelection | undefined) { }
 
   previousVerticesCoords: [number, number][] | [number, number, number][] | undefined;
 
@@ -29,6 +30,11 @@ export class AffineScaleCommand implements Command {
     origin: [number, number],
     vertices_coords: [number, number][],
   ): [number, number][] {
+    if (this.selection && this.selection.vertices) {
+      return vertices_coords.map((coord, i) => this.selection!.vertices!.has(i)
+        ? add2(scale2(subtract2(coord, origin), scaleAmount), origin)
+        : coord);
+    }
     return vertices_coords.map((coord) =>
       add2(scale2(subtract2(coord, origin), scaleAmount), origin),
     );
@@ -39,6 +45,11 @@ export class AffineScaleCommand implements Command {
     origin: [number, number, number],
     vertices_coords: [number, number, number][],
   ): [number, number, number][] {
+    if (this.selection && this.selection.vertices) {
+      return vertices_coords.map((coord, i) => this.selection!.vertices!.has(i)
+        ? add3(scale3(subtract3(coord, origin), scaleAmount), origin)
+        : coord);
+    }
     return vertices_coords.map((coord) =>
       add3(scale3(subtract3(coord, origin), scaleAmount), origin),
     );

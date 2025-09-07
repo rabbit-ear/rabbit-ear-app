@@ -14,7 +14,7 @@ import { FoldedForm } from "./FoldedForm/FoldedForm.svelte.ts";
 import { Simulator } from "./Simulator/Simulator.svelte.ts";
 import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
 import { Frame } from "./Frame.ts";
-import { strictSubcomplex } from "../general/subcomplex.ts";
+import { strictSubcomplex, strictSubgraph, vertexSubgraph } from "../general/subcomplex.ts";
 
 export class GraphData {
   metadata: FOLDFileMetadata = $state({});
@@ -45,7 +45,18 @@ export class GraphData {
   //   this.frame.baked,
   //   this.selection ?? {},
   // ));
-  selectionGraph: FOLD | undefined = $derived(strictSubcomplex(
+
+  selectionFaceGraph: FOLD | undefined = $derived(strictSubcomplex(
+    this.frame.baked,
+    this.selection ?? {},
+  ));
+
+  selectionEdgeGraph: FOLD | undefined = $derived(strictSubgraph(
+    this.frame.baked,
+    this.selection ?? {},
+  ));
+
+  selectionVertexGraph: FOLD | undefined = $derived(vertexSubgraph(
     this.frame.baked,
     this.selection ?? {},
   ));
@@ -93,7 +104,7 @@ export class GraphData {
 
     this.#effects = [
       this.#effectFrameChange(),
-      // this.#debug(),
+      this.#debug(),
     ];
   }
 
@@ -175,6 +186,7 @@ export class GraphData {
   #debug() {
     return $effect.root(() => {
       $effect(() => {
+        console.log("Face graph", this.selectionFaceGraph);
         // console.log("frames", this.frames.length);
       });
       return () => { };

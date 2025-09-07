@@ -5,9 +5,12 @@ import { subgraph, subgraphExclusive } from "rabbit-ear/graph/subgraph.js";
 import { filterKeysWithPrefix, filterKeysWithSuffix } from "rabbit-ear/fold/spec.js";
 
 export type FOLDSelection = {
-  vertices?: number[];
-  edges?: number[];
-  faces?: number[];
+  // vertices?: number[];
+  // edges?: number[];
+  // faces?: number[];
+  vertices?: Set<number>;
+  edges?: Set<number>;
+  faces?: Set<number>;
 };
 
 const pointInRect = (p: [number, number], rect: Box) =>

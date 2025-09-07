@@ -51,6 +51,8 @@ export class Settings {
 
   scrollSensitivity = new LocalStorageItem<number>("ui/input", "scrollSensitivity", 1 / 300);
 
+  showVertices = new LocalStorageItem<boolean>("ui/style", "showVertices", false);
+
   darkMode = new LocalStorageItem<boolean>("ui/style", "darkMode", true);
   modelColorFront = new LocalStorageItem<string>("ui/style", "modelColorFront", "#17F");
   modelColorBack = new LocalStorageItem<string>("ui/style", "modelColorBack", "white");

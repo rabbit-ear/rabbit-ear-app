@@ -1,4 +1,5 @@
 import { SVGViewport } from "./SVGViewport.svelte.ts";
+import context from "../../../app/context.svelte.ts";
 
 export class Style {
   viewport: SVGViewport;
@@ -7,7 +8,7 @@ export class Style {
     this.viewport = viewport;
   }
 
-  showVertices: boolean = $derived(false);
+  showVertices: boolean = $derived(context.ui.settings.showVertices.value);
   showEdges: boolean = $derived(true);
   showFaces: boolean = $derived(true);
 
