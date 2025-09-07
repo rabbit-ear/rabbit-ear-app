@@ -149,7 +149,23 @@
   </div>
 
   <div class="row toggle-row">
-    <p class="gap-after">transform</p>
+    <p class="gap-after">inclusion</p>
+    <button
+      class={context.ui.settings.selectionInclusion.value === "loose"
+        ? "highlighted"
+        : ""}
+      onclick={(): string => (context.ui.settings.selectionInclusion.value = "loose")}
+      >loose</button>
+    <button
+      class={context.ui.settings.selectionInclusion.value === "strict"
+        ? "highlighted"
+        : ""}
+      onclick={(): string => (context.ui.settings.selectionInclusion.value = "strict")}
+      >strict</button>
+  </div>
+
+  <div class="row toggle-row">
+    <p class="gap-after">on transform</p>
     <button
       class={context.ui.settings.selectionHandling.value === "detach"
         ? "svg-icon highlighted"

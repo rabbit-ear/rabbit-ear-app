@@ -4,6 +4,7 @@ import type { FOLDSelection } from "../general/selection.ts";
 import type { GraphUpdateModifier } from "../graphs/Updated.ts";
 import { FileDocument } from "../app/FileDocument.svelte.ts";
 import { getComponentsInsideRect } from "../general/selection.ts";
+import { strictSelectComponents } from "../general/subcomplex.ts";
 
 type VEFBoolean = {
   vertices: boolean;
@@ -35,7 +36,8 @@ export class SelectRectCommand implements Command {
     this.document.updateSource((data): GraphUpdateModifier | undefined => {
       const embedding = data?.getEmbedding(this.embeddingName);
       if (!embedding) { return undefined; }
-      const selection = getComponentsInsideRect(embedding.graph ?? {}, this.box);
+      // const selection = getComponentsInsideRect(embedding.graph ?? {}, this.box);
+      const selection = strictSelectComponents(embedding.graph ?? {}, this.box);
       data.selection = filterSelection(selection, this.components);
       return undefined
     }, false);

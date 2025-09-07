@@ -14,12 +14,14 @@ import { FoldedForm } from "./FoldedForm/FoldedForm.svelte.ts";
 import { Simulator } from "./Simulator/Simulator.svelte.ts";
 import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
 import { Frame } from "./Frame.ts";
+import { strictSubcomplex } from "../general/subcomplex.ts";
 
 export class GraphData {
   metadata: FOLDFileMetadata = $state({});
   #source: FOLDChildFrame[] = $state.raw([]);
 
   // the signal to subscribe to instead of subscribing to frame or framesRaw, etc
+  // todo: are we still using this? We're definitely using the ones on the embeddings.
   graphUpdate = $state<GraphUpdateEvent>(makeGraphUpdateEvent());
 
   // which frame index is currently selected by the app for rendering/modification
@@ -37,8 +39,16 @@ export class GraphData {
   selection?: FOLDSelection = $state();
 
   // adding this, unsure if it should be reactive or not
+  // selectionGraph: FOLD | undefined;
   // selectionGraph: FOLD | undefined = $derived(getSubgraph(this.frame.baked, this.selection ?? {}));
-  selectionGraph: FOLD | undefined = $derived(simpleSubgraph(this.frame.baked, this.selection ?? {}));
+  // selectionGraph: FOLD | undefined = $derived(simpleSubgraph(
+  //   this.frame.baked,
+  //   this.selection ?? {},
+  // ));
+  selectionGraph: FOLD | undefined = $derived(strictSubcomplex(
+    this.frame.baked,
+    this.selection ?? {},
+  ));
 
   shapeManager: ShapeManager;
 

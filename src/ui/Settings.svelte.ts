@@ -9,7 +9,10 @@ export class Settings {
   mode: UIMode = $state(UIMode.mesh);
 
   // boundary handling during operations on a selection
+  selectionInclusion = new LocalStorageItem<string>("ui/selection", "selectionInclusion", "loose");
+
   selectionHandling = new LocalStorageItem<string>("ui/selection", "selectionHandling", "detach");
+
   selectionFilter = {
     vertices: new LocalStorageItem<boolean>("ui/selection", "selectionFilterVertices", true),
     edges: new LocalStorageItem<boolean>("ui/selection", "selectionFilterEdges", true),
