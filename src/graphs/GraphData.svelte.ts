@@ -1,7 +1,7 @@
 import type { FOLD, FOLDChildFrame, FOLDFileMetadata } from "rabbit-ear/types.js";
 import type { Embedding } from "./Embedding.ts";
 import type { GraphUpdateEvent, GraphUpdateModifier } from "./Updated.ts";
-import { getSubgraph, simpleSubgraph, type FOLDSelection } from "../general/selection.ts";
+import type { FOLDSelection } from "../general/selection.ts";
 import { makeGraphUpdateEvent, modifyGraphUpdate } from "./Updated.ts";
 import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
@@ -15,6 +15,7 @@ import { Simulator } from "./Simulator/Simulator.svelte.ts";
 import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
 import { Frame } from "./Frame.ts";
 import { strictSubcomplex, strictSubgraph, vertexSubgraph } from "../general/subcomplex.ts";
+import { getSelectionSeam } from "../general/seam.ts";
 
 export class GraphData {
   metadata: FOLDFileMetadata = $state({});
@@ -186,7 +187,11 @@ export class GraphData {
   #debug() {
     return $effect.root(() => {
       $effect(() => {
-        console.log("Face graph", this.selectionFaceGraph);
+        if (this.frame.baked && this.selection) {
+          // console.log("seam vertices", getSeamVertices(this.frame.baked, this.selection));
+          console.log("seam edges", getSelectionSeam(this.frame.baked, this.selection));
+        }
+        // console.log("Face graph", this.selectionFaceGraph);
         // console.log("frames", this.frames.length);
       });
       return () => { };

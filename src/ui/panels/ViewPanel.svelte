@@ -42,9 +42,9 @@
     !context.fileManager.document?.data.selection
       ? undefined
       : [
-          context.fileManager.document?.data.selection.vertices?.length,
-          context.fileManager.document?.data.selection.edges?.length,
-          context.fileManager.document?.data.selection.faces?.length,
+          context.fileManager.document?.data.selection.vertices?.size,
+          context.fileManager.document?.data.selection.edges?.size,
+          context.fileManager.document?.data.selection.faces?.size,
         ]
           .map((count, i) => ({ count, i }))
           .filter((el) => el.count !== undefined && el.count !== 0)
@@ -154,17 +154,16 @@
     <p class="gap-after">on transform</p>
     <button
       class={context.ui.settings.selectionHandling.value === "detach"
-        ? "svg-icon highlighted"
-        : "svg-icon"}
+        ? "highlighted"
+        : ""}
       onclick={(): string => (context.ui.settings.selectionHandling.value = "detach")}
-      ><IconDetach /></button>
+      >detach</button>
     <button
       class={context.ui.settings.selectionHandling.value === "stretch"
-        ? "svg-icon highlighted"
-        : "svg-icon"}
+        ? "highlighted"
+        : ""}
       onclick={(): string => (context.ui.settings.selectionHandling.value = "stretch")}
-      ><IconStretch /></button>
-    <p class="gap-before">{context.ui.settings.selectionHandling.value}</p>
+      >stretch</button>
   </div>
 
   {#if selection}

@@ -3,8 +3,10 @@ import type { Box } from "rabbit-ear/types.js";
 import type { FOLDSelection } from "../general/selection.ts";
 import type { GraphUpdateModifier } from "../graphs/Updated.ts";
 import { FileDocument } from "../app/FileDocument.svelte.ts";
-import { getComponentsInsideRect } from "../general/selection.ts";
-import { strictSelectComponents } from "../general/subcomplex.ts";
+import {
+  getComponentsInRectInclusive,
+  getComponentsInRectExclusive,
+} from "../general/selection.ts";
 
 type VEFBoolean = {
   vertices: boolean;
@@ -28,7 +30,6 @@ export class SelectRectCommand implements Command {
     private embeddingName: string,
     private box: Box,
     private components: VEFBoolean,
-    // todo: strict or loose
     private strictSelect?: boolean) { }
 
   private previousSelection: FOLDSelection | undefined;
@@ -38,9 +39,9 @@ export class SelectRectCommand implements Command {
     this.document.updateSource((data): GraphUpdateModifier | undefined => {
       const embedding = data?.getEmbedding(this.embeddingName);
       if (!embedding) { return undefined; }
-      // todo: if strict or loose, do a different selection
-      // const selection = getComponentsInsideRect(embedding.graph ?? {}, this.box);
-      const selection = strictSelectComponents(embedding.graph ?? {}, this.box);
+      const selection = this.strictSelect
+        ? getComponentsInRectExclusive(embedding.graph ?? {}, this.box)
+        : getComponentsInRectInclusive(embedding.graph ?? {}, this.box);
       data.selection = filterSelection(selection, this.components);
       return undefined
     }, false);

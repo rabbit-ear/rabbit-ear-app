@@ -122,7 +122,8 @@ export class SVGState implements ToolEvents {
             doc,
             this.viewport.embeddingName,
             box,
-            context.ui.settings.selectionFilterObject);
+            context.ui.settings.selectionFilterObject,
+            context.ui.settings.selectionInclusion.value === "strict");
           doc.executeCommand(command)
         }
         this.touches.reset();

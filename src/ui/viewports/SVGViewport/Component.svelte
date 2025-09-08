@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getSubgraph } from "../../../general/selection.ts";
   import { SVGViewport } from "./SVGViewport.svelte.ts";
   import SVGCanvas from "./SVG/SVGCanvas.svelte";
   import GridLayer from "./SVG/GridLayer.svelte";

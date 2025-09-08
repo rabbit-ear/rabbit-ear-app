@@ -13,6 +13,7 @@ import {
   resize3,
 } from "rabbit-ear/math/vector.js";
 import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
+import { explodeAlongSeam } from "../general/seam.ts";
 
 export class AffineScaleCommand implements Command {
   // please construct an array with holes for newCoords with
@@ -29,9 +30,10 @@ export class AffineScaleCommand implements Command {
     scaleAmount: number,
     origin: [number, number],
     vertices_coords: [number, number][],
+    selection: FOLDSelection | undefined,
   ): [number, number][] {
-    if (this.selection && this.selection.vertices) {
-      return vertices_coords.map((coord, i) => this.selection!.vertices!.has(i)
+    if (selection && selection.vertices) {
+      return vertices_coords.map((coord, i) => selection!.vertices!.has(i)
         ? add2(scale2(subtract2(coord, origin), scaleAmount), origin)
         : coord);
     }
@@ -44,9 +46,10 @@ export class AffineScaleCommand implements Command {
     scaleAmount: number,
     origin: [number, number, number],
     vertices_coords: [number, number, number][],
+    selection: FOLDSelection | undefined,
   ): [number, number, number][] {
-    if (this.selection && this.selection.vertices) {
-      return vertices_coords.map((coord, i) => this.selection!.vertices!.has(i)
+    if (selection && selection.vertices) {
+      return vertices_coords.map((coord, i) => selection!.vertices!.has(i)
         ? add3(scale3(subtract3(coord, origin), scaleAmount), origin)
         : coord);
     }
@@ -59,16 +62,19 @@ export class AffineScaleCommand implements Command {
     scaleAmount: number,
     origin: [number, number] | [number, number, number],
     vertices_coords: [number, number][] | [number, number, number][],
+    selection: FOLDSelection | undefined,
   ): [number, number][] | [number, number, number][] {
     switch (getDimensionQuick({ vertices_coords })) {
       case 2: return this.#scaleVerticesCoords2(
         scaleAmount,
         resize2(origin),
-        vertices_coords as [number, number][]);
+        vertices_coords as [number, number][],
+        selection);
       default: return this.#scaleVerticesCoords3(
         scaleAmount,
         resize3(origin),
-        vertices_coords as [number, number, number][]);
+        vertices_coords as [number, number, number][],
+        selection);
     }
   }
 
@@ -76,10 +82,20 @@ export class AffineScaleCommand implements Command {
     this.doc.updateFrame((frame): GraphUpdateModifier | undefined => {
       if (!frame.vertices_coords) { return undefined; }
       this.previousVerticesCoords = frame.vertices_coords;
+      // frame.vertices_coords = this.#scaleVerticesCoords(
+      //   this.scaleAmount,
+      //   this.origin,
+      //   frame.vertices_coords,
+      //   this.selection);
+      const newSelection = this.selection
+        ? explodeAlongSeam(frame, this.selection)
+        : this.selection;
+      console.log("new selection", newSelection);
       frame.vertices_coords = this.#scaleVerticesCoords(
         this.scaleAmount,
         this.origin,
-        frame.vertices_coords);
+        frame.vertices_coords,
+        newSelection);
       return { isomorphic: { coords: true } };
     });
   }

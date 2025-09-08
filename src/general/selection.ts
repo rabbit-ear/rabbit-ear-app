@@ -1,173 +1,130 @@
 import type { Box, FOLD } from "rabbit-ear/types.js";
-import { includeS } from "rabbit-ear/math/compare.js";
-import { intersectLineLine } from "rabbit-ear/math/intersect.js";
-import { subgraph, subgraphExclusive } from "rabbit-ear/graph/subgraph.js";
-import { filterKeysWithPrefix, filterKeysWithSuffix } from "rabbit-ear/fold/spec.js";
+import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
+import { pointInPolygon, pointInRect2, pointInRect3, segmentBoxOverlap } from "./overlap.ts";
+import { makeFacesEdgesFromVertices } from "rabbit-ear/graph/make/facesEdges.js";
 
 export type FOLDSelection = {
-  // vertices?: number[];
-  // edges?: number[];
-  // faces?: number[];
   vertices?: Set<number>;
   edges?: Set<number>;
   faces?: Set<number>;
 };
 
-const pointInRect = (p: [number, number], rect: Box) =>
-  p[0] > rect.min[0] &&
-  p[0] < rect.max[0] &&
-  p[1] > rect.min[1] &&
-  p[1] < rect.max[1];
-
-const segmentBoxOverlap = (segment: [[number, number], [number, number]], box: Box) => {
-  const boxSegments = [
-    [box.min, [box.max[0], box.min[1]]],
-    [[box.max[0], box.min[1]], box.max],
-    [box.max, [box.min[0], box.max[1]]],
-    [[box.min[0], box.max[1]], box.min],
-  ];
-  const line = {
-    vector: [segment[1][0] - segment[0][0], segment[1][1] - segment[0][1]],
-    origin: segment[0],
-  };
-  const boxVectors = boxSegments.map((seg) => [
-    seg[1][0] - seg[0][0],
-    seg[1][1] - seg[0][1],
-  ]);
-  const boxLines = boxVectors.map((vector, i) => ({
-    vector,
-    origin: boxSegments[i][0],
-  }));
-  const segmentIntersects = boxSegments.map(
-    (seg, i) => intersectLineLine(line, boxLines[i], includeS, includeS).point,
-  );
-  const anySegmentIntersects = segmentIntersects.reduce(
-    (a, b) => a || b,
-    false,
-  );
-  if (anySegmentIntersects) {
-    return true;
+export const getVerticesInRect = (graph: FOLD, rect: Box): Set<number> => {
+  if (!graph || !rect || !graph.vertices_coords) {
+    return new Set();
   }
-  const ptInside = pointInRect(segment[0], box);
-  return ptInside;
+  const dimensions = getDimensionQuick(graph);
+  const verticesLookup = dimensions === 3
+    ? graph.vertices_coords.map((p) => pointInRect3(p, rect))
+    : graph.vertices_coords.map((p) => pointInRect2(p, rect));
+  return new Set(verticesLookup
+    .map((sel, i) => (sel ? i : undefined))
+    .filter((a) => a !== undefined));
 };
 
-export const getComponentsInsideRect = (graph: FOLD, rect: Box): FOLDSelection => {
-  if (!graph || !rect) {
-    return { vertices: [], edges: [], faces: [] };
+export const getEdgesInRectExclusive = (graph: FOLD, vertices: Set<number>): Set<number> => {
+  if (!graph || !graph.vertices_coords || !graph.edges_vertices) {
+    return new Set();
   }
-  if (
-    !graph.vertices_coords ||
-    !graph.edges_vertices ||
-    (!graph.faces_vertices && !graph.faces_edges)
-  ) {
-    return { vertices: [], edges: [], faces: [] };
-  }
-  const verticesLookup = graph.vertices_coords.map((p) => pointInRect(p, rect));
-  const vertices = verticesLookup
-    .map((sel, i) => (sel ? i : undefined))
-    .filter((a) => a !== undefined);
+  // only if both vertices are inside the rect, edge is inside
   const edgesLookup = graph.edges_vertices
-    .map((ev) => ev.map((v) => graph.vertices_coords[v]))
-    .map((segment) => segmentBoxOverlap(segment, rect));
-  const edges = edgesLookup
+    .map(verts => verts.map(v => vertices.has(v))
+      .reduce((a, b) => a && b, true));
+
+  return new Set(edgesLookup
     .map((sel, i) => (sel ? i : undefined))
-    .filter((a) => a !== undefined);
-  const faces = graph.faces_edges
-    ? graph.faces_edges
-      .map((fe) => fe.map((e) => edgesLookup[e]))
-      .map((face) => face.reduce((a, b) => a || b, false))
-      .map((sel, i) => (sel ? i : undefined))
-      .filter((a) => a !== undefined)
-    : graph.faces_vertices
-      // const faces = graph.faces_vertices
-      .map((fv) => fv.map((v) => verticesLookup[v]))
-      .map((face) => face.reduce((a, b) => a || b, false))
-      .map((sel, i) => (sel ? i : undefined))
-      .filter((a) => a !== undefined);
-  return { vertices, edges, faces };
+    .filter((a) => a !== undefined));
 };
 
-export const getSubgraph = (graph: FOLD, selection: FOLDSelection): FOLD => {
-  try {
-    return subgraph(graph, selection);
-    return subgraphExclusive(graph, selection);
-  } catch {
-    return {};
+export const getEdgesInRectInclusive = (graph: FOLD, rect: Box, vertices: Set<number>): Set<number> => {
+  if (!graph || !rect || !graph.vertices_coords || !graph.edges_vertices) {
+    return new Set();
   }
+  // if one or two points are inside, edge is inside
+  const edgesLookup = graph.edges_vertices
+    .map(verts => verts.map(v => vertices.has(v))
+      .reduce((a, b) => a || b, false));
+
+  // for all other edges, if the edge intersects the box, edge is inside
+  graph.edges_vertices.forEach((verts, e) => {
+    if (edgesLookup[e]) { return; }
+    const segment = verts.map((v) => graph.vertices_coords![v]);
+    // todo: not 3D capable
+    edgesLookup[e] = segmentBoxOverlap(segment, rect);
+  });
+
+  return new Set(edgesLookup
+    .map((sel, i) => (sel ? i : undefined))
+    .filter((a) => a !== undefined));
 };
 
-export const simpleSubgraph = (graph: FOLD, selection: FOLDSelection): FOLD => {
-  const lookup: {
-    vertices: { [key: string]: boolean },
-    edges: { [key: string]: boolean },
-    faces: { [key: string]: boolean },
-  } = { vertices: {}, edges: {}, faces: {} };
-  // add vertices to the lookup table, all vertices from
-  // vertices, edges' edges_vertices, and faces' faces_vertices.
-  selection.vertices?.forEach((v) => {
-    lookup.vertices[v] = true;
-  });
-  selection.edges?.forEach((e) => {
-    lookup.edges[e] = true;
-  });
-  // selection.edges?.forEach((edge) =>
-  // 	graph.edges_vertices[edge].forEach((v) => {
-  // 		lookup.vertices[v] = true;
-  // 	}),
-  // );
-  selection.faces?.forEach((f) => {
-    lookup.faces[f] = true;
-  });
-  // selection.faces?.forEach((face) =>
-  // 	graph.faces_vertices[face].forEach((v) => {
-  // 		lookup.vertices[v] = true;
-  // 	}),
-  // );
+export const getFacesInRectExclusive = (
+  graph: FOLD,
+  vertices: Set<number>,
+): Set<number> => {
+  if (!graph || !graph.vertices_coords || !graph.faces_vertices) {
+    return new Set();
+  }
+  // if all of a face's vertices are inside, face is inside
+  const facesLookup = graph.faces_vertices
+    .map(verts => verts.map(v => vertices.has(v))
+      .reduce((a, b) => a && b, true));
 
-  const components = Object.keys(selection);
-  // create a lookup which will be used when a component is a suffix
-  // and we need to filter out elements which don't appear in other arrays
-  const keys = {};
-  components.forEach((c) => {
-    filterKeysWithPrefix(graph, c).forEach((key) => {
-      keys[key] = {};
-    });
-    filterKeysWithSuffix(graph, c).forEach((key) => {
-      keys[key] = {};
-    });
-  });
-  components.forEach((c) => {
-    filterKeysWithPrefix(graph, c).forEach((key) => {
-      keys[key].prefix = c;
-    });
-    filterKeysWithSuffix(graph, c).forEach((key) => {
-      keys[key].suffix = c;
-    });
-  });
+  return new Set(facesLookup
+    .map((sel, i) => (sel ? i : undefined))
+    .filter((a) => a !== undefined));
+};
 
-  const copy: FOLD = {};
-  Object.keys(keys).forEach((key) => {
-    copy[key] = [];
-  });
-  Object.keys(keys).forEach((key) => {
-    const { prefix, suffix } = keys[key];
-    // if prefix exists, filter outer array elements (creating holes)
-    // if suffix exists, filter inner elements using the quick lookup
-    if (prefix && suffix) {
-      selection[prefix].forEach((i) => {
-        copy[key][i] = graph[key][i].filter((j) => lookup[suffix][j]);
-      });
-    } else if (prefix) {
-      selection[prefix].forEach((i) => {
-        copy[key][i] = graph[key][i];
-      });
-    } else if (suffix) {
-      copy[key] = graph[key].map((arr) => arr.filter((j) => lookup[suffix][j]));
-    } else {
-      copy[key] = graph[key];
+export const getFacesInRectInclusive = (
+  graph: FOLD,
+  rect: Box,
+  vertices: Set<number>,
+  edges: Set<number>,
+): Set<number> => {
+  if (!graph || !graph.vertices_coords || !graph.faces_vertices) {
+    return new Set();
+  }
+  const faces_edges = graph.faces_edges ? graph.faces_edges : makeFacesEdgesFromVertices(graph);
+
+  // if any one of a face's points are inside, face is inside
+  const facesLookup = graph.faces_vertices
+    .map(verts => verts.map(v => vertices.has(v))
+      .reduce((a, b) => a || b, false));
+
+  // if any one of a face's edges are inside, face is inside
+  faces_edges.forEach((faceEdges, f) => {
+    if (facesLookup[f]) { return; }
+    for (let i = 0; i < faceEdges.length; i++) {
+      if (edges.has(faceEdges[i])) {
+        facesLookup[f] = true;
+        return;
+      }
     }
   });
-  return copy;
-};
+
+  // one more test: if the box is fully inside of a face
+  graph.faces_vertices.forEach((verts, f) => {
+    if (facesLookup[f]) { return; }
+    const polygon = verts.map(v => graph.vertices_coords![v]);
+    if (pointInPolygon(rect.min, polygon)) { facesLookup[f] = true; }
+  });
+
+  return new Set(facesLookup
+    .map((sel, i) => (sel ? i : undefined))
+    .filter((a) => a !== undefined));
+}
+
+export const getComponentsInRectExclusive = (graph: FOLD, rect: Box): FOLDSelection => {
+  const vertices = getVerticesInRect(graph, rect);
+  const edges = getEdgesInRectExclusive(graph, vertices);
+  const faces = getFacesInRectExclusive(graph, vertices);
+  return { vertices, edges, faces };
+}
+
+export const getComponentsInRectInclusive = (graph: FOLD, rect: Box): FOLDSelection => {
+  const vertices = getVerticesInRect(graph, rect);
+  const edges = getEdgesInRectInclusive(graph, rect, vertices);
+  const faces = getFacesInRectInclusive(graph, rect, vertices, edges);
+  return { vertices, edges, faces };
+}
 
