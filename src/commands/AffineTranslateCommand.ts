@@ -4,15 +4,14 @@ import type { GraphUpdateModifier } from "../graphs/Updated.ts";
 import type { FOLDSelection } from "../general/selection.ts";
 import { FileDocument } from "../app/FileDocument.svelte.ts";
 import { explodeAlongSeam } from "../general/seam.ts";
-import { scaleVerticesCoords } from "../general/affine.ts";
+import { translateVerticesCoords } from "../general/affine.ts";
 
-export class AffineScaleCommand implements Command {
+export class AffineTranslateCommand implements Command {
   // please construct an array with holes for newCoords with
   // the indices requiring changes with their corresponding values
   constructor(
     private doc: FileDocument,
-    private scaleAmount: number,
-    private origin: [number, number] | [number, number, number],
+    private translate: [number, number] | [number, number, number],
     private selection: FOLDSelection | undefined,
     private shouldDetach: boolean = false,
   ) { }
@@ -31,10 +30,8 @@ export class AffineScaleCommand implements Command {
       const newSelection = this.shouldDetach && this.selection
         ? explodeAlongSeam(frame, this.selection)
         : this.selection;
-      console.log("new selection", newSelection);
-      frame.vertices_coords = scaleVerticesCoords(
-        this.scaleAmount,
-        this.origin,
+      frame.vertices_coords = translateVerticesCoords(
+        this.translate,
         frame.vertices_coords,
         newSelection);
       return this.shouldDetach

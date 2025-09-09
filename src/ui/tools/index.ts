@@ -8,7 +8,7 @@ import scale from "./scale/index.ts";
 // import scribble from "./scribble/index.ts";
 // import segment from "./segment/index.ts";
 import select from "./select/index.ts";
-// import translate from "./translate/index.ts";
+import translate from "./translate/index.ts";
 import zoom from "./zoom/index.ts";
 import shapeCircle from "./shape-circle/index.ts";
 
@@ -30,7 +30,7 @@ const Tools: { [key: string]: ToolConstructor } = {};
   // scribble,
   // segment,
   select,
-  // translate,
+  translate,
   zoom,
   shapeCircle,
 ].forEach(ToolItem => { Tools[ToolItem.key] = ToolItem; });

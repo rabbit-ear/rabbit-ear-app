@@ -55,9 +55,8 @@ export class SVGState implements ToolEvents {
     // build the props object so that data can pass from here to the component.
     this.viewport.layer = SVGLayer;
     this.viewport.props = {
-      getRect: (): { x: number; y: number; width: number; height: number } | undefined => {
-        return this.rect;
-      },
+      getRect: (): { x: number; y: number; width: number; height: number } | undefined =>
+        this.rect,
     };
   }
 

@@ -4,8 +4,8 @@ import type { Viewport } from "../../../viewports/Viewport.ts";
 import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import type { ToolEvents } from "../../ToolEvents.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
-import { SVGTouches } from "./SVGTouches.svelte.ts";
-import SVGLayer from "../SVGLayer.svelte";
+import { Touches } from "./Touches.svelte.ts";
+import SVGLayer from "../svg/SVGLayer.svelte";
 import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
 import context from "../../../../app/context.svelte.ts";
@@ -13,37 +13,32 @@ import context from "../../../../app/context.svelte.ts";
 export class SVGState implements ToolEvents {
   viewport: SVGViewport;
   globalState: GlobalState;
-  touches: SVGTouches;
-  unsub: (() => void)[] = [];
+  touches: Touches;
+  #effects: (() => void)[] = [];
 
   constructor(viewport: SVGViewport, globalState: GlobalState) {
     this.viewport = viewport;
     this.globalState = globalState;
 
-    this.touches = new SVGTouches(this.viewport);
-    this.unsub.push(this.makeLine());
-    this.unsub.push(this.preventBadInput());
+    this.touches = new Touches(this.viewport);
+    this.#effects = [
+      this.makeLine(),
+      this.preventBadInput(),
+    ];
 
     // bind data upwards
     this.viewport.layer = SVGLayer;
-    const that = this;
     this.viewport.props = {
-      get line(): VecLine2 | undefined {
-        return that.line;
-      },
-      get segment(): [number, number][] | undefined {
-        return that.segment;
-      },
-      get segmentPoints(): [number, number][] | undefined {
-        return that.segmentPoints;
-      },
+      getLine: (): VecLine2 | undefined => this.line,
+      getSegment: (): [number, number][] | undefined => this.segment,
+      getSegmentPoints: (): [number, number][] | undefined => this.segmentPoints,
     };
   }
 
   dealloc(): void {
     console.log("line: viewport deinit");
-    this.unsub.forEach((u) => u());
-    this.unsub = [];
+    this.#effects.forEach((u) => u());
+    this.#effects = [];
     this.touches.reset();
   }
 
@@ -67,15 +62,17 @@ export class SVGState implements ToolEvents {
     const snapLines = [
       { line: this.line, clamp: (a: number): number => a, domain: (): boolean => true },
     ];
-    const point1 =
+    const snapPoint1 =
       this.touches.snapPresses.length >= 2
-        ? this.viewport.snap.snapToLine(this.touches.presses[1], snapLines).coords
-        : this.viewport.snap.snapToLine(this.touches.move, snapLines).coords;
-    const point2 =
+        ? this.viewport.snap.snapToLine(this.touches.presses[1], snapLines)
+        : this.viewport.snap.snapToLine(this.touches.move, snapLines);
+    const snapPoint2 =
       this.touches.snapReleases.length >= 2
-        ? this.viewport.snap.snapToLine(this.touches.releases[1], snapLines).coords
-        : this.viewport.snap.snapToLine(this.touches.drag, snapLines).coords;
+        ? this.viewport.snap.snapToLine(this.touches.releases[1], snapLines)
+        : this.viewport.snap.snapToLine(this.touches.drag, snapLines);
     const result = [];
+    const point1 = snapPoint1 ? snapPoint1.coords : undefined;
+    const point2 = snapPoint2 ? snapPoint2.coords : undefined;
     if (point1) {
       result.push(point1);
     }
@@ -140,6 +137,8 @@ export class SVGState implements ToolEvents {
   makeLine(): () => void {
     return $effect.root(() => {
       $effect(() => {
+        // console.log("line", this.line);
+        // console.log("segmentPoints", this.segmentPoints);
         if (
           this.touches.snapPresses.length >= 2 &&
           this.touches.snapReleases.length >= 2 &&
@@ -155,3 +154,4 @@ export class SVGState implements ToolEvents {
     });
   }
 }
+

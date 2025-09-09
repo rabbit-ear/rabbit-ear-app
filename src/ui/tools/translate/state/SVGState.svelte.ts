@@ -1,73 +1,55 @@
-import { magnitude2, subtract2 } from "rabbit-ear/math/vector.js";
+import { magnitude, subtract2 } from "rabbit-ear/math/vector.js";
 import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
 import type { Viewport } from "../../../viewports/Viewport.ts";
 import { GlobalState } from "./GlobalState.svelte.ts";
 import { Touches } from "./Touches.svelte.ts";
-import { Anchor } from "./Anchor.svelte.ts";
 import SVGLayer from "../svg/SVGLayer.svelte";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
 import { wheelEventZoomMatrix, wheelPanMatrix } from "../../zoom/matrix.ts";
+import { AffineTranslateCommand } from "../../../../commands/AffineTranslateCommand.ts";
 import context from "../../../../app/context.svelte.ts";
-import { AffineScaleCommand } from "../../../../commands/AffineScaleCommand.ts";
-import { untrack } from "svelte";
 
 export class SVGState {
   viewport: SVGViewport;
   globalState: GlobalState;
   touches: Touches;
-  anchor: Anchor;
   #effects: (() => void)[] = [];
 
-  startVector: [number, number] | undefined = $derived.by(() => {
-    return this.touches && this.touches.snapPress
-      ? subtract2(this.touches.snapPress, this.anchor.origin)
-      : undefined;
-  });
-
-  endVector: [number, number] | undefined = $derived.by(() => {
-    if (this.touches.snapRelease) {
-      return subtract2(this.touches.snapRelease, this.anchor.origin);
+  vector: [number, number] | undefined = $derived.by(() => {
+    if (this.touches.snapPress && this.touches.snapRelease) {
+      return subtract2(this.touches.snapRelease, this.touches.snapPress);
     }
-    if (this.touches.snapDrag) {
-      return subtract2(this.touches.snapDrag, this.anchor.origin);
+    if (this.touches.snapPress && this.touches.snapDrag) {
+      return subtract2(this.touches.snapDrag, this.touches.snapPress);
     }
     return undefined;
   });
-
-  scale: number = $derived(
-    this.startVector && this.endVector
-      ? magnitude2(this.endVector) / magnitude2(this.startVector)
-      : 1,
-  );
 
   constructor(viewport: SVGViewport, globalState: GlobalState) {
     this.viewport = viewport;
     this.globalState = globalState;
 
     this.touches = new Touches(this.viewport);
-    this.anchor = new Anchor(this.viewport, this.touches, this.globalState);
     this.#effects = [
-      this.#update(),
-      this.#resetToolOrigin(),
+      this.#effectTransform(),
     ];
 
     // pass data back up through the viewport: assign the SVGLayer and
     // build the props object so that data can pass from here to the component.
     this.viewport.layer = SVGLayer;
+    //const that = this;
     this.viewport.props = {
-      getStartVector: (): [number, number] | undefined => this.startVector,
-      getEndVector: (): [number, number] | undefined => this.endVector,
-      getAnchor: (): Anchor => this.anchor,
-      getIsPressed: (): boolean => this.touches.snapPress !== undefined,
+      getVector: (): [number, number] | undefined => { return this.vector; },
+      getPressed: (): [number, number] | undefined => { return this.touches.snapPress; },
+      getIsPressed: (): boolean => { return this.touches.snapPress !== undefined; },
       // todo: see if we can pass this off to the Panel somehow
-      getGlobalState: (): GlobalState => this.globalState,
+      getGlobalState: (): GlobalState => { return this.globalState; }
     };
   }
 
   dealloc(): void {
     this.#effects.forEach((u) => u());
     this.#effects = [];
-    this.anchor.dealloc();
     this.touches.reset();
   }
 
@@ -114,46 +96,26 @@ export class SVGState {
   // onkeydown?: (viewport: Viewport, event: KeyboardEvent) => void;
   // onkeyup?: (viewport: Viewport, event: KeyboardEvent) => void;
 
-  #update(): () => void {
+  #effectTransform(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        // console.log("tool.update()", this.touches.snapPress, this.touches.snapRelease);
-        if (this.anchor.selected) {
+        if (!this.touches.snapPress || !this.touches.snapRelease || !this.vector) {
           return;
         }
-        if (!this.touches.snapPress || !this.touches.snapRelease) {
-          return;
-        }
-        if (Math.abs(this.scale) < 1e-6) {
+        if (Math.abs(magnitude(this.vector)) < 1e-6) {
           this.touches.reset();
           return;
         }
-        console.log("scale model by", $state.snapshot(this.scale));
         const doc = context.fileManager.document;
         if (doc) {
-          const command = new AffineScaleCommand(
+          const command = new AffineTranslateCommand(
             doc,
-            this.scale,
-            this.anchor.origin,
+            this.vector,
             context.fileManager.document?.data.selection,
             context.ui.settings.selectionHandling.value === "detach");
           doc.executeCommand(command)
         }
-        // this.anchor.reset();
         this.touches.reset();
-      });
-      return () => { };
-    });
-  }
-
-  #resetToolOrigin(): () => void {
-    return $effect.root(() => {
-      $effect(() => {
-        const _ = context.fileManager.document?.data.frame;
-        untrack(() => {
-          this.anchor.reset();
-          this.touches.reset();
-        });
       });
       return () => { };
     });

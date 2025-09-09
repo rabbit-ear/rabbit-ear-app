@@ -1,16 +1,19 @@
 <script lang="ts">
   import type { VecLine2 } from "rabbit-ear/types.js";
-  import type { SVGViewport } from "../../viewports/SVGViewport/SVGViewport.svelte.ts";
+  import type { SVGViewport } from "../../../viewports/SVGViewport/SVGViewport.svelte.ts";
 
   type PropsType = {
     viewport: SVGViewport;
-    line: VecLine2 | undefined;
-    segmentPoints: [number, number][] | undefined;
-    segment: [number, number][] | undefined;
+    getLine: () => VecLine2 | undefined;
+    getSegmentPoints: () => [number, number][] | undefined;
+    getSegment: () => [number, number][] | undefined;
   };
-  let { viewport, line, segment, segmentPoints }: PropsType = $props();
+  let { viewport, getLine, getSegment, getSegmentPoints }: PropsType = $props();
 
-  const lineClipped = $derived(line ? viewport.clipLine(line) : undefined);
+  const line = $derived(getLine());
+  const segment = $derived(getSegment());
+  const segmentPoints = $derived(getSegmentPoints());
+  const lineClipped = $derived(line ? viewport.view.clipLine(line) : undefined);
 
   const svgLine = $derived.by(() => {
     if (!lineClipped) {

@@ -24,7 +24,7 @@ export class SVGState implements ToolEvents {
     // build the props object so that data can pass from here to the component.
     this.viewport.layer = SVGLayer;
     this.viewport.props = {
-      getGlobalState: () => { return this.globalState; },
+      getGlobalState: () => this.globalState,
     };
   }
 

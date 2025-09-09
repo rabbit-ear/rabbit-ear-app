@@ -3,7 +3,17 @@ import { flattenFrame } from "rabbit-ear/fold/frames.js";
 import { clone } from "rabbit-ear/general/clone.js";
 
 // modifies input list in place
-export const prepareFOLDNonSpecData = (frames: FOLDChildFrame[]): FOLDChildFrame[] => {
+export const prepareFOLDFrames = (frames: FOLDChildFrame[]): FOLDChildFrame[] => {
+  // todo: unsure if this is necessary
+  frames.forEach(frame => {
+    delete frame.vertices_vertices;
+    delete frame.vertices_edges;
+    delete frame.vertices_faces;
+    delete frame.edges_faces;
+    delete frame.faces_edges;
+    delete frame.faces_faces;
+  });
+
   frames
     .filter(frame => frame.frame_inherit)
     .map(frame => frame.frame_parent)

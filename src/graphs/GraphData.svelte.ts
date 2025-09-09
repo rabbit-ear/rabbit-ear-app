@@ -7,7 +7,7 @@ import { getFileMetadata } from "rabbit-ear/fold/spec.js";
 import { getFileFramesAsArray } from "rabbit-ear/fold/frames.js";
 import {
   reassembleFramesToFOLD,
-  prepareFOLDNonSpecData,
+  prepareFOLDFrames,
 } from "../general/fold.ts";
 import { CreasePattern } from "./CreasePattern/CreasePattern.svelte.ts";
 import { FoldedForm } from "./FoldedForm/FoldedForm.svelte.ts";
@@ -15,7 +15,6 @@ import { Simulator } from "./Simulator/Simulator.svelte.ts";
 import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
 import { Frame } from "./Frame.ts";
 import { strictSubcomplex, strictSubgraph, vertexSubgraph } from "../general/subcomplex.ts";
-import { getSelectionSeam } from "../general/seam.ts";
 
 export class GraphData {
   metadata: FOLDFileMetadata = $state({});
@@ -95,7 +94,7 @@ export class GraphData {
 
   constructor(fold: FOLD) {
     const frames = getFileFramesAsArray(fold);
-    this.#source = prepareFOLDNonSpecData(frames);
+    this.#source = prepareFOLDFrames(frames);
     this.metadata = getFileMetadata(fold);
     this.shapeManager = new ShapeManager();
 
@@ -187,12 +186,6 @@ export class GraphData {
   #debug() {
     return $effect.root(() => {
       $effect(() => {
-        if (this.frame.baked && this.selection) {
-          // console.log("seam vertices", getSeamVertices(this.frame.baked, this.selection));
-          console.log("seam edges", getSelectionSeam(this.frame.baked, this.selection));
-        }
-        // console.log("Face graph", this.selectionFaceGraph);
-        // console.log("frames", this.frames.length);
       });
       return () => { };
     })
