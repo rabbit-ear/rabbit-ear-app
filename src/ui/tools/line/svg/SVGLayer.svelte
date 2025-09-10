@@ -15,12 +15,20 @@
   const segmentPoints = $derived(getSegmentPoints());
   const lineClipped = $derived(line ? viewport.view.clipLine(line) : undefined);
 
-  const svgLine = $derived.by(() => {
+  // const svgLine = $derived.by(() => {
+  //   if (!lineClipped) {
+  //     return undefined;
+  //   }
+  //   const [[x1, y1], [x2, y2]] = lineClipped;
+  //   return { x1, y1, x2, y2 };
+  // });
+
+  const svgPath = $derived.by(() => {
     if (!lineClipped) {
       return undefined;
     }
     const [[x1, y1], [x2, y2]] = lineClipped;
-    return { x1, y1, x2, y2 };
+    return { d: `M${x1},${y1}L${x2},${y2}` };
   });
 
   const svgSegment = $derived.by(() => {
@@ -38,8 +46,12 @@
   );
 </script>
 
-{#if svgLine}
-  <line class="animated-dashed-line" {...svgLine} />
+<!-- {#if svgLine} -->
+<!--   <line class="animated-dashed-line" {...svgLine} /> -->
+<!-- {/if} -->
+
+{#if svgPath}
+  <path class="animated-dashed-line" {...svgPath} />
 {/if}
 
 {#if svgSegment}
@@ -55,7 +67,8 @@
     fill: #fb4;
     stroke: none;
   }
-  line {
+  line,
+  path {
     fill: none;
     stroke: var(--text);
   }

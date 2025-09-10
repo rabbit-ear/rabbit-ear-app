@@ -1,6 +1,6 @@
 import type { Box } from "rabbit-ear/types.js";
 
-export type Shape = {
+export type Ruler = {
   // id: number;
   // dependencies: Shape[];
   // dependents: Shape[];

@@ -1,4 +1,4 @@
-import type { Shape } from "../Shape.ts";
+import type { Ruler } from "../Ruler.ts";
 import type { Circle } from "rabbit-ear/types.js";
 import type { Line } from "../Line.svelte";
 import type { Ray } from "../Ray.svelte";
@@ -8,11 +8,11 @@ import { intersectCircleLine } from "./circleLine.ts";
 import { intersectLineLine } from "./lineLine.ts";
 import { include, includeL, includeS, includeR } from "rabbit-ear/math/compare.js";
 
-export const intersectWithPoint = (point: [number, number], shape: Shape): [number, number][] => {
+export const intersectWithPoint = (point: [number, number], shape: Ruler): [number, number][] => {
   return [];
 }
 
-export const intersectWithLine = (line: Line, shape: Shape): [number, number][] => {
+export const intersectWithLine = (line: Line, shape: Ruler): [number, number][] => {
   switch (shape.constructor.name) {
     case "Array": return [];
     case "Line": return intersectLineLine(line, shape as unknown as Line, includeL, includeL);
@@ -23,7 +23,7 @@ export const intersectWithLine = (line: Line, shape: Shape): [number, number][] 
   }
 }
 
-export const intersectWithRay = (ray: Ray, shape: Shape): [number, number][] => {
+export const intersectWithRay = (ray: Ray, shape: Ruler): [number, number][] => {
   switch (shape.constructor.name) {
     case "Array": return [];
     case "Line": return intersectLineLine(ray, shape as unknown as Line, includeR, includeL);
@@ -34,7 +34,7 @@ export const intersectWithRay = (ray: Ray, shape: Shape): [number, number][] => 
   }
 }
 
-export const intersectWithSegment = (segment: Segment, shape: Shape): [number, number][] => {
+export const intersectWithSegment = (segment: Segment, shape: Ruler): [number, number][] => {
   switch (shape.constructor.name) {
     case "Array": return [];
     case "Line": return intersectLineLine(segment, shape as unknown as Line, includeS, includeL);
@@ -45,7 +45,7 @@ export const intersectWithSegment = (segment: Segment, shape: Shape): [number, n
   }
 }
 
-export const intersectWithCircle = (circle: Circle, shape: Shape): [number, number][] => {
+export const intersectWithCircle = (circle: Circle, shape: Ruler): [number, number][] => {
   switch (shape.constructor.name) {
     case "Array": return [];
     case "Line": return intersectCircleLine(circle, shape as unknown as Line, include, includeL);
@@ -56,7 +56,7 @@ export const intersectWithCircle = (circle: Circle, shape: Shape): [number, numb
   }
 }
 
-export const intersect = (a: Shape, b: Shape): [number, number][] => {
+export const intersect = (a: Ruler, b: Ruler): [number, number][] => {
   switch (a.constructor.name) {
     case "Line": return intersectWithLine(a as unknown as Line, b);
     case "Ray": return intersectWithRay(a as unknown as Ray, b);

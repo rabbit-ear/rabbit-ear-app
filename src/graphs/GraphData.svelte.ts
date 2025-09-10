@@ -12,7 +12,7 @@ import {
 import { CreasePattern } from "./CreasePattern/CreasePattern.svelte.ts";
 import { FoldedForm } from "./FoldedForm/FoldedForm.svelte.ts";
 import { Simulator } from "./Simulator/Simulator.svelte.ts";
-import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
+import { RulerManager } from "../rulers/RulerManager.svelte.ts";
 import { Frame } from "./Frame.ts";
 import { strictSubcomplex, strictSubgraph, vertexSubgraph } from "../general/subcomplex.ts";
 
@@ -28,6 +28,8 @@ export class GraphData {
   frameIndex: number = $state(0);
 
   frame: Frame = $derived.by(() => new Frame(this.#source, this.frameIndex));
+
+  rulers: RulerManager;
 
   // frames: Frame[] = $derived
   //   .by(() => this.#source.map((source, i) => new NewFrame(source, i)));
@@ -60,8 +62,6 @@ export class GraphData {
     this.frame.baked,
     this.selection ?? {},
   ));
-
-  shapeManager: ShapeManager;
 
   // models: { [key: string]: Model } = $state({});
   creasePattern: CreasePattern;
@@ -96,7 +96,7 @@ export class GraphData {
     const frames = getFileFramesAsArray(fold);
     this.#source = prepareFOLDFrames(frames);
     this.metadata = getFileMetadata(fold);
-    this.shapeManager = new ShapeManager();
+    this.rulers = new RulerManager();
 
     this.creasePattern = new CreasePattern(this);
     this.foldedForm = new FoldedForm(this);

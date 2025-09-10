@@ -1,13 +1,13 @@
-import { boundingBox } from "rabbit-ear/math/polygon.js";
 import type { Box } from "rabbit-ear/types.js";
-import type { Shape } from "./Shape.ts";
+import type { Ruler } from "./Ruler.ts";
+import { boundingBox } from "rabbit-ear/math/polygon.js";
 
-export class Point implements Shape {
+export class Point implements Ruler {
   // coords: [number, number] = $state() as unknown as [number, number];
   coords: [number, number] | undefined = $state();
 
-  // dependencies: Shape[] = [];
-  // dependents: Shape[] = $state([]);
+  // dependencies: Ruler[] = [];
+  // dependents: Ruler[] = $state([]);
   defined: boolean = true;
 
   makeBounds(padding: number): Box | undefined {

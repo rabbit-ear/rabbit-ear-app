@@ -4,7 +4,7 @@
   import SVGCanvas from "./SVG/SVGCanvas.svelte";
   import GridLayer from "./SVG/GridLayer.svelte";
   // import ModelLayer from "./ModelLayer.svelte";
-  import SVGShapes from "./SVG/SVGShapes.svelte";
+  import SVGRulers from "./SVG/SVGRulers.svelte";
   import SVGFOLD from "./SVG/SVGFOLD.svelte";
 
   type PropsType = {
@@ -91,7 +91,7 @@
   {#if selectedVertices}
     <SVGFOLD vertexGraph={selectedVertices} {viewport} class="selection" />
   {/if}
-  <SVGShapes shapes={viewport.shapes} {viewport} class="shapes-layer" />
+  <SVGRulers shapes={viewport.rulers} {viewport} class="shapes-layer" />
   {@render toolLayer()}
 {/snippet}
 

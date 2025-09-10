@@ -1,7 +1,7 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport.ts";
 import type { Embedding } from "../../../graphs/Embedding.ts";
-import type { Shape } from "../../../shapes/Shape.ts";
+import type { Ruler } from "../../../rulers/Ruler.ts";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./Component.svelte";
@@ -33,7 +33,7 @@ export class SVGViewport implements Viewport {
   embeddingName = $state("creasePattern");
   embedding?: Embedding = $derived(context.fileManager.document?.data[this.embeddingName]);
 
-  shapes?: Shape[] = $derived(context.fileManager.document?.data.shapeManager.shapes);
+  rulers?: Ruler[] = $derived(context.fileManager.document?.data.rulers.allRulers);
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
   // currently, this is used by the tools to draw indicator marks.

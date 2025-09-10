@@ -1,10 +1,10 @@
+import type { Box } from "rabbit-ear/types.js";
+import type { Ruler } from "./Ruler.ts";
+import type { Point } from "./Point.svelte.ts";
 import { subtract2 } from "rabbit-ear/math/vector.js";
 import { boundingBox } from "rabbit-ear/math/polygon.js";
-import type { Box } from "rabbit-ear/types.js";
-import type { Shape } from "./Shape.ts";
-import type { Point } from "./Point.svelte.ts";
 
-export class Ray implements Shape {
+export class Segment implements Ruler {
   p: Point = $state() as unknown as Point;
   q: Point = $state() as unknown as Point;
 
@@ -13,8 +13,8 @@ export class Ray implements Shape {
     ? subtract2(this.q.coords, this.p.coords)
     : undefined);
 
-  // dependencies: Shape[] = $state([]);
-  // dependents: Shape[] = $state([]);
+  // dependencies: Ruler[] = $state([]);
+  // dependents: Ruler[] = $state([]);
   defined: boolean = $derived(this.origin !== undefined && this.vector !== undefined);
 
   makeBounds(padding: number): Box | undefined {

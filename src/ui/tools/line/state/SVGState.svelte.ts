@@ -22,8 +22,8 @@ export class SVGState implements ToolEvents {
 
     this.touches = new Touches(this.viewport);
     this.#effects = [
-      this.makeLine(),
-      this.preventBadInput(),
+      this.#effectMakeLine(),
+      this.#effectPreventBadInput(),
     ];
 
     // bind data upwards
@@ -86,8 +86,8 @@ export class SVGState implements ToolEvents {
     this.segmentPoints && this.segmentPoints.length < 2 ? undefined : this.segmentPoints,
   );
 
-  onmousemove(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
-    const point = getSVGViewportPoint(viewport, [x, y]);
+  onmousemove(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     // // todo change Settings to not export a default, get the type here.
@@ -95,15 +95,15 @@ export class SVGState implements ToolEvents {
     // panel.cursor = point;
   };
 
-  onmousedown(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
-    const point = getSVGViewportPoint(viewport, [x, y]);
+  onmousedown(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.addPress(point);
   };
 
-  onmouseup(viewport: Viewport, { x, y, buttons }: MouseEvent): void {
-    const point = getSVGViewportPoint(viewport, [x, y]);
+  onmouseup(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.addRelease(point);
@@ -113,14 +113,14 @@ export class SVGState implements ToolEvents {
   // all tools must implement the "zoomTool.onwheel?.(event);" behavior.
   // there is no longer an app-wide fallthrough that executes that method
   // if no tool wheel event exists. the tool must specify the behavior explicitly.
-  onwheel(viewport: Viewport, { x, y, deltaY }: WheelEvent): void {
-    const point = getSVGViewportPoint(viewport, [x, y]);
+  onwheel(viewport: Viewport, { offsetX, offsetY, deltaY }: WheelEvent): void {
+    const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
     wheelEventZoomMatrix(this.viewport, { point, deltaY });
     // const panel = (this.viewport.constructor as typeof SVGViewport).settings;
     // panel.cursor = point;
   };
 
-  preventBadInput(): () => void {
+  #effectPreventBadInput(): () => void {
     return $effect.root(() => {
       $effect(() => {
         const moreReleases = this.touches.releases.length > this.touches.presses.length;
@@ -134,7 +134,7 @@ export class SVGState implements ToolEvents {
     });
   }
 
-  makeLine(): () => void {
+  #effectMakeLine(): () => void {
     return $effect.root(() => {
       $effect(() => {
         // console.log("line", this.line);

@@ -1,11 +1,11 @@
+import type { Ruler } from "./Ruler.ts";
+import type { Point } from "./Point.svelte.ts";
+import type { Box } from "rabbit-ear/types.js";
 import { EPSILON } from "rabbit-ear/math/constant.js";
 import { add2, distance2, subtract2 } from "rabbit-ear/math/vector.js";
 import { boundingBox } from "rabbit-ear/math/polygon.js";
-import type { Shape } from "./Shape.ts";
-import type { Point } from "./Point.svelte.ts";
-import type { Box } from "rabbit-ear/types.js";
 
-export class Circle implements Shape {
+export class Circle implements Ruler {
   p: Point = $state() as unknown as Point;
   q: Point = $state() as unknown as Point;
 
@@ -14,8 +14,8 @@ export class Circle implements Shape {
     ? distance2(this.q.coords, this.p.coords)
     : 0);
 
-  // dependencies: Shape[] = $state([]);
-  // dependents: Shape[] = $state([]);
+  // dependencies: Ruler[] = $state([]);
+  // dependents: Ruler[] = $state([]);
   defined: boolean = $derived(this.origin !== undefined && this.radius > EPSILON);
 
   makeBounds(padding: number): Box | undefined {

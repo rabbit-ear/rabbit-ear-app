@@ -1,12 +1,12 @@
-import { clipLineConvexPolygon } from "rabbit-ear/math/clip.js";
-import { include, includeL, includeR, includeS } from "rabbit-ear/math/compare.js";
-import type { Shape } from "./Shape";
+import type { Ruler } from "./Ruler.ts";
 import type { Point } from "./Point.svelte.ts";
 import type { Circle } from "./Circle.svelte.ts";
 import type { Line } from "./Line.svelte.ts";
 import type { Ray } from "./Ray.svelte.ts";
 import type { Segment } from "./Segment.svelte.ts";
 import type { VecLine2 } from "rabbit-ear/types.js";
+import { clipLineConvexPolygon } from "rabbit-ear/math/clip.js";
+import { include, includeL, includeR, includeS } from "rabbit-ear/math/compare.js";
 
 export const clipLineFuncInLargerViewport = (
   line: VecLine2,
@@ -24,7 +24,7 @@ export const clipLineFuncInLargerViewport = (
 };
 
 const pointToSVG = (
-  shape: Shape,
+  shape: Ruler,
   radius: number,
 ): { nodeName: string, attributes: object } | undefined => {
   const point: Point = shape as unknown as Point;
@@ -41,7 +41,7 @@ const pointToSVG = (
 };
 
 const lineToSVG = (
-  shape: Shape,
+  shape: Ruler,
   viewBox: [number, number, number, number],
   lineFn = includeL,
 ): { nodeName: string, attributes: object } | undefined => {
@@ -62,7 +62,7 @@ const lineToSVG = (
 };
 
 const circleToSVG = (
-  shape: Shape,
+  shape: Ruler,
 ): { nodeName: string, attributes: object } | undefined => {
   const circle: Circle = shape as unknown as Circle;
   return circle.defined
@@ -78,7 +78,7 @@ const circleToSVG = (
 };
 
 export const shapeToSVGElement = (
-  shape: Shape,
+  shape: Ruler,
   { viewBox, radius }: { viewBox: [number, number, number, number], radius: number },
 ): { nodeName: string, attributes: object } | undefined => {
   switch (shape.constructor.name) {

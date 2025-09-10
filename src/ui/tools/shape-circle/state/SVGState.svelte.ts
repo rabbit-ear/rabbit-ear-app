@@ -8,8 +8,8 @@ import SVGLayer from "./SVGLayer.svelte";
 import { getSVGViewportPoint } from "../../../viewports/SVGViewport/touches.ts";
 import { wheelEventZoomMatrix } from "../../zoom/matrix.ts";
 import context from "../../../../app/context.svelte.ts";
-import { Circle } from "../../../../shapes/Circle.svelte.ts";
-import { Point } from "../../../../shapes/Point.svelte.ts";
+import { Circle } from "../../../../rulers/Circle.svelte.ts";
+import { Point } from "../../../../rulers/Point.svelte.ts";
 
 export class SVGState implements ToolEvents {
   viewport: SVGViewport;
@@ -124,9 +124,9 @@ export class SVGState implements ToolEvents {
           const p0 = new Point(this.circlePoints![0]);
           const p1 = new Point(this.circlePoints![1]);
           const circleShape = new Circle(p0, p1);
-          doc.data.shapeManager.addShape(p0);
-          doc.data.shapeManager.addShape(p1);
-          doc.data.shapeManager.addShape(circleShape);
+          doc.data.rulers.add(p0);
+          doc.data.rulers.add(p1);
+          doc.data.rulers.add(circleShape);
         }
         this.touches.reset();
       });

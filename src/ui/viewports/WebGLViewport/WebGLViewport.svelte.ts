@@ -1,6 +1,7 @@
 import type { Component } from "svelte";
 import type { Viewport } from "../Viewport";
 import type { Embedding } from "../../../graphs/Embedding.ts";
+import type { Ruler } from "../../../rulers/Ruler.ts";
 import ViewportComponent from "./Component.svelte";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
@@ -10,10 +11,10 @@ import { Style } from "./Style.svelte.ts";
 import { GLModels } from "./GLModels.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import { RenderPerspective, RenderStyle } from "../types.ts";
-import context from "../../../app/context.svelte.ts";
 import { CreasePattern } from "../../../graphs/CreasePattern/CreasePattern.svelte.ts";
 import { FoldedForm } from "../../../graphs/FoldedForm/FoldedForm.svelte.ts";
 import { Simulator } from "../../../graphs/Simulator/Simulator.svelte.ts";
+import context from "../../../app/context.svelte.ts";
 
 export class WebGLViewport implements Viewport {
   static name: string = "WebGL Viewport";
@@ -35,6 +36,8 @@ export class WebGLViewport implements Viewport {
 
   embeddingName = $state("creasePattern");
   embedding?: Embedding = $derived(context.fileManager.document?.data[this.embeddingName]);
+
+  rulers?: Ruler[] = $derived(context.fileManager.document?.data.rulers.allRulers);
 
   // in the HTMLCanvas component, the window onresize event will be
   // be bound to this. this is also necessary for setting the canvasSize.

@@ -1,6 +1,6 @@
 import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.js";
 import type { FrameAttributes } from "./FrameAttributes.ts";
-import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
+// import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
 import { flattenFrameInArray } from "../general/fold.ts";
 import { makeUUID } from "../general/uuid.ts";
 import { makeFrameAttributes } from "./FrameAttributes.ts";
@@ -19,14 +19,14 @@ export class Frame {
   // style-related properties for every frame, like is it 2D, folded, etc..
   attributes: FrameAttributes;
 
-  shapeManager: ShapeManager;
+  // shapeManager: ShapeManager;
 
   constructor(frames: FOLDChildFrame[], index: number) {
     this.uuid = makeUUID();
     this.source = frames[index];
     this.baked = flattenFrameInArray(frames, index);
     this.attributes = makeFrameAttributes(this.source, this.baked);
-    this.shapeManager = new ShapeManager(); // this.source);
+    // this.shapeManager = new ShapeManager(); // this.source);
   }
 }
 
