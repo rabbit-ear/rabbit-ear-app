@@ -11,18 +11,20 @@
   // todo: bring this back, or at least, consider which of the two frames to use,
   // the source or the baked
   // let frames: FOLD[] = $derived(context.fileManager.document?.data.frames ?? []);
-  let frames: FOLD[] = $derived(context.fileManager.document?.data.source ?? []);
+  // let frames: FOLD[] = $derived(context.fileManager.document?.data.source ?? []);
+  let frames: FOLD[] = $derived(context.fileManager.document?.data.frames);
 
   let frameIndex = $derived(context.fileManager.document?.data.frameIndex);
 
   let framesStyle = $derived(
     frames
+      .map((frame) => frame.graph)
       .map((graph) => graph?.frame_classes || [])
       .map((classes) => classes.map((cl) => classNames[cl]))
       .map((classes) => classes.filter((a) => a).join(" ")),
   );
 
-  let frameStyles = $derived(context.fileManager.document?.data.framesStyle);
+  // let frameStyles = $derived(context.fileManager.document?.data.framesStyle);
 
   const makeNewFrame = (): void => context.ui.dialogManager.dialogNewFrame?.showModal();
 

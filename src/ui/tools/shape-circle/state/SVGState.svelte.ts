@@ -124,9 +124,9 @@ export class SVGState implements ToolEvents {
           const p0 = new Point(this.circlePoints![0]);
           const p1 = new Point(this.circlePoints![1]);
           const circleShape = new Circle(p0, p1);
-          doc.data.rulers.add(p0);
-          doc.data.rulers.add(p1);
-          doc.data.rulers.add(circleShape);
+          doc.data.frame.rulers.add(p0);
+          doc.data.frame.rulers.add(p1);
+          doc.data.frame.rulers.add(circleShape);
         }
         this.touches.reset();
       });

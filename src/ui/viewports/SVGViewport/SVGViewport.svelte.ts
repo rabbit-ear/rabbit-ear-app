@@ -33,7 +33,7 @@ export class SVGViewport implements Viewport {
   embeddingName = $state("creasePattern");
   embedding?: Embedding = $derived(context.fileManager.document?.data[this.embeddingName]);
 
-  rulers?: Ruler[] = $derived(context.fileManager.document?.data.rulers.allRulers);
+  rulers?: Ruler[] = $derived(context.fileManager.document?.data.frame.rulers.allRulers);
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
   // currently, this is used by the tools to draw indicator marks.

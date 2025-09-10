@@ -35,23 +35,25 @@ export class SelectRectCommand implements Command {
   private previousSelection: FOLDSelection | undefined;
 
   execute(): void {
-    this.previousSelection = this.document.data?.selection;
-    this.document.updateSource((data): GraphUpdateModifier | undefined => {
+    this.previousSelection = this.document.data?.frame.selection;
+    this.document.updateData((data): GraphUpdateModifier | undefined => {
       const embedding = data?.getEmbedding(this.embeddingName);
       if (!embedding) { return undefined; }
       const selection = this.strictSelect
         ? getComponentsInRectExclusive(embedding.graph ?? {}, this.box)
         : getComponentsInRectInclusive(embedding.graph ?? {}, this.box);
-      data.selection = filterSelection(selection, this.components);
-      return undefined
+      data.frame.selection = filterSelection(selection, this.components);
+      // return undefined;
+      return { selection: true };
     }, false);
   }
 
   undo(): void {
-    this.document.updateSource((data): GraphUpdateModifier | undefined => {
+    this.document.updateData((data): GraphUpdateModifier | undefined => {
       if (!data) { return undefined; }
-      data.selection = this.previousSelection;
-      return undefined;
+      data.frame.selection = this.previousSelection;
+      // return undefined;
+      return { selection: true };
     }, false);
   }
 

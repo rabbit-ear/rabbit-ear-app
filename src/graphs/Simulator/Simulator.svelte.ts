@@ -32,7 +32,7 @@ export class Simulator implements Embedding {
     } as FrameAttributes;
   }
 
-  get selection(): FOLDSelection | undefined { return this.#data.selection; }
+  get selection(): FOLDSelection | undefined { return this.#data.frame.selection; }
 
   // get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
   get selectionFaceGraph(): FOLD | undefined { return this.#data.selectionFaceGraph; }

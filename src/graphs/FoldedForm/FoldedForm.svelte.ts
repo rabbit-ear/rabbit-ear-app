@@ -43,7 +43,7 @@ export class FoldedForm implements Embedding {
     // hasLayerOrder: true,
   }) as FrameAttributes);
 
-  get selection(): FOLDSelection | undefined { return this.#data.selection; }
+  get selection(): FOLDSelection | undefined { return this.#data.frame.selection; }
 
   // get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
   // get selectionFaceGraph(): FOLD | undefined { return this.#data.selectionFaceGraph; }
@@ -152,7 +152,7 @@ export class FoldedForm implements Embedding {
     return $effect.root(() => {
       $effect(() => {
         // console.log("$effect: set graph");
-        const newGraph = { ...this.#data.frame.baked };
+        const newGraph = { ...this.#data.frame.graph };
         newGraph.frame_classes = ["foldedForm"];
         if (this.settings.foldVerticesCoords && this.folded.vertices_coords !== undefined) {
           newGraph.vertices_coords = this.folded.vertices_coords;

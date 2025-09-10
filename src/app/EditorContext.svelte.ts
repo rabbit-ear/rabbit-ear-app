@@ -52,7 +52,7 @@ export class EditorContext {
       $effect(() => {
         const _ = this.fileManager.document?.data.cp.graphUpdate.reset;
         // this.simulator.inputGraph = this.fileManager.document?.data.cp.graph;
-        this.simulator.inputGraph = this.fileManager.document?.data.frame.baked;
+        this.simulator.inputGraph = this.fileManager.document?.data.frame.graph;
       });
       return () => {
         this.simulator.inputGraph = undefined;

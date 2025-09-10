@@ -14,7 +14,7 @@ export class ModifyVerticesCoordsCommand implements Command {
   previousCoords: [number, number][] | undefined;
 
   execute(): void {
-    this.doc.updateFrame((frame): GraphUpdateModifier | undefined => {
+    this.doc.updateGraph((frame): GraphUpdateModifier | undefined => {
       if (!frame.vertices_coords) { return undefined; }
       this.previousCoords = [];
       this.newCoords.forEach((coords, index) => {
@@ -29,7 +29,7 @@ export class ModifyVerticesCoordsCommand implements Command {
   }
 
   undo(): void {
-    this.doc.updateFrame((frame): GraphUpdateModifier | undefined => {
+    this.doc.updateGraph((frame): GraphUpdateModifier | undefined => {
       if (!frame.vertices_coords) { return undefined; }
       this.previousCoords?.forEach((coords, index) => {
         frame.vertices_coords![index] = coords;

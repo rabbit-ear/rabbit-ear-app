@@ -37,7 +37,7 @@ export class WebGLViewport implements Viewport {
   embeddingName = $state("creasePattern");
   embedding?: Embedding = $derived(context.fileManager.document?.data[this.embeddingName]);
 
-  rulers?: Ruler[] = $derived(context.fileManager.document?.data.rulers.allRulers);
+  rulers?: Ruler[] = $derived(context.fileManager.document?.data.frame.rulers.allRulers);
 
   // in the HTMLCanvas component, the window onresize event will be
   // be bound to this. this is also necessary for setting the canvasSize.

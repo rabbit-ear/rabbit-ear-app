@@ -8,7 +8,7 @@ export class InsertTextCommand implements Command {
 
   execute(): void {
     this.previousText = this.document.data?.text;
-    this.document.updateFrame((frame) => {
+    this.document.updateGraph((frame) => {
       frame.text =
         frame.text.slice(0, this.position) +
         this.text +
@@ -17,7 +17,7 @@ export class InsertTextCommand implements Command {
   }
 
   undo(): void {
-    this.document.updateFrame((frame) => {
+    this.document.updateGraph((frame) => {
       frame.text = this.previousText;
     });
   }

@@ -5,7 +5,7 @@
   import PanelEdge from "./PanelEdge.svelte";
   import PanelFace from "./PanelFace.svelte";
 
-  const graph = $derived(context.fileManager.document?.data.frame.baked);
+  const graph = $derived(context.fileManager.document?.data.frame.graph);
   const vCount = $derived(graph?.vertices_coords?.length ?? 0);
   const eCount = $derived(graph?.edges_vertices?.length ?? 0);
   const fCount = $derived(graph?.faces_vertices?.length ?? 0);

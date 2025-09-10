@@ -5,6 +5,7 @@ import { writeTextFile, readTextFile } from "../system/fs.ts";
 import { getFileName } from "../system/path.ts";
 import { GraphData } from "../graphs/GraphData.svelte.ts";
 import { HistoryManager } from "./HistoryManager.svelte.ts";
+import type { Frame } from "../graphs/Frame.ts";
 
 export class FileDocument {
   #history: HistoryManager;
@@ -91,27 +92,34 @@ export class FileDocument {
     await this.save();
   }
 
-  async reload(): Promise<boolean> {
-    if (!this.#filePath) { return false; }
-    try {
-      const contents = await readTextFile(this.#filePath);
-      const data = JSON.parse(contents);
-      this.#data.import(data);
-      this.#history.clear();
-      this.#isDirty = false;
-      return true;
-    } catch {
-      return false;
-    }
+  // todo: temp removing this because data.import was removed
+  // but it's okay to bring this back (and import too)
+  // async reload(): Promise<boolean> {
+  //   if (!this.#filePath) { return false; }
+  //   try {
+  //     const contents = await readTextFile(this.#filePath);
+  //     const data = JSON.parse(contents);
+  //     this.#data.import(data);
+  //     this.#history.clear();
+  //     this.#isDirty = false;
+  //     return true;
+  //   } catch {
+  //     return false;
+  //   }
+  // }
+
+  updateGraph(mutator: (frame: FOLDChildFrame) => (GraphUpdateModifier | undefined), dirty?: boolean) {
+    if (dirty !== false) { this.#isDirty = true; }
+    return this.#data.mutateGraph(mutator);
   }
 
-  updateFrame(mutator: (frame: FOLDChildFrame) => (GraphUpdateModifier | undefined), dirty?: boolean) {
+  updateFrameNew(mutator: (frame: Frame) => (GraphUpdateModifier | undefined), dirty?: boolean) {
     if (dirty !== false) { this.#isDirty = true; }
-    return this.#data.mutateFrame(mutator);
+    return this.#data.mutateFrameNew(mutator);
   }
 
-  updateSource(mutator: (data: GraphData) => (GraphUpdateModifier | undefined), dirty?: boolean) {
+  updateData(mutator: (data: GraphData) => (GraphUpdateModifier | undefined), dirty?: boolean) {
     if (dirty !== false) { this.#isDirty = true; }
-    return this.#data.mutateSource(mutator);
+    return this.#data.mutateData(mutator);
   }
 }

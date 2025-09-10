@@ -21,9 +21,9 @@ export class CreasePattern implements Embedding {
   #data: GraphData;
   #effects: (() => void)[];
 
-  #vertexBVH = $derived.by(() => VertexBVH(this.#data.frame.baked));
-  #edgeBVH = $derived.by(() => EdgeBVH(this.#data.frame.baked));
-  #faceBVH = $derived.by(() => FaceBVH(this.#data.frame.baked));
+  #vertexBVH = $derived.by(() => VertexBVH(this.#data.frame.graph));
+  #edgeBVH = $derived.by(() => EdgeBVH(this.#data.frame.graph));
+  #faceBVH = $derived.by(() => FaceBVH(this.#data.frame.graph));
 
   graph: FOLD | undefined;
 
@@ -47,7 +47,7 @@ export class CreasePattern implements Embedding {
   // }
   get attributes(): FrameAttributes { return this.#data.frame.attributes; }
 
-  get selection(): FOLDSelection | undefined { return this.#data.selection; }
+  get selection(): FOLDSelection | undefined { return this.#data.frame.selection; }
 
   // get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
   get selectionFaceGraph(): FOLD | undefined { return this.#data.selectionFaceGraph; }
@@ -79,7 +79,7 @@ export class CreasePattern implements Embedding {
 
     // todo: it might be possible to "unfold" the vertices
     this.setGraph(this.#data.frame.attributes.class === FrameClass.creasePattern
-      ? this.#data.frame.baked
+      ? this.#data.frame.graph
       : undefined);
     this.#effects = [
       this.#effectGraphUpdate(),
@@ -120,7 +120,7 @@ export class CreasePattern implements Embedding {
     return $effect.root(() => {
       $effect(() => {
         this.setGraph(this.#data.frame.attributes.class === FrameClass.creasePattern
-          ? this.#data.frame.baked
+          ? this.#data.frame.graph
           : undefined);
       });
       // empty

@@ -15,9 +15,9 @@ export class FoldedVertices {
     try {
       // console.log("querying folded vertices");
       return this.#foldedForm.attributes.class === FrameClass.foldedForm
-        // ? { error: undefined, result: this.#data.frame.baked.vertices_coords ?? [] }
+        // ? { error: undefined, result: this.#data.frame.graph.vertices_coords ?? [] }
         ? { error: undefined, result: undefined }
-        : { error: undefined, result: makeVerticesCoordsFolded(this.#data.frame.baked) };
+        : { error: undefined, result: makeVerticesCoordsFolded(this.#data.frame.graph) };
     } catch (err: unknown) {
       const error = err instanceof Error
         ? err
@@ -31,7 +31,7 @@ export class FoldedVertices {
   );
 
   graph: FOLD = $derived.by(() => ({
-    ...this.#data.frame.baked,
+    ...this.#data.frame.graph,
     vertices_coords: this.vertices_coords,
   }));
 

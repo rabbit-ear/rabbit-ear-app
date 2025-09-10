@@ -1,4 +1,7 @@
 export type GraphUpdateEvent = {
+  // nothing changes, only the set of components currently selected
+  selection: number;
+
   // an isomorphic change can modify the vertex coordinates
   // or change any of the attributes associated with the edges
   isomorphic: {
@@ -15,6 +18,7 @@ export type GraphUpdateEvent = {
 };
 
 export type GraphUpdateModifier = {
+  selection: boolean;
   isomorphic?: {
     coords?: boolean;
     assignments?: boolean;
@@ -25,6 +29,7 @@ export type GraphUpdateModifier = {
 };
 
 export const makeGraphUpdateEvent = (): GraphUpdateEvent => ({
+  selection: 0,
   isomorphic: {
     coords: 0,
     assignments: 0,
@@ -35,6 +40,7 @@ export const makeGraphUpdateEvent = (): GraphUpdateEvent => ({
 });
 
 export const modifyGraphUpdate = (update: GraphUpdateEvent, modifier: GraphUpdateModifier): void => {
+  if (modifier.selection) { update.selection++; }
   if (modifier.isomorphic) {
     if (modifier.isomorphic.coords) { update.isomorphic.coords++; }
     if (modifier.isomorphic.assignments) { update.isomorphic.assignments++; }

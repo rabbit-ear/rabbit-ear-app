@@ -21,7 +21,7 @@ export class AffineScaleCommand implements Command {
   previousGraph: FOLD | undefined;
 
   execute(): void {
-    this.doc.updateFrame((frame): GraphUpdateModifier | undefined => {
+    this.doc.updateGraph((frame): GraphUpdateModifier | undefined => {
       if (!frame.vertices_coords) { return undefined; }
       if (this.shouldDetach) {
         this.previousGraph = { ...frame };
@@ -44,7 +44,7 @@ export class AffineScaleCommand implements Command {
   }
 
   undo(): void {
-    this.doc.updateFrame((frame): GraphUpdateModifier | undefined => {
+    this.doc.updateGraph((frame): GraphUpdateModifier | undefined => {
       if (!frame.vertices_coords) { return undefined; }
       if (this.shouldDetach && this.previousGraph) {
         Object.keys(this.previousGraph).forEach(key => {
