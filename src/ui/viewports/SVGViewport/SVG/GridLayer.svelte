@@ -1,12 +1,11 @@
 <script lang="ts">
-  import type { SVGViewport } from "./SVGViewport.svelte.ts";
+  import type { SVGViewport } from "../SVGViewport.svelte.ts";
   let { viewport }: { viewport: SVGViewport } = $props();
 
-  const embeddingExists = $derived(
-    viewport.embedding?.graphUpdate
-      ? !!viewport.embedding?.graph
-      : !!viewport.embedding?.graph,
-  );
+  const embeddingExists = $derived.by(() => {
+    const _ = viewport.embeddingUpdate;
+    return !!viewport.embedding?.graph;
+  });
 </script>
 
 <!-- <g class="grid-layer" stroke-width={viewport.grid.strokeWidth}> -->

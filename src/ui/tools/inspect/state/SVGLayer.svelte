@@ -13,9 +13,12 @@
   let graph: FOLD = $state({});
 
   $effect(() => {
-    viewport.embedding?.graphUpdate.isomorphic;
-    viewport.embedding?.graphUpdate.structural;
-    viewport.embedding?.graphUpdate.reset;
+    // viewport.graphUpdate?.isomorphic;
+    // viewport.graphUpdate?.structural;
+    // viewport.graphUpdate?.reset;
+    viewport.embeddingUpdate?.isomorphic;
+    viewport.embeddingUpdate?.structural;
+    viewport.embeddingUpdate?.reset;
     graph = viewport.embedding?.graph ?? {};
   });
 

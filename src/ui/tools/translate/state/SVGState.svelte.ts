@@ -55,24 +55,20 @@ export class SVGState {
 
   onmousemove(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
     const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
-    // console.log("mousemove", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
   }
 
   onmousedown(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
     const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
-    // console.log("mousedown", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.press = point;
-    // todo: is this necessary? can it be removed?
     this.touches.release = undefined;
   }
 
   onmouseup(viewport: Viewport, { offsetX, offsetY, buttons }: MouseEvent): void {
     const point = getSVGViewportPoint(viewport, [offsetX, offsetY]);
-    // console.log("mouseup", viewport, point);
     this.touches.move = buttons ? undefined : point;
     this.touches.drag = buttons ? point : undefined;
     this.touches.release = point;
@@ -111,7 +107,7 @@ export class SVGState {
           const command = new AffineTranslateCommand(
             doc,
             this.vector,
-            context.fileManager.document?.data.selection,
+            context.fileManager.document?.data.frame.selection,
             context.ui.settings.selectionHandling.value === "detach");
           doc.executeCommand(command)
         }

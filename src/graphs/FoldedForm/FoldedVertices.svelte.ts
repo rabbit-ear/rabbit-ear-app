@@ -3,6 +3,7 @@ import type { GraphData } from "../GraphData.svelte";
 import { FrameClass } from "../FrameAttributes";
 import type { FOLD } from "rabbit-ear/types.js";
 import type { FoldedForm } from "./FoldedForm.svelte.ts";
+import { validate } from "rabbit-ear/graph/validate/validate.js";
 
 export class FoldedVertices {
   #foldedForm: FoldedForm;
@@ -14,10 +15,17 @@ export class FoldedVertices {
   } = $derived.by(() => {
     try {
       // console.log("querying folded vertices");
-      return this.#foldedForm.attributes.class === FrameClass.foldedForm
+      console.log("About to calculate...");
+      const res = this.#foldedForm.attributes.class === FrameClass.foldedForm
         // ? { error: undefined, result: this.#data.frame.graph.vertices_coords ?? [] }
         ? { error: undefined, result: undefined }
         : { error: undefined, result: makeVerticesCoordsFolded(this.#data.frame.graph) };
+      console.log("...result", res);
+      return res;
+      // return this.#foldedForm.attributes.class === FrameClass.foldedForm
+      //   // ? { error: undefined, result: this.#data.frame.graph.vertices_coords ?? [] }
+      //   ? { error: undefined, result: undefined }
+      //   : { error: undefined, result: makeVerticesCoordsFolded(this.#data.frame.graph) };
     } catch (err: unknown) {
       const error = err instanceof Error
         ? err
@@ -30,10 +38,19 @@ export class FoldedVertices {
     this.foldedVerticesAndError.result
   );
 
-  graph: FOLD = $derived.by(() => ({
-    ...this.#data.frame.graph,
-    vertices_coords: this.vertices_coords,
-  }));
+  // graph: FOLD = $derived.by(() => ({
+  //   ...this.#data.frame.graph,
+  //   vertices_coords: this.vertices_coords,
+  // }));
+  graph: FOLD = $derived.by(() => {
+    const folded = {
+      ...this.#data.frame.graph,
+      vertices_coords: this.vertices_coords,
+    };
+    const valid = validate(folded);
+    console.log("valid", valid);
+    return folded;
+  });
 
   error: Error | undefined = $derived(this.foldedVerticesAndError.error);
 

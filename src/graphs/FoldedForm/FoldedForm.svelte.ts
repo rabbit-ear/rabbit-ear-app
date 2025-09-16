@@ -25,7 +25,7 @@ export class FoldedForm implements Embedding {
 
   graph: FOLD | undefined;
 
-  graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
+  // graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
 
   faceOrdersResult: { uuid: string, result: [number, number, number][] } | undefined = $state();
 
@@ -51,28 +51,28 @@ export class FoldedForm implements Embedding {
   // get selectionVertexGraph(): FOLD | undefined { return this.#data.selectionVertexGraph; }
   selectionFaceGraph: FOLD | undefined = $derived.by(() => {
     const graph = { ...this.#data.selectionFaceGraph };
-    if (graph && graph.vertices_coords && this.folded.vertices_coords) {
-      graph.vertices_coords = graph.vertices_coords
-        .map((_, i) => this.folded.vertices_coords![i]);
-    }
+    // if (graph && graph.vertices_coords && this.folded.vertices_coords) {
+    //   graph.vertices_coords = graph.vertices_coords
+    //     .map((_, i) => this.folded.vertices_coords![i]);
+    // }
     return graph;
   });
 
   selectionEdgeGraph: FOLD | undefined = $derived.by(() => {
     const graph = { ...this.#data.selectionEdgeGraph };
-    if (graph && graph.vertices_coords && this.folded.vertices_coords) {
-      graph.vertices_coords = graph.vertices_coords
-        .map((_, i) => this.folded.vertices_coords![i]);
-    }
+    // if (graph && graph.vertices_coords && this.folded.vertices_coords) {
+    //   graph.vertices_coords = graph.vertices_coords
+    //     .map((_, i) => this.folded.vertices_coords![i]);
+    // }
     return graph;
   });
 
   selectionVertexGraph: FOLD | undefined = $derived.by(() => {
     const graph = { ...this.#data.selectionVertexGraph };
-    if (graph && graph.vertices_coords && this.folded.vertices_coords) {
-      graph.vertices_coords = graph.vertices_coords
-        .map((_, i) => this.folded.vertices_coords![i]);
-    }
+    // if (graph && graph.vertices_coords && this.folded.vertices_coords) {
+    //   graph.vertices_coords = graph.vertices_coords
+    //     .map((_, i) => this.folded.vertices_coords![i]);
+    // }
     return graph;
   });
 
@@ -151,7 +151,7 @@ export class FoldedForm implements Embedding {
   #effectSetGraph(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        // console.log("$effect: set graph");
+        console.log("$effect: set graph", this.#data.frame.graph, this.folded.vertices_coords);
         const newGraph = { ...this.#data.frame.graph };
         newGraph.frame_classes = ["foldedForm"];
         if (this.settings.foldVerticesCoords && this.folded.vertices_coords !== undefined) {
@@ -165,7 +165,9 @@ export class FoldedForm implements Embedding {
         this.#attributeDimension = getDimensionQuick(newGraph) ?? 3;
         this.#attributeHasLayerOrder = newGraph.faceOrders != null && newGraph.faceOrders.length > 0;
         this.attributes.hasLayerOrder = this.#attributeHasLayerOrder;
-        this.graphUpdate.reset++;
+        this.#data.graphUpdate.reset++;
+        // this.graphUpdate.reset++;
+        // console.log("$effect: set graph DONE");
       });
       return () => { };
     });
@@ -174,7 +176,7 @@ export class FoldedForm implements Embedding {
   #effectFoldedVertices(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        // console.log("$effect: posting message to worker...", this.settings.solveFaceOrders);
+        // console.log("$effect: posting message to face-orders worker...");
         if (!this.settings.solveFaceOrders) {
           this.faceOrdersResult = undefined;
           return;

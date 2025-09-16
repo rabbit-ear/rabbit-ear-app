@@ -130,6 +130,7 @@ export class Simulator {
           // this "active" is not the same as settings.active
           if (!this.activelyLoadingModels) { return; }
           if (!this.inputGraph) { return; }
+          return;
           this.#model = new Model($state.snapshot(this.inputGraph));
           // console.log("Loading simulator model from", this.inputGraph);
 

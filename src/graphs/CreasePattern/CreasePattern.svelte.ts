@@ -21,13 +21,37 @@ export class CreasePattern implements Embedding {
   #data: GraphData;
   #effects: (() => void)[];
 
-  #vertexBVH = $derived.by(() => VertexBVH(this.#data.frame.graph));
-  #edgeBVH = $derived.by(() => EdgeBVH(this.#data.frame.graph));
-  #faceBVH = $derived.by(() => FaceBVH(this.#data.frame.graph));
+  #vertexBVH = $derived.by(() => {
+    const _ = [
+      this.#data.graphUpdate.reset,
+      this.#data.graphUpdate.isomorphic,
+      this.#data.graphUpdate.structural,
+    ];
+    return VertexBVH(this.#data.frame.graph);
+  });
+
+  #edgeBVH = $derived.by(() => {
+    const _ = [
+      this.#data.graphUpdate.reset,
+      this.#data.graphUpdate.isomorphic,
+      this.#data.graphUpdate.structural,
+    ];
+    return EdgeBVH(this.#data.frame.graph);
+  });
+
+  #faceBVH = $derived.by(() => {
+    const _ = [
+      this.#data.graphUpdate.reset,
+      this.#data.graphUpdate.isomorphic,
+      this.#data.graphUpdate.structural,
+    ];
+    return FaceBVH(this.#data.frame.graph);
+  });
 
   graph: FOLD | undefined;
 
-  graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
+  // embeddingUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
+  embeddingUpdate: GraphUpdateEvent = $derived.by(() => this.#data.graphUpdate);
 
   frameLinked = $derived.by(() => this.#data.frame.attributes.isParent
     || this.#data.frame.attributes.isChild);
@@ -45,6 +69,7 @@ export class CreasePattern implements Embedding {
   //     // hasLayerOrder: true,
   //   };
   // }
+
   get attributes(): FrameAttributes { return this.#data.frame.attributes; }
 
   get selection(): FOLDSelection | undefined { return this.#data.frame.selection; }
@@ -63,7 +88,8 @@ export class CreasePattern implements Embedding {
 
   setGraph(newGraph: FOLD | undefined) {
     this.graph = newGraph;
-    this.graphUpdate.reset++;
+    // this.graphUpdate.reset++;
+    // this.#data.graphUpdate.reset++;
   }
 
   get snapPoints(): [number, number][] {

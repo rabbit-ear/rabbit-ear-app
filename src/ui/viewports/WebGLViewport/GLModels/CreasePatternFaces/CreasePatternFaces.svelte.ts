@@ -31,9 +31,9 @@ export class CreasePatternFaces implements GLModel {
 
   vertexArrays: VertexArray[] = $derived.by(() => {
     if (!this.viewport.gl || !this.program) { return []; }
-    const reset = this.viewport.embedding?.graphUpdate.reset;
-    const structural = this.viewport.embedding?.graphUpdate.structural;
-    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    const reset = this.viewport.graphUpdate?.reset;
+    const structural = this.viewport.graphUpdate?.structural;
+    const isomorphic = this.viewport.graphUpdate?.isomorphic.coords;
     return makeCPFacesVertexArrays(
       this.viewport.gl,
       this.program,
@@ -42,9 +42,9 @@ export class CreasePatternFaces implements GLModel {
 
   elementArrays: ElementArray[] = $derived.by(() => {
     if (!this.viewport.gl) { return []; }
-    const reset = this.viewport.embedding?.graphUpdate.reset;
-    const structural = this.viewport.embedding?.graphUpdate.structural;
-    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    const reset = this.viewport.graphUpdate?.reset;
+    const structural = this.viewport.graphUpdate?.structural;
+    const isomorphic = this.viewport.graphUpdate?.isomorphic.coords;
     return makeCPFacesElementArrays(
       this.viewport.gl,
       this.viewport.version,

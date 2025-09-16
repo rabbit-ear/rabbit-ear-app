@@ -116,8 +116,7 @@ export class SVGView implements View {
   #makeModelMatrixEffect(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const _ = this.viewport.embedding?.graphUpdate.structural
-          || this.viewport.embedding?.graphUpdate.reset;
+        const _ = this.viewport.graphUpdate?.structural || this.viewport.graphUpdate?.reset;
         const matrix = graphToMatrix2(this.viewport.embedding?.graph, this.rightHanded);
         untrack(() => {
           this.#model = matrix;

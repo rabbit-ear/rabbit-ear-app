@@ -19,8 +19,8 @@ export class Simulator implements Embedding {
   // not reactive
   get graph(): FOLD | undefined { return context.simulator.graph; }
 
-  // reactive. subscribe to this to watch the graph
-  get graphUpdate(): GraphUpdateEvent { return context.simulator.graphUpdate; }
+  // // reactive. subscribe to this to watch the graph
+  // get graphUpdate(): GraphUpdateEvent { return context.simulator.graphUpdate; }
 
   #effects: (() => void)[] = [];
 

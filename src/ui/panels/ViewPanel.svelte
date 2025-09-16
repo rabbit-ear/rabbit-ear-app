@@ -39,12 +39,12 @@
   const resetZoom = (): void => context.ui.viewportManager.resetCameras();
 
   const selection = $derived(
-    !context.fileManager.document?.data.selection
+    !context.fileManager.document?.data.frame.selection
       ? undefined
       : [
-          context.fileManager.document?.data.selection.vertices?.size,
-          context.fileManager.document?.data.selection.edges?.size,
-          context.fileManager.document?.data.selection.faces?.size,
+          context.fileManager.document?.data.frame.selection.vertices?.size,
+          context.fileManager.document?.data.frame.selection.edges?.size,
+          context.fileManager.document?.data.frame.selection.faces?.size,
         ]
           .map((count, i) => ({ count, i }))
           .filter((el) => el.count !== undefined && el.count !== 0)

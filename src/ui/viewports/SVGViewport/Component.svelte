@@ -6,6 +6,7 @@
   // import ModelLayer from "./ModelLayer.svelte";
   import SVGRulers from "./SVG/SVGRulers.svelte";
   import SVGFOLD from "./SVG/SVGFOLD.svelte";
+  // import { validate } from "rabbit-ear/graph/validate/validate.js";
 
   type PropsType = {
     viewport: SVGViewport;
@@ -24,10 +25,16 @@
   const selectedVertices = $derived(viewport.embedding?.selectionVertexGraph);
 
   $effect(() => {
-    viewport.embedding?.graphUpdate.structural;
-    viewport.embedding?.graphUpdate.isomorphic;
-    viewport.embedding?.graphUpdate.reset;
+    // console.log("SVG Viewport graphUpdate");
+    // viewport.graphUpdate?.structural;
+    // viewport.graphUpdate?.isomorphic;
+    // viewport.graphUpdate?.reset;
+    viewport.embedding?.embeddingUpdate?.structural;
+    viewport.embedding?.embeddingUpdate?.isomorphic;
+    viewport.embedding?.embeddingUpdate?.reset;
     graph = { ...viewport.embedding?.graph };
+
+    // console.log("Graph", validate(viewport.embedding?.graph ?? {}));
   });
 
   // https://www.youtube.com/live/nMs4X8-L_yo?feature=shared&t=1667

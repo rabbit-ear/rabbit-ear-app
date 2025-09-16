@@ -2,6 +2,7 @@ import type { FOLD } from "rabbit-ear/types.js";
 import type { Command } from "./Command.ts";
 import type { GraphUpdateModifier } from "../graphs/Updated.ts";
 import type { FOLDSelection } from "../general/selection.ts";
+import type { GraphData } from "../graphs/GraphData.svelte.ts";
 import { FileDocument } from "../app/FileDocument.svelte.ts";
 import { explodeAlongSeam } from "../general/seam.ts";
 import { translateVerticesCoords } from "../general/affine.ts";
@@ -20,36 +21,39 @@ export class AffineTranslateCommand implements Command {
   previousGraph: FOLD | undefined;
 
   execute(): void {
-    this.doc.updateGraph((frame): GraphUpdateModifier | undefined => {
-      if (!frame.vertices_coords) { return undefined; }
+    // this.doc.updateGraph((graph): GraphUpdateModifier | undefined => {
+    this.doc.updateData((data: GraphData): GraphUpdateModifier | undefined => {
+      const graph = data.frame.graph;
+      if (!graph.vertices_coords) { return undefined; }
       if (this.shouldDetach) {
-        this.previousGraph = { ...frame };
+        this.previousGraph = { ...graph };
       } else {
-        this.previousVerticesCoords = frame.vertices_coords;
+        this.previousVerticesCoords = graph.vertices_coords;
       }
       const newSelection = this.shouldDetach && this.selection
-        ? explodeAlongSeam(frame, this.selection)
+        ? explodeAlongSeam(graph, this.selection)
         : this.selection;
-      frame.vertices_coords = translateVerticesCoords(
+      data.frame.selection = undefined;
+      graph.vertices_coords = translateVerticesCoords(
         this.translate,
-        frame.vertices_coords,
+        graph.vertices_coords,
         newSelection);
       return this.shouldDetach
-        ? { structural: true }
-        : { isomorphic: { coords: true } };
+        ? { structural: true, selection: true }
+        : { isomorphic: { coords: true }, selection: true };
     });
   }
 
   undo(): void {
-    this.doc.updateGraph((frame): GraphUpdateModifier | undefined => {
-      if (!frame.vertices_coords) { return undefined; }
+    this.doc.updateGraph((graph): GraphUpdateModifier | undefined => {
+      if (!graph.vertices_coords) { return undefined; }
       if (this.shouldDetach && this.previousGraph) {
         Object.keys(this.previousGraph).forEach(key => {
-          frame[key] = this.previousGraph[key];
+          graph[key] = this.previousGraph[key];
         });
         return { structural: true };
       } else {
-        frame.vertices_coords = this.previousVerticesCoords;
+        graph.vertices_coords = this.previousVerticesCoords;
         return { isomorphic: { coords: true } };
       }
     });

@@ -18,7 +18,7 @@ export type GraphUpdateEvent = {
 };
 
 export type GraphUpdateModifier = {
-  selection: boolean;
+  selection?: boolean;
   isomorphic?: {
     coords?: boolean;
     assignments?: boolean;

@@ -23,7 +23,7 @@ export interface Embedding {
   // the reactive metadata which will be updated when
   // the graph updates, and contains more fine-tuned
   // information about how the graph just changed
-  graphUpdate: GraphUpdateEvent;
+  embeddingUpdate: GraphUpdateEvent;
 
   attributes: FrameAttributes;
 

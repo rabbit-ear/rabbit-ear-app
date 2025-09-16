@@ -135,7 +135,7 @@ export class SVGState {
             doc,
             this.scale,
             this.anchor.origin,
-            context.fileManager.document?.data.selection,
+            context.fileManager.document?.data.frame.selection,
             context.ui.settings.selectionHandling.value === "detach");
           doc.executeCommand(command)
         }

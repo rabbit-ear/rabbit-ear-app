@@ -48,9 +48,9 @@ export class FoldedFormFaceOutlines implements GLModel {
   vertexArrays: VertexArray[] = $derived.by(() => {
     if (!this.viewport.gl || !this.program) { return []; }
     const internalUpdate = this.#graphDidLoad;
-    const reset = this.viewport.embedding?.graphUpdate.reset;
-    const structural = this.viewport.embedding?.graphUpdate.structural;
-    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    const reset = this.viewport.graphUpdate?.reset;
+    const structural = this.viewport.graphUpdate?.structural;
+    const isomorphic = this.viewport.graphUpdate?.isomorphic.coords;
     return makeFoldedVertexArrays(
       this.viewport.gl,
       this.program,
@@ -61,9 +61,9 @@ export class FoldedFormFaceOutlines implements GLModel {
   elementArrays: ElementArray[] = $derived.by(() => {
     if (!this.viewport.gl) { return []; }
     const internalUpdate = this.#graphDidLoad;
-    const reset = this.viewport.embedding?.graphUpdate.reset;
-    const structural = this.viewport.embedding?.graphUpdate.structural;
-    const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+    const reset = this.viewport.graphUpdate?.reset;
+    const structural = this.viewport.graphUpdate?.structural;
+    const isomorphic = this.viewport.graphUpdate?.isomorphic.coords;
     return makeFoldedElementArrays(
       this.viewport.gl,
       this.viewport.version,
@@ -114,9 +114,9 @@ export class FoldedFormFaceOutlines implements GLModel {
   #effectLoadGraph(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const reset = this.viewport.embedding?.graphUpdate.reset;
-        const structural = this.viewport.embedding?.graphUpdate.structural;
-        const isomorphic = this.viewport.embedding?.graphUpdate.isomorphic.coords;
+        const reset = this.viewport.graphUpdate?.reset;
+        const structural = this.viewport.graphUpdate?.structural;
+        const isomorphic = this.viewport.graphUpdate?.isomorphic.coords;
         this.#graph = prepareForRendering(
           this.viewport.embedding?.graph ?? {},
           { earcut, layerNudge: this.viewport.style.layersNudge },
