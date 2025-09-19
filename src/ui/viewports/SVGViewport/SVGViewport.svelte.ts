@@ -12,6 +12,7 @@ import { SVGView } from "./SVGView.svelte.ts";
 import { Style } from "./Style.svelte.ts";
 import { Grid } from "./Grid.svelte.ts";
 import { SVGSnap } from "./SVGSnap.svelte.ts";
+import { SVGRendering } from "./SVGRendering.svelte.ts";
 import context from "../../../app/context.svelte.ts";
 
 export class SVGViewport implements Viewport {
@@ -29,6 +30,7 @@ export class SVGViewport implements Viewport {
   style: Style;
   snap: SVGSnap;
   view: SVGView;
+  rendering: SVGRendering;
 
   source: GraphData | undefined = $derived(context.fileManager.document?.data);
   graphUpdate: GraphUpdateEvent | undefined = $derived(this.source?.graphUpdate);
@@ -57,6 +59,7 @@ export class SVGViewport implements Viewport {
     this.style = new Style(this);
     this.grid = new Grid(this);
     this.snap = new SVGSnap(this);
+    this.rendering = new SVGRendering(this);
   }
 
   unbindTool(): void {
@@ -66,6 +69,8 @@ export class SVGViewport implements Viewport {
   }
 
   // empty
-  dealloc(): void { }
+  dealloc(): void {
+    this.rendering.dealloc();
+  }
 }
 

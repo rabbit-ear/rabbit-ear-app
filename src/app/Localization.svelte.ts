@@ -64,3 +64,4 @@ export class Localization {
     return this.#dictionary[key] ?? key;
   }
 }
+

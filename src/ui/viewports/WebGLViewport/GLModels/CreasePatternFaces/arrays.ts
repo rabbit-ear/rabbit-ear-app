@@ -45,15 +45,17 @@ export const makeCPFacesElementArrays = (
   if (!graph || !graph.vertices_coords || !graph.faces_vertices) {
     return [];
   }
+  let triangulatedFaces;
   try {
-    return [{
-      mode: gl.TRIANGLES,
-      buffer: gl.createBuffer(),
-      data: version === 2
-        ? new Uint32Array(triangulateNonConvexFacesVertices(graph, earcut).flat())
-        : new Uint16Array(triangulateNonConvexFacesVertices(graph, earcut).flat()),
-    }];
+    triangulatedFaces = triangulateNonConvexFacesVertices(graph, earcut).flat();
   } catch {
     return [];
   }
+  return [{
+    mode: gl.TRIANGLES,
+    buffer: gl.createBuffer(),
+    data: version === 2
+      ? new Uint32Array(triangulatedFaces)
+      : new Uint16Array(triangulatedFaces)
+  }];
 };

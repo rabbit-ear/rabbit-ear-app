@@ -18,3 +18,4 @@ export class LocalStorageRegistry {
     return [...this.registry.keys()];
   }
 }
+

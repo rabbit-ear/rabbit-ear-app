@@ -6,6 +6,7 @@ import { KeyboardManager } from "./KeyboardManager.svelte.ts";
 import { Localization } from "./Localization.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import { Simulator } from "./Simulator.svelte.ts";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 
 export class EditorContext {
   fileManager: FileManager;
@@ -37,6 +38,7 @@ export class EditorContext {
     this.ui = new UI();
     // this should go somewhere else
     this.#setSimulatorGraph();
+    this.#effectAppTitle();
   }
 
   // this is not really planned, but if ever the app was to completely de-initialize and
@@ -58,6 +60,15 @@ export class EditorContext {
         this.simulator.inputGraph = undefined;
       };
     });
+  }
+
+  #effectAppTitle(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        getCurrentWindow().setTitle(this.appTitle);
+      });
+      return () => { };
+    })
   }
 }
 

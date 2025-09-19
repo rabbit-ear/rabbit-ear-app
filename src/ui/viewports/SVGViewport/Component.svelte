@@ -17,25 +17,10 @@
 
   let svg: SVGSVGElement | undefined = $state();
 
-  let graph = $state(viewport.embedding?.graph);
-
   // const selection = $derived(viewport.embedding?.selectionGraph);
   const selectedFaces = $derived(viewport.embedding?.selectionFaceGraph);
   const selectedEdges = $derived(viewport.embedding?.selectionEdgeGraph);
   const selectedVertices = $derived(viewport.embedding?.selectionVertexGraph);
-
-  $effect(() => {
-    // console.log("SVG Viewport graphUpdate");
-    // viewport.graphUpdate?.structural;
-    // viewport.graphUpdate?.isomorphic;
-    // viewport.graphUpdate?.reset;
-    viewport.embedding?.embeddingUpdate?.structural;
-    viewport.embedding?.embeddingUpdate?.isomorphic;
-    viewport.embedding?.embeddingUpdate?.reset;
-    graph = { ...viewport.embedding?.graph };
-
-    // console.log("Graph", validate(viewport.embedding?.graph ?? {}));
-  });
 
   // https://www.youtube.com/live/nMs4X8-L_yo?feature=shared&t=1667
   const SVGToolLayer = $derived(viewport.layer);
@@ -88,16 +73,16 @@
 
 {#snippet everything()}
   {@render gridLayer()}
-  <SVGFOLD {graph} {viewport} />
-  {#if selectedFaces}
-    <SVGFOLD faceGraph={selectedFaces} {viewport} class="selection" />
-  {/if}
-  {#if selectedEdges}
-    <SVGFOLD edgeGraph={selectedEdges} {viewport} class="selection" />
-  {/if}
-  {#if selectedVertices}
-    <SVGFOLD vertexGraph={selectedVertices} {viewport} class="selection" />
-  {/if}
+  <SVGFOLD rendering={viewport.rendering} />
+  <!-- {#if selectedFaces} -->
+  <!--   <SVGFOLD faceGraph={selectedFaces} {viewport} class="selection" /> -->
+  <!-- {/if} -->
+  <!-- {#if selectedEdges} -->
+  <!--   <SVGFOLD edgeGraph={selectedEdges} {viewport} class="selection" /> -->
+  <!-- {/if} -->
+  <!-- {#if selectedVertices} -->
+  <!--   <SVGFOLD vertexGraph={selectedVertices} {viewport} class="selection" /> -->
+  <!-- {/if} -->
   <SVGRulers shapes={viewport.rulers} {viewport} class="shapes-layer" />
   {@render toolLayer()}
 {/snippet}

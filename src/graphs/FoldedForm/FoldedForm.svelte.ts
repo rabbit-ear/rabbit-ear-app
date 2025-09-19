@@ -96,7 +96,7 @@ export class FoldedForm implements Embedding {
     this.settings = new Settings();
     this.#effects = [
       this.#effectSetGraph(),
-      this.#effectFoldedVertices(),
+      this.#effectFaceOrders(),
     ];
     // console.log("FoldedForm: constructor()", context.workerManager.faceOrders);
     this.faceOrdersWorker = new Worker(
@@ -151,29 +151,33 @@ export class FoldedForm implements Embedding {
   #effectSetGraph(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        console.log("$effect: set graph", this.#data.frame.graph, this.folded.vertices_coords);
-        const newGraph = { ...this.#data.frame.graph };
-        newGraph.frame_classes = ["foldedForm"];
-        if (this.settings.foldVerticesCoords && this.folded.vertices_coords !== undefined) {
-          newGraph.vertices_coords = this.folded.vertices_coords;
+        try {
+          console.log("$effect: set graph", this.#data.frame.graph, this.folded.vertices_coords);
+          const newGraph = { ...this.#data.frame.graph };
+          newGraph.frame_classes = ["foldedForm"];
+          if (this.settings.foldVerticesCoords && this.folded.vertices_coords !== undefined) {
+            newGraph.vertices_coords = this.folded.vertices_coords;
+          }
+          if (this.faceOrdersResult && this.faceOrdersResult.uuid === this.#data.frame.uuid) {
+            newGraph.faceOrders = $state
+              .snapshot(this.faceOrdersResult.result) as [number, number, number][];
+          }
+          this.graph = newGraph;
+          this.#attributeDimension = getDimensionQuick(newGraph) ?? 3;
+          this.#attributeHasLayerOrder = newGraph.faceOrders != null && newGraph.faceOrders.length > 0;
+          this.attributes.hasLayerOrder = this.#attributeHasLayerOrder;
+          this.#data.graphUpdate.reset++;
+          // this.graphUpdate.reset++;
+          // console.log("$effect: set graph DONE");
+        } catch (error) {
+          console.log("caught error", error);
         }
-        if (this.faceOrdersResult && this.faceOrdersResult.uuid === this.#data.frame.uuid) {
-          newGraph.faceOrders = $state
-            .snapshot(this.faceOrdersResult.result) as [number, number, number][];
-        }
-        this.graph = newGraph;
-        this.#attributeDimension = getDimensionQuick(newGraph) ?? 3;
-        this.#attributeHasLayerOrder = newGraph.faceOrders != null && newGraph.faceOrders.length > 0;
-        this.attributes.hasLayerOrder = this.#attributeHasLayerOrder;
-        this.#data.graphUpdate.reset++;
-        // this.graphUpdate.reset++;
-        // console.log("$effect: set graph DONE");
       });
       return () => { };
     });
   }
 
-  #effectFoldedVertices(): () => void {
+  #effectFaceOrders(): () => void {
     return $effect.root(() => {
       $effect(() => {
         // console.log("$effect: posting message to face-orders worker...");

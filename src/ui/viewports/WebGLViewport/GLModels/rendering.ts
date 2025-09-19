@@ -72,12 +72,23 @@ export const prepareForRenderingWithCycles = (
   }));
 
   // this resizes the length of the coordinates back to 2.
-  const planes_graphXYFixed = planes_graphXY.map((g, p) =>
-    fixCycles({
-      ...g,
-      faceOrders: planes_faceOrders[p],
-    }),
-  );
+  // const planes_graphXYFixed = planes_graphXY.map((g, p) =>
+  //   fixCycles({
+  //     ...g,
+  //     faceOrders: planes_faceOrders[p],
+  //   }),
+  // );
+  let planes_graphXYFixed = planes_graphXY;
+  try {
+    planes_graphXYFixed = planes_graphXY.map((g, p) =>
+      fixCycles({
+        ...g,
+        faceOrders: planes_faceOrders[p],
+      }),
+    );
+  } catch (error) {
+    console.log(error);
+  }
 
   const planes_graphFixed = planes_graphXYFixed.map((graphXY, p) => ({
     ...graphXY,

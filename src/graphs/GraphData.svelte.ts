@@ -55,27 +55,42 @@ export class GraphData {
   // ));
 
   selectionFaceGraph: FOLD | undefined = $derived.by(() => {
+    console.log("selection face graph");
     const _ = this.graphUpdate.selection;
-    return strictSubcomplex(
-      this.frame.graph,
-      this.frame.selection ?? {},
-    );
+    try {
+      return strictSubcomplex(
+        this.frame.graph,
+        this.frame.selection ?? {},
+      );
+    } catch {
+      return undefined;
+    }
   });
 
   selectionEdgeGraph: FOLD | undefined = $derived.by(() => {
+    console.log("selection edge graph");
     const _ = this.graphUpdate.selection;
-    return strictSubgraph(
-      this.frame.graph,
-      this.frame.selection ?? {},
-    );
+    try {
+      return strictSubgraph(
+        this.frame.graph,
+        this.frame.selection ?? {},
+      );
+    } catch {
+      return undefined;
+    }
   });
 
   selectionVertexGraph: FOLD | undefined = $derived.by(() => {
+    console.log("selection vertex graph");
     const _ = this.graphUpdate.selection;
-    return vertexSubgraph(
-      this.frame.graph,
-      this.frame.selection ?? {},
-    );
+    try {
+      return vertexSubgraph(
+        this.frame.graph,
+        this.frame.selection ?? {},
+      );
+    } catch {
+      return undefined;
+    }
   });
 
   // models: { [key: string]: Model } = $state({});

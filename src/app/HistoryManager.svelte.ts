@@ -8,7 +8,11 @@ export class HistoryManager {
   get redoStack(): Readonly<Command[]> { return this.#redoStack; }
 
   executeCommand(command: Command): boolean {
-    command.execute();
+    try {
+      command.execute();
+    } catch (error) {
+      console.log(error);
+    }
     this.#undoStack.push(command);
     this.#redoStack = [];
     return true;
@@ -17,7 +21,11 @@ export class HistoryManager {
   undo(): boolean {
     const command = this.#undoStack.pop();
     if (!command) { return false; }
-    command.undo();
+    try {
+      command.undo();
+    } catch (error) {
+      console.log(error);
+    }
     this.#redoStack.push(command);
     return true;
   }
@@ -25,7 +33,11 @@ export class HistoryManager {
   redo(): boolean {
     const command = this.#redoStack.pop();
     if (!command) { return false; }
-    command.execute();
+    try {
+      command.execute();
+    } catch (error) {
+      console.log(error);
+    }
     this.#undoStack.push(command);
     return true;
   }

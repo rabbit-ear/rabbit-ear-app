@@ -11,6 +11,7 @@ import Panel from "./Panel.svelte";
 import { VertexBVH, EdgeBVH, FaceBVH } from "../../general/BVHGraph.ts";
 import { resize2 } from "rabbit-ear/math/vector.js";
 import { makeGraphUpdateEvent } from "../Updated.ts";
+import { validate } from "rabbit-ear/graph/validate/validate.js";
 
 export class CreasePattern implements Embedding {
   name: string = "creasePattern";
@@ -21,34 +22,40 @@ export class CreasePattern implements Embedding {
   #data: GraphData;
   #effects: (() => void)[];
 
+  graph: FOLD | undefined;
+
   #vertexBVH = $derived.by(() => {
+    console.log("CP vertex BVH");
     const _ = [
       this.#data.graphUpdate.reset,
       this.#data.graphUpdate.isomorphic,
       this.#data.graphUpdate.structural,
     ];
+    console.log("isvalid", validate(this.#data.frame.graph));
     return VertexBVH(this.#data.frame.graph);
   });
 
   #edgeBVH = $derived.by(() => {
+    console.log("CP edge BVH");
     const _ = [
       this.#data.graphUpdate.reset,
       this.#data.graphUpdate.isomorphic,
       this.#data.graphUpdate.structural,
     ];
+    console.log("isvalid", validate(this.#data.frame.graph));
     return EdgeBVH(this.#data.frame.graph);
   });
 
   #faceBVH = $derived.by(() => {
+    console.log("CP face BVH");
     const _ = [
       this.#data.graphUpdate.reset,
       this.#data.graphUpdate.isomorphic,
       this.#data.graphUpdate.structural,
     ];
+    console.log("isvalid", validate(this.#data.frame.graph));
     return FaceBVH(this.#data.frame.graph);
   });
-
-  graph: FOLD | undefined;
 
   // embeddingUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
   embeddingUpdate: GraphUpdateEvent = $derived.by(() => this.#data.graphUpdate);

@@ -6,6 +6,7 @@ import type { GraphData } from "../graphs/GraphData.svelte.ts";
 import { FileDocument } from "../app/FileDocument.svelte.ts";
 import { explodeAlongSeam } from "../general/seam.ts";
 import { translateVerticesCoords } from "../general/affine.ts";
+import { validate } from "rabbit-ear/graph/validate/validate.js";
 
 export class AffineTranslateCommand implements Command {
   // please construct an array with holes for newCoords with
@@ -30,9 +31,13 @@ export class AffineTranslateCommand implements Command {
       } else {
         this.previousVerticesCoords = graph.vertices_coords;
       }
+      // todo: this is building a bad graph. it is triggering an issue with
+      // facesWinding() method in rabbit ear.
+      // const newSelection = this.selection;
       const newSelection = this.shouldDetach && this.selection
         ? explodeAlongSeam(graph, this.selection)
         : this.selection;
+      console.log("execite() isvalid", validate(graph), graph);
       data.frame.selection = undefined;
       graph.vertices_coords = translateVerticesCoords(
         this.translate,
