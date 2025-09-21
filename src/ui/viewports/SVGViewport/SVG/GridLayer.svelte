@@ -3,7 +3,7 @@
   let { viewport }: { viewport: SVGViewport } = $props();
 
   const embeddingExists = $derived.by(() => {
-    const _ = viewport.embeddingUpdate;
+    const _ = viewport.embedding?.embeddingUpdate;
     return !!viewport.embedding?.graph;
   });
 </script>

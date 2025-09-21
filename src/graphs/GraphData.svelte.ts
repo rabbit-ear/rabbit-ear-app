@@ -16,16 +16,29 @@ import { strictSubcomplex, strictSubgraph, vertexSubgraph } from "../general/sub
 
 export class GraphData {
   metadata: FOLDFileMetadata = $state({});
-  frames: Frame[] = $state([]);
+
+  // frames: Frame[] = $state([]);
+  frames: Frame[] = [];
+
+  // frame: Frame = $derived.by(() => this.frames[this.frameIndex]);
+  // frame: Frame = $state(this.frames[this.#frameIndex]);
+  frame: Frame;
 
   // the signal to subscribe to instead of subscribing to frame or framesRaw, etc
   // todo: are we still using this? We're definitely using the ones on the embeddings.
   graphUpdate = $state<GraphUpdateEvent>(makeGraphUpdateEvent());
 
   // which frame index is currently selected by the app for rendering/modification
-  frameIndex: number = $state(0);
-
-  frame: Frame = $derived.by(() => this.frames[this.frameIndex]);
+  #frameIndex: number = $state(0);
+  get frameIndex(): number { return this.#frameIndex; }
+  set frameIndex(index: number) {
+    this.#frameIndex = index;
+    // this.frame = this.frames[this.#frameIndex];
+    this.frame = this.frames[index];
+    // this.graphUpdate.structural++;
+    this.graphUpdate.reset++;
+    console.log("new frame", this.frame);
+  }
 
   // style-related properties for every frame, like is it 2D, folded, etc..
   // frameAttributes: FrameAttributes = $derived.by(() => this.frame.sourceAttributes);
@@ -55,39 +68,42 @@ export class GraphData {
   // ));
 
   selectionFaceGraph: FOLD | undefined = $derived.by(() => {
-    console.log("selection face graph");
-    const _ = this.graphUpdate.selection;
+    console.log("GraphData(): selection face graph");
+    const _ = [
+      this.graphUpdate.selection,
+      this.graphUpdate.reset,
+      this.graphUpdate.structural,
+    ];
     try {
-      return strictSubcomplex(
-        this.frame.graph,
-        this.frame.selection ?? {},
-      );
+      return strictSubcomplex(this.frame.graph, this.frame.selection ?? {});
     } catch {
       return undefined;
     }
   });
 
   selectionEdgeGraph: FOLD | undefined = $derived.by(() => {
-    console.log("selection edge graph");
-    const _ = this.graphUpdate.selection;
+    console.log("GraphData(): selection edge graph");
+    const _ = [
+      this.graphUpdate.selection,
+      this.graphUpdate.reset,
+      this.graphUpdate.structural,
+    ];
     try {
-      return strictSubgraph(
-        this.frame.graph,
-        this.frame.selection ?? {},
-      );
+      return strictSubgraph(this.frame.graph, this.frame.selection ?? {});
     } catch {
       return undefined;
     }
   });
 
   selectionVertexGraph: FOLD | undefined = $derived.by(() => {
-    console.log("selection vertex graph");
-    const _ = this.graphUpdate.selection;
+    console.log("GraphData(): selection vertex graph");
+    const _ = [
+      this.graphUpdate.selection,
+      this.graphUpdate.reset,
+      this.graphUpdate.structural,
+    ];
     try {
-      return vertexSubgraph(
-        this.frame.graph,
-        this.frame.selection ?? {},
-      );
+      return vertexSubgraph(this.frame.graph, this.frame.selection ?? {});
     } catch {
       return undefined;
     }
@@ -132,6 +148,7 @@ export class GraphData {
 
     this.frames = frames
       .map(frame => new Frame(frame));
+    this.frame = this.frames[this.#frameIndex];
     this.metadata = getFileMetadata(fold);
 
     this.creasePattern = new CreasePattern(this);
@@ -139,7 +156,6 @@ export class GraphData {
     this.simulator = new Simulator(this);
 
     this.#effects = [
-      // this.#effectFrameChange(),
       this.#debug(),
     ];
   }
@@ -212,20 +228,9 @@ export class GraphData {
     }
   }
 
-  // #effectFrameChange() {
-  //   return $effect.root(() => {
-  //     $effect(() => {
-  //       const _ = this.frameIndex;
-  //       this.selection = undefined;
-  //     });
-  //     return () => { };
-  //   });
-  // }
-
   #debug() {
     return $effect.root(() => {
-      $effect(() => {
-      });
+      $effect(() => { });
       return () => { };
     })
   }

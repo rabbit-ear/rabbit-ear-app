@@ -27,8 +27,8 @@
       return;
     }
     viewport.embedding;
-    viewport.graphUpdate?.reset;
-    viewport.graphUpdate?.structural;
+    viewport.embedding?.embeddingUpdate?.reset;
+    viewport.embedding?.embeddingUpdate?.structural;
     // console.log("Component: WebGLModels: redraw", viewport.embeddingName);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     viewport.glModels.models.forEach((model) => drawGLModel(gl, version, model));

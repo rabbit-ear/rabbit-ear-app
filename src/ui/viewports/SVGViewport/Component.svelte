@@ -3,10 +3,8 @@
   import { SVGViewport } from "./SVGViewport.svelte.ts";
   import SVGCanvas from "./SVG/SVGCanvas.svelte";
   import GridLayer from "./SVG/GridLayer.svelte";
-  // import ModelLayer from "./ModelLayer.svelte";
   import SVGRulers from "./SVG/SVGRulers.svelte";
   import SVGFOLD from "./SVG/SVGFOLD.svelte";
-  // import { validate } from "rabbit-ear/graph/validate/validate.js";
 
   type PropsType = {
     viewport: SVGViewport;
@@ -16,11 +14,6 @@
   let { viewport, ...props }: PropsType = $props();
 
   let svg: SVGSVGElement | undefined = $state();
-
-  // const selection = $derived(viewport.embedding?.selectionGraph);
-  const selectedFaces = $derived(viewport.embedding?.selectionFaceGraph);
-  const selectedEdges = $derived(viewport.embedding?.selectionEdgeGraph);
-  const selectedVertices = $derived(viewport.embedding?.selectionVertexGraph);
 
   // https://www.youtube.com/live/nMs4X8-L_yo?feature=shared&t=1667
   const SVGToolLayer = $derived(viewport.layer);
@@ -74,15 +67,6 @@
 {#snippet everything()}
   {@render gridLayer()}
   <SVGFOLD rendering={viewport.rendering} />
-  <!-- {#if selectedFaces} -->
-  <!--   <SVGFOLD faceGraph={selectedFaces} {viewport} class="selection" /> -->
-  <!-- {/if} -->
-  <!-- {#if selectedEdges} -->
-  <!--   <SVGFOLD edgeGraph={selectedEdges} {viewport} class="selection" /> -->
-  <!-- {/if} -->
-  <!-- {#if selectedVertices} -->
-  <!--   <SVGFOLD vertexGraph={selectedVertices} {viewport} class="selection" /> -->
-  <!-- {/if} -->
   <SVGRulers shapes={viewport.rulers} {viewport} class="shapes-layer" />
   {@render toolLayer()}
 {/snippet}

@@ -46,9 +46,9 @@ export class FoldedFormEdges implements GLModel {
   vertexArrays: VertexArray[] = $derived.by(() => {
     if (!this.viewport.gl || !this.program) { return []; }
     const internalUpdate = this.#graphDidLoad;
-    const reset = this.viewport.graphUpdate?.reset;
-    const structural = this.viewport.graphUpdate?.structural;
-    const isomorphic = this.viewport.graphUpdate?.isomorphic.coords;
+    const reset = this.viewport.embedding?.embeddingUpdate?.reset;
+    const structural = this.viewport.embedding?.embeddingUpdate?.structural;
+    const isomorphic = this.viewport.embedding?.embeddingUpdate?.isomorphic.coords;
     return makeThickEdgesVertexArrays(
       this.viewport.gl,
       this.program,
@@ -59,9 +59,9 @@ export class FoldedFormEdges implements GLModel {
   elementArrays: ElementArray[] = $derived.by(() => {
     if (!this.viewport.gl) { return []; }
     const internalUpdate = this.#graphDidLoad;
-    const reset = this.viewport.graphUpdate?.reset;
-    const structural = this.viewport.graphUpdate?.structural;
-    const isomorphic = this.viewport.graphUpdate?.isomorphic.coords;
+    const reset = this.viewport.embedding?.embeddingUpdate?.reset;
+    const structural = this.viewport.embedding?.embeddingUpdate?.structural;
+    const isomorphic = this.viewport.embedding?.embeddingUpdate?.isomorphic.coords;
     return makeThickEdgesElementArrays(
       this.viewport.gl,
       this.viewport.version,
@@ -108,9 +108,9 @@ export class FoldedFormEdges implements GLModel {
   #effectLoadGraph(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const reset = this.viewport.graphUpdate?.reset;
-        const structural = this.viewport.graphUpdate?.structural;
-        const isomorphic = this.viewport.graphUpdate?.isomorphic.coords;
+        const reset = this.viewport.embedding?.embeddingUpdate?.reset;
+        const structural = this.viewport.embedding?.embeddingUpdate?.structural;
+        const isomorphic = this.viewport.embedding?.embeddingUpdate?.isomorphic.coords;
         this.#graph = this.viewport.embedding?.graph ?? {};
         this.#graphDidLoad++;
       });

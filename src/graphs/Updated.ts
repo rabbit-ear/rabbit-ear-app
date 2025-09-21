@@ -50,3 +50,15 @@ export const modifyGraphUpdate = (update: GraphUpdateEvent, modifier: GraphUpdat
   if (modifier.reset) { update.reset++; }
 };
 
+// writes the changes into a new graph update object. does not modify input objects
+export const joinGraphUpdates = (a: GraphUpdateEvent, b: GraphUpdateEvent): GraphUpdateEvent => ({
+  selection: a.selection + b.selection,
+  isomorphic: {
+    coords: a.isomorphic.coords + b.isomorphic.coords,
+    assignments: a.isomorphic.assignments + b.isomorphic.assignments,
+    foldAngles: a.isomorphic.foldAngles + b.isomorphic.foldAngles,
+  },
+  structural: a.structural + b.structural,
+  reset: a.reset + b.reset,
+});
+

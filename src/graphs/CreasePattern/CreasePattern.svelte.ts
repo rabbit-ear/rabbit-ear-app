@@ -152,6 +152,7 @@ export class CreasePattern implements Embedding {
   #effectGraphUpdate(): () => void {
     return $effect.root(() => {
       $effect(() => {
+        const _ = this.#data.graphUpdate.reset;
         this.setGraph(this.#data.frame.attributes.class === FrameClass.creasePattern
           ? this.#data.frame.graph
           : undefined);

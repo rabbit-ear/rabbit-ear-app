@@ -8,6 +8,9 @@ interface Keymap {
   listeners: Map<Action, KeyHandler[]>;
 }
 
+// todo: bugs where the control keys (cmd, ctr, alt) are sticky.
+// we might be able to fix this on all updates given that any key
+// (letter keys) will also transmit these states, maybe can prevent this.
 export class KeyboardManager {
   // #keys: Set<string> = $state(new Set<string>());
   #keys: { [key: string]: boolean } = $state({});

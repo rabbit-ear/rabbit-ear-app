@@ -9,16 +9,12 @@
   };
   let { getGlobalState, viewport }: PropsType = $props();
 
-  // let graph: FOLD = $state(viewport.embedding?.graph ?? {});
   let graph: FOLD = $state({});
 
   $effect(() => {
-    // viewport.graphUpdate?.isomorphic;
-    // viewport.graphUpdate?.structural;
-    // viewport.graphUpdate?.reset;
-    viewport.embeddingUpdate?.isomorphic;
-    viewport.embeddingUpdate?.structural;
-    viewport.embeddingUpdate?.reset;
+    viewport.embedding?.embeddingUpdate?.isomorphic;
+    viewport.embedding?.embeddingUpdate?.structural;
+    viewport.embedding?.embeddingUpdate?.reset;
     graph = viewport.embedding?.graph ?? {};
   });
 

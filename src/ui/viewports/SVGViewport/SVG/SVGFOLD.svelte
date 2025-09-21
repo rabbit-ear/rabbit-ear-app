@@ -6,14 +6,14 @@
     rendering: SVGRendering;
   };
 
-  $effect(() => {
-    console.log(
-      "!!! doing a new rendering",
-      rendering.vertices.length,
-      rendering.edges.length,
-      rendering.faces.length,
-    );
-  });
+  // $effect(() => {
+  //   console.log(
+  //     "!!! doing a new rendering",
+  //     rendering.vertices.length,
+  //     rendering.edges.length,
+  //     rendering.faces.length,
+  //   );
+  // });
 
   const { rendering, ...props }: PropsType & SVGAttributes<SVGGElement> = $props();
 </script>
@@ -53,35 +53,6 @@
 
   :global(.selection) circle {
     fill: var(--yellow);
-  }
-
-  /* faces */
-  polygon {
-    stroke: none;
-    fill: #fff1;
-  }
-
-  :global(.foldedForm) {
-    polygon {
-      stroke: none;
-      fill: #fff1;
-    }
-  }
-
-  :global(.creasePattern) {
-    polygon {
-      stroke: none;
-      /*fill: #fff1;*/
-      fill: #111;
-    }
-  }
-
-  :global(.selection) polygon,
-  :global(.selection .foldedForm) polygon,
-  :global(.selection .creasePattern) polygon {
-    stroke: none;
-    fill: var(--yellow);
-    opacity: 0.25;
   }
 
   /* edges */
@@ -136,5 +107,34 @@
   :global(.selection) .U,
   :global(.selection) .u {
     stroke: var(--yellow);
+  }
+
+  /* faces */
+  polygon {
+    stroke: none;
+    fill: #fff1;
+  }
+
+  :global(.foldedForm) {
+    polygon {
+      stroke: none;
+      fill: #fff1;
+    }
+  }
+
+  :global(.creasePattern) {
+    polygon {
+      stroke: none;
+      /*fill: #fff1;*/
+      fill: #111;
+    }
+  }
+
+  :global(.selection) polygon,
+  :global(.selection .foldedForm) polygon,
+  :global(.selection .creasePattern) polygon {
+    stroke: none;
+    fill: var(--yellow);
+    opacity: 0.25;
   }
 </style>

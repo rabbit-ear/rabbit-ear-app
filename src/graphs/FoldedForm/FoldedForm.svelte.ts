@@ -8,7 +8,7 @@ import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHG
 import type { FOLDSelection } from "../../general/selection.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
-import { makeGraphUpdateEvent } from "../Updated.ts";
+import { joinGraphUpdates, makeGraphUpdateEvent } from "../Updated.ts";
 import { FoldedVertices } from "./FoldedVertices.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
@@ -26,6 +26,10 @@ export class FoldedForm implements Embedding {
   graph: FOLD | undefined;
 
   // graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
+  // #update: GraphUpdateEvent = $derived.by(() => this.#data.graphUpdate);
+  #update: GraphUpdateEvent = $state(makeGraphUpdateEvent());
+  embeddingUpdate: GraphUpdateEvent = $derived
+    .by(() => joinGraphUpdates(this.#data.graphUpdate, this.#update));
 
   faceOrdersResult: { uuid: string, result: [number, number, number][] } | undefined = $state();
 
@@ -166,9 +170,7 @@ export class FoldedForm implements Embedding {
           this.#attributeDimension = getDimensionQuick(newGraph) ?? 3;
           this.#attributeHasLayerOrder = newGraph.faceOrders != null && newGraph.faceOrders.length > 0;
           this.attributes.hasLayerOrder = this.#attributeHasLayerOrder;
-          this.#data.graphUpdate.reset++;
-          // this.graphUpdate.reset++;
-          // console.log("$effect: set graph DONE");
+          this.#update.reset++;
         } catch (error) {
           console.log("caught error", error);
         }

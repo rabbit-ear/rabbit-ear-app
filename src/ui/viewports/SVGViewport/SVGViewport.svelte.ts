@@ -2,7 +2,6 @@ import type { Component } from "svelte";
 import type { Viewport } from "../Viewport.ts";
 import type { Embedding } from "../../../graphs/Embedding.ts";
 import type { Ruler } from "../../../rulers/Ruler.ts";
-import type { GraphData } from "../../../graphs/GraphData.svelte.ts";
 import type { GraphUpdateEvent } from "../../../graphs/Updated.ts";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
@@ -32,16 +31,11 @@ export class SVGViewport implements Viewport {
   view: SVGView;
   rendering: SVGRendering;
 
-  source: GraphData | undefined = $derived(context.fileManager.document?.data);
-  graphUpdate: GraphUpdateEvent | undefined = $derived(this.source?.graphUpdate);
-
-  // model?: Model = $state.raw();
-  // embeddingName = $derived.by(() => this.state.model);
   embeddingName = $state("creasePattern");
-  embedding?: Embedding = $derived(this.source?.[this.embeddingName]);
+  embedding?: Embedding = $derived(context.fileManager.document?.data?.[this.embeddingName]);
   embeddingUpdate: GraphUpdateEvent | undefined = $derived(this.embedding?.embeddingUpdate);
 
-  rulers?: Ruler[] = $derived(this.source?.frame.rulers.allRulers);
+  rulers?: Ruler[] = $derived(context.fileManager.document?.data?.frame.rulers.allRulers);
 
   // the SVG Viewport comes with the ability to instantiate a <g> layer.
   // currently, this is used by the tools to draw indicator marks.
@@ -68,7 +62,6 @@ export class SVGViewport implements Viewport {
     this.props = undefined;
   }
 
-  // empty
   dealloc(): void {
     this.rendering.dealloc();
   }

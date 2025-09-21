@@ -2,8 +2,6 @@ import type { Component } from "svelte";
 import type { Viewport } from "../Viewport";
 import type { Embedding } from "../../../graphs/Embedding.ts";
 import type { Ruler } from "../../../rulers/Ruler.ts";
-import type { GraphData } from "../../../graphs/GraphData.svelte.ts";
-import type { GraphUpdateEvent } from "../../../graphs/Updated.ts";
 import ViewportComponent from "./Component.svelte";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
@@ -36,14 +34,10 @@ export class WebGLViewport implements Viewport {
   gl: WebGLRenderingContext | WebGL2RenderingContext | undefined = $state();
   version: number = $state(2);
 
-  source: GraphData | undefined = $derived(context.fileManager.document?.data);
-
   embeddingName = $state("creasePattern");
-  embedding?: Embedding = $derived(this.source?.[this.embeddingName]);
+  embedding?: Embedding = $derived(context.fileManager.document?.data?.[this.embeddingName]);
 
-  rulers?: Ruler[] = $derived(this.source?.frame.rulers.allRulers);
-
-  graphUpdate: GraphUpdateEvent | undefined = $derived(this.source?.graphUpdate);
+  rulers?: Ruler[] = $derived(context.fileManager.document?.data?.frame.rulers.allRulers);
 
   // in the HTMLCanvas component, the window onresize event will be
   // be bound to this. this is also necessary for setting the canvasSize.

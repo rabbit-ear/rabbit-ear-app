@@ -57,8 +57,8 @@ export class FoldedFormFaces implements GLModel {
   vertexArrays: VertexArray[] = $derived.by(() => {
     if (!this.viewport.gl || !this.program) { return []; }
     const internalUpdate = this.#graphDidLoad;
-    const reset = this.viewport.graphUpdate?.reset;
-    const structural = this.viewport.graphUpdate?.structural;
+    const reset = this.viewport.embedding?.embeddingUpdate?.reset;
+    const structural = this.viewport.embedding?.embeddingUpdate?.structural;
     // console.log("FOLDED_FORM_FACES: vertexArrays: deriving new vertex arrays");
     return makeFoldedVertexArrays(
       this.viewport.gl,
@@ -70,8 +70,8 @@ export class FoldedFormFaces implements GLModel {
   elementArrays: ElementArray[] = $derived.by(() => {
     if (!this.viewport.gl) { return []; }
     const internalUpdate = this.#graphDidLoad;
-    const reset = this.viewport.graphUpdate?.reset;
-    const structural = this.viewport.graphUpdate?.structural;
+    const reset = this.viewport.embedding?.embeddingUpdate?.reset;
+    const structural = this.viewport.embedding?.embeddingUpdate?.structural;
     // console.log("FOLDED_FORM_FACES: elementArrays: deriving new vertex arrays");
     return makeFoldedElementArrays(
       this.viewport.gl,
@@ -123,8 +123,8 @@ export class FoldedFormFaces implements GLModel {
     return $effect.root(() => {
       $effect(() => {
         // console.log("FoldedFormFaces: effectLoadGraph()")
-        const reset = this.viewport.graphUpdate?.reset;
-        const structural = this.viewport.graphUpdate?.structural;
+        const reset = this.viewport.embedding?.embeddingUpdate?.reset;
+        const structural = this.viewport.embedding?.embeddingUpdate?.structural;
         const { graph, vertices_map } = prepareForRendering(
           this.viewport.embedding?.graph ?? {},
           { earcut, layerNudge: this.viewport.style.layersNudge },
@@ -140,7 +140,7 @@ export class FoldedFormFaces implements GLModel {
   #effectUpdateVertexBuffers(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const watch = this.viewport.graphUpdate?.isomorphic.coords;
+        const watch = this.viewport.embedding?.embeddingUpdate?.isomorphic.coords;
         untrack(() => {
           // this follows a similar formula to the "set graph effect",
           // we grab the graph from the embedding (not from the local copy),

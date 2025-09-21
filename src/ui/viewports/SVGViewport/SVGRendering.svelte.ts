@@ -1,5 +1,6 @@
 import { resize2 } from "rabbit-ear/math/vector.js";
 import type { SVGViewport } from "./SVGViewport.svelte.ts";
+import type { FOLD } from "rabbit-ear/types.js";
 
 const angleToOpacity = (angle?: number): string =>
   angle === undefined ||
@@ -10,15 +11,19 @@ const angleToOpacity = (angle?: number): string =>
     ? "1"
     : String(Math.abs(angle) / 180);
 
+// this class will watch for the SVGViewport's embedding's graph,
+// build SVG Element definitions for the components of the graph,
+// and trigger a reactive update of the graph when necessary.
 export class SVGRendering {
   viewport: SVGViewport;
 
-  graph = $state({});
+  graph: FOLD = $state({});
+  // todo: thought this might work but i guess not
   // graph = $derived.by(() => {
   //   const _ = [
-  //     this.viewport.embeddingUpdate?.reset,
-  //     this.viewport.embeddingUpdate?.isomorphic,
-  //     this.viewport.embeddingUpdate?.structural,
+  //     this.viewport.embedding?.embeddingUpdate?.reset,
+  //     this.viewport.embedding?.embeddingUpdate?.isomorphic,
+  //     this.viewport.embedding?.embeddingUpdate?.structural,
   //   ];
   //   console.log("refreshing SVG Rendering's graph");
   //   return this.viewport.embedding?.graph;
@@ -32,6 +37,11 @@ export class SVGRendering {
   file_classes = $derived(this.graph?.file_classes ?? []);
   frame_classes = $derived(this.graph?.frame_classes ?? []);
   className = $derived(this.file_classes.concat(this.frame_classes).join(" "));
+
+  // const selection = $derived(viewport.embedding?.selectionGraph);
+  selectedFaces = $derived.by(() => this.viewport.embedding?.selectionFaceGraph);
+  selectedEdges = $derived.by(() => this.viewport.embedding?.selectionEdgeGraph);
+  selectedVertices = $derived.by(() => this.viewport.embedding?.selectionVertexGraph);
 
   // vertices
   vertices_coords2: [number, number][] = $derived((this.graph?.vertices_coords ?? [])
@@ -103,16 +113,19 @@ export class SVGRendering {
     return $effect.root(() => {
       $effect(() => {
         const _ = [
-          // viewport.graphUpdate?.structural;
-          // viewport.graphUpdate?.isomorphic;
-          // viewport.graphUpdate?.reset;
+          this.viewport.embedding,
           this.viewport.embedding?.embeddingUpdate?.structural,
           this.viewport.embedding?.embeddingUpdate?.isomorphic,
           this.viewport.embedding?.embeddingUpdate?.reset,
         ];
-        this.graph = { ...this.viewport.embedding?.graph };
+        // this.graph = { ...this.viewport.embedding?.graph };
+        const graph = this.viewport.embedding?.graph;
+        console.log("CP Graph Update", graph);
+        // tood: switching frames to a foldedForm, this updates irregularly,
+        // graph is sometimes populated and sometimes not (it should be not)
+        this.graph = graph ? { ...graph } : {};
       });
       return () => { };
-    })
+    });
   }
 }
