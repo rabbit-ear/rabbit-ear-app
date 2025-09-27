@@ -1,12 +1,7 @@
 import type { WebGLViewport } from "../../WebGLViewport.svelte.ts";
 import type { ElementArray, GLModel, VertexArray } from "../../GLModel.ts";
 import { createProgram } from "rabbit-ear/webgl/general/webgl.js";
-import { dark, light } from "rabbit-ear/webgl/general/colors.js";
 import { makeUniforms } from "./uniforms.ts";
-import {
-  makeCPEdgesVertexArrays,
-  makeCPEdgesElementArrays,
-} from "./arrays.js";
 import thick_edges_100_vert from "./shaders/thick-edges-100.vert?raw";
 import thick_edges_100_frag from "./shaders/thick-edges-100.frag?raw";
 import thick_edges_300_vert from "./shaders/thick-edges-300.vert?raw";
@@ -38,25 +33,52 @@ export class CreasePatternEdges implements GLModel {
 
   vertexArrays: VertexArray[] = $derived.by(() => {
     if (!this.viewport.gl || !this.program) { return []; }
-    const reset = this.viewport.embedding?.embeddingUpdate?.reset;
-    const structural = this.viewport.embedding?.embeddingUpdate?.structural;
-    const isomorphic = this.viewport.embedding?.embeddingUpdate?.isomorphic.coords;
-    return makeCPEdgesVertexArrays(
-      this.viewport.gl,
-      this.program,
-      this.viewport.embedding?.graph ?? {},
-      this.viewport.style.darkMode ? { ...dark } : { ...light })
+    return [
+      {
+        location: this.viewport.gl?.getAttribLocation(this.program, "v_position"),
+        buffer: this.viewport.gl?.createBuffer(),
+        type: this.viewport.gl?.FLOAT,
+        length: 2,
+        data: this.viewport.rendering.cp.vertexArrayThickEdgesVerticesCoords,
+      },
+      {
+        location: this.viewport.gl?.getAttribLocation(this.program, "v_color"),
+        buffer: this.viewport.gl?.createBuffer(),
+        type: this.viewport.gl?.FLOAT,
+        length: 3,
+        data: this.viewport.rendering.cp.vertexArrayThickEdgesVerticesColor,
+      },
+      {
+        location: this.viewport.gl?.getAttribLocation(this.program, "edge_vector"),
+        buffer: this.viewport.gl?.createBuffer(),
+        type: this.viewport.gl?.FLOAT,
+        length: 2,
+        data: this.viewport.rendering.cp.vertexArrayThickEdgesVerticesEdgesVector,
+      },
+      {
+        location: this.viewport.gl?.getAttribLocation(this.program, "edge_foldAngle"),
+        buffer: this.viewport.gl?.createBuffer(),
+        type: this.viewport.gl?.FLOAT,
+        length: 1,
+        data: this.viewport.rendering.cp.vertexArrayThickEdgesVerticesFoldAngle,
+      },
+      {
+        location: this.viewport.gl?.getAttribLocation(this.program, "vertex_vector"),
+        buffer: this.viewport.gl?.createBuffer(),
+        type: this.viewport.gl?.FLOAT,
+        length: 2,
+        data: this.viewport.rendering.cp.vertexArrayThickEdgesVerticesVector,
+      },
+    ].filter((el) => el.location !== -1);
   });
 
   elementArrays: ElementArray[] = $derived.by(() => {
     if (!this.viewport.gl) { return []; }
-    const reset = this.viewport.embedding?.embeddingUpdate?.reset;
-    const structural = this.viewport.embedding?.embeddingUpdate?.structural;
-    const isomorphic = this.viewport.embedding?.embeddingUpdate?.isomorphic.coords;
-    return makeCPEdgesElementArrays(
-      this.viewport.gl,
-      this.viewport.version,
-      this.viewport.embedding?.graph ?? {})
+    return [{
+      mode: this.viewport.gl?.TRIANGLES,
+      buffer: this.viewport.gl?.createBuffer(),
+      data: this.viewport.rendering.cp.elementArrayThickEdges,
+    }];
   });
 
   flags: number[] = $state([]);
@@ -87,9 +109,7 @@ export class CreasePatternEdges implements GLModel {
 
   #deleteProgram(): () => void {
     return $effect.root(() => {
-      $effect(() => {
-        const _ = this.program;
-      });
+      $effect(() => { const _ = this.program; });
       return () => {
         if (this.program && this.viewport.gl) {
           this.viewport.gl.deleteProgram(this.program);
@@ -100,9 +120,7 @@ export class CreasePatternEdges implements GLModel {
 
   #deleteVertexArrays(): () => void {
     return $effect.root(() => {
-      $effect(() => {
-        const _ = this.vertexArrays;
-      });
+      $effect(() => { const _ = this.vertexArrays; });
       return () => {
         if (this.viewport.gl) {
           this.vertexArrays.forEach(v => v.buffer && this.viewport.gl?.deleteBuffer(v.buffer));
@@ -113,9 +131,7 @@ export class CreasePatternEdges implements GLModel {
 
   #deleteElementArrays(): () => void {
     return $effect.root(() => {
-      $effect(() => {
-        const _ = this.elementArrays;
-      });
+      $effect(() => { const _ = this.elementArrays; });
       return () => {
         if (this.viewport.gl) {
           this.elementArrays.forEach(e => e.buffer && this.viewport.gl?.deleteBuffer(e.buffer));

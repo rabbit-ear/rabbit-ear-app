@@ -10,7 +10,6 @@ import { FrameClass, type FrameAttributes } from "../FrameAttributes.ts";
 import Panel from "./Panel.svelte";
 import { VertexBVH, EdgeBVH, FaceBVH } from "../../general/BVHGraph.ts";
 import { resize2 } from "rabbit-ear/math/vector.js";
-import { makeGraphUpdateEvent } from "../Updated.ts";
 import { validate } from "rabbit-ear/graph/validate/validate.js";
 
 export class CreasePattern implements Embedding {
@@ -25,39 +24,35 @@ export class CreasePattern implements Embedding {
   graph: FOLD | undefined;
 
   #vertexBVH = $derived.by(() => {
-    console.log("CP vertex BVH");
     const _ = [
       this.#data.graphUpdate.reset,
-      this.#data.graphUpdate.isomorphic,
       this.#data.graphUpdate.structural,
+      this.#data.graphUpdate.isomorphic.coords,
     ];
-    console.log("isvalid", validate(this.#data.frame.graph));
+    // if (validate(this.#data.frame.graph).length) { console.log("!!! BVH vertex graph not valid!"); }
     return VertexBVH(this.#data.frame.graph);
   });
 
   #edgeBVH = $derived.by(() => {
-    console.log("CP edge BVH");
     const _ = [
       this.#data.graphUpdate.reset,
-      this.#data.graphUpdate.isomorphic,
       this.#data.graphUpdate.structural,
+      this.#data.graphUpdate.isomorphic.coords,
     ];
-    console.log("isvalid", validate(this.#data.frame.graph));
+    // if (validate(this.#data.frame.graph).length) { console.log("!!! BVH edge graph not valid!"); }
     return EdgeBVH(this.#data.frame.graph);
   });
 
   #faceBVH = $derived.by(() => {
-    console.log("CP face BVH");
     const _ = [
       this.#data.graphUpdate.reset,
-      this.#data.graphUpdate.isomorphic,
       this.#data.graphUpdate.structural,
+      this.#data.graphUpdate.isomorphic.coords,
     ];
-    console.log("isvalid", validate(this.#data.frame.graph));
+    // if (validate(this.#data.frame.graph).length) { console.log("!!! BVH face graph not valid!"); }
     return FaceBVH(this.#data.frame.graph);
   });
 
-  // embeddingUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
   embeddingUpdate: GraphUpdateEvent = $derived.by(() => this.#data.graphUpdate);
 
   frameLinked = $derived.by(() => this.#data.frame.attributes.isParent
@@ -80,11 +75,6 @@ export class CreasePattern implements Embedding {
   get attributes(): FrameAttributes { return this.#data.frame.attributes; }
 
   get selection(): FOLDSelection | undefined { return this.#data.frame.selection; }
-
-  // get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
-  get selectionFaceGraph(): FOLD | undefined { return this.#data.selectionFaceGraph; }
-  get selectionEdgeGraph(): FOLD | undefined { return this.#data.selectionEdgeGraph; }
-  get selectionVertexGraph(): FOLD | undefined { return this.#data.selectionVertexGraph; }
 
   // userLocked: boolean | undefined = $state(undefined);
   // sourceIsCreasePattern: boolean = $derived.by(() => this.#data.frameAttributes.isCreasePattern);

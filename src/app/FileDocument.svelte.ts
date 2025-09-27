@@ -113,9 +113,9 @@ export class FileDocument {
     return this.#data.mutateGraph(mutator);
   }
 
-  updateFrameNew(mutator: (frame: Frame) => (GraphUpdateModifier | undefined), dirty?: boolean) {
+  updateFrame(mutator: (frame: Frame) => (GraphUpdateModifier | undefined), dirty?: boolean) {
     if (dirty !== false) { this.#isDirty = true; }
-    return this.#data.mutateFrameNew(mutator);
+    return this.#data.mutateFrame(mutator);
   }
 
   updateData(mutator: (data: GraphData) => (GraphUpdateModifier | undefined), dirty?: boolean) {

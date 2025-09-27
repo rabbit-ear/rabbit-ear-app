@@ -1,6 +1,7 @@
 import { resize2 } from "rabbit-ear/math/vector.js";
 import type { SVGViewport } from "./SVGViewport.svelte.ts";
 import type { FOLD } from "rabbit-ear/types.js";
+import { SvelteSet } from "svelte/reactivity";
 
 const angleToOpacity = (angle?: number): string =>
   angle === undefined ||
@@ -18,16 +19,6 @@ export class SVGRendering {
   viewport: SVGViewport;
 
   graph: FOLD = $state({});
-  // todo: thought this might work but i guess not
-  // graph = $derived.by(() => {
-  //   const _ = [
-  //     this.viewport.embedding?.embeddingUpdate?.reset,
-  //     this.viewport.embedding?.embeddingUpdate?.isomorphic,
-  //     this.viewport.embedding?.embeddingUpdate?.structural,
-  //   ];
-  //   console.log("refreshing SVG Rendering's graph");
-  //   return this.viewport.embedding?.graph;
-  // });
 
   // metadata
   showVertices = $derived.by(() => this.viewport.style.showVertices ?? false);
@@ -38,21 +29,20 @@ export class SVGRendering {
   frame_classes = $derived(this.graph?.frame_classes ?? []);
   className = $derived(this.file_classes.concat(this.frame_classes).join(" "));
 
-  // const selection = $derived(viewport.embedding?.selectionGraph);
-  selectedFaces = $derived.by(() => this.viewport.embedding?.selectionFaceGraph);
-  selectedEdges = $derived.by(() => this.viewport.embedding?.selectionEdgeGraph);
-  selectedVertices = $derived.by(() => this.viewport.embedding?.selectionVertexGraph);
+  selectedVertices: SvelteSet<number> | undefined = $state();
+  selectedEdges: SvelteSet<number> | undefined = $state();
+  selectedFaces: SvelteSet<number> | undefined = $state();
 
   // vertices
   vertices_coords2: [number, number][] = $derived((this.graph?.vertices_coords ?? [])
     .map(resize2));
   // .map((points) => points.map((point) => point.map((n) => n.toFixed(4))))
 
-  // edges
-  edges_vertices = $derived(this.graph?.edges_vertices ?? []);
-  edges_assignment = $derived(this.graph?.edges_assignment ?? []);
-  edges_foldAngle = $derived(this.graph?.edges_foldAngle ?? []);
+  verticesClass: string[] = $derived((this.graph?.vertices_coords ?? [])
+    .map((_, i) => [this.selectedVertices?.has(i) ? "selected" : undefined])
+    .map(arr => arr.filter(a => a !== undefined).join(" ")));
 
+  // edges
   edgesCoords: [[number, number], [number, number]][] = $derived((this.graph?.edges_vertices ?? [])
     .map((ev) => [this.vertices_coords2[ev[0]] ?? [0, 0], this.vertices_coords2[ev[1]] ?? [0, 0]]));
 
@@ -67,6 +57,13 @@ export class SVGRendering {
   edgesLines: { x1: number, y1: number, x2: number, y2: number }[] = $derived(this.edgesCoords
     .map((s) => ({ x1: s[0][0], y1: s[0][1], x2: s[1][0], y2: s[1][1] })));
 
+  edgesClass: string[] = $derived((this.graph?.edges_vertices ?? [])
+    .map((_, i) => [
+      this.edgesAssignments[i],
+      this.selectedEdges?.has(i) ? "selected" : undefined,
+    ])
+    .map(arr => arr.filter(a => a !== undefined).join(" ")));
+
   // faces
   facesCoords: [number, number][][] = $derived((this.graph?.faces_vertices ?? [])
     .map((fv) => (fv ?? []).map(v => this.vertices_coords2[v] ?? [0, 0])));
@@ -74,12 +71,19 @@ export class SVGRendering {
   facesPoints: string[] = $derived(this.facesCoords
     .map((points) => points.map((point) => point.join(",")).join(" ")));
 
-  facesSide: string[] = $derived((this.graph?.faces_vertices ?? [])
-    .map(() => "front"));
+  facesSide: boolean[] = $derived((this.graph?.faces_vertices ?? [])
+    .map(() => true));
+
+  facesClass: string[] = $derived((this.graph?.faces_vertices ?? [])
+    .map((_, i) => [
+      this.facesSide[i] ? "front" : undefined,
+      this.selectedFaces?.has(i) ? "selected" : undefined,
+    ])
+    .map(arr => arr.filter(a => a !== undefined).join(" ")));
 
   // renderable components
   vertices: { cx: number, cy: number }[] = $derived(this.vertices_coords2
-    .map(([cx, cy]) => ({ cx, cy })));
+    .map(([cx, cy], i) => ({ cx, cy, class: this.verticesClass[i] })));
 
   edges: {
     x1: number,
@@ -91,18 +95,22 @@ export class SVGRendering {
   }[] = $derived(this.edgesLines
     .map((el, i) => ({
       ...el,
-      class: this.edgesAssignments[i] ?? "U",
+      class: this.edgesClass[i],
       opacity: this.edgesOpacities[i] ?? "1",
     })));
 
   faces: { points: string, class: string }[] = $derived(this.facesPoints
-    .map((points, i) => ({ points, class: this.facesSide[i] ?? "front" })));
+    .map((points, i) => ({ points, class: this.facesClass[i] })));
 
   #effects: (() => void)[] = [];
 
   constructor(viewport: SVGViewport) {
     this.viewport = viewport;
-    this.#effects = [this.#effectGraph()];
+    this.#effects = [
+      this.#effectGraph(),
+      this.#effectSetSelection(),
+      this.#effectSetEdgesAttributes(),
+    ];
   }
 
   dealloc(): void {
@@ -113,17 +121,48 @@ export class SVGRendering {
     return $effect.root(() => {
       $effect(() => {
         const _ = [
+          // everything except for selection, and from isomorphic only coords
           this.viewport.embedding,
           this.viewport.embedding?.embeddingUpdate?.structural,
-          this.viewport.embedding?.embeddingUpdate?.isomorphic,
+          this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
           this.viewport.embedding?.embeddingUpdate?.reset,
         ];
-        // this.graph = { ...this.viewport.embedding?.graph };
+        console.log("SVGRendering(): update graph");
+        this.graph = this.viewport.embedding?.graph ? { ...this.viewport.embedding?.graph } : {};
+      });
+      return () => { };
+    });
+  }
+
+  #effectSetEdgesAttributes(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = [
+          this.viewport.embedding?.embeddingUpdate?.isomorphic.assignments,
+          this.viewport.embedding?.embeddingUpdate?.isomorphic.foldAngles,
+        ];
+        console.log("SVGRendering(): update edge attributes");
         const graph = this.viewport.embedding?.graph;
-        console.log("CP Graph Update", graph);
-        // tood: switching frames to a foldedForm, this updates irregularly,
-        // graph is sometimes populated and sometimes not (it should be not)
-        this.graph = graph ? { ...graph } : {};
+        this.edgesAssignments = (graph?.edges_vertices ?? [])
+          .map((_, i) => graph?.edges_assignment?.[i] ?? "U");
+        this.edgesOpacities = (graph?.edges_vertices ?? [])
+          .map((_, i) => graph?.edges_foldAngle?.[i])
+          .map(angleToOpacity);
+      });
+      return () => { };
+    });
+  }
+
+  #effectSetSelection(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = [
+          this.viewport.embedding?.embeddingUpdate?.selection,
+        ];
+        console.log("SVGRendering(): update selection");
+        this.selectedVertices = new SvelteSet(this.viewport.embedding?.selection?.vertices);
+        this.selectedEdges = new SvelteSet(this.viewport.embedding?.selection?.edges);
+        this.selectedFaces = new SvelteSet(this.viewport.embedding?.selection?.faces);
       });
       return () => { };
     });

@@ -1,6 +1,8 @@
 import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.d.ts";
 import { flattenFrame } from "rabbit-ear/fold/frames.js";
 import { clone } from "rabbit-ear/general/clone.js";
+import { normalize3 } from "rabbit-ear/math/vector.js";
+import { makeFacesEdgesFromVertices } from "rabbit-ear/graph/make/facesEdges.js";
 
 // modifies input list in place
 export const prepareFOLDFrames = (frames: FOLDChildFrame[]): FOLDChildFrame[] => {
@@ -106,4 +108,61 @@ export const flattenFrameInArray = (frames: FOLDChildFrame[], frameNumber = 0): 
   // return clone(flattened);
   return flattened;
 };
+
+export const makeVerticesFacesSimple = ({ vertices_coords, faces_vertices }: FOLD): number[][] => {
+  const vertices_faces: number[][] = (vertices_coords ?? []).map(() => []);
+  faces_vertices?.forEach((face, f) => {
+    // in the case that one face visits the same vertex multiple times,
+    // use a set to allow one occurence of each vertex index.
+    const set: Set<number> = new Set();
+    face.forEach((vertex) => set.add(vertex));
+    set.forEach(v => vertices_faces[v].push(f));
+  });
+  return vertices_faces;
+};
+
+export const makeVerticesNormal = ({
+  vertices_coords, faces_vertices, faces_normal
+}: FOLD & { faces_normal: [number, number, number][] }) => {
+  const vertices_normals: [number, number, number][] = (vertices_coords ?? []).map(() => [0, 0, 0]);
+
+  faces_vertices?.forEach((vertices, f) =>
+    vertices.forEach((v) => {
+      vertices_normals[v][0] += faces_normal[f][0];
+      vertices_normals[v][1] += faces_normal[f][1];
+      vertices_normals[v][2] += faces_normal[f][2];
+    }),
+  );
+
+  // normalize all summed vectors and return them
+  return vertices_normals.map((v) => normalize3(v));
+};
+
+export const getFaceEdgeIsJoined = ({ edges_vertices, edges_assignment, faces_vertices, faces_edges }: FOLD): boolean[][] => {
+  if (!faces_edges) { faces_edges = makeFacesEdgesFromVertices({ edges_vertices, faces_vertices }) };
+  if (edges_assignment) {
+    return faces_edges.map((edges) =>
+      edges.map((e) => edges_assignment[e]).map((a) => a === "J" || a === "j"),
+    );
+  }
+  return faces_vertices ? faces_vertices.map((arr) => arr.map(() => false)) : [];
+};
+
+export const getVerticesBarycentric = (vertices_coords3: [number, number, number][], facesEdgesIsJoined: boolean[][]) => {
+  const vertices_barycentric: [number, number, number][] = vertices_coords3
+    .map((_, i) => i % 3)
+    .map((n) => [n === 0 ? 1 : 0, n === 1 ? 1 : 0, n === 2 ? 1 : 0]);
+  for (let i = 0; i < facesEdgesIsJoined.length; i += 1) {
+    if (facesEdgesIsJoined[i][0]) {
+      vertices_barycentric[i * 3 + 0][2] = vertices_barycentric[i * 3 + 1][2] = 100;
+    }
+    if (facesEdgesIsJoined[i][1]) {
+      vertices_barycentric[i * 3 + 1][0] = vertices_barycentric[i * 3 + 2][0] = 100;
+    }
+    if (facesEdgesIsJoined[i][2]) {
+      vertices_barycentric[i * 3 + 0][1] = vertices_barycentric[i * 3 + 2][1] = 100;
+    }
+  }
+  return vertices_barycentric;
+}
 

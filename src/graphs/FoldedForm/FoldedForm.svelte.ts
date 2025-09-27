@@ -8,7 +8,7 @@ import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHG
 import type { FOLDSelection } from "../../general/selection.ts";
 // import type { Shape } from "../../geometry/shapes.ts";
 import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
-import { joinGraphUpdates, makeGraphUpdateEvent } from "../Updated.ts";
+import { makeGraphUpdateEvent } from "../Updated.ts";
 import { FoldedVertices } from "./FoldedVertices.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import Panel from "./Panel.svelte";
@@ -17,26 +17,46 @@ export class FoldedForm implements Embedding {
   name: string = "foldedForm";
   abbreviation: string = "folded";
   panel: Component = Panel;
+  settings: Settings;
 
   #data: GraphData;
-  folded: FoldedVertices;
-  settings: Settings;
+  #folded: FoldedVertices;
   #effects: (() => void)[];
 
-  graph: FOLD | undefined;
+  faceOrdersWorker: Worker;
 
-  // graphUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
-  // #update: GraphUpdateEvent = $derived.by(() => this.#data.graphUpdate);
-  #update: GraphUpdateEvent = $state(makeGraphUpdateEvent());
-  embeddingUpdate: GraphUpdateEvent = $derived
-    .by(() => joinGraphUpdates(this.#data.graphUpdate, this.#update));
+  #vertices_coords: [number, number][] | [number, number, number][] | undefined;
+  #faceOrders: [number, number, number][] | undefined;
 
-  faceOrdersResult: { uuid: string, result: [number, number, number][] } | undefined = $state();
-
-  faceOrdersError: { uuid: string, error: Error } | undefined = $state();
+  #faceOrdersResult: { uuid: string, result: [number, number, number][] } | undefined = $state.raw();
+  #faceOrdersError: { uuid: string, error: Error } | undefined = $state();
 
   #attributeDimension: number = $state(3);
   #attributeHasLayerOrder: boolean = $state(false);
+
+  get graph(): FOLD | undefined {
+    return {
+      ...this.#data.frame.graph,
+      frame_classes: ["foldedForm"],
+      vertices_coords: this.#vertices_coords ?? [],
+      faceOrders: this.#faceOrders ?? [],
+    };
+  };
+
+  #graphUpdate: GraphUpdateEvent = $derived.by(() => this.#data.graphUpdate);
+  #update: GraphUpdateEvent = $state(makeGraphUpdateEvent());
+  embeddingUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
+  // embeddingUpdate: GraphUpdateEvent = $derived({
+  //   isomorphic: {
+  //     coords: this.#data.graphUpdate.isomorphic.coords + this.#update.isomorphic.coords,
+  //     assignments: this.#data.graphUpdate.isomorphic.assignments + this.#update.isomorphic.assignments,
+  //     foldAngles: this.#data.graphUpdate.isomorphic.foldAngles + this.#update.isomorphic.foldAngles,
+  //     faceOrders: this.#data.graphUpdate.isomorphic.faceOrders + this.#update.isomorphic.faceOrders,
+  //   },
+  //   reset: this.#data.graphUpdate.reset + this.#update.reset,
+  //   structural: this.#data.graphUpdate.structural + this.#update.structural,
+  //   selection: this.#data.graphUpdate.selection + this.#update.selection,
+  // });
 
   // get attributes() { return this.#data.frame.attributes; }
   // attributes = $derived.by(() => this.#data.frame.attributes);
@@ -44,43 +64,9 @@ export class FoldedForm implements Embedding {
     ...this.#data.frame.attributes,
     hasLayerOrder: this.#attributeHasLayerOrder,
     dimension: this.#attributeDimension,
-    // hasLayerOrder: true,
   }) as FrameAttributes);
 
   get selection(): FOLDSelection | undefined { return this.#data.frame.selection; }
-
-  // get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
-  // get selectionFaceGraph(): FOLD | undefined { return this.#data.selectionFaceGraph; }
-  // get selectionEdgeGraph(): FOLD | undefined { return this.#data.selectionEdgeGraph; }
-  // get selectionVertexGraph(): FOLD | undefined { return this.#data.selectionVertexGraph; }
-  selectionFaceGraph: FOLD | undefined = $derived.by(() => {
-    const graph = { ...this.#data.selectionFaceGraph };
-    // if (graph && graph.vertices_coords && this.folded.vertices_coords) {
-    //   graph.vertices_coords = graph.vertices_coords
-    //     .map((_, i) => this.folded.vertices_coords![i]);
-    // }
-    return graph;
-  });
-
-  selectionEdgeGraph: FOLD | undefined = $derived.by(() => {
-    const graph = { ...this.#data.selectionEdgeGraph };
-    // if (graph && graph.vertices_coords && this.folded.vertices_coords) {
-    //   graph.vertices_coords = graph.vertices_coords
-    //     .map((_, i) => this.folded.vertices_coords![i]);
-    // }
-    return graph;
-  });
-
-  selectionVertexGraph: FOLD | undefined = $derived.by(() => {
-    const graph = { ...this.#data.selectionVertexGraph };
-    // if (graph && graph.vertices_coords && this.folded.vertices_coords) {
-    //   graph.vertices_coords = graph.vertices_coords
-    //     .map((_, i) => this.folded.vertices_coords![i]);
-    // }
-    return graph;
-  });
-
-  faceOrdersWorker: Worker;
 
   // todo
   get snapPoints(): [number, number][] {
@@ -89,18 +75,21 @@ export class FoldedForm implements Embedding {
   }
 
   get errors(): string[] {
-    return [this.folded.error, this.faceOrdersError?.error]
+    return [this.#folded.error, this.#faceOrdersError?.error]
       .filter(a => a !== undefined)
       .map(error => String(error));
   }
 
   constructor(data: GraphData) {
     this.#data = data;
-    this.folded = new FoldedVertices(this, data);
+    this.#folded = new FoldedVertices(data);
     this.settings = new Settings();
     this.#effects = [
-      this.#effectSetGraph(),
-      this.#effectFaceOrders(),
+      this.#effectFaceOrdersSend(),
+      this.#effectFaceOrdersReceive(),
+      this.#effectFoldedVertices(),
+      this.#effectGraphUpdate(),
+      this.#effectDebug(),
     ];
     // console.log("FoldedForm: constructor()", context.workerManager.faceOrders);
     this.faceOrdersWorker = new Worker(
@@ -120,15 +109,16 @@ export class FoldedForm implements Embedding {
 
   onFaceOrdersMessage({ data }: MessageEvent) {
     // console.log("LayerOrder worker responded with a message", data.result);
-    this.faceOrdersError = undefined;
-    this.faceOrdersResult = { uuid: data.uuid, result: data.result };
+    this.#faceOrdersError = undefined;
+    this.#faceOrdersResult = { uuid: data.uuid, result: data.result };
   }
 
   onFaceOrdersError(error: ErrorEvent) {
     console.log("LayerOrder worker responded with an error", error);
-    this.faceOrdersResult = undefined;
-    // this.faceOrdersError = { uuid: error.uuid, error: error.error };
-    this.faceOrdersError = { uuid: "", error: error.error };
+    this.#faceOrdersResult = undefined;
+    this.#faceOrdersError = { uuid: "", error: error.error };
+    // todo implement uuid on the error web worker
+    // this.#faceOrdersError = { uuid: error.uuid, error: error.error };
   }
 
   nearestVertex(point: [number, number]): VertexBVHType {
@@ -150,51 +140,130 @@ export class FoldedForm implements Embedding {
     return undefined;
   }
 
-  // conditions for updating the graph: 
-  // - it always updates (any changes to the source frame)
-  #effectSetGraph(): () => void {
+  #effectFoldedVertices(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        try {
-          console.log("$effect: set graph", this.#data.frame.graph, this.folded.vertices_coords);
-          const newGraph = { ...this.#data.frame.graph };
-          newGraph.frame_classes = ["foldedForm"];
-          if (this.settings.foldVerticesCoords && this.folded.vertices_coords !== undefined) {
-            newGraph.vertices_coords = this.folded.vertices_coords;
-          }
-          if (this.faceOrdersResult && this.faceOrdersResult.uuid === this.#data.frame.uuid) {
-            newGraph.faceOrders = $state
-              .snapshot(this.faceOrdersResult.result) as [number, number, number][];
-          }
-          this.graph = newGraph;
-          this.#attributeDimension = getDimensionQuick(newGraph) ?? 3;
-          this.#attributeHasLayerOrder = newGraph.faceOrders != null && newGraph.faceOrders.length > 0;
-          this.attributes.hasLayerOrder = this.#attributeHasLayerOrder;
-          this.#update.reset++;
-        } catch (error) {
-          console.log("caught error", error);
+        if (!this.settings.foldVerticesCoords) {
+          this.#vertices_coords = this.#data.frame.graph?.vertices_coords;
+          this.#update.isomorphic.coords++;
+          return;
         }
+        console.log("$effect: FoldedForm(): folded vertices");
+        this.#vertices_coords = this.#folded.vertices_coords;
+        try {
+          this.#attributeDimension = getDimensionQuick({ vertices_coords: this.#vertices_coords }) ?? 3;
+        } catch {
+          this.#attributeDimension = 3;
+        }
+        this.#update.isomorphic.coords++;
       });
       return () => { };
     });
   }
 
-  #effectFaceOrders(): () => void {
+  #effectFaceOrdersSend(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        // console.log("$effect: posting message to face-orders worker...");
-        if (!this.settings.solveFaceOrders) {
-          this.faceOrdersResult = undefined;
+        const _ = [
+          this.#data.graphUpdate.reset,
+          this.#data.graphUpdate.structural,
+          this.#data.graphUpdate.isomorphic.coords,
+        ];
+        // const _ = [
+        //   this.embeddingUpdate.reset,
+        //   this.embeddingUpdate.structural,
+        //   this.embeddingUpdate.isomorphic.coords,
+        // ];
+        if (!this.settings.foldVerticesCoords) {
+          this.#faceOrdersResult = undefined;
+          this.#faceOrdersError = undefined;
           return;
         }
-        if (this.folded.vertices_coords === undefined) { return; }
-        if (!this.settings.foldVerticesCoords) { return; }
-        const graph = this.graph;
+        if (!this.settings.solveFaceOrders) {
+          this.#faceOrdersResult = undefined;
+          this.#faceOrdersError = undefined;
+          return;
+        }
+        // if (!this.#folded.vertices_coords) { return; }
+        if (!this.#folded.vertices_coords) {
+          this.#faceOrdersResult = undefined;
+          this.#faceOrdersError = undefined;
+          return;
+        }
+        console.log("$effect: FoldedForm(): face orders send...");
+        const graph = {
+          ...this.graph,
+          vertices_coords: this.#folded.vertices_coords,
+        };
         const uuid = this.#data.frame.uuid;
         this.faceOrdersWorker.postMessage({ uuid, graph });
       });
       return () => { };
     });
   }
+
+  #effectFaceOrdersReceive(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        if (!this.settings.solveFaceOrders) {
+          this.#faceOrders = undefined;
+          this.#attributeHasLayerOrder = false;
+          this.#update.isomorphic.faceOrders++;
+          return;
+        }
+        if (!this.#faceOrdersResult) {
+          this.#faceOrders = undefined;
+          this.#attributeHasLayerOrder = false;
+          this.#update.isomorphic.faceOrders++;
+          return;
+        }
+        this.#faceOrders = this.#faceOrdersResult !== undefined
+          ? this.#faceOrdersResult.result
+          : undefined;
+        const hasFaceOrders = this.#faceOrdersResult != null
+          && this.#faceOrdersResult.result != null
+          && this.#faceOrdersResult.uuid === this.#data.frame.uuid
+          && this.#faceOrdersResult.result.length > 0;
+        console.log("$effect: FoldedForm(): face orders receive", hasFaceOrders, this.#faceOrders?.length);
+        this.#attributeHasLayerOrder = hasFaceOrders;
+        this.attributes.hasLayerOrder = this.#attributeHasLayerOrder;
+        this.#update.isomorphic.faceOrders++;
+      });
+      return () => { };
+    });
+  }
+
+  #effectDebug(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = this.embeddingUpdate.isomorphic.foldAngles
+        console.log("FoldedForm(): foldAngles did update");
+      });
+      return () => { };
+    });
+  }
+
+  #effectGraphUpdate(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        this.embeddingUpdate.isomorphic.coords = this.#graphUpdate.isomorphic.coords + this.#update.isomorphic.coords;
+      });
+      $effect(() => {
+        this.embeddingUpdate.isomorphic.assignments = this.#graphUpdate.isomorphic.assignments + this.#update.isomorphic.assignments;
+      });
+      $effect(() => {
+        this.embeddingUpdate.isomorphic.foldAngles = this.#graphUpdate.isomorphic.foldAngles + this.#update.isomorphic.foldAngles;
+      });
+      $effect(() => {
+        this.embeddingUpdate.isomorphic.faceOrders = this.#graphUpdate.isomorphic.faceOrders + this.#update.isomorphic.faceOrders;
+      });
+      $effect(() => { this.embeddingUpdate.reset = this.#graphUpdate.reset + this.#update.reset; });
+      $effect(() => { this.embeddingUpdate.structural = this.#graphUpdate.structural + this.#update.structural; });
+      $effect(() => { this.embeddingUpdate.selection = this.#graphUpdate.selection + this.#update.selection; });
+
+      return () => { };
+    });
+  }
+
 }
 

@@ -6,12 +6,12 @@ import type { GraphUpdateEvent } from "../../../graphs/Updated.ts";
 import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./Component.svelte";
+import { SVGRendering } from "./SVGRendering.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import { SVGView } from "./SVGView.svelte.ts";
+import { SVGSnap } from "./SVGSnap.svelte.ts";
 import { Style } from "./Style.svelte.ts";
 import { Grid } from "./Grid.svelte.ts";
-import { SVGSnap } from "./SVGSnap.svelte.ts";
-import { SVGRendering } from "./SVGRendering.svelte.ts";
 import context from "../../../app/context.svelte.ts";
 
 export class SVGViewport implements Viewport {
@@ -32,7 +32,7 @@ export class SVGViewport implements Viewport {
   rendering: SVGRendering;
 
   embeddingName = $state("creasePattern");
-  embedding?: Embedding = $derived(context.fileManager.document?.data?.[this.embeddingName]);
+  embedding: Embedding | undefined = $derived(context.fileManager.document?.data?.getEmbedding(this.embeddingName));
   embeddingUpdate: GraphUpdateEvent | undefined = $derived(this.embedding?.embeddingUpdate);
 
   rulers?: Ruler[] = $derived(context.fileManager.document?.data?.frame.rulers.allRulers);

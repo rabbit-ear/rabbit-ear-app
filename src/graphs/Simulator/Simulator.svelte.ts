@@ -19,10 +19,9 @@ export class Simulator implements Embedding {
   // not reactive
   get graph(): FOLD | undefined { return context.simulator.graph; }
 
-  // // reactive. subscribe to this to watch the graph
-  // get graphUpdate(): GraphUpdateEvent { return context.simulator.graphUpdate; }
-
-  #effects: (() => void)[] = [];
+  // reactive. subscribe to this to watch the graph
+  embeddingUpdate: GraphUpdateEvent = $derived.by(() => context.simulator.graphUpdate);
+  // get embeddingUpdate(): GraphUpdateEvent { return context.simulator.graphUpdate; }
 
   // get attributes() { return this.#data.frame.attributes; }
   get attributes() {
@@ -34,10 +33,7 @@ export class Simulator implements Embedding {
 
   get selection(): FOLDSelection | undefined { return this.#data.frame.selection; }
 
-  // get selectionGraph(): FOLD | undefined { return this.#data.selectionGraph; }
-  get selectionFaceGraph(): FOLD | undefined { return this.#data.selectionFaceGraph; }
-  get selectionEdgeGraph(): FOLD | undefined { return this.#data.selectionEdgeGraph; }
-  get selectionVertexGraph(): FOLD | undefined { return this.#data.selectionVertexGraph; }
+  #effects: (() => void)[] = [];
 
   constructor(data: GraphData) {
     this.#data = data;

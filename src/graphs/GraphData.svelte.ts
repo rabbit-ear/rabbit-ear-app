@@ -12,7 +12,6 @@ import { CreasePattern } from "./CreasePattern/CreasePattern.svelte.ts";
 import { FoldedForm } from "./FoldedForm/FoldedForm.svelte.ts";
 import { Simulator } from "./Simulator/Simulator.svelte.ts";
 import { Frame } from "./Frame.ts";
-import { strictSubcomplex, strictSubgraph, vertexSubgraph } from "../general/subcomplex.ts";
 
 export class GraphData {
   metadata: FOLDFileMetadata = $state({});
@@ -32,82 +31,16 @@ export class GraphData {
   #frameIndex: number = $state(0);
   get frameIndex(): number { return this.#frameIndex; }
   set frameIndex(index: number) {
+    // console.log("new frame (start)", this.frame);
     this.#frameIndex = index;
-    // this.frame = this.frames[this.#frameIndex];
-    this.frame = this.frames[index];
-    // this.graphUpdate.structural++;
+    this.frame = this.frames[this.#frameIndex];
     this.graphUpdate.reset++;
-    console.log("new frame", this.frame);
+    // console.log("new frame (end)", this.frame);
   }
 
   // style-related properties for every frame, like is it 2D, folded, etc..
   // frameAttributes: FrameAttributes = $derived.by(() => this.frame.sourceAttributes);
   // get frameAttributes(): FrameAttributes { return this.frame.attributes; }
-
-  // adding this, unsure if it should be reactive or not
-  // selectionGraph: FOLD | undefined;
-  // selectionGraph: FOLD | undefined = $derived(getSubgraph(this.frame.baked, this.selection ?? {}));
-  // selectionGraph: FOLD | undefined = $derived(simpleSubgraph(
-  //   this.frame.baked,
-  //   this.selection ?? {},
-  // ));
-
-  // selectionFaceGraph: FOLD | undefined = $derived(strictSubcomplex(
-  //   this.frame.graph,
-  //   this.frame.selection ?? {},
-  // ));
-  //
-  // selectionEdgeGraph: FOLD | undefined = $derived(strictSubgraph(
-  //   this.frame.graph,
-  //   this.frame.selection ?? {},
-  // ));
-  //
-  // selectionVertexGraph: FOLD | undefined = $derived(vertexSubgraph(
-  //   this.frame.graph,
-  //   this.frame.selection ?? {},
-  // ));
-
-  selectionFaceGraph: FOLD | undefined = $derived.by(() => {
-    console.log("GraphData(): selection face graph");
-    const _ = [
-      this.graphUpdate.selection,
-      this.graphUpdate.reset,
-      this.graphUpdate.structural,
-    ];
-    try {
-      return strictSubcomplex(this.frame.graph, this.frame.selection ?? {});
-    } catch {
-      return undefined;
-    }
-  });
-
-  selectionEdgeGraph: FOLD | undefined = $derived.by(() => {
-    console.log("GraphData(): selection edge graph");
-    const _ = [
-      this.graphUpdate.selection,
-      this.graphUpdate.reset,
-      this.graphUpdate.structural,
-    ];
-    try {
-      return strictSubgraph(this.frame.graph, this.frame.selection ?? {});
-    } catch {
-      return undefined;
-    }
-  });
-
-  selectionVertexGraph: FOLD | undefined = $derived.by(() => {
-    console.log("GraphData(): selection vertex graph");
-    const _ = [
-      this.graphUpdate.selection,
-      this.graphUpdate.reset,
-      this.graphUpdate.structural,
-    ];
-    try {
-      return vertexSubgraph(this.frame.graph, this.frame.selection ?? {});
-    } catch {
-      return undefined;
-    }
-  });
 
   // models: { [key: string]: Model } = $state({});
   creasePattern: CreasePattern;
@@ -211,7 +144,7 @@ export class GraphData {
     }
   }
 
-  mutateFrameNew(mutator: (frame: Frame) => (GraphUpdateModifier | undefined)) {
+  mutateFrame(mutator: (frame: Frame) => (GraphUpdateModifier | undefined)) {
     const updateModifier = mutator(this.frame);
     if (updateModifier) {
       // this.frames[this.frameIndex] = frame;
@@ -232,7 +165,7 @@ export class GraphData {
     return $effect.root(() => {
       $effect(() => { });
       return () => { };
-    })
+    });
   }
 }
 

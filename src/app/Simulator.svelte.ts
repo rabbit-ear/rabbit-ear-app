@@ -11,7 +11,7 @@ export class Simulator {
   #effects: (() => void)[] = [];
 
   // set a graph here to load it into the simulator
-  inputGraph: FOLD | undefined = $state();
+  inputGraph: FOLD | undefined = $state.raw();
 
   // this is different from the "active" toggle,
   // this will prevent the inputGraph from loading its
@@ -130,7 +130,7 @@ export class Simulator {
           // this "active" is not the same as settings.active
           if (!this.activelyLoadingModels) { return; }
           if (!this.inputGraph) { return; }
-          this.#model = new Model($state.snapshot(this.inputGraph));
+          this.#model = new Model(this.inputGraph);
           if (!this.#model) { return; }
           // console.log("Loading simulator model from", this.inputGraph);
 

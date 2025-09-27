@@ -53,7 +53,7 @@ export const makeFacesVertexData = (
         vertices_barycentric[i * 3 + 1][0] = vertices_barycentric[i * 3 + 2][0] = 100;
       }
       if (facesEdgesIsJoined[i][2]) {
-        vertices_barycentric[i * 3 + 0][1] = vertices_barycentric[i * 3 + 2][1] = 100;
+        vertices_barycentric[i * 3 + 2][1] = vertices_barycentric[i * 3 + 0][1] = 100;
       }
     }
   }

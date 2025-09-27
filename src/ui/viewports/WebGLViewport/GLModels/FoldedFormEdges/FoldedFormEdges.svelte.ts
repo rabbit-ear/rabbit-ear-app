@@ -45,10 +45,14 @@ export class FoldedFormEdges implements GLModel {
 
   vertexArrays: VertexArray[] = $derived.by(() => {
     if (!this.viewport.gl || !this.program) { return []; }
-    const internalUpdate = this.#graphDidLoad;
-    const reset = this.viewport.embedding?.embeddingUpdate?.reset;
-    const structural = this.viewport.embedding?.embeddingUpdate?.structural;
-    const isomorphic = this.viewport.embedding?.embeddingUpdate?.isomorphic.coords;
+    const _ = [
+      this.#graphDidLoad,
+      this.viewport.embedding?.embeddingUpdate?.reset,
+      this.viewport.embedding?.embeddingUpdate?.structural,
+      this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
+      this.viewport.embedding?.embeddingUpdate?.isomorphic.assignments,
+      this.viewport.embedding?.embeddingUpdate?.isomorphic.faceOrders,
+    ];
     return makeThickEdgesVertexArrays(
       this.viewport.gl,
       this.program,
@@ -58,10 +62,14 @@ export class FoldedFormEdges implements GLModel {
 
   elementArrays: ElementArray[] = $derived.by(() => {
     if (!this.viewport.gl) { return []; }
-    const internalUpdate = this.#graphDidLoad;
-    const reset = this.viewport.embedding?.embeddingUpdate?.reset;
-    const structural = this.viewport.embedding?.embeddingUpdate?.structural;
-    const isomorphic = this.viewport.embedding?.embeddingUpdate?.isomorphic.coords;
+    const _ = [
+      this.#graphDidLoad,
+      this.viewport.embedding?.embeddingUpdate?.reset,
+      this.viewport.embedding?.embeddingUpdate?.structural,
+      this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
+      this.viewport.embedding?.embeddingUpdate?.isomorphic.assignments,
+      this.viewport.embedding?.embeddingUpdate?.isomorphic.faceOrders,
+    ];
     return makeThickEdgesElementArrays(
       this.viewport.gl,
       this.viewport.version,
@@ -108,9 +116,13 @@ export class FoldedFormEdges implements GLModel {
   #effectLoadGraph(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const reset = this.viewport.embedding?.embeddingUpdate?.reset;
-        const structural = this.viewport.embedding?.embeddingUpdate?.structural;
-        const isomorphic = this.viewport.embedding?.embeddingUpdate?.isomorphic.coords;
+        const _ = [
+          this.viewport.embedding?.embeddingUpdate?.reset,
+          this.viewport.embedding?.embeddingUpdate?.structural,
+          this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
+          this.viewport.embedding?.embeddingUpdate?.isomorphic.assignments,
+          this.viewport.embedding?.embeddingUpdate?.isomorphic.faceOrders,
+        ];
         this.#graph = this.viewport.embedding?.graph ?? {};
         this.#graphDidLoad++;
       });

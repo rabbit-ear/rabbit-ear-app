@@ -12,7 +12,7 @@
   let graph: FOLD = $state({});
 
   $effect(() => {
-    viewport.embedding?.embeddingUpdate?.isomorphic;
+    viewport.embedding?.embeddingUpdate?.isomorphic.coords;
     viewport.embedding?.embeddingUpdate?.structural;
     viewport.embedding?.embeddingUpdate?.reset;
     graph = viewport.embedding?.graph ?? {};
@@ -31,8 +31,10 @@
   const edge = $derived(edgeInfo?.index);
   const face = $derived(faceInfo?.index);
 
-  const vertexCoords = $derived(vertices_coords[vertex]);
-  const edgeCoords = $derived(edges_vertices[edge]?.map((v) => vertices_coords[v]));
+  const vertexCoords = $derived(vertices_coords[vertex] ?? []);
+  const edgeCoords = $derived(
+    edges_vertices[edge]?.map((v) => vertices_coords[v]) ?? [[], []],
+  );
   const faceCoords = $derived(faces_vertices[face]?.map((v) => vertices_coords[v]));
   const facePoints = $derived((faceCoords ?? []).map(([x, y]) => `${x},${y}`).join(" "));
 </script>

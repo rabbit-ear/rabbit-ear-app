@@ -31,7 +31,7 @@ export const prepareForRenderingWithCycles = (
   inputGraph: FOLD,
   { earcut, layerNudge }: { earcut?: any, layerNudge?: number } = {},
 ): { graph: FOLD, vertices_map: number[] } => {
-  let graph = {};
+  let graph: FOLD = {};
   try {
     graph = clone(inputGraph);
   } catch (err) {
@@ -156,13 +156,12 @@ export const prepareForRendering = (
 ): { graph: FOLD, vertices_map: number[] } => {
   // todo: remove the structured clone as long as everything is working.
   // update: shallow copy is not working. the input parameter is still modified.
-  let graph = {};
+  let graph: FOLD = {};
   try {
     graph = clone(inputGraph);
   } catch (err) {
     console.log(err);
   }
-  // const copy = { ...graph };
 
   // we render "J" joined edges differently from all others. if edges_assignment
   // doesn't exist, make it with all assignments set to "U".

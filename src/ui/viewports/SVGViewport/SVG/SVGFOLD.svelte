@@ -51,7 +51,7 @@
     stroke: none;
   }
 
-  :global(.selection) circle {
+  circle.selected {
     fill: var(--yellow);
   }
 
@@ -91,21 +91,20 @@
     stroke: orchid;
   }
 
-  :global(.selection),
-  :global(.selection) .B,
-  :global(.selection) .b,
-  :global(.selection) .M,
-  :global(.selection) .m,
-  :global(.selection) .V,
-  :global(.selection) .v,
-  :global(.selection) .F,
-  :global(.selection) .f,
-  :global(.selection) .J,
-  :global(.selection) .j,
-  :global(.selection) .C,
-  :global(.selection) .c,
-  :global(.selection) .U,
-  :global(.selection) .u {
+  .B.selected,
+  .b.selected,
+  .M.selected,
+  .m.selected,
+  .V.selected,
+  .v.selected,
+  .F.selected,
+  .f.selected,
+  .J.selected,
+  .j.selected,
+  .C.selected,
+  .c.selected,
+  .U.selected,
+  .u.selected {
     stroke: var(--yellow);
   }
 
@@ -130,9 +129,9 @@
     }
   }
 
-  :global(.selection) polygon,
-  :global(.selection .foldedForm) polygon,
-  :global(.selection .creasePattern) polygon {
+  polygon.selected,
+  :global(.foldedForm) polygon.selected,
+  :global(.creasePattern) polygon.selected {
     stroke: none;
     fill: var(--yellow);
     opacity: 0.25;

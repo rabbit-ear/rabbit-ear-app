@@ -9,7 +9,8 @@ import { light, dark } from "rabbit-ear/webgl/general/colors.js";
  * @param {([number, number]|[number, number, number])[]} coords
  * @returns {[number, number][]}
  */
-const make2D = (coords: ([number, number] | [number, number, number])[]): [number, number][] => coords.map(([x, y]) => [x || 0, y || 0]);
+const make2D = (coords: ([number, number] | [number, number, number])[]): [number, number][] => coords
+  .map(([x, y]) => [x || 0, y || 0]);
 
 /**
  * @param {FOLD} graph a FOLD object
