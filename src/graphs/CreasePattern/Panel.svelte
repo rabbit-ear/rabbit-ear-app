@@ -1,14 +1,14 @@
 <script lang="ts">
   import type { CreasePattern } from "./CreasePattern.svelte.ts";
   import Wrapper from "../Wrapper.svelte";
-  import { FrameClass } from "../FrameAttributes.ts";
+  import { EmbeddingType } from "../GraphAttributes.ts";
 
   const { embedding }: { embedding: CreasePattern } = $props();
 
   // embedding.userLocked;
   // embedding.attributeLocked;
   // embedding.locked;
-  const isCP = $derived(embedding.attributes.class === FrameClass.creasePattern);
+  const isCP = $derived(embedding.attributes.class === EmbeddingType.creasePattern);
   const editable = $derived(embedding.editable);
   const frameLinked = $derived(embedding.frameLinked);
 

@@ -2,7 +2,7 @@ import type { FOLD } from "rabbit-ear/types.js";
 import { scale3, add3, resize3 } from "rabbit-ear/math/vector.js";
 import { invertMatrix4, multiplyMatrix4Vector3 } from "rabbit-ear/math/matrix4.js";
 import { clone } from "rabbit-ear/general/clone.js";
-import { faceOrdersSubset, nudgeFacesWithFaceOrders } from "rabbit-ear/graph/orders.js";
+import { faceOrdersSubset, linearizeFaceOrders, nudgeFacesWithFaceOrders, overlappingFaceOrdersClusters } from "rabbit-ear/graph/orders.js";
 import { countEdges, countImpliedEdges } from "rabbit-ear/graph/count.js";
 import { invertArrayToFlatMap } from "rabbit-ear/graph/maps.js";
 import { triangulate } from "rabbit-ear/graph/triangulate.js";
@@ -30,7 +30,7 @@ const LAYER_NUDGE = 5e-6;
 export const prepareForRenderingWithCycles = (
   inputGraph: FOLD,
   { earcut, layerNudge }: { earcut?: any, layerNudge?: number } = {},
-): { graph: FOLD, vertices_map: number[] } => {
+): { graph: FOLD, changes: { vertices: number[], edges?: number[], faces: number[][] } } => {
   let graph: FOLD = {};
   try {
     graph = clone(inputGraph);
@@ -47,7 +47,11 @@ export const prepareForRenderingWithCycles = (
   if (!graph.faceOrders) {
     return {
       graph: triangulate(graph, earcut).result,
-      vertices_map: (graph.vertices_coords ?? []).map((_, i) => i),
+      changes: {
+        vertices: (graph.vertices_coords ?? []).map((_, i) => i),
+        // todo: changes
+        faces: [],
+      },
     };
   }
   const planes_inverseTransform = planes_transform.map(invertMatrix4);
@@ -146,14 +150,24 @@ export const prepareForRenderingWithCycles = (
   return {
     graph: planes_graphExploded[0],
     // todo: needs vertices_map
-    vertices_map: [],
+    changes: {
+      vertices: [],
+      faces: [],
+    },
   };
 };
+
+
+export const graphHasCycle = ({ faceOrders, faces_normal }: FOLD): boolean => (
+  overlappingFaceOrdersClusters({ faceOrders })
+    .clusters_faceOrders
+    .map((orders) => linearizeFaceOrders({ faceOrders: orders, faces_normal }))
+    .includes(undefined));
 
 export const prepareForRendering = (
   inputGraph: FOLD,
   { earcut, layerNudge = LAYER_NUDGE } = {},
-): { graph: FOLD, vertices_map: number[] } => {
+): { graph: FOLD, changes: { vertices: number[], edges?: number[], faces: number[][] } } => {
   // todo: remove the structured clone as long as everything is working.
   // update: shallow copy is not working. the input parameter is still modified.
   let graph: FOLD = {};
@@ -176,10 +190,12 @@ export const prepareForRendering = (
   // if no faceOrders exist, all we need to do is triangulate the graph
   // and return the modified copy.
   if (!graph.faceOrders) {
-    const { graph: result, vertices_map } = explodeFaces(triangulate(graph, earcut).result);
+    const { result: triangulated, changes } = triangulate(graph, earcut);
+    const { graph: result, vertices_map } = explodeFaces(triangulated);
     return {
       graph: result,
-      vertices_map,
+      // todo: change map
+      changes: { vertices: vertices_map, faces: changes.faces?.map ?? [] },
     };
   }
 
@@ -217,6 +233,12 @@ export const prepareForRendering = (
     });
   }
 
-  return { graph: exploded, vertices_map: [] };
+  return {
+    graph: exploded,
+    changes: {
+      vertices: [],
+      faces: changes.faces?.map ?? [],
+    }
+  };
 };
 

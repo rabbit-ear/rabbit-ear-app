@@ -33,6 +33,7 @@ export class CreasePatternEdges implements GLModel {
 
   vertexArrays: VertexArray[] = $derived.by(() => {
     if (!this.viewport.gl || !this.program) { return []; }
+    console.log("+++ GLMODEL CP-EDGES: Rebuild Vertex Arrays");
     return [
       {
         location: this.viewport.gl?.getAttribLocation(this.program, "v_position"),

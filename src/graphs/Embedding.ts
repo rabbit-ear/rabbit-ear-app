@@ -1,9 +1,8 @@
 import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
-// import type { Shape } from "../geometry/shapes.ts";
+import type { Nearest } from "./Nearest.svelte.ts";
 import type { GraphUpdateEvent } from "./Updated.ts";
-import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../general/BVHGraph.ts";
-import type { FrameAttributes } from "./FrameAttributes.ts";
+import type { GraphAttributes } from "./GraphAttributes.ts";
 import type { FOLDSelection } from "../general/selection.ts";
 
 // we need a fine tuned update system
@@ -15,6 +14,12 @@ export interface Embedding {
   errors: string[];
   panel?: Component;
 
+  nearest: Nearest;
+
+  // selection is stored on the GraphData.
+  // this is here for convenience, should reference the GraphData.
+  selection: FOLDSelection | undefined;
+
   // get the (compiled if necessary) FOLD graph
   // this graph will not be reactive, instead, watch
   // for the graph update metadata for reactive updates.
@@ -25,21 +30,10 @@ export interface Embedding {
   // information about how the graph just changed
   embeddingUpdate: GraphUpdateEvent;
 
-  attributes: FrameAttributes;
-
-  // selection is stored on the GraphData.
-  // this is here for convenience, should reference the GraphData.
-  selection: FOLDSelection | undefined;
-
-  // other
-  // shapes: Shape[];
+  attributes: GraphAttributes;
 
   // some optional properties that might exist
   snapPoints?: [number, number][] | [number, number, number][];
-
-  nearestVertex(point: [number, number]): VertexBVHType;
-  nearestEdge(point: [number, number]): EdgeBVHType;
-  nearestFace(point: [number, number]): FaceBVHType;
 
   nearestSnapPoint(point: [number, number]): {
     coords: [number, number] | [number, number, number],

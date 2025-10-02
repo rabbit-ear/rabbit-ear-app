@@ -12,6 +12,10 @@ import { Settings } from "./Settings.svelte.ts";
 import { WebGLView } from "./WebGLView.svelte.ts";
 import { WebGLSnap } from "./WebGLSnap.svelte.ts";
 import { WebGLRendering } from "./WebGLRendering.svelte.ts";
+import { RenderPerspective, RenderStyle } from "../types.ts";
+import { CreasePattern } from "../../../graphs/CreasePattern/CreasePattern.svelte.ts";
+import { FoldedForm } from "../../../graphs/FoldedForm/FoldedForm.svelte.ts";
+import { Simulator } from "../../../graphs/Simulator/Simulator.svelte.ts";
 import context from "../../../app/context.svelte.ts";
 
 export class WebGLViewport implements Viewport {
@@ -45,6 +49,8 @@ export class WebGLViewport implements Viewport {
 
   didMount?: () => void;
 
+  #effects: (() => void)[];
+
   constructor() {
     this.id = String(Math.random());
     this.component = ViewportComponent;
@@ -54,6 +60,10 @@ export class WebGLViewport implements Viewport {
     this.style = new Style(this);
     this.glModels = new GLModels(this);
     this.rendering = new WebGLRendering(this);
+    this.#effects = [
+      this.#effectModelStyle(),
+      this.#effectModelPerspective(),
+    ];
   }
 
   unbindTool(): void {
@@ -63,7 +73,73 @@ export class WebGLViewport implements Viewport {
 
   dealloc(): void {
     this.glModels.dealloc();
-    this.style.dealloc();
+    this.rendering.dealloc();
+    this.#effects.forEach(fn => fn());
+  }
+
+  #setModelStyle(embedding: Embedding | undefined): void {
+    console.log("WebGLViewport() setModelStyle");
+    if (!embedding) { return; }
+    switch (embedding.constructor) {
+      case CreasePattern:
+        this.style.renderStyle = RenderStyle.creasePattern;
+        break;
+      case Simulator:
+        this.style.renderStyle = RenderStyle.foldedForm;
+        break;
+      case FoldedForm:
+      default:
+        this.style.renderStyle = embedding.attributes.hasLayerOrder
+          ? RenderStyle.foldedForm
+          : RenderStyle.translucent;
+        break;
+    }
+  }
+
+  #setModelPerspective(embedding: Embedding | undefined): void {
+    console.log("WebGLViewport() setModelPerspective");
+    if (!embedding) { return; }
+    this.view.perspective = embedding.attributes.dimension === 2
+      ? RenderPerspective.orthographic
+      : RenderPerspective.perspective;
+  }
+
+  #effectModelStyle(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = [
+          this.embedding,
+          // this.embedding?.embeddingUpdate?.reset,
+          // this.embedding?.embeddingUpdate?.structural,
+          // this.embedding?.embeddingUpdate?.isomorphic.coords,
+          this.embedding?.embeddingUpdate?.isomorphic.faceOrders,
+          // this.embedding?.embeddingUpdate?.isomorphic.assignments,
+          // this.embedding?.embeddingUpdate?.isomorphic.foldAngles,
+        ];
+        this.#setModelStyle(this.embedding);
+      });
+      // empty
+      return () => { };
+    });
+  }
+
+  #effectModelPerspective(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = [
+          this.embedding,
+          // this.embedding?.embeddingUpdate?.reset,
+          // this.embedding?.embeddingUpdate?.structural,
+          // this.embedding?.embeddingUpdate?.isomorphic.coords,
+          // this.embedding?.embeddingUpdate?.isomorphic.faceOrders,
+          // this.embedding?.embeddingUpdate?.isomorphic.assignments,
+          // this.embedding?.embeddingUpdate?.isomorphic.foldAngles,
+        ];
+        this.#setModelPerspective(this.embedding);
+      });
+      // empty
+      return () => { };
+    });
   }
 }
 

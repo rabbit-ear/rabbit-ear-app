@@ -2,15 +2,14 @@ import type { Component } from "svelte";
 import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Embedding } from "../Embedding.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
-import type { VertexBVHType, EdgeBVHType, FaceBVHType } from "../../general/BVHGraph.ts";
-import type { GraphUpdateEvent } from "../Updated.ts";
 import type { FOLDSelection } from "../../general/selection.ts";
-import { FrameClass, type FrameAttributes } from "../FrameAttributes.ts";
-// import type { Shape } from "../../geometry/shapes.ts";
+import { makeGraphUpdateEvent, type GraphUpdateEvent } from "../Updated.ts";
+import { EmbeddingType, type GraphAttributes } from "../GraphAttributes.ts";
+import { Nearest } from "../Nearest.svelte.ts";
 import Panel from "./Panel.svelte";
-import { VertexBVH, EdgeBVH, FaceBVH } from "../../general/BVHGraph.ts";
+// import type { Shape } from "../../geometry/shapes.ts";
 import { resize2 } from "rabbit-ear/math/vector.js";
-import { validate } from "rabbit-ear/graph/validate/validate.js";
+import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 
 export class CreasePattern implements Embedding {
   name: string = "creasePattern";
@@ -18,64 +17,42 @@ export class CreasePattern implements Embedding {
   warnings: string[] = [];
   errors: string[] = [];
   panel: Component = Panel;
+  nearest: Nearest;
   #data: GraphData;
   #effects: (() => void)[];
 
   graph: FOLD | undefined;
+  #vertices_coords: [number, number][] | undefined = [];
 
-  #vertexBVH = $derived.by(() => {
-    const _ = [
-      this.#data.graphUpdate.reset,
-      this.#data.graphUpdate.structural,
-      this.#data.graphUpdate.isomorphic.coords,
-    ];
-    // if (validate(this.#data.frame.graph).length) { console.log("!!! BVH vertex graph not valid!"); }
-    return VertexBVH(this.#data.frame.graph);
-  });
+  // this is the internal update
+  #update: GraphUpdateEvent = $state(makeGraphUpdateEvent());
 
-  #edgeBVH = $derived.by(() => {
-    const _ = [
-      this.#data.graphUpdate.reset,
-      this.#data.graphUpdate.structural,
-      this.#data.graphUpdate.isomorphic.coords,
-    ];
-    // if (validate(this.#data.frame.graph).length) { console.log("!!! BVH edge graph not valid!"); }
-    return EdgeBVH(this.#data.frame.graph);
-  });
-
-  #faceBVH = $derived.by(() => {
-    const _ = [
-      this.#data.graphUpdate.reset,
-      this.#data.graphUpdate.structural,
-      this.#data.graphUpdate.isomorphic.coords,
-    ];
-    // if (validate(this.#data.frame.graph).length) { console.log("!!! BVH face graph not valid!"); }
-    return FaceBVH(this.#data.frame.graph);
-  });
-
-  embeddingUpdate: GraphUpdateEvent = $derived.by(() => this.#data.graphUpdate);
+  // this is the reactive state to watch to determine when this embedding's graph
+  // has updated. the formula for each entry is this = #data.graphUpdate + #update
+  embeddingUpdate: GraphUpdateEvent = $state(makeGraphUpdateEvent());
 
   frameLinked = $derived.by(() => this.#data.frame.attributes.isParent
     || this.#data.frame.attributes.isChild);
 
-  // todo: this should not be here. this is tool-dependent.
-  editable: boolean = $derived.by(() => !this.frameLinked
-    && this.#data.frame.attributes.class === FrameClass.creasePattern);
-
-  // get attributes(): FrameAttributes {
-  //   return {
-  //     ...this.#data.frameAttributes,
-  //     isFoldedForm: false,
-  //     // // unclear what we should say here. a CP does not render layer orders
-  //     // // (not the folded form of a CP, but the CP itself)
-  //     // hasLayerOrder: true,
-  //   };
-  // }
-
-  get attributes(): FrameAttributes { return this.#data.frame.attributes; }
+  attributes: GraphAttributes = $derived.by(() => ({
+    ...this.#data.frame.attributes,
+    dimension: 2,
+    class: EmbeddingType.creasePattern,
+  }) as GraphAttributes);
 
   get selection(): FOLDSelection | undefined { return this.#data.frame.selection; }
 
+  get snapPoints(): [number, number][] {
+    return (this.graph?.vertices_coords as [number, number][]) ?? [];
+  }
+
+  // get shapes(): Shape[] {
+  //   return this.#model.shapes;
+  // }
+
+  // todo: this should not be here. this is tool-dependent.
+  // editable: boolean = $derived.by(() => !this.frameLinked
+  //   && this.#data.frame.attributes.class === EmbeddingType.creasePattern);
   // userLocked: boolean | undefined = $state(undefined);
   // sourceIsCreasePattern: boolean = $derived.by(() => this.#data.frameAttributes.isCreasePattern);
   // attributeLocked: boolean = $derived.by(() => !this.#data.frameAttributes.isCreasePattern);
@@ -83,28 +60,13 @@ export class CreasePattern implements Embedding {
   //   ? this.userLocked
   //   : this.attributeLocked);
 
-  setGraph(newGraph: FOLD | undefined) {
-    this.graph = newGraph;
-    // this.graphUpdate.reset++;
-    // this.#data.graphUpdate.reset++;
-  }
-
-  get snapPoints(): [number, number][] {
-    return this.graph?.vertices_coords?.map(resize2) ?? [];
-  }
-
-  // get shapes(): Shape[] {
-  //   return this.#model.shapes;
-  // }
-
   constructor(data: GraphData) {
     this.#data = data;
-
-    // todo: it might be possible to "unfold" the vertices
-    this.setGraph(this.#data.frame.attributes.class === FrameClass.creasePattern
-      ? this.#data.frame.graph
-      : undefined);
+    this.nearest = new Nearest(this);
     this.#effects = [
+      this.#effectNewGraphReset(),
+      this.#effectNewGraphStructural(),
+      this.#effectNewGraphIsomorphic(),
       this.#effectGraphUpdate(),
     ];
   }
@@ -113,23 +75,11 @@ export class CreasePattern implements Embedding {
     this.#effects.forEach(fn => fn());
   }
 
-  nearestVertex(point: [number, number]): VertexBVHType {
-    return this.#vertexBVH?.nearest(point);
-  }
-
-  nearestEdge(point: [number, number]): EdgeBVHType {
-    return this.#edgeBVH?.nearest(point);
-  }
-
-  nearestFace(point: [number, number]): FaceBVHType {
-    return this.#faceBVH?.nearest(point);
-  }
-
   nearestSnapPoint(point: [number, number]): {
     coords: [number, number] | [number, number, number],
     dist: number,
   } | undefined {
-    const vertex = this.nearestVertex(point);
+    const vertex = this.nearest.vertex(point);
     if (!vertex) { return undefined; }
     return {
       coords: vertex.coords,
@@ -137,17 +87,101 @@ export class CreasePattern implements Embedding {
     };
   }
 
-  // conditions for updating the graph: 
-  // - it always updates (any changes to the source frame)
-  #effectGraphUpdate(): () => void {
+  // assemble all constituent parts of this crease pattern graph into
+  // the top level graph
+  #assembleGraph(): FOLD | undefined {
+    // todo: it might be possible to "unfold" the vertices
+    if (this.#data.frame.attributes.class === EmbeddingType.foldedForm) { return undefined; }
+    if (!this.#data.frame.graph) { return undefined; }
+    return {
+      ...this.#data.frame.graph,
+      frame_classes: ["creasePattern"],
+      vertices_coords: this.#vertices_coords ?? [],
+    };
+  }
+
+  // return the vertices coords of a graph but ensure they are 2D
+  #getVerticesCoords2D(graph: FOLD): [number, number][] | undefined {
+    try {
+      switch (getDimensionQuick(graph)) {
+        case 2: return graph.vertices_coords as [number, number][];
+        case 3: return (graph.vertices_coords ?? []).map(resize2);
+        case undefined:
+        default:
+          return undefined;
+      }
+    } catch {
+      return undefined;
+    }
+  }
+
+  // fires on source GraphData's update.reset
+  #effectNewGraphReset(): () => void {
     return $effect.root(() => {
       $effect(() => {
         const _ = this.#data.graphUpdate.reset;
-        this.setGraph(this.#data.frame.attributes.class === FrameClass.creasePattern
-          ? this.#data.frame.graph
-          : undefined);
+        this.#vertices_coords = this.#getVerticesCoords2D(this.#data.frame.graph);
+        this.graph = this.#assembleGraph();
+        this.#update.reset++;
+        console.log("CreasePattern() graph: reset");
       });
       // empty
+      return () => { };
+    });
+  }
+
+  // fires on source GraphData's update.structural
+  #effectNewGraphStructural(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = this.#data.graphUpdate.structural;
+        this.#vertices_coords = this.#getVerticesCoords2D(this.#data.frame.graph);
+        this.graph = this.#assembleGraph();
+        this.#update.structural++;
+        console.log("CreasePattern() graph: structural");
+      });
+      // empty
+      return () => { };
+    });
+  }
+
+  // fires on source GraphData's update.isomorphic.coords
+  #effectNewGraphIsomorphic(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = this.#data.graphUpdate.isomorphic.coords;
+        this.#vertices_coords = this.#getVerticesCoords2D(this.#data.frame.graph);
+        this.graph = this.#assembleGraph();
+        this.#update.isomorphic.coords++;
+        console.log("CreasePattern() graph: isomorphic coords");
+      });
+      // empty
+      return () => { };
+    });
+  }
+
+  #effectGraphUpdate(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        this.embeddingUpdate.isomorphic.coords = this.#data.graphUpdate.isomorphic.coords
+          + this.#update.isomorphic.coords;
+      });
+      $effect(() => {
+        this.embeddingUpdate.isomorphic.assignments = this.#data.graphUpdate.isomorphic.assignments
+          + this.#update.isomorphic.assignments;
+      });
+      $effect(() => {
+        this.embeddingUpdate.isomorphic.foldAngles = this.#data.graphUpdate.isomorphic.foldAngles
+          + this.#update.isomorphic.foldAngles;
+      });
+      $effect(() => {
+        this.embeddingUpdate.isomorphic.faceOrders = this.#data.graphUpdate.isomorphic.faceOrders
+          + this.#update.isomorphic.faceOrders;
+      });
+      $effect(() => { this.embeddingUpdate.reset = this.#data.graphUpdate.reset + this.#update.reset; });
+      $effect(() => { this.embeddingUpdate.structural = this.#data.graphUpdate.structural + this.#update.structural; });
+      $effect(() => { this.embeddingUpdate.selection = this.#data.graphUpdate.selection + this.#update.selection; });
+
       return () => { };
     });
   }

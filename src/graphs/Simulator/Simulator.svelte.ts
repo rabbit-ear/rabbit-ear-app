@@ -3,9 +3,9 @@ import type { FOLD } from "rabbit-ear/types.d.ts";
 import type { Embedding } from "../Embedding.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
-import type { EdgeBVHType, FaceBVHType, VertexBVHType } from "../../general/BVHGraph.ts";
 import type { FOLDSelection } from "../../general/selection.ts";
-import type { FrameAttributes } from "../FrameAttributes.ts";
+import type { GraphAttributes } from "../GraphAttributes.ts";
+import { Nearest } from "../Nearest.svelte.ts";
 import Panel from "./Panel.svelte";
 import context from "../../app/context.svelte.ts";
 
@@ -15,6 +15,7 @@ export class Simulator implements Embedding {
   errors: string[] = [];
   panel: Component = Panel;
   #data: GraphData;
+  nearest: Nearest;
 
   // not reactive
   get graph(): FOLD | undefined { return context.simulator.graph; }
@@ -28,7 +29,7 @@ export class Simulator implements Embedding {
     return {
       ...this.#data.frame.attributes,
       dimension: 3,
-    } as FrameAttributes;
+    } as GraphAttributes;
   }
 
   get selection(): FOLDSelection | undefined { return this.#data.frame.selection; }
@@ -37,24 +38,13 @@ export class Simulator implements Embedding {
 
   constructor(data: GraphData) {
     this.#data = data;
+    this.nearest = new Nearest(this);
     this.#effects = [];
     // this.#setSimulatorGraph();
   }
 
   dealloc(): void {
     this.#effects.forEach((fn) => fn());
-  }
-
-  nearestVertex(point: [number, number]): VertexBVHType {
-    return { index: 0, coords: [0, 0], dist: 0 };
-  }
-
-  nearestEdge(point: [number, number]): EdgeBVHType {
-    return { index: 0, coords: [[0, 0], [0, 0]], dist: 0 };
-  }
-
-  nearestFace(point: [number, number]): FaceBVHType {
-    return { index: 0, poly: [[0, 0], [0, 0], [0, 0]], dist: 0 };
   }
 
   nearestSnapPoint(point: [number, number]): {

@@ -1,11 +1,11 @@
 <script lang="ts">
   import type { FoldedForm } from "./FoldedForm.svelte.ts";
   import Wrapper from "../Wrapper.svelte";
-  import { FrameClass } from "../FrameAttributes.ts";
+  import { EmbeddingType } from "../GraphAttributes.ts";
 
   const { embedding }: { embedding: FoldedForm } = $props();
 
-  const isFoldedForm = $derived(embedding.attributes.class === FrameClass.foldedForm);
+  const isFoldedForm = $derived(embedding.attributes.class === EmbeddingType.foldedForm);
 
   const errors: string[] = $derived(embedding.errors ?? []);
 </script>

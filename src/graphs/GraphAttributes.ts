@@ -5,15 +5,14 @@ import {
   edgesFoldAngleAreAllFlat,
 } from "rabbit-ear/fold/spec.js";
 
-export enum FrameClass {
+export enum EmbeddingType {
   foldedForm = "foldedForm",
   creasePattern = "creasePattern",
 };
 
-// FrameAttributes
-export type FrameAttributes = {
+export type GraphAttributes = {
   // as best as we can tell quickly, is the graph a folded form?
-  class: FrameClass;
+  class: EmbeddingType;
 
   // what dimension (2D or 3D) are the vertices?
   dimension: 2 | 3;
@@ -40,7 +39,7 @@ export type FrameAttributes = {
   isChild: number | undefined;
 };
 
-// export const makeFrameAttributes = (graph: FOLDChildFrame): FrameAttributes => {
+// export const makeGraphAttributes = (graph: FOLDChildFrame): GraphAttributes => {
 //   const isFoldedForm = IsFoldedForm(graph);
 //   const dimension = getDimensionQuick(graph) ?? 2;
 //   // const edgesAreFlat = edgesFoldAngleAreAllFlat(graph);
@@ -59,9 +58,9 @@ export type FrameAttributes = {
 //   };
 // };
 
-export const makeFrameAttributes = (source: FOLDChildFrame, baked: FOLD): FrameAttributes => {
+export const makeGraphAttributes = (source: FOLDChildFrame, baked: FOLD): GraphAttributes => {
   const isFoldedForm = IsFoldedForm(baked);
-  const frameClass = isFoldedForm ? FrameClass.foldedForm : FrameClass.creasePattern;
+  const frameClass = isFoldedForm ? EmbeddingType.foldedForm : EmbeddingType.creasePattern;
   const dimension = getDimensionQuick(baked) as (2 | 3) ?? 2;
   // const edgesAreFlat = edgesFoldAngleAreAllFlat(graph);
   const isAbstract = (baked?.vertices_coords

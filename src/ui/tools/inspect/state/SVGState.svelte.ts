@@ -87,12 +87,13 @@ export class SVGState implements ToolEvents {
       $effect(() => {
         if (!this.touches.move || this.globalState.locked) { return; }
         const point: [number, number] = [this.touches.move[0], this.touches.move[1]];
-        this.globalState.nearestVertex = this.viewport.embedding?.nearestVertex?.(point);
-        this.globalState.nearestEdge = this.viewport.embedding?.nearestEdge?.(point);
-        this.globalState.nearestFace = this.viewport.embedding?.nearestFace?.(point);
+        this.globalState.nearestVertex = this.viewport.embedding?.nearest.vertex?.(point);
+        this.globalState.nearestEdge = this.viewport.embedding?.nearest.edge?.(point);
+        this.globalState.nearestFace = this.viewport.embedding?.nearest.face?.(point);
         // console.log("setting nearest values", this.globalState.nearestVertex);
       })
       return () => { };
     })
   }
 }
+

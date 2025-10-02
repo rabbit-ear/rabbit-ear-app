@@ -2,12 +2,14 @@ import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
 import type { FOLD } from "rabbit-ear/types.js";
 import earcut from "earcut";
 import { SvelteSet } from "svelte/reactivity";
-import { cross3, normalize3, parallel, subtract2, subtract3 } from "rabbit-ear/math/vector.js";
+import { add3, cross3, normalize3, parallel, scale3, subtract3 } from "rabbit-ear/math/vector.js";
 import { light, dark } from "rabbit-ear/webgl/general/colors.js";
 import { makeVerticesFacesSimple, makeVerticesNormal } from "../../../general/fold.ts";
 import { makeFacesEdgesFromVertices } from "rabbit-ear/graph/make/facesEdges.js";
-import { prepareForRendering } from "./GLModels/rendering.ts";
+import { graphHasCycle, prepareForRendering } from "./GLModels/rendering.ts";
 import { makeEdgesFoldAngle } from "rabbit-ear/graph/make/edgesFoldAngle.js";
+import { nudgeFacesWithFaceOrders } from "rabbit-ear/graph/orders.js";
+import { invertArrayToFlatMap } from "rabbit-ear/graph/maps.js";
 
 // this class will watch for the SVGViewport's embedding's graph,
 // build SVG Element definitions for the components of the graph,
@@ -24,7 +26,7 @@ export class WebGLRenderingFolded {
   // this maps this graph's vertices (index) to the vertex index from
   // the source graph (value).
   // #mapping: { vertices: number[], edges: number[], faces: number[] } = $state({ vertices: [], edges: [], faces: [] });
-  #mapping: { vertices: number[], edges: number[], faces: number[] } | undefined = $state();
+  #mapping: { vertices: number[], edges?: number[][], faces?: number[][] } | undefined = $state();
 
   // style data
   assignmentsColor: { [key: string]: number[] } = $derived.by(() => ({
@@ -51,26 +53,36 @@ export class WebGLRenderingFolded {
     .map((_, i) => this.selectedFaces?.has(i) ?? false));
 
   // vertices
-  vertices_coords2: [number, number][] = $derived((this.graph?.vertices_coords ?? [])
-    .map(coord => [coord[0] ?? 0, coord[1] ?? 0]));
-  vertices_coords3: [number, number, number][] = $derived((this.graph?.vertices_coords ?? [])
+  // vertices_coords2: [number, number][] = $derived((this.graph?.vertices_coords ?? [])
+  //   .map(coord => [coord[0] ?? 0, coord[1] ?? 0]));
+  vertices_coords3Raw: [number, number, number][] = $derived((this.graph?.vertices_coords ?? [])
     .map(coord => [coord[0] ?? 0, coord[1] ?? 0, coord[2] ?? 0]));
 
+  // vertices_layerDisplaceVector: [number, number, number][] = $derived((this.graph?.vertices_coords ?? [])
+  //   .map(() => [0, 0, 0]));
+  vertices_layerDisplaceVector: [number, number, number][] = $state([]);
+
+  vertices_layerDisplace: [number, number, number][] = $derived((this.graph?.vertices_coords ?? [])
+    .map((_, i) => scale3(this.vertices_layerDisplaceVector[i] ?? [0, 0, 0], this.viewport.style.layersNudge)));
+
+  vertices_coords3: [number, number, number][] = $derived((this.graph?.vertices_coords ?? [])
+    .map((_, i) => add3(this.vertices_coords3Raw[i], this.vertices_layerDisplace[i])));
+
   // edges
-  edgesCoords2: [[number, number], [number, number]][] = $derived((this.graph?.edges_vertices ?? [])
-    .map((ev) => [
-      this.vertices_coords2[ev[0]] ?? [0, 0],
-      this.vertices_coords2[ev[1]] ?? [0, 0],
-    ]));
-  edgesCoords3: [[number, number, number], [number, number, number]][] = $derived((this.graph?.edges_vertices ?? [])
-    .map((ev) => [
-      this.vertices_coords3[ev[0]] ?? [0, 0, 0],
-      this.vertices_coords3[ev[1]] ?? [0, 0, 0],
-    ]));
+  // edgesCoords2: [[number, number], [number, number]][] = $derived((this.graph?.edges_vertices ?? [])
+  //   .map((ev) => [
+  //     this.vertices_coords2[ev[0]] ?? [0, 0],
+  //     this.vertices_coords2[ev[1]] ?? [0, 0],
+  //   ]));
+  // edgesCoords3: [[number, number, number], [number, number, number]][] = $derived((this.graph?.edges_vertices ?? [])
+  //   .map((ev) => [
+  //     this.vertices_coords3[ev[0]] ?? [0, 0, 0],
+  //     this.vertices_coords3[ev[1]] ?? [0, 0, 0],
+  //   ]));
 
   // faces
-  facesCoords2: [number, number][][] = $derived((this.graph?.faces_vertices ?? [])
-    .map((fv) => (fv ?? []).map(v => this.vertices_coords2[v] ?? [0, 0])));
+  // facesCoords2: [number, number][][] = $derived((this.graph?.faces_vertices ?? [])
+  //   .map((fv) => (fv ?? []).map(v => this.vertices_coords2[v] ?? [0, 0])));
   facesCoords3: [number, number, number][][] = $derived((this.graph?.faces_vertices ?? [])
     .map((fv) => (fv ?? []).map(v => this.vertices_coords3[v] ?? [0, 0, 0])));
 
@@ -119,7 +131,7 @@ export class WebGLRenderingFolded {
     .map(() => true));
 
   // renderable components
-  vertexArrayVertices2: Float32Array = $derived(new Float32Array(this.vertices_coords2.flat()));
+  // vertexArrayVertices2: Float32Array = $derived(new Float32Array(this.vertices_coords2.flat()));
   vertexArrayVertices3: Float32Array = $derived(new Float32Array(this.vertices_coords3.flat()));
   vertexArrayVerticesNormal3: Float32Array = $derived(new Float32Array(this.verticesNormal3.flat()));
   vertexArrayVerticesBarycentric3: Float32Array = $derived(new Float32Array(this.verticesBarycentric.flat()));
@@ -134,6 +146,7 @@ export class WebGLRenderingFolded {
     this.viewport = viewport;
     this.#effects = [
       this.#effectGraph(),
+      this.#effectFaceOrders(),
       this.#effectSetSelection(),
     ];
   }
@@ -151,15 +164,15 @@ export class WebGLRenderingFolded {
           this.viewport.embedding?.embeddingUpdate?.reset,
           this.viewport.embedding?.embeddingUpdate?.structural,
           this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
-          // todo: move face orders to another effect
-          this.viewport.embedding?.embeddingUpdate?.isomorphic.faceOrders,
         ];
-        console.log("SVGRendering(): update graph");
         try {
           const inputGraph = { ...this.viewport.embedding?.graph };
           // explode the graph (vertices unique to one face) for a few reasons like
           // flat shading (stylistic) and barycentric values (face-boundary shading)
-          const { vertices_map, graph } = prepareForRendering(inputGraph, earcut);
+          // if (graphHasCycle(inputGraph)) {
+          // } else {
+          // }
+          const { changes, graph } = prepareForRendering(inputGraph, earcut);
           if (graph.edges_assignment && !graph.edges_foldAngle) {
             graph.edges_foldAngle = makeEdgesFoldAngle(graph);
           }
@@ -170,10 +183,38 @@ export class WebGLRenderingFolded {
             graph.faces_edges = makeFacesEdgesFromVertices(graph);
           }
           // todo: check if graph has all required fields, otherwise, set to {}
-          console.log("effect graph", graph);
+          console.log("WebGLRendering(): FOLDED: update graph");
+          this.#mapping = changes;
           this.graph = graph;
         } catch {
           this.graph = {};
+        }
+      });
+      return () => { };
+    });
+  }
+
+  #effectFaceOrders(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = [
+          this.viewport.embedding?.embeddingUpdate?.isomorphic.faceOrders,
+        ];
+        console.log("WebGLRendering(): FOLDED: update face orders");
+        try {
+          const faces_nudge = nudgeFacesWithFaceOrders(this.viewport.embedding?.graph);
+          if (!faces_nudge) {
+            this.vertices_layerDisplaceVector = [];
+            return;
+          }
+          const backmap = invertArrayToFlatMap(this.#mapping?.faces ?? []);
+          this.vertices_layerDisplaceVector = (this.graph.vertices_faces ?? [])
+            .map((faces) => faces?.[0])
+            .map(face => face != null ? backmap[face] : undefined)
+            .map(face => face != null ? faces_nudge[face] : undefined)
+            .map((nudge) => nudge !== undefined ? scale3(nudge.vector, nudge.layer) : [0, 0, 0]);
+        } catch {
+          this.vertices_layerDisplaceVector = [];
         }
       });
       return () => { };
@@ -186,7 +227,7 @@ export class WebGLRenderingFolded {
         const _ = [
           this.viewport.embedding?.embeddingUpdate?.selection,
         ];
-        console.log("SVGRendering(): update selection");
+        console.log("WebGLRendering(): FOLDED: update selection");
         this.selectedVertices = new SvelteSet(this.viewport.embedding?.selection?.vertices);
         this.selectedEdges = new SvelteSet(this.viewport.embedding?.selection?.edges);
         this.selectedFaces = new SvelteSet(this.viewport.embedding?.selection?.faces);

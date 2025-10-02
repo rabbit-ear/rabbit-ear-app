@@ -1,13 +1,14 @@
 import type { FOLD, FOLDChildFrame } from "rabbit-ear/types.js";
-import type { FrameAttributes } from "./FrameAttributes.ts";
+import type { GraphAttributes } from "./GraphAttributes.ts";
 import type { FOLDSelection } from "../general/selection.ts";
 import { RulerManager } from "../rulers/RulerManager.svelte.ts";
 // import { ShapeManager } from "../shapes/ShapeManager.svelte.ts";
 // import { flattenFrameInArray } from "../general/fold.ts";
 import { makeUUID } from "../general/uuid.ts";
-import { makeFrameAttributes } from "./FrameAttributes.ts";
+import { makeGraphAttributes } from "./GraphAttributes.ts";
 
 export class Frame {
+  // each time the graph is modified in any way, this will randomize
   uuid: string;
 
   // taken from the "raw" frames (not collapsed if inherits from a parent)
@@ -19,7 +20,7 @@ export class Frame {
   graph: FOLD = {};
 
   // style-related properties for every frame, like is it 2D, folded, etc..
-  attributes: FrameAttributes;
+  attributes: GraphAttributes;
 
   rulers: RulerManager;
 
@@ -30,7 +31,7 @@ export class Frame {
     this.uuid = makeUUID();
     this.source = frame;
     this.graph = frame;
-    this.attributes = makeFrameAttributes(this.source, this.graph);
+    this.attributes = makeGraphAttributes(this.source, this.graph);
     this.rulers = new RulerManager();
   }
 }

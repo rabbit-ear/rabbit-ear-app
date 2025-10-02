@@ -34,6 +34,7 @@
     stroke: var(--background-3);
   }
   .no-model {
-    stroke: var(--dark-yellow);
+    stroke: var(--red);
+    /* stroke: var(--dark-yellow); */
   }
 </style>

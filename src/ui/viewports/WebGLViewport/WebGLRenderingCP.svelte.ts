@@ -196,7 +196,7 @@ export class WebGLRenderingCP {
           this.viewport.embedding?.embeddingUpdate?.structural,
           this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
         ];
-        console.log("SVGRendering(): update graph");
+        console.log("WebGLRendering(): CP: update graph");
         try {
           const { graph, changes } = this.#processGraph(this.viewport.embedding?.graph ?? {});
           this.graph = graph;
@@ -216,7 +216,7 @@ export class WebGLRenderingCP {
           this.viewport.embedding?.embeddingUpdate?.isomorphic.assignments,
           this.viewport.embedding?.embeddingUpdate?.isomorphic.foldAngles,
         ];
-        console.log("SVGRendering(): update edge attributes");
+        console.log("WebGLRendering(): CP: update edge attributes");
         const graph = this.viewport.embedding?.graph;
         this.edgesAssignments = (graph?.edges_vertices ?? [])
           .map((_, i) => graph?.edges_assignment?.[i] ?? "U");
@@ -234,7 +234,7 @@ export class WebGLRenderingCP {
         const _ = [
           this.viewport.embedding?.embeddingUpdate?.selection,
         ];
-        console.log("SVGRendering(): update selection");
+        console.log("WebGLRendering(): CP: update selection");
         this.selectedVertices = new SvelteSet(this.viewport.embedding?.selection?.vertices);
         this.selectedEdges = new SvelteSet(this.viewport.embedding?.selection?.edges);
         this.selectedFaces = new SvelteSet(this.viewport.embedding?.selection?.faces);

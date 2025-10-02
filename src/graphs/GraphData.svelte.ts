@@ -12,37 +12,37 @@ import { CreasePattern } from "./CreasePattern/CreasePattern.svelte.ts";
 import { FoldedForm } from "./FoldedForm/FoldedForm.svelte.ts";
 import { Simulator } from "./Simulator/Simulator.svelte.ts";
 import { Frame } from "./Frame.ts";
+import { makeUUID } from "../general/uuid.ts";
 
 export class GraphData {
   metadata: FOLDFileMetadata = $state({});
 
-  // frames: Frame[] = $state([]);
   frames: Frame[] = [];
 
-  // frame: Frame = $derived.by(() => this.frames[this.frameIndex]);
-  // frame: Frame = $state(this.frames[this.#frameIndex]);
   frame: Frame;
 
   // the signal to subscribe to instead of subscribing to frame or framesRaw, etc
-  // todo: are we still using this? We're definitely using the ones on the embeddings.
+  // in practice, most of the app will be watching the derived value "embeddingUpdate"
+  // on a particular embedding, as they inherit from this object and then add their own
+  // level of particular updates (like faceOrder layer information for foldedForm).
+  // this object will be updated when the Frame itself is modified (or the frame index changes)
+  // which is typically after a data-modifying operation has just taken place;
+  // in which case, this will trigger, which tends to trigger all embeddings to update as well.
   graphUpdate = $state<GraphUpdateEvent>(makeGraphUpdateEvent());
 
   // which frame index is currently selected by the app for rendering/modification
   #frameIndex: number = $state(0);
   get frameIndex(): number { return this.#frameIndex; }
   set frameIndex(index: number) {
-    // console.log("new frame (start)", this.frame);
     this.#frameIndex = index;
     this.frame = this.frames[this.#frameIndex];
     this.graphUpdate.reset++;
-    // console.log("new frame (end)", this.frame);
   }
 
-  // style-related properties for every frame, like is it 2D, folded, etc..
-  // frameAttributes: FrameAttributes = $derived.by(() => this.frame.sourceAttributes);
-  // get frameAttributes(): FrameAttributes { return this.frame.attributes; }
-
-  // models: { [key: string]: Model } = $state({});
+  // the source graph will be fed into each of these embeddings, where
+  // each embedding has its own particular way of creating a modified copy
+  // of the source material. For example in many cases an embedding will
+  // move the vertices while maintaining the overall graph structure.
   creasePattern: CreasePattern;
   foldedForm: FoldedForm;
   simulator: Simulator;
@@ -130,6 +130,7 @@ export class GraphData {
     if (updateModifier.reset || updateModifier.structural) {
       this.frame.selection = undefined;
     }
+    this.frame.uuid = makeUUID();
   }
 
   // public facing method. all changes should go through here

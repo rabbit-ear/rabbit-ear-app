@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { FOLDChildFrame } from "rabbit-ear/types.js";
   import context from "../../app/context.svelte.ts";
-  import type { FrameAttributes } from "../../graphs/FrameAttributes.ts";
+  import type { GraphAttributes } from "../../graphs/GraphAttributes.ts";
 
   const graphArrays: { [key: string]: [string, string] } = {
     vertices_vertices: ["v", "v"],
@@ -34,7 +34,7 @@
     context.fileManager.document?.data.frame.source,
   );
 
-  const attributes: FrameAttributes | undefined = $derived(
+  const attributes: GraphAttributes | undefined = $derived(
     context.fileManager.document?.data.frame.attributes,
   );
 
