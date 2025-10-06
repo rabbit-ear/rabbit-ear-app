@@ -7,7 +7,7 @@ import Dropdown from "./Dropdown.svelte";
 import ClassPanel from "./Panel.svelte";
 import ViewportComponent from "./Component.svelte";
 import { Style } from "./Style.svelte.ts";
-import { GLModels } from "./GLModels.svelte.ts";
+import { WebGLModels } from "./WebGLModels.svelte.ts";
 import { Settings } from "./Settings.svelte.ts";
 import { WebGLView } from "./WebGLView.svelte.ts";
 import { WebGLSnap } from "./WebGLSnap.svelte.ts";
@@ -31,7 +31,7 @@ export class WebGLViewport implements Viewport {
   view: WebGLView;
   snap: WebGLSnap; // todo
   style: Style;
-  glModels: GLModels;
+  webGLModels: WebGLModels;
   rendering: WebGLRendering;
 
   gl: WebGLRenderingContext | WebGL2RenderingContext | undefined = $state();
@@ -58,7 +58,7 @@ export class WebGLViewport implements Viewport {
     this.view = new WebGLView(this);
     this.snap = new WebGLSnap(this);
     this.style = new Style(this);
-    this.glModels = new GLModels(this);
+    this.webGLModels = new WebGLModels(this);
     this.rendering = new WebGLRendering(this);
     this.#effects = [
       this.#effectModelStyle(),
@@ -68,11 +68,11 @@ export class WebGLViewport implements Viewport {
 
   unbindTool(): void {
     // console.log("WebGLViewport unbindTool()");
-    this.glModels.unbindTool();
+    this.webGLModels.unbindTool();
   }
 
   dealloc(): void {
-    this.glModels.dealloc();
+    this.webGLModels.dealloc();
     this.rendering.dealloc();
     this.#effects.forEach(fn => fn());
   }

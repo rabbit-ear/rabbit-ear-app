@@ -113,7 +113,7 @@ export class WebGLView implements View {
         const _ = [
           this.viewport.embedding?.embeddingUpdate?.reset,
           this.viewport.embedding?.embeddingUpdate?.structural,
-          this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
+          // this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
         ];
         const matrix = graphToMatrix4(this.viewport.embedding?.graph);
         untrack(() => { this.model = matrix; });

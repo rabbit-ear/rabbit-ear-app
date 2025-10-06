@@ -19,7 +19,7 @@
   };
 
   const modelNames: string[] = $derived(
-    viewport.glModels.models.map((model) => model.constructor.name),
+    viewport.webGLModels.models.map((model) => model.constructor.name),
   );
 </script>
 

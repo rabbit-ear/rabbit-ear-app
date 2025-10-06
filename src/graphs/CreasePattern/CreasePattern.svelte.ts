@@ -7,7 +7,6 @@ import { makeGraphUpdateEvent, type GraphUpdateEvent } from "../Updated.ts";
 import { EmbeddingType, type GraphAttributes } from "../GraphAttributes.ts";
 import { Nearest } from "../Nearest.svelte.ts";
 import Panel from "./Panel.svelte";
-// import type { Shape } from "../../geometry/shapes.ts";
 import { resize2 } from "rabbit-ear/math/vector.js";
 import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 
@@ -45,10 +44,6 @@ export class CreasePattern implements Embedding {
   get snapPoints(): [number, number][] {
     return (this.graph?.vertices_coords as [number, number][]) ?? [];
   }
-
-  // get shapes(): Shape[] {
-  //   return this.#model.shapes;
-  // }
 
   // todo: this should not be here. this is tool-dependent.
   // editable: boolean = $derived.by(() => !this.frameLinked
@@ -106,8 +101,8 @@ export class CreasePattern implements Embedding {
       switch (getDimensionQuick(graph)) {
         case 2: return graph.vertices_coords as [number, number][];
         case 3: return (graph.vertices_coords ?? []).map(resize2);
-        case undefined:
         default:
+        case undefined:
           return undefined;
       }
     } catch {

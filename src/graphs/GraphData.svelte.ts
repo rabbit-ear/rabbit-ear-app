@@ -139,7 +139,6 @@ export class GraphData {
   mutateGraph(mutator: (frame: FOLDChildFrame) => (GraphUpdateModifier | undefined)) {
     const updateModifier = mutator(this.frame.graph);
     if (updateModifier) {
-      // this.frames[this.frameIndex].graph = graph;
       this.#didUpdate(updateModifier);
       modifyGraphUpdate(this.graphUpdate, updateModifier);
     }
@@ -148,7 +147,6 @@ export class GraphData {
   mutateFrame(mutator: (frame: Frame) => (GraphUpdateModifier | undefined)) {
     const updateModifier = mutator(this.frame);
     if (updateModifier) {
-      // this.frames[this.frameIndex] = frame;
       this.#didUpdate(updateModifier);
       modifyGraphUpdate(this.graphUpdate, updateModifier);
     }

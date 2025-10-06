@@ -37,7 +37,7 @@ export class WebGLState implements GLModel, ToolEvents {
       this.#timer(),
     ];
 
-    this.viewport.glModels.toolModel = this;
+    this.viewport.webGLModels.toolModel = this;
   }
 
   dealloc(): void {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import type { WebGLViewport } from "./WebGLViewport.svelte.ts";
-  import WebGLModels from "./WebGLModels.svelte";
+  import WebGLModelsView from "./WebGLModelsView.svelte";
 
   type PropsType = {
     viewport: WebGLViewport;
@@ -38,7 +38,7 @@
   });
 </script>
 
-<WebGLModels
+<WebGLModelsView
   {viewport}
   bind:gl
   bind:version

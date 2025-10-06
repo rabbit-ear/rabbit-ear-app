@@ -2,7 +2,7 @@ import type { WebGLViewport } from "./WebGLViewport.svelte.js";
 import type { GLModel } from "./GLModel.ts";
 import { RenderStyle } from "../types.ts";
 import { deallocModel } from "./GLModel.ts";
-import GLModelClasses from "./GLModels/index.ts";
+import GLModelClasses from "./WebGLModels/index.ts";
 import { untrack } from "svelte";
 
 const FOLD_MODEL_NAMES = [
@@ -13,7 +13,7 @@ const FOLD_MODEL_NAMES = [
   "FoldedFormEdges",
 ];
 
-export class GLModels {
+export class WebGLModels {
   viewport: WebGLViewport;
 
   effects: (() => void)[];
@@ -47,7 +47,7 @@ export class GLModels {
   });
 
   constructor(viewport: WebGLViewport) {
-    // console.log("GLModels() constructor");
+    // console.log("WebGLModels() constructor");
     this.viewport = viewport;
     this.effects = [
       this.#swapFOLDModels(),

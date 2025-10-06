@@ -14,7 +14,7 @@ import { FoldedFormEdges } from "./FoldedFormEdges/FoldedFormEdges.svelte.ts";
 // for trying to instance an abstract class
 type GLModelConstructor<T extends GLModel = GLModel> = new (viewport: WebGLViewport) => T;
 
-const GLModels: { [key: string]: GLModelConstructor } = {};
+const WebGLModels: { [key: string]: GLModelConstructor } = {};
 
 [
   WorldAxes,
@@ -24,7 +24,7 @@ const GLModels: { [key: string]: GLModelConstructor } = {};
   FoldedFormFaces,
   FoldedFormFaceOutlines,
   FoldedFormEdges,
-].forEach(Item => { GLModels[Item.name] = Item; });
+].forEach(Item => { WebGLModels[Item.name] = Item; });
 
-export default GLModels;
+export default WebGLModels;
 

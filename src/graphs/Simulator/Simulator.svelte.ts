@@ -4,7 +4,7 @@ import type { Embedding } from "../Embedding.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
 import type { FOLDSelection } from "../../general/selection.ts";
-import type { GraphAttributes } from "../GraphAttributes.ts";
+import { EmbeddingType, type GraphAttributes } from "../GraphAttributes.ts";
 import { Nearest } from "../Nearest.svelte.ts";
 import Panel from "./Panel.svelte";
 import context from "../../app/context.svelte.ts";
@@ -29,6 +29,8 @@ export class Simulator implements Embedding {
     return {
       ...this.#data.frame.attributes,
       dimension: 3,
+      hasLayerOrder: false,
+      class: EmbeddingType.foldedForm,
     } as GraphAttributes;
   }
 

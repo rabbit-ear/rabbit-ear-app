@@ -6,7 +6,7 @@ import { add3, cross3, normalize3, parallel, scale3, subtract3 } from "rabbit-ea
 import { light, dark } from "rabbit-ear/webgl/general/colors.js";
 import { makeVerticesFacesSimple, makeVerticesNormal } from "../../../general/fold.ts";
 import { makeFacesEdgesFromVertices } from "rabbit-ear/graph/make/facesEdges.js";
-import { graphHasCycle, prepareForRendering } from "./GLModels/rendering.ts";
+import { graphHasCycle, prepareForRendering } from "./WebGLModels/rendering.ts";
 import { makeEdgesFoldAngle } from "rabbit-ear/graph/make/edgesFoldAngle.js";
 import { nudgeFacesWithFaceOrders } from "rabbit-ear/graph/orders.js";
 import { invertArrayToFlatMap } from "rabbit-ear/graph/maps.js";
@@ -26,7 +26,8 @@ export class WebGLRenderingFolded {
   // this maps this graph's vertices (index) to the vertex index from
   // the source graph (value).
   // #mapping: { vertices: number[], edges: number[], faces: number[] } = $state({ vertices: [], edges: [], faces: [] });
-  #mapping: { vertices: number[], edges?: number[][], faces?: number[][] } | undefined = $state();
+  // #mapping: { vertices: number[], edges?: number[], faces: number[][] } | undefined = $state();
+  #mapping: { vertices: number[], edges?: number[], faces: number[][] } | undefined;
 
   // style data
   assignmentsColor: { [key: string]: number[] } = $derived.by(() => ({
@@ -146,6 +147,7 @@ export class WebGLRenderingFolded {
     this.viewport = viewport;
     this.#effects = [
       this.#effectGraph(),
+      this.#effectVerticesCoords(),
       this.#effectFaceOrders(),
       this.#effectSetSelection(),
     ];
@@ -159,11 +161,10 @@ export class WebGLRenderingFolded {
     return $effect.root(() => {
       $effect(() => {
         const _ = [
-          // everything except for selection, and from isomorphic only coords
+          // only when the graph is rebuilt (no isomorphic changes or selection)
           this.viewport.embedding,
           this.viewport.embedding?.embeddingUpdate?.reset,
           this.viewport.embedding?.embeddingUpdate?.structural,
-          this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
         ];
         try {
           const inputGraph = { ...this.viewport.embedding?.graph };
@@ -183,11 +184,37 @@ export class WebGLRenderingFolded {
             graph.faces_edges = makeFacesEdgesFromVertices(graph);
           }
           // todo: check if graph has all required fields, otherwise, set to {}
-          console.log("WebGLRendering(): FOLDED: update graph");
+          console.log("WebGLRendering(): FOLDED: update graph", changes);
           this.#mapping = changes;
           this.graph = graph;
         } catch {
           this.graph = {};
+        }
+      });
+      return () => { };
+    });
+  }
+
+  #effectVerticesCoords(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = [
+          this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
+        ];
+        try {
+          const inputCoords = this.viewport.embedding?.graph?.vertices_coords;
+          if (!this.#mapping?.vertices || !inputCoords) { return; }
+          // console.log("WebGLRendering(): FOLDED: update vertices_coords");
+          // explode the graph (vertices unique to one face) for a few reasons like
+          // flat shading (stylistic) and barycentric values (face-boundary shading)
+          const vertices_coords = this.#mapping?.vertices.map(i => inputCoords[i]);
+          this.graph = {
+            ...this.graph,
+            vertices_coords,
+          };
+          // console.log("WebGLRendering(): FOLDED: update vertices_coords DONE", this.#mapping, vertices_coords);
+        } catch {
+          // empty
         }
       });
       return () => { };

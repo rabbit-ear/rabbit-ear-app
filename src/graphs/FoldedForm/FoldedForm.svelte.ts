@@ -5,7 +5,6 @@ import { EmbeddingType, type GraphAttributes } from "../GraphAttributes.ts";
 import type { GraphData } from "../GraphData.svelte.ts";
 import type { GraphUpdateEvent } from "../Updated.ts";
 import type { FOLDSelection } from "../../general/selection.ts";
-// import type { Shape } from "../../geometry/shapes.ts";
 import { getDimensionQuick } from "rabbit-ear/fold/spec.js";
 import { makeGraphUpdateEvent } from "../Updated.ts";
 import { makeVerticesCoordsFolded } from "rabbit-ear/graph/vertices/folded.js";
@@ -246,7 +245,7 @@ export class FoldedForm implements Embedding {
   #effectDebug(): () => void {
     return $effect.root(() => {
       $effect(() => {
-        const _ = this.#data.graphUpdate.isomorphic.foldAngles
+        const _ = this.#data.graphUpdate.isomorphic.foldAngles;
         console.log("FoldedForm(): foldAngles did update");
       });
       return () => { };

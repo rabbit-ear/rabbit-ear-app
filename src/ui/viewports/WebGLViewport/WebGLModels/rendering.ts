@@ -216,7 +216,7 @@ export const prepareForRendering = (
 
   // explode will modify edges and vertices.
   // we don't need the return information for anything just yet.
-  const exploded = explodeFaces(triangulated).graph;
+  const { graph: exploded, vertices_map } = explodeFaces(triangulated);
   // Object.assign(changes, change2);
 
   if (changes.faces) {
@@ -236,7 +236,7 @@ export const prepareForRendering = (
   return {
     graph: exploded,
     changes: {
-      vertices: [],
+      vertices: vertices_map,
       faces: changes.faces?.map ?? [],
     }
   };

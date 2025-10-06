@@ -30,7 +30,8 @@ export class WebGLRenderingCP {
   // this graph for rendering and the source graph are not isomorphic,
   // this maps this graph's vertices (index) to the vertex index from
   // the source graph (value).
-  #mapping: { vertices?: number[][], edges?: number[][], faces: number[][] } | undefined = $state();
+  // #mapping: { faces: number[][] } | undefined = $state();
+  #mapping: { faces: number[][] } | undefined;
 
   // style data
   assignmentsColor: { [key: string]: number[] } = $derived.by(() => ({
@@ -134,6 +135,7 @@ export class WebGLRenderingCP {
     this.viewport = viewport;
     this.#effects = [
       this.#effectGraph(),
+      this.#effectVerticesCoords(),
       this.#effectSetSelection(),
       this.#effectSetEdgesAttributes(),
     ];
@@ -143,10 +145,7 @@ export class WebGLRenderingCP {
     this.#effects.forEach(fn => fn());
   }
 
-  #processGraph(graph: FOLD): {
-    graph: FOLD,
-    changes: { vertices?: number[][], edges?: number[][], faces: number[][] } | undefined,
-  } {
+  #processGraph(graph: FOLD): { graph: FOLD, changes: { faces: number[][] } | undefined } {
     if (!graph.vertices_coords || !graph.edges_vertices) {
       return { graph: {}, changes: { faces: [] } };
     }
@@ -194,15 +193,33 @@ export class WebGLRenderingCP {
           this.viewport.embedding,
           this.viewport.embedding?.embeddingUpdate?.reset,
           this.viewport.embedding?.embeddingUpdate?.structural,
-          this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
         ];
         console.log("WebGLRendering(): CP: update graph");
         try {
           const { graph, changes } = this.#processGraph(this.viewport.embedding?.graph ?? {});
-          this.graph = graph;
           this.#mapping = changes;
+          this.graph = graph;
         } catch {
           this.graph = {};
+        }
+      });
+      return () => { };
+    });
+  }
+
+  #effectVerticesCoords(): () => void {
+    return $effect.root(() => {
+      $effect(() => {
+        const _ = [
+          this.viewport.embedding?.embeddingUpdate?.isomorphic.coords,
+        ];
+        try {
+          const vertices_coords = this.viewport.embedding?.graph?.vertices_coords;
+          if (!vertices_coords) { return; }
+          // console.log("WebGLRendering(): CP: update vertices_coords");
+          this.graph = { ...this.graph, vertices_coords };
+        } catch {
+          // empty
         }
       });
       return () => { };
